@@ -1,0 +1,67 @@
+{% load organizations %}
+{% load i18n %}
+
+{% for project in project_list %}
+	  <li class="module-item">
+	  {% with org=project|organization %}
+		  {% if org %}
+		  <a class="module-item-title" href="{{ org.get_absolute_url }}">
+		  {{ org.slug }}
+		  </a>
+		  /
+		  {% endif %}
+		  <a class="module-item-title" href="{{ project.get_absolute_url }}">
+		  {{ project.name }}
+		  </a>
+		  </a>
+	  {% endwith %}
+    {% with project.users.all as users %}
+
+      {% if users|length > 1 %}
+      ({% for user in project.users.all|slice:":3" %}
+        {% if omit and user.pk != omit.pk %}
+          <a href="{{ user.get_absolute_url }}" class="quiet user">{{ user }}</a>
+        {% endif %}
+        {% if not omit %}
+          <a href="{{ user.get_absolute_url }}" class="quiet user">{{ user }}</a>
+        {% endif %}
+      {% endfor %})
+      {% else %}
+        {% if omit and users.0.pk == omit.pk %}{% else %}{% with project.users.all.0 as user %}
+          (<a href="{{ user.get_absolute_url }}" class="quiet user">{{ user }}</a>)
+        {% endwith %}
+        {% endif %}
+      {% endif %}
+    {% endwith %}
+
+    {% if project.has_good_build %}
+    <span class="right-menu quiet">{% blocktrans with date=project.builds.all.0.date|timesince %}{{ date }} ago{% endblocktrans %}</span>
+    {% else %}
+    <span class="right-menu quiet">{% trans "No builds" %}</span>
+    {% endif %}
+
+    {% if project.has_good_build %}
+    <span class="dropdown" style="position:absolute; right:0px; top:0px;">
+      <span>
+          <a href="{{ project.get_docs_url }}">{% trans "View Docs" %}</a>
+        <a href="#">&#x25BC;</a>
+      </span>
+      <ul>
+          <li><input type="search" placeholder="{% trans "Search" %}&hellip;" /></li>
+          {% for version in project.ordered_active_versions reversed %}
+              <li><a href="{{ version.get_absolute_url }}">{{ version.slug }}</a></li>
+          {% endfor %}
+      </ul> 
+    </span>
+    {% else %}
+    <ul class="module-item-menu">
+      <li><a href="{{ project.get_builds_url }}">{% trans "No Docs" %}</a></li>
+    </ul>
+    {% endif %}
+
+
+  </li>
+{% empty %}
+  <li class="module-item quiet">{% trans "No projects found" %}</li>
+{% endfor %}
+

@@ -2,13 +2,14 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-const extractCSS = new ExtractTextPlugin('[name].css');
+const extractCSS = new ExtractTextPlugin('site.css');
 
 module.exports = {
   entry: {
+      "dummy.js": "./src/js/dummy.js",
       "site.js": "./src/js/site.js",
-      "site.css": "./src/css/site.less",
-      "vendor.js": ['knockout'],
+      //"site.css": "./src/css/site.less",
+      "vendor.js": ['knockout', 'jquery'],
   },
   module: {
     rules: [
@@ -37,7 +38,11 @@ module.exports = {
       '../../theme.config': path.join(
         __dirname,
         'src/theme/theme.config'
-      )
+      ),
+      '../../src/theme/site': path.join(
+        __dirname,
+        'src/theme/site'
+      ),
     },
     extensions: ['.less', '.js', '.json'],
   },
@@ -47,9 +52,13 @@ module.exports = {
       names: ['vendor.js'],
       minChunks: 1,
     }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+    }),
   ],
   output: {
     filename: '[name]',
-    path: __dirname + 'dist/'
+    path: path.join(__dirname, 'readthedocsext', 'theme', 'static', 'readthedocsext', 'theme')
   },
 };

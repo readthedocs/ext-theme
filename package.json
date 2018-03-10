@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "knockout": "^3.5.0-beta"
+    "jquery": "^3.3.1",
+    "knockout": "^3.5.0-beta",
+    "semantic-ui-dropdown": "^2.3.0",
+    "semantic-ui-transition": "^2.3.0"
   },
   "devDependencies": {
     "css-loader": "^0.28.10",

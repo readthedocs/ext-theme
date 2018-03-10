@@ -1,0 +1,116 @@
+{% extends "base-ng.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Home" %}{% endblock %}
+
+{% block header %}
+  {% include "includes/header.html" with front=True %}
+{% endblock %}
+
+{% block info_bar %}
+{% endblock %}
+
+{% block content-wrapper %}
+  {# start: notifications #}
+  {% if messages %}
+    {% for message in messages %}
+      {% comment %}
+        Just consume messages for now, make this a javascript notify later.
+      {% endcomment %}
+      <!-- Message: {{ message|safe }} -->
+    {% endfor %}
+  {% endif %}
+  {# end: notifications #}
+
+  <div class="ui stackable three column very relaxed grid container">
+    <div class="column center aligned">
+      <h1 class="ui heading">You Write.</h1>
+      <p>
+      Write documentation alongside your code, with all your same tools.
+      You can write with <b>reStructuredText</b> or <b>Markdown</b>.
+      </p>
+    </div>
+    <div class="column center aligned">
+      <h1 class="ui heading">We Build.</h1>
+      <p>
+      Using <b>webhooks</b>, your documentation is automatically kept up to date,
+      <b>across all versions of your software</b>.
+      </p>
+    </div>
+    <div class="column center aligned">
+      <h1 class="ui heading">Everyone Reads.</h1>
+      <p>
+      Your published documentation is securely hosted,
+      <b>only available to people inside your company.</b>
+      </p>
+    </div>
+  </div>
+
+  {% comment %}
+    <div class="ui inverted vertical segment center aligned relaxed">
+      <div class="ui text container">
+        <h2 class="ui heading">
+          <a href="{% url 'pricing' %}">Learn more</a> about our plans and hosting
+        </h2>
+        <a class="ui button primary">
+          Get started!
+        </a>
+      </div>
+    </div>
+  {% endcomment %}
+
+  {# start: how it works #}
+  <div class="ui vertical segment padded">
+    <section class="ui text container">
+      <h2 class="ui heading">How it works</h2>
+
+      <dl>
+        <dt>Write documentation</dt>
+        <dd>
+        Documentation can be written in <b>reStructuredText</b> or <b>Markdown</b>.
+        Write just prose documentation, or include referential documentation
+        that is written alongside your code.
+        </dd>
+
+        <dt>Keep it up to date</dt>
+        <dd>
+        Your documentation is always next to your source code, so you always
+        have a clear path to update your documentation when you make changes
+        to your code. No more external tools for editing documentation,
+        <b>which your developers will love</b>.
+        </dd>
+
+        <dt>Value your docs</dt>
+        <dd>
+        All too often, when documentation is lacking, the act of writing or
+        maintaining documentation becomes <b>under-valued</b>, which only
+        worsens the state of the information.  Having tools that work means
+        lowering the bar to submitting documentation, which means your docs
+        will actually get written.
+        </dd>
+
+        <dt>Read the docs</dt>
+        <dd>
+        Your documentation can be available privately or publicly. Access is
+        limited by users and teams to privately hosted projects.  Publicly
+        hosted documentation allows your company to intergrate your
+        documentation with your existing site, allowing your customers to
+        use your documentation.
+        </dd>
+      </dl>
+
+    </section>
+  </div>
+  {# end: how it works #}
+
+  <section class="ui vertical segment padded">
+    <div class="ui text container">
+      <p>
+      <a href="{% url 'features' %}">Discover the features</a> that will help improve your documentation
+      </p>
+    </div>
+  </section>
+
+{% endblock %}

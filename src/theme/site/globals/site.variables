@@ -1,2 +1,4 @@
-@importGoogleFonts : True;
-@googleProtocol    : 'https://';
+@emSize: 16px;
+@fontSize: 16px;
+@importGoogleFonts: True;
+@googleProtocol: 'https://';
