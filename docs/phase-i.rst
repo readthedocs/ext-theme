@@ -233,11 +233,20 @@ We have 3 version listing pages that are all different
         The listing view of this UI is horrendous. The actual per-version forms
         are the UX that we will be moving towards, but really the project
         version listing should be moved to the admin version listing page to
-        replace this current view.  Ideally, this view does not list inactive
+        replace this current view. Ideally, this view does not list inactive
         versions either, but maybe allows users to add new active version from a
         dropdown of inactive versions.  The high number of inactive versions on
         this page is noise to the user, and frequently crashes this page for
         users as well.
+
+        A form for activating an inactive version could pretty easily use SUI
+        fuzzy search elements and could filter a list of inactive tags/branches,
+        similar to the GitHub UI for selecting a branch/tag:
+
+        .. figure:: img/github-fuzzy-seach.png
+
+            GitHub UI for fuzzy search on branch and tag names. We have a list
+            of branch/tags that we could use to populate a dropdown form field.
 
     There is much more useful metadata that we're missing from the version
     listing pages as well -- build status(!), last build date(!), which version
