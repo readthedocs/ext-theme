@@ -13,6 +13,15 @@ Examples
 User dashboard using SUI divided item view
 ------------------------------------------
 
+This is an example of the SUI divided items view, which we'd like to use for
+most of our model list views. It has a heading, subheading, room for float
+buttons right on the heading, and the list items also have heading and enough
+flexibility to work multiple lines of metadata and multiple buttons into the
+view.
+
+This particular example show a list of projects with a list of active projects
+for each project.
+
 .. raw:: html
 
     <br />
