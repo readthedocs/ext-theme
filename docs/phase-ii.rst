@@ -55,6 +55,7 @@ Some things this page should do:
   GitHub/etc. We could look into some code changes to update user repositories
   on load, in which case we'd want to show elements as visually loading while
   waiting on information back from GitHub/GitLab/Bitbucket APIs.
+* The projects with more recent commits should be first
 
 Build detail page
 `````````````````
@@ -100,7 +101,7 @@ some nicer patterns from the framework, it would be nice to have attractive
 marketing pages. Some of the pages we'll be focusing on at this point if we
 haven't ported the pages already:
 
-* Community landing page
+* `Community landing page <https://readthedocs.org>`_
 
   * Highlights what Read the Docs does
   * Points to some existing projects
@@ -108,16 +109,20 @@ haven't ported the pages already:
   * Global RTD search is maybe optional. It does at least show off projects on
     Read the Docs, but I don't think it's useful for anyone
 
-* Commercial landing page
+* `Commercial landing page <https://readthedocs.com>`_
 
   * Highlights what Read the Docs does, and also highlights the commercial
     hosting features that are different from community
   * Has testimonials or case studies
   * Maybe has plan information on front page
 
-* Commercial pricing page
+* `Commercial pricing page <https://readthedocs.com/pricing/>`_
+* `Commercial features page <https://readthedocs.com/features/>`_
 * Community features page
-* Commercial features page
+* Community login and logout pages
+* `Community support page <https://readthedocs.org/support/>`_
+* `Community supporters page <https://readthedocs.org/sustainability/>`_
+* `Community advertising pages <https://readthedocs.org/sustainability/advertising/>`_
 
 The community and commercial landing pages are good candidates to utilize more
 thoughtful design and start to apply some more graphical elements to these

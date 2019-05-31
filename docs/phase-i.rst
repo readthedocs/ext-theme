@@ -42,7 +42,8 @@ Work items
 Use SemanticUI to overhaul our templates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This repository is already a proof of concept example showing how to implement a
+`This repository <https://github.com/rtfd/ext-theme>`_ is already a proof of concept
+example showing how to implement a
 tuned version of SUI that was installed via NPM. We can keep the size of SUI
 down using this pattern.
 
@@ -64,15 +65,16 @@ with a close approximation of how they exist currently:
   pattern we have been moving towards for all of our admin dashboard views.
   We'll keep this pattern as-is, using semanticui components instead, and expand
   it's usage on to all admin views.
-* The project import page. We want to add fuzzy search to remote repositories,
+* The `project import page <https://readthedocs.org/dashboard/import/>`_.
+  We want to add fuzzy search to remote repositories,
   and make the organization sorting better. This will take some javascript code
   changes that shouldn't block the first phase of work.
 * The build output page. This page will eventually have UI features like linking
   to a specific line number on the output and perhaps some UI to show the
   configuration file we executed with (replacing no-op commands like ``cat
   conf.py``).
-* Marketing pages and landing pages. These will be addressed with the next
-  phase(s) of work
+* Marketing pages and landing pages like the `community home page <https://readthedocs.org>`_.
+  These will be addressed with the next phase(s) of work
 
 UIs we should address
 `````````````````````
@@ -80,8 +82,8 @@ UIs we should address
 User dashboard view
 +++++++++++++++++++
 
-The user dasboard view differs between the community site and our commercial
-site.
+The `user dasboard view <https://readthedocs.org/dashboard/>`_
+differs between the community site and our commercial site.
 
 .. figure:: img/dashboard-community.png
 
@@ -142,7 +144,7 @@ enough real estate to rethink how we're using the view. A couple notes/ideas her
 
 .. figure:: img/user-dashboard-example.png
 
-    A proof of concept that shows project versions and build status for
+    A proof of concept that shows project versions and build status (red for failure) for
     each version. See :ref:`example-user-dashboard` for the source code
 
 Project dashboard view
@@ -243,7 +245,7 @@ We have 3 version listing pages that are all different
         fuzzy search elements and could filter a list of inactive tags/branches,
         similar to the GitHub UI for selecting a branch/tag:
 
-        .. figure:: img/github-fuzzy-seach.png
+        .. figure:: img/github-fuzzy-search.png
 
             GitHub UI for fuzzy search on branch and tag names. We have a list
             of branch/tags that we could use to populate a dropdown form field.
@@ -295,8 +297,9 @@ Other technical considerations
 Move to webpack build for CSS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This repository also includes an example of building static assets for SUI using
-Webpack. We'll have to also do testing of building JavaScript assets separately,
+`This repository <https://github.com/rtfd/ext-theme>`_
+also includes an example of building static assets for SUI using Webpack.
+We'll have to also do testing of building JavaScript assets separately,
 as this could be a large breaking change if not well tested.
 
 .. note::
