@@ -58,8 +58,9 @@ UIs we won't change yet
 
 With several exceptions, we don't view our current design as sacred. We aren't
 looking for a larger structural overhaul of our UI yet, but we are open to
-recommendations for later stages of work. The following UIs should be replaced
-with a close approximation of how they exist currently:
+recommendations for later stages of work. The following UIs will be ported to
+using SUI for now, but we won't worry yet about altering the UX of these pages
+yet:
 
 * The UI pattern described in :ref:`modularize-common-ui` is the UI
   pattern we have been moving towards for all of our admin dashboard views.
@@ -74,7 +75,9 @@ with a close approximation of how they exist currently:
   configuration file we executed with (replacing no-op commands like ``cat
   conf.py``).
 * Marketing pages and landing pages like the `community home page <https://readthedocs.org>`_.
-  These will be addressed with the next phase(s) of work
+  These will be addressed with the next phase(s) of work. We will port to SUI
+  for now, and will think more about polish of these pages in the following
+  phases of work.
 
 UIs we should address
 `````````````````````
