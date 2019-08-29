@@ -4,26 +4,39 @@
   "description": "Read the Docs site theme",
   "main": "src/js/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack",
+    "postinstall": "mv ./node_modules/semantic-ui-less/theme.config.example ./node_modules/semantic-ui-less/theme.config"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "jquery": "^3.3.1",
-    "knockout": "^3.5.0-beta",
-    "semantic-ui-dropdown": "^2.3.0",
-    "semantic-ui-transition": "^2.3.0"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "css-loader": "^0.28.10",
+    "css-loader": "^0.28.11",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.9",
-    "less": "^2.7.2",
-    "less-loader": "^4.0.5",
+    "jquery": "^3.4.1",
+    "knockout": "^3.5.0",
+    "less": "^2.7.3",
+    "less-loader": "^4.1.0",
     "resolve-url-loader": "^2.2.1",
+    "semantic-ui-dropdown": "^2.4.1",
     "semantic-ui-less": "^2.3.0",
-    "style-loader": "^0.20.2",
+    "semantic-ui-transition": "^2.3.1",
+    "style-loader": "^0.20.3",
     "url-loader": "^0.6.2",
-    "webpack": "^3.11.0"
-  }
+    "webpack": "^3.12.0",
+    "webpack-cli": "^3.3.7"
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/readthedocs/ext-theme.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/readthedocs/ext-theme/issues"
+  },
+  "homepage": "https://github.com/readthedocs/ext-theme#readme"
 }
