@@ -9,12 +9,12 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="icon" type="image/png" href="{% static 'corporate/img/favicon.png' %}" />
+
+    {# TODO remove old stylesheet here #}
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'corporate/css/main.css' %}" />
+
     {# New stylesheet #}
-
     <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/site.css' %}" />
-
-    {# here there should be the styles specific to the .org page #}
-    <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/org_overwrites.css' %}" />
 
     {% block extra_links %}{% endblock %}
 
@@ -26,9 +26,11 @@
 var $ = jQuery = require('jquery');
     </script>
     <script type="text/javascript" src="{% static 'core/js/site.js' %}"></script>
+    <script type="text/javascript" src="{% static 'corporate/js/main.js' %}"></script>
     <script type="text/javascript">
-        var site = require('core/site');
-        site.handle_notification_dismiss();
+var site = require('core/site');
+site.handle_notification_dismiss();
+var main = require('corporate/main');
     </script>
     <script type="text/javascript" src="{{ MEDIA_URL }}javascript/instantsearch.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}javascript/base.js"></script>
@@ -45,12 +47,10 @@ var $ = jQuery = require('jquery');
     {% block info_bar %}{% endblock %}
 
     <!-- BEGIN header -->
-    {% comment %}
     {% block header %}
       {% include "includes/header.html" %}
     {% endblock %}
     <!-- END header -->
-    {% endcomment %}
 
     {# TODO remove #}
     {% block subnav-bar %}{% endblock %}
@@ -84,10 +84,9 @@ var $ = jQuery = require('jquery');
       </div>
     {% endblock %}
 
-    {% comment %}
     {% block footer %}
       {% include "includes/footer.html" %}
     {% endblock %}
-    {% endcomment %}
+
   </body>
 </html>

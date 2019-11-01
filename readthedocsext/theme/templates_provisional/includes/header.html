@@ -13,13 +13,13 @@
           <a class="ui small centered middle aligned image" href="{% if request.user.is_authenticated %}{% url "projects_dashboard" %}{% else %}{% url "homepage" %}{% endif %}"></a>
         {% endblock %}
       </div>
-
+      {% comment %}...
       {% if not request.user.is_authenticated %}
         <a class="item" href="{% url "features" %}">{% trans "Features" %}</a>
         <a class="item" href="{% url "pricing" %}">{% trans "Pricing" %}</a>
         <a class="item" href="{% url "services" %}">{% trans "Services" %}</a>
       {% endif %}
-
+      {% endcomment %}
       <div class="right menu">
 
         {% if request.user.is_authenticated %}
