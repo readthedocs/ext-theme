@@ -11,7 +11,9 @@
     <link rel="icon" type="image/png" href="{% static 'corporate/img/favicon.png' %}" />
     {# New stylesheet #}
 
-    <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/site.css' %}" />
+    {% comment %} <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/site.css' %}" /> {% endcomment %}
+    {% comment %} Uncomment line above and comment one below when commiting {% endcomment %}
+    <link rel="stylesheet" href="http://localhost:8080/static/site.css">
 
     {# here there should be the styles specific to the .org page #}
     <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/org_overwrites.css' %}" />
@@ -45,12 +47,10 @@ var $ = jQuery = require('jquery');
     {% block info_bar %}{% endblock %}
 
     <!-- BEGIN header -->
-    {% comment %}
     {% block header %}
       {% include "includes/header.html" %}
     {% endblock %}
     <!-- END header -->
-    {% endcomment %}
 
     {# TODO remove #}
     {% block subnav-bar %}{% endblock %}
@@ -84,10 +84,8 @@ var $ = jQuery = require('jquery');
       </div>
     {% endblock %}
 
-    {% comment %}
     {% block footer %}
       {% include "includes/footer.html" %}
     {% endblock %}
-    {% endcomment %}
   </body>
 </html>

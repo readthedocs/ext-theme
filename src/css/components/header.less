@@ -1,58 +1,95 @@
-// Read the Docs header
+#rtfd-header .ui.secondary.menu {
+  background: url(../../images/header-bg.png) bottom left repeat-x #465158;
+}
 
-header.rtd-header {
+.rtfd-header-title h1 {
+  background: url(../../images/logo.png) top left no-repeat;
+  font-size: 20px;
+  line-height: 20px;
+  color: #fff;
 
-    border-bottom: 1px solid rgba(0, 0, 0, .1);
+  a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    height: 50px;
+    width: 190px;
+    opacity: 0;
+  }
+}
 
-    nav.ui.menu {
+div.menu-user div.menu-button {
+  height: 24px;
+  margin-top: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
 
-        border: none;
-        box-shadow: none;
-        border-radius: 0px;
+#rtfd-header .right.menu .menu.menu-user {
+  display: inherit;
+  margin-top: 10px;
+}
 
-        div.header-logo a {
-            display: block;
-            background-image: url('../../images/logo-wordmark-dark.svg');
-            background-repeat: no-repeat;
-            background-size: 9.375em;
-            width: 9.375em;
-            height: 2em;
-        }
+.menu.menu-user a .gravatar {
+  margin-right: .6em;
+  display: block;
+  float: left;
+}
 
-        div.rtd-user-menu {
-            padding-left: .3125em !important;
+.menu.menu-user .ui.buttons .ui.menu-button.button {
+  height: 24px;
+  padding: 4px 1em 28px 4px;
+  background: #7C8F99 url(../../images/gradient-light.png) bottom left repeat-x;
+  color: #fff;
+  text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+  border-radius: 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
 
-            img.ui.avatar {
-                border-radius: .2em;
-            }
-        }
-    }
+#rtfd-header .ui.buttons .floating.dropdown.icon.button {
+  background: url(../../images/gradient-light.png) left bottom repeat-x rgb(124, 143, 153);
+  border-radius: 0em 0.3em 0.3em 0em;
+  border-top: 1px solid #ccc;
+  height: 32px;
+  color: #fff;
+  border-left: 1px solid rgb(70, 81, 88);
+}
 
-    // The front page menu
-    &.front {
+.floating.dropdown.icon.button .menu .item {
+  border-radius: 0;
+  padding: 5px;
+  color: #fff;
+}
 
-        background: rgb(20, 20, 10);
-        background: url('../../images/bg.png');
-        background-size: cover;
-        background-position: bottom right;
+#rtfd-header .ui.menu .floating.dropdown.icon.button .menu>.item {
+  padding: 8px !important;
+  color: #fff !important;
+}
 
-        nav.ui.menu {
-            padding-top: 2em;
-            background: transparent;
+#rtfd-header .ui.buttons .floating.dropdown.icon.button .menu .item:hover {
+  background: rgb(70, 81, 88) !important;
+}
 
-            div.header a {
-                background-image: url('../../images/logo-wordmark-light.svg');
-            }
-        }
+#rtfd-header .menu.transition.visible {
+  display: block !important;
+  padding: 12px;
+  background-color: #7c8f99;
+  border-radius: 0 !important;
+}
 
-        section.masthead {
-            padding-top: 10em;
-            padding-bottom: 12em;
-            min-height: 30em;
+// Mobile
+@media only screen and (max-width: 767px) {
+  #rtfd-header .ui.container {
+    flex-direction: column;
+    align-items: center;
+  }
 
-            p {
-                color: white;
-            }
-        }
-    }
+  #rtfd-header .ui.container .right.menu {
+    display: flex;
+    padding-bottom: 15px;
+    margin-left: 26px !important;
+  }
 }
