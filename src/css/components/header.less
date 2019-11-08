@@ -8,6 +8,11 @@
   line-height: 20px;
   color: #fff;
 
+  @media (min-width: 768px) {
+    position: relative;
+    right: 30px;
+  }
+
   a {
     display: block;
     color: #fff;
@@ -26,6 +31,7 @@ div.menu-user div.menu-button {
   border: 0;
 }
 
+
 #rtfd-header .right.menu .menu.menu-user {
   display: inherit;
   margin-top: 10px;
@@ -37,11 +43,12 @@ div.menu-user div.menu-button {
   float: left;
 }
 
-.menu.menu-user .ui.buttons .ui.menu-button.button {
+.menu.menu-user .ui.buttons .ui.menu-button.button,
+.menu.menu-user .ui.buttons .ui.menu-button.button:hover {
   height: 24px;
   padding: 4px 1em 28px 4px;
-  background: #7C8F99 url(../../images/gradient-light.png) bottom left repeat-x;
-  color: #fff;
+  background: #7C8F99 url(../../images/gradient-light.png) bottom left repeat-x !important;
+  color: #fff !important;
   text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
   border-radius: 0;
   font-size: 16px;

@@ -43,10 +43,15 @@ a.cta-btn:hover {
   color: #fff;
 }
 
+button {
+  font-size: 13px;
+}
+
 input[type="submit"],
 input[type="button"],
 button,
-.button {
+.button,
+a.button {
   font-family: Lato, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   color: #666;
   font-weight: bold;
@@ -56,10 +61,12 @@ button,
   margin: 30px 5px 20px 0;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
   border: 1px solid #bfbfbf;
+  border-radius: 3px;
   display: block;
   text-decoration: none;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
   cursor: pointer;
+  width: fit-content;
 }
 
 input[type="submit"]:hover,
@@ -71,4 +78,9 @@ button:hover,
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5) !important;
   border-color: #6B9939 !important;
   border-bottom-color: #50732B !important;
+  text-decoration: none;
+}
+
+a.socialaccount-provider.button {
+  padding: 6px 10px;
 }

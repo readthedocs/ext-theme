@@ -144,6 +144,7 @@
 /* ------ SITE WIDE STYLES ------ */
 body {
   background: #fafafa url(../images/body-bg.svg) top left repeat;
+  color: #444;
 }
 
 h1 {
@@ -203,6 +204,8 @@ select,
   border: 1px solid #BFBFBF;
   color: #444;
   background-color: #fff;
+  padding: 5px;
+  border-radius: 3px;
 }
 
 ::placeholder {
@@ -218,7 +221,22 @@ select {
   line-height: 20px;
 }
 
+form p {
+  color: #999;
+}
+
+label {
+  display: block;
+  margin-bottom: 4px;
+  color: #444;
+}
+
 /* ------ END OF SITE WIDE STYLES ------ */
+
+.notification {
+  padding: 5px 0;
+  color: #a55;
+}
 
 .home .lead {
   font-size: 20px;
@@ -226,11 +244,7 @@ select {
 }
 
 .padding-top {
-  padding-top: 30px;
-
-  @media (max-width: 767px) {
-    padding-top: 10px;
-  }
+  padding-top: 20px;
 }
 
 
