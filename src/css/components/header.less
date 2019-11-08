@@ -49,14 +49,16 @@ div.menu-user div.menu-button {
   line-height: 24px;
 }
 
-#rtfd-header .ui.buttons .floating.dropdown.icon.button {
-  background: url(../../images/gradient-light.png) left bottom repeat-x rgb(124, 143, 153);
+#rtfd-header .ui.buttons .floating.dropdown.icon.button,
+#rtfd-header .ui.buttons .floating.dropdown.icon.button:hover {
+  background: url(../../images/gradient-light.png) left bottom repeat-x rgb(124, 143, 153) !important;
   border-radius: 0em 0.3em 0.3em 0em;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #ccc !important;
   height: 32px;
   color: #fff;
-  border-left: 1px solid rgb(70, 81, 88);
+  border-left: 1px solid rgb(70, 81, 88) !important;
 }
+
 
 .floating.dropdown.icon.button .menu .item {
   border-radius: 0;
@@ -82,12 +84,21 @@ div.menu-user div.menu-button {
 
 // Mobile
 @media only screen and (max-width: 767px) {
-  #rtfd-header .ui.container {
+
+  #rtfd-header .ui.container,
+  #home-header .ui.container {
     flex-direction: column;
     align-items: center;
   }
 
-  #rtfd-header .ui.container .right.menu {
+
+  #home-header .ui.container {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  #rtfd-header .ui.container .right.menu,
+  #home-header .ui.container .right.menu {
     display: flex;
     padding-bottom: 15px;
     margin-left: 26px !important;

@@ -1,143 +1,183 @@
 <!-- Inserted RTD Footer -->
 {% load i18n %}
-<div class="injected">
+{% load core_tags %}
+{% load static %}
+<div id="footer">
+  <div class="ui container">
+    <hr>
+    {% block footer-content %}
 
-  {% if not new_theme %}
-  <div class="rst-versions rst-badge" data-toggle="rst-versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-      <span class="fa fa-book">&nbsp;</span>
-      v: {{ current_version }}
-      <span class="fa fa-caret-down"></span>
-    </span>
-    <div class="rst-other-versions">
-      {% endif %}
+    <div class="ui three column doubling grid container">
+      <div class="column column-logo">
+        <div id="email-signup">
+          <form action="https://readthedocs.us3.list-manage.com/subscribe/post?u=a6a22369cc2b356379cf789ca&amp;id=a85a83a5a5" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+              <div>
+                <h4>{% trans 'Stay Updated' %}</h4>
 
-      {% block versions %}
-      {% if translations %}
-      <dl>
-        <dt>{% trans "Languages" %}</dt>
+                <ul>
+                  <li>
+                    <a href="https://blog.readthedocs.com/">{% trans 'Blog' %}</a>
+                  </li>
+                </ul>
 
-        {# Output the main project language since it isn't included in translations list #}
-        {% if main_project.language == current_language %} <strong> {% endif %}
-        <dd><a href="{{ main_project.get_docs_url }}{{ path }}">{{ main_project.language }}</a></dd>
-        {% if main_project.language == current_language %} </strong> {% endif %}
-
-        {# regroup to make language_list unique per language #}
-        {% regroup translations by language as language_list %}
-        {% for group in language_list %}
-        {% for translation in group.list %}
-        {% if translation.language != main_project.language %}
-        {% if translation.language == current_language %} <strong> {% endif %}
-        <dd><a href="{{ translation.get_docs_url }}{{ path }}">{{ translation.language }}</a></dd>
-        {% if translation.language == current_language %} </strong> {% endif %}
-        {% endif %}
-        {% endfor %}
-        {% endfor %}
-
-      </dl>
-      {% endif %}
-      {% if not project.single_version and versions|length >= 1 %}
-      <dl>
-        <dt>{% trans "Versions" %}</dt>
-        {% for version in versions %}
-        {% if version.verbose_name == current_version %} <strong> {% endif %}
-        <dd><a href="{{ version.get_subdomain_url }}{{ path|default_if_none:"" }}">{{ version.slug }}</a></dd>
-        {% if version.verbose_name == current_version %} </strong> {% endif %}
-        {% endfor %}
-      </dl>
-      {% endif %}
-      {% endblock %}
-
-      {% block downloads %}
-      {% if downloads %}
-      <dl>
-        <dt>{% trans "Downloads" %}</dt>
-        {% for name, url in downloads.items %}
-        <dd><a href="{{ url }}">{{ name }}</a></dd>
-        {% endfor %}
-      </dl>
-      {% endif %}
-      {% endblock %}
-
-      {% block readthedocs %}
-      <dl>
-        <!-- These are kept as relative links for internal installs that are http -->
-        <dt>{% trans "On Read the Docs" %}</dt>
-        <dd>
-          <a href="/">{% trans "Project Home" %}</a>
-        </dd>
-        <dd>
-          <a href="/">{% trans "Builds" %}</a>
-        </dd>
-        <dd>
-          <a href="/">{% trans "Downloads" %}</a>
-        </dd>
-      </dl>
-      {% endblock %}
-
-      {% block vcs %}
-
-      {% if github_edit_url %}
-      <dl>
-        <dt>{% trans "On GitHub" %}</dt>
-        <dd>
-          <a href="{{ github_view_url }}">{% trans "View" %}</a>
-        </dd>
-        {% if version.is_editable %}
-        <dd>
-          <a href="{{ github_edit_url }}">{% trans "Edit" %}</a>
-        </dd>
-        {% endif %}
-      </dl>
-      {% elif bitbucket_url %}
-      <dl>
-        <dt>{% trans "On Bitbucket" %}</dt>
-        <dd>
-          <a href="{{ bitbucket_url }}">{% trans "Edit" %}</a>
-        </dd>
-      </dl>
-      {% elif gitlab_edit_url %}
-      <dl>
-        <dt>{% trans "On GitLab" %}</dt>
-        <dd>
-          <a href="{{ gitlab_view_url }}">{% trans "View" %}</a>
-        </dd>
-        {% if version.is_editable %}
-        <dd>
-          <a href="{{ gitlab_edit_url }}">{% trans "Edit" %}</a>
-        </dd>
-        {% endif %}
-      </dl>
-      {% endif %}
-      {% endblock %}
-
-      {% block search %}
-      <dl>
-        <dt>{% trans "Search" %}</dt>
-        <dd>
-          <div style="padding: 6px;">
-            <form id="flyout-search-form" class="wy-form" target="_blank" action="/" method="get">
-              <input type="text" name="q" placeholder="{% trans "Search docs" %}">
-              </form>
+                <p>{% trans 'Sign up for our newsletter to get our latest blog updates delivered to your inbox weekly.' %}</p>
+                <div>
+                  <label for="mce-EMAIL">{% trans 'Email' %}</label><br>
+                  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="you@example.com">
+                </div>
+                <div id="mce-responses" class="clear">
+                  <div class="response" id="mce-error-response" style="display:none"></div>
+                  <div class="response" id="mce-success-response" style="display:none"></div>
+                </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_a6a22369cc2b356379cf789ca_a85a83a5a5" tabindex="-1" value=""></div>
+                <div class="clear"><input type="submit" value="{% trans 'Subscribe' %}" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+              </div>
+            </form>
           </div>
-        </dd>
-      </dl>
-      {% endblock %}
+      </div>
+      <div class="column column-about">
+        <h4>{% trans 'Get Involved' %}</h4>
 
+        <ul>
+          <li>
+            <a href="https://docs.readthedocs.io/page/intro/getting-started-with-sphinx.html">{% trans 'Getting Started Guide' %}</a>
+          </li>
+          <li>
+            <a href="https://docs.readthedocs.io">{% trans 'Documentation' %}</a>
+          </li>
+          <li>
+            <a href="https://docs.readthedocs.io/page/contribute.html">{% trans 'Contributing' %}</a>
+          </li>
+          <li>
+            <a href="https://docs.readthedocs.io/page/team.html">{% trans 'Team' %}</a>
+          </li>
+          <li>
+            <a href="https://docs.readthedocs.io/page/open-source-philosophy.html">{% trans 'Open Source Philosophy' %}</a>
+          </li>
+        </ul>
 
+      </div>
+      <div class="column column-rtd">
+        <h4>{% trans 'Business Info' %}</h4>
 
-      <hr/>
-      {% block footer %}
-        <small>
-          <span>{% trans "Hosted by" %} <a href="https://readthedocs.org">Read the Docs</a></span>
-          <span> &middot; </span>
-          <a href="https://docs.readthedocs.io/page/privacy-policy.html">{% trans "Privacy Policy" %}</a>
-        </small>
-      {% endblock %}
-
-      {% if not new_theme %}
+        <ul>
+          <li>
+            {% url "advertising" as advertising_url %}
+            <a href="{{ advertising_url | default:'https://readthedocs.org/sustainability/advertising/' }}">{% trans 'Advertise with Us' %}</a>
+          </li>
+          <li>
+            <a href="https://readthedocs.com">{% trans 'Read the Docs for Business' %}</a>
+          </li>
+          <li>
+            {% url "donate" as donate_url %}
+            <a href='{{ donate_url }}'>{% trans 'Supporters' %}</a>
+          </li>
+          <li>
+            <a href="https://docs.readthedocs.io/page/privacy-policy.html">{% trans 'Privacy Policy' %}</a>
+          </li>
+          <li>
+            <a href="https://docs.readthedocs.io/page/terms-of-service.html">{% trans 'Terms of Service' %}</a>
+          </li>
+          <li>
+            <a href="https://read-the-docs-guidelines.readthedocs-hosted.com/">{% trans 'Branding' %}</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-  {% endif %}
 
+    <div class="ui two column grid items container social">
+      <div class="column item">
+      <a class="ui right floated" href="https://github.com/rtfd/readthedocs.org" rel="noopener noreferrer"><i class="github icon"></i></a>
+      </div>
+      <div class="column item">
+      <a href="https://twitter.com/readthedocs" rel="noopener noreferrer"><i class="twitter icon medium"></i></a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <hr style="margin-top: 35px; margin-bottom: 30px">
+
+      <div class="ui two column grid container meta-info">
+      <div class="column-copyright">
+        <p>
+          <small>&copy; Copyright {% now "Y" %}, {% trans 'Read the Docs, Inc & contributors' %}</small>
+        </p>
+
+        <p>
+          <small>{% trans 'Version' %} <a href="http://docs.readthedocs.io/page/changelog.html">{% readthedocs_version %}</a></small>
+        </p>
+      </div>
+
+      {% block language-select-form %}
+        <div class="column-setlang">
+          {% get_current_language as current_lang %}
+          <form action="/i18n/setlang/" method="post" style="float: right">
+            <input name="next" type="hidden" value="/" />
+            {% csrf_token %}
+            <select name="language">
+              {% for lang in LANGUAGES %}
+                {% if lang.0 == current_lang %}
+                <option selected="selected" value="{{ lang.0 }}">{{ lang.0|language_name_local }} [{{ lang.1 }}]</option>
+                {% else %}
+                <option value="{{ lang.0 }}">{{ lang.0|language_name_local }} [{{ lang.1 }}]</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+            <input type="submit" value="{% trans 'Change Language' %}" name="submit">
+          </form>
+        </div>
+      {% endblock language-select-form %}
+      </div>
+    </div>
+
+      <div class="clearfix"></div>
+
+      <div class="sponsors ui six column doubling  grid container items">
+        <div class="column item">
+          <a class="sponsor bottom aligned" href="https://azure.microsoft.com" rel="noopener" target="_blank">
+            <img src="{% static 'images/sponsors/azure.png' %}" alt="Microsoft Azure" class="sponsor-image">
+            <div class="sponsor-name">Microsoft Azure</div>
+            <div class="sponsor-description">Cloud Computing</div>
+          </a>
+        </div>
+          <div class="column item">
+          <a class="sponsor bottom aligned" href="https://cloudflare.com" rel="noopener" target="_blank">
+            <img src="{% static 'images/sponsors/cloudflare.png' %}" alt="CloudFlare" class="sponsor-image">
+            <div class="sponsor-name">Cloudflare</div>
+            <div class="sponsor-description">DNS &amp; SSL</div>
+          </a>
+        </div>
+          <div class="column item">
+          <a class="sponsor bottom aligned" href="https://sentry.io/" rel="noopener" target="_blank">
+            <img src="{% static 'images/sponsors/sentry.png' %}" alt="Sentry" class="sponsor-image">
+            <div class="sponsor-name">Sentry</div>
+            <div class="sponsor-description">Monitoring</div>
+          </a>
+        </div>
+        <div class="column item">
+          <a class="sponsor bottom aligned" href="https://www.elastic.co/" rel="noopener" target="_blank">
+            <img src="{% static 'images/sponsors/elastic.png' %}" alt="Elastic" class="sponsor-image">
+            <div class="sponsor-name">Elastic</div>
+            <div class="sponsor-description">Search</div>
+          </a>
+        </div>
+        <div class="column item">
+          <a class="sponsor bottom aligned" href="https://newrelic.com/" rel="noopener" target="_blank">
+            <img src="{% static 'images/sponsors/newrelic.png' %}" alt="New Relic" class="sponsor-image">
+            <div class="sponsor-name">New Relic</div>
+            <div class="sponsor-description">Performance</div>
+          </a>
+        </div>
+        <div class="column item">
+          <a class="sponsor bottom aligned" href="https://www.pagerduty.com/" rel="noopener" target="_blank">
+            <img src="{% static 'images/sponsors/pagerduty.png' %}" alt="PagerDuty" class="sponsor-image">
+            <div class="sponsor-name">PagerDuty</div>
+            <div class="sponsor-description">Monitoring</div>
+          </a>
+        </div>
+      </div>
+
+    {% endblock footer-content %}
+
+  </div>
 </div>

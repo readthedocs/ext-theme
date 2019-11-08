@@ -1,5 +1,152 @@
 // Read the Docs footer
 
-footer.rtd-footer {
-  margin-bottom: 0px;
+#footer {
+  width: calc(~'100% + 5px');
+  background: url(../../images/header-home-bg.svg) bottom left repeat-x #465158;
+  border-bottom: 1px solid #333;
+  background-repeat: repeat;
+  border-bottom: 1px solid #333;
+  padding: 70px 0;
+  color: #BCC1C3;
+
+  @media (max-width: 767px) {
+    padding: 30px 0;
+  }
+
+  h4 {
+    font-size: 18px;
+    color: #e3e3e3;
+  }
+
+  hr {
+    background-color: #ccc;
+    border: 0;
+    height: 1px;
+    margin-bottom: 10px;
+  }
+
+  li {
+    margin-bottom: 5px;
+  }
+
+  .ui.three.column .column {
+    padding-left: 0;
+  }
+
+  a,
+  a:visited {
+    color: #e3e3e3;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: white;
+    text-decoration: underline;
+  }
+
+  #email-signup p {
+    padding-right: 10px;
+    font-size: 14px;
+    color: #BCC1C3;
+  }
+
+  input[type="email"] {
+    padding: 4px;
+    font-size: 12px;
+    line-height: 16px;
+    margin-bottom: 5px;
+    margin-top: 4px;
+    border: 1px solid #BFBFBF;
+    border-radius: 3px;
+  }
+
+  input[type=submit] {
+    margin: 0;
+    font-family: Lato, Helvetica, Arial, sans-serif;
+    color: #666;
+    font-weight: 700;
+    padding: 2px;
+    font-size: 12px;
+    border-radius: 3px;
+    background: #e6e6e6 url(../../images/gradient.png) repeat-x 0 100%;
+    text-shadow: 0 1px 0 #fff;
+    border: 1px solid #bfbfbf;
+    display: block;
+    text-decoration: none;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .1), inset 0 1px 0 hsla(0, 0%, 100%, .5);
+    cursor: pointer;
+  }
+
+  .meta-info {
+    justify-content: space-between;
+
+    .column-copyright,
+    .column-setlang {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    form {
+      display: flex;
+    }
+
+    form select {
+      float: left;
+      width: 175px;
+      padding: 2px;
+      height: 24px;
+      font-size: 12px;
+      margin-right: 10px;
+    }
+  }
+
+  .sponsors {
+    margin-top: 50px;
+
+    a {
+      text-align: center;
+    }
+
+    a.sponsor:hover {
+      text-decoration: none;
+    }
+
+    .sponsor-name {
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .sponsor-name:hover {
+      color: #fff;
+    }
+
+    .sponsor-description {
+      font-size: 10px;
+      color: #BCC1C3;
+    }
+  }
+
+  a.sponsor img {
+    width: 90px;
+    height: auto;
+    margin-left: 35px;
+  }
+}
+
+.social {
+
+  .column.item {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  i.icon {
+    transform: scale(1.5);
+    color: #999;
+  }
+}
+
+.social i.icon:hover {
+  text-decoration: none;
+  color: #fff;
 }

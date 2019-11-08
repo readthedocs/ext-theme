@@ -11,9 +11,11 @@
     <link rel="icon" type="image/png" href="{% static 'corporate/img/favicon.png' %}" />
     {# New stylesheet #}
 
-    {% comment %} <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/site.css' %}" /> {% endcomment %}
-    {% comment %} Uncomment line above and comment one below when commiting {% endcomment %}
-    <link rel="stylesheet" href="http://localhost:8080/static/site.css">
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/site.css' %}" />
+    {% comment %} 
+      Line below is for webpack-dev-ser (hot-reloading). Uncomment line when commiting
+    {% endcomment %}
+    {% comment %} <link rel="stylesheet" href="http://localhost:8080/static/site.css"> {% endcomment %}
 
     {# here there should be the styles specific to the .org page #}
     <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/org_overwrites.css' %}" />
@@ -60,8 +62,7 @@ var $ = jQuery = require('jquery');
 
     {# TODO remove this and use the base-ng theme as the default #}
     {% block content-wrapper %}
-      <div id="content">
-        <div class="wrapper">
+        <div class="ui container padding-top">
 
           <!-- BEGIN notify -->
           {% if messages %}
@@ -81,11 +82,14 @@ var $ = jQuery = require('jquery');
 
           {% block content %}{% endblock %}
         </div>
-      </div>
     {% endblock %}
 
     {% block footer %}
       {% include "includes/footer.html" %}
     {% endblock %}
+
+    <script>
+      {% block footerjs %}{% endblock %}
+    </script>
   </body>
 </html>

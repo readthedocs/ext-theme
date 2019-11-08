@@ -30,7 +30,10 @@ module.exports = {
     ]
   },
   devServer: {
-    hot: true
+    hot: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    }
   },
   resolve: {
     alias: {
@@ -60,7 +63,7 @@ module.exports = {
       "static",
       "readthedocsext",
       "theme"
-    ),
-    publicPath: "/static/"
+    )
+    // publicPath: "/static/"
   }
 };

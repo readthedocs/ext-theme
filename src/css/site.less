@@ -143,7 +143,7 @@
 
 /* ------ SITE WIDE STYLES ------ */
 body {
-  color: rgb(68, 68, 68);
+  background: #fafafa url(../images/body-bg.svg) top left repeat;
 }
 
 h1 {
@@ -164,54 +164,92 @@ h3 {
   margin-bottom: 10px;
 }
 
+h4 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
 p {
   margin-bottom: 15px;
 }
 
-.home .lead {
-  font-size: 20px;
-  line-height: 30px;
+ol,
+ul {
+  list-style: none;
+  padding-left: 0;
 }
 
 section {
   margin-bottom: 40px;
 }
 
-/* ------ END OF SITE WIDE STYLES ------ */
-
-a.cta-btn {
-  width: 300px;
-  font-weight: bold;
-  text-align: center;
-  display: inline-block;
-  font-size: 1.1em;
-  color: rgb(255, 255, 255);
-  text-shadow: rgba(0, 0, 0, 0.5) 0px 1px 1px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 0px, rgba(255, 255, 255, 0.5) 0px 1px 0px inset;
-  margin: 0.3em 0em;
-  background: url(../images/gradient.png) left bottom repeat-x rgb(142, 204, 76);
-  border-width: 1px;
-  border-style: solid;
-  border-image: initial;
-  border-color: rgb(107, 153, 57) rgb(107, 153, 57) rgb(80, 115, 43);
-  padding: 8px 15px;
-  border-radius: 3px;
-  text-decoration: none;
+a {
+  color: #444;
+  text-decoration: underline;
 }
 
-a.cta-btn:hover {
-  color: #fff;
+a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+textarea,
+input,
+select,
+.button {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", Courier, monospace;
+  font-size: 16px;
+  line-height: 20px;
+  border: 1px solid #BFBFBF;
+  color: #444;
+  background-color: #fff;
+}
+
+::placeholder {
+  opacity: 0.5;
+}
+
+select {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", Courier, monospace;
+  display: block;
+  max-height: 300px;
+  width: 250px;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+/* ------ END OF SITE WIDE STYLES ------ */
+
+.home .lead {
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.padding-top {
+  padding-top: 30px;
+
+  @media (max-width: 767px) {
+    padding-top: 10px;
+  }
+}
+
+
+#features .grid.container {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 /* ------- Wide search bar ------- */
-
-
 .wide-search-bar {
   width: 100%;
   margin-bottom: 60px;
   border-radius: 5px;
   background: #e6e6e6;
   background: rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 767px) {
+    margin-bottom: 0;
+  }
 }
 
 .wide-search-bar-wrapper {
@@ -220,6 +258,11 @@ a.cta-btn:hover {
 
 .wide-search-bar-wrapper form {
   display: flex;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .wide-search-bar input {
@@ -243,6 +286,11 @@ a.cta-btn:hover {
 
 .wide-search-bar .submit-input-wrapper {
   width: 30%;
+
+  @media (max-width: 767px) {
+    width: 50%;
+    margin-top: 10px;
+  }
 }
 
 .wide-search-bar input[type="submit"] {
@@ -254,12 +302,10 @@ a.cta-btn:hover {
   text-align: center;
 }
 
-
-/*
 .wide-search-bar input[type="text"] {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
-  width: 513px;
+  height: 47px;
 }
 
 .wide-search-bar input {
@@ -275,6 +321,6 @@ a.cta-btn:hover {
   height: 47px;
   width: 100%;
   text-align: center;
-} */
+}
 
 /* ------- End of wide search bar ------- */

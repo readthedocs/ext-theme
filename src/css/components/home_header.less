@@ -1,12 +1,15 @@
-#home-header .ui.secondary.menu {
-  background: url(../../images/header-home-bg.svg) bottom left repeat-x #465158;
-  border-bottom: 1px solid #333;
-  background-repeat: repeat;
-}
+#home-header {
 
-#home-header .ui.container {
-  padding-top: 60px;
-  padding-bottom: 57px;
+  .ui.secondary.menu {
+    background: url(../../images/header-home-bg.svg) bottom left repeat-x #465158;
+    border-bottom: 1px solid #333;
+    background-repeat: repeat;
+  }
+
+  .ui.container {
+    padding-top: 60px;
+    padding-bottom: 57px;
+  }
 }
 
 .home-header-title {
@@ -15,16 +18,20 @@
   background: url(../../images/home-logo.png) top left no-repeat;
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
 
+  @media (max-width: 767px) {
+    margin: 0 auto;
+  }
+
   h1 {
     color: #fff;
     padding: 0;
     margin: 0;
     text-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
   }
-}
 
-.home-header-title .tagline {
-  color: #BCC1C3;
+  .tagline {
+    color: #BCC1C3;
+  }
 }
 
 // Sign up button
@@ -34,6 +41,10 @@
 
 .home-header-links {
   padding-top: 22px;
+
+  @media (max-width: 767px) {
+    padding-top: 0;
+  }
 }
 
 .home-header-links .login-box p {
