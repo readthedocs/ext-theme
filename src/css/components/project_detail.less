@@ -1,0 +1,86 @@
+#project_bar {
+  background: #E8ECEF url(../../images/project-bar-bg.png) top left repeat;
+  border-bottom: 1px solid #DAE1E5;
+  overflow: hidden;
+  position: relative;
+
+  .ui.container {
+    padding: 30px 0 20px;
+  }
+
+  h1 a {
+    text-decoration: none;
+  }
+
+  h1 span.project-breadcrumb {
+    font-weight: normal;
+    font-size: 17px;
+  }
+
+  .options ul li.active a {
+    background-color: #465158;
+  }
+
+  .options ul {
+    display: flex;
+    flex-wrap: wrap;
+
+    @media (max-width: 767px) {
+      justify-content: center;
+    }
+  }
+
+  .options ul li {
+    margin-right: 8px;
+
+    @media (max-width: 767px) {
+      margin-top: 10px;
+    }
+  }
+
+  .options ul li a {
+    margin: 0;
+    display: block;
+    margin: 0;
+    padding: 8px 12px 26px 12px;
+    font-weight: bold;
+    font-size: 15px;
+    height: 20px;
+    line-height: 20px;
+    text-decoration: none;
+    color: #fff;
+    background: #8CA1AF url(../../images/gradient-light.png) bottom left repeat-x;
+    box-shadow: 0 1px 1px #465158;
+    border-radius: 3px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  }
+
+  .options ul li a:hover {
+    background-color: #697983;
+    box-shadow: 0 1px 0px #465158;
+  }
+}
+
+.build_a_version {
+  margin-top: 15px;
+}
+
+#project_details {
+
+  .additional-details {
+    h3 {
+      margin-top: 15px;
+      margin-bottom: 0;
+      font-size: 16px;
+    }
+
+    h3:first-child,
+    .sub_projects {
+      margin-top: 0;
+    }
+
+    .repo-url {
+      overflow-x: hidden;
+    }
+  }
+}

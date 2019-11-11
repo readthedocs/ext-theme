@@ -17,6 +17,17 @@
   }
 }
 
+
+.module-header h3,
+.module-header h1 {
+  margin-bottom: 10px;
+}
+
+#project_details .module-list-wrapper li {
+  display: flex;
+  justify-content: space-between;
+}
+
 .module-item {
   position: relative;
   border-bottom: 1px solid #bfbfbf;
@@ -30,6 +41,8 @@
     font-weight: bold;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
 
   a:hover {
@@ -40,21 +53,21 @@
     font-weight: normal;
     color: #999;
   }
+}
 
-  a span.build-state {
-    padding: .2em .4em;
-    margin-left: .3em;
-    border-radius: .3em;
-    border: 1px solid #e4e4e4;
-  }
+span.build-state {
+  padding: .2em .4em;
+  margin-left: .3em;
+  border-radius: .3em;
+  border: 1px solid #e4e4e4;
+}
 
-  a span.build-state.build-state-failing {
-    color: #a55;
-  }
+span.build-state.build-state-failing {
+  color: #a55;
+}
 
-  a span.build-state.build-state-passing {
-    color: #5a5;
-  }
+span.build-state.build-state-passing {
+  color: #5a5;
 }
 
 .module-item:hover {
@@ -67,4 +80,26 @@
 
 .module-item:hover {
   background: #f3f3f3 url(../../images/gradient-light.png) bottom left repeat-x;
+}
+
+.module-item .module-item-menu li a {
+  display: block;
+  padding: 6px 10px 4px;
+  margin: 0;
+  padding: 8px 10px 22px 10px;
+  font-weight: bold;
+  font-size: 14px;
+  height: 20px;
+  line-height: 17px;
+  text-decoration: none;
+  color: #fff;
+  background: #8CA1AF url(../../images/gradient-light.png) bottom left repeat-x;
+  border-radius: 3px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 1px #465158;
+}
+
+.module-item .module-item-menu li a:hover {
+  background-color: #697983;
+  box-shadow: 0 1px 0px #465158;
 }
