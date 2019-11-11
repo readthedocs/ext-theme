@@ -137,13 +137,15 @@
 // Read the Docs
 @import "config";
 @import "components/buttons";
+@import "components/wide_search_bar";
 @import "components/header";
 @import "components/footer";
 @import "components/home_header";
-@import "components/dashboard";
-@import "components/project_detail";
 @import "components/table";
 @import "components/badge_markup";
+@import "pages/dashboard";
+@import "pages/project_detail";
+@import "pages/elastic_search";
 
 /* ------ SITE WIDE STYLES ------ */
 body {
@@ -262,89 +264,3 @@ pre {
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
-
-/* ------- Wide search bar ------- */
-.wide-search-bar {
-  width: 100%;
-  margin-bottom: 60px;
-  border-radius: 5px;
-  background: #e6e6e6;
-  background: rgba(0, 0, 0, 0.1);
-
-  @media (max-width: 767px) {
-    margin-bottom: 0;
-  }
-}
-
-.wide-search-bar-wrapper {
-  padding: 8px;
-}
-
-.wide-search-bar-wrapper form {
-  display: flex;
-
-  @media (max-width: 767px) {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-.wide-search-bar input {
-  margin: 0;
-  height: 45px;
-  padding: 10px;
-  border-radius: 0;
-}
-
-.wide-search-bar .text-input-wrapper {
-  width: 99%;
-}
-
-.wide-search-bar input[type="text"] {
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  width: 99%;
-  box-sizing: border-box;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 0px, rgba(255, 255, 255, 0.5) 0px 1px 0px inset;
-}
-
-.wide-search-bar .submit-input-wrapper {
-  width: 30%;
-
-  @media (max-width: 767px) {
-    width: 50%;
-    margin-top: 10px;
-  }
-}
-
-.wide-search-bar input[type="submit"] {
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-  height: 25px;
-  padding: 10px;
-  width: 100%;
-  text-align: center;
-}
-
-.wide-search-bar input[type="text"] {
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  height: 47px;
-}
-
-.wide-search-bar input {
-  height: 25px;
-  margin: 0px;
-  padding: 10px;
-  border-radius: 0px;
-}
-
-.wide-search-bar input[type="submit"] {
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-  height: 47px;
-  width: 100%;
-  text-align: center;
-}
-
-/* ------- End of wide search bar ------- */
