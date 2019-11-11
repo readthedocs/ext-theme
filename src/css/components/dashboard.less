@@ -1,0 +1,40 @@
+#dashboard {
+  margin-bottom: 20px;
+
+  input {
+    margin: 0;
+  }
+
+  h3 {
+    margin-bottom: 10px;
+  }
+}
+
+#dashboard_sidebar {
+  h3 {
+    margin-top: 40px;
+  }
+
+  input.search {
+    display: block;
+    padding-left: 40px;
+    height: 2.5em;
+    box-sizing: border-box;
+    background-image: url(../../images/search.png);
+    background-repeat: no-repeat;
+    background-position: 8px center;
+    background-size: 24px 24px;
+  }
+}
+
+// Force the sixteen columns-width on the two columns of the page in the tablet 
+// breakpoint as semantic-ui doesn't have a media queries variables for html classes
+@media (min-width: 768px) and (max-width: 1023px) {
+  #dashboard.grid.stackable {
+
+    .twelve.wide.column,
+    .four.wide.column {
+      width: 100% !important;
+    }
+  }
+}

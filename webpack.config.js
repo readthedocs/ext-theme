@@ -64,6 +64,7 @@ module.exports = {
       "readthedocsext",
       "theme"
     )
+    // Required for webpack-dev-server
     // publicPath: "/static/"
   }
 };

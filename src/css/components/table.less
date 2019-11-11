@@ -1,0 +1,70 @@
+.module-list {
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.module-list-wrapper {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+
+  ul {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+.module-item {
+  position: relative;
+  border-bottom: 1px solid #bfbfbf;
+  background: #fff;
+  padding: 10px;
+  position: relative;
+
+  a {
+    display: block;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+
+  a span {
+    font-weight: normal;
+    color: #999;
+  }
+
+  a span.build-state {
+    padding: .2em .4em;
+    margin-left: .3em;
+    border-radius: .3em;
+    border: 1px solid #e4e4e4;
+  }
+
+  a span.build-state.build-state-failing {
+    color: #a55;
+  }
+
+  a span.build-state.build-state-passing {
+    color: #5a5;
+  }
+}
+
+.module-item:hover {
+  cursor: pointer;
+
+  a {
+    color: #000;
+  }
+}
+
+.module-item:hover {
+  background: #f3f3f3 url(../../images/gradient-light.png) bottom left repeat-x;
+}
