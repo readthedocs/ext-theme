@@ -3,7 +3,7 @@
 #footer {
   margin-top: 60px;
   width: calc(~'100% + 5px');
-  background: url(../../images/header-home-bg.svg) bottom left repeat-x #465158;
+  background-color: #465158;
   border-bottom: 1px solid #333;
   background-repeat: repeat;
   border-bottom: 1px solid #333;
@@ -73,7 +73,7 @@
     padding: 2px;
     font-size: 12px;
     border-radius: 3px;
-    background: #e6e6e6 url(../../images/gradient.png) repeat-x 0 100%;
+    background: #e6e6e6%;
     text-shadow: 0 1px 0 #fff;
     border: 1px solid #bfbfbf;
     display: block;
@@ -107,6 +107,7 @@
 
   .sponsors {
     margin-top: 50px;
+    align-items: flex-end;
 
     a {
       text-align: center;
@@ -135,6 +136,20 @@
     width: 90px;
     height: auto;
     margin-left: 35px;
+
+    @media (min-width: 768px) and (max-width: 1023px) {
+      margin-left: 60px;
+    }
+  }
+}
+
+.sponsors .column.item:last-child {
+  @media (min-width: 768px) and (max-width: 1023px) {
+    margin-bottom: 1em !important;
+  }
+
+  @media (min-width: 1024px) {
+    align-self: center;
   }
 }
 
