@@ -1,86 +1,38 @@
-button.regular,
-a.regular {
-  color: #fff;
-  display: block;
-  padding: 10px 20px;
-  background-color: #7C8F99;
-  font-weight: bold;
-  text-shadow: 0px 1px 0 rgba(0, 0, 0, 0.7);
-  text-decoration: none;
-  border-radius: 3px;
-  margin-bottom: 10px;
+// Semantic ui default button styling
+button,
+input[type="submit"] {
+  cursor: pointer;
+  display: inline-block;
+  min-height: 1em;
+  outline: none;
+  border: none;
+  vertical-align: baseline;
+  background: #e0e1e2 none;
+  color: rgba(0, 0, 0, .6);
+  font-family: Lato, Helvetica Neue, Arial, Helvetica, sans-serif;
+  margin: 0 .25em 0 0;
+  padding: .6875em 1.5em;
+  text-transform: none;
+  text-shadow: none;
+  font-weight: 700;
+  line-height: 1em;
+  font-style: normal;
   text-align: center;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  border-radius: .25rem;
+  user-select: none;
+  transition: opacity .1s ease, background-color .1s ease, color .1s ease, box-shadow .1s ease, background .1s ease;
+  will-change: "";
+  -webkit-tap-highlight-color: transparent;
 }
 
-button.regular:hover,
-a.regular:hover {
-  background-color: #8CA1AF;
-  color: #fff;
+button:hover,
+input[type="submit"]:hover {
+  background-color: #cacbcd;
+  background-image: none;
+  color: rgba(0, 0, 0, .8);
 }
 
 a.cta-btn {
   width: 300px;
-  font-weight: bold;
-  text-align: center;
-  display: inline-block;
-  font-size: 1.1em;
-  color: rgb(255, 255, 255);
-  text-shadow: rgba(0, 0, 0, 0.5) 0px 1px 1px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 0px, rgba(255, 255, 255, 0.5) 0px 1px 0px inset;
-  margin: 0.3em 0em;
-  background-color: rgb(142, 204, 76);
-  border-width: 1px;
-  border-style: solid;
-  border-image: initial;
-  border-color: rgb(107, 153, 57) rgb(107, 153, 57) rgb(80, 115, 43);
-  padding: 8px 15px;
-  border-radius: 3px;
-  text-decoration: none;
-}
-
-a.cta-btn:hover {
-  color: #fff;
-}
-
-button {
-  font-size: 13px;
-}
-
-input[type="submit"],
-input[type="button"],
-button,
-.button,
-a.button {
-  font-family: Lato, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  color: #666;
-  font-weight: bold;
-  padding: 8px 15px;
-  border: none;
-  background-color: #e6e6e6;
-  margin: 30px 5px 20px 0;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
-  border: 1px solid #bfbfbf;
-  border-radius: 3px;
-  display: block;
-  text-decoration: none;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
-  cursor: pointer;
-  width: fit-content;
-}
-
-input[type="submit"]:hover,
-input[type="button"]:hover,
-button:hover,
-.button:hover {
-  background-color: #8ECC4C !important;
-  color: #fff !important;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5) !important;
-  border-color: #6B9939 !important;
-  border-bottom-color: #50732B !important;
-  text-decoration: none;
-}
-
-a.socialaccount-provider.button {
-  padding: 6px 10px;
 }

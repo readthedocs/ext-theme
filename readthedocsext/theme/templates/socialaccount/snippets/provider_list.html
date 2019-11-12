@@ -21,7 +21,7 @@
   {% if provider.id != 'bitbucket' %}
     <li>
       <a title="{{ provider.name }}"
-         class="socialaccount-provider button"
+         class="socialaccount-provider ui button"
          href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params next=next %}"
          > <i class="icon {{ provider.name|lower }}"></i>
          {% blocktrans trimmed with provider_name=provider.name verbiage=verbiage|default:'Connect to' %}
