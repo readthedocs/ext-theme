@@ -1,6 +1,7 @@
 {% extends "account/base.html" %}
 
 {% load i18n %}
+{% load account socialaccount %}
 {% load account %}
 
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
@@ -30,10 +31,8 @@
 
 <h3>{% trans 'Or' %}</h3>
 
-<div class="clearfix">
   <ul class="socialaccount_providers">
     {% include "socialaccount/snippets/provider_list.html" with process="login" next=request.GET.next verbiage="Sign in with" %}
   </ul>
-</div>
 
 {% endblock content %}

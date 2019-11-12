@@ -25,18 +25,6 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script>
-  $(document).ready(function () {
-    // Show action on hover
-    $(".module-item-menu").hover(
-      function () {
-        $(".hidden-child", this).show();
-      }, function () {
-        $(".hidden-child", this).hide();
-      }
-    );
-  });
-</script>
 {% endblock %}
 
 
@@ -102,10 +90,10 @@
 
   <!-- Call to action -->
   <section>
-    <p style="text-align: center">
+  <div class="ui center aligned segment basic">
       <a href="https://docs.readthedocs.io/page/intro/getting-started-with-sphinx.html"
         class="cta-btn ui button green">{% trans 'Getting started guide' %}</a>
-    </p>
+  </div>
   </section>
 
   <!-- Search -->

@@ -22,8 +22,10 @@
 
                 <p>{% trans 'Sign up for our newsletter to get our latest blog updates delivered to your inbox weekly.' %}</p>
                 <div>
-                  <label for="mce-EMAIL">{% trans 'Email' %}</label><br>
+                <div class="ui input email-input">
+                  <label for="mce-EMAIL">{% trans 'Email' %}</label>
                   <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="you@example.com">
+                  </div>
                 </div>
                 <div id="mce-responses">
                   <div class="response" id="mce-error-response" style="display:none"></div>
@@ -95,7 +97,7 @@
     </div>
 
     <div class="footer-bottom">
-      <hr style="margin-top: 35px; margin-bottom: 30px">
+      <hr>
 
       <div class="ui two column grid container meta-info">
       <div class="column-copyright">

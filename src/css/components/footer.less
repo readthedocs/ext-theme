@@ -5,8 +5,6 @@
   width: calc(~'100% + 5px');
   background-color: #465158;
   border-bottom: 1px solid #333;
-  background-repeat: repeat;
-  border-bottom: 1px solid #333;
   padding: 70px 0;
   color: #BCC1C3;
 
@@ -34,6 +32,11 @@
     margin-bottom: 5px;
   }
 
+  .footer-bottom hr {
+    margin-top: 35px;
+    margin-bottom: 30px
+  }
+
   .ui.three.column .column {
     padding-left: 0;
   }
@@ -55,17 +58,20 @@
     color: #BCC1C3;
   }
 
-  input[type="email"] {
-    padding: 4px;
-    font-size: 12px;
-    line-height: 16px;
-    margin-bottom: 5px;
-    margin-top: 4px;
-    border: 1px solid #BFBFBF;
-    border-radius: 3px;
+  .email-input {
+    display: flex;
+    flex-direction: column;
   }
 
-  input[type=submit] {
+  input[type="email"] {
+    margin-bottom: 5px;
+    margin-top: 4px;
+  }
+
+  input[type=submit],
+  input[type="email"],
+  form select,
+  .sponsors {
     font-size: 12px;
   }
 
@@ -78,17 +84,13 @@
       padding-right: 0;
     }
 
-    form {
-      display: flex;
-    }
-
     form select {
-      float: left;
+      display: inline-block;
       width: 175px;
       padding: 2px;
       height: 24px;
-      font-size: 12px;
       margin-right: 10px;
+      margin-bottom: 10px;
     }
   }
 
@@ -105,7 +107,6 @@
     }
 
     .sponsor-name {
-      font-size: 12px;
       line-height: 1.4;
     }
 
@@ -126,6 +127,10 @@
 
     @media (min-width: 768px) and (max-width: 1023px) {
       margin-left: 60px;
+    }
+
+    @media (max-width: 767px) {
+      margin-left: 15px;
     }
   }
 }

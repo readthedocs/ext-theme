@@ -62,7 +62,7 @@ var $ = jQuery = require('jquery');
 
     {# TODO remove this and use the base-ng theme as the default #}
     {% block content-wrapper %}
-        <div class="ui container padding-top">
+        <div class="ui container" id="content-wrapper">
 
           <!-- BEGIN notify -->
           {% if messages %}
