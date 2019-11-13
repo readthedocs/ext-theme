@@ -68,8 +68,8 @@
 {% block badge %}
     <h3>{% trans "Badge" %}</h3>
       <img src="{{ badge_url }}" />
-      <a href="{{ site_url }}" style="text-decoration: none;" onclick="$('#badge_markup').toggle(); return false;">
-      <i class="info circle icon" title="Get this badge" style="transform: scale(1.3) translateY(-4px)"></i>
+      <a class="get_badge" href="{{ site_url }}" onclick="$('#badge_markup').toggle(); return false;">
+      <i class="info circle icon" title="Get this badge"></i>
       </a>
       {% include "core/badge_markup.html" with badge_url=badge_url site_url=site_url %}
 {% endblock %}

@@ -4,10 +4,9 @@
 {% load static %}
 <div id="footer">
   <div class="ui container">
-    <hr>
     {% block footer-content %}
 
-    <div class="ui three column doubling grid container">
+    <div class="ui three column doubling grid container information">
       <div class="column column-logo">
         <div id="email-signup">
           <form action="https://readthedocs.us3.list-manage.com/subscribe/post?u=a6a22369cc2b356379cf789ca&amp;id=a85a83a5a5" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
@@ -28,10 +27,10 @@
                   </div>
                 </div>
                 <div id="mce-responses">
-                  <div class="response" id="mce-error-response" style="display:none"></div>
-                  <div class="response" id="mce-success-response" style="display:none"></div>
+                  <div class="ui hidden response" id="mce-error-response"></div>
+                  <div class="ui hidden response" id="mce-success-response"></div>
                 </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-                <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_a6a22369cc2b356379cf789ca_a85a83a5a5" tabindex="-1" value=""></div>
+                <div class="ui hidden" aria-hidden="true"><input type="text" name="b_a6a22369cc2b356379cf789ca_a85a83a5a5" tabindex="-1" value=""></div>
                 <div><input class="ui button" type="submit" value="{% trans 'Subscribe' %}" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
               </div>
             </form>
@@ -113,7 +112,7 @@
       {% block language-select-form %}
         <div class="column-setlang">
           {% get_current_language as current_lang %}
-          <form action="/i18n/setlang/" method="post" style="float: right">
+          <form action="/i18n/setlang/" method="post">
             <input name="next" type="hidden" value="/" />
             {% csrf_token %}
             <select name="language">
