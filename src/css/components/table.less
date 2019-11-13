@@ -1,64 +1,47 @@
-.module-list {
+.modules {
   padding: 8px;
   background: rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-}
-
-.module-list-wrapper {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  vertical-align: baseline;
 
   ul {
     margin-top: 0;
     margin-bottom: 0;
   }
-}
 
+  li {
+    position: relative;
+    border-bottom: 1px solid #bfbfbf;
+    background: #fff;
+    padding: 10px;
+    position: relative;
 
-.module-header h3,
-.module-header h1 {
-  margin-bottom: 10px;
-}
+    a {
+      display: block;
+      text-decoration: none;
+      font-weight: bold;
+      background-color: transparent;
+    }
 
-#project_details .module-list-wrapper li {
-  display: flex;
-  justify-content: space-between;
-}
+    a:hover {
+      background-color: transparent;
+      text-decoration: none;
+    }
 
-.module-item {
-  position: relative;
-  border-bottom: 1px solid #bfbfbf;
-  background: #fff;
-  padding: 10px;
-  position: relative;
-
-  a {
-    display: block;
-    text-decoration: none;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
+    .details {
+      font-weight: normal;
+      color: #999;
+    }
   }
 
-  a:hover {
-    text-decoration: none;
-  }
-
-  a span {
-    font-weight: normal;
-    color: #999;
+  li:hover {
+    background-color: #f3f3f3;
   }
 }
 
 span.build-state {
-  padding: .2em .4em;
-  margin-left: .3em;
-  border-radius: .3em;
+  padding: 0.2em 0.4em;
+  margin-left: 0.3em;
+  border-radius: 0.3em;
   border: 1px solid #e4e4e4;
 }
 
@@ -68,20 +51,4 @@ span.build-state.build-state-failing {
 
 span.build-state.build-state-passing {
   color: #5a5;
-}
-
-.module-item:hover {
-  cursor: pointer;
-
-  a {
-    color: #000;
-  }
-}
-
-.module-item:hover {
-  background-color: #f3f3f3;
-}
-
-.module-item .module-item-menu li a {
-  padding: 8px 10px;
 }

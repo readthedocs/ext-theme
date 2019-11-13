@@ -19,34 +19,35 @@
         <h3>{% trans "Versions" %}</h3>
       </div>
 
-      <div class="module-list">
 
-        <div class="module-list-wrapper">
+        <div class="modules">
           <ul>
           {% for version in versions|sort_version_aware %}
-            <li class="module-item col-span">
-            {% if version.uploaded or version.built %}
+            <li>
+              <div class="ui grid">
+              {% if version.uploaded or version.built %}
               {# Link to the docs #}
-              <a class="module-item-title" href="{{ version.get_absolute_url }}">
+              <a class="fourteen wide column computer twelve wide tablet ten wide mobile ui middle aligned" href="{{ version.get_absolute_url }}">
                 {{ version.slug }}
               {% if request.user in project.users.all %}
                 <span class="right-menu quiet">{{ version.get_privacy_level_display }}</span>
               {% endif %}
               </a>
-            {% else %}
-              <a class="module-item-title" href="{{ version.project.get_builds_url }}">
-                {{ version.slug }}
-              </a>
-            {% endif %}
-              {% if request.user|is_admin:project %}
-                <ul class="module-item-menu">
-                  <li><a class="ui button" href="{% url "project_version_detail" project.slug version.slug %}">{% trans "Edit" %}</a></li>
-                </ul>
+              {% else %}
+                <a class="fourteen wide column computer twelve wide tablet ten wide mobile ui middle aligned" href="{{ version.project.get_builds_url }}">
+                  {{ version.slug }}
+                </a>
               {% endif %}
+              {% if request.user|is_admin:project %}
+                <span class="two wide column right aligned segment">
+                  <a class="ui button" href="{% url "project_version_detail" project.slug version.slug %}">{% trans "Edit" %}</a>
+                  </span>
+              {% endif %}
+              </div>
             </li>
 
           {% empty %}
-            <li class="module-item">
+            <li>
               <p class="quiet">
                 {% trans "No active versions." %}
               </p>
@@ -54,7 +55,6 @@
           {% endfor %}
           </ul>
         </div>
-      </div>
 
     {% block build_versions %}
     {% if versions and request.user|is_admin:project %}
