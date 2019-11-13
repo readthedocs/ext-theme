@@ -26,15 +26,3 @@
     background-size: 24px 24px;
   }
 }
-
-// Force the sixteen columns-width on the two columns of the page in the tablet 
-// breakpoint as semantic-ui doesn't have a media queries variables for html classes
-@media (min-width: 768px) and (max-width: 1023px) {
-  #dashboard.grid.stackable {
-
-    .twelve.wide.column,
-    .four.wide.column {
-      width: 100% !important;
-    }
-  }
-}
