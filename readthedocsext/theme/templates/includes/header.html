@@ -2,52 +2,48 @@
 {% load gravatar %}
 
 <!-- BEGIN header-->
-<div id="rtfd-header">
-  <div class="ui secondary menu">
-    <div class="ui container">
+<div class="ui inverted attached stackable menu">
+  <div class="ui container">
+    {% comment %}Translators: Name of the website{% endcomment %}
+    <a class="header item" href="{% url "homepage" %}">Read the Docs</a>
 
-      <!-- BEGIN header title-->
-      <div class="rtfd-header-title">
-        <h1>
-          {% comment %}Translators: Name of the website{% endcomment %}
-          <a href="{% url "homepage" %}">Read the Docs</a>
-        </h1>
-      </div>
-      <!-- END header title -->
+    <!-- BEGIN header nav -->
+    <div class="right menu">
+      {% if request.user.is_authenticated %}
+        <div class="ui pointing dropdown link item">
 
-      <!-- BEGIN header nav -->
-       <div class="right menu">
-        {% if request.user.is_authenticated %}
-        <div class="menu menu-user">
-          <div class="ui buttons">
-            <a class="ui menu-button button" href="{% url 'projects_dashboard' %}">
-              {% gravatar request.user.email 24 %}
-              {{ request.user }}</a>
-            <div class="ui floating dropdown icon button">
-              <i class="dropdown icon"></i>
-              <div class="menu">
-                <a class="item" href="{% url 'projects_dashboard' %}">{% trans "My Projects" %}</a>
+            <img class="ui avatar image" src="{% gravatar_url request.user.email 24 %}">
+            <div class="text">
+              {{ request.user }}
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <a class="item" href="{% url 'projects_dashboard' %}">{% trans "My Projects" %}</a>
               <a class="item" href="{% url 'profiles_profile_edit' %}">{% trans "Settings" %}</a>
               <a class="item" href="{% url 'support' %}">{% trans "Support" %}</a>
               <a class="item" href="{% url 'account_logout' %}">{% trans "Log Out" %}</a>
-              </div>
             </div>
-          </div>
+
         </div>
-        {% else %}
-          {% url 'account_login' as login %}
-          {% if not request.path == login %}
-          <div class="rtfd-header-nav">
-            <ul><li><a href="{% url 'account_login' %}">{% trans "Log In" %}</a></li></ul>
+      {% else %}
+        {% url 'account_login' as login %}
+        {% if not request.path == login %}
+          <div class="item">
+            <a href="{% url 'account_login' %}" class="ui button">
+              {% trans "Log In" %}
+            </a>
           </div>
-          {% endif %}
         {% endif %}
-
-      </div>
-            <!-- END header nav -->
-
+        <div class="item">
+          <a class="ui button primary" href="{% url "account_signup" %}">
+            {% trans "Sign up" %}
+          </a>
+        </div>
+      {% endif %}
 
     </div>
+    <!-- END header nav -->
+
   </div>
 </div>
 <!-- END header-->
