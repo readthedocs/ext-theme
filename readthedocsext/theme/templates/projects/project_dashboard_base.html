@@ -46,46 +46,43 @@
         {% endif %}
 
         <div class="module">
-            <div class="module-header">
               {% block project_import_button %}
               <form method="get" action="{{ projects_import_url }}">
                 <input type="submit" value="{% trans "Import a Project" %}" />
               </form>
               {% endblock %}
               <h3>{% trans "Projects" %}</h3>
-            </div>
 
-          <div class="modules">
-            <ul>
-              {% for project in project_list %}
-                <li>
-                  <a href="{% url "projects_manage" project.slug %}" class=" ui grid">
-                    <span class="twelve wide computer ten wide tablet seven wide mobile column">
-                      {% block project-name %}
-                        {{ project.name }}
-                      {% endblock %}
-                      {% with build=project.get_latest_build %}
-                    </span>
-                      <span class="four wide computer six wide tablet nine wide mobile column right aligned segment details">
-
-                        {% if build %}
-                          <time datetime="{{ build.date|date:"c" }}" title="{{ build.date|date:"DATETIME_FORMAT" }}">
-                            <small>{% blocktrans with date=build.date|timesince %}{{ date }} ago{% endblocktrans %}</small>
-                          </time>
-                          {% if build.success %}
-                            <span class="build-state build-state-passing">{% trans "passing" %}</span>
-                          {% else %}
-                            <span class="build-state build-state-failing">{% trans "failing" %}</span>
-                          {% endif %}
+          <div class="ui items divided">
+            {% for project in project_list %}
+                <a href="{% url "projects_manage" project.slug %}" class="item">
+                  <div class="left aligned content">
+                    <div class="header">
+                    {% block project-name %}
+                      {{ project.name }}
+                    {% endblock %}
+                    {% with build=project.get_latest_build %}
+                    </div>
+                  </div>
+                    <span class="ui right aligned content segment">
+                      <div class="meta">
+                      {% if build %}
+                        <time datetime="{{ build.date|date:"c" }}" title="{{ build.date|date:"DATETIME_FORMAT" }}">
+                          <small>{% blocktrans with date=build.date|timesince %}{{ date }} ago{% endblocktrans %}</small>
+                        </time>
+                        {% if build.success %}
+                          <span class="ui green label">{% trans "passing" %}</span>
                         {% else %}
-                          <span>{% trans "No builds yet" %}</span>
+                          <span class="ui red label">{% trans "failing" %}</span>
                         {% endif %}
-                      </span>
-                    {% endwith %}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
+                      {% else %}
+                        <span class="ui gray label">{% trans "No builds yet" %}</span>
+                      {% endif %}
+                      </div>
+                    </span>
+                  {% endwith %}
+                </a>
+            {% endfor %}
           </div>
         </div>
 
