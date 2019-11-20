@@ -13,65 +13,63 @@
         {% include 'projects/onboard_detail.html' %}
       <!-- END onboard -->
       {% endif %}
+      <h3>{% trans "Versions" %}</h3>
 
 
-      <div class="module-header">
-        <h3>{% trans "Versions" %}</h3>
-      </div>
-
-
-        <div class="modules">
-          <ul>
-          {% for version in versions|sort_version_aware %}
-            <li>
-              <div class="ui grid">
+      <div class="ui items divided">
+        {% for version in versions|sort_version_aware %}
+            <div class="item">
+              <div class="content">
               {% if version.uploaded or version.built %}
               {# Link to the docs #}
-              <a class="fourteen wide column computer twelve wide tablet ten wide mobile ui middle aligned" href="{{ version.get_absolute_url }}">
-                {{ version.slug }}
-              {% if request.user in project.users.all %}
-                <span class="right-menu quiet">{{ version.get_privacy_level_display }}</span>
-              {% endif %}
-              </a>
-              {% else %}
-                <a class="fourteen wide column computer twelve wide tablet ten wide mobile ui middle aligned" href="{{ version.project.get_builds_url }}">
+                <a class="header" href="{{ version.get_absolute_url }}">
                   {{ version.slug }}
                 </a>
-              {% endif %}
+                {% if request.user in project.users.all %}
+                  <div class="meta">
+                    <span>{{ version.get_privacy_level_display }}</span>
+                  </div>
+                {% endif %}
+                {% else %}
+                  <a class="header" href="{{ version.project.get_builds_url }}">
+                    {{ version.slug }}
+                {% endif %}
+                </div>
               {% if request.user|is_admin:project %}
-                <span class="two wide column right aligned segment">
-                  <a class="ui button" href="{% url "project_version_detail" project.slug version.slug %}">{% trans "Edit" %}</a>
-                  </span>
+                <div class="extra">
+                  <a class="ui right floated button" href="{% url "project_version_detail" project.slug version.slug %}">{% trans "Edit" %}</a>
+                  </div> 
               {% endif %}
-              </div>
-            </li>
-
-          {% empty %}
-            <li>
-              <p class="quiet">
-                {% trans "No active versions." %}
-              </p>
-            </li>
-          {% endfor %}
-          </ul>
-        </div>
+            </div>
+        {% empty %}
+          <div class="item">
+            <div class="content">
+              <span class="header">{% trans "No active versions." %}</span>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
 
     {% block build_versions %}
     {% if versions and request.user|is_admin:project %}
-      <div class="build_a_version">
         <h3>{% trans "Build a version" %}</h3>
         <div class="version_right">
-          <form method="post" action="{% url "projects_detail" project.slug %}">
+          <form method="post" class="ui form" action="{% url "projects_detail" project.slug %}">
             {% csrf_token %}
+            <class class="inline fields">
+            <div class="field">
             <select id="id_version" name="version_slug">
             {% for version in versions|sort_version_aware %}
               <option value="{{ version.slug }}">{{ version.slug }}</option>
             {% endfor %}
             </select>
+            </div>
+            <div class="field">
             <input type="submit" value="{% trans "Build version" context "Build is a verb" %}">
+            </div>
+            </class>
           </form>
         </div>
-      </div>
     {% endif %}
     {% endblock %}
 
