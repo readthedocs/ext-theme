@@ -17,9 +17,6 @@
     {% endcomment %}
     {% comment %} <link rel="stylesheet" href="http://localhost:8080/static/site.css"> {% endcomment %}
 
-    {# here there should be the styles specific to the .org page #}
-    <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/org_overwrites.css' %}" />
-
     {% block extra_links %}{% endblock %}
 
     <meta name="viewport" content="width=device-width" />
@@ -62,13 +59,13 @@ var $ = jQuery = require('jquery');
 
     {# TODO remove this and use the base-ng theme as the default #}
     {% block content-wrapper %}
-        <div class="ui container" id="content-wrapper">
+        <div class="ui container">
 
           <!-- BEGIN notify -->
           {% if messages %}
             <ul class="notifications">
               {% for message in messages %}
-                <li class="notification notification-{{ message.level }}" {% if message.pk %}data-dismiss-url="{% url 'message_mark_read' message.pk %}"{% endif %}>
+                <li class="ui red message notification notification-{{ message.level }}" {% if message.pk %}data-dismiss-url="{% url 'message_mark_read' message.pk %}"{% endif %}>
                   {{ message }}
                 </li>
               {% endfor %}
