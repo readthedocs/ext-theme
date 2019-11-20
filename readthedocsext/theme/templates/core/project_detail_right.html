@@ -7,7 +7,7 @@
 {% block repo %}
   {% if project.repo %}
     <h3>{% trans "Repository" %}</h3>
-    <p class="detail-long repo-url">
+    <p>
       {% if project.repo|slice:':4' == 'http' %}
         {{ project.repo|urlize }}
       {% else %}
@@ -20,7 +20,7 @@
 {% block slug %}
   {% trans "Used in URL's and in code to represent the project name" as title %}
   <h3 title="{{ title }}">{% trans "Project Slug" %}</h3>
-  <p title="{{ title }}" class="detail-long">
+  <p title="{{ title }}">
       {{ project.slug }}
   </p>
 {% endblock %}
@@ -33,9 +33,9 @@
           {% if build.date %}
             {{ build.date|timesince }} ago
             {% if build.success %}
-              <span class="build-state build-state-passing">{% trans "passed" %}</span>
+              <span class="ui label green">{% trans "passed" %}</span>
             {% else %}
-              <span class="build-state build-state-failing">{% trans "failed" %}</span>
+              <span class="ui label red">{% trans "failed" %}</span>
             {% endif %}
           {% else %}
             {% trans "Currently Building" %}
@@ -68,7 +68,7 @@
 {% block badge %}
     <h3>{% trans "Badge" %}</h3>
       <img src="{{ badge_url }}" />
-      <a class="get_badge" href="{{ site_url }}" onclick="$('#badge_markup').toggle(); return false;">
+      <a href="{{ site_url }}" onclick="$('#badge_markup').toggle(); return false;">
       <i class="info circle icon" title="Get this badge"></i>
       </a>
       {% include "core/badge_markup.html" with badge_url=badge_url site_url=site_url %}
@@ -99,7 +99,7 @@
 
 {% block privacy-level %}
   <h3>{% trans "Project Privacy Level" %}</h3>
-  <div id="privacy_level">
+  <div>
     <p>
       {{ project.get_privacy_level_display }}
     </p>

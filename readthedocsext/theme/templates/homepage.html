@@ -112,13 +112,9 @@
   <!-- BEGIN projects list -->
   <section>
     <h3>{% trans "Featured Projects" %}</h3>
-    <div class="module-list">
-      <div class="module-list-wrapper">
-        <ul>
-          {% include "core/project_list_featured.html" %}
-        </ul>
-      </div>
-    </div>
+      <ul>
+        {% include "core/project_list_featured.html" %}
+      </ul>
   </section>
   <!-- END projects list -->
   {% endcache %}

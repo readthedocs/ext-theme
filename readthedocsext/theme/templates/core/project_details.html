@@ -53,12 +53,11 @@
     {% block build_versions %}
     {% if versions and request.user|is_admin:project %}
         <h3>{% trans "Build a version" %}</h3>
-        <div class="version_right">
           <form method="post" class="ui form" action="{% url "projects_detail" project.slug %}">
             {% csrf_token %}
             <class class="inline fields">
             <div class="field">
-            <select id="id_version" name="version_slug">
+            <select name="version_slug">
             {% for version in versions|sort_version_aware %}
               <option value="{{ version.slug }}">{{ version.slug }}</option>
             {% endfor %}
@@ -69,7 +68,6 @@
             </div>
             </class>
           </form>
-        </div>
     {% endif %}
     {% endblock %}
 

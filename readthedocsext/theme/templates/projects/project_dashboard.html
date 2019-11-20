@@ -3,7 +3,7 @@
 {% block dashboard-onboard-extra %}
     <!-- BEGIN Gold Pitch -->
     {% if not request.user.gold.count and request.user.projects.count > 1 %}
-      <div class="module onboard onboard-accounts">
+      <div class="onboard onboard-accounts">
         <h3>Support Read the Docs</h3>
 
         <p>
@@ -20,7 +20,7 @@
         </form>
       </div>
     {% else %}
-      <div class="module onboard onboard-accounts">
+      <div class="onboard onboard-accounts">
         <h3>Thanks!</h3>
         <p>
           Your <a href="{% url "gold_detail" %}">support</a> of Read the Docs helps make the site better each and every month.

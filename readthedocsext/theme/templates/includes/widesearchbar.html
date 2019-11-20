@@ -5,10 +5,10 @@
 
 <div class="wide-search-bar">
     <form class="ui stackable two column grid" action="{% url "search" %}" method="GET">
-      <div class="thirteen wide computer twelve wide tablet column text-input-wrapper ui input">
-        <input type="text" name="q" value="{{ term }}" id="id_site_search" placeholder="{% trans 'Search Read the Docs' %}">
+      <div class="thirteen wide computer twelve wide tablet column ui input">
+        <input type="text" name="q" value="{{ term }}" placeholder="{% trans 'Search Read the Docs' %}">
       </div>
-      <div class="three wide computer four wide tablet column submit-input-wrapper">
+      <div class="three wide computer four wide tablet column">
         {% comment %} Translators: This is about starting a search {% endcomment %}
         <input type="submit" value="{% trans "Let's do this." %}">
       </div>

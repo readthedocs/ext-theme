@@ -37,9 +37,7 @@
         {% else %}
           {% url 'account_login' as login %}
           {% if not request.path == login %}
-          <div class="rtfd-header-nav">
             <ul><li><a href="{% url 'account_login' %}">{% trans "Log In" %}</a></li></ul>
-          </div>
           {% endif %}
         {% endif %}
 

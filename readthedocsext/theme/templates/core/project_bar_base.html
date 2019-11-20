@@ -55,7 +55,7 @@
         {% endcomment %}
 
         {% if request.user|is_admin:project %}
-          <li class="project-admin"><a class="ui button {{ edit_active }}" href="{% url "projects_edit" project.slug %}"><i class="gear"></i>{% trans "Admin" %}</a></li>
+          <li><a class="ui button {{ edit_active }}" href="{% url "projects_edit" project.slug %}"><i class="gear"></i>{% trans "Admin" %}</a></li>
         {% endif %}
       </ul>
     </div>
