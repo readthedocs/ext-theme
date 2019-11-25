@@ -36,7 +36,7 @@
                     <div class="item">
                       <form method="post" action="{% url "profiles_tokens_delete" %}">
                         {% csrf_token %}
-                        <input class="ui button" type="submit" value="{% trans "Revoke" %}">
+                        <input class="ui primary button" type="submit" value="{% trans "Revoke" %}">
                       </form>
                     </div>
                   </div>

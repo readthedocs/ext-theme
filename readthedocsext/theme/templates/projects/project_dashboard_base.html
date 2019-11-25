@@ -105,7 +105,7 @@
       <!-- BEGIN social account onboard -->
       {% get_social_accounts request.user as accounts %}
       {% if not accounts.github.0 %}
-        <div class="module onboard onboard-accounts">
+        <div>
           <h3>{% trans "Connect your Accounts" %}</h3>
 
           <p>
@@ -115,7 +115,7 @@
           </p>
 
           <form method="get" action="{{ social_accounts }}">
-            <input type="submit" value="{% trans "Connect your Accounts" %}" />
+            <input class="ui button " type="submit" value="{% trans "Connect your Accounts" %}" />
           </form>
         </div>
       {% endif %}
