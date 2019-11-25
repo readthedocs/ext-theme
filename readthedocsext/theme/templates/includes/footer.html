@@ -2,183 +2,169 @@
 {% load i18n %}
 {% load core_tags %}
 {% load static %}
-<div id="footer">
+<footer class="ui inverted basic segment attached bottom">
   <div class="ui container">
     {% block footer-content %}
 
-    <div class="ui three column doubling grid container information">
-      <div class="column column-logo">
-        <div id="email-signup">
-          <form action="https://readthedocs.us3.list-manage.com/subscribe/post?u=a6a22369cc2b356379cf789ca&amp;id=a85a83a5a5" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-              <div>
-                <h4>{% trans 'Stay Updated' %}</h4>
+      <div class="ui three column stackable doubling grid information very padded">
 
-                <ul>
-                  <li>
-                    <a href="https://blog.readthedocs.com/">{% trans 'Blog' %}</a>
-                  </li>
-                </ul>
+        <div class="column">
+          <h4 class="ui sub inverted header">{% trans 'Stay Updated' %}</h4>
 
-                <p>{% trans 'Sign up for our newsletter to get our latest blog updates delivered to your inbox weekly.' %}</p>
-                <div>
-                <div class="ui input email-input">
-                  <label for="mce-EMAIL">{% trans 'Email' %}</label>
-                  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="you@example.com">
-                  </div>
-                </div>
-                <div>
-                  <div class="ui hidden"></div>
-                  <div class="ui hidden"></div>
-                </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-                <div class="ui hidden" aria-hidden="true"><input type="text" name="b_a6a22369cc2b356379cf789ca_a85a83a5a5" tabindex="-1" value=""></div>
-                <div><input class="ui button" type="submit" value="{% trans 'Subscribe' %}" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-              </div>
-            </form>
+          <div class="ui list">
+            <a href="https://blog.readthedocs.com/" class="item">{% trans 'Blog' %}</a>
+            <div class="item">
+              <a href="https://github.com/rtfd/readthedocs.org" rel="noopener noreferrer"><i class="large blue github icon"></i></a>
+              <a href="https://twitter.com/readthedocs" rel="noopener noreferrer"><i class="large blue twitter icon"></i></a>
+            </div>
           </div>
-      </div>
-      <div class="column">
-        <h4>{% trans 'Get Involved' %}</h4>
 
-        <ul>
-          <li>
-            <a href="https://docs.readthedocs.io/page/intro/getting-started-with-sphinx.html">{% trans 'Getting Started Guide' %}</a>
-          </li>
-          <li>
-            <a href="https://docs.readthedocs.io">{% trans 'Documentation' %}</a>
-          </li>
-          <li>
-            <a href="https://docs.readthedocs.io/page/contribute.html">{% trans 'Contributing' %}</a>
-          </li>
-          <li>
-            <a href="https://docs.readthedocs.io/page/team.html">{% trans 'Team' %}</a>
-          </li>
-          <li>
-            <a href="https://docs.readthedocs.io/page/open-source-philosophy.html">{% trans 'Open Source Philosophy' %}</a>
-          </li>
-        </ul>
+          <div class="ui inverted form">
+            <form action="https://readthedocs.us3.list-manage.com/subscribe/post?u=a6a22369cc2b356379cf789ca&amp;id=a85a83a5a5" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+              <p>{% trans 'Sign up for our newsletter to get our latest blog updates delivered to your inbox weekly.' %}</p>
 
-      </div>
-      <div class="column">
-        <h4>{% trans 'Business Info' %}</h4>
+              <div class="field">
+                <label for="mce-EMAIL">{% trans 'Email' %}</label>
+                <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="you@example.com">
+              </div>
 
-        <ul>
-          <li>
-            {% url "advertising" as advertising_url %}
-            <a href="{{ advertising_url | default:'https://readthedocs.org/sustainability/advertising/' }}">{% trans 'Advertise with Us' %}</a>
-          </li>
-          <li>
-            <a href="https://readthedocs.com">{% trans 'Read the Docs for Business' %}</a>
-          </li>
-          <li>
-            {% url "donate" as donate_url %}
-            <a href='{{ donate_url }}'>{% trans 'Supporters' %}</a>
-          </li>
-          <li>
-            <a href="https://docs.readthedocs.io/page/privacy-policy.html">{% trans 'Privacy Policy' %}</a>
-          </li>
-          <li>
-            <a href="https://docs.readthedocs.io/page/terms-of-service.html">{% trans 'Terms of Service' %}</a>
-          </li>
-          <li>
-            <a href="https://read-the-docs-guidelines.readthedocs-hosted.com/">{% trans 'Branding' %}</a>
-          </li>
-        </ul>
-      </div>
-    </div>
+              <div id="mce-responses">
+                <div class="ui hidden response" id="mce-error-response"></div>
+                <div class="ui hidden response" id="mce-success-response"></div>
+              </div>
+              {% comment %}Real people should not fill this in and expect good things - do not remove this or risk form bot signups{% endcomment %}
+              <input type="hidden" aria-hidden="true" name="b_a6a22369cc2b356379cf789ca_a85a83a5a5" tabindex="-1" value="">
 
-    <div class="ui two column grid items container">
-      <div class="column item">
-      <a class="ui right floated" href="https://github.com/rtfd/readthedocs.org" rel="noopener noreferrer"><i class="github icon"></i></a>
-      </div>
-      <div class="column item">
-      <a href="https://twitter.com/readthedocs" rel="noopener noreferrer"><i class="twitter icon medium"></i></a>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <hr>
-
-      <div class="ui two column grid container meta-info">
-      <div class="column-copyright">
-        <p>
-          <small>&copy; Copyright {% now "Y" %}, {% trans 'Read the Docs, Inc & contributors' %}</small>
-        </p>
-
-        <p>
-          <small>{% trans 'Version' %} <a href="http://docs.readthedocs.io/page/changelog.html">{% readthedocs_version %}</a></small>
-        </p>
-      </div>
-
-      {% block language-select-form %}
-        <div class="column-setlang">
-          {% get_current_language as current_lang %}
-          <form action="/i18n/setlang/" method="post">
-            <input name="next" type="hidden" value="/" />
-            {% csrf_token %}
-            <select name="language">
-              {% for lang in LANGUAGES %}
-                {% if lang.0 == current_lang %}
-                <option selected="selected" value="{{ lang.0 }}">{{ lang.0|language_name_local }} [{{ lang.1 }}]</option>
-                {% else %}
-                <option value="{{ lang.0 }}">{{ lang.0|language_name_local }} [{{ lang.1 }}]</option>
-                {% endif %}
-              {% endfor %}
-            </select>
-            <input class="ui button" type="submit" value="{% trans 'Change Language' %}" name="submit">
+              <input class="ui primary button" type="submit" value="{% trans 'Subscribe' %}" name="subscribe" id="mc-embedded-subscribe" class="button">
+            </div>
           </form>
         </div>
-      {% endblock language-select-form %}
+
+        <div class="column">
+          <h4 class="ui sub inverted header">{% trans 'Get Involved' %}</h4>
+
+          <div class="ui list">
+            <a class="item" href="https://docs.readthedocs.io/page/intro/getting-started-with-sphinx.html">{% trans 'Getting Started Guide' %}</a>
+            <a class="item" href="https://docs.readthedocs.io">{% trans 'Documentation' %}</a>
+            <a class="item" href="https://docs.readthedocs.io/page/contribute.html">{% trans 'Contributing' %}</a>
+            <a class="item" href="https://docs.readthedocs.io/page/team.html">{% trans 'Team' %}</a>
+            <a class="item" href="https://docs.readthedocs.io/page/open-source-philosophy.html">{% trans 'Open Source Philosophy' %}</a>
+          </div>
+        </div>
+
+        <div class="column">
+          <h4 class="ui sub inverted header">{% trans 'Business Info' %}</h4>
+
+          <div class="ui list">
+            {% url "advertising" as advertising_url %}
+            <a class="item" href="{{ advertising_url | default:'https://readthedocs.org/sustainability/advertising/' }}">{% trans 'Advertise with Us' %}</a>
+            <a class="item" href="https://readthedocs.com">{% trans 'Read the Docs for Business' %}</a>
+            {% url "donate" as donate_url %}
+            <a class="item" href='{{ donate_url }}'>{% trans 'Supporters' %}</a>
+            <a class="item" href="https://docs.readthedocs.io/page/privacy-policy.html">{% trans 'Privacy Policy' %}</a>
+            <a class="item" href="https://docs.readthedocs.io/page/terms-of-service.html">{% trans 'Terms of Service' %}</a>
+            <a class="item" href="https://read-the-docs-guidelines.readthedocs-hosted.com/">{% trans 'Branding' %}</a>
+          </div>
+        </div>
+
       </div>
-    </div>
 
-      <div></div>
+      <div class="ui two column grid container">
+        <div class="column">
+          <p>
+            <small>&copy; Copyright {% now "Y" %}, {% trans 'Read the Docs, Inc & contributors' %}</small>
+          </p>
 
-      <div class="sponsors ui six column doubling  grid container items">
-        <div class="column item">
-          <a class="sponsor bottom aligned" href="https://azure.microsoft.com" rel="noopener" target="_blank">
-            <img src="{% static 'images/sponsors/azure.png' %}" alt="Microsoft Azure" class="sponsor-image">
-            <div class="sponsor-name">Microsoft Azure</div>
-            <div class="sponsor-description">Cloud Computing</div>
-          </a>
+          <p>
+            <small>{% trans 'Version' %} <a href="http://docs.readthedocs.io/page/changelog.html">{% readthedocs_version %}</a></small>
+          </p>
         </div>
-          <div class="column item">
-          <a class="sponsor bottom aligned" href="https://cloudflare.com" rel="noopener" target="_blank">
-            <img src="{% static 'images/sponsors/cloudflare.png' %}" alt="CloudFlare" class="sponsor-image">
-            <div class="sponsor-name">Cloudflare</div>
-            <div class="sponsor-description">DNS &amp; SSL</div>
-          </a>
+
+        {% block language-select-form %}
+          <div class="column">
+            {% get_current_language as current_lang %}
+            <div class="ui form">
+              <form action="/i18n/setlang/" method="post">
+                <div class="field">
+                  <input name="next" type="hidden" value="/" />
+                </div>
+                {% csrf_token %}
+                <div class="field">
+                  <select name="language">
+                    {% for lang in LANGUAGES %}
+                      {% if lang.0 == current_lang %}
+                        <option selected="selected" value="{{ lang.0 }}">{{ lang.0|language_name_local }} [{{ lang.1 }}]</option>
+                      {% else %}
+                        <option value="{{ lang.0 }}">{{ lang.0|language_name_local }} [{{ lang.1 }}]</option>
+                      {% endif %}
+                    {% endfor %}
+                  </select>
+                </div>
+                <input class="ui secondary button" type="submit" value="{% trans 'Change Language' %}" name="submit">
+              </form>
+            </div>
+          </div>
+        {% endblock language-select-form %}
+      </div>
+
+      <div class="ui six column doubling grid container">
+        <div class="column bottom aligned centered">
+          <div class="ui tiny inverted header centered">
+            <a href="https://azure.microsoft.com" rel="noopener" target="_blank">
+              <img class="ui image" src="{% static 'images/sponsors/azure.png' %}" alt="Microsoft Azure" />
+              Microsoft Azure
+              <div class="inverted sub header">Cloud Computing</div>
+            </a>
+          </div>
         </div>
-          <div class="column item">
-          <a class="sponsor bottom aligned" href="https://sentry.io/" rel="noopener" target="_blank">
-            <img src="{% static 'images/sponsors/sentry.png' %}" alt="Sentry" class="sponsor-image">
-            <div class="sponsor-name">Sentry</div>
-            <div class="sponsor-description">Monitoring</div>
-          </a>
+        <div class="column bottom aligned centered">
+          <div class="ui tiny inverted header centered">
+            <a href="https://cloudflare.com" rel="noopener" target="_blank">
+              <img class="ui image" src="{% static 'images/sponsors/cloudflare.png' %}" alt="CloudFlare">
+              Cloudflare
+              <div class="inverted sub header">DNS &amp; SSL</div>
+            </a>
+          </div>
         </div>
-        <div class="column item">
-          <a class="sponsor bottom aligned" href="https://www.elastic.co/" rel="noopener" target="_blank">
-            <img src="{% static 'images/sponsors/elastic.png' %}" alt="Elastic" class="sponsor-image">
-            <div class="sponsor-name">Elastic</div>
-            <div class="sponsor-description">Search</div>
-          </a>
+        <div class="column bottom aligned centered">
+          <div class="ui tiny inverted header centered">
+            <a href="https://sentry.io/" rel="noopener" target="_blank">
+              <img class="ui image" src="{% static 'images/sponsors/sentry.png' %}" alt="Sentry">
+              Sentry
+              <div class="inverted sub header">Monitoring</div>
+            </a>
+          </div>
         </div>
-        <div class="column item">
-          <a class="sponsor bottom aligned" href="https://newrelic.com/" rel="noopener" target="_blank">
-            <img src="{% static 'images/sponsors/newrelic.png' %}" alt="New Relic" class="sponsor-image">
-            <div class="sponsor-name">New Relic</div>
-            <div class="sponsor-description">Performance</div>
-          </a>
+        <div class="column bottom aligned centered">
+          <div class="ui tiny inverted header centered">
+            <a href="https://www.elastic.co/" rel="noopener" target="_blank">
+              <img class="ui image" src="{% static 'images/sponsors/elastic.png' %}" alt="Elastic">
+              Elastic
+              <div class="inverted sub header">Search</div>
+            </a>
+          </div>
         </div>
-        <div class="column item">
-          <a class="sponsor bottom aligned" href="https://www.pagerduty.com/" rel="noopener" target="_blank">
-            <img src="{% static 'images/sponsors/pagerduty.png' %}" alt="PagerDuty" class="sponsor-image">
-            <div class="sponsor-name">PagerDuty</div>
-            <div class="sponsor-description">Monitoring</div>
-          </a>
+        <div class="column bottom aligned centered">
+          <div class="ui tiny inverted header centered">
+            <a href="https://newrelic.com/" rel="noopener" target="_blank">
+              <img class="ui image" src="{% static 'images/sponsors/newrelic.png' %}" alt="New Relic">
+              New Relic
+              <div class="inverted sub header">Performance</div>
+            </a>
+          </div>
+        </div>
+        <div class="column bottom aligned centered">
+          <div class="ui tiny inverted header centered">
+            <a href="https://www.pagerduty.com/" rel="noopener" target="_blank">
+              <img class="ui image" src="{% static 'images/sponsors/pagerduty.png' %}" alt="PagerDuty">
+              PagerDuty
+              <div class="inverted sub header">Monitoring</div>
+            </a>
+          </div>
         </div>
       </div>
 
     {% endblock footer-content %}
 
   </div>
-</div>
+</footer>
