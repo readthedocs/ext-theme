@@ -23,34 +23,29 @@
       <div class="ui hidden divider"></div>
   {% endif %}
 
-    <div class="module">
-      <div class="module-list">
-        <div class="module-list-wrapper">
+
+  <div class="ui relaxed list">
+    {% for token in object_list %}
+      <div class="item">
+          <div>Created: {{ token.created }}</div>
+          <div>Token: {{ token.key }}</div>
+
           <div class="ui relaxed list">
-            {% for token in object_list %}
-              <div class="item">
-                  <div>Created: {{ token.created }}</div>
-                  <div>Token: {{ token.key }}</div>
-
-                  <div class="ui relaxed list">
-                    <div class="item">
-                      <form method="post" action="{% url "profiles_tokens_delete" %}">
-                        {% csrf_token %}
-                        <input class="ui primary button" type="submit" value="{% trans "Revoke" %}">
-                      </form>
-                    </div>
-                  </div>
-
-              </div
-            {% empty %}
-              <div class="item">
-                <p class="quiet">
-                  {% trans 'No API Tokens currently configured.' %}
-                </p>
-              </div>
-            {% endfor %}
+            <div class="item">
+              <form method="post" action="{% url "profiles_tokens_delete" %}">
+                {% csrf_token %}
+                <input class="ui button" type="submit" value="{% trans "Revoke" %}">
+              </form>
             </div>
+          </div>
+
         </div>
+    {% empty %}
+      <div class="item">
+        <p class="ui message">
+          {% trans 'No API Tokens currently configured.' %}
+        </p>
       </div>
+    {% endfor %}
     </div>
 {% endblock %}
