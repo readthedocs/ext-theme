@@ -67,7 +67,7 @@ Versions
 
     {% if request.user|is_admin:project or request.user.is_staff %}
     <div class="ui basic segment padded">
-      <div class="module-wrapper">
+      
 
         {% if inactive_versions or request.GET.version_filter %}
           <div class="ui content">
@@ -118,7 +118,6 @@ Versions
               <div class="item">{% trans "No versions found" %}</li>
               {% endfor %}
               </div>
-        </div>
         {% endif %}
 
     </div>

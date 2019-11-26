@@ -38,12 +38,12 @@
 
 {% block content %}
 
-  <ul
-      class="notifications"
+  <div
+      class="ui list"
       style="display: none;"
       data-bind="visible: error">
-    <li
-        class="ui message"
+    <div
+        class="item ui message"
         data-bind="with: error">
 
       <span data-bind="visible: message">
@@ -51,11 +51,11 @@
         <span data-bind="text: message"></span>
       </span>
 
-    </li>
-  </ul>
+    </div>
+  </div>
 
   {% block main_content %}
-    <div class="ui very padded container">
+    <div class="ui basic padded segment">
 
       <button
           data-bind="click: sync_projects, visible: !is_syncing()"
@@ -64,7 +64,6 @@
       </button>
       <span
           data-bind="visible: is_syncing"
-          class="remote-sync-loader"
           style="display: none;">
         <img src="{% static 'core/img/loader.gif' %}"/>
       </span>
@@ -73,7 +72,7 @@
 
       {% if has_connected_accounts %}
         {% block private-repo-tip %}
-          <div class="import-repo">
+          <div>
             <p>
             {% blocktrans trimmed %}
                 We're only showing public repositories. For private projects and many of features,
@@ -83,130 +82,113 @@
           </div>
         {% endblock %}
       {% endif %}
-      <div class="module repository-list">
-        <div class="module-wrapper">
-          <div class="module-list">
-            <div class="module-list-wrapper">
+      
 
-              <div data-bind="visible: is_ready() && !has_projects()" style="display: none;"
-                  class="ui list">
-                <div class="item">
-                  {% if has_connected_accounts %}
-                    <p>
-                      {% blocktrans trimmed with binding='data-bind="click: sync_projects"' %}
-                        No remote repositories found,
-                        try <a href="#" {{ binding }}>refreshing your accounts</a>.
-                      {% endblocktrans %}
-                    </p>
-                  {% else %}
-                    <p>
-                      {% blocktrans trimmed %}
-                        You don't currently have any connected accounts.
-                        Connect your account to be able to easily set up projects.
-                      {% endblocktrans %}
-                    </p>
+      <div class="ui list" data-bind="visible: is_ready() && !has_projects()" style="display: none;">
+        <div class="item">
+          {% if has_connected_accounts %}
+            <p>
+              {% blocktrans trimmed with binding='data-bind="click: sync_projects"' %}
+                No remote repositories found,
+                try <a href="#" {{ binding }}>refreshing your accounts</a>.
+              {% endblocktrans %}
+            </p>
+          {% else %}
+            <p>
+              {% blocktrans trimmed %}
+                You don't currently have any connected accounts.
+                Connect your account to be able to easily set up projects.
+              {% endblocktrans %}
+            </p>
+        
+            <div class="ui list">
+              {% include "socialaccount/snippets/provider_list.html" with process="connect" next="/dashboard/import/" %}
+            </div>
+          
+          {% endif %}
+          </div>
+        </div>
 
+      <div data-bind="foreach: projects" class="ui list">
+        <div
+            class="item"
+            data-bind="visible: full_name"
+            style="display: none;">
 
-                    <div class="project-import-providers">
-                      <div class="ui list">
-                        {% include "socialaccount/snippets/provider_list.html" with process="connect" next="/dashboard/import/" %}
-                      </div>
-                    </div>
-                  {% endif %}
-                  </div>
-                </div>
+          <img
+              data-bind="attr: {src: avatar_url}"
+              height="24"
+          />
 
-              <div data-bind="foreach: projects" class="ui list">
-                <div
-                    class="item"
-                    data-bind="visible: full_name"
-                    style="display: none;">
+          <div>
+            <a data-bind="attr: {href: html_url}, text: full_name">
+            </a>
+            <span data-bind="visible: !is_locked(), text: clone_url"></span>
+            <span data-bind="visible: is_locked()">
+              {% trans "This repository requires admin access to import" %}
+            </span>
+          </div>
 
-                  <img
-                      data-bind="attr: {src: avatar_url}"
-                      height="24"
-                      class="remote-repo-avatar" />
-
-                  <div class="remote-repo-info">
-                    <a
-                        data-bind="attr: {href: html_url}, text: full_name"
-                        class="remote-repo-name">
-                    </a>
-                    <span
-                        data-bind="visible: !is_locked(), text: clone_url"
-                        class="remote-repo-extra remote-repo-extra-url">
-                    </span>
-                    <span
-                        data-bind="visible: is_locked()"
-                        class="remote-repo-extra remote-repo-extra-locked">
-                      {% trans "This repository requires admin access to import" %}
-                    </span>
-                  </div>
-
-                  <div class="ui list">
-                    <div
-                        class="item"
-                        data-bind="visible: is_locked()"
-                        style="display: none;">
-                      <span class="remote-repo-locked">
-                        <span>{% trans "Locked" %}</span>
-                      </span>
-                    </div>
-                    <div
-                        class="item"
-                        data-bind="visible: match() && !is_locked(), with: match"
-                        style="display: none;">
-                      <a
-                          data-bind="attr: {href: url}"
-                          title="{% trans "This repository has already been imported" %}">
-                        <span>{% blocktrans context "verb, action to see in detail" %}"View"{% endblocktrans %}</span>
-                      </a>
-                    </div>
-                    <div class="item" data-bind="visible: !match() && !is_locked()" style="display: none;">
-                      <a
-                          href="#"
-                          data-bind="click: import_repo"
-                          class="remote-repo-import">
-                        <span>{% trans "Add" %}</span>
-                      </a>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
+          <div class="ui list">
+            <div
+                class="item"
+                data-bind="visible: is_locked()"
+                style="display: none;">
+              <span>
+                <span>{% trans "Locked" %}</span>
+              </span>
+            </div>
+            <div
+                class="item"
+                data-bind="visible: match() && !is_locked(), with: match"
+                style="display: none;">
+              <a
+                  data-bind="attr: {href: url}"
+                  title="{% trans "This repository has already been imported" %}">
+                <span>{% blocktrans context "verb, action to see in detail" %}"View"{% endblocktrans %}</span>
+              </a>
+            </div>
+            <div class="item" data-bind="visible: !match() && !is_locked()" style="display: none;">
+              <a
+                  href="#"
+                  data-bind="click: import_repo"
+                  >
+                <span>{% trans "Add" %}</span>
+              </a>
             </div>
           </div>
+
         </div>
       </div>
 
-      <div class="ui pagination menu">
-        <span data-bind="visible: !page_previous()" class="disabled item">
-          ‹‹ {% trans "previous" %}
-        </span>
-        <a
-            href="#"
-            data-bind="visible: page_previous, click: previous_page"
-            class="item">
-          ‹‹ {% trans "previous" %}
-        </a>
+      <div class="ui basic padded segment">
+        <div class="ui pagination menu">
+          <span data-bind="visible: !page_previous()" class="disabled item">
+            ‹‹ {% trans "previous" %}
+          </span>
+          <a
+              href="#"
+              data-bind="visible: page_previous, click: previous_page"
+              class="item">
+            ‹‹ {% trans "previous" %}
+          </a>
 
-        <span data-bind="visible: !page_next()" class="disabled item">
-          {% trans "next" %} ››
-        </span>
-        <a
-            href="#"
-            data-bind="visible: page_next, click: next_page"
-            class="item">
-          {% trans "next" %} ››
-        </a>
+          <span data-bind="visible: !page_next()" class="disabled item">
+            {% trans "next" %} ››
+          </span>
+          <a
+              href="#"
+              data-bind="visible: page_next, click: next_page"
+              class="item">
+            {% trans "next" %} ››
+          </a>
+        </div>
       </div>
-
     </div>
   {% endblock main_content %}
 
   {% block sidebar_content %}
-    <div class="col-minor project-import-sidebar">
+    <div class="ui basic padded segment">
 
       {% block manual-import %}
         <div>
@@ -217,8 +199,8 @@
             {% endblocktrans %}
           </p>
 
-          <form action="{% url "projects_import_manual" %}" method="get" class="import-manual">
-            <input type="submit" value="{% trans "Import Manually" %}"/>
+          <form action="{% url "projects_import_manual" %}" method="get" class="ui form">
+            <input class="ui button" type="submit" value="{% trans "Import Manually" %}"/>
           </form>
         </div>
       {% endblock %}
@@ -231,8 +213,8 @@
             <div
                 class="item"
                 data-bind="css: {'remote-filter-hidden': filtered()}, click: function () { $root.set_filter_by(filter_id(), filter_type); }">
-              <img data-bind="attr: {src: avatar_url}" class="remote-filter-avatar" />
-              <span data-bind="text: display_name" class="remote-filter-name"></span>
+              <img data-bind="attr: {src: avatar_url}" />
+              <span data-bind="text: display_name" ></span>
           </div>
         </div>
         </div>

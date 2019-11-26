@@ -9,28 +9,15 @@
 
 {% block content %}
 
-  <div id="profile">
-    <div>
+  <div class="ui basic segment padded">
+
     {% get_public_projects profile.user %}
       {% with public_projects as project_list %}
-            <!-- BEGIN projects list -->
-            <div class="module">
-              <div class="module-wrapper">
-
-                <div class="module-list">
-                  <div class="module-list-wrapper">
-
-                    <ul>
-                    {% include "core/project_list_detailed.html" with omit=profile.user %}
-                    </ul>
-
-                  </div>
-                </div>
-
-              </div>
-            </div>
-            <!-- END projects list -->
+        <!-- BEGIN projects list -->
+          <div class="ui list">
+            {% include "core/project_list_detailed.html" with omit=profile.user %}
+          </div>          
+        <!-- END projects list -->
       {% endwith %}
-      </div>
   </div>
 {% endblock %}

@@ -6,10 +6,10 @@
 
 {% block subnav-bar %}
 <!-- BEGIN project bar -->
-<div id="project_bar">
-  <div class="wrapper">
+<div class="ui secondary segment attached">
+  <div class="ui container very padded">
 
-    <div class="project-title">
+    <div class="ui basic segment very padded">
       <h2>
         <a href="{{ profile.get_absolute_url }}">
         {% gravatar profile.user.email 30 %}
@@ -21,15 +21,15 @@
       </h2>
     </div>
 
-    <div class="options">
+    <div lass="ui basic segment very padded">
 
-      <ul>
-        <li class="{% block profile-bar-profile %}{% endblock %}"><a href="{{ profile.get_absolute_url }}">{% trans "Profile" %}</a></li>
+      <div class="ui list">
+        <div class="item {% block profile-bar-profile %}{% endblock %}"><a href="{{ profile.get_absolute_url }}">{% trans "Profile" %}</a></div>
         {% if profile.user == user %}
-          <li class="{% block profile-bar-admin %}{% endblock %}"><a href="{% url "profiles_profile_edit" %}"><i class="gear"></i>{% trans "Admin" %}</a></li>
+          <div class="item {% block profile-bar-admin %}{% endblock %}"><a href="{% url "profiles_profile_edit" %}"><i class="gear"></i>{% trans "Admin" %}</a></div>
         {% endif %}
 
-      </ul>
+      </div>
     </div>
 
   </div>

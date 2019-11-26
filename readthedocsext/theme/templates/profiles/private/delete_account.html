@@ -9,7 +9,7 @@
 {% block edit_content_header %} {% trans "Delete Account" %} {% endblock %}
 
 {% block edit_content %}
-  <form method="POST" action=".">
+  <form class="ui form" method="POST" action=".">
     {% csrf_token %}
     {{ form }}
     <div>
