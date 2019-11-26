@@ -27,7 +27,7 @@ $(document).ready(function () {
 {% endblock %}
 
 {% block edit_content %}
-  <div class="gold-subscription">
+  <div class="ui basic segment">
     <h2>{% trans "Gold Membership" %}</h2>
 
     <p>
@@ -36,29 +36,29 @@ $(document).ready(function () {
       {% endblocktrans %}
     </p>
 
-    <p class="subscription-detail subscription-detail-level">
+    <p>
       <label>{% trans "Level" %}:</label>
       <span>{{ golduser.get_level_display }}</span>
     </p>
 
-    <p class="subscription-detail subscription-detail-card">
+    <p>
       <label>{% trans "Card" %}:</label>
       <span>****-{{ golduser.last_4_card_digits }}</span>
     </p>
 
-    <form method="get" action="{% url "gold_subscription" %}" class="subscription-update">
-      <button>{% trans "Update membership" %}</button>
+    <form class="ui form" method="get" action="{% url "gold_subscription" %}" class="subscription-update">
+      <button class="ui button">{% trans "Update membership" %}</button>
     </form>
 
-    <form method="get" action="{% url "gold_cancel" %}" class="subscription-cancel">
-      <button>{% trans "Cancel membership" %}</button>
+    <form class="ui form" method="get" action="{% url "gold_cancel" %}" class="subscription-cancel">
+      <button class="ui button">{% trans "Cancel membership" %}</button>
     </form>
 
     <h3>{% trans "Gold projects" %}</h3>
     <p class="subscription-projects">{% trans 'Choose projects you would like to make ad-free.' %}</p>
 
-    <form method="get" action="{% url "gold_projects" %}" class="subscription-projects">
-      <button>{% trans "Select Projects" %}</button>
+    <form class="ui form" method="get" action="{% url "gold_projects" %}" class="subscription-projects">
+      <button class="ui button">{% trans "Select Projects" %}</button>
     </form>
   </div>
 {% endblock %}

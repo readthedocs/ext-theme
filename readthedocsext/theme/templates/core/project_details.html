@@ -4,7 +4,7 @@
 {% load gravatar %}
 {% load projects_tags %}
 
-<div id="project_details">
+<div class="ui basic segment very padded">
   <div class="ui grid stackable">
 
     <div class="twelve wide column">
@@ -72,7 +72,7 @@
     {% endblock %}
 
     {% if project.description %}
-    <div id="project_description">
+    <div>
       <h3>{% trans "Description" %}</h3>
       <p>
         {{ project.description|restructuredtext }}

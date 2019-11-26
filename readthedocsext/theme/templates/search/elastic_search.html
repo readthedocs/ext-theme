@@ -1,0 +1,247 @@
+{% extends "projects/base_project.html" %}
+
+{% load core_tags i18n static %}
+
+{% block title %}
+  {% blocktrans with query=query|default:"" %}
+    Search: {{ query }}
+  {% endblocktrans %}
+{% endblock %}
+
+{% block extra_links %}
+  {{ super }}
+  <style>
+    .navigable > ul > li { border-bottom: 0; }
+  </style>
+{% endblock %}
+
+{% block project_editing %}
+  {% if project_obj %}
+    {% with search_active="active" project=project_obj %}
+        {% include "core/project_bar.html" %}
+    {% endwith %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="ui basic segment padded">
+  <div class="ui list">
+    <h5>{% trans 'Object Type' %}</h5>
+    {% if not project_obj %}
+      <div class="item {% if type == 'project' %}active{% endif %}"><a href="?{% url_replace request 'type' 'project' %}">{% trans 'Projects' %}</a></div>
+    {% endif %}
+      <div class="item {% if type == 'file' %}active{% endif %}"><a href="?{% url_replace request 'type' 'file' %}">{% trans 'Files' %}</a></div>
+    <div class="ui divider"></div>
+
+    {% if facets.index %}
+      <h5>{% trans 'Index' %}</h5>
+      {% for name, count, selected in facets.index %}
+        <div class="item {% if selected %}active{% endif %}">
+          {% if index == name %}
+            <a href="?{% url_replace request 'index' ''  %}">{{ name }}
+          {% else %}
+            <a href="?{% url_replace request 'index' name  %}">{{ name }}
+          {% endif %}
+          ({{ count }})
+          </a>
+        </div>
+      {% endfor %}
+      <div class="ui divider"></div>
+    {% endif %}
+
+    {% if facets.project and not project_obj %}
+      <h5>{% trans 'Projects' %}</h5>
+      {% for name, count, selected in facets.project %}
+        <div class="item {% if selected %}active{% endif %}">
+          {% if project == name %}
+            <a href="?{% url_replace request 'project' ''  %}">{{ name }}
+          {% else %}
+            <a href="?{% url_replace request 'project' name  %}">{{ name }}
+          {% endif %}
+          ({{ count }})
+          </a>
+        </div>
+      {% endfor %}
+      <div class="ui divider"></div>
+    {% endif %}
+
+    {% if facets.version %}
+      <h5>{% trans 'Version' %}</h5>
+      {% for name, count, selected in facets.version %}
+        <div class="item {% if selected %}active{% endif %}">
+          {% if version == name %}
+            <a href="?{% url_replace request 'version' ''  %}">{{ name }}
+          {% else %}
+            <a href="?{% url_replace request 'version' name  %}">{{ name }}
+          {% endif %}
+          ({{ count }})
+          </a>
+        </div>
+      {% endfor %}
+      <div class="ui divider"></div>
+    {% endif %}
+
+    {% if facets.language %}
+      <h5>{% trans 'Language' %}</h5>
+      {% for name, count, selected in facets.language %}
+        <div class="item {% if selected %}active{% endif %}">
+          {% if language == name %}
+            <a href="?{% url_replace request 'language' ''  %}">{{ name }}
+          {% else %}
+            <a href="?{% url_replace request 'language' name  %}">{{ name }}
+          {% endif %}
+          ({{ count }})
+          </a>
+        </div>
+      {% endfor %}
+      <div class="ui divider"></div>
+    {% endif %}
+
+
+    {% if facets.role_name %}
+      <h5>{% trans 'Code API Type' %}</h5>
+      {% for name, count, selected in facets.role_name %}
+        <div class="item {% if selected %}active{% endif %}">
+          {% if role_name == name %}
+            <a href="?{% url_replace request 'role_name' ''  %}">{{ name }}
+          {% else %}
+            <a href="?{% url_replace request 'role_name' name  %}">{{ name }}
+          {% endif %}
+          ({{ count }})
+          </a>
+        </div>
+      {% endfor %}
+      <div class="ui divider"></div>
+    {% endif %}
+
+    {% block sponsor %}
+      <div class="search-sponsored">
+        Search is sponsored by <a href="https://www.elastic.co/">Elastic</a>, and hosted on <a href="https://www.elastic.co/cloud">Elastic Cloud</a>.
+      </div>
+    {% endblock sponsor %}
+    </div>
+<div>
+
+<h2>{% trans 'Search' %}</h2>
+<!-- BEGIN search form -->
+
+    <form class="ui form" action="." method="GET">
+      <div class="field">
+        <input type="text" name="q" value="{{ query|default_if_none:"" }}" id="id_elastic_search">
+        {% if type %} <input type="hidden" name="type" value="{{ type }}"> {% endif %}
+        {% if project %} <input type="hidden" name="project" value="{{ project }}"> {% endif %}
+        {% if taxonomy %} <input type="hidden" name="taxonomy" value="{{ taxonomy }}"> {% endif %}
+        {% if version %} <input type="hidden" name="version" value="{{ version }}"> {% endif %}
+        {% if language %} <input type="hidden" name="language" value="{{ language }}"> {% endif %}
+        {% if role_name %} <input type="hidden" name="role_name" value="{{ role_name }}"> {% endif %}
+      </div>
+      <div class="field">
+        {% comment %}Translators: This is about starting a search{% endcomment %}
+        <input class="ui primary button" type="submit" value="{% trans 'Search' %}">
+      </div>
+    </form>
+<!-- END search form -->
+
+{% if query %}
+  <!-- BEGIN search results -->
+
+      <div class="ui header">
+        <h3>
+          {% blocktrans with count=results.hits.total query=query|default:"" %}
+            {{ count }} results for `{{ query }}`
+          {% endblocktrans %}
+        </h3>
+      </div>
+
+
+          <div class="ui list">
+
+            {% for result in results %}
+
+              <div class="item">
+                <p>
+                  {% if 'project' in result.meta.index %}
+                    <a href="{{ result.url }}">
+                      {{ result.name }} (<em>{{ result.slug }}</em>)
+                    </a>
+                    {% for fragment in result.meta.highlight.description %}
+                      <p>
+                        ...{{ fragment|safe }}...
+                      </p>
+                    {% empty %}
+                      <p><em>No description for project.</em></p>
+                    {% endfor %}
+
+                  {% elif 'page' in result.meta.index %}
+                    {% with "100" as MAX_SUBSTRING_LIMIT %}
+                      <a href="{% doc_url result.project|get_project result.version result.full_path %}">
+                        {{ result.project }} - {% if result.meta.highlight.title %} {{ result.meta.highlight.title.0|safe }} {% else %} {{ result.title }} {% endif %}
+                      </a>
+
+                      {% for inner_hit in result.meta.inner_hits %}
+                        {% if inner_hit.type == 'domains' %}
+                          <p>
+                            <a href="{% doc_url result.project|get_project result.version result.full_path %}#{{ inner_hit.source.anchor }}">
+                              {% if inner_hit.highlight|get_key_or_none:"domains.name" %}
+                                {% with domain_name=inner_hit.highlight|get_key_or_none:"domains.name" %}
+                                  [{{ inner_hit.source.role_name }}]: {{ domain_name.0|safe }}
+                                {% endwith %}
+                              {% else %}
+                                [{{ inner_hit.source.role_name }}]: {{ inner_hit.source.name }}
+                              {% endif %}
+                            </a>
+                          </p>
+                          <p>
+                            {% if inner_hit.highlight|get_key_or_none:"domains.docstrings" %}
+                              {% with domain_docstrings=inner_hit.highlight|get_key_or_none:"domains.docstrings" %}
+                                {{ domain_docstrings.0|safe }}
+                              {% endwith %}
+                            {% else %}
+                              {% if inner_hit.source.docstrings %}
+                                {{ inner_hit.source.docstrings|slice:MAX_SUBSTRING_LIMIT }} ...
+                              {% endif %}
+                            {% endif %}
+                          </p>
+
+                        {% elif inner_hit.type == 'sections' %}
+                          <p>
+                            <a href="{% doc_url result.project|get_project result.version result.full_path %}#{{ inner_hit.source.id }}">
+                              {% if inner_hit.highlight|get_key_or_none:"sections.title" %}
+                                {% with section_title=inner_hit.highlight|get_key_or_none:"sections.title" %}
+                                  {{ section_title.0|safe }}
+                                {% endwith %}
+                              {% else %}
+                                {{ inner_hit.source.title }}
+                              {% endif %}
+                            </a>
+                          </p>
+                          {% if inner_hit.highlight|get_key_or_none:"sections.content" %}
+                            {% with section_content=inner_hit.highlight|get_key_or_none:"sections.content" %}
+                              {% for content in section_content %}
+                                <p>
+                                  ... {{ content|safe }} ...
+                                </p>
+                              {% endfor %}
+                            {% endwith %}
+                          {% else %}
+                            <p>
+                              {{ inner_hit.source.content|slice:MAX_SUBSTRING_LIMIT }} ...
+                            </p>
+                          {% endif %}
+                        {% endif %}
+                      {% endfor %}
+                    {% endwith %}
+                  {% endif %}
+                </p>
+              </div>
+            {% empty %}
+              <div class="item"><span>{% trans "No results found." %}</span></div>
+            {% endfor %}
+         
+      </div>
+{% endif %}
+<!-- END search results -->
+</div>
+</div>
+{% endblock %}

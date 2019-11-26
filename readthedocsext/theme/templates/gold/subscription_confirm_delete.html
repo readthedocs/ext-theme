@@ -14,8 +14,8 @@
     {% endblocktrans %}
   </p>
 
-  <form  method="post" action="{% url "gold_cancel" %}">
+  <form  class="ui form" method="post" action="{% url "gold_cancel" %}">
     {% csrf_token %}
-    <input type="submit" value="{% trans "Cancel Gold membership" %}">
+    <input class="ui button"  type="submit" value="{% trans "Cancel Gold membership" %}">
   </form>
 {% endblock %}

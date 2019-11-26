@@ -10,6 +10,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="icon" type="image/png" href="{% static 'corporate/img/favicon.png' %}" />
     {# New stylesheet #}
+
     <!-- Website Font -->
     <link rel="stylesheet" href="https://use.typekit.net/omm0eld.css">
     <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/site.css' %}" />
@@ -29,8 +30,8 @@ var $ = jQuery = require('jquery');
     </script>
     <script type="text/javascript" src="{% static 'core/js/site.js' %}"></script>
     <script type="text/javascript">
-        var site = require('core/site');
-        site.handle_notification_dismiss();
+var site = require('core/site');
+site.handle_notification_dismiss();
     </script>
     <script type="text/javascript" src="{{ MEDIA_URL }}javascript/instantsearch.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}javascript/base.js"></script>
@@ -64,15 +65,14 @@ var $ = jQuery = require('jquery');
 
           <!-- BEGIN notify -->
           {% if messages %}
-            <ul class="notifications">
               {% for message in messages %}
-                <li class="ui warning message message-{{ message.level }}" {% if message.pk %}data-dismiss-url="{% url 'message_mark_read' message.pk %}"{% endif %}>
+                <div class="ui warning message message-{{ message.level }}" {% if message.pk %}data-dismiss-url="{% url 'message_mark_read' message.pk %}"{% endif %}>
                     <i class="close icon"></i>
                     <div class="header">Notification</div>
+
                   {{ message }}
-                </li>
+                </div>
               {% endfor %}
-            </ul>
           {% endif %}
           <!-- END notify -->
 

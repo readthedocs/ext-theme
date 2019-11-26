@@ -16,32 +16,32 @@
     {% endblocktrans %}
   </p>
 
-  <ul class="donate-about">
-    <li>{% trans 'For small businesses or personal projects, we ask for $5 per month to remove ads from a project.' %}</li>
-    <li>{% trans 'For corporate supported open source projects, we ask for a $50 membership in order to cover our support and operations costs.' %}</li>
-  </ul>
+  <div class="ui list">
+    <div class="item">{% trans 'For small businesses or personal projects, we ask for $5 per month to remove ads from a project.' %}</div>
+    <div class="item">{% trans 'For corporate supported open source projects, we ask for a $50 membership in order to cover our support and operations costs.' %}</div>
+  </div>
 
   <h3>{% trans 'Ad-free projects' %}</h3>
-  <ul class="donate-about">
+  <div class="ui list">
     {% for project in projects %}
-      <li>
+      <div class="item">
         <a href="{{ project.get_absolute_url }}">{{ project }}</a>
         <span>(<a href="{% url "gold_projects_remove" project.slug %}">{% trans "Remove Ad-Free Status" %}</a>)</span>
-      </li>
+      </div>
     {% empty %}
       <p>{% trans 'No projects are currently ad-free.' %}</p>
     {% endfor %}
-  </ul>
+    </div>
 
   <h3>{% trans "Make a project ad-free" %}</h3>
   {% if gold_user.num_supported_projects > projects|length %}
     <p>
       {% trans "Choose which project you would like to make ad-free." %}
     </p>
-    <form method="post" action=".">{% csrf_token %}
+    <form class="ui form" method="post" action=".">{% csrf_token %}
       {{ form.as_p }}
       <p>
-        <input type="submit" value="{% trans "Make Project Ad-Free" %}">
+        <input class="ui button" type="submit" value="{% trans "Make Project Ad-Free" %}">
       </p>
     </form>
   {% else %}

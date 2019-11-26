@@ -180,24 +180,24 @@
         </div>
       </div>
 
-      <div class="pagination">
-        <span data-bind="visible: !page_previous()" class="disabled prev">
+      <div class="ui pagination menu">
+        <span data-bind="visible: !page_previous()" class="disabled item">
           ‹‹ {% trans "previous" %}
         </span>
         <a
             href="#"
             data-bind="visible: page_previous, click: previous_page"
-            class="prev">
+            class="item">
           ‹‹ {% trans "previous" %}
         </a>
 
-        <span data-bind="visible: !page_next()" class="disabled next">
+        <span data-bind="visible: !page_next()" class="disabled item">
           {% trans "next" %} ››
         </span>
         <a
             href="#"
             data-bind="visible: page_next, click: next_page"
-            class="next">
+            class="item">
           {% trans "next" %} ››
         </a>
       </div>

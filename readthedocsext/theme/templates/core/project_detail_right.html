@@ -130,11 +130,11 @@
 {% block subprojects %}
   {% if project.subprojects.exists %}
     <h3>{% trans "Sub Projects" %}</h3>
-      <ul class="sub_projects">
+      <div class="ui list">
       {% for rel in project.subprojects.all %}
-          <li><a href="{{ rel.get_absolute_url }}">{{ rel.child }}</a></li>
+          <div class="item"><a href="{{ rel.get_absolute_url }}">{{ rel.child }}</a></div>
       {% endfor %}
-      </ul>
+      </div>
   {% endif %}
 {% endblock %}
 
