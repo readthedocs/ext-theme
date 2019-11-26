@@ -29,6 +29,12 @@ module.exports = {
       }
     ]
   },
+  watch: true,
+  watchOptions: {
+    aggregateTimeout: 300,
+    poll: 1000,
+    ignored: ['./node_modules/', './readthedocs.org/', 'readthedocsext_theme.egg-info']
+  },
   devServer: {
     hot: true,
     headers: {

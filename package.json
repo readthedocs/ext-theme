@@ -5,6 +5,7 @@
   "main": "src/js/index.js",
   "scripts": {
     "start": "webpack",
+    "start:dev": "webpack-dev-server",
     "postinstall": "mv ./node_modules/semantic-ui-less/theme.config.example ./node_modules/semantic-ui-less/theme.config"
   },
   "author": "",
