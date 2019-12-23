@@ -5,9 +5,9 @@
 {% block title %}{% trans "Popular tags" %}{% endblock %}
 
 {% block content %}
-  <div class="ui list">
+  <ul class="ui list">
   {% for tag in tag_list %}
-    <div class="item"><a href="{% url "projects_tag_detail" tag.slug %}">{{ tag.name }}</a></div>
+    <li class="item"><a href="{% url "projects_tag_detail" tag.slug %}">{{ tag.name }}</a></li>
   {% endfor %}
-  </div>
+  </ul>
 {% endblock %}

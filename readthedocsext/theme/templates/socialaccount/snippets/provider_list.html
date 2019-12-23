@@ -6,7 +6,7 @@
 {% for provider in socialaccount_providers %}
   {% if provider.id == "openid" %}
     {% for brand in provider.get_brands %}
-      <div class="item">
+      <li class="item">
         <a title="{{ brand.name }}"
            class="ui button {{ provider.id }} {{ brand.id }} button"
            href="{% provider_login_url provider.id openid=brand.openid_url process=process next=next %}"
@@ -15,11 +15,11 @@
              {{ verbiage }} {{ brand_name }}
            {% endblocktrans %}
         </a>
-      </div>
+      </li>
     {% endfor %}
   {% endif %}
   {% if provider.id != 'bitbucket' %}
-    <div  class="item">
+    <li  class="item">
       <a title="{{ provider.name }}"
          class="ui button"
          href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params next=next %}"
@@ -28,6 +28,6 @@
            {{ verbiage }} {{ provider_name }}
          {% endblocktrans %}
       </a>
-    </div>
+    </li>
   {% endif %}
 {% endfor %}
