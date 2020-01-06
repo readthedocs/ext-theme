@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load core_tags %}
+{% load gravatar %}
+
+{% block subnav-bar %}
+<!-- BEGIN project bar -->
+<div class="ui secondary segment attached">
+  <div class="ui container very padded">
+
+    <div class="ui basic segment very padded">
+      <h2>
+        <a href="{{ profile.get_absolute_url }}">
+        {% gravatar profile.user.email 30 %}
+        </a>
+        {{ profile.user }}
+        {% if profile.user.get_full_name %}
+          ({{ profile.user.get_full_name}})
+        {% endif %}
+      </h2>
+    </div>
+
+    <div lass="ui basic segment very padded">
+
+      <div class="ui list">
+        <div class="item {% block profile-bar-profile %}{% endblock %}"><a href="{{ profile.get_absolute_url }}">{% trans "Profile" %}</a></div>
+        {% if profile.user == user %}
+          <div class="item {% block profile-bar-admin %}{% endblock %}"><a href="{% url "profiles_profile_edit" %}"><i class="gear"></i>{% trans "Admin" %}</a></div>
+        {% endif %}
+
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- END project bar -->
+
+{% endblock %}

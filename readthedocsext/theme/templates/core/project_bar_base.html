@@ -1,0 +1,62 @@
+{% load i18n %}
+{% load core_tags %}
+{% load privacy_tags %}
+{% load gravatar %}
+
+<!-- BEGIN project bar -->
+<div class="ui secondary segment attached">
+  <div class="ui container">
+
+    {% if project.has_good_build %}
+      <div class="project-view-docs">
+        <a href="{{ project.get_docs_url }}">{% trans "View Docs" %}</a>
+      </div>
+    {% endif %}
+
+    <div class="ui basic segment">
+          {% block project-breadcrumb %}
+            <a href="{% url "projects_dashboard" %}">{% trans "Projects" %}</a>&nbsp;&gt;
+          {% endblock %}
+          <br>
+        <span class="ui huge header"><a href="{{ project.get_absolute_url }}">{{ project }}</a></span>
+    </div>
+
+    <div class="ui basic segment">
+
+    {% if project.skip %}
+      <p class="build-failure">
+          {% blocktrans trimmed %}
+            Your project is currently disabled for abuse of the system.
+            Please make sure it isn't using unreasonable amounts of resources or triggering lots of builds in a short amount of time.
+            Please <a href="https://github.com/rtfd/readthedocs.org/issues">file a ticket</a> to get your project re-enabled.
+          {% endblocktrans %}
+      </p>
+      <br>
+    {% endif %}
+      <div class="ui horizontal list">
+        <div class="item"><a class="ui button {{ overview_active }}" href="{{ project.get_absolute_url }}">{% trans "Overview" %}</a></div>
+
+        <div class="item"><a class="ui button {{ downloads_active }}" href="{% url "project_downloads" project.slug %}" rel="nofollow,noindex">{% trans "Downloads" %}</a></div>
+
+        <div class="item"><a class="ui button {{ search_active }}" href="{% url "elastic_project_search" project.slug %}" rel="nofollow,noindex">{% trans "Search" %}</a></div>
+
+        <div class="item"><a class="ui button {{ builds_active }}" href="{{ project.get_builds_url }}">{% trans "Builds" %}</a></div>
+
+        <div class="item"><a class="ui button {{ versions_active }}" href="{% url "project_version_list" project.slug %}">{% trans "Versions" %}</a></div>
+
+        {% comment %}
+        {% if request.user.is_authenticated %}
+        <div class="item {{ tools_active }}"><a href="{% url 'project_embed' project.slug %}">{% trans "Tools" %}</a></div>
+        {% endif %}
+        {% endcomment %}
+
+        {% if request.user|is_admin:project %}
+          <div class="item"><a class="ui button {{ edit_active }}" href="{% url "projects_edit" project.slug %}"><i class="gear"></i>{% trans "Admin" %}</a></div>
+        {% endif %}
+      </div>
+    </div>
+
+
+  </div>
+</div>
+<!-- END project bar -->

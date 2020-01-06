@@ -5,6 +5,7 @@
   "main": "src/js/index.js",
   "scripts": {
     "start": "webpack",
+    "start:dev": "webpack-dev-server",
     "postinstall": "mv ./node_modules/semantic-ui-less/theme.config.example ./node_modules/semantic-ui-less/theme.config"
   },
   "author": "",
@@ -25,7 +26,8 @@
     "style-loader": "^0.20.3",
     "url-loader": "^0.6.2",
     "webpack": "^3.12.0",
-    "webpack-cli": "^3.3.7"
+    "webpack-cli": "^3.3.7",
+    "webpack-dev-server": "2.9.1"
   },
   "directories": {
     "doc": "docs"

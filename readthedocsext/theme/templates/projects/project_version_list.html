@@ -1,0 +1,127 @@
+{% extends "projects/base_project.html" %}
+{% load i18n %}
+{% load projects_tags %}
+{% load privacy_tags %}
+{% load core_tags %}
+
+{% block title %}
+Versions
+{% endblock title %}
+
+{% block project_editing %}
+  {% with versions_active="active" %}
+    {% include "core/project_bar.html" %}
+  {% endwith %}
+{% endblock %}
+
+
+{% block content %}
+
+  <div class="ui basic segment padded">
+
+    <div>
+          <h1 class="ui header">{% trans "Active Versions" %}</h1>
+
+        <div class="ui list">
+          {% for version in active_versions|sort_version_aware %}
+            {% block active-versions %}
+              <div class="item">
+                {# Link to the docs #}
+                <a href="{{ version.get_absolute_url }}">{{ version.slug }}</a>
+
+                {% if request.user|is_admin:project %}
+                  <span>
+                    {{ version.get_privacy_level_display }}
+                  </span>
+                {% endif %}
+
+                {% if not version.slug in version.identifier %}
+                  <span>{{ version.identifier_friendly|truncatechars:24 }}</span>
+                {% endif %}
+
+                {% if request.user|is_admin:project %}
+                  <div class="ui list">
+                    <div class="item"><a class="ui button" href="{% url "project_version_detail" project.slug version.slug %}">{% trans "Edit" %}</a></div>
+                  </div>
+                {% else %}
+                  <div class="ui list">
+                    <div class="item"><a class="ui button" href="{{ version.get_absolute_url }}">{% trans "View Docs" %}</a></div>
+                  </div>
+                {% endif %}
+
+                </div>
+            {% endblock active-versions %}
+
+          {% empty %}
+            <div class="item">
+              <p class="ui message">
+                {% trans "No active versions." %}
+              </p>
+            </div>
+          {% endfor %}
+        </div>
+
+      </div>
+
+    </div>
+
+    {% if request.user|is_admin:project or request.user.is_staff %}
+    <div class="ui basic segment padded">
+      
+
+        {% if inactive_versions or request.GET.version_filter %}
+          <div class="ui content">
+            <h1>{% trans "Activate a version" %}</h1>
+            <p>{% trans "Active versions are built whenever new code is pushed to that branch or tag." %}</p>
+          </div>
+
+          {# Version search #}
+          <div class="ui basic segment">            
+            <form class="ui form" action="." method="GET">
+              <div class="field">
+                <input type="text" name="version_filter" value="{{ request.GET.version_filter }}" placeholder="1.0, 2.0, devel">
+              </div>
+              <div class="field">
+                <input class="ui button" type="submit" value="{% trans 'Filter Inactive Versions' %}">
+              </div>
+            </form>
+          </div>
+
+          <div class="ui basic segment">
+            <div class="ui list">
+              {% for version in inactive_versions|sort_version_aware %}
+
+                {% block inactive-versions %}
+                  <div class="item">
+                    {# Link to the docs #}
+                    <span>{{ version.slug }}</span>
+
+
+                    {% if request.user|is_admin:project %}
+                      <span>
+                        {{ version.get_privacy_level_display }}
+                      </span>
+                    {% endif %}
+
+                    {% if not version.slug in version.identifier_friendly %}
+                      <span>{{ version.identifier_friendly|truncatechars:24 }}</span>
+                    {% endif %}
+
+                    {% if request.user|is_admin:project %}
+                     <a class="ui tiny button" href="{% url "project_version_detail" project.slug version.slug %}">{% trans "Activate" %}</a>
+                    {% endif %}
+
+                    </div>
+                {% endblock inactive-versions %}
+
+              {% empty %}
+              <div class="item">{% trans "No versions found" %}</li>
+              {% endfor %}
+              </div>
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+  </div>
+{% endblock %}

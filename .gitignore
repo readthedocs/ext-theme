@@ -7,3 +7,6 @@ __pycache__/
 *.egg-info
 *.DS_Store
 docs/_build/
+
+# VS code generated files
+.vscode/

@@ -1,0 +1,33 @@
+{% load socialaccount %}
+{% load i18n %}
+
+{% get_providers as socialaccount_providers %}
+
+{% for provider in socialaccount_providers %}
+  {% if provider.id == "openid" %}
+    {% for brand in provider.get_brands %}
+      <li class="item">
+        <a title="{{ brand.name }}"
+           class="ui button {{ provider.id }} {{ brand.id }} button"
+           href="{% provider_login_url provider.id openid=brand.openid_url process=process next=next %}"
+           >
+           {% blocktrans trimmed with brand_name=brand.name verbiage=verbiage|default:'Connect to' %}
+             {{ verbiage }} {{ brand_name }}
+           {% endblocktrans %}
+        </a>
+      </li>
+    {% endfor %}
+  {% endif %}
+  {% if provider.id != 'bitbucket' %}
+    <li  class="item">
+      <a title="{{ provider.name }}"
+         class="ui button"
+         href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params next=next %}"
+         > <i class="icon {{ provider.name|lower }}"></i>
+         {% blocktrans trimmed with provider_name=provider.name verbiage=verbiage|default:'Connect to' %}
+           {{ verbiage }} {{ provider_name }}
+         {% endblocktrans %}
+      </a>
+    </li>
+  {% endif %}
+{% endfor %}
