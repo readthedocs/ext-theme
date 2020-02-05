@@ -1,0 +1,16 @@
+{% extends "projects/base_project.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Popular tags" %}{% endblock %}
+
+{% block content-header %}
+      <h1>{% trans "Popular tags" %}</h1>
+{% endblock %}
+
+{% block content %}
+  <ul class="ui list">
+  {% for tag in tag_list %}
+    <li class="item"><a href="{% url "projects_tag_detail" tag.slug %}">{{ tag.name }}</a></li>
+  {% endfor %}
+  </ul>
+{% endblock %}

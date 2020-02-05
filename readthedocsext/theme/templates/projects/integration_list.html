@@ -1,0 +1,41 @@
+{% extends "projects/project_edit_base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Integrations" %}{% endblock %}
+
+{% block nav-dashboard %} class="active"{% endblock %}
+
+{% block editing-option-edit-integrations %}class="active"{% endblock %}
+
+{% block project-integrations-active %}active{% endblock %}
+{% block project_edit_content_header %}{% trans "Integrations" %}{% endblock %}
+
+{% block project_edit_content %}
+  <div>
+    <a class="ui button primary"
+        href="{% url 'projects_integrations_create' project_slug=project.slug %}">
+      {% trans "Add integration" %}
+    </a>
+  </div>
+
+  <div class="ui basic segment">
+    <div>
+      <ul class="ui list">
+        {% for integration in object_list %}
+          <li class="item">
+            <a href="{% url 'projects_integrations_detail' project_slug=project.slug integration_pk=integration.pk %}">
+              {{ integration.get_integration_type_display }}
+            </a>
+          </li>
+        {% empty %}
+          <li class="item">
+            <p>
+              {% trans 'No integrations are currently configured.' %}
+            </p>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </di>
+{% endblock %}

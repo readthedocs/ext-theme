@@ -57,14 +57,14 @@
             {% csrf_token %}
             <class class="inline fields">
             <div class="field">
-            <select name="version_slug">
+            <select class="ui selection dropdown" name="version_slug">
             {% for version in versions|sort_version_aware %}
               <option value="{{ version.slug }}">{{ version.slug }}</option>
             {% endfor %}
             </select>
             </div>
             <div class="field">
-            <input type="submit" value="{% trans "Build version" context "Build is a verb" %}">
+            <input class="ui button" type="submit" value="{% trans "Build version" context "Build is a verb" %}">
             </div>
             </class>
           </form>

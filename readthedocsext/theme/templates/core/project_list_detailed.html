@@ -1,0 +1,45 @@
+{% load i18n %}
+
+{% for project in project_list %}
+  <li class="item">
+    <a href="{{ project.get_absolute_url }}">{{ project.name }}</a>
+
+    {% with project.users.all as users %}
+      {% if users|length > 1 %}
+      ({% for user in project.users.all|slice:":3" %}
+        {% if omit and user.pk != omit.pk %}
+          <a href="{{ user.get_absolute_url }}">{{ user }}</a>
+        {% endif %}
+        {% if not omit %}
+          <a href="{{ user.get_absolute_url }}">{{ user }}</a>
+        {% endif %}
+      {% endfor %})
+      {% else %}
+        {% if omit and users.0.pk == omit.pk %}{% else %}{% with project.users.all.0 as user %}
+          (<a href="{{ user.get_absolute_url }}">{{ user }}</a>)
+        {% endwith %}
+        {% endif %}
+      {% endif %}
+    {% endwith %}
+
+    {% if project.has_good_build %}
+    <span>{% blocktrans with date=project.get_latest_build.date|timesince %}{{ date }} ago{% endblocktrans %}</span>
+    {% else %}
+    <span>{% trans "No builds" %}</span>
+    {% endif %}
+
+    <ul class="list">
+      <li class="item">
+        {% if project.has_good_build %}
+          <a href="{{ project.get_docs_url }}">{% trans "View Docs" %}</a>
+        {% else %}
+          <a href="{{ project.get_builds_url }}">{% trans "No Docs" %}</a>
+        {% endif %}
+      </li>
+    </ul>
+
+
+  </li>
+{% empty %}
+  <li class="item">{% trans "No projects found" %}</li>
+{% endfor %}

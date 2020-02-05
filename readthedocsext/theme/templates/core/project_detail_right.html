@@ -71,7 +71,29 @@
       <a href="{{ site_url }}" onclick="$('#badge_markup').toggle(); return false;">
       <i class="info circle icon" title="Get this badge"></i>
       </a>
-      {% include "core/badge_markup.html" with badge_url=badge_url site_url=site_url %}
+      
+      <div class="ui icon button" data-content="Add users to your feed">
+        <i class="add icon"></i>
+      </div>
+
+      <div class="ui icon button badge-popup" data-content="{% include "core/badge_markup.html" with badge_url=badge_url site_url=site_url %}">
+        <img src="{{ badge_url }}" /> <i class="info circle icon" title="Get this badge"></i>
+      </div>
+      <script>
+        var resizePopup = function(){$('.ui.popup').css('max-height', $(window).height());};
+
+        $(window).resize(function(e){
+            resizePopup();
+        });
+        $('.ui.icon.button').popup();
+        $('.badge-popup').popup({
+
+        lastResort: 'bottom right',
+        onShow: function(){
+            resizePopup();
+        },
+    });
+      </script>
 {% endblock %}
 
 
