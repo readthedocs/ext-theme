@@ -5,6 +5,7 @@
 {% load projects_tags %}
 
 {% block repo %}
+  {% comment %}
   {% if project.repo %}
     <h3>{% trans "Repository" %}</h3>
     <p>
@@ -15,17 +16,21 @@
       {% endif %}
     </p>
   {% endif %}
+  {% endcomment %}
 {% endblock %}
 
 {% block slug %}
+  {% comment %}
   {% trans "Used in URL's and in code to represent the project name" as title %}
   <h3 title="{{ title }}">{% trans "Project Slug" %}</h3>
   <p title="{{ title }}">
       {{ project.slug }}
   </p>
+  {% endcomment %}
 {% endblock %}
 
 {% block last-built %}
+  {% comment %}
   <h3>{% trans "Last Built" %}</h3>
   <p>
     {% with build=project.get_latest_build %}
@@ -45,15 +50,18 @@
       {% endif %}
     {% endwith %}
   </p>
+  {% endcomment %}
 {% endblock %}
 
 {% block owners %}
+  {% comment %}
     <h3>{% trans "Maintainers" %}</h3>
     <p>
       {% for user in project.users.all %}
       <a href="{% url "profiles_profile_detail" user.username %}">{% gravatar user.email 32 %}</a>
       {% endfor %}
     </p>
+  {% endcomment %}
 {% endblock %}
 
 {% block homepage %}
@@ -79,25 +87,11 @@
       <div class="ui icon button badge-popup" data-content="{% include "core/badge_markup.html" with badge_url=badge_url site_url=site_url %}">
         <img src="{{ badge_url }}" /> <i class="info circle icon" title="Get this badge"></i>
       </div>
-      <script>
-        var resizePopup = function(){$('.ui.popup').css('max-height', $(window).height());};
-
-        $(window).resize(function(e){
-            resizePopup();
-        });
-        $('.ui.icon.button').popup();
-        $('.badge-popup').popup({
-
-        lastResort: 'bottom right',
-        onShow: function(){
-            resizePopup();
-        },
-    });
-      </script>
 {% endblock %}
 
 
 {% block tags %}
+  {% comment %}
     <h3>{% trans "Tags" %}</h3>
     <p>
 
@@ -117,18 +111,22 @@
     {% endif %}
 
     </p>
+  {% endcomment %}
 {% endblock %}
 
 {% block privacy-level %}
+  {% comment %}
   <h3>{% trans "Project Privacy Level" %}</h3>
   <div>
     <p>
       {{ project.get_privacy_level_display }}
     </p>
   </div>
+  {% endcomment %}
 {% endblock %}
 
 {% block short-urls %}
+  {% comment %}
   <h3>{% trans "Short URLs" %}</h3>
   <p>
     <a href="http://{{ project.slug}}.{{ PUBLIC_DOMAIN }}">{{ project.slug }}.{{ PUBLIC_DOMAIN }}</a><br>
@@ -136,6 +134,7 @@
     <a href="http://{{ project.slug}}.rtfd.io">{{ project.slug }}.rtfd.io</a>
     {% endif %}
   </p>
+  {% endcomment %}
 {% endblock %}
 
 {% block translations %}
@@ -161,9 +160,11 @@
 {% endblock %}
 
 {% block defaults %}
+  {% comment %}
 <h3>{% trans "Default Version" %}</h3>
 <p> {{ project.get_default_version }}</p>
 
 <h3>{% trans "'latest' Version" %}</h3>
 <p> {{ project.get_default_branch }}</p>
+  {% endcomment %}
 {% endblock %}

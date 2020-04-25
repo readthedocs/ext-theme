@@ -1,16 +1,42 @@
 {% extends "profiles/base_profile_edit.html" %}
 
 {% load i18n %}
+{% load gravatar %}
 
-{% block title %}{% trans "Edit your profile" %}{% endblock %}
+{% block title %}{% trans "Profile" %}{% endblock %}
 
 {% block profile-admin-details %}active{% endblock %}
 
-{% block edit_content_header %} {% trans "Edit your profile" %} {% endblock %}
+{% block edit_content_header %} {% trans "Profile" %} {% endblock %}
 
 {% block edit_content %}
-  <form class="ui form" method="POST" action=".">{% csrf_token %}
-    {{ form.as_p }}
-    <input class="ui primary button" type="submit" name="submit" value="{% trans "OK, save it!" %}" id="submit"/>
-  </form>
+  <div class="ui two column grid">
+    <div class="ui ten wide column">
+      <form method="POST" action=".">
+        {% csrf_token %}
+        {% include "includes/forms/semanticui.html" with form=form %}
+      </form>
+    </div>
+    <div class="ui six wide column">
+      <div class="ui card">
+        <div class="image" data-tooltip="{% trans "Visit Gravatar to update your profile image" %}" data-position="bottom center">
+          <a class="ui bottom right corner label">
+            <i class="edit icon"></i>
+          </a>
+          <img src="{% gravatar_url request.user.email 256 %}">
+        </div>
+        <div class="content">
+          <div class="header">{{ profile.user.first_name | default:profile.user.username }}</div>
+          <div class="meta">
+            <span class="date">Joined {{ profile.user.date_joined | timesince }} ago</span>
+          </div>
+          {% if profile.homepage %}
+            <div class="description">
+              {{ profile.homepage | urlize }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

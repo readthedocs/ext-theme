@@ -4,74 +4,98 @@
 
 {% block title %}{% trans "Connected Services" %}{% endblock %}
 
-{% block edit_content_header %} {% trans "Connected Services" %} {% endblock %}
+{% block edit_content_header %}{% trans "Connected Services" %}{% endblock %}
 
 {% block profile-admin-social-accounts %}active{% endblock %}
 
 {% block edit_content %}
 
-
-      <p>
-        {% blocktrans trimmed %}
-          The following services are currently connected to your account:
-        {% endblocktrans %}
-      </p>
-
-    {% if form.accounts %}
-      <div class="ui list">
-
-        {% for base_account in form.accounts %}
-          {% with base_account.get_provider_account as account %}
-            <div class="item">
-
-              <img src="{{ base_account.get_avatar_url }}" class="account-gravatar" height=24 width=24 />
-
-              <span>
-                {{ account }}
-                <span class="{{ base_account.provider }} {{ account.get_brand.id }}">
-                  ({{ account.get_brand.name }})
-                </span>
-              </span>
-
-              <div class="ui list">
-                <div class="item">
-                  <form method="post" action="{% url 'socialaccount_connections' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="account" value="{{ base_account.id }}" />
-                    <input type="submit" name="submit" value="{% trans 'Disconnect' %}" />
-                  </form>
-                </div>
-              </div>
-
-              {% if base_account.provider == 'bitbucket' %}
-                <p class="ui negative message">
-                  {% blocktrans trimmed %}
-                    The API version this connection uses is no longer
-                    supported, please reconnect your Bitbucket account.
-                  {% endblocktrans %}
-                </p>
-              {% endif %}
-
-              </div>
-          {% endwith %}
-        {% endfor %}
-
-          </div>
-
-    {% else %}
-      <div class="ui list">
-        <div class="item">
-          <p>{% trans 'You currently have no social network accounts connected to this account.' %}</p>
-        </div>
-      </div>
-    {% endif %}
-
-
-
-  <div class="ui relaxed list">
-    {% include "socialaccount/snippets/provider_list.html" with process="connect" next="" %}
+  <div class="ui basic segment top attached right aligned">
+    <div class="ui tiny green icon button" data-modal="#socialaccount-connections-modal">
+      <i class="plus icon"></i>
+      {% trans "Add new connection" %}
+    </div>
   </div>
 
+  {% if not form.accounts %}
+    <div class="ui attached placeholder segment">
+      <div class="ui icon header">
+        <i class="user plus outline icon"></i>
+        {% trans 'Your account is not connected to any services.' %}
+      </div>
+      <div class="inline">
+        <p>
+          {% blocktrans trimmed %}
+            Add a new connection to to enable automatic import and
+            configuration of new projects.
+          {% endblocktrans %}
+        </p>
+      </div>
+    </div>
+  {% else %}
+    <div class="ui attached list">
+
+      {% for base_account in form.accounts %}
+        {% with base_account.get_provider_account as account %}
+          <div class="item">
+
+            <img src="{{ base_account.get_avatar_url }}" class="account-gravatar" height=24 width=24 />
+
+            <span>
+              {{ account }}
+              <span class="{{ base_account.provider }} {{ account.get_brand.id }}">
+                ({{ account.get_brand.name }})
+              </span>
+            </span>
+
+            <div class="ui list">
+              <div class="item">
+                <form method="post" action="{% url 'socialaccount_connections' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="account" value="{{ base_account.id }}" />
+                  <input type="submit" name="submit" value="{% trans 'Disconnect' %}" />
+                </form>
+              </div>
+            </div>
+
+            {% if base_account.provider == 'bitbucket' %}
+              <p class="ui negative message">
+                {% blocktrans trimmed %}
+                  The API version this connection uses is no longer
+                  supported, please reconnect your Bitbucket account.
+                {% endblocktrans %}
+              </p>
+            {% endif %}
+
+            </div>
+        {% endwith %}
+      {% endfor %}
+
+    </div>
+  {% endif %}
+
   {% include "socialaccount/snippets/login_extra.html" %}
+
+  <div class="ui tiny modal" id="socialaccount-connections-modal">
+    <i class="close icon"></i>
+    <div class="header">
+      {% trans "Add a connection" %}
+    </div>
+    <div class="content center aligned">
+      <div class="ui basic center aligned segment">
+        <p>
+          You can connect your account with any of the following providers:
+        </p>
+        <div class="ui list">
+          {% include "socialaccount/snippets/provider_list.html" with process="connect" next="" %}
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui cancel button">
+        {% trans "Cancel" %}
+      </div>
+    </div>
+  </div>
 
 {% endblock %}

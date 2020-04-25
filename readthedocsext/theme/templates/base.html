@@ -5,25 +5,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{% block title %}{% endblock %}{% block head_title %}{% endblock %} - Read the Docs for Business</title>
+    <title>{% block title %}{% endblock %}{% block head_title %}{% endblock %} - Read the Docs</title>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="icon" type="image/png" href="{% static 'corporate/img/favicon.png' %}" />
-    {# New stylesheet #}
-
-    <!-- Website Font -->
-    <link rel="stylesheet" href="https://use.typekit.net/omm0eld.css">
-    <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/site.css' %}" />
-    {% comment %} 
-      Line below is for webpack-dev-server. Comment line when commiting
-    {% endcomment %}
-    {% comment %} <link rel="stylesheet" href="http://localhost:8080/static/site.css"> {% endcomment %}
-    
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/css/site.css' %}" />
     {% block extra_links %}{% endblock %}
 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width" />
 
     {# TODO remove these, from the existing theme #}
+    <!--
     <script type="text/javascript" src="{% static 'vendor/jquery.js' %}"></script>
     <script type="text/javascript">
 var $ = jQuery = require('jquery');
@@ -35,11 +27,15 @@ site.handle_notification_dismiss();
     </script>
     <script type="text/javascript" src="{{ MEDIA_URL }}javascript/instantsearch.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}javascript/base.js"></script>
+    -->
 
     {# New theme #}
-    <script type="text/javascript" src="{% static 'readthedocsext/theme/vendor.js' %}"></script>
-    <script type="text/javascript" src="{% static 'readthedocsext/theme/site.js' %}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/popup.js" integrity="sha256-s2qsK8Pc2X9cKCpRTyq+onTYAK1j+nyA7tw8C4lVIFs=" crossorigin="anonymous"></script>
+    <!--
+    <script type="text/javascript" src="{% static 'readthedocsext/theme/js/vendor.js' %}"></script>
+    <script type="text/javascript" src="{% static 'readthedocsext/theme/js/site.js' %}"></script>
+    -->
+    <script type="text/javascript" src="http://localhost:8080/static/js/vendor.js"></script>
+    <script type="text/javascript" src="http://localhost:8080/static/js/site.js"></script>
 
     {% block extra_scripts %}{% endblock %}
   </head>

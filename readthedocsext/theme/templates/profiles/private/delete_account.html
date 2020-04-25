@@ -6,15 +6,16 @@
 
 {% block profile-admin-delete-account %}active{% endblock %}
 
-{% block edit_content_header %} {% trans "Delete Account" %} {% endblock %}
+{% block edit_content_header %}{% trans "Delete Account" %}{% endblock %}
 
 {% block edit_content %}
-  <form class="ui form" method="POST" action=".">
+  <div class="ui red warning message">
+    {% trans "Be careful! This cannot be undone!" %}
+  </div>
+
+  <form method="POST" action=".">
     {% csrf_token %}
-    {{ form }}
-    <div>
-      <strong>{% trans "Be careful! This can not be undone!" %}</strong>
-    </div>
-    <input class="ui button" type="submit" name="submit" value="{% trans "Delete Account" %}" id="submit"/>
+    {% trans "Delete Account" as submit_text %}
+    {% include "includes/forms/semanticui.html" with form=form submit_text=submit_text%}
   </form>
 {% endblock %}

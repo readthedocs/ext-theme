@@ -4,26 +4,97 @@
 {% load gravatar %}
 
 <!-- BEGIN project bar -->
-<div class="ui secondary segment attached">
+<div class="ui segment attached padded">
+
   <div class="ui container">
 
+    <div class="ui stackable grid">
+      <div class="ten wide column">
+        <div class="ui large breadcrumb">
+          {% block project-breadcrumb %}
+            <a class="section" href="{% url "projects_dashboard" %}">{% trans "Projects" %}</a>
+          {% endblock %}
+          <a class="section" href="{{ project.get_absolute_url }}">{{ project }}</a>
+        </div>
+      </div>
+      <div class="six wide right aligned column">
+
+        {% comment %}
+         TODO THESE
+        <a class="item {{ overview_active }}" href="{{ project.get_absolute_url }}">{% trans "Overview" %}</a>
+
+        <div class="item"><a class="ui button {{ downloads_active }}" href="{% url "project_downloads" project.slug %}" rel="nofollow,noindex">{% trans "Downloads" %}</a></div>
+        <div class="item"><a class="ui button {{ search_active }}" href="{% url "elastic_project_search" project.slug %}" rel="nofollow,noindex">{% trans "Search" %}</a></div>
+
+        <a class="item" {{ builds_active }}" href="{{ project.get_builds_url }}">{% trans "Builds" %}</a>
+
+        <div class="item"><a class="ui button {{ versions_active }}" href="{% url "project_version_list" project.slug %}">{% trans "Versions" %}</a></div>
+        {% endcomment %}
+
+        <div class="item">
+          <div class="ui action input">
+            <input type="text" placeholder="Search...">
+            <button class="ui button">Search</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="ui stackable grid">
+      <div class="ten wide column">
+
+        <div class="ui horizontal relaxed list">
+
+          <div class="item">
+            {% for user in project.users.all %}
+              <a href="{% url "profiles_profile_detail" user.username %}">
+                <img class="ui avatar image" src="{% gravatar_url user.email 32 %}" data-title="{{ user.username }}" data-content="{{ user.username }}">
+              </a>
+            {% endfor %}
+          </div>
+
+          <div class="item">
+            {% if project.tags.exists %}
+              {% for tag in project.tags.all %}
+                <a class="ui label" href="{% url "projects_tag_detail" tag.slug %}">{{ tag.name }}</a>
+              {% endfor %}
+            {% else %}
+              {% if request.user|is_admin:project %}
+                {% url 'projects_edit' project.slug as edit_url %}
+                <a href="{{ edit_url }}">
+                  {% blocktrans trimmed %}
+                    Manage tags
+                  {% endblocktrans %}
+                </a>
+              {% endif %}
+            {% endif %}
+          </div>
+
+        </div>
+      </div>
+      <div class="six wide right aligned column">
+        <div class="ui right left icon fluid action input">
+          <i class="primary link icon"></i>
+          <input type="text" readonly="" value="{{ project.repo }}">
+          <button class="ui teal icon button">
+            <i class="copy icon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {% comment %}
     {% if project.has_good_build %}
       <div class="project-view-docs">
         <a href="{{ project.get_docs_url }}">{% trans "View Docs" %}</a>
       </div>
     {% endif %}
+    {% endcomment %}
 
-    <div class="ui basic segment">
-          {% block project-breadcrumb %}
-            <a href="{% url "projects_dashboard" %}">{% trans "Projects" %}</a>&nbsp;&gt;
-          {% endblock %}
-          <br>
-        <span class="ui huge header"><a href="{{ project.get_absolute_url }}">{{ project }}</a></span>
-    </div>
-
-    <div class="ui basic segment">
 
     {% if project.skip %}
+    <div class="ui basic segment">
       <p class="build-failure">
           {% blocktrans trimmed %}
             Your project is currently disabled for abuse of the system.
@@ -31,30 +102,20 @@
             Please <a href="https://github.com/rtfd/readthedocs.org/issues">file a ticket</a> to get your project re-enabled.
           {% endblocktrans %}
       </p>
-      <br>
+    </div>
     {% endif %}
+      {% comment %}
       <div class="ui horizontal list">
-        <div class="item"><a class="ui button {{ overview_active }}" href="{{ project.get_absolute_url }}">{% trans "Overview" %}</a></div>
 
-        <div class="item"><a class="ui button {{ downloads_active }}" href="{% url "project_downloads" project.slug %}" rel="nofollow,noindex">{% trans "Downloads" %}</a></div>
-
-        <div class="item"><a class="ui button {{ search_active }}" href="{% url "elastic_project_search" project.slug %}" rel="nofollow,noindex">{% trans "Search" %}</a></div>
-
-        <div class="item"><a class="ui button {{ builds_active }}" href="{{ project.get_builds_url }}">{% trans "Builds" %}</a></div>
-
-        <div class="item"><a class="ui button {{ versions_active }}" href="{% url "project_version_list" project.slug %}">{% trans "Versions" %}</a></div>
-
-        {% comment %}
         {% if request.user.is_authenticated %}
         <div class="item {{ tools_active }}"><a href="{% url 'project_embed' project.slug %}">{% trans "Tools" %}</a></div>
         {% endif %}
-        {% endcomment %}
 
         {% if request.user|is_admin:project %}
           <div class="item"><a class="ui button {{ edit_active }}" href="{% url "projects_edit" project.slug %}"><i class="gear"></i>{% trans "Admin" %}</a></div>
         {% endif %}
       </div>
-    </div>
+      {% endcomment %}
 
 
   </div>
