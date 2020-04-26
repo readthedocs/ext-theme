@@ -40,12 +40,7 @@ function BuildCommand(data) {
   self.run_time = ko.observable(data.run_time);
 
   // Conditional expansion
-  var is_showing = false;
-  if (!self.successful()) {
-    is_showing = true;
-  } else if (self.view.selected_command() == self.id()) {
-    is_showing = true;
-  }
+  var is_showing = self.successful() ? false : true;
   self.is_showing = ko.observable(is_showing);
   self.toggle_showing = function () {
     self.is_showing(!self.is_showing());
@@ -163,13 +158,23 @@ export function BuildDetailView(instance) {
     var hash = $(location).attr("hash");
     if (hash) {
       // Update selected command and line
-      var found = hash.match(re_hash);
-      if (found) {
-        self.selected_command(found[1]);
-        self.selected_line(found[2]);
+      let found = hash.match(re_hash);
+
+      if (!found) {
+        return;
       }
 
-      // Focus
+      let selected_command = found[1];
+      let selected_line = found[2];
+      self.selected_command(selected_command);
+      self.selected_line(selected_line);
+
+      // Show and focus
+      for (let command of self.commands()) {
+        if (command.id() == selected_command) {
+          command.is_showing(true);
+        }
+      }
       $(hash).focus();
 
       // Stop processing the event
