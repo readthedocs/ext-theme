@@ -237,28 +237,33 @@ readthedocs.site.build.detail.BuildDetailView.init({id: '{{ build.pk }}'});
         </div>
         <div class="ui basic segment very padded" data-bind="visible: is_loading()"></div>
 
-        <div class="ui inverted relaxed list"
+        <div class="ui inverted relaxed command list"
              data-bind="visible: commands, foreach: commands"
              style="display: none;">
           <div class="item">
-            <a class="ui icon left floated" style="margin: 0px; user-select: none;" data-bind="click: toggle_showing">
+            <a class="ui icon left floated" data-bind="click: toggle_showing">
               <i class="angle down grey icon"></i>
             </a>
-            <div class="content">
-              <pre style="margin: 0px"><code style="font-size: 14px; white-space: pre-wrap; word-wrap: break-word; color: green;" data-bind="text: command"></code><a class="ui mini black label" style="color: gray !important;" data-bind="text: run_time() + 's'"></a></pre>
-            </div>
-          </div>
 
-          <!-- ko foreach: output_lines -->
-          <div class="item" data-bind="visible: $parent.is_showing(), css: { green: is_highlighted() }">
-            <a class="ui icon left floated" style="margin: 0px; user-select: none;" data-bind="attr: {id: anchor_id(), href: '#' + anchor_id()};">
-              <i class="linkify grey icon"></i>
-            </a>
-            <div class="content">
-              <pre style="margin: 0px"><code style="font-size: 14px; white-space: pre-wrap; word-wrap: break-word;" data-bind="text: output"></code></pre>
+            <div class="command content">
+              <pre><code data-bind="text: command"></code><a class="ui mini timing label" data-bind="text: run_time() + 's'"></a></pre>
+            </div>
+
+            <div class="output content" data-bind="visible: is_showing()">
+
+              <div class="ui relaxed command output list" data-bind="foreach: output_lines">
+                <div class="item" data-bind="css: { highlight: is_highlighted() }">
+                  <a class="ui icon left floated" data-bind="attr: {id: anchor_id(), href: '#' + anchor_id()};">
+                    <i class="linkify icon"></i>
+                  </a>
+                  <div class="content">
+                    <pre><code data-bind="text: output"></code></pre>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
-          <!-- /ko -->
         </div>
 
         <div data-bind="visible: !is_loading()">

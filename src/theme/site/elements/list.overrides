@@ -1,0 +1,58 @@
+.ui.command.list {
+  > .item {
+    > .icon {
+      margin: 0px;
+      user-select: none;
+
+      > i.linkify.icon {
+        color: darken(@grey, 20%);
+
+        &:hover, &:active {
+          color: @grey;
+        }
+      }
+    }
+
+    > .command.content {
+      color: @lightOlive;
+
+      .ui.timing.label {
+        background: fadeout(@grey, 80%);
+        color: fadeout(@white, 70%);
+        margin-left: 1em;
+        padding: 4px 8px;
+        user-select: none;
+
+        &:hover {
+          background: fadeout(@grey, 60%);
+          color: fadeout(@white, 50%);
+        }
+      }
+    }
+
+    > .output.content {
+      > .command.output.list {
+        > .highlight.item {
+          background: fadeout(@white, 85%);
+
+          > .icon > i.linkify.icon {
+            color: @grey;
+          }
+        }
+      }
+    }
+
+    .command.content,
+    .output.content .command.output.list .content {
+      > pre {
+        margin: 0em;
+        > code {
+          font-size: 14px;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+        }
+      }
+    }
+
+  }
+}
