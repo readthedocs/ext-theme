@@ -40,6 +40,25 @@
           }
         }
       }
+
+      // ansi_up control character classes
+      span.ansi-black-fg { color: @black; }
+      span.ansi-red-fg { color: @lightRed; }
+      span.ansi-green-fg { color: @lightOlive; }
+      span.ansi-yellow-fg { color: @lightYellow; }
+      span.ansi-blue-fg { color: @lightBlue; }
+      span.ansi-magenta-fg { color: @lightViolet; }
+      span.ansi-cyan-fg { color: @lightPurple; }
+      span.ansi-white-fg { color: @white; }
+
+      span.ansi-black-bg { color: @black; }
+      span.ansi-red-bg { color: @lightRed; }
+      span.ansi-green-bg { color: @lightOlive; }
+      span.ansi-yellow-bg { color: @lightYellow; }
+      span.ansi-blue-bg { color: @lightBlue; }
+      span.ansi-magenta-bg { color: @lightViolet; }
+      span.ansi-cyan-bg { color: @lightPurple; }
+      span.ansi-white-bg { color: @white; }
     }
 
     .command.content,

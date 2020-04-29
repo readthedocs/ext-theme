@@ -3,6 +3,8 @@
 const ko = require("knockout");
 const $ = require("jquery");
 import moment from "moment";
+import AnsiUp from "ansi_up";
+import sanitize_html from "sanitize-html";
 
 
 function BuildCommandOutput(data) {
@@ -32,9 +34,14 @@ function BuildCommand(data) {
   // Used for calls to the root view
   self.view = data.view;
 
+  // Remove the path from display
+  // TODO do this on the API level
+  const re_command_trim = /(\/usr\/src\/app|\/home\/docs)\/checkouts\/readthedocs.org\/user_builds\/[^\/]+\/[^\/]+\/[^\/]+\//g;
+  let command = data.command.replace(re_command_trim, '');
+
   // Observables
   self.id = ko.observable(data.id);
-  self.command = ko.observable(data.command);
+  self.command = ko.observable(command);
   self.exit_code = ko.observable(data.exit_code || 0);
   self.successful = ko.observable(self.exit_code() === 0);
   self.run_time = ko.observable(data.run_time);
@@ -47,7 +54,15 @@ function BuildCommand(data) {
   };
 
   // Build output lines
-  var output_lines = data.output.split(/\n/);
+  let ansi_up = new AnsiUp();
+  ansi_up.use_classes = true;
+  let output = ansi_up.ansi_to_html(data.output);
+  output = sanitize_html(output, {
+    allowedTags: ['span'],
+    allowedAttributes: {'span': ['class']},
+  });
+
+  var output_lines = output.split(/\n/);
   self.output_lines = ko.observableArray(
     output_lines.map(function (line, index) {
       return new BuildCommandOutput({
@@ -69,6 +84,10 @@ function BuildCommand(data) {
 export function BuildDetailView(instance) {
   var self = this;
   var instance = instance || {};
+
+  /* Attributes */
+  self.id = instance.id;
+  self.api_url = "/api/v2/build/";
 
   /* State variables */
   self.success = ko.observable(instance.success);
@@ -182,43 +201,52 @@ export function BuildDetailView(instance) {
     }
   };
 
+  self.load_remote_build = function(build_id) {
+    self.id = build_id;
+    self.api_url = 'https://readthedocs.org/api/v2/build/';
+    self.state('triggered');
+    self.commands([]);
+    poll_api();
+  };
+
+  function callback_api(data) {
+    self.state(data.state);
+    self.state_display(data.state_display);
+    self.date(data.date);
+    self.success(data.success);
+    self.error(data.error);
+    self.length(data.length);
+    self.commit(data.commit);
+    self.docs_url(data.docs_url);
+    self.commit_url(data.commit_url);
+    self.builder(data.builder);
+    self.config(data.config);
+
+    let commands = self.commands()
+    if (data.commands.length !== commands.length) {
+      for (let n in data.commands) {
+        var command = data.commands[n];
+        var match = ko.utils.arrayFirst(
+          commands,
+          function (command_cmp) {
+            return command_cmp.id() === command.id;
+          }
+        );
+        if (!match) {
+          command.view = self;
+          self.commands.push(new BuildCommand(command));
+        }
+      }
+    }
+    self.is_loading(false);
+    self.update_hash();
+  }
+
   function poll_api() {
     if (self.finished()) {
       return;
     }
-    $.getJSON("/api/v2/build/" + instance.id + "/", function (data) {
-      self.state(data.state);
-      self.state_display(data.state_display);
-      self.date(data.date);
-      self.success(data.success);
-      self.error(data.error);
-      self.length(data.length);
-      self.commit(data.commit);
-      self.docs_url(data.docs_url);
-      self.commit_url(data.commit_url);
-      self.builder(data.builder);
-      self.config(data.config);
-
-      let commands = self.commands()
-      if (data.commands.length !== commands.length) {
-        for (let n in data.commands) {
-          var command = data.commands[n];
-          var match = ko.utils.arrayFirst(
-            commands,
-            function (command_cmp) {
-              return command_cmp.id() === command.id;
-            }
-          );
-          if (!match) {
-            command.view = self;
-            self.commands.push(new BuildCommand(command));
-          }
-        }
-      }
-      self.is_loading(false);
-      self.update_hash();
-    });
-
+    $.getJSON(self.api_url + self.id + "/", callback_api);
     setTimeout(poll_api, 2000);
   }
 
