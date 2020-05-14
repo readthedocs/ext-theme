@@ -5,25 +5,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{% block title %}{% endblock %}{% block head_title %}{% endblock %} - Read the Docs for Business</title>
+    <title>{% block title %}{% endblock %}{% block head_title %}{% endblock %} - Read the Docs</title>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="icon" type="image/png" href="{% static 'corporate/img/favicon.png' %}" />
-    {# New stylesheet #}
-
-    <!-- Website Font -->
-    <link rel="stylesheet" href="https://use.typekit.net/omm0eld.css">
-    <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/site.css' %}" />
-    {% comment %} 
-      Line below is for webpack-dev-server. Comment line when commiting
-    {% endcomment %}
-    {% comment %} <link rel="stylesheet" href="http://localhost:8080/static/site.css"> {% endcomment %}
-    
+    <!--
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/css/site.css' %}" />
+    -->
+    <link rel="stylesheet" type="text/css" media="all" href="http://localhost:8080/static/css/site.css" />
     {% block extra_links %}{% endblock %}
 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width" />
 
     {# TODO remove these, from the existing theme #}
+    <!--
     <script type="text/javascript" src="{% static 'vendor/jquery.js' %}"></script>
     <script type="text/javascript">
 var $ = jQuery = require('jquery');
@@ -35,10 +30,15 @@ site.handle_notification_dismiss();
     </script>
     <script type="text/javascript" src="{{ MEDIA_URL }}javascript/instantsearch.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}javascript/base.js"></script>
+    -->
 
     {# New theme #}
-    <script type="text/javascript" src="{% static 'readthedocsext/theme/vendor.js' %}"></script>
-    <script type="text/javascript" src="{% static 'readthedocsext/theme/site.js' %}"></script>
+    <!--
+    <script type="text/javascript" src="{% static 'readthedocsext/theme/js/vendor.js' %}"></script>
+    <script type="text/javascript" src="{% static 'readthedocsext/theme/js/site.js' %}"></script>
+    -->
+    <script type="text/javascript" src="http://localhost:8080/static/js/vendor.js"></script>
+    <script type="text/javascript" src="http://localhost:8080/static/js/site.js"></script>
 
     {% block extra_scripts %}{% endblock %}
   </head>
@@ -53,6 +53,23 @@ site.handle_notification_dismiss();
     {% endblock %}
     <!-- END header -->
 
+    <!-- BEGIN notify -->
+    {% if messages %}
+      <div class="ui container">
+        <div class="ui basic segment">
+          {% for message in messages %}
+            <div class="ui warning message message-{{ message.level }}" {% if message.pk %}data-dismiss-url="{% url 'message_mark_read' message.pk %}"{% endif %}>
+              <i class="close icon"></i>
+              <div class="header">Notification</div>
+
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    <!-- END notify -->
+
     {# TODO remove #}
     {% block subnav-bar %}{% endblock %}
 
@@ -62,19 +79,6 @@ site.handle_notification_dismiss();
     {# TODO remove this and use the base-ng theme as the default #}
     {% block content-wrapper %}
         <div class="ui very padded container">
-
-          <!-- BEGIN notify -->
-          {% if messages %}
-              {% for message in messages %}
-                <div class="ui warning message message-{{ message.level }}" {% if message.pk %}data-dismiss-url="{% url 'message_mark_read' message.pk %}"{% endif %}>
-                    <i class="close icon"></i>
-                    <div class="header">Notification</div>
-
-                  {{ message }}
-                </div>
-              {% endfor %}
-          {% endif %}
-          <!-- END notify -->
 
           {% block admin-bar %}{% endblock %}
 

@@ -1,21 +1,26 @@
 {% extends "base.html" %}
+
 {% load i18n %}
-{% load pagination_tags %}
 {% load socialaccount %}
 
-{% block title %}{% trans "Project Dashboard" %}{% endblock %}
+{% load pagination_tags %}
 
-{% block dash-nav-projects %}active{% endblock %}
+{% block title %}{% trans "Projects" %}{% endblock %}
 
 {% block content %}
   {% url "projects_import" as projects_import_url %}
   {% url "socialaccount_connections" as social_accounts %}
 
+  {# TODO ??? {% include "projects/partials/project_list.html" with objects=filter.qs %} #}
+  {% include "projects/partials/project_list.html" with objects=project_list %}
+{% endblock content %}
+
+{% block oldshit %}
   <!-- BEGIN your projects list -->
   <div class="ui very padded grid stackable">
     <div class="twelve wide computer sixteen wide tablet sixteen wide mobile column">
-      {% if project_list %}
 
+      {% if project_list %}
         {% if filter.qs.count > 0 %}
           <div class="ui medium header">
             <h3>{% trans "Important Versions" %}</h3>
@@ -36,12 +41,12 @@
         {% endif %}
 
         <div class="ui basic segment">
-              {% block project_import_button %}
-              <form class="ui form" method="get" action="{{ projects_import_url }}">
-                <input class="ui button" type="submit" value="{% trans "Import a Project" %}" />
-              </form>
-              {% endblock %}
-              <h3>{% trans "Projects" %}</h3>
+          {% block project_import_button %}
+            <form class="ui form" method="get" action="{{ projects_import_url }}">
+              <input class="ui button" type="submit" value="{% trans "Import a Project" %}" />
+            </form>
+          {% endblock %}
+          <h3>{% trans "Projects" %}</h3>
 
           <div class="ui items divided">
             {% for project in project_list %}

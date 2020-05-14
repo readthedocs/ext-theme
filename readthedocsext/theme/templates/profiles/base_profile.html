@@ -19,18 +19,17 @@
           ({{ profile.user.get_full_name}})
         {% endif %}
       </h2>
-    </div>
-
-    <div lass="ui basic segment very padded">
 
       <div class="ui list">
-        <div class="item {% block profile-bar-profile %}{% endblock %}"><a href="{{ profile.get_absolute_url }}">{% trans "Profile" %}</a></div>
+        <button class="ui button {% block profile-bar-profile %}{% endblock %}"><a href="{{ user.profile.get_absolute_url }}">{% trans "Profile" %}</a></button>
         {% if profile.user == user %}
-          <div class="item {% block profile-bar-admin %}{% endblock %}"><a href="{% url "profiles_profile_edit" %}"><i class="gear"></i>{% trans "Admin" %}</a></div>
+          <button class="ui secondary button {% block profile-bar-admin %}{% endblock %}"><a href="{% url "profiles_profile_edit" %}"><i class="cog icon"></i>{% trans "Admin" %}</a></button>
         {% endif %}
-
       </div>
+
     </div>
+
+    
 
   </div>
 </div>

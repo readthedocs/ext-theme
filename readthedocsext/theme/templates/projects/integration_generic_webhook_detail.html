@@ -1,0 +1,23 @@
+{% extends "projects/integration_webhook_detail.html" %}
+
+{% load i18n %}
+
+{% block integration_details %}
+  <p>
+    {% blocktrans trimmed %}
+      The following parameters are configured for this integration:
+    {% endblocktrans %}
+  </p>
+
+  <div>
+    <ul class="ui list">
+      <li class="item">{% trans "Token" %}:
+        <ul class="list">
+          <li class="item">
+            {{ integration.token }}
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+{% endblock %}

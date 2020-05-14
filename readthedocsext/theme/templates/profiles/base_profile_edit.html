@@ -2,60 +2,31 @@
 
 {% load i18n %}
 {% load core_tags %}
-{% load gravatar %}
-
-{% block profile-bar-admin %}active{% endblock %}
-
-{# This is included here instead of subclassing base_profile because we don't control all the views, and can't set the `profile` variable reliably #}
-{% block subnav-bar %}
-<!-- BEGIN project bar -->
-<div class="ui secondary segment attached">
-  <div class="ui container very padded">
-
-    <div class="ui basic segment very padded">
-      <h2>
-        <a href="{{ user.profile.get_absolute_url }}">
-        {% gravatar user.email 30 %}
-        </a>
-        {{ user }}
-        {% if user.get_full_name %}
-          ({{ user.get_full_name}})
-        {% endif %}
-      </h2>
-
-        <button class="ui button {% block profile-bar-profile %}{% endblock %}"><a href="{{ user.profile.get_absolute_url }}">{% trans "Profile" %}</a></button>
-        <button class="ui secondary button"><a href="{% url "profiles_profile_edit" %}"><i class="cog icon"></i>{% trans "Admin" %}</a></button>
-
-    </div>
-
-  </div>
-</div>
-<!-- END project bar -->
-
-{% endblock %}
 
 {% block content %}
-<div class="ui basic segment very padded">
-  <div class="ui two column grid">
-    <div class="ui link divided relaxed list three wide column">
-      {% block profile-admin-nav %}
-        <div class="item {% block profile-admin-details %}{% endblock %}"><a  href="{% url 'profiles_profile_edit' %}">{% trans "Details" %}</a></div>
-        <div class="item {% block profile-admin-social-accounts %}{% endblock %}"><a href="{% url 'socialaccount_connections' %}">{% trans "Connected Services" %}</a></div>
-        <div class="item {% block profile-admin-change-password %}{% endblock %}"><a href="{% url 'account_change_password' %}">{% trans "Change Password" %}</a></div>
-        <div class="item {% block profile-admin-change-email %}{% endblock %}"><a href="{% url 'account_email' %}">{% trans "Change Email" %}</a></div>
-        <div class="item {% block profile-admin-tokens %}{% endblock %}"><a href="{% url 'profiles_tokens' %}">{% trans "API Tokens" %}</a></div>
-        <div class="item {% block profile-admin-delete-account %}{% endblock %}"><a href="{% url 'delete_account' %}">{% trans "Delete Account" %}</a></div>
-        <div class="item {% block profile-admin-gold-edit %}{% endblock %}"><a href="{% url 'gold_detail' %}">{% trans "Gold Membership" %}</a></div>
-        {% if USE_PROMOS %}
-          <div class="{% block profile-admin-advertising %}{% endblock %}"><a href="{% url 'account_advertising' %}">{% trans "Advertising" %}</a></div>
-        {% endif %}
-      {% endblock %}
-    </div>
-    <div class="column">
-      <h2>{% block edit_content_header %}{% endblock %}</h2>
-      {% block edit_content %}
-      {% endblock %}
+  <div class="ui basic segment very padded">
+    <div class="ui two column grid">
+      <div class="ui four wide column">
+        <div class="ui vertical fluid menu">
+          {% block profile-admin-nav %}
+            <a class="item blue {% block profile-admin-details %}{% endblock %}" href="{% url 'profiles_profile_edit' %}">{% trans "Profile" %}</a>
+            <a class="item blue {% block profile-admin-change-email %}{% endblock %}" href="{% url 'account_email' %}">{% trans "Email Addresses" %}</a>
+            <a class="item blue {% block profile-admin-change-password %}{% endblock %}" href="{% url 'account_change_password' %}">{% trans "Security" %}</a>
+            <a class="item blue {% block profile-admin-delete-account %}{% endblock %}" href="{% url 'delete_account' %}">{% trans "Delete Account" %}</a>
+            <a class="item blue {% block profile-admin-social-accounts %}{% endblock %}" href="{% url 'socialaccount_connections' %}">{% trans "Connected Services" %}</a>
+            <a class="item blue {% block profile-admin-tokens %}{% endblock %}" href="{% url 'profiles_tokens' %}">{% trans "API Tokens" %}</a>
+            <a class="item blue {% block profile-admin-gold-edit %}{% endblock %}" href="{% url 'gold_detail' %}">{% trans "Gold Membership" %}</a>
+            {% if USE_PROMOS %}
+              <a class="item blue {% block profile-admin-advertising %}{% endblock %}" href="{% url 'account_advertising' %}">{% trans "Advertising" %}</a>
+            {% endif %}
+          {% endblock %}
+        </div>
+      </div>
+      <div class="ui twelve wide column">
+        <h2 class="ui heading">{% block edit_content_header %}{% endblock %}</h2>
+
+        {% block edit_content %}{% endblock %}
+      </div>
     </div>
   </div>
-</div>
 {% endblock %}

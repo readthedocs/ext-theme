@@ -7,18 +7,13 @@
 {% block title %}{{ build.project.name }}{% endblock %}
 
 {% block extra_scripts %}
+  <!--
   <script type="text/javascript" src="{% static 'vendor/knockout.js' %}"></script>
   <script type="text/javascript" src="{% static 'builds/js/detail.js' %}"></script>
+  -->
   <script type="text/javascript">
-var detail_views = require('builds/detail');
-$(document).ready(function () {
-    var view = detail_views.BuildDetailView.init({id: '{{ build.pk }}'});
-});
+readthedocs.site.build.detail.BuildDetailView.init({id: '{{ build.pk }}'});
   </script>
-{% endblock %}
-
-{% block extra_links %}
-  <link rel="stylesheet" href="{% static 'builds/css/detail.css' %}" />
 {% endblock %}
 
 {% block project_editing %}
@@ -28,141 +23,131 @@ $(document).ready(function () {
 {% endblock %}
 
 {% block content %}
-  <div class="ui basic segment">
-    <div class="ui container">
-      <div class="ui basic segment">  
-        <!-- Build meta data -->
+  <div class="ui basic segment padded" id="build-detail">
 
-        <div class="ui grid">
-         
-          <div class="ui ten wide column">
-            <div class="introduction">
-              <div class="ui header">
-                {% blocktrans trimmed with build_id=build.pk %}
-                  Build #{{ build_id }}
-                {% endblocktrans %}
+    <!-- top most -->
+    <div class="ui top attached segment">
+      <div class="ui stackable grid">
+
+        <!-- top left -->
+        <div class="ui eleven wide column">
+          <div class="ui header">
+            {% blocktrans trimmed with build_id=build.pk %}
+              Build #{{ build_id }}
+            {% endblocktrans %}
+          </div>
+
+          <div class="ui basic segment loading padded" data-bind="css: { loading: is_loading() }">
+            <div class="ui active progress" id="build-progress" data-bind="css: state_progress_css()">
+              <div class="bar"><div class="progress"></div></div>
+              <div class="label">
+                <span data-bind="visible: !finished()" style="display: none;">
+                  <span data-bind="text: state_display"></span>
+                </span>
+                <span data-bind="visible: finished()" style="display: none;">
+                  <span data-bind="visible: success()">
+                    {% trans "Build complete!" %}
+                  </span>
+                  <span data-bind="visible: !success()">
+                    {% trans "Build failed" %}
+                  </span>
+                </span>
               </div>
             </div>
-        
-            <div>
-              <span>
+          </div>
+        </div>
+
+        <!-- top right -->
+        <div class="ui five wide middle aligned column">
+          <div class="ui relaxed list">
+            <div class="item">
+              <i class="grey calendar outline icon"></i>
+              <div class="content" data-bind="if: !is_loading()">
+                <div data-bind="attr: { 'data-tooltip': date_display() }, text: '{% trans "Build started" %} ' + date_display_since()"></div>
+              </div>
+            </div>
+
+            <div class="item">
+              <i class="grey clock outline icon"></i>
+              <div class="content" data-bind="if: finished">
+                <div data-bind="text: '{% trans "Build took %d" %}'.replace('%d', length_display())"></div>
+              </div>
+            </div>
+
+            <div class="item">
+              <i class="grey code branch icon"></i>
+              <div class="content" data-bind="if: !is_loading()">
+                <a data-bind="attr: {href: commit_url}"><code data-bind="text: commit_short"></code></a>
+              </div>
+            </div>
+
+            <div class="item">
+              <i class="grey tag icon"></i>
+              <div class="content" data-bind="if: !is_loading()">
+                {% comment %}TODO unfuck this django templating
                 {% if request.user|is_admin:project and not build.is_external %}
                   <a href="{% url "project_version_detail" build.version.project.slug build.version.slug %}">{{ build.version.slug }}</a>
                 {% elif build.is_external %}
                   {% blocktrans with build.external_version_name as external_version_name %}
                     <b>{{ external_version_name }}</b>
                   {% endblocktrans %}
-                    #<a href="{{ build.version.vcs_url }}">{{ build.version.verbose_name }}</a>
+                  #<a href="{{ build.version.vcs_url }}">{{ build.version.verbose_name }}</a>
                 {% else %}
                   {{ build.version.slug }}
                 {% endif %}
-              </span>
-              <span data-bind="visible: commit">
-                {% if build.get_commit_url %}
-                  (<a data-bind="attr: {href: commit_url}"><span data-bind="text: commit">{{ build.commit }}</span></a>)
-                {% else %}
-                    (<span data-bind="text: commit">{{ build.commit }}</span>)
-                {% endif %}
-              </span>
+              {% endcomment %}
+                <a data-bind="attr: {href: commit_url}"><code>{{ build.version.slug }}</code></a>
+              </div>
             </div>
-            <div>
-              <span>
-                <span class="ui big label" data-bind="visible: !finished(), text: state_display"
-                      style="display: none;">
-                  {{ build.get_state_display }}
-                </span>
-                <img src="{% static 'core/img/loader.gif' %}"
-                    data-bind="visible: !finished()"
-                    style="display: none;" />
-              </span>
-              <span class="ui big green label"
-                    data-bind="visible: finished() && success()"
-                    style="display: none;">
-                {% trans "Build completed" %}
-              </span>
-              <span class="ui big red label"
-                    data-bind="visible: finished() && !success()"
-                    style="display: none;">
-                {% trans "Build failed" %}
-              </span>
-            </div>
-        
+
           </div>
+        </div>
 
-          <div class="ui list six wide column right aligned">     
-            <div class="item" data-bind="visible: finished()">
-              {% trans "Completed" %}
-              <span>{{ build.date|date:"N j, Y. P" }}</span>
-            </div>
+      </div>
+    </div>
+    <!-- end top -->
 
-            <div class="item" data-bind="visible: finished()">
-              {% trans "Build took" %}
-              <span data-bind="text: length">
-                {{ build.length }}
-              </span>
-              {% trans "seconds" %}
-            </div>
-
-          {% if build.builder and request.user.is_staff %}
-            <div class="item">
-              {% trans "Built on" %}
-              {{ build.builder }}
-            </div>
-          {% endif %}
-
-          <div class="item" data-bind="visible: finished() && success()">
-            <a data-bind="attr: {href: docs_url}">
-              {% trans "View docs" %}
+    <div class="ui attached menu">
+      <a class="active item">Output</a>
+      <a class="item" href="{% url "build-detail" build.pk "txt" %}">
+        {% trans "Raw log" %}
+      </a>
+      <div class="right menu">
+        {% if request.user.is_staff %}
+          <div class="ui item">
+            <a class="ui mini red icon button" data-bind="click: show_debug">
+              <i class="bug icon"></i>
+              Debug
             </a>
           </div>
-
-          <div class="item"  data-bind="visible: finished()">
-            <a href="{% url "build-detail" build.pk "txt" %}">
-              {% trans "View raw" %}
-            </a>
+          <div class="ui modal" id="build-debug-modal">
+            <div class="ui icon header">
+              <i class="bug icon"></i>
+              Debug
+            </div>
+            <div class="content">
+              <div class="ui relaxed list">
+                <div class="item">Built on server <span data-bind="text: builder"></span></div>
+                <div class="item">Time to first command: TODO</div>
+              </div>
+              <div class="ui heading">Config:</div>
+              <pre><code data-bind="text: config_display"></code></pre>
+            </div>
+            <div class="actions">
+              <div class="ui green ok inverted button">
+                <i class="checkmark icon"></i>
+                Fantastic
+              </div>
+            </div>
           </div>
+        {% endif %}
 
-        </div>
-    
-        </div>
-        
-
-    
-    {% if request.user|is_admin:project %}
-      {% if not build.success and build.commands.count < 4 and build.version.supports_wipe %}
-        <div class="ui basic segment">
-          <p>
-            {% url 'wipe_version' build.version.project.slug build.version.slug as wipe_url %}
-            {% blocktrans trimmed %}
-              Having trouble with your build environment?
-              Try <a href="{{ wipe_url }}">resetting it</a>.
-            {% endblocktrans %}
-          </p>
-        </divas>
-      {% elif not build.success and "setup.py install" in build.commands.last.output %}
-        <div class="ui basic segment">
-          <p>
-            {% url 'projects_advanced' build.version.project.slug as advanced_url %}
-            {% blocktrans trimmed %}
-              Don't want <em>setup.py install</em> called?
-              Change the <strong>Install Project</strong> setting in your <a href="{{ advanced_url }}">advanced settings</a>.
-            {% endblocktrans %}
-          </p>
-        </div>
-      {% endif %}
-      {% if build.finished and not build.using_latest_config %}
-        <div>
-          <p>
-            {% blocktrans trimmed with config_file_link="https://docs.readthedocs.io/page/config-file/v2.html" %}
-              <strong>Configure your documentation builds!</strong>
-              Adding a <a href="{{ config_file_link }}">.readthedocs.yml</a> file to your project
-              is the recommended way to configure your documentation builds.
-              You can declare dependencies, set up submodules, and many other great features.
-            {% endblocktrans %}
-          </p>
-        </div>
-      {% endif %}
-    {% endif %}
+        <a class="disabled item" data-bind="css: {disabled: !finished() || !success()}, attr: {href: docs_url}">
+          <i class="external alternate icon"></i>
+          {% trans "View docs" %}
+        </a>
+      </div>
+    </div>
 
     {% if build.output %}
       {# If we have build output, this is an old build #}
@@ -194,58 +179,99 @@ $(document).ready(function () {
       {% endif %}
 
     {% else %}
-      {# Show new command output if lacking build.output #}
 
-      <div class="build-error"
-           data-bind="visible: error"
-           style="display: none;">
-        <h3>{% trans "Error" %}</h3>
-        <p class="ui negative message"
-           data-bind="text: error">
-          {{ build.error }}
-        </p>
+      {% comment %}
+        Error list
+      {% endcomment %}
+      <div class="ui attached inverted red segment" data-bind="visible: error" style="display: none;">
+        <i class="exclamation circle icon"></i>
+        <span data-bind="text: error"></span>
+        <span>{% trans "For more information on this error, see our documentation." %}
+      </div>
+      {% comment %}
+        Space for errors!
+      <div class="ui inverted grey segment">
         <p>
-          {% block github_issue_link %}
-            {% if issue_url %}
-              {% blocktrans trimmed with url=issue_url %}
-                <a href="{{ url }}">Report any build issues here</a>.
-              {% endblocktrans %}
-            {% endif %}
-          {% endblock %}
+          {% url 'wipe_version' build.version.project.slug build.version.slug as wipe_url %}
+          {% blocktrans trimmed %}
+            Having trouble with your build environment?
+            Try <a href="{{ wipe_url }}">resetting it</a>.
+          {% endblocktrans %}
         </p>
       </div>
-
-      <div 
-           data-bind="visible: commands, foreach: display_commands"
-           style="display: none;">
-        <div class="ui message"
-             data-bind="css: command_status">
-          <div class="build-command-run" data-bind="click: toggleCommand">
-            <span data-bind="text: command"></span>
+      {% if build.finished and not build.using_latest_config %}
+        <div>
+          <p>
+            {% blocktrans trimmed with config_file_link="https://docs.readthedocs.io/page/config-file/v2.html" %}
+              <strong>Configure your documentation builds!</strong>
+              Adding a <a href="{{ config_file_link }}">.readthedocs.yml</a> file to your project
+              is the recommended way to configure your documentation builds.
+              You can declare dependencies, set up submodules, and many other great features.
+            {% endblocktrans %}
+          </p>
+        </div>
+      {% endif %}
+      {% if request.user|is_admin:project %}
+        {% elif not build.success and "setup.py install" in build.commands.last.output %}
+          <div class="ui basic segment">
+            <p>
+              {% url 'projects_advanced' build.version.project.slug as advanced_url %}
+              {% blocktrans trimmed %}
+                Don't want <em>setup.py install</em> called?
+                Change the <strong>Install Project</strong> setting in your <a href="{{ advanced_url }}">advanced settings</a>.
+              {% endblocktrans %}
+            </p>
           </div>
-          <div class="build-command-return"
-               data-bind="visible: is_showing">
-            <div class="build-command-output">
-              <span data-bind="text: output"></span>
+        {% endif %}
+      {% endif %}
+      {% endcomment %}
+
+      <div class="ui inverted bottom attached segment transition slide">
+
+        {% comment %}
+          This is a loading placeholder. The extra element is to fill out the
+          extra space in the div
+        {% endcomment %}
+        <div class="ui hidden active dimmer" data-bind="visible: is_loading()">
+          <div class="ui text loader">Loading</div>
+        </div>
+        <div class="ui basic segment very padded" data-bind="visible: is_loading()"></div>
+
+        <div class="ui inverted relaxed command list"
+             data-bind="visible: commands, foreach: commands"
+             style="display: none;">
+          <div class="item">
+            <a class="ui icon left floated" data-bind="click: toggle_showing">
+              <i class="angle down grey icon"></i>
+            </a>
+
+            <div class="command content">
+              <pre><code data-bind="text: command"></code><a class="ui mini timing label" data-bind="text: run_time() + 's'"></a></pre>
             </div>
 
-            <div class="build-command-meta">
-              <span class="build-command-time">
-                {% trans "Command time:" %}
-                <span data-bind="text: run_time">0</span>s
-              </span>
+            <div class="output content" data-bind="visible: is_showing()">
 
-              <span class="build-command-exit-code">
-                {% trans "Return" %}:
-                <span data-bind="text: exit_code"></span>
-              </span>
+              <div class="ui relaxed command output list" data-bind="foreach: output_lines">
+                <div class="item" data-bind="css: { highlight: is_highlighted() }">
+                  <a class="ui icon left floated" data-bind="attr: {id: anchor_id(), href: '#' + anchor_id()};">
+                    <i class="linkify icon"></i>
+                  </a>
+                  <div class="content">
+                    <pre><code data-bind="html: output"></code></pre>
+                  </div>
+                </div>
+              </div>
+
             </div>
-
           </div>
         </div>
+
+        <div data-bind="visible: !is_loading()">
+          <div data-bind="visible: !finished()" class="ui active inverted mini centered inline text loader"></div>
+        </div>
+
       </div>
     {% endif %}
-      </div>
-    </div>
+
   </div>
 {% endblock %}

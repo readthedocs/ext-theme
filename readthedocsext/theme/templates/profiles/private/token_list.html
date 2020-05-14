@@ -9,43 +9,72 @@
 {% block edit_content_header %} {% trans "API Tokens" %} {% endblock %}
 
 {% block edit_content %}
-  <p>Personal Access Token are tokens that allow you to use the Read the Docs APIv3 being authenticated as yourself. See <a href="https://docs.readthedocs.org/page/api/v3.html">APIv3 documentation</a> for more information.</p>
+
+  <p>
+    {% blocktrans trimmed with url="https://docs.readthedocs.org/page/api/v3.html" %}
+      API tokens can be used to access the Read the Docs APIv3. See the
+      <a href="{{ url }}">APIv3 documentation</a> for more information.
+    {% endblocktrans %}
+  </p>
+
+  <div class="ui basic segment top attached right aligned">
+    <form method="post" action="{% url "profiles_tokens_create" %}">
+      {% csrf_token %}
+      <button class="ui tiny green icon button">
+        <i class="plus icon"></i>
+        {% trans "Generate API token" %}
+      </button>
+    </form>
+  </div>
 
   {% if not object_list %}
-      <div class="ui relaxed list">
-        <div class="item">
-          <form method="post" action="{% url "profiles_tokens_create" %}">
-            {% csrf_token %}
-            <input class="ui button" type="submit" value="{% trans "Generate API Token" %}">
-          </form>
-        </div>
+    <div class="ui attached placeholder segment">
+      <div class="ui icon header">
+        <i class="key icon"></i>
+        {% trans 'You currently have no API tokens.' %}
       </div>
-      <div class="ui hidden divider"></div>
-  {% endif %}
-
-
-  <div class="ui relaxed list">
-    {% for token in object_list %}
-      <div class="item">
-          <div>Created: {{ token.created }}</div>
-          <div>Token: {{ token.key }}</div>
-
-          <div class="ui relaxed list">
-            <div class="item">
-              <form method="post" action="{% url "profiles_tokens_delete" %}">
-                {% csrf_token %}
-                <input class="ui button" type="submit" value="{% trans "Revoke" %}">
-              </form>
-            </div>
-          </div>
-
-        </div>
-    {% empty %}
-      <div class="item">
-        <p class="ui message">
-          {% trans 'No API Tokens currently configured.' %}
+      <div class="inline">
+        <p>
+          {% blocktrans trimmed %}
+            Add a new API token to begin using APIv3.
+          {% endblocktrans %}
         </p>
       </div>
-    {% endfor %}
     </div>
+  {% else %}
+    <div class="ui attached segment">
+      <div class="ui middle aligned very relaxed divided list">
+        {% for token in object_list %}
+          <div class="item">
+
+            {% comment %}
+              This is a CRUD interface for now, even though we only allow 1
+              relationsihp to Token.
+
+              TODO make the revoke form include a token id if we do many to many
+            {% endcomment %}
+            <div class="ui right floated">
+              <form method="post" action="{% url "profiles_tokens_delete" %}">
+                {% csrf_token %}
+                <input class="ui basic button" type="submit" value="{% trans "Revoke" %}">
+              </form>
+            </div>
+
+            <div class="content">
+              <div class="header">
+                <code>{{ token.key }}</code>
+                <div class="ui compact icon basic button" data-clipboard-text="{{ token.key }}">
+                  <i class="copy outline icon"></i>
+                </div>
+              </div>
+              <div class="description">
+                Created <span data-tooltip="{{ token.created }}">{{ token.created | timesince }} ago</span>
+              </div>
+            </div>
+
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
 {% endblock %}

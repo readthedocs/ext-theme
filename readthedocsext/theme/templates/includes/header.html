@@ -1,16 +1,18 @@
 {% load i18n %}
 {% load gravatar %}
+{% load static %}
 
 <!-- BEGIN header-->
 <div class="ui inverted attached stackable menu">
   <div class="ui container">
-    {% comment %}Translators: Name of the website{% endcomment %}
-    <a class="header item" href="{% url "homepage" %}">Read the Docs</a>
+    <a class="header item" href="{% url "homepage" %}">
+      <div class="ui readthedocs-logo image"></div>
+    </a>
 
     <!-- BEGIN header nav -->
     <div class="right menu">
       {% if request.user.is_authenticated %}
-        <div class="ui pointing dropdown link item">
+        <div class="ui pointing link dropdown item">
 
             <img class="ui avatar image" src="{% gravatar_url request.user.email 24 %}">
             <div class="text">

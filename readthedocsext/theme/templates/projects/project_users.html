@@ -1,0 +1,54 @@
+{% extends "projects/project_edit_base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Edit Maintainers" %}{% endblock %}
+
+{% block project-users-active %}active{% endblock %}
+{% block project_edit_content_header %}{% trans "Maintainers" %}{% endblock %}
+
+{% block project_edit_content %}
+  <p class="ui info message">
+    {% trans "This allows you to add maintainers to your project. It gives them admin access to the project, so be careful!" %}
+  </p>
+
+  <h3>{% trans "Existing Maintainers" %}</h3>
+  <p>
+    <ul class="ui list">
+    {% for user in users %}
+        <li class="item">
+        <a href="{% url "profiles_profile_detail" user.username %}">
+        {{ user }}
+        </a>
+        </li>
+    {% endfor %}
+    </ul>
+
+  {% if users|length > 1 %}
+  <h3>{% trans "Remove Maintainer" %}</h3>
+    <p>
+        <form class="ui form" method="post" action="{% url "projects_users_delete" project.slug %}">
+            {% csrf_token %}
+          <select class="ui dropdown" id="id_user" name="username">
+          {% for user in users %}
+            {% if user != request.user %}
+            <option value="{{ user.username }}">{{ user }}</option>
+            {% endif %}
+          {% endfor %}
+          </select>
+          <input class="ui button" type="submit" value="{% trans "Remove" %}">
+        </form>
+    </p>
+  {% endif %}
+
+  <h3>{% trans "Add Maintainer" %}</h3>
+  <p>
+    {% trans "Choose which user you would like to add." %}
+  </p>
+  <form class="ui form" method="post" action=".">{% csrf_token %}
+    {{ form.as_p }}
+    <p>
+      <input class="ui button" style="display: inline;" type="submit" value="{% trans "Add" %}">
+    </p>
+  </form>
+{% endblock %}

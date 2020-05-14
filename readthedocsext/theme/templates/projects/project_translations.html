@@ -1,0 +1,70 @@
+{% extends "projects/project_edit_base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Edit Translations" %}{% endblock %}
+
+{% block nav-dashboard %} class="active"{% endblock %}
+
+{% block editing-option-edit-translations %}class="active"{% endblock %}
+
+{% block project-translations-active %}active{% endblock %}
+{% block project_edit_content_header %}{% trans "Translations" %}{% endblock %}
+
+{% block project_edit_content %}
+  <p class="ui info message">
+    {% blocktrans trimmed %}
+      To add a translation to your project, select a project below.
+    {% endblocktrans %}
+  </p>
+
+  {% if project.main_language_project %}
+    <p>
+      {% blocktrans trimmed with language=project.get_language_display  main_project=project.main_language_project.name %}
+        This project is already configured as the <code>{{ language }}</code> translation of
+        "{{ main_project }}".
+        Nested translations are not supported.
+      {% endblocktrans %}
+    </p>
+
+    <a href="{% url 'projects_translations' project_slug=project.main_language_project.slug %}">
+      {% blocktrans trimmed with main_project=project.main_language_project.name %}
+        View translations of "{{ main_project }}".
+      {% endblocktrans %}
+    </a>
+  {% else %}
+    <h3> {% trans "Existing Translations" %} </h3>
+    <div class="ui basic segment">
+      <ul class="ui list">
+        {% for lang_project in lang_projects %}
+          <li class="item">
+            <a href="{{ lang_project.get_absolute_url }}">
+              {{ lang_project.name }} ({{ lang_project.get_language_display }})
+            </a>
+            <ul class="ui list">
+              <li class="item">
+                <form class="ui form" method="post" action="{% url "projects_translations_delete" project.slug lang_project.slug %}">
+                  {% csrf_token %}
+                  <input class="ui button" type="submit" value="{% trans 'Remove' %}">
+                </form>
+              </li>
+            </ul>
+          </li>
+        {% empty %}
+          <li class="item">
+            <p>
+              {% trans 'No translations are currently configured' %}
+            </p>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <p>
+      {% trans "Choose which project you would like to add as a translation." %}
+    </p>
+    <form class="ui form" method="post" action=".">{% csrf_token %}
+      {{ form.as_p }}
+      <input class="ui button" type="submit" value="{% trans "Add" %}">
+    </form>
+  {% endif %}
+{% endblock %}

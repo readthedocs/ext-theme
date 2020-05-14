@@ -1,86 +1,15 @@
 {% extends "projects/base_project.html" %}
 
 {% load i18n %}
-{% load static %}
 
-{% load pagination_tags %}
-{% load privacy_tags %}
-{% load projects_tags %}
-
-{% block title %}Builds{% endblock %}
+{% block title %}{% trans "Builds" %}{% endblock %}
 
 {% block project_editing %}
-    {% with builds_active="active" %}
-        {% include "core/project_bar.html" %}
-    {% endwith %}
+  {% with builds_active="active" %}
+    {% include "core/project_bar.html" %}
+  {% endwith %}
 {% endblock %}
 
 {% block content %}
-
-
-<div class="ui basic segment padded">
-
-        {% autopaginate build_qs 15 %}
-
-        <!-- BEGIN builds list -->
-        <div class="module">
-          <div class="module-wrapper">
-
-            {% block build_versions %}
-            {% if versions and request.user|is_admin:project %}
-            <div class="module-header">
-              <div class="right floated">
-                <form class="ui form" method="post" action="{% url "builds_project_list" project.slug %}">
-                  {% csrf_token %}
-                  <class class="ui horizontal list">
-                    <div class="item">
-                      <input class="ui button" style="display: inline-block" type="submit" value="{% trans "Build Version:" %}">
-                    </div>
-                    <div class="item">
-                      <select id="id_version" name="version_slug">
-                      {% for version in versions|sort_version_aware %}
-                        <option value="{{ version.slug }}">{{ version.slug }}</option>
-                      {% endfor %}
-                      </select>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-            {% endif %}
-            {% endblock %}
-
-              <h1>{% trans "Recent Builds" %}</h1>
-            </div>
-
-            <div class="ui list">
-              {% include "core/build_list_detailed.html" %}
-            </div>
-
-          </div>
-        </div>
-        <!-- END builds list -->
-
-        {% paginate %}
-
-</div>
-
+  {% include "builds/partials/build_crud.html" with objects=build_qs %}
 {% endblock %}
-
-{% comment %}
-
-{% block extra_scripts %}
-{{ block.super }}
-  <script type="text/javascript" src="{% static 'javascript/build_updater.js' %}"></script>
-
-  <script type="text/javascript">
-    $(function() {
-      {% for build in active_builds %}
-        $('#build-{{ build.id }}').effect('highlight', {}, 3000);
-        new BuildListUpdater({{ build.id }}).startPolling();
-      {% endfor %}
-    });
-  </script>
-{% endblock %}
-
-{% endcomment %}

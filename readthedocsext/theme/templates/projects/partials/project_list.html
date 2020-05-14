@@ -1,0 +1,129 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+
+{% load pagination_tags %}
+
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_left_menu_items %}
+  {% comment %}
+    TODO replace this with a filter search box. This is a dropdown menu for now
+    because of the search dropdown feature. There is now search box that operates
+    in the same way.
+  {% endcomment %}
+  <div class="header item">
+    <div class="ui inline link search dropdown">
+      <i class="search icon"></i>
+      <i class="dropdown icon"></i>
+
+      <div class="menu">
+        <div class="ui search icon input">
+          <i class="search icon"></i>
+          <input type="text" name="search" placeholder="Search projects">
+        </div>
+
+        {# TODO this should be a different query that uses public() queryset #}
+        {% for project in request.user.projects.all %}
+          <a class="item" href="{{ project.get_absolute_url }}">{{ project.name }}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="header item">
+    {% trans "Sort by" %}
+  </div>
+
+  <div class="active item">
+    <div class="ui inline link dropdown">
+      <div class="text">Recently built</div>
+      <i class="dropdown icon"></i>
+
+      <div class="menu">
+        <a class="item" data-text="Recently built">{% trans "Recently built" %}</a>
+        <a class="item" data-text="Name">{% trans "Name" %}</a>
+      </div>
+    </div>
+  </div>
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  <a class="ui green button" href="{{ projects_import_url }}">
+    {% trans "Add Project" %}
+  </a>
+{% endblock %}
+
+{% block list_placeholder_icon %}box{% endblock %}
+{% block list_placeholder_header %}
+  {% trans "You don't have any projects yet" %}
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <div class="ui primary button">{% trans "Add your first project" %}</div>
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  <a class="ui icon button"
+     href=""
+     data-content="{% trans "View project documentation" %}">
+    <i class="external icon"></i>
+  </a>
+{% endblock list_item_right_buttons %}
+
+{% block list_item_header %}
+  <a class="ui basic label" href="{% url "projects_manage" object.slug %}">
+    {{ object.name }}
+  </a>
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+  <div class="item">
+    <i class="box icon"></i>
+    <code><a href="{{ object.get_docs_url }}">
+      {{ object.get_docs_url }}
+      </a></code>
+  </div>
+  <div class="item">
+    <i class="box icon"></i>
+    {{ object.builds.count }} builds
+  </div>
+  <div class="item">
+    <i class="box icon"></i>
+    {{ object.builds.count }} builds
+  </div>
+{% endblock list_item_meta %}
+
+{# ui divided items #}
+
+{% comment %}
+  {# TESTING OLD LKDG #}
+{% block list_item_right_menu_items %}
+  <div class="item">
+    <i class="box icon"></i>
+    {% blocktrans trimmed %}
+      {{ object.builds.count }} builds
+    {% endblocktrans %}
+  </div>
+  <div class="item">
+    <i class="clock outline icon"></i>
+    {% blocktrans with "TODO" as date trimmed %}
+      Last built {{ date }} ago
+    {% endblocktrans %}
+  </div>
+{% endblock list_item_right_menu_items %}
+
+{% block list_item_right_buttons %}
+  {% if request.user|is_admin:project %}
+    <a class="ui icon button" href="">
+      <i class="wrench icon"></i>
+    </a>
+  {% endif %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_content %}
+  <a class="ui large basic violet label" href="{% url "projects_manage" object.slug %}">
+    {{ object.name }}
+  </a>
+{% endblock list_item_content %}
+{% endcomment %}

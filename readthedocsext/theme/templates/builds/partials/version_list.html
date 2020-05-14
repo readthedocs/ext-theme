@@ -1,0 +1,125 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+
+{% load gravatar %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_left_menu_items %}
+  <div class="item">
+    <div class="ui category search">
+      <div class="ui icon input">
+        <input type="text" placeholder="Search versions...">
+        <i class="search icon"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="header item">
+    Sort by
+  </div>
+  <a class="active item">
+    Recently built
+  </a>
+  <a class="item">
+    Name
+  </a>
+{% endblock top_left_menu_items %}
+
+{% block top_right_menu_items %}
+  <div class="item">
+    <a class="ui tiny green icon button"><i class="plus icon"></i> Add version</a>
+  </div>
+{% endblock top_right_menu_items %}
+
+{% block create_button %}
+{% endblock %}
+
+{% block list_placeholder_icon %}box{% endblock %}
+{% block list_placeholder_header %}
+  This project doesn't have any active versions.
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <div class="ui primary button">Activate a version</div>
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  <a class="ui icon button"
+     href=""
+     data-content="{% trans "View version documentation" %}">
+    <i class="external icon"></i>
+  </a>
+
+  {% if request.user|is_admin:project %}
+    <a class="ui icon button"
+       href="{% url "project_version_detail" project.slug object.slug %}"
+       data-content="{% trans "Configure version" %}">
+      <i class="wrench icon"></i>
+    </a>
+
+    <form method="post" action="{% url "projects_detail" project.slug %}">
+      {% csrf_token %}
+      <input type="hidden" name="version_slug" value="{{ object.slug }}">
+      <button class="ui icon button" data-content="{% trans "Rebuild version" %}">
+        <i class="refresh icon"></i>
+      </button>
+    </form>
+  {% endif %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_header %}
+  <a class="ui basic label" href="#">
+    <i class="code branch icon"></i>
+    <code>{{ object.verbose_name }}</code>
+  </a>
+  {% if object.slug == project.default_version %}
+    <span class="ui label">
+      <i class="asterisk icon"></i>
+      default
+    </span>
+  {% endif %}
+  {% if object.slug == project.stable_version %}
+    <span class="ui label">
+      <i class="asterisk icon"></i>
+      stable
+    </span>
+  {% endif %}
+
+  {% if request.user in project.users.all %}
+    {% if object.privacy_level == 'private' %}
+      <span class="ui label">
+        <i class="lock icon"></i>
+        private
+      </span>
+    {% endif %}
+  {% endif %}
+
+  {% if object.hidden %}
+    <span class="ui label">
+      <i class="eye slash icon"></i>
+      hidden
+    </span>
+  {% endif %}
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+  <div class="item">
+    <i class="box icon"></i>
+    {{ object.builds.count }} builds
+  </div>
+  <div class="item">
+    <i class="clock outline icon"></i>
+    Last built 23 days ago
+  </div>
+
+  {% comment %}
+    {% if object.uploaded or object.built %}
+      <a href="{{ object.get_absolute_url }}">View docs</a>
+    {% else %}
+      <a href="{{ object.project.get_builds_url }}">Builds</a>
+    {% endif %}
+  {% endcomment %}
+{% endblock list_item_meta %}
