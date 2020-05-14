@@ -53,6 +53,23 @@ site.handle_notification_dismiss();
     {% endblock %}
     <!-- END header -->
 
+    <!-- BEGIN notify -->
+    {% if messages %}
+      <div class="ui container">
+        <div class="ui basic segment">
+          {% for message in messages %}
+            <div class="ui warning message message-{{ message.level }}" {% if message.pk %}data-dismiss-url="{% url 'message_mark_read' message.pk %}"{% endif %}>
+              <i class="close icon"></i>
+              <div class="header">Notification</div>
+
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    <!-- END notify -->
+
     {# TODO remove #}
     {% block subnav-bar %}{% endblock %}
 
@@ -62,19 +79,6 @@ site.handle_notification_dismiss();
     {# TODO remove this and use the base-ng theme as the default #}
     {% block content-wrapper %}
         <div class="ui very padded container">
-
-          <!-- BEGIN notify -->
-          {% if messages %}
-              {% for message in messages %}
-                <div class="ui warning message message-{{ message.level }}" {% if message.pk %}data-dismiss-url="{% url 'message_mark_read' message.pk %}"{% endif %}>
-                    <i class="close icon"></i>
-                    <div class="header">Notification</div>
-
-                  {{ message }}
-                </div>
-              {% endfor %}
-          {% endif %}
-          <!-- END notify -->
 
           {% block admin-bar %}{% endblock %}
 

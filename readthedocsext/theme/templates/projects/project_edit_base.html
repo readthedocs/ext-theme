@@ -1,39 +1,47 @@
 {% extends "projects/base_project.html" %}
 
-{% block project_editing %}
-    {% with edit_active="active" %}
-        {% include "core/project_bar.html" %}
-    {% endwith %}
-{% endblock %}
 {% load i18n %}
+
+{% block project_editing %}
+  {% with edit_active="active" %}
+    {% include "core/project_bar.html" %}
+  {% endwith %}
+{% endblock %}
 
 {% block body_class %}{{ block.super }} project-edit{% endblock %}
 
 {% block content %}
-<div class="ui basic segment very padded">
-  <div class="ui two column grid">
-    <div class="ui link divided relaxed list three wide column">
-        <div class="item {% block project-edit-active %}{% endblock %}"><a href="{% url "projects_edit" project.slug %}">{% trans "Settings" %} </a></div>
-        <div class="item {% block project-advanced-active %}{% endblock %}"><a href="{% url "projects_advanced" project.slug %}">{% trans "Advanced Settings" %} </a></div>
-        <div class="item {% block project-domains-active %}{% endblock %}"><a href="{% url "projects_domains" project.slug %}">{% trans "Domains" %}</a></div>
-        <div class="item {% block project-users-active %}{% endblock %}"><a href="{% url "projects_users" project.slug %}">{% trans "Maintainers" %}</a></div>
-        <div class="item {% block project-redirects-active %}{% endblock %}"><a href="{% url "projects_redirects" project.slug %}">{% trans "Redirects" %}</a></div>
-        <div class="item {% block project-translations-active %}{% endblock %}"><a href="{% url "projects_translations" project.slug %}">{% trans "Translations" %}</a></div>
-        <div class="item {% block project-subprojects-active %}{% endblock %}"><a href="{% url "projects_subprojects" project.slug %}">{% trans "Subprojects" %}</a></div>
-        <div class="item {% block project-integrations-active %}{% endblock %}"><a href="{% url "projects_integrations" project.slug %}">{% trans "Integrations" %}</a></div>
-        <div class="item {% block project-environment-variables-active %}{% endblock %}"><a href="{% url "projects_environmentvariables" project.slug %}">{% trans "Environment Variables" %}</a></div>
-        <div class="item {% block project-notifications-active %}{% endblock %}"><a href="{% url "projects_notifications" project.slug %}">{% trans "Notifications" %}</a></div>
-        <div class="item {% block project-search-analytics-active %}{% endblock %}"><a href="{% url "projects_search_analytics" project.slug %}">{% trans "Search Analytics" %}</a></div>
-        {% if USE_PROMOS %}
-          <div class="item {% block project-ads-active %}{% endblock %}"><a href="{% url "projects_advertising" project.slug %}">{% trans "Advertising" %} </a></div>
-        {% endif %}
-    </div>
-    <div class="column">
-        <h2>{% block project_edit_content_header %}{% endblock %}</h2>
-        {% block project_edit_content %}
+  {# TODO don't do this. fix the spacing issue with the container #}
+  <p></p>
 
-        {% endblock %}
+  <div class="ui two column centered stackable grid">
+
+    <div class="ui three wide column">
+
+      <div class="ui vertical pointing fluid menu">
+        <a class="item {% block project-edit-active %}{% endblock %}" href="{% url "projects_edit" project.slug %}">{% trans "Settings" %} </a>
+        <a class="item {% block project-advanced-active %}{% endblock %}" href="{% url "projects_advanced" project.slug %}">{% trans "Advanced Settings" %} </a>
+        <a class="item {% block project-domains-active %}{% endblock %}" href="{% url "projects_domains" project.slug %}">{% trans "Domains" %}</a>
+        <a class="item {% block project-users-active %}{% endblock %}" href="{% url "projects_users" project.slug %}">{% trans "Maintainers" %}</a>
+        <a class="item {% block project-redirects-active %}{% endblock %}" href="{% url "projects_redirects" project.slug %}">{% trans "Redirects" %}</a>
+        <a class="item {% block project-translations-active %}{% endblock %}" href="{% url "projects_translations" project.slug %}">{% trans "Translations" %}</a>
+        <a class="item {% block project-subprojects-active %}{% endblock %}" href="{% url "projects_subprojects" project.slug %}">{% trans "Subprojects" %}</a>
+        <a class="item {% block project-integrations-active %}{% endblock %}" href="{% url "projects_integrations" project.slug %}">{% trans "Integrations" %}</a>
+        <a class="item {% block project-environment-variables-active %}{% endblock %}" href="{% url "projects_environmentvariables" project.slug %}">{% trans "Environment Variables" %}</a>
+        <a class="item {% block project-notifications-active %}{% endblock %}" href="{% url "projects_notifications" project.slug %}">{% trans "Notifications" %}</a>
+        <a class="item {% block project-search-analytics-active %}{% endblock %}" href="{% url "projects_search_analytics" project.slug %}">{% trans "Search Analytics" %}</a>
+        {% if USE_PROMOS %}
+          <a class="item {% block project-ads-active %}{% endblock %}" href="{% url "projects_advertising" project.slug %}">{% trans "Advertising" %} </a>
+        {% endif %}
+      </div>
     </div>
+
+    <div class="ui nine wide column">
+      <h2 class="ui medium header">{% block project_edit_content_header %}{% endblock %}</h2>
+
+      {% block project_edit_content %}
+      {% endblock project_edit_content %}
+    </div>
+
   </div>
-</div>
-{% endblock %}
+{% endblock content %}

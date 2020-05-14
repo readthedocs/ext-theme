@@ -1,3 +1,28 @@
+/* https://github.com/Semantic-Org/Semantic-UI-CSS/pull/68 */
+.ui.horizontal.list > .item > .icon + .content {
+  width: auto;
+}
+
+.ui.horizontal.list > .item {
+  &.left.aligned { text-align: left; }
+  &.right.aligned { text-align: right; }
+  &.center.aligned { text-align: center; }
+}
+
+.ui.list > .item > .ui.menu.right,
+.ui.list > .item .description .ui.text.menu {
+  min-height: auto;
+  margin-top: .25rem;
+  margin-bottom: .25rem;
+
+  > .item:first-child {
+    // TODO if there is no right float menu, we actually want this padding. For
+    // now we likely will just always have a right float menu
+    // padding-left: 0rem;
+  }
+}
+
+// For build detail page
 .ui.command.list {
   > .item {
     > .icon {
@@ -73,5 +98,19 @@
       }
     }
 
+  }
+}
+
+// Footer
+footer .ui.horizontal.list {
+  > .item {
+
+    > .icon {
+      color: @grey;
+    }
+
+    .header, .sub.header {
+      color: @grey;
+    }
   }
 }

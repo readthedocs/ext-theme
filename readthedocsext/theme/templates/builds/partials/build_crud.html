@@ -1,0 +1,102 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_left_menu_items %}
+  <div class="header item">
+    {% trans "For version" %}
+  </div>
+
+  <div class="active item">
+    <div class="ui inline link search dropdown">
+      <div class="text">Any</div>
+      <i class="dropdown icon"></i>
+
+      <div class="menu">
+        <div class="ui search icon input">
+          <i class="search icon"></i>
+          <input type="text" name="search" placeholder="Search versions">
+        </div>
+
+        <div class="header">{% trans "Versions" %}</div>
+        <a class="active item" data-text="Any">{% trans "Any version" %}</a>
+        {# TODO which one? #}
+        {# {% for version in project.ordered_active_versions %} #}
+        {% for version in versions|sort_version_aware %}
+          <a class="item" data-text="{{ version.slug }}">{{ version.verbose_name }}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+{% endblock %}
+
+{% block list_placeholder_icon %}box{% endblock %}
+{% block list_placeholder_header %}
+  This project doesn't have any builds yet.
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <div class="ui primary button">Learn how to get started</div>
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  {% if request.user|is_admin:project %}
+    <form method="post" action="{% url "projects_detail" project.slug %}">
+      {% csrf_token %}
+      <input type="hidden" name="version_slug" value="{{ object.version.slug }}">
+      <button class="ui icon button" data-content="{% trans "Rebuild" %}">
+        <i class="refresh icon"></i>
+      </button>
+    </form>
+  {% endif %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_header %}
+  {% if object.state == 'finished' %}
+    {% if object.success %}
+      <i class="ui small olive inverted circular check icon"></i>
+    {% else %}
+      <i class="ui small red inverted circular x icon"></i>
+    {% endif %}
+  {% elif object.is_stale %}
+    <i class="ui small orange inverted exclamation icon" title="{% trans 'This build is still waiting to be built' %}"></i>
+  {% else %}
+    <i class="ui small yellow inverted circular hourglass start icon"></i>
+  {% endif %}
+
+  <a class="ui basic label" href="{{ object.get_absolute_url }}">
+    # {{ object.pk }}
+  </a>
+
+  <div class="ui label" data-popup="1">
+    <i class="code branch icon"></i>
+    <code>{{ object.version.verbose_name }}</code>
+  </div>
+  {% include "includes/popups/version.html" with version=object.version %}
+
+  {% if object.is_external %}
+    <div class="ui label">
+      <i class="ui hashtag icon"></i>
+      {{ object.external_version_name }}
+    </div>
+  {% endif %}
+
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+  <div class="item">
+    <i class="code branch icon"></i>
+    <code>{{ object.commit|truncatechars:8 }}</code>
+  </div>
+  <div class="item">
+    <i class="clock outline icon"></i>
+    {% blocktrans with object.date|timesince as date trimmed %}
+      {{ date }} ago
+    {% endblocktrans %}
+  </div>
+{% endblock list_item_meta %}

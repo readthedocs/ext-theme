@@ -1,17 +1,21 @@
 {% extends "base.html" %}
 
 {% load i18n %}
-{% load pagination_tags %}
 {% load socialaccount %}
 
-{% block title %}{% trans "Project Dashboard" %}{% endblock %}
+{% load pagination_tags %}
 
-{% block dash-nav-projects %}active{% endblock %}
+{% block title %}{% trans "Projects" %}{% endblock %}
 
 {% block content %}
   {% url "projects_import" as projects_import_url %}
   {% url "socialaccount_connections" as social_accounts %}
 
+  {# TODO ??? {% include "projects/partials/project_list.html" with objects=filter.qs %} #}
+  {% include "projects/partials/project_list.html" with objects=project_list %}
+{% endblock content %}
+
+{% block oldshit %}
   <!-- BEGIN your projects list -->
   <div class="ui very padded grid stackable">
     <div class="twelve wide computer sixteen wide tablet sixteen wide mobile column">

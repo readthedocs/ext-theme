@@ -15,8 +15,21 @@ jquery.fn.progress = require('semantic-ui-progress');
 jquery(document).ready(() => {
     // TODO make this a function somewhere
     jquery('.ui[data-content]').popup();
-    jquery('.ui.dropdown').dropdown();
+    jquery('.ui[data-popup]').popup({hoverable: true});
     jquery('.ui.progress').progress();
+
+    // Dropdowns
+    // For .ui.link.dropdown, alter the action to only allow selectiong, and allow
+    // select by keyboard for .ui.link.search.dropdown
+    let dropdowns = jquery('.ui.dropdown');
+    dropdowns.add('.link').dropdown({
+      action: 'hide',
+      onChange: function(value, text, $selectedItem) {
+        const url = $selectedItem.attr('href');
+        window.location = url;
+      },
+    })
+    dropdowns.not('.link').dropdown();
 
     jquery('.ui.button[data-modal]').on('click', function () {
         var modal_selector = $(this).attr('data-modal');

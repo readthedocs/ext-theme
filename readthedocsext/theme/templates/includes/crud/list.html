@@ -1,0 +1,144 @@
+{% comment %}
+
+  CRUD list view
+  ==============
+
+  This is a common template which will provide the necessary scaffolding for a
+  list view of items. This view is replicated throughout our interface and so
+  all list views will share a common style and functionality.
+
+  Parameters that can be passed in:
+
+  objects
+      This is the queryset object that the list view will iterate over
+
+  skip_pagination
+      Skip pagination calls and links
+
+  pagination_length
+      Number of items to paginate on, default 15
+
+{% endcomment %}
+
+{% load i18n %}
+{% load pagination_tags %}
+
+{% block top_menu %}
+  <div class="ui text menu">
+    {% block top_left_menu_items %}
+      {% comment %}
+      <div class="header item">
+        Sort by
+      </div>
+      <a class="active item">
+        Recently built
+      </a>
+      <a class="item">
+        Name
+      </a>
+      {% endcomment %}
+    {% endblock top_left_menu_items %}
+
+    {% block top_right_menu %}
+      <div class="right menu">
+        {% block top_right_menu_items %}
+          <div class="item">
+            {% block create_button %}
+              {# TODO #}
+              <button class="ui button">Add</button>
+            {% endblock %}
+          </div>
+        {% endblock top_right_menu_items %}
+      </div>
+    {% endblock top_right_menu %}
+  </div>
+{% endblock top_menu %}
+
+{% comment %}
+  Testing for boolean here is not efficient, but we support both querysets and arrays here #}
+  {% if not objects.exists %}
+{% endcomment %}
+{% if not objects %}
+  {# Placeholder when no objects exists #}
+  <div class="ui placeholder segment">
+    {% block list_placeholder %}
+      <div class="ui icon header">
+        <i class="{% block list_placeholder_icon %}{% endblock %} icon"></i>
+        {% block list_placeholder_header %}
+          There are no objects here.
+        {% endblock list_placeholder_header %}
+      </div>
+      {% block list_placeholder_text %}
+      {% endblock list_placeholder_text %}
+    {% endblock list_placeholder %}
+  </div>
+{% else %}
+  {% block list %}
+    {# Normal list view #}
+    <div class="ui segment">
+      <div class="{% block list_classes %}ui middle aligned very relaxed divided list{% endblock %}">
+
+        {% if not skip_pagination %}
+          {% autopaginate objects 15 %}
+        {% endif %}
+
+        {% for object in objects %}
+          {# Item view for each object in objects queryset #}
+          <div class="item">
+            {% block list_item %}
+
+              {% block list_item_right_menu %}
+                <div class="ui basic mini right floated buttons">
+                  {% block list_item_right_buttons %}
+                    {% comment %}
+                      <a class="ui icon button">
+                        <i class="refresh icon"></i>
+                      </a>
+                    {% endcomment %}
+                  {% endblock list_item_right_buttons %}
+                </div>
+              {% endblock list_item_right_menu %}
+
+              <div class="content">
+
+                {% block list_item_image %}
+                {% endblock list_item_image %}
+
+                <div class="header">
+                  {% block list_item_header %}
+                    {{ object }}
+                  {% endblock list_item_header %}
+                </div>
+
+                <div class="description">
+                  {% block list_item_description %}
+                    <div class="ui stackable text menu">
+                      {% block list_item_meta %}
+                        {% comment %}
+                          <div class="item">
+                            <i class="code branch icon"></i>
+                            <code>{{ build.commit|truncatechars:8 }}</code>
+                          </div>
+                        {% endcomment %}
+                      {% endblock list_item_meta %}
+                    </div>
+                  {% endblock list_item_description %}
+                </div>
+              </div>
+
+              {% block list_item_extra %}
+              {% endblock list_item_extra %}
+
+            {% endblock list_item %}
+          </div>
+        {% endfor %}
+
+      </div>
+    </div>
+
+    {% if not skip_pagination %}
+      {% paginate using "includes/lists/pagination.html" %}
+    {% endif %}
+
+  {% endblock list %}
+{% endif %}
