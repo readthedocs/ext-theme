@@ -1,0 +1,10 @@
+{{ form.media }}
+<div class="ui basic fieldset segment">
+{% if form_show_errors %}
+    {% include "semantic-ui/errors.html" %}
+{% endif %}
+
+{% for field in form %}
+    {% include "semantic-ui/field.html" %}
+{% endfor %}
+</div>
