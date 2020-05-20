@@ -15,9 +15,6 @@
   skip_pagination
       Skip pagination calls and links
 
-  pagination_length
-      Number of items to paginate on, default 15
-
 {% endcomment %}
 
 {% load i18n %}
@@ -44,8 +41,9 @@
         {% block top_right_menu_items %}
           <div class="item">
             {% block create_button %}
-              {# TODO #}
-              <button class="ui button">Add</button>
+              {% comment %}
+                <button class="ui button">Add</button>
+              {% endcomment %}
             {% endblock %}
           </div>
         {% endblock top_right_menu_items %}
@@ -63,7 +61,9 @@
   <div class="ui placeholder segment">
     {% block list_placeholder %}
       <div class="ui icon header">
-        <i class="{% block list_placeholder_icon %}{% endblock %} icon"></i>
+        {% block list_placeholder_icon %}
+          <i class="{% block list_placeholder_icon_class %}{% endblock %} icon"></i>
+        {% endblock list_placeholder_icon %}
         {% block list_placeholder_header %}
           There are no objects here.
         {% endblock list_placeholder_header %}

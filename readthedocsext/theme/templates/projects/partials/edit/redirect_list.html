@@ -1,0 +1,92 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+
+{% load gravatar %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{# Because we don't have filters and we have an inline create form, we don't need this yet #}
+{% block top_menu %}
+{% endblock top_menu %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  {% comment %}
+    {# TODO make this a view #}
+    <div class="item">
+      <a class="ui green icon button"
+        href="{% url "projects_domains_create" project.slug %}">
+        <i class="plus icon"></i>
+        {% trans "Add maintainer" %}
+      </a>
+    </div>
+  {% endcomment %}
+{% endblock %}
+
+{% block list_placeholder_icon_class %}directions{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No redirects exist yet
+  {% endblocktrans %}
+  <div class="sub header">
+    {% trans "Redirects allow you to fix links to pages that have moved." %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  <a class="ui icon button"
+     data-modal="#modal-redirect-{{ object.pk }}"
+     data-content="{% trans "Remove redirect" %}">
+    <i class="trash icon"></i>
+  </a>
+  <div class="ui mini modal" id="modal-redirect-{{ object.pk }}">
+    <div class="header">Remove redirect?</div>
+    <div class="content">
+      Remove redirect {{ object }}?
+    </div>
+    <div class="actions">
+      <form method="post" action="{% url "projects_redirects_delete" project.slug %}">
+        {% csrf_token %}
+        <input type="hidden" name="id_pk" value="{{ object.pk }}" />
+        <input class="ui negative button" type="submit" value="{% trans "Remove" %}">
+      </form>
+    </div>
+  </div>
+{% endblock list_item_right_buttons %}
+
+{% block list_item_header %}
+  <div class="ui basic label">
+    <i class="map marker icon"></i>
+    {% if object.from_url %}
+      <code>
+        {% if object.redirect_type == "page" %}/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>{% endif %}<!--
+        -->{{ object.from_url }}
+      </code>
+    {% else %}
+      <i class="small asterisk grey icon"></i>
+    {% endif %}
+  </div>
+  <div class="ui label">
+    {{ object.get_redirect_type_display }}
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+  {% if object.to_url or object.redirect_type == "prefix" %}
+    <div class="item">
+      <i class="right arrow icon"></i>
+      <code>
+        {% if object.redirect_type == "page" or object.redirect_type == "prefix" %}/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>{% if object.redirect_type == "prefix" %}/{% endif %}{% endif %}<!--
+        -->{{ object.to_url }}
+      </code>
+    </div>
+  {% endif %}
+{% endblock list_item_meta %}

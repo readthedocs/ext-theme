@@ -1,0 +1,75 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+
+{% load gravatar %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_left_menu_items %}
+  {% if objects.exists %}
+    <div class="item">
+      This project has {{ objects.count }} domains
+    </div>
+  {% endif %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  <div class="item">
+    <a class="ui green icon button"
+       href="{% url "projects_domains_create" project.slug %}">
+      <i class="plus icon"></i>
+      {% trans "Add domain" %}
+    </a>
+  </div>
+{% endblock %}
+
+{% block list_placeholder_icon_class %}atlas{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No domains are currently configured.
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed with docs_url='https://docs.readthedocs.io/page/custom_domains.html' %}
+      Configuring a custom domain allows you to serve your documentation from a
+      domain other than "{{ default_domain }}".
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  <a class="ui icon button"
+     href="{% url 'projects_domains_edit' project.slug object.pk %}"
+     data-content="{% trans "Edit" %}">
+    <i class="wrench icon"></i>
+  </a>
+  <a class="ui icon button"
+     href="{% url 'projects_domains_delete' project.slug object.pk %}"
+     data-content="{% trans "Delete" %}">
+    <i class="trash icon"></i>
+  </a>
+{% endblock list_item_right_buttons %}
+
+{% block list_item_header %}
+  <a class="ui basic label" href="{% url 'projects_domains_edit' project.slug object.pk %}">
+    <i class="linkify icon"></i>
+    <code>{{ object.domain }}</code>
+  </a>
+  {% if object.https  %}
+    <i class="ui shield grey icon" data-content="{% trans "HTTPS enabled" %}"></i>
+  {% endif %}
+  {% if object.domainssl  %}
+    <i class="ui tachometer alternate grey icon" data-content="{% trans "CDN enabled" %}"></i>
+  {% endif %}
+  {% if object.canonical %}
+    <i class="ui asterisk grey icon" data-content="{% trans "Canonical" %}"></i>
+  {% endif %}
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+{% endblock list_item_meta %}

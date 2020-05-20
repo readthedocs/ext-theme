@@ -1,91 +1,37 @@
 {% extends "projects/project_edit_base.html" %}
 
 {% load i18n %}
+{% load crispy_forms_tags %}
 
-{% block title %}{% trans "Edit Notifications" %}{% endblock %}
+{% block title %}{{ project.name }} - {% trans "Notifications" %}{% endblock %}
 
-{% block nav-dashboard %} class="active"{% endblock %}
-
-{% block editing-option-edit-proj %}class="active"{% endblock %}
-
-{% block project-notifications-active %}active{% endblock %}
+{% block project_notifications_active %}active{% endblock %}
 {% block project_edit_content_header %}{% trans "Notifications" %}{% endblock %}
 
 {% block project_edit_content %}
-  <p class="ui info message">
-    {% trans "Configure Notifications to be sent on build failures." %}
-  </p>
-
-  {% if emails or urls %}
-    <h3>{% trans "Existing Notifications" %}</h3>
-    <div class="ui basic segment">
-      {% if emails %}
-      <div class="ui list">
-        <div class="item">
-        <h2> Emails </h2>
-        <ul class="list">
-        {% for email in emails %}
-            <li class="item">
-            {{ email }}
-            </li>
-        {% endfor %}
-        </ul>
-      </div>
-    </div>
-      {% endif %}
-
-      {% if urls %}
-      <div class="ui list">
-      <div class="item">
-        <h2> Webhooks </h2>
-        <ul class="list">
-        {% for url in urls %}
-            <li class="item">
-            {{ url }}
-            </li>
-        {% endfor %}
-        </ul>
-      </div>
-    </div>
-      {% endif %}
-    </div>
-    <h3>{% trans "Remove Notifications" %}</h3>
-      <p>
-          <form class="ui form" method="post" action="{% url "projects_notification_delete" project.slug %}">
-              {% csrf_token %}
-            <select class="ui selection dropdown" id="id_email" name="email">
-            {% for email in emails %}
-              <option value="{{ email.email }}">{{ email }}</option>
-            {% endfor %}
-            {% for url in urls %}
-              <option value="{{ url.url }}">{{ url }}</option>
-            {% endfor %}
-            </select>
-            <input class="ui button" type="submit" value="{% trans "Remove" %}">
-          </form>
-      </p>
-  {% endif %}
-
-
-  <h3>{% trans "New Email Notifications" %}</h3>
-  <p>
-    {% trans "Add an email address to notify" %}
-  </p>
-  <form class="ui form" method="post" action=".">{% csrf_token %}
-    {{ email_form }}
-    <p>
-      <input class="ui button" style="display: inline;" type="submit" value="{% trans "Add" %}">
-    </p>
+  <h3 class="ui small header">
+    {% trans "Email notifications" %}
+  </h3>
+  {% include "projects/partials/edit/notification_email_list.html" with objects=emails %}
+  <h4 class="ui tiny header">
+    {% trans "Add email notification" %}
+  </h4>
+  <form class="ui form" method="post" action=".">
+    {% csrf_token %}
+    {{ email_form|crispy }}
+    <input class="ui primary button" type="submit" value="{% trans "Add" %}">
   </form>
 
-  <h3>{% trans "New Webhook Notifications" %}</h3>
-  <p>
-    {% trans "Add a URL to notify" %}
-  </p>
-  <form class="ui form" method="post" action=".">{% csrf_token %}
-    {{ webhook_form }}
-    <p>
-      <input class="ui button" style="display: inline;" type="submit" value="{% trans "Add" %}">
-    </p>
+  <h3 class="ui small header">
+    {% trans "Webhook notifications" %}
+  </h3>
+  {% include "projects/partials/edit/notification_webhook_list.html" with objects=urls %}
+  <h4 class="ui tiny header">
+    {% trans "Add webhook notification" %}
+  </h4>
+  <form class="ui form" method="post" action=".">
+    {% csrf_token %}
+    {{ webhook_form|crispy }}
+    <input class="ui primary button" type="submit" value="{% trans "Add" %}">
   </form>
 {% endblock %}

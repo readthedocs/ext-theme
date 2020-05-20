@@ -1,0 +1,68 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+
+{% load gravatar %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  <div class="item">
+    <a class="ui green icon button"
+       href="{% url 'projects_integrations_create' project_slug=project.slug %}">
+      <i class="plus icon"></i>
+      {% trans "Add integration" %}
+    </a>
+  </div>
+{% endblock %}
+
+{% block list_placeholder_icon_class %}plug{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No integrations have been configured yet
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      Integrations extend the functionality of Read the Docs to other services,
+      such as GitHub, GitLab, and Bitbucket
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  <a class="ui icon button"
+     href="{% url 'projects_integrations_detail' project_slug=project.slug integration_pk=object.pk %}">
+    <i class="wrench icon"></i>
+  </a>
+
+  {% url 'projects_integrations_delete' project_slug=project.slug integration_pk=object.pk as form_url %}
+  {% trans "Remove integration" as action_text %}
+  {% blocktrans trimmed asvar content_text with description=object.get_integration_type_display %}
+    Remove integration {{ description }}?
+  {% endblocktrans %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_header %}
+  <a class="ui basic label" href="{% url 'projects_integrations_detail' project_slug=project.slug integration_pk=object.pk %}">
+    {{ object.get_integration_type_display }}
+  </a>
+  {% if object.has_sync and object.can_sync %}
+    <i class="ui magic grey icon" data-content="{% trans "Automatically managed" %}"></i>
+  {% endif %}
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+  <div class="item">
+    <i class="exchange alternate icon"></i>
+    {{ object.exchanges.count }} exchanges
+  </div>
+{% endblock list_item_meta %}

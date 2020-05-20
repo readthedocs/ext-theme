@@ -1,0 +1,53 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+
+{% load gravatar %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{# TODO we aren't showing a top menu here, because of the pattern used on this view #}
+{% block top_menu %}
+{% endblock top_menu %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+{% endblock %}
+
+{% block list_placeholder_icon_class %}broadcast tower{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No webhook notifications have been configured yet
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      Webhook notifications can be used to emit webhook requests on build
+      failures. On each build failure, a request will be made to webhook URL.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  {% url "projects_notification_delete" project.slug as form_url %}
+  {% trans "Remove webhook notification" as action_text %}
+  {% blocktrans trimmed asvar content_text with url=object.url %}
+    Remove webhook notification to {{ url }}?
+  {% endblocktrans %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text field_name="email" field_value=object.url %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_header %}
+  <div class="ui basic label">
+    <code>{{ object.url }}</code>
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+{% endblock list_item_meta %}

@@ -1,42 +1,28 @@
-{% extends "projects/project_edit_base.html" %}
+{% extends "projects/projectrelationship_list.html" %}
 
 {% load i18n %}
+{% load crispy_forms_tags %}
 
-{% block title %}{% trans "Subprojects" %}{% endblock %}
-
-{% block nav-dashboard %} class="active"{% endblock %}
-
-{% block editing-option-edit-proj %}class="active"{% endblock %}
-
-{% block project-subprojects-active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Subprojects" %}{% endblock %}
+{% block project_edit_content_subheader %}
+  {% if object %}
+    {% trans "Update subproject" %}
+  {% else %}
+    {% trans "Add subproject" %}
+  {% endif %}
+{% endblock %}
 
 {% block project_edit_content %}
   {% if object %}
-    <form
-        method="post"
-        class="ui form"
-        action="{% url 'projects_subprojects_update' project_slug=project.slug subproject_slug=object.child.slug %}">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input class="ui button" type="submit" value="{% trans "Update subproject" %}">
-    </form>
-
-    <form
-        method="post"
-        class="ui form"
-        action="{% url 'projects_subprojects_delete' project_slug=project.slug subproject_slug=object.child.slug %}">
-      {% csrf_token %}
-      <input class="ui button" type="submit" value="{% trans "Delete subproject" %}">
-    </form>
+    {% url 'projects_subprojects_update' project_slug=project.slug subproject_slug=object.child.slug as form_url %}
+    {% trans "Update subproject" as action_text %}
   {% else %}
-    <form
-        method="post"
-        class="ui form"
-        action="{% url 'projects_subprojects_create' project_slug=project.slug %}">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input class="ui button" type="submit" value="{% trans "Add subproject" %}">
-    </form>
+    {% url 'projects_subprojects_create' project_slug=project.slug as form_url %}
+    {% trans "Add subproject" as action_text %}
   {% endif %}
+
+  <form class="ui form" method="post" action="{{ form_url }}">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input class="ui primary button" type="submit" value="{{ action_text }}">
+  </form>
 {% endblock %}

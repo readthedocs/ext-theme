@@ -9,14 +9,20 @@
     {% endblocktrans %}
   </p>
 
-  <div>
+  <div class="ui segment">
     <ul class="ui list">
-      <li class="item">{% trans "Token" %}:
-        <ul class="list">
-          <li class="item">
-            {{ integration.token }}
-          </li>
-        </ul>
+      <li class="item">
+        <div class="content">
+          <div class="header">
+            {% trans "Token" %}
+          </div>
+          <div class="description">
+            <code>{{ integration.token }}</code>
+            <span class="ui mini compact icon basic button" data-clipboard-text="{{ integration.token }}" data-content="{% trans "Copied!" %}">
+              <i class="copy outline icon"></i>
+            </span>
+          </div>
+        </div>
       </li>
     </ul>
   </div>

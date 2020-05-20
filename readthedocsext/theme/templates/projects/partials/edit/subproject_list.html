@@ -1,0 +1,65 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+
+{% load gravatar %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  <div class="item">
+    <a class="ui green icon button"
+       href="{% url 'projects_subprojects_create' project_slug=project.slug %}">
+      <i class="plus icon"></i>
+      {% trans "Add subproject" %}
+    </a>
+  </div>
+{% endblock %}
+
+{% block list_placeholder_icon_class %}sitemap{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No subprojects exist yet
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      Subprojects are projects hosted from the same URL as their parent project.
+      This is useful for organizing multiple projects under a custom domain.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  <a class="ui icon button"
+     href="{% url 'projects_subprojects_update' project_slug=project.slug subproject_slug=object.child.slug %}">
+    <i class="wrench icon"></i>
+  </a>
+
+  {% url 'projects_subprojects_delete' project_slug=project.slug subproject_slug=object.child.slug as form_url %}
+  {% trans "Remove subproject" as action_text %}
+  {% blocktrans trimmed asvar content_text with name=object.child.name %}
+    Remove subproject {{ name }}?
+  {% endblocktrans %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_header %}
+  <a class="ui basic label" href="{% url 'projects_manage' project_slug=object.child.slug %}">
+    {{ object.child.name }}
+  </a>
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+  <a class="item" href="{{ object.get_absolute_url }}">
+    <i class="linkify icon"></i>
+    <code>{{ object.get_absolute_url|truncatechars:60 }}</code>
+  </a>
+{% endblock list_item_meta %}

@@ -1,51 +1,46 @@
-{% extends "projects/project_edit_base.html" %}
+{% extends "projects/integration_list.html" %}
 
 {% load i18n %}
 
-{% block title %}{% trans "Integrations" %}{% endblock %}
-
-{% block nav-dashboard %} class="active"{% endblock %}
-
-{% block editing-option-edit-integrations %}class="active"{% endblock %}
-
-{% block project-integrations-active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Exchange" %}{% endblock %}
+{% block project_edit_content_subheader %}{% trans "Exchange" %}{% endblock %}
 
 {% block project_edit_content %}
-  <h4>Response</h4>
+  <h3 class="ui small header">{% trans "Response" %}</h3>
 
-  <div>
-    <ul class="ui list">
-      <li class="item">Status:
-        <ul class="list">
-          <li class="item">{{ httpexchange.status_code }}</li>
-        </ul>
-      </li>
+  <div class="ui inverted segment">
+    <div class="ui http-exchange list">
+      <div class="item">
+        <span class="header"><code>Status:</code></span>
+        <span class="value"><code>{{ httpexchange.status_code }}</code></span>
+      </div>
 
       {% for header, value in httpexchange.response_headers.items %}
-      <li class="item">{{ header }}:
-        <ul class="list">
-          <li class="item">{{ value }}</li>
-        </ul>
-      </li>
+        <div class="item">
+          <span class="header"><code>{{ header }}:</code></span>
+          <span class="value"><code>{{ value }}</code></span>
+        </div>
       {% endfor %}
-    </ul>
-    {{ httpexchange.formatted_response_body }}
+    </div>
+
+    <div class="ui http-exchange text">
+      {{ httpexchange.formatted_response_body }}
+    </div>
   </div>
 
-  <h4>Request</h4>
+  <h3 class="ui small header">{% trans "Request" %}</h3>
 
-  <div>
-    <ul class="ui list">
+  <div class="ui inverted segment">
+    <div class="ui http-exchange list">
       {% for header, value in httpexchange.request_headers.items %}
-      <li class="item">{{ header }}:
-        <ul class="list">
-          <li class="item">{{ value }}</li>
-        </ul>
-      </li>
+        <div class="item">
+          <span class="header"><code>{{ header }}:</code></span>
+          <span class="value"><code>{{ value }}</code></span>
+        </div>
       {% endfor %}
-      
-    </ul>
-    {{ httpexchange.formatted_request_body }}
+    </div>
+
+    <div class="ui http-exchange text">
+      {{ httpexchange.formatted_request_body }}
+    </div>
   </div>
 {% endblock %}

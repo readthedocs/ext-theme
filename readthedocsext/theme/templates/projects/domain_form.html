@@ -1,52 +1,54 @@
-{% extends "projects/project_edit_base.html" %}
+{% extends "projects/domain_list.html" %}
 
 {% load i18n %}
+{% load crispy_forms_tags %}
 
-{% block title %}{% trans "Edit Domains" %}{% endblock %}
-
-{% block nav-dashboard %} class="active"{% endblock %}
-
-{% block editing-option-edit-proj %}class="active"{% endblock %}
-
-{% block project-domains-active %}active{% endblock %}
-
-{% block project_edit_content_header %}
-
-{% if domain %}
-{% trans "Domain Details" %}
-{% else %}
-{% trans "Create Domain" %}
-{% endif %}
-
-{% endblock %}
+{% block project_edit_content_subheader %}
+  {% if domain %}
+    {% trans "Update domain" %}
+  {% else %}
+    {% trans "Add domain" %}
+  {% endif %}
+{% endblock project_edit_content_subheader %}
 
 {% block project_edit_content %}
-  {% if domain.domainssl %}
-    {# This references optional code to get the SSL certificate status #}
-    <p>
-      <strong>{% trans 'SSL certificate status' %}: </strong>
-      <span>{{ domain.domainssl.status }}</span>
-    </p>
-    {% if domain.domainssl.status == 'pending_validation' %}
-    <div class="ui message">
-      <p><small>{% trans 'Did you setup a CNAME record in DNS pointing at "readthedocs.io"?' %}</small></p>
-    </div>
-      
-    {% endif %}
-  {% endif %}
-
   {% if domain %}
     {% url 'projects_domains_edit' project.slug domain.pk as action_url %}
+    {% trans "Save domain" as button_text %}
   {% else %}
     {% url 'projects_domains_create' project.slug as action_url %}
+    {% trans "Add domain" as button_text %}
   {% endif %}
   <form class="ui form" method="post" action="{{ action_url }}">{% csrf_token %}
-    {{ form.as_p }}
-    <input class="ui button" type="submit" value="{% trans "Save Domain" %}">
+
+    {{ form|crispy }}
+
+    {% block domain_ssl %}
+      {% if domain.domainssl %}
+        <div class="ui basic fieldset segment">
+          {# This references optional code to get the SSL certificate status #}
+          <div class="field">
+            <label>{% trans "SSL certificate status" %}</label>
+            <div>
+              {{ domain.domainssl.status }}
+              <div class="ui warning message">
+                {% trans 'Did you setup a CNAME record in DNS pointing at "readthedocs.io"?' %}
+              </div>
+            </div>
+          </div>
+
+          {% if domain.domainssl.status == 'pending_validation' or True %}
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endblock domain_ssl %}
+
+    <input class="ui primary button" type="submit" value="{{ button_text }}">
     {% if domain.domainssl %}
-    <div class="ui message">
-      <p>{% trans 'Saving the domain will revalidate the SSL certificate' %}</p>
-    </div>
+      <div class="ui basic left pointing label">
+        <i class="warning icon"></i>
+        {% trans "Saving the domain will cause revalidation of the SSL certificate." %}
+      </div>
     {% endif %}
   </form>
 {% endblock %}

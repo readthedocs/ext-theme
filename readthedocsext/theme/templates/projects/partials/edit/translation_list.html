@@ -1,0 +1,70 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+
+{% load gravatar %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{# Because we don't have filters and we have an inline create form, we don't need this yet #}
+{% block top_menu %}
+{% endblock top_menu %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  {% comment %}
+    {# TODO make this a view #}
+    <div class="item">
+      <a class="ui green icon button"
+        href="{% url "projects_domains_create" project.slug %}">
+        <i class="plus icon"></i>
+        {% trans "Add maintainer" %}
+      </a>
+    </div>
+  {% endcomment %}
+{% endblock %}
+
+{% block list_placeholder_icon_class %}language{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No translations exist yet
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans %}
+      Enable translations of your project by attaching projects configured with a different language.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  {% url "projects_translations_delete" project.slug object.slug as form_url %}
+  {% trans "Remove translation" as action_text %}
+  {% blocktrans trimmed asvar content_text with language=object.get_language_display name=project.name %}
+    Remove project {{ language }} translation for
+    project {{ name }}?
+  {% endblocktrans %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_header %}
+  <a class="ui basic label" href="{{ object.get_absolute_url }}">
+    {{ object.name }}
+  </a>
+  <span class="ui label">
+    {{ object.get_language_display }}
+  </span>
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+  <a class="item" href="{{ object.get_docs_url }}">
+    <i class="linkify icon"></i>
+    <code>{{ object.get_docs_url }}</code>
+  </a>
+{% endblock list_item_meta %}

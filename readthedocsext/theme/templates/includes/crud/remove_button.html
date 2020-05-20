@@ -1,0 +1,52 @@
+{% comment %}
+  Use in a list display to add a remove icon
+  button. The remove icon button is responsible for
+  activating a modal on click that will confirm the
+  removal and submit the remove form to a view URL.
+  This removes the need to have a separate view
+  just for removal, or a removal hidden in the edit
+  form.
+
+  Variables
+  ---------
+
+  id
+      Object id for the modal
+
+  form_url
+      URL for the form post
+
+  field_name
+      Optional form field name for hidden field
+
+  field_value
+      Optional form field value for hidden field
+
+  action_text
+      Header and button text for modal
+
+  content_text
+      Modal content text
+
+{% endcomment %}
+
+<a class="ui icon button"
+   data-modal="#modal-{{ id }}"
+   data-content="{{ action_text }}">
+  <i class="trash icon"></i>
+</a>
+<div class="ui mini modal" id="modal-{{ id }}">
+  <div class="header">{{ action_text }}</div>
+  <div class="content">
+    {{ content_text }}
+  </div>
+  <div class="actions">
+    <form method="post" action="{{ form_url }}">
+      {% csrf_token %}
+      {% if field_name and field_value %}
+        <input type="hidden" name="{{ field_name }}" value="{{ field_value }}" />
+      {% endif %}
+      <input class="ui button" type="submit" value="{{ action_text }}">
+    </form>
+  </div>
+</div>
