@@ -1,0 +1,9 @@
+{% if field.errors %}
+  <div class="ui basic negative pointing {% if direction %}{{ direction }}{% else %}up{% endif %} label">
+    <div class="ui basic list">
+      {% for error in field.errors %}
+        <div class="item">{{ error }}</div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
