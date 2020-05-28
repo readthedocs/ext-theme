@@ -29,9 +29,6 @@
         <a class="item {% block project_users_active %}{% endblock %}" href="{% url "projects_users" project.slug %}">
           {% trans "Maintainers" %}
         </a>
-        <a class="item {% block project_redirects_active %}{% endblock %}" href="{% url "projects_redirects" project.slug %}">
-          {% trans "Redirects" %}
-        </a>
         <a class="item {% block project_translations_active %}{% endblock %}" href="{% url "projects_translations" project.slug %}">
           {% trans "Translations" %}
         </a>
@@ -44,11 +41,20 @@
         <a class="item {% block project_environment_variables_active %}{% endblock %}" href="{% url "projects_environmentvariables" project.slug %}">
           {% trans "Environment Variables" %}
         </a>
+        <a class="item {% block project_automation_rules_active %}{% endblock %}" href="{% url "projects_automation_rule_list" project.slug %}">
+          {% trans "Automation Rules" %}
+        </a>
         <a class="item {% block project_notifications_active %}{% endblock %}" href="{% url "projects_notifications" project.slug %}">
           {% trans "Notifications" %}
         </a>
+        <a class="item {% block project_redirects_active %}{% endblock %}" href="{% url "projects_redirects" project.slug %}">
+          {% trans "Redirects" %}
+        </a>
         <a class="item {% block project_search-analytics_active %}{% endblock %}" href="{% url "projects_search_analytics" project.slug %}">
           {% trans "Search Analytics" %}
+        </a>
+        <a class="item {% block project_traffic_analytics_active %}{% endblock %}" href="{% url "projects_traffic_analytics" project.slug %}">
+          {% trans "Traffic Analytics" %}
         </a>
         {% if USE_PROMOS %}
           <a class="item {% block project_ads_active %}{% endblock %}" href="{% url "projects_advertising" project.slug %}">
@@ -72,5 +78,39 @@
       {% endblock project_edit_content %}
     </div>
 
+    <div class="ui four wide column" id="edit-right">
+
+      {% block project_edit_sidebar %}
+        <div class="ui basic segment">
+          <h2 class="ui small header">{% trans "Help topics" %}</h2>
+          {% block project_edit_sidebar_help_topics %}
+            <div data-embed-doc-view="{% block project_edit_sidebar_embed_doc %}{% endblock %}"
+                 data-bind="template: { name: 'doc-topics' }">
+            </div>
+          {% endblock project_edit_sidebar_help_topics %}
+        </div>
+        <div class="ui basic segment">
+          <a href="https://docs.readthedocs.io/en/stable/" target="_blank">
+            View our full docs
+          </a>
+        </div>
+
+        {% block project_edit_sidebar_extra %}
+        {% endblock project_edit_sidebar_extra %}
+      {% endblock project_edit_sidebar %}
+
+    </div>
+
   </div>
+
+  <script type="text/html" id="doc-topics">
+<div class="ui small centered inline loader" data-bind="css: { active: is_loading }"></div>
+<ul class="ui list" data-bind="foreach: topics">
+  <li class="item">
+    <div class="content">
+      <a class="header" href="#" data-bind="attr: { href: url }, text: text" target="_blank"></a>
+    </div>
+  </li>
+</ul>
+  </script>
 {% endblock content %}

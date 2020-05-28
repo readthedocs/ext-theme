@@ -9,11 +9,6 @@
 {% load projects_tags %}
 
 {% block top_left_menu_items %}
-  {% if objects.exists %}
-    <div class="item">
-      This project has {{ objects.count }} domains
-    </div>
-  {% endif %}
 {% endblock top_left_menu_items %}
 
 {% block create_button %}

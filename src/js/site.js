@@ -4,6 +4,7 @@ const clipboard = require('clipboard');
 // Application views
 export const build = require("./build");
 export const project = require("./project");
+export const docs = require("./docs");
 
 // SemanticUI JS is brought in piecemeal, through separate dependencies
 jquery.fn.transition = require('semantic-ui-transition');
@@ -36,7 +37,7 @@ jquery(document).ready(() => {
       const child_select = dropdown.children('select');
 
       if (child_select.length > 0) {
-        child_select.dropdown();
+        child_select.dropdown({placeholder: ""});
       }
       else {
         dropdown.add('.link').dropdown({
@@ -46,7 +47,7 @@ jquery(document).ready(() => {
             window.location = url;
           },
         })
-        dropdown.not('.link').dropdown();
+        dropdown.not('.link').dropdown({placeholder: ""});
       }
     });
 
@@ -65,4 +66,7 @@ jquery(document).ready(() => {
       on: 'click',
       hoverable: false,
     })
+
+    // Add embedded docs
+    docs.embed_docs();
 });

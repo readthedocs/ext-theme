@@ -1,0 +1,42 @@
+{% extends "projects/automation_rule_list.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load alter_field %}
+
+{% block project_edit_content_subheader %}
+  {% if object %}
+    {% trans "Update rule" %}
+  {% else %}
+    {% trans "Add rule" %}
+  {% endif %}
+{% endblock project_edit_content_subheader %}
+
+{% block extra_scripts %}
+  <script type="text/javascript">
+readthedocs.site.project.admin.ProjectAutomationRuleView.init({}, '#project-automation-rule-form');
+  </script>
+{% endblock %}
+
+{% block project_edit_content %}
+  {% if object %}
+    {% trans "Update rule" as button_text %}
+  {% else %}
+    {% trans "Add rule" as button_text %}
+  {% endif %}
+  <form class="ui form" method="post" action="." id="project-automation-rule-form">
+    {% csrf_token %}
+    {% alter_field form.predefined_match_arg data_bind="if: true, value: predefined_match_arg" classes="manual select" %}
+    {% alter_field form.match_arg data_bind="enable: is_match_arg_visible" %}
+    {{ form|crispy }}
+    <div class="ui info message" data-bind="visible: is_all_versions() || is_semver_versions()" style="display: none;">
+      <span data-bind="visible: is_all_versions">
+        {% trans "All versions will be matched by this rule." %}
+      </span>
+      <span data-bind="visible: is_semver_versions">
+        {% trans "Versions incremented based on semantic versioning rules will be matched by this rule." %}
+      </span>
+    </div>
+    <input class="ui primary button" type="submit" value="{{ button_text }}">
+  </form>
+{% endblock %}

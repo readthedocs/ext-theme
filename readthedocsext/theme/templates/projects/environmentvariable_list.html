@@ -10,3 +10,21 @@
 {% block project_edit_content %}
   {% include "projects/partials/edit/environment_variable_list.html" with objects=object_list %}
 {% endblock %}
+
+{# We don't have docs on env vars yet #}
+{% block project_edit_sidebar_help_topics %}
+  <ul class="ui list">
+    <li class="item">
+      <div class="content">
+        <a class="header"
+           href="https://docs.readthedocs.io/en/stable/guides/environment-variables.html"
+           target="_blank">
+          Using environment variables
+        </a>
+        <div class="description">
+          <div class="meta">Guide</div>
+        </div>
+      </div>
+    </li>
+  </ul>
+{% endblock project_edit_sidebar_help_topics %}

@@ -1,6 +1,36 @@
 import jquery from "jquery";
 import ko from "knockout";
 
+export function ProjectAutomationRuleView(data) {
+  const self = this;
+
+  self.predefined_match_arg = ko.observable();
+  self.predefined_match_arg.subscribe((predefined_match_arg) => {
+    console.log(predefined_match_arg);
+  });
+  self.is_match_arg_visible = ko.computed(() => {
+    let predefined_match_arg = self.predefined_match_arg();
+    return predefined_match_arg === '';
+  });
+  self.is_all_versions = ko.computed(() => {
+    return self.predefined_match_arg() === 'all-versions';
+  });
+  self.is_semver_versions = ko.computed(() => {
+    return self.predefined_match_arg() === 'semver-versions';
+  });
+  self.is_custom = ko.computed(() => {
+    return self.predefined_match_arg() === '';
+  });
+}
+
+ProjectAutomationRuleView.init = function (instance, selector) {
+  jquery(document).ready(() => {
+    var view = new ProjectAutomationRuleView(instance);
+    ko.applyBindings(view, jquery(selector)[0]);
+    return view;
+  });
+};
+
 export function ProjectRedirectView(data) {
   const self = this;
 
@@ -60,19 +90,6 @@ export function ProjectRedirectView(data) {
     }
   });
 };
-
-// TODO Move this to the django form widget attributes. This is a hack to add
-// the data bindings without touching the form code.
-ProjectRedirectView.install = function () {
-  jquery(document).ready(() => {
-    jquery('#id_redirect_type').attr('data-bind', 'value: redirect_type');
-    jquery('#id_from_url').attr('data-bind', 'textInput: from_url, enable: is_from_url_visible');
-    jquery('#id_to_url').attr('data-bind', 'textInput: to_url, enable: is_to_url_visible');
-    var view = new ProjectRedirectView({});
-    ko.applyBindings(view, jquery('#project-redirect-form')[0]);
-    return view;
-  });
-}
 
 ProjectRedirectView.init = function (instance, selector) {
   jquery(document).ready(() => {

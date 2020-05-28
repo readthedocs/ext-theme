@@ -44,3 +44,20 @@
     </form>
   {% endif %}
 {% endblock %}
+
+{% block project_edit_sidebar_embed_doc %}localization{% endblock %}
+{% block project_edit_sidebar_help_topics %}
+  {{ block.super }}
+  <ul class="ui list">
+    <li class="item">
+      <div class="content">
+        <a class="header" href="https://docs.readthedocs.io/en/stable/guides/manage-translations.html" target="_blank">
+          Managing translations
+        </a>
+        <div class="description">
+          Guide
+        </div>
+      </div>
+    </li>
+  </ul>
+{% endblock project_edit_sidebar_help_topics %}

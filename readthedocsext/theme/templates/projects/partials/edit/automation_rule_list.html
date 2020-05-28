@@ -1,0 +1,90 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+
+{% load gravatar %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  <div class="item">
+    <a class="ui green icon button"
+       href="{% url 'projects_automation_rule_regex_create' project_slug=project.slug %}">
+      <i class="plus icon"></i>
+      {% trans "Add rule" %}
+    </a>
+  </div>
+{% endblock %}
+
+{% block list_placeholder_icon_class %}robot{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No automation rules have been configured yet
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      Automation rules can be used to automate common actions on new
+      branches and tags.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="https://docs.readthedocs.io/page/automation-rules.html">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  {% trans "Move up" as button_up_text %}
+  {% trans "Move down" as button_down_text %}
+  {% if not forloop.first %}
+    <form method="post" action="{% url 'projects_automation_rule_move' project_slug=project.slug automation_rule_pk=object.pk steps=-1 %}">
+      {% csrf_token %}
+      <button class="ui icon button"
+              data-content="{{ button_up_text }}"
+              aria-label="{{ button_up_text }}"
+              title="{{ button_up_text }}">
+        <i class="arrow up icon"></i>
+      </button>
+    </form>
+  {% endif %}
+
+  {% if not forloop.last %}
+    <form method="post" action="{% url 'projects_automation_rule_move' project_slug=project.slug automation_rule_pk=object.pk steps=1 %}">
+      {% csrf_token %}
+      <button class="ui icon button"
+              data-content="{{ button_down_text }}"
+              aria-label="{{ button_down_text }}"
+              title="{{ button_down_text }}">
+        <i class="arrow down icon"></i>
+      </button>
+    </form>
+  {% endif %}
+
+  {% url 'projects_automation_rule_delete' object.project.slug object.pk as form_url %}
+  {% trans "Remove rule" as action_text %}
+  {% blocktrans trimmed asvar content_text with rule=object.get_description %}
+    Remove rule {{ rule }}?
+  {% endblocktrans %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_header %}
+  <a class="ui basic label" href="{{ object.get_edit_url }}">
+    {{ object.get_description }}
+  </a>
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+  <a class="item">
+    {{ object.get_action_display }}
+    for {{ object.get_version_type_display|lower }}
+    matching {{ object.get_predefined_match_arg_display|lower }}
+    {% if object.match_arg %}
+      <code>{{ object.match_arg }}</code>
+    {% endif %}
+  </a>
+{% endblock list_item_meta %}

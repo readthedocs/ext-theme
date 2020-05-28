@@ -64,11 +64,15 @@
 
 {% block list_item_header %}
   <div class="ui basic label">
-    <i class="map marker icon"></i>
     {% if object.from_url %}
       <code>
-        {% if object.redirect_type == "page" %}/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>{% endif %}<!--
-        -->{{ object.from_url }}
+        {% spaceless %}
+          {% if object.redirect_type == "page" %}
+            <span>/</span><span class="ui violet text">$lang</span>
+            <span>/</span><span class="ui violet text">$version</span>
+          {% endif %}
+          <span>{{ object.from_url }}</span>
+        {% endspaceless %}
       </code>
     {% else %}
       <i class="small asterisk grey icon"></i>
@@ -82,10 +86,18 @@
 {% block list_item_meta %}
   {% if object.to_url or object.redirect_type == "prefix" %}
     <div class="item">
-      <i class="right arrow icon"></i>
+      <i class="directions icon"></i>
       <code>
-        {% if object.redirect_type == "page" or object.redirect_type == "prefix" %}/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>{% if object.redirect_type == "prefix" %}/{% endif %}{% endif %}<!--
-        -->{{ object.to_url }}
+        {% spaceless %}
+          {% if object.redirect_type == "page" or object.redirect_type == "prefix" %}
+            <span>/</span><span class="ui violet text">$lang</span>
+            <span>/</span><span class="ui violet text">$version</span>
+            {% if object.redirect_type == "prefix" %}
+              <span>/</span>
+            {% endif %}
+          {% endif %}
+          <span>{{ object.to_url }}</span>
+        {% endspaceless %}
       </code>
     </div>
   {% endif %}

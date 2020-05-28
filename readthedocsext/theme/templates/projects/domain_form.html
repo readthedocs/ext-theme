@@ -19,8 +19,8 @@
     {% url 'projects_domains_create' project.slug as action_url %}
     {% trans "Add domain" as button_text %}
   {% endif %}
-  <form class="ui form" method="post" action="{{ action_url }}">{% csrf_token %}
-
+  <form class="ui form" method="post" action="{{ action_url }}">
+    {% csrf_token %}
     {{ form|crispy }}
 
     {% block domain_ssl %}
