@@ -1,40 +1,72 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{% trans "Add a Project" %}{% endblock %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% trans "Add Project" %}{% endblock %}
 
 {% block content %}
-  <div class="ui container very padded">
-    <form class="ui form" action="{% url "projects_import_manual" %}" method="post">
+  {% block project_add_content %}
+    <div class="ui very padded centered stackable grid">
+      <div class="ui ten wide tablet six wide computer column">
 
-      {% csrf_token %}
-      {{ wizard.management_form }}
+        {% block project_add_content_header %}
+          <h1 class="ui medium header">
+            <div class="content">
+              {% trans "Add project" %}
+              <div class="sub header">
+                {% block project_add_content_subheader %}
+                {% endblock project_add_content_subheader %}
+              </div>
+            </div>
+          </h1>
+        {% endblock project_add_content_header %}
 
-      {% block wizard-form %}
-        {% if wizard.form.forms %}
-          {{ wizard.form.management_form }}
-          {% for form in wizard.form.forms %}
-            {{ form.as_p }}
-          {% endfor %}
-        {% else %}
-          {{ wizard.form.as_p }}
-        {% endif %}
-      {% endblock %}
+        <form class="ui form" action="{% url "projects_import_manual" %}" method="post">
 
-      {% block wizard-actions %}
-        <div class="actions wizard-actions">
-          {% if wizard.steps.next %}
-            <input class="ui button primary" type="submit" value="{% trans "Next" %}" />
-          {% else %}
-            <input class="ui button primary" type="submit" value="{% trans "Finish" %}" />
-          {% endif %}
+          {% csrf_token %}
+          {{ wizard.management_form }}
 
-          {% if wizard.steps.prev %}
-            <button class="ui button secondary" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "Previous" %}</button>
-          {% endif %}
-        </div>
-      {% endblock%}
+          {% block wizard_form %}
+            {% if wizard.form.forms %}
+              {{ wizard.form.management_form }}
+              {% for form in wizard.form.forms %}
+                {% csrf_token %}
+                {{ form|crispy }}
+              {% endfor %}
+            {% else %}
+              {{ wizard.form|crispy }}
+            {% endif %}
+          {% endblock wizard_form %}
 
-    </form>
+          {% block wizard_actions %}
+            <div>
+              {% if wizard.steps.prev %}
+                <button class="ui button" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">
+                  {% trans "Previous" %}
+                </button>
+              {% endif %}
+
+              {% if wizard.steps.next %}
+                <input class="ui button primary" type="submit" value="{% trans "Next" %}" />
+              {% else %}
+                <input class="ui button primary" type="submit" value="{% trans "Finish" %}" />
+              {% endif %}
+            </div>
+          {% endblock wizard_actions %}
+
+        </form>
+      {% endblock project_add_content %}
+    </div>
+
+    <div class="ui ten wide tablet four wide computer column">
+      <h2 class="ui small header">{% trans "Help topics" %}</h2>
+      <div data-embed-doc-view="intro/import-guide"
+           data-bind="template: { name: 'doc-topics' }">
+      </div>
+    </div>
   </div>
+
+  {% include "includes/utils/embed_docs.html" %}
+
 {% endblock %}
