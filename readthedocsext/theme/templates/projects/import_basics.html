@@ -1,20 +1,7 @@
 {% extends "projects/import_base.html" %}
+
 {% load i18n %}
 
-{% block content %}
-<div class="ui basic segment padded">
-  <div class="ui container">
-    <h3>{% trans "Project Details" %}</h3>
-
-    <p>
-      {% blocktrans trimmed %}
-        To import a project, start by entering a few details about your repository.
-        You can set additional configuration options for your documentation in a
-        <a href="https://docs.readthedocs.io/en/stable/config-file/v2.html">.readthedocs.yml</a> file.
-      {% endblocktrans %}
-    </p>
-
-    {{ block.super }}
-  </div>
-</div>
-{% endblock %}
+{% block project_add_content_subheader %}
+  {% trans "Configure basic project settings" %}
+{% endblock project_add_content_subheader %}

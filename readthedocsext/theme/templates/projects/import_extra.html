@@ -1,14 +1,9 @@
 {% extends "projects/import_base.html" %}
+
 {% load i18n %}
+{% load crispy_forms_tags %}
+{% load alter_field %}
 
-{% block content %}
-  <h3>{% trans "Project Extra Details" %}</h3>
-
-  <p>
-    {% blocktrans trimmed %}
-      Here are a few more project options that you may need to configure.
-    {% endblocktrans %}
-  </p>
-
-  {{ block.super }}
-{% endblock %}
+{% block project_add_content_subheader %}
+  {% trans "Configure advanced project settings" %}
+{% endblock project_add_content_subheader %}
