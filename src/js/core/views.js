@@ -1,5 +1,5 @@
-import ko from 'knockout';
-import jquery from 'jquery';
+import ko from "knockout";
+import jquery from "jquery";
 
 // Constants, pulled from SUI:
 // https://semantic-ui.com/elements/container.html
@@ -29,13 +29,13 @@ export class ResponsiveView {
       tablet: ko.observable(false),
       computer: ko.observable(false),
       large_screen: ko.observable(false),
-    }
+    };
 
     // Don't send too many events to listeners
-    this.viewport_width.extend({ratelimit: 500});
+    this.viewport_width.extend({ ratelimit: 500 });
     this.viewport_width.subscribe((width) => {
       for (const device_name of Object.keys(this.device)) {
-        const is_device = (width >= breakpoints[device_name]);
+        const is_device = width >= breakpoints[device_name];
         this.device[device_name](is_device);
       }
     });
@@ -45,7 +45,7 @@ export class ResponsiveView {
     const fn_update = () => {
       this.viewport_width(jq_window.width());
     };
-    jq_window.on('resize', fn_update);
+    jq_window.on("resize", fn_update);
     fn_update();
   }
 }

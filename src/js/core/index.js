@@ -1,19 +1,18 @@
 import jquery from "jquery";
 import ko from "knockout";
 
-
 /*
  * MessageView.init('#messages .ui.message');
  */
 export class MessageView {
-  constructor(message={}) {
+  constructor(message = {}) {
     const self = this;
 
     self.message = message;
-    self.dismiss_url = message.attr('data-message-dismiss-url');
+    self.dismiss_url = message.attr("data-message-dismiss-url");
 
-    message.children('.close').on('click', self.dismiss());
-    message.children('a').on('click', self.dismiss());
+    message.children(".close").on("click", self.dismiss());
+    message.children("a").on("click", self.dismiss());
   }
 
   /* Dismiss URL and redirect client to link location, if any */
@@ -22,27 +21,30 @@ export class MessageView {
 
     return (event) => {
       const target = jquery(event.target);
-      const link_url = target.attr('href');
+      const link_url = target.attr("href");
 
       event.preventDefault();
 
       if (self.dismiss_url) {
-        jquery.get(self.dismiss_url).done((resp) => {
-          if (link_url) {
-            window.location = link_url;
-          }
-        }).fail((error) => {
-          console.log(error);
-        }).always(() => {
-          self.message.transition('fade');
-        })
-      }
-      else {
-        self.message.transition('fade');
+        jquery
+          .get(self.dismiss_url)
+          .done((resp) => {
+            if (link_url) {
+              window.location = link_url;
+            }
+          })
+          .fail((error) => {
+            console.log(error);
+          })
+          .always(() => {
+            self.message.transition("fade");
+          });
+      } else {
+        self.message.transition("fade");
       }
 
       return false;
-    }
+    };
   }
 
   static init(selector) {

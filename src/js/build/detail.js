@@ -6,7 +6,6 @@ import moment from "moment";
 import AnsiUp from "ansi_up";
 import sanitize_html from "sanitize-html";
 
-
 function BuildCommandOutput(data) {
   var self = this;
 
@@ -37,7 +36,7 @@ function BuildCommand(data) {
   // Remove the path from display
   // TODO do this on the API level
   const re_command_trim = /(\/usr\/src\/app|\/home\/docs)\/checkouts\/readthedocs.org\/user_builds\/[^\/]+\/[^\/]+\/[^\/]+\//g;
-  let command = data.command.replace(re_command_trim, '');
+  let command = data.command.replace(re_command_trim, "");
 
   // Observables
   self.id = ko.observable(data.id);
@@ -58,8 +57,8 @@ function BuildCommand(data) {
   ansi_up.use_classes = true;
   let output = ansi_up.ansi_to_html(data.output);
   output = sanitize_html(output, {
-    allowedTags: ['span'],
-    allowedAttributes: {'span': ['class']},
+    allowedTags: ["span"],
+    allowedAttributes: { span: ["class"] },
   });
 
   var output_lines = output.split(/\n/);
@@ -120,16 +119,16 @@ export function BuildDetailView(instance) {
     const finished = self.finished();
     const is_success = self.success();
     return {
-      success: (finished && is_success),
-      error: (finished && !is_success),
-    }
+      success: finished && is_success,
+      error: finished && !is_success,
+    };
   });
 
   /* Output variables */
   self.date = ko.observable(instance.date);
   self.date_display = ko.computed(() => {
     const date = self.date();
-    return moment(date).format('llll');
+    return moment(date).format("llll");
   });
   self.date_display_since = ko.computed(() => {
     const date = self.date();
@@ -137,8 +136,8 @@ export function BuildDetailView(instance) {
   });
   self.length = ko.observable(instance.length);
   self.length_display = ko.computed(() => {
-    return moment.duration(self.length(), 'seconds').humanize();
-  })
+    return moment.duration(self.length(), "seconds").humanize();
+  });
   self.builder = ko.observable(instance.builder);
   self.commands = ko.observableArray(instance.commands);
   self.commit = ko.observable(instance.commit);
@@ -167,7 +166,7 @@ export function BuildDetailView(instance) {
   });
   self.show_debug = function () {
     $("#build-debug-modal").modal("show");
-  }
+  };
 
   // Anchor handling
   var re_hash = /^#(\d+)--(\d+)$/;
@@ -201,10 +200,10 @@ export function BuildDetailView(instance) {
     }
   };
 
-  self.load_remote_build = function(build_id) {
+  self.load_remote_build = function (build_id) {
     self.id = build_id;
-    self.api_url = 'https://readthedocs.org/api/v2/build/';
-    self.state('triggered');
+    self.api_url = "https://readthedocs.org/api/v2/build/";
+    self.state("triggered");
     self.commands([]);
     poll_api();
   };
@@ -222,16 +221,13 @@ export function BuildDetailView(instance) {
     self.builder(data.builder);
     self.config(data.config);
 
-    let commands = self.commands()
+    let commands = self.commands();
     if (data.commands.length !== commands.length) {
       for (let n in data.commands) {
         var command = data.commands[n];
-        var match = ko.utils.arrayFirst(
-          commands,
-          function (command_cmp) {
-            return command_cmp.id() === command.id;
-          }
-        );
+        var match = ko.utils.arrayFirst(commands, function (command_cmp) {
+          return command_cmp.id() === command.id;
+        });
         if (!match) {
           command.view = self;
           self.commands.push(new BuildCommand(command));
@@ -260,7 +256,7 @@ BuildDetailView.init = function (instance, domobj) {
     var hash = $(location).attr("hash");
     instance.hash = hash;
 
-    var view = build_ctl = new BuildDetailView(instance);
+    var view = (build_ctl = new BuildDetailView(instance));
     var domobj = domobj || $("#build-detail")[0];
 
     ko.applyBindings(view, domobj);
@@ -268,5 +264,5 @@ BuildDetailView.init = function (instance, domobj) {
     $(window).bind("hashchange", view.update_hash);
 
     return view;
-  })
+  });
 };

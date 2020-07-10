@@ -3,8 +3,7 @@ import ko from "knockout";
 
 import * as tasks from "../tasks";
 import * as utils from "../core/utils";
-import {ResponsiveView} from "../core/views";
-
+import { ResponsiveView } from "../core/views";
 
 class RemoteRepository {
   constructor(remote_repo) {
@@ -24,20 +23,20 @@ class RemoteRepository {
     this.is_private = ko.observable(this.private);
     this.is_active = ko.observable(this.active);
     this.is_locked = ko.computed(() => {
-      return (this.is_private() && !this.has_admin());
+      return this.is_private() && !this.has_admin();
     });
     this.has_admin = ko.observable(this.admin);
     this.has_project = ko.observable(false);
   }
 
   get_project(pk) {
-    const url = '/api/v2/project/' + pk + '/';
+    const url = "/api/v2/project/" + pk + "/";
 
     let promise = jquery.getJSON(url).done((response) => {
-      response.url = '/projects/' + response.slug;
+      response.url = "/projects/" + response.slug;
       this.project(response);
       this.has_project(true);
-    })
+    });
 
     return promise;
   }
@@ -50,7 +49,7 @@ export class ProjectCreateView extends ResponsiveView {
 
     this.config = config || {};
     this.urls = config.urls || {};
-    this.csrf_token = config.csrf_token || '';
+    this.csrf_token = config.csrf_token || "";
 
     this.remote_repos = ko.observableArray();
     this.selected = ko.observable();
@@ -91,13 +90,16 @@ export class ProjectCreateView extends ResponsiveView {
     this.is_loading(true);
     //this.error(null);
 
-    let promise = tasks.trigger_task(params).fail((error) => {
-      console.log(error);
-      //this.error(error);
-    }).always(() => {
-      this.is_syncing(false);
-      this.is_loading(false);
-    });
+    let promise = tasks
+      .trigger_task(params)
+      .fail((error) => {
+        console.log(error);
+        //this.error(error);
+      })
+      .always(() => {
+        this.is_syncing(false);
+        this.is_loading(false);
+      });
 
     return promise;
   }
@@ -107,19 +109,23 @@ export class ProjectCreateView extends ResponsiveView {
     const url = this.urls.remoterepository_list + "?page_size=" + page_size;
 
     // TODO support multiple pages here
-    let promise = jquery.getJSON(url).done((response) => {
-      //this.page_next(projects_list.next);
-      //this.page_previous(projects_list.previous);
-      for (const remote_repo of response.results) {
-        this.remote_repos.push(new RemoteRepository(remote_repo));
-      }
-    }).fail((error) => {
-      const error_msg = error.responseJSON.detail || error.statusText;
-      console.log('Error!', error_msg);
-      //this.error({message: error_msg});
-    }).always(() => {
-      this.is_loading(false);
-    });
+    let promise = jquery
+      .getJSON(url)
+      .done((response) => {
+        //this.page_next(projects_list.next);
+        //this.page_previous(projects_list.previous);
+        for (const remote_repo of response.results) {
+          this.remote_repos.push(new RemoteRepository(remote_repo));
+        }
+      })
+      .fail((error) => {
+        const error_msg = error.responseJSON.detail || error.statusText;
+        console.log("Error!", error_msg);
+        //this.error({message: error_msg});
+      })
+      .always(() => {
+        this.is_loading(false);
+      });
 
     return promise;
   }
@@ -133,13 +139,13 @@ export class ProjectCreateView extends ResponsiveView {
       type: "knockout",
       templates: {
         knockout: (response) => {
-          let node_temp = jquery('<div>');
+          let node_temp = jquery("<div>");
 
           ko.applyBindingsToNode(node_temp[0], {
             template: {
               name: "remote-repo-results",
               data: response,
-            }
+            },
           });
 
           const output = node_temp.html();
@@ -162,7 +168,7 @@ export class ProjectCreateView extends ResponsiveView {
         this.selected(result);
       },
     };
-    jquery('.ui.search').search(config);
+    jquery(".ui.search").search(config);
   }
 
   static init(config, selector) {
