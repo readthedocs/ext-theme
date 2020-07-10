@@ -99,10 +99,10 @@
                 </div>
               {% endblock list_item_right_menu %}
 
-              <div class="content">
+              {% block list_item_image %}
+              {% endblock list_item_image %}
 
-                {% block list_item_image %}
-                {% endblock list_item_image %}
+              <div class="content">
 
                 <div class="header">
                   {% block list_item_header %}
