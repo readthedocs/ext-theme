@@ -37,10 +37,6 @@ site.handle_notification_dismiss();
     <script type="text/javascript" src="{% static 'readthedocsext/theme/js/vendor.js' %}"></script>
     <script type="text/javascript" src="{% static 'readthedocsext/theme/js/site.js' %}"></script>
     -->
-    <script type="text/javascript" src="http://localhost:8080/static/js/vendor.js"></script>
-    <script type="text/javascript" src="http://localhost:8080/static/js/site.js"></script>
-
-    {% block extra_scripts %}{% endblock %}
   </head>
   <body class="{% block body_class %}{% endblock %}">
 
@@ -94,5 +90,11 @@ site.handle_notification_dismiss();
     <script>
       {% block footerjs %}{% endblock %}
     </script>
+
+    <script type="text/javascript" src="http://localhost:8080/static/js/vendor.js"></script>
+    <script type="text/javascript" src="http://localhost:8080/static/js/site.js"></script>
+
+    {% block extra_scripts %}{% endblock %}
+
   </body>
 </html>
