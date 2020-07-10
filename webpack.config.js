@@ -15,7 +15,9 @@ module.exports = (env, argv) => {
       //vendor: ["knockout", "jquery"],
     },
     output: {
-      filename: is_production ? "js/[name].min.js?[hash]" : "js/[name].js?[hash]",
+      filename: is_production
+        ? "js/[name].min.js?[hash]"
+        : "js/[name].js?[hash]",
       path: path.join(
         __dirname,
         "readthedocsext",
@@ -104,7 +106,9 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: is_production ? "css/[name].min.css?[hash]" : "css/[name].css?[hash]",
+        filename: is_production
+          ? "css/[name].min.css?[hash]"
+          : "css/[name].css?[hash]",
         chunkFilename: "css/[name].css?[hash]",
       }),
       /*
