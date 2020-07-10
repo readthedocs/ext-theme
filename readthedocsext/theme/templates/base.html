@@ -55,13 +55,12 @@ site.handle_notification_dismiss();
 
     <!-- BEGIN notify -->
     {% if messages %}
-      <div class="ui container">
+      <div class="ui container" id="messages">
         <div class="ui basic segment">
           {% for message in messages %}
-            <div class="ui warning message message-{{ message.level }}" {% if message.pk %}data-dismiss-url="{% url 'message_mark_read' message.pk %}"{% endif %}>
+            <div class="ui message {{ message.tags }}"
+                 {% if message.pk %}data-message-dismiss-url="{% url 'message_mark_read' message.pk %}"{% endif %}>
               <i class="close icon"></i>
-              <div class="header">Notification</div>
-
               {{ message }}
             </div>
           {% endfor %}
