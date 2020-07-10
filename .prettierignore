@@ -1,0 +1,8 @@
+# Don't do templates at all. Prettier is opinionated and there is extra Django
+# pieces that would be mangled by Prettier.
+*.html
+/docs/_build/
+/readthedocsext/theme/static/readthedocsext/theme/css/site.css
+/readthedocsext/theme/static/readthedocsext/theme/js/site.js
+/readthedocsext/theme/static/readthedocsext/theme/js/vendor.js
+/crispy-semantic-ui.git/
