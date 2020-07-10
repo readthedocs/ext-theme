@@ -5,7 +5,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 
 // Use export as a function to inspect `--mode`
 module.exports = (env, argv) => {
-  const production = argv.mode == "production";
+  const is_production = argv.mode == "production";
 
   return {
     entry: {
@@ -15,7 +15,7 @@ module.exports = (env, argv) => {
       //vendor: ["knockout", "jquery"],
     },
     output: {
-      filename: "js/[name].js?[hash]",
+      filename: is_production ? "js/[name].min.js?[hash]" : "js/[name].js?[hash]",
       path: path.join(
         __dirname,
         "readthedocsext",
@@ -30,7 +30,7 @@ module.exports = (env, argv) => {
       globalObject: "this",
     },
     optimization: {
-      minimize: production,
+      minimize: is_production,
       minimizer: [new TerserPlugin(), new OptimizeCssAssetsPlugin({})],
       splitChunks: {
         cacheGroups: {
@@ -104,7 +104,7 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: "css/[name].css?[hash]",
+        filename: is_production ? "css/[name].min.css?[hash]" : "css/[name].css?[hash]",
         chunkFilename: "css/[name].css?[hash]",
       }),
       /*
