@@ -5,6 +5,7 @@ const clipboard = require('clipboard');
 export const build = require("./build");
 export const project = require("./project");
 export const docs = require("./docs");
+export const core = require("./core");
 
 // SemanticUI JS is brought in piecemeal, through separate dependencies
 jquery.fn.transition = require('semantic-ui-transition');
@@ -13,6 +14,10 @@ jquery.fn.popup = require('semantic-ui-popup');
 jquery.fn.modal = require('semantic-ui-modal');
 jquery.fn.dimmer = require('semantic-ui-dimmer');
 jquery.fn.progress = require('semantic-ui-progress');
+jquery.fn.search = require('semantic-ui-search');
+jquery.fn.api = require('semantic-ui-api');
+jquery.fn.accordion = require('semantic-ui-accordion');
+jquery.fn.tab = require('semantic-ui-tab');
 
 jquery(document).ready(() => {
     // TODO make this a function somewhere
@@ -20,6 +25,8 @@ jquery(document).ready(() => {
     jquery('.ui[data-html]').popup({hoverable: true});
     jquery('.ui[data-popup]').popup({hoverable: true});
     jquery('.ui.progress').progress();
+    jquery('.ui.accordion').accordion();
+    jquery('.ui.menu > .item[data-tab]').tab();
 
     jquery('.ui[data-popup-on-click]').popup({
       on: 'click',
@@ -58,6 +65,20 @@ jquery(document).ready(() => {
         }
     });
 
+    // Search
+    /*
+    jquery('.ui.search').each((index, obj) => {
+      const search = jquery(obj);
+      const config_obj = search.children('script.config').first();
+      const config_src = config_obj.text();
+
+      if (config_src && config_obj.attr('type') == "application/json") {
+        const config = JSON.parse(config_src);
+        search.search(config);
+      }
+    });
+    */
+
     // Initialize clipboard, but only for data-clipboard-text. This is the most
     // generalized pattern for clipboard usage, so I won't yet worry about
     // adding the other data binding selectors.
@@ -66,6 +87,9 @@ jquery(document).ready(() => {
       on: 'click',
       hoverable: false,
     })
+
+    // Messages
+    core.MessageView.init('#messages .message');
 
     // Add embedded docs
     docs.embed_docs();
