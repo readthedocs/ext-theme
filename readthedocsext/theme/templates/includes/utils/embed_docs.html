@@ -1,0 +1,16 @@
+{% comment %}
+  This is the Knockout template used for sidebar "Help topics" lists. This block
+  is found on many of the project edit pages, as well as many of the other project
+  pages that include forms.
+{% endcomment %}
+
+<script type="text/html" id="doc-topics">
+<div class="ui small centered inline loader" data-bind="css: { active: is_loading }"></div>
+<ul class="ui list" data-bind="foreach: topics">
+  <li class="item">
+    <div class="content">
+      <a class="header" href="#" data-bind="attr: { href: url }, text: text" target="_blank"></a>
+    </div>
+  </li>
+</ul>
+</script>

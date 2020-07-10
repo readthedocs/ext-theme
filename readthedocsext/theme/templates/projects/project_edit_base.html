@@ -103,14 +103,5 @@
 
   </div>
 
-  <script type="text/html" id="doc-topics">
-<div class="ui small centered inline loader" data-bind="css: { active: is_loading }"></div>
-<ul class="ui list" data-bind="foreach: topics">
-  <li class="item">
-    <div class="content">
-      <a class="header" href="#" data-bind="attr: { href: url }, text: text" target="_blank"></a>
-    </div>
-  </li>
-</ul>
-  </script>
+  {% include "includes/utils/embed_docs.html" %}
 {% endblock content %}
