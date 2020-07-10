@@ -22,6 +22,11 @@
   }
 }
 
+// Bug fix for a i.list.icon inside a div.ui.list
+.ui.list .list.icon {
+  padding-left: 0em;
+}
+
 // For build detail page
 .ui.command.list {
   > .item {
