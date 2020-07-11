@@ -1,0 +1,52 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+
+{% load gravatar %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  <a class="ui button" href="?download=true">
+    <i class="download icon"></i>
+    {% trans "Download search data" %}
+  </a>
+{% endblock %}
+
+{% block list_placeholder_icon_class %}search{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No search queries are available yet
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      New search queries will be counted as users search your documentation.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_header %}
+  <div class="ui basic label">
+    <code>{{ object }}</code>
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+  <span class="item">
+    {{ total_results }} results
+  </span>
+  <span class="item">
+    {{ count }} results
+  </span>
+{% endblock list_item_meta %}

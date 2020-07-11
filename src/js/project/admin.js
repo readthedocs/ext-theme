@@ -1,6 +1,8 @@
 import jquery from "jquery";
 import ko from "knockout";
 
+import { ChartView } from "../core/views";
+
 /* Project automation rule form view
  *
  * @param {Object} automation_rule - Initial instance data, optional
@@ -32,7 +34,7 @@ export class ProjectAutomationRuleView {
    * @param {string} selector - Selector string to use for view attachment
    * @returns {ProjectAutomationRuleView}
    */
-  static init(automation_rule, selector) {
+  static init(automation_rule, selector = "#edit-content") {
     jquery(document).ready(() => {
       const view = new ProjectAutomationRuleView(automation_rule);
       ko.applyBindings(view, jquery(selector)[0]);
@@ -105,10 +107,46 @@ export class ProjectRedirectView {
    * @param {string} selector - Selector string to use for view attachment
    * @returns {ProjectRedirectView}
    */
-  static init(redirect, selector) {
+  static init(redirect, selector = "#edit-content") {
     jquery(document).ready(() => {
       var view = new ProjectRedirectView(redirect);
       ko.applyBindings(view, jquery(selector)[0]);
+      return view;
+    });
+  }
+}
+
+/* Project search analytics view
+ *
+ * Search analytics chart data and config is loaded from an inline
+ * application/json script block, so that data, labels, and localized strings
+ * can be handled from the templates.
+ *
+ * @param {Element} elem - Element that view is attached to
+ */
+export class ProjectSearchAnalyticsView extends ChartView {
+  constructor() {
+    super();
+    this.config = ko.observable();
+    this.is_loading = ko.observable(true);
+    this.config.subscribe((config) => {
+      this.is_loading(false);
+    });
+  }
+
+  //<link rel="stylesheet" href="{% static 'vendor/chartjs/chartjs.min.css' %}">
+  //<script src="{% static 'vendor/chartjs/chartjs.bundle.min.js' %}"></script>
+
+  /* View attachment static method
+   *
+   * @param {string} selector - Selector string to use for view attachment
+   * @returns {ProjectSearchAnalyticsView}
+   */
+  static init(selector = "#edit-content") {
+    jquery(document).ready(() => {
+      const elem = jquery(selector);
+      const view = new ProjectSearchAnalyticsView();
+      ko.applyBindings(view, elem[0]);
       return view;
     });
   }

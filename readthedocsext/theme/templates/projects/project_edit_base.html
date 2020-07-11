@@ -50,7 +50,7 @@
         <a class="item {% block project_redirects_active %}{% endblock %}" href="{% url "projects_redirects" project.slug %}">
           {% trans "Redirects" %}
         </a>
-        <a class="item {% block project_search-analytics_active %}{% endblock %}" href="{% url "projects_search_analytics" project.slug %}">
+        <a class="item {% block project_search_analytics_active %}{% endblock %}" href="{% url "projects_search_analytics" project.slug %}">
           {% trans "Search Analytics" %}
         </a>
         <a class="item {% block project_traffic_analytics_active %}{% endblock %}" href="{% url "projects_traffic_analytics" project.slug %}">
@@ -74,8 +74,10 @@
         </div>
       </h2>
 
-      {% block project_edit_content %}
-      {% endblock project_edit_content %}
+      <div id="edit-content">
+        {% block project_edit_content %}
+        {% endblock project_edit_content %}
+      </div>
     </div>
 
     <div class="ui four wide column" id="edit-right">
