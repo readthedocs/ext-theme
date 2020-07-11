@@ -7,10 +7,6 @@
 {% block title %}{{ build.project.name }}{% endblock %}
 
 {% block extra_scripts %}
-  <!--
-  <script type="text/javascript" src="{% static 'vendor/knockout.js' %}"></script>
-  <script type="text/javascript" src="{% static 'builds/js/detail.js' %}"></script>
-  -->
   <script type="text/javascript">
 readthedocs.site.build.detail.BuildDetailView.init({id: '{{ build.pk }}'});
   </script>

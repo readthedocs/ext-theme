@@ -1,179 +1,286 @@
 // Build - detail view
 
-const ko = require("knockout");
-const $ = require("jquery");
-import moment from "moment";
-import AnsiUp from "ansi_up";
-import sanitize_html from "sanitize-html";
+import jquery from "jquery";
+import ko from "knockout";
+import dayjs from "dayjs";
+import RelativeTime from "dayjs/plugin/relativeTime";
+import Duration from "dayjs/plugin/duration";
+import LocalizedFormat from "dayjs/plugin/localizedFormat";
 
-function BuildCommandOutput(data) {
-  var self = this;
+class BuildCommandOutput {
+  constructor(build_command_output, view) {
+    // Used for calls to the root view and parent command
+    this.view = view;
 
-  // Used for calls to the root view and parent command
-  self.view = data.view;
-  self.command = data.command;
-
-  self.output = ko.observable(data.output);
-  self.line_number = ko.observable(data.line_number);
-  self.anchor_id = ko.computed(function () {
-    return self.command.id() + "--" + self.line_number();
-  });
-
-  self.is_highlighted = ko.computed(() => {
-    return (
-      self.line_number() == self.view.selected_line() &&
-      self.command.id() == self.view.selected_command()
-    );
-  });
-}
-
-function BuildCommand(data) {
-  var self = this;
-
-  // Used for calls to the root view
-  self.view = data.view;
-
-  // Remove the path from display
-  // TODO do this on the API level
-  const re_command_trim = /(\/usr\/src\/app|\/home\/docs)\/checkouts\/readthedocs.org\/user_builds\/[^\/]+\/[^\/]+\/[^\/]+\//g;
-  let command = data.command.replace(re_command_trim, "");
-
-  // Observables
-  self.id = ko.observable(data.id);
-  self.command = ko.observable(command);
-  self.exit_code = ko.observable(data.exit_code || 0);
-  self.successful = ko.observable(self.exit_code() === 0);
-  self.run_time = ko.observable(data.run_time);
-
-  // Conditional expansion
-  var is_showing = self.successful() ? false : true;
-  self.is_showing = ko.observable(is_showing);
-  self.toggle_showing = function () {
-    self.is_showing(!self.is_showing());
-  };
-
-  // Build output lines
-  let ansi_up = new AnsiUp();
-  ansi_up.use_classes = true;
-  let output = ansi_up.ansi_to_html(data.output);
-  output = sanitize_html(output, {
-    allowedTags: ["span"],
-    allowedAttributes: { span: ["class"] },
-  });
-
-  var output_lines = output.split(/\n/);
-  self.output_lines = ko.observableArray(
-    output_lines.map(function (line, index) {
-      return new BuildCommandOutput({
-        view: self.view,
-        command: self,
-        output: line,
-        line_number: index + 1,
-      });
-    })
-  );
-
-  self.command_status = ko.computed(function () {
-    return self.successful()
-      ? "build-command-successful"
-      : "build-command-failed";
-  });
-}
-
-export function BuildDetailView(instance) {
-  var self = this;
-  var instance = instance || {};
-
-  /* Attributes */
-  self.id = instance.id;
-  self.api_url = "/api/v2/build/";
-
-  /* State variables */
-  self.success = ko.observable(instance.success);
-  self.error = ko.observable(instance.error);
-  self.state = ko.observable(instance.state);
-  self.state_display = ko.observable(instance.state_display);
-  self.finished = ko.computed(function () {
-    return self.state() === "finished";
-  });
-  self.is_loading = ko.observable(true);
-
-  /* State subscriptions -- performed on load to ensure jquery plugins */
-  self.state_progress = self.state.subscribe(function (new_value) {
-    var states = [
-      "triggered",
-      "queued",
-      "cloning",
-      "installing",
-      "building",
-      "uploading",
-      "finished",
-    ];
-    var progress_value = states.indexOf(self.state());
-    $("#build-progress").progress({
-      value: progress_value,
-      total: states.length - 1,
+    this.command = build_command_output.command;
+    this.output = ko.observable(build_command_output.output);
+    this.line_number = ko.observable(build_command_output.line_number);
+    this.anchor_id = ko.computed(() => {
+      return this.command.id() + "--" + this.line_number();
     });
-  });
-  self.state_progress_css = ko.computed(() => {
-    const finished = self.finished();
-    const is_success = self.success();
-    return {
-      success: finished && is_success,
-      error: finished && !is_success,
-    };
-  });
 
-  /* Output variables */
-  self.date = ko.observable(instance.date);
-  self.date_display = ko.computed(() => {
-    const date = self.date();
-    return moment(date).format("llll");
-  });
-  self.date_display_since = ko.computed(() => {
-    const date = self.date();
-    return moment(date).fromNow();
-  });
-  self.length = ko.observable(instance.length);
-  self.length_display = ko.computed(() => {
-    return moment.duration(self.length(), "seconds").humanize();
-  });
-  self.builder = ko.observable(instance.builder);
-  self.commands = ko.observableArray(instance.commands);
-  self.commit = ko.observable(instance.commit);
-  self.commit_short = ko.computed(() => {
-    let commit = self.commit();
-    if (commit !== undefined) {
-      return commit.substring(0, 8);
+    this.is_highlighted = ko.computed(() => {
+      return (
+        this.line_number() == this.view.selected_line() &&
+        this.command.id() == this.view.selected_command()
+      );
+    });
+  }
+}
+
+class BuildCommand {
+  constructor(build_command, view) {
+    // Used for calls to the root view
+    this.view = view;
+
+    // Remove the path from display
+    // TODO do this on the API level
+    const re_command_trim = /(\/usr\/src\/app|\/home\/docs)\/checkouts\/readthedocs.org\/user_builds\/[^\/]+\/[^\/]+\/[^\/]+\//g;
+    let command = build_command.command.replace(re_command_trim, "");
+
+    // Observables
+    this.id = ko.observable(build_command.id);
+    this.command = ko.observable(command);
+    this.exit_code = ko.observable(build_command.exit_code || 0);
+    this.successful = ko.computed(() => {
+      return this.exit_code() === 0;
+    });
+    this.run_time = ko.observable(build_command.run_time);
+
+    // Conditional expansion
+    const is_showing = this.successful() ? false : true;
+    this.is_showing = ko.observable(is_showing);
+
+    this.command_status = ko.computed(() => {
+      return this.successful()
+        ? "build-command-successful"
+        : "build-command-failed";
+    });
+
+    this.output = ko.observable(build_command.output);
+    this.output_lines = ko.observableArray([]);
+    this.render_output();
+  }
+
+  toggle_showing() {
+    this.is_showing(!this.is_showing());
+  }
+
+  render_output() {
+    // Dynamically load expensive chunks. These will be kept out of the normal
+    // vendor bundle.
+    Promise.all([
+      import(
+        /* webpackChunkName: 'ansi_up' */
+        "ansi_up"
+      ).then(({ default: AnsiUp }) => {
+        return AnsiUp;
+      }),
+      import(
+        /* webpackChunkName: 'sanitize-html' */
+        "sanitize-html"
+      ).then(({ default: sanitize_html }) => {
+        return sanitize_html;
+      }),
+    ]).then((imports) => {
+      let AnsiUp, sanitize_html;
+      [AnsiUp, sanitize_html] = imports;
+
+      // Build output lines
+      let ansi_up = new AnsiUp();
+      ansi_up.use_classes = true;
+      let output = ansi_up.ansi_to_html(this.output());
+      output = sanitize_html(output, {
+        allowedTags: ["span"],
+        allowedAttributes: { span: ["class"] },
+      });
+
+      var output_lines = output.split(/\n/);
+      this.output_lines(
+        output_lines.map((line, index) => {
+          return new BuildCommandOutput(
+            {
+              command: this,
+              output: line,
+              line_number: index + 1,
+            },
+            this.view
+          );
+        })
+      );
+    });
+  }
+}
+
+export class BuildDetailView {
+  constructor(build = {}) {
+    /* Attributes */
+    this.id = build.id;
+    // TODO make this configurable?
+    this.api_url = "/api/v2/build/";
+
+    /* State variables */
+    this.success = ko.observable(build.success);
+    this.error = ko.observable(build.error);
+    this.state = ko.observable(build.state);
+    this.state_display = ko.observable(build.state_display);
+    this.finished = ko.computed(() => {
+      return this.state() === "finished";
+    });
+    this.is_loading = ko.observable(true);
+
+    /* State subscriptions -- performed on load to ensure jquery plugins */
+    this.state_progress = this.state.subscribe((new_value) => {
+      const states = [
+        "triggered",
+        "queued",
+        "cloning",
+        "installing",
+        "building",
+        "uploading",
+        "finished",
+      ];
+      var progress_value = states.indexOf(this.state());
+      jquery("#build-progress").progress({
+        value: progress_value,
+        total: states.length - 1,
+      });
+    });
+    this.state_progress_css = ko.computed(() => {
+      const finished = this.finished();
+      const is_success = this.success();
+      return {
+        success: finished && is_success,
+        error: finished && !is_success,
+      };
+    });
+
+    /* Time attributes */
+    this.date = ko.observable(build.date);
+    this.length = ko.observable(build.length);
+
+    this.date_display = ko.observable();
+    this.date_display_since = ko.observable();
+    this.length_display = ko.observable();
+
+    dayjs.extend(RelativeTime);
+    dayjs.extend(Duration);
+    dayjs.extend(LocalizedFormat);
+    this.date.subscribe((date) => {
+      const date_readable = dayjs(date);
+      this.date_display(date_readable.format("llll"));
+      this.date_display_since(date_readable.fromNow());
+    });
+    this.length.subscribe((length) => {
+      this.length_display(dayjs.duration(length, "seconds").humanize());
+    });
+
+    /* Output */
+    this.builder = ko.observable(build.builder);
+    this.commands = ko.observableArray(build.commands);
+    this.commit = ko.observable(build.commit);
+    this.commit_short = ko.computed(() => {
+      let commit = this.commit();
+      if (commit !== undefined) {
+        return commit.substring(0, 8);
+      }
+    });
+    this.docs_url = ko.observable(build.docs_url);
+    this.commit_url = ko.observable(build.commit_url);
+
+    /* Others */
+    this.legacy_output = ko.observable(false);
+
+    /* Debug */
+    this.config = ko.observable();
+    this.config_display = ko.computed(() => {
+      return JSON.stringify(this.config(), null, 2);
+    });
+
+    // Anchor handling
+    this.selected_command = ko.observable();
+    this.selected_line = ko.observable();
+
+    this.poll_api();
+  }
+
+  /* Initial static method used to create view instance and attach to DOM
+   *
+   * @returns {BuildDetailView}
+   */
+  static init(build, selector = "#build-detail") {
+    jquery(document).ready(() => {
+      const hash = jquery(location).attr("hash");
+      build.hash = hash;
+
+      const view = new BuildDetailView(build);
+      const domobj = domobj || jquery(selector)[0];
+      ko.applyBindings(view, domobj);
+
+      jquery(window).bind("hashchange", () => {
+        view.handle_hash_change();
+      });
+
+      return view;
+    });
+  }
+
+  /* Continually poll API for build object and update Build, BuildCommand, and
+   * BuildCommandOutput states.
+   */
+  poll_api() {
+    if (this.finished()) {
+      return;
     }
-  });
-  self.docs_url = ko.observable(instance.docs_url);
-  self.commit_url = ko.observable(instance.commit_url);
+    jquery.getJSON(this.api_url + this.id + "/").then((data) => {
+      this.state(data.state);
+      this.state_display(data.state_display);
+      this.date(data.date);
+      this.success(data.success);
+      this.error(data.error);
+      this.length(data.length);
+      this.commit(data.commit);
+      this.docs_url(data.docs_url);
+      this.commit_url(data.commit_url);
+      this.builder(data.builder);
+      this.config(data.config);
 
-  /* Others */
-  self.legacy_output = ko.observable(false);
-  self.show_legacy_output = function () {
-    self.legacy_output(true);
-  };
-  self.line_number = function (command_id, line_number) {
+      const commands = this.commands();
+      if (data.commands.length !== commands.length) {
+        for (const n in data.commands) {
+          let command = data.commands[n];
+          const match = ko.utils.arrayFirst(commands, (command_cmp) => {
+            return command_cmp.id() === command.id;
+          });
+          if (!match) {
+            this.commands.push(new BuildCommand(command, this));
+          }
+        }
+      }
+      this.is_loading(false);
+      this.handle_hash_change();
+    });
+
+    // Continually poll API while build is not finished. If it is in a finished
+    // state, this method will return without setting another timer.
+    setTimeout(() => {
+      this.poll_api();
+    }, 2000);
+  }
+
+  /* Get a reference id for each command output line
+   *
+   * @returns {string}
+   */
+  line_number(command_id, line_number) {
     return command_id + "--" + line_number;
-  };
+  }
 
-  /* Debug */
-  self.config = ko.observable();
-  self.config_display = ko.computed(() => {
-    return JSON.stringify(self.config(), null, 2);
-  });
-  self.show_debug = function () {
-    $("#build-debug-modal").modal("show");
-  };
+  /* Use URL hash change to highlight the selected command output line */
+  handle_hash_change() {
+    const hash = jquery(location).attr("hash");
+    const re_hash = /^#(\d+)--(\d+)$/;
 
-  // Anchor handling
-  var re_hash = /^#(\d+)--(\d+)$/;
-  self.selected_command = ko.observable();
-  self.selected_line = ko.observable();
-  self.update_hash = function (ev) {
-    var hash = $(location).attr("hash");
     if (hash) {
       // Update selected command and line
       let found = hash.match(re_hash);
@@ -182,87 +289,41 @@ export function BuildDetailView(instance) {
         return;
       }
 
-      let selected_command = found[1];
-      let selected_line = found[2];
-      self.selected_command(selected_command);
-      self.selected_line(selected_line);
+      const selected_command = found[1];
+      const selected_line = found[2];
+      this.selected_command(selected_command);
+      this.selected_line(selected_line);
 
       // Show and focus
-      for (let command of self.commands()) {
+      for (const command of this.commands()) {
         if (command.id() == selected_command) {
           command.is_showing(true);
         }
       }
-      $(hash).focus();
+      jquery(hash).focus();
 
       // Stop processing the event
       return false;
     }
-  };
-
-  self.load_remote_build = function (build_id) {
-    self.id = build_id;
-    self.api_url = "https://readthedocs.org/api/v2/build/";
-    self.state("triggered");
-    self.commands([]);
-    poll_api();
-  };
-
-  function callback_api(data) {
-    self.state(data.state);
-    self.state_display(data.state_display);
-    self.date(data.date);
-    self.success(data.success);
-    self.error(data.error);
-    self.length(data.length);
-    self.commit(data.commit);
-    self.docs_url(data.docs_url);
-    self.commit_url(data.commit_url);
-    self.builder(data.builder);
-    self.config(data.config);
-
-    let commands = self.commands();
-    if (data.commands.length !== commands.length) {
-      for (let n in data.commands) {
-        var command = data.commands[n];
-        var match = ko.utils.arrayFirst(commands, function (command_cmp) {
-          return command_cmp.id() === command.id;
-        });
-        if (!match) {
-          command.view = self;
-          self.commands.push(new BuildCommand(command));
-        }
-      }
-    }
-    self.is_loading(false);
-    self.update_hash();
   }
 
-  function poll_api() {
-    if (self.finished()) {
-      return;
-    }
-    $.getJSON(self.api_url + self.id + "/", callback_api);
-    setTimeout(poll_api, 2000);
+  /* Show modal with debug information, only available for site admins */
+  show_debug() {
+    jquery("#build-debug-modal").modal("show");
   }
 
-  poll_api();
+  /* Debugging method for loading content from the main site */
+  // TODO remove this after debug phase, it's only useful locally
+  load_remote_build(build_id) {
+    this.id = build_id;
+    this.api_url = "https://readthedocs.org/api/v2/build/";
+    this.state("triggered");
+    this.commands([]);
+    this.poll_api();
+  }
+
+  // TODO is this needed? This is likely old view cruft
+  show_legacy_output() {
+    this.legacy_output(true);
+  }
 }
-
-export var build_ctl = null;
-
-BuildDetailView.init = function (instance, domobj) {
-  $(document).ready(() => {
-    var hash = $(location).attr("hash");
-    instance.hash = hash;
-
-    var view = (build_ctl = new BuildDetailView(instance));
-    var domobj = domobj || $("#build-detail")[0];
-
-    ko.applyBindings(view, domobj);
-
-    $(window).bind("hashchange", view.update_hash);
-
-    return view;
-  });
-};

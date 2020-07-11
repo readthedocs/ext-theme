@@ -2,10 +2,6 @@
 # pieces that would be mangled by Prettier.
 *.html
 /docs/_build/
-/readthedocsext/theme/static/readthedocsext/theme/css/site.css
-/readthedocsext/theme/static/readthedocsext/theme/css/site.min.css
-/readthedocsext/theme/static/readthedocsext/theme/js/site.js
-/readthedocsext/theme/static/readthedocsext/theme/js/site.min.js
-/readthedocsext/theme/static/readthedocsext/theme/js/vendor.js
-/readthedocsext/theme/static/readthedocsext/theme/js/vendor.min.js
+/readthedocsext/theme/static/readthedocsext/theme/css/
+/readthedocsext/theme/static/readthedocsext/theme/js/
 /crispy-semantic-ui.git/

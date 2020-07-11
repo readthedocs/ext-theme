@@ -18,6 +18,10 @@ module.exports = (env, argv) => {
       filename: is_production
         ? "js/[name].min.js?[hash]"
         : "js/[name].js?[hash]",
+      chunkFilename: is_production
+        ? "js/[name].min.js?[hash]"
+        : "js/[name].js?[hash]",
+      publicPath: is_production ? "/" : "http://localhost:8080/static/",
       path: path.join(
         __dirname,
         "readthedocsext",
@@ -46,12 +50,6 @@ module.exports = (env, argv) => {
     },
     module: {
       rules: [
-        /*
-        {
-          test: require.resolve("./src/js/site.js"),
-          use: "imports-loader?this=>window"
-        },
-        */
         {
           test: /\.js$/,
           exclude: /(node_modules)/,
@@ -111,12 +109,6 @@ module.exports = (env, argv) => {
           : "css/[name].css?[hash]",
         chunkFilename: "css/[name].css?[hash]",
       }),
-      /*
-      new webpack.ProvidePlugin({
-        $: "jquery",
-        jQuery: "jquery"
-      }),
-      */
     ],
     resolve: {
       alias: {
