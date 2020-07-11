@@ -39,7 +39,8 @@ readthedocs.site.project.admin.ProjectSearchAnalyticsView.init();
     "datasets": [
       {
         "label": "{% trans "Number of searches" %}",
-        "data": {{ query_count_of_1_month.int_data|escapejs }}
+        "data": {{ query_count_of_1_month.int_data|escapejs }},
+        "fill": false
       }
     ]
   },

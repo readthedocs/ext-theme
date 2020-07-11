@@ -151,3 +151,9 @@ export class ProjectSearchAnalyticsView extends ChartView {
     });
   }
 }
+
+/* Project traffic analytics view
+ *
+ * This is identical to search analytics currently
+ */
+export class ProjectTrafficAnalyticsView extends ProjectSearchAnalyticsView {}

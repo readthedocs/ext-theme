@@ -33,20 +33,23 @@
   <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
 {% endblock list_placeholder_text %}
 
-{% block list_item_right_buttons %}
-{% endblock list_item_right_buttons %}
+{% block list_item_right_menu %}
+  <div class="ui right floated text menu">
+    <div class="item">
+      {% blocktrans trimmed count num=object.1 %}
+        {{ num }} result
+      {% plural %}
+        {{ num }} results
+      {% endblocktrans %}
+    </div>
+  </div>
+{% endblock list_item_right_menu %}
 
 {% block list_item_header %}
   <div class="ui basic label">
-    <code>{{ object }}</code>
+    <code>{{ object.0 }}</code>
   </div>
 {% endblock list_item_header %}
 
 {% block list_item_meta %}
-  <span class="item">
-    {{ total_results }} results
-  </span>
-  <span class="item">
-    {{ count }} results
-  </span>
 {% endblock list_item_meta %}
