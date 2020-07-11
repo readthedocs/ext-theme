@@ -1,0 +1,50 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+
+{% load gravatar %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_menu %}
+{% endblock top_menu %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+{% endblock %}
+
+{% block list_placeholder_icon_class %}search{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    Traffic data is not available yet
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      Traffic data will be accumulated as reader view your documentation.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_menu %}
+  <div class="ui right floated text menu">
+    <div class="item">
+      {{ count.1 }}
+    </div>
+  </div>
+{% endblock list_item_right_menu %}
+
+{% block list_item_header %}
+  <div class="ui basic label">
+    <code>{{ object.0 }}</code>
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+{% endblock list_item_meta %}

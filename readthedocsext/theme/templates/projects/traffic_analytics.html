@@ -1,0 +1,59 @@
+{% extends "projects/edit_base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Traffic Analytics" %}{% endblock %}
+{% block project_traffic_analytics_active %}active{% endblock %}
+{% block project_edit_content_header %}{% trans "Traffic Analytics" %}{% endblock %}
+
+{% block project_edit_sidebar_embed_doc %}commercial/analytics{% endblock %}
+
+{% block extra_scripts %}
+  <script type="text/javascript">
+readthedocs.site.project.admin.ProjectTrafficAnalyticsView.init();
+  </script>
+{% endblock %}
+
+{% block project_edit_content %}
+  {% include "projects/partials/edit/traffic_list.html" with objects=top_viewed_pages %}
+
+  <h3 class="ui small header">
+    {% trans "Overview" %}
+    <div class="sub header">
+      {% trans "For the last month" %}
+    </div>
+  </h3>
+
+  <div class="ui loading segment" data-bind="css: {loading: is_loading()}">
+    <canvas width="400" height="150" data-bind="chart: config"></canvas>
+    <script type="application/json" data-bind="jsonInit: config">
+{
+  "type": "line",
+  "data": {
+    "labels": [
+      {% for label in page_data.labels %}
+        "{{ label|escapejs }}"{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ],
+    "datasets": [
+      {
+        "label": "{% trans "Number of views" %}",
+        "data": {{ page_data.int_data|escapejs }},
+        "fill": false
+      }
+    ]
+  },
+  "options": {
+    "scales": {
+      "yAxes": [{
+        "ticks": {
+          "beginAtZero": true
+        }
+      }]
+    }
+  }
+}
+    </script>
+  </div>
+{% endblock %}
