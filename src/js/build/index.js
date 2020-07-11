@@ -1,1 +1,3 @@
-export const detail = require("./detail");
+import * as detail from "./detail";
+
+export { detail };

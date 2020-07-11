@@ -6,28 +6,24 @@ import ko from "knockout";
  */
 export class MessageView {
   constructor(message = {}) {
-    const self = this;
+    this.message = message;
+    this.dismiss_url = message.attr("data-message-dismiss-url");
 
-    self.message = message;
-    self.dismiss_url = message.attr("data-message-dismiss-url");
-
-    message.children(".close").on("click", self.dismiss());
-    message.children("a").on("click", self.dismiss());
+    message.children(".close").on("click", this.dismiss());
+    message.children("a").on("click", this.dismiss());
   }
 
   /* Dismiss URL and redirect client to link location, if any */
   dismiss() {
-    const self = this;
-
     return (event) => {
       const target = jquery(event.target);
       const link_url = target.attr("href");
 
       event.preventDefault();
 
-      if (self.dismiss_url) {
+      if (this.dismiss_url) {
         jquery
-          .get(self.dismiss_url)
+          .get(this.dismiss_url)
           .done((resp) => {
             if (link_url) {
               window.location = link_url;
@@ -37,10 +33,10 @@ export class MessageView {
             console.log(error);
           })
           .always(() => {
-            self.message.transition("fade");
+            this.message.transition("fade");
           });
       } else {
-        self.message.transition("fade");
+        this.message.transition("fade");
       }
 
       return false;
