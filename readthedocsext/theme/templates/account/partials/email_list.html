@@ -1,0 +1,81 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+
+{% load gravatar %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_menu %}
+{% endblock top_menu %}
+
+{% block create_button %}
+{% endblock %}
+
+{% block list_placeholder_icon_class %}envelope outline{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No email addresses have been configured yet
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      Email addresses are required receive notifications and reset your password.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  {% url "account_email" as form_url %}
+  <form action="{{ form_url }}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="email" {% if object.primary %}checked="checked"{% endif %} value="{{ object.email }}"/>
+    {% if not object.primary %}
+      <button class="ui icon button" name="action_primary" type="submit">
+        <i class="star icon"></i>
+      </button>
+    {% endif %}
+    {% if not object.verified %}
+      <button class="ui icon button" name="action_send" type="submit">
+        <i class="refresh icon"></i>
+      </button>
+    {% endif %}
+  </form>
+  {% trans "Remove email" as action_text %}
+  {% blocktrans trimmed asvar content_text with email=object.email %}
+    Remove email address {{ email }}?
+  {% endblocktrans %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_name="action_remove" action_text=action_text context_text=context_text field_name="email" field_value=object.email %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_header %}
+  <div class="ui basic label">
+    <i class="envelope outline icon"></i>
+    <code>{{ object.email }}</code>
+  </div>
+
+  {% if object.primary %}
+    <span class="ui label">
+      <i class="star icon"></i>
+      {% trans "Primary" %}
+    </span>
+  {% endif %}
+
+  {% if object.verified %}
+    <span class="ui green label">
+      {% trans "Verified" %}
+    </span>
+  {% else %}
+    <span class="ui label">
+      <i class="yellow exclamation circle icon"></i>
+      {% trans "Not verified" %}
+    </span>
+  {% endif %}
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+{% endblock list_item_meta %}

@@ -1,122 +1,22 @@
 {% extends "profiles/base_profile_edit.html" %}
 
 {% load i18n %}
+{% load crispy_forms_tags %}
 
 {% block title %}{% trans "Email Addresses" %}{% endblock %}
-
-{% block profile-admin-change-email %}active{% endblock %}
-
+{% block profile_admin_change_email %}active{% endblock %}
 {% block edit_content_header %} {% trans "Email Addresses" %} {% endblock %}
 
 {% block edit_content %}
+  {% include "account/partials/email_list.html" with objects=user.emailaddress_set.all %}
 
-  <div class="ui top attached menu right aligned">
-    <div class="right item">
-      <div class="ui primary button">Add email address</div>
-    </div>
-  </div>
-
-  {% if not user.emailaddress_set.all %}
-    <div class="ui placeholder attached segment">
-      <div class="ui icon header">
-        <i class="exclamation triangle icon"></i>
-        No email addresses are configured
-      </div>
-      <div class="ui inline center aligned">
-        {% trans "Email addresses are required receive notifications and reset your password." %}</p>
-        <div class="ui primary button">Add Document</div>
-      </div>
-    </div>
-  {% else %}
-    <div class ="ui attached segment">
-      <form action="{% url 'account_email' %}" class="ui form" method="post">
-        {% csrf_token %}
-
-        {% for emailaddress in user.emailaddress_set.all %}
-          <div class="field">
-            <input id="email_radio_{{ forloop.counter }}" type="radio" name="email" {% if emailaddress.primary %}checked="checked"{%endif %} value="{{ emailaddress.email }}"/>
-
-              {{ emailaddress.email }}
-                {% if emailaddress.verified %}
-                  <span class="ui green label">{% trans "Verified" %}</span>
-                {% else %}
-                  <span class="ui label">{% trans "Unverified" %}</span>
-                {% endif %}
-                {% if emailaddress.primary %}<span class="ui primary label">{% trans "Primary" %}</span>{% endif %}
-            </label>
-          </div>
-        {% endfor %}
-
-        <div>
-          <button class="ui secondary button" type="submit" name="action_primary" >{% trans "Make Primary" %}</button> 
-          <button class="ui secondary button" type="submit" name="action_send" >{% trans "Re-send Verification" %}</button>
-          <button class="ui button" type="submit" name="action_remove" >{% trans "Remove" %}</button>
-        </div>
-
-      </form>
-    </div>
-  {% endif %}
-
-  <h2>{% trans "Add E-mail Address" %}</h2>
+  <h3 class="ui small header">
+    {% trans "Add email address" %}
+  </h3>
 
   <form method="post" action="{% url 'account_email' %}" class="ui form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button class="ui primary button" name="action_add" type="submit">{% trans "Add E-mail" %}</button>
+    {{ form|crispy }}
+    <button class="ui primary button" type="submit" name="action_add">{% trans "Add email" %}</button>
   </form>
-
-{% endblock %}
-
-{% block footerjs %}
-
-  (function() {
-    var message = "{% trans 'Do you really want to remove the selected email address?' %}";
-    var actions = document.getElementsByName('action_remove');
-    if (actions.length) {
-      actions[0].addEventListener("click", function(e) {
-        if (! confirm(message)) {
-          e.preventDefault();
-        }
-      });
-    }
-  })();
-
-  (function() {
-    var primaryButton = document.querySelector("button[name=action_primary]");
-    var sendVerificationButton = document.querySelector("button[name=action_send");
-
-    {% if user.emailaddress_set.exists %}
-      {% for emailaddress in user.emailaddress_set.all %}
-        var email_{{ forloop.counter }} = document.querySelector("input[value='{{ emailaddress.email }}']")
-        if (email_{{ forloop.counter }}.checked == true) {
-          {% if emailaddress.primary %}
-            primaryButton.style.display = 'None';
-          {% else %}
-            primaryButton.style.display = 'block';
-          {% endif %}
-          {% if emailaddress.verified %}
-            sendVerificationButton.style.display = 'None';
-          {% else %}
-            sendVerificationButton.style.display = 'block';
-            primaryButton.style.display = 'None';
-          {% endif %}
-        }
-
-        email_{{ forloop.counter }}.addEventListener('change', function() {
-          {% if emailaddress.primary %}
-            primaryButton.style.display = 'None';
-          {% else %}
-            primaryButton.style.display = 'block';
-          {% endif %}
-          {% if emailaddress.verified %}
-            sendVerificationButton.style.display = 'None';
-          {% else %}
-            sendVerificationButton.style.display = 'block';
-            primaryButton.style.display = 'None';
-          {% endif %}
-        })
-      {% endfor %}
-    {% endif %}
-  })();
-
 {% endblock %}
