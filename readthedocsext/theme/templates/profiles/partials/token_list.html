@@ -1,0 +1,67 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+{% load gravatar %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  {% comment %}
+    This is a CRUD interface for now, even though we only allow 1
+    relationsihp to Token.
+  {% endcomment %}
+  <form method="post" action="{% url "profiles_tokens_create" %}">
+    {% csrf_token %}
+    <button class="ui green {% if objects %}disabled {% endif %}button">
+      <i class="plus icon"></i>
+      {% trans "Generate API token" %}
+    </button>
+  </form>
+{% endblock %}
+
+{% block list_placeholder_icon_class %}key{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    You currently have no API tokens.
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      Add a new API token to begin using APIv3.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  <div class="ui basic icon button" data-clipboard-text="{{ object.key }}">
+    <i class="copy outline icon"></i>
+  </div>
+  <form method="post" action="{% url "profiles_tokens_delete" %}">
+    {% csrf_token %}
+    {# TODO make the revoke form include a token id if we do many to many #}
+    <button class="ui icon button" data-content="{% trans "Revoke token" %}">
+      <i class="trash icon"></i>
+    </button>
+  </form>
+{% endblock list_item_right_buttons %}
+
+{% block list_item_header %}
+  <span class="ui basic label">
+    <i class="key icon"></i>
+    <code>{{ object.key }}</code>
+  </span>
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+  <span class="item">
+    <span>Created&nbsp;</span>
+    <span data-tooltip="{{ object.created }}">{{ object.created | timesince }} ago</span>
+  </span>
+{% endblock list_item_meta %}
