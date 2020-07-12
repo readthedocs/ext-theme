@@ -2,41 +2,76 @@
 
 {% load i18n %}
 {% load gravatar %}
+{% load crispy_forms_tags %}
 
-{% block title %}{% trans "Profile" %}{% endblock %}
-
-{% block profile-admin-details %}active{% endblock %}
-
-{% block edit_content_header %} {% trans "Profile" %} {% endblock %}
+{% block title %}{% trans "Account" %}{% endblock %}
+{% block profile_admin_details %}active{% endblock %}
+{% block edit_content_header %}{% trans "Account" %}{% endblock %}
 
 {% block edit_content %}
-  <div class="ui two column grid">
-    <div class="ui ten wide column">
-      <form method="POST" action=".">
-        {% csrf_token %}
-        {% include "includes/forms/semanticui.html" with form=form %}
-      </form>
-    </div>
-    <div class="ui six wide column">
-      <div class="ui card">
-        <div class="image" data-tooltip="{% trans "Visit Gravatar to update your profile image" %}" data-position="bottom center">
-          <a class="ui bottom right corner label">
-            <i class="edit icon"></i>
-          </a>
-          <img src="{% gravatar_url request.user.email 256 %}">
-        </div>
-        <div class="content">
-          <div class="header">{{ profile.user.first_name | default:profile.user.username }}</div>
-          <div class="meta">
-            <span class="date">Joined {{ profile.user.date_joined | timesince }} ago</span>
-          </div>
-          {% if profile.homepage %}
-            <div class="description">
-              {{ profile.homepage | urlize }}
-            </div>
-          {% endif %}
-        </div>
+  <form method="POST" action="." class="ui form">
+    {% csrf_token %}
+    {{ form|crispy }}
+  </form>
+
+  <div class="ui horizontal divider">
+    {% trans "More" %}
+  </div>
+
+  <div class="ui red segment">
+    <h3 class="ui small header">
+      {% trans "Delete account" %}
+    </h3>
+
+    <p>
+      {% blocktrans trimmed %}
+        Be careful, this cannot be undone!
+      {% endblocktrans %}
+    </p>
+
+    {% trans "Delete account" as action_text %}
+    <a class="ui button" data-modal="#modal-account-delete">
+      <i class="trash icon"></i>
+      {{ action_text }}
+    </a>
+    <div class="ui mini modal" id="modal-account-delete">
+      <div class="header">
+        {{ action_text }}
       </div>
+      <div class="content">
+        {% blocktrans trimmed %}
+          Are you sure you want to delete your account? This action cannot
+          be undone.
+        {% endblocktrans %}
+      </div>
+      <div class="actions">
+        <form method="POST" action="{% url 'delete_account' %}">
+          {% csrf_token %}
+          <input class="ui negative button" type="submit" value="{{ action_text }}">
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock edit_content %}
+
+{% block edit_sidebar %}
+  <div class="ui card">
+    <div class="image" data-tooltip="{% trans "Visit Gravatar to update your profile image" %}" data-position="bottom center">
+      <a class="ui bottom right corner label">
+        <i class="edit icon"></i>
+      </a>
+      <img src="{% gravatar_url request.user.email 256 %}">
+    </div>
+    <div class="content">
+      <div class="header">{{ profile.user.first_name | default:profile.user.username }}</div>
+      <div class="meta">
+        <span class="date">Joined {{ profile.user.date_joined | timesince }} ago</span>
+      </div>
+      {% if profile.homepage %}
+        <div class="description">
+          {{ profile.homepage | urlize }}
+        </div>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
