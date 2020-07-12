@@ -1,0 +1,64 @@
+{% extends "includes/crud/list.html" %}
+
+{% load i18n %}
+{% load gravatar %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  <div class="ui tiny green icon button" data-modal="#socialaccount-connections-modal">
+    <i class="plus icon"></i>
+    {% trans "Add new connection" %}
+  </div>
+{% endblock %}
+
+{% block list_placeholder_icon_class %}user circle{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    Your account is not connected to any services.
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      Add a new connection to to enable automatic import and
+      configuration of new projects.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  <form method="post" action="{% url 'socialaccount_connections' %}">
+    {% csrf_token %}
+    <input type="hidden" name="account" value="{{ object.id }}" />
+    <button class="ui icon button" data-content="{% trans 'Disconnect account' %}">
+      <i class="trash icon"></i>
+    </button>
+  </form>
+{% endblock list_item_right_buttons %}
+
+{% block list_item_image %}
+  <img class="image" src="{{ object.get_avatar_url }}" height=28 width=28 />
+{% endblock list_item_image %}
+
+{% block list_item_header %}
+  <span class="ui basic label">
+    <i class="user icon"></i>
+    <code>{{ object }}</code>
+  </span>
+  {% with object.get_provider_account as provider %}
+    <span class="ui label">
+      <i class="{{ object.provider }} {{ provider.get_brand.id }} icon"></i>
+      {{ provider.get_brand.name }}
+    </span>
+  {% endwith %}
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+{% endblock list_item_meta %}
