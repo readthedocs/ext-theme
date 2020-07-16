@@ -10,6 +10,78 @@ const breakpoints = {
   large_screen: 1200,
 };
 
+
+/*
+ * MessageView.init('#messages .ui.message');
+ */
+export class MessageView {
+  constructor(message = {}) {
+    this.message = message;
+    this.dismiss_url = message.attr("data-message-dismiss-url");
+
+    message.children(".close").on("click", this.dismiss());
+    message.children("a").on("click", this.dismiss());
+  }
+
+  /* Dismiss URL and redirect client to link location, if any */
+  dismiss() {
+    return (event) => {
+      const target = jquery(event.target);
+      const link_url = target.attr("href");
+
+      event.preventDefault();
+
+      if (this.dismiss_url) {
+        jquery
+          .get(this.dismiss_url)
+          .done((resp) => {
+            if (link_url) {
+              window.location = link_url;
+            }
+          })
+          .fail((error) => {
+            console.log(error);
+          })
+          .always(() => {
+            this.message.transition("fade");
+          });
+      } else {
+        this.message.transition("fade");
+      }
+
+      return false;
+    };
+  }
+
+  static init(selector) {
+    jquery(selector).each((index, obj) => {
+      const message = jquery(obj);
+      const view = new MessageView(message);
+    });
+  }
+}
+
+/* A view mixin to enable initial knockout view model binding
+ *
+ * The selector ``[data-list-view]`` is added in the base CRUD list.html
+ * template that is used by all the list view pages.
+ *
+ */
+export class KnockoutView {
+
+  /* View attachment static method
+   *
+   * @param {Object} params - Initial instance data, optional
+   * @param {string} selector - Selector string to use for view attachment
+   * @returns {ProjectRedirectView}
+   */
+  static init(params, selector = "[data-list-view]") {
+    var view = new this(params);
+    ko.applyBindings(view, jquery(selector)[0]);
+    return view;
+  }
+}
+
 /*
  * ResponsiveView is used to create bindings that alter elements on changes to
  * the viewport width.
@@ -21,7 +93,7 @@ const breakpoints = {
  *   <div class="ui menu" data-bind="css: {vertical: device.computer()}">
  *   <div class="ui menu" data-bind="css: {vertical: device.large_screen()}">
  */
-export class ResponsiveView {
+export class ResponsiveView extends KnockoutView {
   constructor() {
     this.viewport_width = ko.observable();
     this.device = {
@@ -68,7 +140,7 @@ export class ResponsiveView {
  *      {"foo": "foo"}
  *    </script>
  */
-export class InitView {
+export class InitView extends KnockoutView {
   constructor() {
     // HTML binding. Gets initial value as HTML, sets HTML in return
     ko.bindingHandlers.htmlInit = this.add_init_handler(
@@ -161,5 +233,56 @@ export class ChartView extends InitView {
         });
       },
     };
+  }
+}
+
+/* Knockout binding to help show popups
+ *
+ * This is used inside normal Django templates, where we iterate
+ * over a list of objects inside the template, not inside hte KO
+ * view. This binding will create individual popup contexts.
+ *
+ */
+export class PopupView extends KnockoutView {
+  constructor() {
+    ko.bindingHandlers.popup = {
+      init: (element, value_accessor, bindings, view, context) => {
+        const config = Object.assign(
+          {
+            hoverable: true,
+            delay: {
+              show: 300,
+              hide: 100,
+            },
+            exclusive: true,
+            onHide: () => { context.$rawData.hide(); },
+          },
+          value_accessor()
+        );
+        const jq_element = jquery(element);
+        jq_element.popup(config).hover(
+          () => { context.$rawData.show(); },
+        );
+      },
+    };
+    super();
+  }
+
+  create_popup() {
+    return new Popup();
+  }
+}
+
+export class Popup {
+  constructor() {
+    this.is_showing = ko.observable(false);
+  }
+
+  show() {
+    this.is_showing(true);
+  }
+
+  hide() {
+    this.is_showing(false);
   }
 }

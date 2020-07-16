@@ -1,5 +1,6 @@
-const jquery = require("jquery");
-const clipboard = require("clipboard");
+import jquery from "jquery";
+import clipboard from "clipboard";
+import RouteRecognizer from "route-recognizer";
 
 // Application views
 export const build = require("./build");
@@ -88,8 +89,25 @@ jquery(document).ready(() => {
   });
 
   // Messages
-  core.MessageView.init("#messages .message");
+  core.views.MessageView.init("#messages .message");
 
   // Add embedded docs
   docs.embed_docs();
+
+  // Do routing to avoid a per page inline script. Avoid future issues with CSP
+  const router = new RouteRecognizer();
+  router.add([{
+      path: "/dashboard",
+      handler: core.views.PopupView,
+  }])
+  router.add([{
+      path: "/projects/:id",
+      handler: core.views.PopupView,
+  }])
+
+  const results = router.recognize(window.location.pathname);
+  if (results !== undefined) {
+    const result = results[0];
+    result.handler.init(result.params);
+  }
 });
