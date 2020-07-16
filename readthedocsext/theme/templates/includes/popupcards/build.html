@@ -1,0 +1,35 @@
+{% extends "includes/popupcards/base.html" %}
+
+{% load i18n %}
+
+{% block popupcard_content %}
+  <div class="header" title="Build #{{ build.id }}, for version {{ build.version.verbose_name }}, {{ build.get_state_display }}">
+    {% include "builds/includes/status_icon.html" with build=build circular=False %}
+    {% blocktrans trimmed with id=build.id %}
+      Build #{{ id }}
+    {% endblocktrans %}
+  </div>
+  <div class="meta">
+    For version <code>{{ build.version.verbose_name }}</code>
+  </div>
+  <div class="description">
+    <div class="ui list">
+      <div class="item">
+        <div class="content">
+          <div class="header">Total time</div>
+          <div class="description">{{ build.length }}</div>
+        </div>
+      </div>
+      <div class="item"></div>
+      <div class="item">{{ build.version_slug }}</div>
+    </div>
+  </div>
+{% endblock popupcard_content %}
+
+{% block popupcard_extra_content %}
+  <span>
+    <a href="{{ build.commit_url }}">
+      <code>{{ build.commit }}</code>
+    </a>
+  </span>
+{% endblock popupcard_extra_content %}
