@@ -60,11 +60,10 @@
 
   {% include "builds/includes/status_icon.html" with build=object circular=True %}
 
-  <div class="ui label" data-popup="1">
-    <i class="code branch icon"></i>
+  <a class="ui basic label" href="{{ object.get_absolute_url }}">
     <code>{{ object.version.verbose_name }}</code>
-  </div>
-  {% include "includes/popups/version.html" with version=object.version %}
+    <span class="detail">#{{ object.pk }}</span>
+  </a>
 
   {% if object.is_external %}
     <div class="ui label">
@@ -76,10 +75,10 @@
 {% endblock list_item_header %}
 
 {% block list_item_meta %}
-  <div class="item">
+  <a href="{{ object.commit_url }}" class="item">
     <i class="code branch icon"></i>
-    <code>{{ object.commit|truncatechars:8 }}</code>
-  </div>
+    <code>{{ object.commit|slice:"0:8" }}</code>
+  </a>
   <div class="item">
     <i class="clock outline icon"></i>
     {% blocktrans with object.date|timesince as date trimmed %}

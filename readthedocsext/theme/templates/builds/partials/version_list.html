@@ -53,7 +53,19 @@
     <i class="external icon"></i>
   </a>
 
+  <a class="ui {% if not object.has_pdf and not object.has_epub %}disabled {% endif %}icon button"
+     href=""
+     data-content="{% trans "View version documentation" %}">
+    <i class="download icon"></i>
+  </a>
+
   {% if request.user|is_admin:project %}
+    <a class="ui icon button"
+       href=""
+       data-content="{% trans "More" %}">
+      <i class="horizontal ellipsis icon"></i>
+    </a>
+    {% comment %}
     <a class="ui icon button"
        href="{% url "project_version_detail" project.slug object.slug %}"
        data-content="{% trans "Configure version" %}">
@@ -67,6 +79,7 @@
         <i class="refresh icon"></i>
       </button>
     </form>
+    {% endcomment %}
   {% endif %}
 {% endblock list_item_right_buttons %}
 

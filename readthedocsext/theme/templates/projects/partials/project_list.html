@@ -75,6 +75,27 @@
   <a class="ui basic label" href="{% url "projects_manage" object.slug %}">
     {{ object.name }}
   </a>
+
+  {% if object.translations.exists %}
+    <span class="ui label">
+      <i class="language icon"></i>
+      {% trans "Translations" %}
+      <span class="detail">
+        {{ object.translations.count }}
+      </span>
+    </span>
+  {% endif %}
+
+  {% if object.subprojects.exists %}
+    <span class="ui label">
+      <i class="project diagram icon"></i>
+      {% trans "Subprojects" %}
+      <span class="detail">
+        {{ object.subprojects.count }}
+      </span>
+    </span>
+  {% endif %}
+
 {% endblock list_item_header %}
 
 {% block list_item_meta %}
