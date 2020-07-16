@@ -146,10 +146,17 @@
     {{ build.date|timesince }}
   </div>
 
-  <div class="item">
-    <i class="box icon"></i>
+  <a class="item">
+    <i class="code branch icon"></i>
+    <code>{{ object.identifier_friendly }}</code>
+  </a>
+
+  <a
+    class="item"
+    href="{% url "builds_project_list" object.project.slug %}">
+    <i class="history icon"></i>
     {% blocktrans trimmed with count=object.builds.count %}
       {{ count }} total builds
     {% endblocktrans %}
-  </div>
+  </a>
 {% endblock list_item_meta %}

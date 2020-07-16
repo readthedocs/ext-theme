@@ -115,7 +115,10 @@
             <div class="item">
               {% include "builds/includes/status_icon.html" with build=build circular=False %}
               <span data-bind="with: create_popup">
-                <a class="ui basic mini compact button" data-bind="popup: {}">
+                <a
+                  class="ui basic mini compact button"
+                  data-bind="popup: {}"
+                  href="{% url "builds_detail" object.slug build.pk %}">
                   <code>{{ version_stable.verbose_name }} #{{ build.id }}</code>
                 </a>
                 {% include "includes/popupcards/build.html" with build=build %}
@@ -131,7 +134,10 @@
               {% include "builds/includes/status_icon.html" with build=build circular=False %}
 
               <span data-bind="with: create_popup">
-                <a class="ui basic mini compact button" data-bind="popup: {}">
+                <a
+                  class="ui basic mini compact button"
+                  data-bind="popup: {}"
+                  href="{% url "builds_detail" object.slug build.pk %}">
                   <code>{{ build.version.verbose_name }} #{{ build.id }}</code>
                 </a>
                 {% include "includes/popupcards/build.html" with build=build %}

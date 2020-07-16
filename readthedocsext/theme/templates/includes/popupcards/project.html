@@ -1,0 +1,25 @@
+{% extends "includes/popupcards/base.html" %}
+
+{% load i18n %}
+
+{% block popupcard_content %}
+  <div class="header">
+    {{ project.name }}
+  </div>
+  <div class="meta">
+  </div>
+  <div class="description">
+    {{ project.description }}
+  </div>
+{% endblock popupcard_content %}
+
+{% block popupcard_extra_content %}
+  <span>
+    <a class="ui basic mini labeled icon button">
+      <i class="book icon"></i>
+      <code>
+        /{{ project.language }}/{{ project.default_version }}/
+      </code>
+    </a>
+  </span>
+{% endblock popupcard_extra_content %}
