@@ -75,7 +75,7 @@
 {% else %}
   {% block list %}
     {# Normal list view #}
-    <div class="ui segment">
+    <div class="ui segment" data-list-view="{% block list_view_name %}{% endblock list_view_name %}">
       <div class="{% block list_classes %}ui middle aligned very relaxed divided list{% endblock %}">
 
         {% if not skip_pagination %}
@@ -88,7 +88,7 @@
             {% block list_item %}
 
               {% block list_item_right_menu %}
-                <div class="ui basic mini right floated buttons">
+                <div class="ui mini right floated buttons">
                   {% block list_item_right_buttons %}
                     {% comment %}
                       <a class="ui icon button">
