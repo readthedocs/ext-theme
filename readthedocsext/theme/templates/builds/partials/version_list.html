@@ -71,6 +71,8 @@
 {% endblock list_item_right_buttons %}
 
 {% block list_item_header %}
+  {% include "builds/includes/status_icon.html" with build=object.builds.first circular=True %}
+
   <a class="ui basic label" href="#">
     <i class="code branch icon"></i>
     <code>{{ object.verbose_name }}</code>
@@ -107,19 +109,30 @@
 
 {% block list_item_meta %}
   <div class="item">
-    <i class="box icon"></i>
-    {{ object.builds.count }} builds
-  </div>
-  <div class="item">
-    <i class="clock outline icon"></i>
-    Last built 23 days ago
+    {% with build=object.builds.first %}
+      {% if build %}
+        <i class="history icon"></i>
+        <span data-bind="with: create_popup">
+          <a
+            data-bind="popup: {}"
+            class="ui basic mini compact button"
+            href="{% url "builds_detail" build.project.slug build.pk %}">
+            {% include "builds/includes/status_icon.html" with build=build circular=False size="normal" %}
+            <code>Build #{{ build.id }}</code>
+          </a>
+          {% include "includes/popupcards/build.html" with build=build %}
+          <span>was built {{ build.date|timesince }} ago</span>
+        </span>
+      {% endif %}
+    {% endwith %}
+
+    {{ build.date|timesince }}
   </div>
 
-  {% comment %}
-    {% if object.uploaded or object.built %}
-      <a href="{{ object.get_absolute_url }}">View docs</a>
-    {% else %}
-      <a href="{{ object.project.get_builds_url }}">Builds</a>
-    {% endif %}
-  {% endcomment %}
+  <div class="item">
+    <i class="box icon"></i>
+    {% blocktrans trimmed with count=object.builds.count %}
+      {{ count }} total builds
+    {% endblocktrans %}
+  </div>
 {% endblock list_item_meta %}

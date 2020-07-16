@@ -57,21 +57,8 @@
 {% endblock list_item_right_buttons %}
 
 {% block list_item_header %}
-  {% if object.state == 'finished' %}
-    {% if object.success %}
-      <i class="ui small olive inverted circular check icon"></i>
-    {% else %}
-      <i class="ui small red inverted circular x icon"></i>
-    {% endif %}
-  {% elif object.is_stale %}
-    <i class="ui small orange inverted exclamation icon" title="{% trans 'This build is still waiting to be built' %}"></i>
-  {% else %}
-    <i class="ui small yellow inverted circular hourglass start icon"></i>
-  {% endif %}
 
-  <a class="ui basic label" href="{{ object.get_absolute_url }}">
-    # {{ object.pk }}
-  </a>
+  {% include "builds/includes/status_icon.html" with build=object circular=True %}
 
   <div class="ui label" data-popup="1">
     <i class="code branch icon"></i>

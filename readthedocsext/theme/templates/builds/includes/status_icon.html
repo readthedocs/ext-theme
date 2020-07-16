@@ -1,0 +1,13 @@
+{% load i18n %}
+
+{% if build.state == 'finished' %}
+  {% if build.success %}
+    <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}olive {% if circular %}inverted circular {% endif %}check icon"></i>
+  {% else %}
+    <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}red {% if circular %}inverted circular {% endif %}x icon"></i>
+  {% endif %}
+{% elif build.is_stale %}
+  <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}orange {% if circular %}inverted circular {% endif %}exclamation icon" title="{% trans 'This build is still waiting to be built' %}"></i>
+{% else %}
+  <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}yellow {% if circular %}inverted circular {% endif %}half hourglass icon"></i>
+{% endif %}

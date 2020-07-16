@@ -78,14 +78,51 @@
 {% endblock list_item_header %}
 
 {% block list_item_meta %}
-  <div class="item">
-    <i class="box icon"></i>
-    {{ object.builds.count }} builds
-  </div>
-  <div class="item">
-    <i class="box icon"></i>
-    {{ object.builds.count }} builds
-  </div>
+
+  {% if object.builds.count == 0 %}
+    <span class="item">
+      <i class="half hourglass icon"></i>
+      {% trans "No builds yets" %}
+    </span>
+  {% else %}
+    {% with version_stable=object.get_stable_version %}
+      {% with build_last=object.get_latest_build %}
+
+        {# Show stable build #}
+        {% with build=version_stable.builds.last %}
+          {% if build %}
+            <div class="item">
+              {% include "builds/includes/status_icon.html" with build=build circular=False %}
+              <span data-bind="with: create_popup">
+                <a class="ui basic mini compact button" data-bind="popup: {}">
+                  <code>{{ version_stable.verbose_name }} #{{ build.id }}</code>
+                </a>
+                {% include "includes/popupcards/build.html" with build=build %}
+                <span>was built {{ build.date|timesince }} ago</span>
+              </span>
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        {% if build_last and build_last.version != version_stable %}
+          {% with build=build_last %}
+            <div class="item">
+              {% include "builds/includes/status_icon.html" with build=build circular=False %}
+
+              <span data-bind="with: create_popup">
+                <a class="ui basic mini compact button" data-bind="popup: {}">
+                  <code>{{ build.version.verbose_name }} #{{ build.id }}</code>
+                </a>
+                {% include "includes/popupcards/build.html" with build=build %}
+                <span>was built {{ build.date|timesince }} ago</span>
+              </span>
+            </div>
+          {% endwith %}
+        {% endif %}
+      {% endwith %}
+    {% endwith %}
+  {% endif %}
+
 {% endblock list_item_meta %}
 
 {# ui divided items #}
