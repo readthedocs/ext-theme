@@ -78,32 +78,36 @@
     <code>{{ object.verbose_name }}</code>
   </a>
   {% if object.slug == project.default_version %}
-    <span class="ui label">
-      <i class="asterisk icon"></i>
-      default
-    </span>
+    {% trans "default" context "Version is the default version" as text %}
+    {% blocktrans trimmed with version=object.verbose_name asvar popup %}
+      Version {{ version }} is the default version
+    {% endblocktrans %}
+    {% include "includes/components/config_label.html" with icon="asterisk" text=text popup=popup %}
   {% endif %}
   {% if object.slug == project.stable_version %}
-    <span class="ui label">
-      <i class="asterisk icon"></i>
-      stable
-    </span>
+    {% trans "stable" context "Version is the stable version" as text %}
+    {% blocktrans trimmed with version=object.verbose_name asvar popup %}
+      Version {{ version }} is the stable version
+    {% endblocktrans %}
+    {% include "includes/components/config_label.html" with icon="asterisk" text=text popup=popup %}
   {% endif %}
 
   {% if request.user in project.users.all %}
     {% if object.privacy_level == 'private' %}
-      <span class="ui label">
-        <i class="lock icon"></i>
-        private
-      </span>
+      {% trans "private" context "Version is private" as text %}
+      {% blocktrans trimmed with version=object.verbose_name asvar popup %}
+        Version {{ version }} is private
+      {% endblocktrans %}
+      {% include "includes/components/config_label.html" with icon="lock" text=text popup=popup %}
     {% endif %}
   {% endif %}
 
   {% if object.hidden %}
-    <span class="ui label">
-      <i class="eye slash icon"></i>
-      hidden
-    </span>
+    {% trans "hidden" context "Version is hidden" as text %}
+    {% blocktrans trimmed with version=object.verbose_name asvar popup %}
+      Version {{ version }} is hidden
+    {% endblocktrans %}
+    {% include "includes/components/config_label.html" with icon="eye slash" text=text popup=popup %}
   {% endif %}
 {% endblock list_item_header %}
 
