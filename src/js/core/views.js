@@ -142,6 +142,7 @@ export class ResponsiveView extends KnockoutView {
  */
 export class InitView extends KnockoutView {
   constructor() {
+    super();
     // HTML binding. Gets initial value as HTML, sets HTML in return
     ko.bindingHandlers.htmlInit = this.add_init_handler(
       (element) => {
@@ -284,5 +285,36 @@ export class Popup {
 
   hide() {
     this.is_showing(false);
+  }
+}
+
+export class APIListItemView extends PopupView {
+  constructor(data) {
+    super();
+    this.id = data.id;
+    this.url = data.url;
+    this.loaded = ko.observable(false);
+    this.loading = ko.observable(false);
+    this.promise = null;
+    this.data = ko.observable();
+  }
+
+  fetch() {
+    if (this.promise) {
+      return this.promise;
+    }
+    this.promise = new Promise((resolve, reject) => {
+      if (this.loaded()) {
+        return resolve(this.data());
+      }
+      this.loading(true);
+      jquery.getJSON(this.url).then((data) => {
+        console.log(data);
+        this.data(data);
+        this.loaded(true);
+        this.loading(false);
+        return resolve(data);
+      })
+    });
   }
 }

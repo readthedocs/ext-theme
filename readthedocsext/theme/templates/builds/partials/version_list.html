@@ -46,42 +46,60 @@
   <div class="ui primary button">Activate a version</div>
 {% endblock list_placeholder_text %}
 
-{% block list_item_right_buttons %}
-  <a class="ui icon button"
-     href=""
-     data-content="{% trans "View version documentation" %}">
-    <i class="external icon"></i>
-  </a>
+{% block list_item_start %}
+  <div class="item" data-bind="with: version({id: {{ object.pk }}, url: '{% url "projects-versions-detail" object.project.slug object.slug %}'})">
+{% endblock list_item_start %}
 
-  <a class="ui {% if not object.has_pdf and not object.has_epub %}disabled {% endif %}icon button"
-     href=""
-     data-content="{% trans "View version documentation" %}">
-    <i class="download icon"></i>
-  </a>
-
-  {% if request.user|is_admin:project %}
-    <a class="ui icon button"
-       href=""
-       data-content="{% trans "More" %}">
-      <i class="horizontal ellipsis icon"></i>
-    </a>
-    {% comment %}
-    <a class="ui icon button"
-       href="{% url "project_version_detail" project.slug object.slug %}"
-       data-content="{% trans "Configure version" %}">
-      <i class="wrench icon"></i>
+{% block list_item_right_menu %}
+  <div class="ui mini right floated buttons" data-bind="event: {mouseover: fetch}">
+    <a class="ui icon{% if not object.built %} disabled{% endif %} button"
+       data-content="{% trans "View version documentation" %}"
+       data-bind="attr: {href: url_docs}">
+      <i class="external icon"></i>
     </a>
 
-    <form method="post" action="{% url "projects_detail" project.slug %}">
-      {% csrf_token %}
-      <input type="hidden" name="version_slug" value="{{ object.slug }}">
-      <button class="ui icon button" data-content="{% trans "Rebuild version" %}">
-        <i class="refresh icon"></i>
-      </button>
-    </form>
-    {% endcomment %}
-  {% endif %}
-{% endblock list_item_right_buttons %}
+    <button class="ui icon{% if not object.has_epub and not object.has_htmlzip and not object.has_pdf %} disabled{% endif %} dropdown button" data-bind="event: {click: fetch}">
+      <i class="download icon"></i>
+      <div class="menu">
+        <div class="header">{% trans "Downloads" %}</div>
+        <a class="disabled item" data-bind="css: {disabled: !url_pdf()}, attr: {href: url_pdf()}">
+          <i class="pdf file icon"></i>
+          {% trans "PDF file" %}
+        </a>
+        <a class="disabled item" data-bind="css: {disabled: !url_epub()}, attr: {href: url_epub()}">
+          <i class="epub file icon"></i>
+          {% trans "ePUB file" %}
+        </a>
+        <a class="disabled item" data-bind="css: {disabled: !url_html()}, attr: {href: url_html()}">
+          <i class="zip file icon"></i>
+          {% trans "HTML archive" %}
+        </a>
+      </div>
+    </button>
+
+    {% if request.user|is_admin:project %}
+      <div class="ui icon dropdown button">
+        <i class="horizontal ellipsis icon"></i>
+        <div class="menu">
+          <div class="header">{% trans "Admin" %}</div>
+          <a
+              class="item"
+              {# Note, the syntax could be confusing here: trigger_build returns a closure #}
+              data-bind="click: trigger_build('{% url "projects-versions-builds-list" project.slug object.slug %}', '{{ csrf_token }}')">
+            <i class="refresh icon"></i>
+            {% trans "Rebuild version" %}
+          </a>
+          <a
+            class="item"
+            href="{% url "project_version_detail" project.slug object.slug %}">
+            <i class="wrench icon"></i>
+            {% trans "Configure version" %}
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock list_item_right_menu %}
 
 {% block list_item_header %}
   {% include "builds/includes/status_icon.html" with build=object.builds.first circular=True %}

@@ -134,9 +134,6 @@ export class ProjectSearchAnalyticsView extends ChartView {
     });
   }
 
-  //<link rel="stylesheet" href="{% static 'vendor/chartjs/chartjs.min.css' %}">
-  //<script src="{% static 'vendor/chartjs/chartjs.bundle.min.js' %}"></script>
-
   /* View attachment static method
    *
    * @param {string} selector - Selector string to use for view attachment

@@ -98,11 +98,11 @@ jquery(document).ready(() => {
   const router = new RouteRecognizer();
   router.add([{
       path: "/dashboard",
-      handler: core.views.PopupView,
+      handler: project.ProjectListView,
   }])
   router.add([{
       path: "/projects/:id",
-      handler: core.views.PopupView,
+      handler: project.ProjectVersionListView,
   }])
 
   const results = router.recognize(window.location.pathname);

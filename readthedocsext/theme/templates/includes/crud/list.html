@@ -84,7 +84,7 @@
 
         {% for object in objects %}
           {# Item view for each object in objects queryset #}
-          <div class="item">
+          {% block list_item_start %}<div class="item">{% endblock list_item_start %}
             {% block list_item %}
 
               {% block list_item_right_menu %}
