@@ -40,7 +40,7 @@ export class MessageView {
             }
           })
           .fail((error) => {
-            console.log(error);
+            console.error(error);
           })
           .always(() => {
             this.message.transition("fade");
@@ -309,7 +309,6 @@ export class APIListItemView extends PopupView {
       }
       this.loading(true);
       jquery.getJSON(this.url).then((data) => {
-        console.log(data);
         this.data(data);
         this.loaded(true);
         this.loading(false);

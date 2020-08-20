@@ -40,7 +40,7 @@ jquery(document).ready(() => {
   // dropdown, which breaks things. Using a select in a dropdown is mostly
   // used by crispy forms.
   // TODO make this more efficient, selectors can reduce the work here
-  jquery(".ui.dropdown").each((index, obj) => {
+  jquery(".ui.dropdown:not(.manual)").each((index, obj) => {
     const dropdown = jquery(obj);
     const child_select = dropdown.children("select");
 

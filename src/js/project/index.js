@@ -39,6 +39,37 @@ export class ProjectVersionListView extends PopupView {
     super();
 
     this.versions = ko.observableArray();
+
+    jquery('#add-version').dropdown({
+      action: "select",
+      ignoreCase: true,
+      fullTextSearch: true,
+      sortSelect: true,
+    });
+
+    // TODO replace with APIv3 query when the feature is available
+    // https://github.com/readthedocs/readthedocs.org/issues/7363
+    /*
+    jquery('#add-version').each((index, elem) => {
+      const jq_elem = jquery(elem);
+      const api_url = jq_elem.attr('data-url');
+      jq_elem.dropdown({
+        apiSettings: {
+          url: api_url + '&{query}',
+        },
+        fields: {
+          name: "verbose_name",
+          value: "slug",
+        },
+        filterRemoteData: true,
+      })
+    });
+    */
+;}
+
+  attach_add_version() {
+    console.log(arguments);
+    return {};
   }
 
   version(data) {
