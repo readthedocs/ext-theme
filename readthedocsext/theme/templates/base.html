@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load static %}
-
+{% load ext_theme_tags %}
 
 <!DOCTYPE html>
 <html>
@@ -8,10 +8,7 @@
     <title>{% block title %}{% endblock %}{% block head_title %}{% endblock %} - Read the Docs</title>
 
     <link rel="icon" type="image/png" href="{% static 'corporate/img/favicon.png' %}" />
-    <!--
-    <link rel="stylesheet" type="text/css" media="all" href="{% static 'readthedocsext/theme/css/site.css' %}" />
-    -->
-    <link rel="stylesheet" type="text/css" media="all" href="http://localhost:8080/static/css/site.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="{% webpack_static "/static/css/site.css" %}" />
     {% block extra_links %}{% endblock %}
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -19,28 +16,14 @@
 
     {# TODO remove these, from the existing theme #}
     <!--
-    <script type="text/javascript" src="{% static 'vendor/jquery.js' %}"></script>
-    <script type="text/javascript">
-var $ = jQuery = require('jquery');
-    </script>
-    <script type="text/javascript" src="{% static 'core/js/site.js' %}"></script>
-    <script type="text/javascript">
-var site = require('core/site');
-site.handle_notification_dismiss();
-    </script>
     <script type="text/javascript" src="{{ MEDIA_URL }}javascript/instantsearch.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}javascript/base.js"></script>
     -->
-
-    {# New theme #}
-    <!--
-    <script type="text/javascript" src="{% static 'readthedocsext/theme/js/vendor.js' %}"></script>
-    <script type="text/javascript" src="{% static 'readthedocsext/theme/js/site.js' %}"></script>
-    -->
+    {% block extra_scripts %}{% endblock %}
   </head>
   <body class="{% block body_class %}{% endblock %}">
 
-    {# TODO remove #}
+    {# TODO remove info_bar block, it isn't used #}
     {% block info_bar %}{% endblock %}
 
     <!-- BEGIN header -->
@@ -65,13 +48,12 @@ site.handle_notification_dismiss();
     {% endif %}
     <!-- END notify -->
 
-    {# TODO remove #}
+    {# TODO remove subnav-bar block, it isn't used #}
     {% block subnav-bar %}{% endblock %}
 
-    {# TODO remove #}
+    {# TODO remove project_editing block, it isn't used #}
     {% block project_editing %}{% endblock %}
 
-    {# TODO remove this and use the base-ng theme as the default #}
     {% block content-wrapper %}
         <div class="ui very padded container">
 
@@ -91,10 +73,7 @@ site.handle_notification_dismiss();
       {% block footerjs %}{% endblock %}
     </script>
 
-    <script type="text/javascript" src="http://localhost:8080/static/js/vendor.js"></script>
-    <script type="text/javascript" src="http://localhost:8080/static/js/site.js"></script>
-
-    {% block extra_scripts %}{% endblock %}
-
+    <script type="text/javascript" src="{% webpack_static "/static/js/vendor.js" %}"></script>
+    <script type="text/javascript" src="{% webpack_static "/static/js/site.js" %}"></script>
   </body>
 </html>

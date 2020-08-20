@@ -3,8 +3,9 @@
 {% load i18n %}
 {% load privacy_tags %}
 
-{% block title %}{{ version.slug }} - {{ version.project.name }}{% endblock %}
+{% load ext_theme_tags %}
 
+{% block title %}{{ version.slug }} - {{ version.project.name }}{% endblock %}
 
 {% block project_editing %}
     {% with versions_active="active" %}
