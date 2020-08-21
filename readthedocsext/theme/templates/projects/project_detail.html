@@ -22,7 +22,9 @@
     {% endif %}
   {% endcomment %}
 
-  {% include "builds/partials/version_list.html" with objects=versions|sort_version_aware %}
+  <div data-list-view="version-list">
+    {% include "builds/partials/version_list.html" with objects=versions|sort_version_aware %}
+  </div>
 
   {% comment %}
     TODO remove this entirely?

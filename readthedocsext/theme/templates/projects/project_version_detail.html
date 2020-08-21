@@ -2,24 +2,60 @@
 
 {% load i18n %}
 {% load privacy_tags %}
+{% load crispy_forms_tags %}
 
 {% load ext_theme_tags %}
 
 {% block title %}{{ version.slug }} - {{ version.project.name }}{% endblock %}
 
 {% block project_editing %}
-    {% with versions_active="active" %}
-        {% include "core/project_bar.html" %}
-    {% endwith %}
+  {% with versions_active="active" %}
+    {% include "core/project_bar.html" %}
+  {% endwith %}
 {% endblock %}
 
-{% block content-header %}<h1>{% blocktrans with version.name as version_name %}{{ version_name }}{% endblocktrans %}</h1>{% endblock %}
-
 {% block content %}
-    <h2> Editing {{ version.slug }} </h2>
+  <div class="ui very padded centered grid stackable">
 
-    {% if request.user|is_admin:project %}
-      {% if not version.active and version.built %}
+    {# Left card display #}
+    <div class="six wide computer sixteen wide tablet sixteen wide mobile column">
+      <div class="ui fluid card">
+        <div class="content">
+          <div class="header">
+            <i class="{% if version.type == "branch" %}code branch {% elif version.type == "tag" %}tag {% endif %}icon"></i>
+            <code>{{ version.verbose_name }}</code>
+          </div>
+          <div class="meta">
+            <span>
+              <i class="code branch icon"></i>
+              <code>{{ version.identifier_friendly }}</code>
+            </span>
+          </div>
+        </div>
+
+        <div class="content">
+          <form class="ui form" method="post" action=".">
+            {% csrf_token %}
+
+            {% alter_field form.active classes="ui toggle checkbox" %}
+            {% alter_field form.hidden classes="ui toggle checkbox" %}
+            {{ form|crispy }}
+            <input class="ui primary button" type="submit" value="Update version">
+          </form>
+        </div>
+      </div>
+    </div>
+
+    {# Help display? #}
+    <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+      HELP
+    </div>
+  </div>
+{% endblock content %}
+
+{% block wtf %}
+  {% if is_project_admin %}
+    {% if not version.active and version.built %}
         <form class="ui form" name="version_delete_html" method="post" action="{% url "project_version_delete_html" project.slug version.slug %}">
           {% csrf_token %}
         </form>
