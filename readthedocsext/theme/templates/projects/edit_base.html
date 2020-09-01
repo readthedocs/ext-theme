@@ -86,8 +86,8 @@
         <div class="ui basic segment">
           <h2 class="ui small header">{% trans "Help topics" %}</h2>
           {% block project_edit_sidebar_help_topics %}
-            <div data-embed-doc-view="{% block project_edit_sidebar_embed_doc %}{% endblock %}"
-                 data-bind="template: { name: 'doc-topics' }">
+            <div data-bind="using: EmbedTopicsView('{% block project_edit_sidebar_embed_doc %}{% endblock %}')">
+              <div data-bind="template: { name: 'doc-topics' }"></div>
             </div>
           {% endblock project_edit_sidebar_help_topics %}
         </div>

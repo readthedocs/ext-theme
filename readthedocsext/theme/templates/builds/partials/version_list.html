@@ -8,6 +8,8 @@
 {% load privacy_tags %}
 {% load projects_tags %}
 
+{% block view_binding %}data-bind="with: ProjectVersionListView()"{% endblock %}
+
 {% block top_left_menu_items %}
   <div class="item">
     <div class="ui category search">

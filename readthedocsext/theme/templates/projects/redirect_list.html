@@ -9,12 +9,6 @@
 {% block project_redirects_active %}active{% endblock %}
 {% block project_edit_content_header %}{% trans "Redirects" %}{% endblock %}
 
-{% block extra_scripts %}
-  <script type="text/javascript">
-readthedocs.site.project.admin.ProjectRedirectView.init({}, '#project-redirect-form');
-  </script>
-{% endblock %}
-
 {% block project_edit_content %}
   {% include "projects/partials/edit/redirect_list.html" with objects=redirects %}
 
@@ -22,7 +16,7 @@ readthedocs.site.project.admin.ProjectRedirectView.init({}, '#project-redirect-f
     {% trans "Add Redirect" %}
   </h3>
 
-  <form class="ui form" method="post" action="." id="project-redirect-form">
+  <form class="ui form" method="post" action="." data-bind="using: ProjectRedirectView()">
     {% csrf_token %}
     {% alter_field form.redirect_type data_bind="value: redirect_type" %}
     {% alter_field form.from_url data_bind="textInput: from_url, enable: is_from_url_visible" %}

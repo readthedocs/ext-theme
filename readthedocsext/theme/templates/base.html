@@ -8,18 +8,27 @@
     <title>{% block title %}{% endblock %}{% block head_title %}{% endblock %} - Read the Docs</title>
 
     <link rel="icon" type="image/png" href="{% static 'corporate/img/favicon.png' %}" />
-    <link rel="stylesheet" type="text/css" media="all" href="{% webpack_static "/static/css/site.css" %}" />
+    <link rel="stylesheet" type="text/css" media="all" href="{% webpack_static "readthedocsext/theme/css/site.css" %}" />
     {% block extra_links %}{% endblock %}
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width" />
+
+    {# This block is used to pass settings between our application and JS #}
+    <script type="application/json" id="site-config">
+{
+  {# TODO make this debug conditional work. It requires altering INTERNAL_IPS #}
+  {% if debug %}"debug": true,{% endif %}
+  "debug": true,
+  "webpack_public_path": "{% webpack_static "readthedocsext/theme" %}/"
+}
+    </script>
 
     {# TODO remove these, from the existing theme #}
     <!--
     <script type="text/javascript" src="{{ MEDIA_URL }}javascript/instantsearch.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}javascript/base.js"></script>
     -->
-    {% block extra_scripts %}{% endblock %}
   </head>
   <body class="{% block body_class %}{% endblock %}">
 
@@ -34,7 +43,7 @@
 
     <!-- BEGIN notify -->
     {% if messages %}
-      <div class="ui container" id="messages">
+      <div class="ui container" id="messages" data-bind="with: MessageView()">
         <div class="ui basic segment">
           {% for message in messages %}
             <div class="ui message {{ message.tags }}"
@@ -69,11 +78,7 @@
       {% include "includes/footer.html" %}
     {% endblock %}
 
-    <script>
-      {% block footerjs %}{% endblock %}
-    </script>
-
-    <script type="text/javascript" src="{% webpack_static "/static/js/vendor.js" %}"></script>
-    <script type="text/javascript" src="{% webpack_static "/static/js/site.js" %}"></script>
+    <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/vendor.js" %}"></script>
+    <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/site.js" %}"></script>
   </body>
 </html>

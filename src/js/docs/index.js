@@ -1,29 +1,35 @@
 import jquery from "jquery";
 import ko from "knockout";
 
-function EmbedTopic(data) {
-  const self = this;
-
-  self.docs_url = ko.observable(data.docs_url);
-  self.section = ko.observable(data.section);
-  self.url = ko.computed(() => {
-    return self.docs_url() + self.section();
-  });
-  self.text = ko.observable(data.text);
-  self.children = ko.observableArray();
+class EmbedTopic {
+  constructor(topic) {
+    this.docs_url = ko.observable(topic.docs_url);
+    this.section = ko.observable(topic.section);
+    this.url = ko.computed(() => {
+      return this.docs_url() + this.section();
+    });
+    this.text = ko.observable(topic.text);
+    this.children = ko.observableArray();
+  }
 }
 
-export function EmbedTopicsView() {
-  const self = this;
+export class EmbedTopicsView {
+  constructor(doc) {
+    this.doc = doc;
+    this.topics = ko.observableArray();
+    this.is_loading = ko.observable(false);
 
-  self.topics = ko.observableArray();
-  self.is_loading = ko.observable(false);
+    // `doc` can be empty in the template, just ignore if so.
+    if (this.doc) {
+      this.load();
+    }
+  }
 
-  self.header_to_topics = (data) => {
+  header_to_topics(data) {
     for (let header of data.headers) {
       for (let text of Object.keys(header)) {
         const section = header[text];
-        self.topics.push(
+        this.topics.push(
           new EmbedTopic({
             docs_url: data.url + ".html",
             section: section,
@@ -32,43 +38,27 @@ export function EmbedTopicsView() {
         );
       }
     }
-  };
+  }
 
-  self.load = (doc) => {
-    self.is_loading(true);
+  load() {
+    console.debug("Loading doc from embed API:", this.doc);
+    this.is_loading(true);
     const params = jquery.param({
       project: "docs",
       version: "stable",
-      doc: doc,
+      doc: this.doc,
     });
-    const docs = jquery("#edit-right");
     const url = "https://readthedocs.org/api/v2/embed/?" + params;
 
     jquery
       .get(url, (data) => {
-        self.header_to_topics(data);
+        this.header_to_topics(data);
       })
       .catch((err) => {
         console.log(err);
       })
       .always(() => {
-        self.is_loading(false);
+        this.is_loading(false);
       });
-  };
-}
-
-EmbedTopicsView.init = function (doc, dom_obj) {
-  jquery(document).ready(() => {
-    var view = new EmbedTopicsView();
-    ko.applyBindings(view, dom_obj);
-    view.load(doc);
-  });
-};
-
-export function embed_docs() {
-  jquery("[data-embed-doc-view]").each((index, obj) => {
-    const embed = jquery(obj);
-    const embed_doc = embed.attr("data-embed-doc-view");
-    EmbedTopicsView.init(embed_doc, embed[0]);
-  });
+  }
 }

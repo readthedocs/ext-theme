@@ -7,6 +7,8 @@
 {% load privacy_tags %}
 {% load projects_tags %}
 
+{% block view_binding %}data-bind="with: ProjectListView()"{% endblock view_binding %}
+
 {% block top_left_menu_items %}
   {% comment %}
     TODO replace this with a filter search box. This is a dropdown menu for now

@@ -43,14 +43,10 @@ class RemoteRepository {
 }
 
 export class ProjectCreateView extends ResponsiveView {
-  constructor(config) {
-    // Call first to extend superclass
+  constructor() {
     super();
 
-    this.config = config || {};
-    this.urls = config.urls || {};
-    this.csrf_token = config.csrf_token || "";
-
+    this.config = ko.observable();
     this.remote_repos = ko.observableArray();
     this.selected = ko.observable();
     this.is_loading = ko.observable(true);
@@ -74,16 +70,22 @@ export class ProjectCreateView extends ResponsiveView {
     });
     */
 
-    let promise_load = this.get_remote_repos();
-    promise_load.done((obj) => {
-      this.init_search();
+    // Wait for config to load to call remote repos
+    let promise_load;
+    this.config.subscribe(() => {
+      promise_load = this.get_remote_repos();
+      promise_load.done((obj) => {
+        this.init_search();
+      });
     });
   }
 
   sync_remote_repos() {
+    const config = this.config();
+
     const params = {
-      url: this.urls.api_sync_remote_repositories,
-      token: this.csrf_token,
+      url: config.urls.api_sync_remote_repositories,
+      token: config.csrf_token,
     };
 
     this.is_syncing(true);
@@ -106,7 +108,8 @@ export class ProjectCreateView extends ResponsiveView {
 
   get_remote_repos() {
     const page_size = 1000;
-    const url = this.urls.remoterepository_list + "?page_size=" + page_size;
+    const config = this.config();
+    const url = config.urls.remoterepository_list + "?page_size=" + page_size;
 
     // TODO support multiple pages here
     let promise = jquery
@@ -169,11 +172,5 @@ export class ProjectCreateView extends ResponsiveView {
       },
     };
     jquery(".ui.search").search(config);
-  }
-
-  static init(config, selector) {
-    var view = new ProjectCreateView(config);
-    ko.applyBindings(view, jquery(selector)[0]);
-    return view;
   }
 }

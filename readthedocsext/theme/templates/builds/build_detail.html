@@ -6,12 +6,6 @@
 
 {% block title %}{{ build.project.name }}{% endblock %}
 
-{% block extra_scripts %}
-  <script type="text/javascript">
-readthedocs.site.build.detail.BuildDetailView.init({id: '{{ build.pk }}'});
-  </script>
-{% endblock %}
-
 {% block project_editing %}
   {% with builds_active="active" %}
     {% include "core/project_bar.html" %}
@@ -19,7 +13,7 @@ readthedocs.site.build.detail.BuildDetailView.init({id: '{{ build.pk }}'});
 {% endblock %}
 
 {% block content %}
-  <div class="ui basic segment padded" id="build-detail">
+  <div class="ui basic segment padded" data-bind="using: BuildDetailView({id: {{ build.pk }}})">
 
     <!-- top most -->
     <div class="ui top attached segment">

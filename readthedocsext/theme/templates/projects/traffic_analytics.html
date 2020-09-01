@@ -9,25 +9,21 @@
 
 {% block project_edit_sidebar_embed_doc %}commercial/analytics{% endblock %}
 
-{% block extra_scripts %}
-  <script type="text/javascript">
-readthedocs.site.project.admin.ProjectTrafficAnalyticsView.init();
-  </script>
-{% endblock %}
-
 {% block project_edit_content %}
-  {% include "projects/partials/edit/traffic_list.html" with objects=top_viewed_pages %}
+  <div data-bind="using: ProjectTrafficAnalyticsView()">
 
-  <h3 class="ui small header">
-    {% trans "Overview" %}
-    <div class="sub header">
-      {% trans "For the last month" %}
-    </div>
-  </h3>
+    {% include "projects/partials/edit/traffic_list.html" with objects=top_viewed_pages %}
 
-  <div class="ui loading segment" data-bind="css: {loading: is_loading()}">
-    <canvas width="400" height="150" data-bind="chart: config"></canvas>
-    <script type="application/json" data-bind="jsonInit: config">
+    <h3 class="ui small header">
+      {% trans "Overview" %}
+      <div class="sub header">
+        {% trans "For the last month" %}
+      </div>
+    </h3>
+
+    <div class="ui loading segment" data-bind="css: {loading: is_loading()}">
+      <canvas width="400" height="150" data-bind="chart: config"></canvas>
+      <script type="application/json" data-bind="jsonInit: config">
 {
   "type": "line",
   "data": {
@@ -54,6 +50,7 @@ readthedocs.site.project.admin.ProjectTrafficAnalyticsView.init();
     }
   }
 }
-    </script>
+      </script>
+    </div>
   </div>
 {% endblock %}

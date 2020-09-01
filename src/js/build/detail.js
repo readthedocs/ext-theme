@@ -7,6 +7,8 @@ import RelativeTime from "dayjs/plugin/relativeTime";
 import Duration from "dayjs/plugin/duration";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
 
+import { KnockoutView } from "../core/views";
+
 class BuildCommandOutput {
   constructor(build_command_output, view) {
     // Used for calls to the root view and parent command
@@ -112,8 +114,10 @@ class BuildCommand {
   }
 }
 
-export class BuildDetailView {
+export class BuildDetailView extends KnockoutView {
   constructor(build = {}) {
+    super();
+
     /* Attributes */
     this.id = build.id;
     // TODO make this configurable?
@@ -209,20 +213,18 @@ export class BuildDetailView {
    * @returns {BuildDetailView}
    */
   static init(build, selector = "#build-detail") {
-    jquery(document).ready(() => {
-      const hash = jquery(location).attr("hash");
-      build.hash = hash;
+    const hash = jquery(location).attr("hash");
+    build.hash = hash;
 
-      const view = new BuildDetailView(build);
-      const domobj = domobj || jquery(selector)[0];
-      ko.applyBindings(view, domobj);
+    const view = new BuildDetailView(build);
+    const domobj = domobj || jquery(selector)[0];
+    ko.applyBindings(view, domobj);
 
-      jquery(window).bind("hashchange", () => {
-        view.handle_hash_change();
-      });
-
-      return view;
+    jquery(window).bind("hashchange", () => {
+      view.handle_hash_change();
     });
+
+    return view;
   }
 
   /* Continually poll API for build object and update Build, BuildCommand, and

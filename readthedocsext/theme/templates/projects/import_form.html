@@ -6,23 +6,7 @@
 
 {% block title %}{% trans "Add project" %}{% endblock %}
 
-{% block extra_scripts %}
-  <script type="text/javascript">
-readthedocs.site.project.create.ProjectCreateView.init(
-  {
-    'urls': {
-      'api_sync_remote_repositories': '{% url 'api_sync_remote_repositories' %}',
-      'remoterepository_list': '{% url 'remoterepository-list' %}',
-    },
-    'csrf_token': '{{ view_csrf_token }}',
-  },
-  '#project-create-view',
-);
-  </script>
-{% endblock %}
-
 {% block content %}
-
   {# Common URLs used in a few places #}
   {% url "socialaccount_connections" as url_connected_services %}
 
@@ -44,7 +28,17 @@ readthedocs.site.project.create.ProjectCreateView.init(
   </div>
   {# End header #}
 
-  <div class="ui very padded stackable grid" id="project-create-view">
+  <div class="ui very padded stackable grid" data-bind="using: ProjectCreateView()">
+
+    <script type="application/json" data-bind="jsonInit: config">
+{
+  "urls": {
+      "api_sync_remote_repositories": "{% url 'api_sync_remote_repositories' %}",
+      "remoterepository_list": "{% url 'remoterepository-list' %}"
+  },
+  "csrf_token": "{{ view_csrf_token }}"
+}
+    </script>
 
     {# Sidebar #}
     <div class="ui sixteen wide tablet five wide computer four wide large screen column">
@@ -64,8 +58,6 @@ readthedocs.site.project.create.ProjectCreateView.init(
     <div class="ui sixteen wide tablet eleven wide computer ten wide large screen column">
 
       <div class="ui active tab" data-tab="automatic">
-
-
 
       {% if has_connected_accounts %}
         {# Search prompt and dropdown #}
@@ -409,4 +401,4 @@ readthedocs.site.project.create.ProjectCreateView.init(
     </div>
   {% endblock %}
 
-{% endblock %}
+{% endblock oldcontent %}

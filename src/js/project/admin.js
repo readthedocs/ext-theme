@@ -1,18 +1,16 @@
 import jquery from "jquery";
 import ko from "knockout";
 
-import { ChartView } from "../core/views";
+import { ChartView, KnockoutView } from "../core/views";
 
 /* Project automation rule form view
  *
  * @param {Object} automation_rule - Initial instance data, optional
  */
-export class ProjectAutomationRuleView {
+export class ProjectAutomationRuleView extends KnockoutView {
   constructor(automation_rule) {
+    super();
     this.predefined_match_arg = ko.observable();
-    this.predefined_match_arg.subscribe((predefined_match_arg) => {
-      console.log(predefined_match_arg);
-    });
     this.is_match_arg_visible = ko.computed(() => {
       let predefined_match_arg = this.predefined_match_arg();
       return predefined_match_arg === "";
@@ -27,28 +25,15 @@ export class ProjectAutomationRuleView {
       return this.predefined_match_arg() === "";
     });
   }
-
-  /* View attachment static method
-   *
-   * @param {Object} automation_rule - Initial data for automation rule
-   * @param {string} selector - Selector string to use for view attachment
-   * @returns {ProjectAutomationRuleView}
-   */
-  static init(automation_rule, selector = "#edit-content") {
-    jquery(document).ready(() => {
-      const view = new ProjectAutomationRuleView(automation_rule);
-      ko.applyBindings(view, jquery(selector)[0]);
-      return view;
-    });
-  }
 }
 
 /* Project redirect rule form view
  *
  * @param {Object} redirect - Initial instance data, optional
  */
-export class ProjectRedirectView {
+export class ProjectRedirectView extends KnockoutView {
   constructor(redirect) {
+    super();
     this.redirect_type = ko.observable();
     this.from_url = ko.observable("");
     this.to_url = ko.observable("");
@@ -100,20 +85,6 @@ export class ProjectRedirectView {
       }
     });
   }
-
-  /* View attachment static method
-   *
-   * @param {Object} redirect - Initial instance data, optional
-   * @param {string} selector - Selector string to use for view attachment
-   * @returns {ProjectRedirectView}
-   */
-  static init(redirect, selector = "#edit-content") {
-    jquery(document).ready(() => {
-      var view = new ProjectRedirectView(redirect);
-      ko.applyBindings(view, jquery(selector)[0]);
-      return view;
-    });
-  }
 }
 
 /* Project search analytics view
@@ -131,20 +102,6 @@ export class ProjectSearchAnalyticsView extends ChartView {
     this.is_loading = ko.observable(true);
     this.config.subscribe((config) => {
       this.is_loading(false);
-    });
-  }
-
-  /* View attachment static method
-   *
-   * @param {string} selector - Selector string to use for view attachment
-   * @returns {ProjectSearchAnalyticsView}
-   */
-  static init(selector = "#edit-content") {
-    jquery(document).ready(() => {
-      const elem = jquery(selector);
-      const view = new ProjectSearchAnalyticsView();
-      ko.applyBindings(view, elem[0]);
-      return view;
     });
   }
 }

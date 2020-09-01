@@ -10,7 +10,6 @@ const breakpoints = {
   large_screen: 1200,
 };
 
-
 /*
  * MessageView.init('#messages .ui.message');
  */
@@ -52,13 +51,6 @@ export class MessageView {
       return false;
     };
   }
-
-  static init(selector) {
-    jquery(selector).each((index, obj) => {
-      const message = jquery(obj);
-      const view = new MessageView(message);
-    });
-  }
 }
 
 /* A view mixin to enable initial knockout view model binding
@@ -68,14 +60,13 @@ export class MessageView {
  *
  */
 export class KnockoutView {
-
   /* View attachment static method
    *
    * @param {Object} params - Initial instance data, optional
    * @param {string} selector - Selector string to use for view attachment
    * @returns {ProjectRedirectView}
    */
-  static init(params, selector = "[data-list-view]") {
+  static init(params, selector = "[data-list-view], #edit-content") {
     var view = new this(params);
     ko.applyBindings(view, jquery(selector)[0]);
     return view;
@@ -95,6 +86,7 @@ export class KnockoutView {
  */
 export class ResponsiveView extends KnockoutView {
   constructor() {
+    super();
     this.viewport_width = ko.observable();
     this.device = {
       mobile: ko.observable(true),
@@ -143,49 +135,6 @@ export class ResponsiveView extends KnockoutView {
 export class InitView extends KnockoutView {
   constructor() {
     super();
-    // HTML binding. Gets initial value as HTML, sets HTML in return
-    ko.bindingHandlers.htmlInit = this.add_init_handler(
-      (element) => {
-        return element.innerHTML;
-      },
-      (property) => {
-        return { html: property };
-      }
-    );
-    // Text binding. Gets initial value as node inner text, sets inner text in return
-    ko.bindingHandlers.textInit = this.add_init_handler(
-      (element) => {
-        return element.innerText;
-      },
-      (property) => {
-        return { text: property };
-      }
-    );
-    // JSON binding. Gets initial value as JSON from node inner HTML, doesn't
-    // set anything in return
-    ko.bindingHandlers.jsonInit = this.add_init_handler((element) => {
-      return JSON.parse(element.innerHTML);
-    });
-  }
-
-  add_init_handler(getter, setter) {
-    return {
-      init: function (element, valueAccessor, allBindingsAccessor, data) {
-        const property = valueAccessor();
-        const value = getter(element);
-
-        // Create the observable, if it doesn't exist
-        if (!ko.isWriteableObservable(property)) {
-          throw new Error("Property not found:", property);
-        }
-
-        property(value);
-
-        if (setter) {
-          ko.applyBindingsToNode(element, setter(property));
-        }
-      },
-    };
   }
 }
 
@@ -210,30 +159,6 @@ export class InitView extends KnockoutView {
 export class ChartView extends InitView {
   constructor() {
     super();
-    ko.bindingHandlers.chart = {
-      init: function (element, value_accessor) {
-        var property = value_accessor();
-
-        // Dynamic webpack import of library. This will trigger a new request.
-        import(
-          /* webpackChunkName: "chartjs" */
-          "chart.js"
-        ).then(({ default: chartjs }) => {
-          let config = property();
-
-          const datasets = config.data.datasets.map((value) => {
-            value.backgroundColor = "rgb(65, 131, 196, 0.8)";
-            value.borderColor = "rgb(65, 131, 196, 1)";
-            value.pointBorderColor = "rgb(65, 131, 196, 1)";
-            value.borderWidth = "1px";
-            return value;
-          });
-
-          config.data.datasets = datasets;
-          const chart = new chartjs(element, config);
-        });
-      },
-    };
   }
 }
 
@@ -246,26 +171,6 @@ export class ChartView extends InitView {
  */
 export class PopupView extends KnockoutView {
   constructor() {
-    ko.bindingHandlers.popup = {
-      init: (element, value_accessor, bindings, view, context) => {
-        const config = Object.assign(
-          {
-            hoverable: true,
-            delay: {
-              show: 300,
-              hide: 100,
-            },
-            exclusive: true,
-            onHide: () => { context.$rawData.hide(); },
-          },
-          value_accessor()
-        );
-        const jq_element = jquery(element);
-        jq_element.popup(config).hover(
-          () => { context.$rawData.show(); },
-        );
-      },
-    };
     super();
   }
 
@@ -313,7 +218,7 @@ export class APIListItemView extends PopupView {
         this.loaded(true);
         this.loading(false);
         return resolve(data);
-      })
+      });
     });
   }
 }

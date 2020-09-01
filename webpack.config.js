@@ -14,14 +14,13 @@ module.exports = (env, argv) => {
       site: ["./src/css/site.less", "./src/js/site.js"],
       //vendor: ["knockout", "jquery"],
     },
+    externals: {
+      moment: "moment",
+    },
     output: {
-      filename: is_production
-        ? "js/[name].min.js?[hash]"
-        : "js/[name].js?[hash]",
-      chunkFilename: is_production
-        ? "js/[name].min.js?[hash]"
-        : "js/[name].js?[hash]",
-      publicPath: is_production ? "/" : "http://localhost:8080/static/",
+      filename: "js/[name].js?[hash]",
+      chunkFilename: "js/[name].js?[hash]",
+      publicPath: "./",
       path: path.join(
         __dirname,
         "readthedocsext",
@@ -104,9 +103,7 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: is_production
-          ? "css/[name].min.css?[hash]"
-          : "css/[name].css?[hash]",
+        filename: "css/[name].css?[hash]",
         chunkFilename: "css/[name].css?[hash]",
       }),
     ],
@@ -133,7 +130,7 @@ module.exports = (env, argv) => {
       open: false,
       hot: false,
       liveReload: true,
-      publicPath: "/static/",
+      publicPath: "/readthedocsext/theme/",
       disableHostCheck: true,
       headers: {
         "Access-Control-Allow-Origin": "*",

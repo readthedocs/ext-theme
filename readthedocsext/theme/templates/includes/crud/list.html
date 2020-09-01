@@ -20,7 +20,7 @@
 {% load i18n %}
 {% load pagination_tags %}
 
-<div data-list-view="{% block list_view_name %}{% endblock list_view_name %}">
+<div {% block view_binding %}{% endblock view_binding %}>
   {% block top_menu %}
     <div class="ui text menu">
       {% block top_left_menu_items %}

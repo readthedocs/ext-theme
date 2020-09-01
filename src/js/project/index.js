@@ -8,7 +8,6 @@ import { PopupView, APIListItemView } from "../core/views";
 
 export { admin, create };
 
-
 export class ProjectListView extends PopupView {
   constructor() {
     super();
@@ -40,7 +39,7 @@ export class ProjectVersionListView extends PopupView {
 
     this.versions = ko.observableArray();
 
-    jquery('#add-version').dropdown({
+    jquery("#add-version").dropdown({
       action: "select",
       ignoreCase: true,
       fullTextSearch: true,
@@ -65,7 +64,7 @@ export class ProjectVersionListView extends PopupView {
       })
     });
     */
-;}
+  }
 
   attach_add_version() {
     console.log(arguments);
@@ -99,23 +98,26 @@ class Version extends APIListItemView {
 
   trigger_build(url, csrf_token) {
     return (context, ev) => {
-      jquery.ajax({
-        type: "POST",
-        url: url,
-        data: {
-          csrfmiddlewaretoken: csrf_token,
-        },
-      }).then((data) => {
-        // The user could be redirected to the build that was just created here,
-        // but API v3 is missing the URL on the build object. I don't mind that
-        // the interaction leaves me on the same interface while showing the new
-        // build either.
-        // TODO maybe redirect the user to the new build?
-        // https://github.com/readthedocs/readthedocs.org/issues/7361
-        window.location.reload();
-      }).catch((err) => {
-        console.error(err);
-      });
+      jquery
+        .ajax({
+          type: "POST",
+          url: url,
+          data: {
+            csrfmiddlewaretoken: csrf_token,
+          },
+        })
+        .then((data) => {
+          // The user could be redirected to the build that was just created here,
+          // but API v3 is missing the URL on the build object. I don't mind that
+          // the interaction leaves me on the same interface while showing the new
+          // build either.
+          // TODO maybe redirect the user to the new build?
+          // https://github.com/readthedocs/readthedocs.org/issues/7361
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     };
   }
 }
