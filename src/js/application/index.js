@@ -12,18 +12,23 @@ export const core = require("../core");
 export class Application {
   constructor() {}
 
-  configure() {
+  load_config() {
     // TODO modularize this for reuse, or go global with additional settings?
     const site_config_src = jquery("script#site-config").text() || "{}";
     const site_config = JSON.parse(site_config_src);
     if (site_config.webpack_public_path) {
-      __webpack_public_path__ = site_config.webpack_public_path;
+      global.__webpack_public_path__ = window.__webpack_public_path__ =
+        site_config.webpack_public_path;
     }
     // Null route debug logging
     if (!site_config.debug) {
       console.debug = () => {};
     }
 
+    return site_config;
+  }
+
+  configure() {
     // TODO make this a function somewhere
     jquery(".ui[data-content]").popup();
     jquery(".ui[data-html]").popup({ hoverable: true });
@@ -107,6 +112,7 @@ export class Application {
   }
 
   run() {
+    this.load_config();
     this.configure_plugins();
     this.configure();
     this.attach_view();
