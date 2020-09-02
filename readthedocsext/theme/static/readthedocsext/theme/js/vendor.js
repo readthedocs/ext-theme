@@ -1,4 +1,4 @@
-(this.webpackJsonp=this.webpackJsonp||[]).push([[2],[function(e,t,n){var i,o,r;
+(window.webpackJsonp=window.webpackJsonp||[]).push([[2],[function(e,t,n){var i,o,r;
 /*!
  * Knockout JavaScript library v3.5.1
  * (c) The Knockout.js team - http://knockoutjs.com/

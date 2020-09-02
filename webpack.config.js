@@ -12,7 +12,6 @@ module.exports = (env, argv) => {
       // LESS goes first because the output library only exports that last entry
       // point in an entry point array
       site: ["./src/css/site.less", "./src/js/site.js"],
-      //vendor: ["knockout", "jquery"],
     },
     externals: {
       moment: "moment",
@@ -29,10 +28,6 @@ module.exports = (env, argv) => {
         "readthedocsext",
         "theme"
       ),
-      // This is what exports a `readthedocs.site` object when loading the `site.js`
-      // file via a `<script>` element.
-      library: ["readthedocs", "[name]"],
-      globalObject: "this",
     },
     optimization: {
       minimize: is_production,
