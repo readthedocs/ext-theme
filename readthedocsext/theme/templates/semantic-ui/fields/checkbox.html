@@ -1,0 +1,34 @@
+{% extends "semantic-ui/fields/base.html" %}
+
+{% load crispy_forms_field %}
+
+{% block field-outer %}
+  <div class="{% if field.field.required %} required{% endif %}{% if field.errors %} error{% endif %}{% if 'form-horizontal' in form_class %} inline {% endif %}field">
+    {% if label_class or field.field.widget.attrs.class %}
+      <div class="{% for offset in bootstrap_checkbox_offsets %}{{ offset }} {% endfor %}{{ field_class }}{{ field.field.widget.attrs.class }}">
+        {{ block.super }}
+      </div>
+    {% else %}
+      {{ block.super }}
+    {% endif %}
+  </div>
+{% endblock field-outer %}
+
+{% block field-label %}
+{% endblock field-label %}
+
+{% block field-input %}
+  {% crispy_field field 'class' 'form-check-input' %}
+
+  {% if form_show_labels %}
+    <label for="{{ field.id_for_label }}" class="form-check-label">
+      {{ field.label|safe }}
+
+      {% if field.help_text %}
+        <i class="ui small circular grey help icon" data-html="{{ field.help_text }}"></i>
+      {% endif %}
+    </label>
+  {% endif %}
+
+  {% include 'semantic-ui/layout/field_errors_block.html' with direction="left" %}
+{% endblock field-input %}
