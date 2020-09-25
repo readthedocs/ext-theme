@@ -7,8 +7,6 @@ import RelativeTime from "dayjs/plugin/relativeTime";
 import Duration from "dayjs/plugin/duration";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
 
-import { KnockoutView } from "../core/views";
-
 class BuildCommandOutput {
   constructor(build_command_output, view) {
     // Used for calls to the root view and parent command
@@ -114,10 +112,8 @@ class BuildCommand {
   }
 }
 
-export class BuildDetailView extends KnockoutView {
+export class BuildDetailView {
   constructor(build = {}) {
-    super();
-
     /* Attributes */
     this.id = build.id;
     // TODO make this configurable?

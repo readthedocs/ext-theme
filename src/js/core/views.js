@@ -53,26 +53,6 @@ export class MessageView {
   }
 }
 
-/* A view mixin to enable initial knockout view model binding
- *
- * The selector ``[data-list-view]`` is added in the base CRUD list.html
- * template that is used by all the list view pages.
- *
- */
-export class KnockoutView {
-  /* View attachment static method
-   *
-   * @param {Object} params - Initial instance data, optional
-   * @param {string} selector - Selector string to use for view attachment
-   * @returns {ProjectRedirectView}
-   */
-  static init(params, selector = "[data-list-view], #edit-content") {
-    var view = new this(params);
-    ko.applyBindings(view, jquery(selector)[0]);
-    return view;
-  }
-}
-
 /*
  * ResponsiveView is used to create bindings that alter elements on changes to
  * the viewport width.
@@ -84,9 +64,8 @@ export class KnockoutView {
  *   <div class="ui menu" data-bind="css: {vertical: device.computer()}">
  *   <div class="ui menu" data-bind="css: {vertical: device.large_screen()}">
  */
-export class ResponsiveView extends KnockoutView {
+export class ResponsiveView {
   constructor() {
-    super();
     this.viewport_width = ko.observable();
     this.device = {
       mobile: ko.observable(true),
@@ -114,54 +93,6 @@ export class ResponsiveView extends KnockoutView {
   }
 }
 
-/* View class for providing knockout observable initial values from templates
- *
- * This allows templates to supply initial value for observables. This is useful
- * for supplying data for KO views in templates, where it would be otherwise a
- * lot of work to supply this data from something like an API return.
- *
- * This adds 3 binding handlers to KO:
- *
- * * htmlInit - Gets/sets HTML value from node to/from observable
- * * textInit - Gets/sets text value from node to/from observable
- * * jsonInit - Gets JSON value from node to observable, doesn't read
- *
- * Usage:
- *
- *    <script type="application/json" data-bind="jsonInit: config">
- *      {"foo": "foo"}
- *    </script>
- */
-export class InitView extends KnockoutView {
-  constructor() {
-    super();
-  }
-}
-
-/* Knockout chart view based on chartjs
- *
- * This will dynamically load chartjs using webpack dynamic imports, and will
- * configure a chart view for display. This uses InitView to provide a way to
- * configure the chart labels, data, and localized strings from templates.
- *
- * Chart.js is dynamically loaded as it also brings in momentjs, which is very
- * large due to locales. The resulting script is >1MB, so we won't ever load it
- * unless necessary.
- *
- * Usage:
- *
- *    <script type="application/json" data-bind="jsonInit: config">
- *      // This is the chartjs configuration as JSON
- *      {...}
- *    </script>
- *    <canvas data-bind="chart: config"></canvas>
- */
-export class ChartView extends InitView {
-  constructor() {
-    super();
-  }
-}
-
 /* Knockout binding to help show popups
  *
  * This is used inside normal Django templates, where we iterate
@@ -169,11 +100,7 @@ export class ChartView extends InitView {
  * view. This binding will create individual popup contexts.
  *
  */
-export class PopupView extends KnockoutView {
-  constructor() {
-    super();
-  }
-
+export class PopupView {
   create_popup() {
     return new Popup();
   }

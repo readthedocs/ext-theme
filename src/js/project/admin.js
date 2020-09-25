@@ -1,15 +1,12 @@
 import jquery from "jquery";
 import ko from "knockout";
 
-import { ChartView, KnockoutView } from "../core/views";
-
 /* Project automation rule form view
  *
  * @param {Object} automation_rule - Initial instance data, optional
  */
-export class ProjectAutomationRuleView extends KnockoutView {
+export class ProjectAutomationRuleView {
   constructor(automation_rule) {
-    super();
     this.predefined_match_arg = ko.observable();
     this.is_match_arg_visible = ko.computed(() => {
       let predefined_match_arg = this.predefined_match_arg();
@@ -31,9 +28,8 @@ export class ProjectAutomationRuleView extends KnockoutView {
  *
  * @param {Object} redirect - Initial instance data, optional
  */
-export class ProjectRedirectView extends KnockoutView {
+export class ProjectRedirectView {
   constructor(redirect) {
-    super();
     this.redirect_type = ko.observable();
     this.from_url = ko.observable("");
     this.to_url = ko.observable("");
@@ -95,9 +91,8 @@ export class ProjectRedirectView extends KnockoutView {
  *
  * @param {Element} elem - Element that view is attached to
  */
-export class ProjectSearchAnalyticsView extends ChartView {
+export class ProjectSearchAnalyticsView {
   constructor() {
-    super();
     this.config = ko.observable();
     this.is_loading = ko.observable(true);
     this.config.subscribe((config) => {
