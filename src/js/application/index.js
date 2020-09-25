@@ -13,10 +13,13 @@ export class Application {
   constructor() {}
 
   load_config() {
+    console.debug("Loading site front end configuration from script tag");
+
     // TODO modularize this for reuse, or go global with additional settings?
     const site_config_src = jquery("script#site-config").text() || "{}";
     const site_config = JSON.parse(site_config_src);
     if (site_config.webpack_public_path) {
+      __webpack_public_path__ = site_config.webpack_public_path;
       global.__webpack_public_path__ = window.__webpack_public_path__ =
         site_config.webpack_public_path;
     }

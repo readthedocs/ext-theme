@@ -82,5 +82,10 @@
         ]
       }
     }
+  },
+  "jest": {
+    "globals": {
+      "__webpack_public_path__": null
+    }
   }
 }

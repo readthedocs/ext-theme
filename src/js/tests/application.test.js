@@ -18,8 +18,9 @@ test("Application load default config", () => {
   document.body.innerHTML =
     '<script type="application/json" id="site-config">{}</script>';
   const config = app.load_config();
-  expect(global.__webpack_public_path__).toBeUndefined();
+  expect(config.webpack_public_path).toBeUndefined();
   expect(config.debug).toBeFalsy();
+  expect(window.__webpack_public_path).toBeUndefined();
 });
 
 test("Application load custom config", () => {
@@ -32,6 +33,7 @@ test("Application load custom config", () => {
   }
   </script>`;
   const config = app.load_config();
-  expect(global.__webpack_public_path__).toBe("/foo");
   expect(config.debug).toBeTruthy();
+  expect(config.webpack_public_path).toBe("/foo");
+  expect(global.__webpack_public_path__).toBe("/foo");
 });
