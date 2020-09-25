@@ -107,6 +107,7 @@ export class Application {
     ko.bindingHandlers.jsonInit = plugins.jsonInit;
     ko.bindingHandlers.chart = plugins.chart;
     ko.bindingHandlers.popup = plugins.popup;
+    ko.bindingHandlers.search = plugins.search;
   }
 
   attach_view() {

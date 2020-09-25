@@ -118,3 +118,12 @@ export const popup = {
     });
   },
 };
+
+export const search = {
+  update: (element, value_accessor, all_bindings) => {
+    const value = ko.unwrap(value_accessor());
+    if (value !== undefined) {
+      jquery(element).search(value);
+    }
+  },
+};
