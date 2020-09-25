@@ -30,6 +30,8 @@ class RemoteRepository {
   }
 
   get_project(pk) {
+    // TODO convert to APIv3 and hopefully use a URL field from the
+    // RemoteRepository APIv3 response to link here, instead of hardcoding.
     const url = "/api/v2/project/" + pk + "/";
 
     let promise = jquery.getJSON(url).done((response) => {
@@ -47,9 +49,10 @@ export class ProjectCreateView extends ResponsiveView {
     super();
 
     this.config = ko.observable();
+    this.search_config = ko.observable();
     this.remote_repos = ko.observableArray();
     this.selected = ko.observable();
-    this.is_loading = ko.observable(true);
+    this.is_loading = ko.observable(false);
     this.is_syncing = ko.observable(false);
     this.is_selected = ko.computed(() => {
       return this.selected() !== undefined;
@@ -70,13 +73,11 @@ export class ProjectCreateView extends ResponsiveView {
     });
     */
 
-    // Wait for config to load to call remote repos
-    let promise_load;
-    this.config.subscribe(() => {
-      promise_load = this.get_remote_repos();
-      promise_load.done((obj) => {
+    // Wait for config to be loaded
+    this.config.subscribe((config) => {
+      if (config !== undefined) {
         this.init_search();
-      });
+      }
     });
   }
 
@@ -106,36 +107,10 @@ export class ProjectCreateView extends ResponsiveView {
     return promise;
   }
 
-  get_remote_repos() {
-    const page_size = 1000;
-    const config = this.config();
-    const url = config.urls.remoterepository_list + "?page_size=" + page_size;
-
-    // TODO support multiple pages here
-    let promise = jquery
-      .getJSON(url)
-      .done((response) => {
-        //this.page_next(projects_list.next);
-        //this.page_previous(projects_list.previous);
-        for (const remote_repo of response.results) {
-          this.remote_repos.push(new RemoteRepository(remote_repo));
-        }
-      })
-      .fail((error) => {
-        const error_msg = error.responseJSON.detail || error.statusText;
-        console.log("Error!", error_msg);
-        //this.error({message: error_msg});
-      })
-      .always(() => {
-        this.is_loading(false);
-      });
-
-    return promise;
-  }
-
   init_search() {
-    const remote_repos = this.remote_repos();
-    const config = {
+    const config = this.config();
+    const url = config.urls.remoterepository_list + "?full_name={query}";
+    this.search_config({
       // We use a Knockout template here, embedded in the template as a script
       // element. This avoids string interpolation in JS and keeps HTML in one
       // place, along with HTML translations.
@@ -156,9 +131,9 @@ export class ProjectCreateView extends ResponsiveView {
           return output;
         },
       },
-
-      source: remote_repos,
-      searchFields: ["full_name"],
+      apiSettings: {
+        url: url,
+      },
       selector: {
         // Required because the default of ``prompt`` is a rounded input
         prompt: ".ui.text",
@@ -168,9 +143,8 @@ export class ProjectCreateView extends ResponsiveView {
       },
       fullTextSearch: true,
       onSelect: (result, response) => {
-        this.selected(result);
+        this.selected(new RemoteRepository(result));
       },
-    };
-    jquery(".ui.search").search(config);
+    });
   }
 }
