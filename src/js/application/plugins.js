@@ -119,11 +119,15 @@ export const popup = {
   },
 };
 
-export const search = {
+export const semanticui = {
   update: (element, value_accessor, all_bindings) => {
     const value = ko.unwrap(value_accessor());
-    if (value !== undefined) {
-      jquery(element).search(value);
+    for (const [key, value] of Object.entries(value)) {
+      if (value !== undefined) {
+        console.debug('Setting up SemanticUI component:', key, value, element);
+        // Call jquery(element).search(value), but dynamically
+        jquery(element)[key](value);
+      }
     }
   },
 };

@@ -61,7 +61,7 @@
 
       {% if has_connected_accounts %}
         {# Search prompt and dropdown #}
-        <div class="ui fluid disabled loading search" data-bind="search: search_config, css: {disabled: is_loading(), loading: is_loading()}">
+        <div class="ui fluid disabled loading search" data-bind="semanticui: {search: search_config()}, css: {disabled: is_loading(), loading: is_loading()}">
           <div class="ui fluid icon large action input">
             <input class="ui text" type="text" placeholder="{% trans "Search repositories" %}">
             <button
