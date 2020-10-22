@@ -33,37 +33,74 @@ class Project extends APIListItemView {
   }
 }
 
+export class ProjectVersionCreateView extends PopupView {
+  constructor() {
+    super();
+
+    this.config = ko.observable();
+
+    this.is_loading = ko.observable(false);
+
+    // Load after config is loaded
+    this.search_config = ko.computed(() => {
+      const config = this.config();
+      if (config !== undefined) {
+        return this.init_search(config);
+      }
+    });
+  }
+
+  init_search(config) {
+    const url = config.api_url + "?verbose_name={query}";
+    const errors = config.errors || {};
+    return {
+      apiSettings: {
+        url: url,
+      },
+      selector: {
+        // Required because the default of ``.ui.prompt`` is a rounded input
+        prompt: ".ui.text",
+      },
+      fields: {
+        title: "verbose_name",
+        description: "identifier",
+      },
+      fullTextSearch: true,
+      onSelect: (result, response) => {
+        window.location.href = result.urls.edit;
+      },
+      error: errors,
+    };
+  }
+}
+
 export class ProjectVersionListView extends PopupView {
   constructor() {
     super();
 
     this.versions = ko.observableArray();
+    this.config = ko.observable();
+    this.dropdown_config = ko.observable();
 
-    jquery("#add-version").dropdown({
-      action: "select",
-      ignoreCase: true,
-      fullTextSearch: true,
-      sortSelect: true,
+    // Set dropdown config once view config is loaded from script block
+    this.config.subscribe((config) => {
+      if (config !== undefined) {
+        this.dropdown_config({
+          action: "select",
+          ignoreCase: true,
+          fullTextSearch: true,
+          sortSelect: true,
+          apiSettings: {
+            url: config.api_url + '?active=False&limit=20&verbose_name={query}',
+          },
+          fields: {
+            name: "verbose_name",
+            value: "slug",
+          },
+          saveRemoteData: false,
+        });
+      }
     });
-
-    // TODO replace with APIv3 query when the feature is available
-    // https://github.com/readthedocs/readthedocs.org/issues/7363
-    /*
-    jquery('#add-version').each((index, elem) => {
-      const jq_elem = jquery(elem);
-      const api_url = jq_elem.attr('data-url');
-      jq_elem.dropdown({
-        apiSettings: {
-          url: api_url + '&{query}',
-        },
-        fields: {
-          name: "verbose_name",
-          value: "slug",
-        },
-        filterRemoteData: true,
-      })
-    });
-    */
   }
 
   attach_add_version() {

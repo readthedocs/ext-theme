@@ -12,6 +12,7 @@ import { MessageView } from "../core/views";
 const views = {
   BuildDetailView: build.detail.BuildDetailView,
   ProjectListView: project.ProjectListView,
+  ProjectVersionCreateView: project.ProjectVersionCreateView,
   ProjectVersionListView: project.ProjectVersionListView,
   ProjectCreateView: project.create.ProjectCreateView,
   ProjectSearchAnalyticsView: project.admin.ProjectSearchAnalyticsView,

@@ -32,39 +32,10 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  <div class="ui green icon floating manual dropdown button" id="add-version">
-    {% comment %}
-      TODO replace this with an actual query mechanism
-      data-url="{% url "projects-versions-list" project.slug %}?active=False&limit=50"
-    {% endcomment %}
+  <a href="{% url "project_version_create" project.slug %}" class="ui primary button">
     <i class="plus icon"></i>
     <span class="text">{% trans "Add version" %}</span>
-
-    <div class="menu">
-      <div class="ui icon search input">
-        <i class="search icon"></i>
-        <input type="text" placeholder="Search versions...">
-      </div>
-      <div class="divider"></div>
-      <div class="header">
-        <i class="tags icon"></i>
-        {% trans "Versions" %}
-      </div>
-      <div class="scrolling menu">
-        {% for version in project.versions.all %}
-          {% if not version.active %}
-            <a
-                class="item"
-                data-value="{{ version.slug }}"
-                href="{% url "project_version_detail" project.slug version.slug %}">
-              <i class="{% if version.type == "branch" %}code branch {% elif version.type == "tag" %}tag {% endif %}icon"></i>
-              {{ version.verbose_name }}
-            </a>
-          {% endif %}
-        {% endfor %}
-      </div>
-    </div>
-  </div>
+  </a>
 {% endblock %}
 
 {% block list_placeholder_icon_class %}{% endblock %}
