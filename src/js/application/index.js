@@ -105,6 +105,8 @@ export class Application {
     ko.bindingHandlers.htmlInit = plugins.htmlInit;
     ko.bindingHandlers.textInit = plugins.textInit;
     ko.bindingHandlers.jsonInit = plugins.jsonInit;
+    ko.bindingHandlers.valueInit = plugins.valueInit;
+    ko.bindingHandlers.element = plugins.element;
     ko.bindingHandlers.chart = plugins.chart;
     ko.bindingHandlers.popup = plugins.popup;
     ko.bindingHandlers.semanticui = plugins.semanticui;

@@ -8,27 +8,35 @@
 {% load privacy_tags %}
 {% load projects_tags %}
 
+{% load ext_theme_tags %}
+
 {% block view_binding %}data-bind="with: ProjectVersionListView()"{% endblock %}
 
 {% block top_left_menu_items %}
-  <div class="item">
-    <div class="ui category search">
-      <div class="ui icon input">
-        <input type="text" placeholder="Search versions...">
-        <i class="search icon"></i>
-      </div>
+  {# Pass information from Django into site JS #}
+  <script type="application/json" data-bind="jsonInit: config">
+{
+  "api_url": "{% url "projects-versions-list" project.slug %}"
+}
+  </script>
+
+  {# Separate UI for the version search selection field #}
+  <div class="header item">Version</div>
+  <div class="active item">
+    <div class="ui link search dropdown" data-bind="semanticui: {dropdown: filter_version_config()}">
+      <input type="hidden" name="version" value="{{ filter.form.version.value|default:"" }}">
+      <div class="default text">{% trans "All versions" %}</div>
+      <i class="dropdown icon"></i>
+      <div class="menu"></div>
     </div>
   </div>
 
-  <div class="header item">
-    Sort by
-  </div>
-  <a class="active item">
-    Recently built
-  </a>
-  <a class="item">
-    Name
-  </a>
+  {% comment %}
+  Fields == visible fields here as the versions filter is for show a single
+  version, not actually filtering a list
+  {% endcomment %}
+  {% include "includes/filters/form.html" with fields=filter.form.visible_fields %}
+
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
@@ -46,8 +54,7 @@
   <div class="ui primary button">Activate a version</div>
 {% endblock list_placeholder_text %}
 
-{% block list_item_start %}
-  <div class="item" data-bind="with: version({id: {{ object.pk }}, url: '{% url "projects-versions-detail" object.project.slug object.slug %}'})">
+{% block list_item_start %} <div class="item" data-bind="with: version({id: {{ object.pk }}, url: '{% url "projects-versions-detail" object.project.slug object.slug %}'})">
 {% endblock list_item_start %}
 
 {% block list_item_right_menu %}
@@ -110,7 +117,7 @@
 {% block list_item_header %}
   {% include "builds/includes/status_icon.html" with build=object.builds.first circular=True %}
 
-  <a class="ui basic label" href="#">
+  <a class="ui basic label" href="{% url "builds_project_list" object.project.slug %}?version={{ object.slug }}">
     <i class="code branch icon"></i>
     <code>{{ object.verbose_name }}</code>
   </a>
@@ -177,7 +184,7 @@
 
   <a
     class="item"
-    href="{% url "builds_project_list" object.project.slug %}">
+    href="{% url "builds_project_list" object.project.slug %}?version={{ object.slug }}">
     <i class="history icon"></i>
     {% blocktrans trimmed with count=object.builds.count %}
       {{ count }} total builds

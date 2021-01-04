@@ -13,6 +13,44 @@ export class ProjectListView extends PopupView {
     super();
 
     this.projects = ko.observableArray();
+    this.config = ko.observable();
+    this.filter_project_config = ko.observable();
+
+    this.config.subscribe((config) => {
+      if (config === undefined) {
+        return;
+      }
+      const url = config.api_url + "?name={query}";
+      const errors = config.errors || {};
+      this.filter_project_config({
+        apiSettings: {
+          url: url,
+        },
+        fields: {
+          name: "name",
+          value: "slug",
+        },
+        saveRemoteData: true,
+        filterRemoteData: true,
+        sortSelect: true,
+        onChange: (value, label, $elem) => {
+          window.location.href = "?project=" + value;
+        },
+      });
+    });
+
+    this.filter_config = {
+      action: 'select',
+      onChange: (value, label, $elem) => {
+        // Note: limit use of jQuery selector aid. It's confusing to mix Django
+        // templates, knockout, and random jQuery selections in the page. Most
+        // of the time, you should be able to use a knockout binding, but this
+        // was rather trivial and resulted in no additional observables on the
+        // view.
+        const form = $elem.closest('form');
+        form.submit();
+      },
+    };
   }
 
   project(data) {
@@ -80,27 +118,43 @@ export class ProjectVersionListView extends PopupView {
 
     this.versions = ko.observableArray();
     this.config = ko.observable();
-    this.dropdown_config = ko.observable();
+    this.filter_version_config = ko.observable();
 
-    // Set dropdown config once view config is loaded from script block
     this.config.subscribe((config) => {
-      if (config !== undefined) {
-        this.dropdown_config({
-          action: "select",
-          ignoreCase: true,
-          fullTextSearch: true,
-          sortSelect: true,
-          apiSettings: {
-            url: config.api_url + '?active=False&limit=20&verbose_name={query}',
-          },
-          fields: {
-            name: "verbose_name",
-            value: "slug",
-          },
-          saveRemoteData: false,
-        });
+      if (config === undefined) {
+        return;
       }
+      const url = config.api_url + "?verbose_name={query}&active=True";
+      const errors = config.errors || {};
+      this.filter_version_config({
+        apiSettings: {
+          url: url,
+        },
+        fields: {
+          name: "verbose_name",
+          value: "slug",
+        },
+        saveRemoteData: true,
+        filterRemoteData: true,
+        sortSelect: true,
+        onChange: (value, label, $elem) => {
+          window.location.href = "?version=" + value;
+        },
+      });
     });
+
+    this.filter_config = {
+      action: 'select',
+      onChange: (value, label, $elem) => {
+        // Note: limit use of jQuery selector aid. It's confusing to mix Django
+        // templates, knockout, and random jQuery selections in the page. Most
+        // of the time, you should be able to use a knockout binding, but this
+        // was rather trivial and resulted in no additional observables on the
+        // view.
+        const form = $elem.closest('form');
+        form.submit();
+      },
+    };
   }
 
   attach_add_version() {

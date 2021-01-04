@@ -45,6 +45,16 @@ export const textInit = add_init_handler(
   }
 );
 
+// Value init binding. Gets initial value as node value, sets value in return
+export const valueInit = add_init_handler(
+  (element) => {
+    return element.value;
+  },
+  (property) => {
+    return { value: property };
+  }
+);
+
 // JSON binding. Gets initial value as JSON from node inner HTML, doesn't
 // set anything in return
 export const jsonInit = add_init_handler((element) => {
@@ -70,6 +80,13 @@ function add_init_handler(getter, setter) {
     },
   };
 }
+
+export const element = {
+  init: function (element, value_accessor) {
+    var property = value_accessor();
+    property(element);
+  },
+};
 
 export const chart = {
   init: function (element, value_accessor) {

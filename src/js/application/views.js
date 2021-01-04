@@ -11,6 +11,7 @@ import { MessageView } from "../core/views";
  */
 const views = {
   BuildDetailView: build.detail.BuildDetailView,
+  BuildListView: build.list.BuildListView,
   ProjectListView: project.ProjectListView,
   ProjectVersionCreateView: project.ProjectVersionCreateView,
   ProjectVersionListView: project.ProjectVersionListView,
