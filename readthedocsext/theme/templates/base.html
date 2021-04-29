@@ -7,22 +7,12 @@
   <head>
     <title>{% block title %}{% endblock %}{% block head_title %}{% endblock %} - Read the Docs</title>
 
-    <link rel="icon" type="image/png" href="{% static 'corporate/img/favicon.png' %}" />
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" />
     <link rel="stylesheet" type="text/css" media="all" href="{% webpack_static "readthedocsext/theme/css/site.css" %}" />
     {% block extra_links %}{% endblock %}
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width" />
-
-    {# This block is used to pass settings between our application and JS #}
-    <script type="application/json" id="site-config">
-{
-  {# TODO make this debug conditional work. It requires altering INTERNAL_IPS #}
-  {% if debug %}"debug": true,{% endif %}
-  "debug": true,
-  "webpack_public_path": "{% webpack_static "readthedocsext/theme" %}/"
-}
-    </script>
 
     {# TODO remove these, from the existing theme #}
     <!--
