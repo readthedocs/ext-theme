@@ -14,6 +14,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width" />
 
+    {# This block is used to pass settings between our application and JS #}
+    <script type="application/json" id="site-config">
+{
+  {# TODO make this debug conditional work. It requires altering INTERNAL_IPS #}
+  {% if debug %}"debug": true,{% endif %}
+  "debug": true,
+  "webpack_public_path": "{% get_static_prefix %}/"
+}
+    </script>
+
     {# TODO remove these, from the existing theme #}
     <!--
     <script type="text/javascript" src="{{ MEDIA_URL }}javascript/instantsearch.js"></script>
