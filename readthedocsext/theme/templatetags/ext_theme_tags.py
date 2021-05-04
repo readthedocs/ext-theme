@@ -48,6 +48,19 @@ def do_webpack_static(parser, token):
     return WebpackStaticNode.handle_token(parser, token)
 
 
+@register.simple_tag(name="get_webpack_static_prefix")
+def do_get_webpack_static_prefix():
+    """
+    Emulates what {% get_static_prefix %} does considering local dev server.
+
+    If the local dev webpack server is being used, it return this prefix.
+    Otherwise, it fallbacks to regular STATIC_URL setting.
+    """
+    webpack_server = getattr(settings, 'RTD_EXT_THEME_DEV_SERVER', None)
+    static_url = getattr(settings, 'STATIC_URL', None)
+    return (webpack_server or static_url).rstrip('/')
+
+
 @register.simple_tag(name="alter_field", takes_context=True)
 def alter_field(context, field, data_bind=None, classes=None, label_classes=None):
     if not isinstance(field, boundfield.BoundField) and settings.DEBUG:
