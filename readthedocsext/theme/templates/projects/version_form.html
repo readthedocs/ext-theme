@@ -83,7 +83,7 @@
         {% block project_version_form_search %}
           <div data-bind="using: ProjectVersionCreateView()">
 
-            {# Pass information from Django into site JS #}
+            {# Pass information from Django into site JS, avoid CSP as inline JS #}
             <script type="application/json" data-bind="jsonInit: config">
 {
   "api_url": "{% url "projects-versions-list" project.slug %}",

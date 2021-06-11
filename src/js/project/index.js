@@ -75,6 +75,8 @@ export class ProjectVersionCreateView extends PopupView {
   constructor() {
     super();
 
+    // `config` comes from an inline `jsonInit` plugin. This configuration is
+    // passed in here as an observable via JSON
     this.config = ko.observable();
 
     this.is_loading = ko.observable(false);
@@ -88,6 +90,9 @@ export class ProjectVersionCreateView extends PopupView {
     });
   }
 
+  /**
+   * Get the config for SUI search element
+   */
   init_search(config) {
     const url = config.api_url + "?verbose_name={query}";
     const errors = config.errors || {};
@@ -105,7 +110,7 @@ export class ProjectVersionCreateView extends PopupView {
       },
       fullTextSearch: true,
       onSelect: (result, response) => {
-        window.location.href = result.urls.edit;
+        window.location.href = result.urls.dashboard.edit;
       },
       error: errors,
     };
