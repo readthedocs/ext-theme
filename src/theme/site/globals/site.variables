@@ -3,11 +3,13 @@
 @importGoogleFonts: False;
 
 /* Colors */
+/*
 @positiveColor           : @olive;
 @positiveBackgroundColor : @olive;  //#FCFFF5;
 @positiveBorderColor     : darken(@olive, 10%);  //#A3C293;
 @positiveHeaderColor     : darken(@olive, 20%);  //#1A531B;
 @positiveTextColor       : @olive;  //#2C662D;
+*/
 
 // TODO move these
 .ui.red.text { color: @red; }
