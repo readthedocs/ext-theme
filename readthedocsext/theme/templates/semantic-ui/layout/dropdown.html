@@ -1,6 +1,14 @@
 {% load crispy_forms_field %}
 
-<div class="ui fluid selection search dropdown{% if field.attrs.multiple%} multiple{% endif %}">
+{% comment %}
+  This wraps a ``<select>`` in extra elements for SUI, however because we are
+  initializing ``dropdown()`` on the underlying ``<select>``, we will skip
+  automatic set up of ``dropdown()`` on the wrapping element with
+  ``data-semanticui-dropdown``
+{% endcomment %}
+
+<div class="ui fluid selection search link dropdown{% if field.attrs.multiple%} multiple{% endif %}"
+     data-semanticui-dropdown="1">
   <i class="dropdown icon"></i>
   <div class="default text">{{ field.attrs.placeholder }}</div>
   {% crispy_field field %}

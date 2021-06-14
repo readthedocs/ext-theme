@@ -1,13 +1,13 @@
 {% load i18n %}
 {% load gravatar %}
 
-<!-- BEGIN header-->
+{# BEGIN header #}
 <div class="ui inverted attached stackable menu">
   <div class="ui container">
     {% comment %}Translators: Name of the website{% endcomment %}
     <a class="header item" href="{% url "homepage" %}">Read the Docs</a>
 
-    <!-- BEGIN header nav -->
+    {# BEGIN header nav #}
     <div class="right menu">
       {% if request.user.is_authenticated %}
         <div class="ui pointing dropdown link item">
@@ -42,8 +42,8 @@
       {% endif %}
 
     </div>
-    <!-- END header nav -->
+    {# END header nav #}
 
   </div>
 </div>
-<!-- END header-->
+{# END header #}

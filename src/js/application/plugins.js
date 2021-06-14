@@ -199,11 +199,17 @@ export const message = {
 export const semanticui = {
   update: (element, value_accessor, all_bindings) => {
     const value = ko.unwrap(value_accessor());
+    const jq_element = jquery(element);
     for (const [key, value] of Object.entries(value)) {
       if (value !== undefined) {
         console.debug("Setting up SemanticUI component:", key, value, element);
-        // Call jquery(element).search(value), but dynamically
-        jquery(element)[key](value);
+
+        // Call jquery(element).search(value), but dynamically.
+        jq_element[key](value);
+
+        // Set attribute for CSS selector on element. This is used to avoid
+        // initializing SUI JQuery plugins twice on elements.
+        jq_element.attr('data-semanticui-' + key, true);
       }
     }
   },

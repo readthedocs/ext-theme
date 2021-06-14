@@ -12,6 +12,12 @@ export const core = require("../core");
 export class Application {
   constructor() {}
 
+  /**
+   * Load site configuration from JSON
+   *
+   * This is a global configuration, for things like webpack asset URLs and
+   * debug mode.
+   */
   load_config() {
     console.debug("Loading site front end configuration from script tag");
 
@@ -31,40 +37,31 @@ export class Application {
     return site_config;
   }
 
-  configure() {
+  /**
+   * Do final set up
+   *
+   * This is for jQuery and SUI jQuery plugins that were not explicitly set up
+   * in the templates. There are a number of places where an element needs to
+   * be initialized with specific plugin configuration, and so we can't do a
+   * blanket configuration of these plugins.
+   *
+   * The additional negative selectors here are added by the `semanticui` KO
+   * plugin and allow an easy way to detect elements that already have jQuery
+   * plugins initialized.
+   */
+  finalize() {
     // TODO make this a function somewhere
-    jquery(".ui.progress").progress();
-    jquery(".ui.accordion").accordion();
+    jquery(".ui.progress:not([data-semanticui-progress])").progress();
+    jquery(".ui.accordion:not([data-semanticui-accordion])").accordion();
+    jquery(".ui.dropdown:not([data-semanticui-dropdown])").dropdown({placeholder: ""});
+    // Automatically convert ``<select>`` in a nested dropdown element. This is
+    // used with Crispy form fields and other Django form fields mostly.
+    jquery(".ui.dropdown[data-semanticui-dropdown] > select").dropdown({placeholder: ""});
     // We only enable popup functionality with a broad CSS selector here
     // because `data-content` is very basic usage of a popup. Anything more
     // complicated should use the `semanticui` KO plugin.
-    jquery(".ui[data-content]").popup();
+    jquery(".ui[data-content]:not([data-semanticui-popup])").popup();
     jquery(".ui.menu > .item[data-tab]").tab();
-
-    // Dropdowns
-    // For .ui.link.dropdown, alter the action to only allow selecting, and allow
-    // select by keyboard for .ui.link.search.dropdown. We separate dropdown
-    // with nested select elements so that we don't double initialize the
-    // dropdown, which breaks things. Using a select in a dropdown is mostly
-    // used by crispy forms.
-    // TODO make this more efficient, selectors can reduce the work here
-    jquery(".ui.dropdown:not(.manual)").each((index, obj) => {
-      const dropdown = jquery(obj);
-      const child_select = dropdown.children("select");
-
-      if (child_select.length > 0) {
-        child_select.dropdown({ placeholder: "" });
-      } else {
-        dropdown.add(".link").dropdown({
-          action: "hide",
-          onChange: function (value, text, $selectedItem) {
-            const url = $selectedItem.attr("href");
-            window.location = url;
-          },
-        });
-        dropdown.not(".link").dropdown({ placeholder: "" });
-      }
-    });
 
     jquery(".ui.button[data-modal]").on("click", function () {
       var modal_selector = jquery(this).attr("data-modal");
@@ -104,7 +101,7 @@ export class Application {
   run() {
     this.load_config();
     this.configure_plugins();
-    this.configure();
     this.attach_view();
+    this.finalize();
   }
 }
