@@ -6,8 +6,12 @@ import * as build from "../build";
 import * as docs from "../docs";
 import { MessageView } from "../core/views";
 
-/* Fun fact, we can't rely on dynamic naming here, like using
- * ``ProjectListView.constructor.name``, as minification renames the class
+/**
+ * This is an explicit mapping of view name to view class
+ *
+ * This is required because we can't use something like
+ * `ProjectListView.constructor.name``, as minification renames the class at
+ * build time.
  */
 const views = {
   BuildDetailView: build.detail.BuildDetailView,
@@ -21,7 +25,6 @@ const views = {
   ProjectRedirectView: project.admin.ProjectRedirectView,
   ProjectAutomationRuleView: project.admin.ProjectAutomationRuleView,
   EmbedTopicsView: docs.EmbedTopicsView,
-  MessageView: MessageView,
 };
 
 export class ApplicationView {

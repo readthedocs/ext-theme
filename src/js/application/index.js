@@ -76,20 +76,6 @@ export class Application {
       }
     });
 
-    // Search
-    /*
-      jquery('.ui.search').each((index, obj) => {
-        const search = jquery(obj);
-        const config_obj = search.children('script.config').first();
-        const config_src = config_obj.text();
-
-        if (config_src && config_obj.attr('type') == "application/json") {
-          const config = JSON.parse(config_src);
-          search.search(config);
-        }
-      });
-      */
-
     // Initialize clipboard, but only for data-clipboard-text. This is the most
     // generalized pattern for clipboard usage, so I won't yet worry about
     // adding the other data binding selectors.
@@ -109,6 +95,7 @@ export class Application {
     ko.bindingHandlers.element = plugins.element;
     ko.bindingHandlers.chart = plugins.chart;
     ko.bindingHandlers.popup = plugins.popup;
+    ko.bindingHandlers.message = plugins.message;
     ko.bindingHandlers.semanticui = plugins.semanticui;
   }
 

@@ -136,6 +136,66 @@ export const popup = {
   },
 };
 
+/**
+ * Message plugin for Knockout
+ *
+ * This manipulates the child DOM to provide messages that can be dismissed by
+ * either closing via the close button, or clicking the link in the message.
+ * This will fade out the message.
+ *
+ * This is a plugin as we manipulate JQuery elements directly. Knockout views
+ * are not a good fit here because the underlying JQuery element is not
+ * surfaced to Knockout views.
+ *
+ * Usage:
+ *
+ *     <div data-bind="message: {}"></div>
+ *     <div data-bind="message: {dismiss_url: '/foo'}"></div>
+ *
+ */
+export const message = {
+  init: (element, value_accessor, bindings, view, context) => {
+    const jq_element = jquery(element);
+
+    const config = value_accessor()
+
+    // This intercepts the normal function of the button, and injects a call to
+    // first dismiss the message.
+    const dismiss = (event) => {
+      const target = jquery(event.target);
+      const link_url = target.attr("href");
+
+      event.preventDefault();
+
+      if (config.dismiss_url) {
+        jquery
+          .get(config.dismiss_url)
+          .done((resp) => {
+            if (link_url) {
+              window.location = link_url;
+            }
+          })
+          .fail((error) => {
+            console.error(error);
+          })
+          .always(() => {
+            jq_element.transition("fade");
+          });
+      } else {
+        jq_element.transition("fade");
+      }
+
+      return false;
+    };
+
+    // We will use the above handler on both the close button, and also on any
+    // links in the text of the message. This ensures both options dismiss the
+    // notification message.
+    jq_element.find(".close").on("click", dismiss);
+    jq_element.find("a").on("click", dismiss);
+  }
+};
+
 export const semanticui = {
   update: (element, value_accessor, all_bindings) => {
     const value = ko.unwrap(value_accessor());

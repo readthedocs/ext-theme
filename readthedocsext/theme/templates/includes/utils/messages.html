@@ -1,0 +1,26 @@
+{% comment %}
+  This template is used by the base template to provide a list of messages on
+  the top of the page.
+{% endcomment %}
+
+{% if messages %}
+<div class="ui container">
+  <div class="ui basic segment">
+    {% for message in messages %}
+      {% if message.pk %}
+        <div class="ui message {{ message.tags }}"
+             data-bind="message: {dismiss_url: '{% url "message_mark_read" message.pk %}'}">
+          <i class="close icon"></i>
+          <span>{{ message }}</span>
+        </div>
+      {% else %}
+        <div class="ui message {{ message.tags }}"
+             data-bind="message: {}">
+          <i class="close icon"></i>
+          <span>{{ message }}</span>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

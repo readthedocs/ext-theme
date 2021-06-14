@@ -35,27 +35,13 @@
     {# TODO remove info_bar block, it isn't used #}
     {% block info_bar %}{% endblock %}
 
-    <!-- BEGIN header -->
     {% block header %}
       {% include "includes/header.html" %}
-    {% endblock %}
-    <!-- END header -->
+    {% endblock header %}
 
-    <!-- BEGIN notify -->
-    {% if messages %}
-      <div class="ui container" id="messages" data-bind="with: MessageView()">
-        <div class="ui basic segment">
-          {% for message in messages %}
-            <div class="ui message {{ message.tags }}"
-                 {% if message.pk %}data-message-dismiss-url="{% url 'message_mark_read' message.pk %}"{% endif %}>
-              <i class="close icon"></i>
-              {{ message }}
-            </div>
-          {% endfor %}
-        </div>
-      </div>
-    {% endif %}
-    <!-- END notify -->
+    {% block messages %}
+      {% include "includes/utils/messages.html" %}
+    {% endblock messages %}
 
     {# TODO remove subnav-bar block, it isn't used #}
     {% block subnav-bar %}{% endblock %}
