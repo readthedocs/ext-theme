@@ -40,10 +40,6 @@ export class Application {
     jquery(".ui.accordion").accordion();
     jquery(".ui.menu > .item[data-tab]").tab();
 
-    jquery(".ui[data-popup-on-click]").popup({
-      on: "click",
-    });
-
     // Dropdowns
     // For .ui.link.dropdown, alter the action to only allow selecting, and allow
     // select by keyboard for .ui.link.search.dropdown. We separate dropdown

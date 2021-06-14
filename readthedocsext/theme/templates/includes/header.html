@@ -2,17 +2,15 @@
 {% load gravatar %}
 {% load static %}
 
-<!-- BEGIN header-->
 <div class="ui inverted attached stackable menu">
   <div class="ui container">
     <a class="header item" href="{% url "homepage" %}">
       <div class="ui readthedocs-logo image"></div>
     </a>
 
-    <!-- BEGIN header nav -->
     <div class="right menu">
       {% if request.user.is_authenticated %}
-        <a class="ui item" data-popup-on-click=1>
+        <a class="ui item" data-bind="semanticui: {popup: {on: 'click'}}">
           <img class="ui avatar image" src="{% gravatar_url request.user.email 24 %}">
           <span class="text">
             {{ request.user }}
@@ -60,8 +58,6 @@
       {% endif %}
 
     </div>
-    <!-- END header nav -->
 
   </div>
 </div>
-<!-- END header-->
