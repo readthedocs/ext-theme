@@ -5,7 +5,6 @@ import ko from "knockout";
 
 import { PopupView, APIListItemView } from "../core/views";
 
-
 export class BuildListView extends PopupView {
   constructor() {
     super();
@@ -31,21 +30,21 @@ export class BuildListView extends PopupView {
         filterRemoteData: true,
         sortSelect: true,
         onChange: (value, label, $elem) => {
-          $elem.closest('form').submit();
+          $elem.closest("form").submit();
           //window.location.href = "?version=" + value;
         },
       });
     });
 
     this.filter_config = {
-      action: 'select',
+      action: "select",
       onChange: (value, label, $elem) => {
         // Note: limit use of jQuery selector aid. It's confusing to mix Django
         // templates, knockout, and random jQuery selections in the page. Most
         // of the time, you should be able to use a knockout binding, but this
         // was rather trivial and resulted in no additional observables on the
         // view.
-        const form = $elem.closest('form');
+        const form = $elem.closest("form");
         form.submit();
       },
     };

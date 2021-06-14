@@ -157,7 +157,7 @@ export const message = {
   init: (element, value_accessor, bindings, view, context) => {
     const jq_element = jquery(element);
 
-    const config = value_accessor()
+    const config = value_accessor();
 
     // This intercepts the normal function of the button, and injects a call to
     // first dismiss the message.
@@ -193,7 +193,7 @@ export const message = {
     // notification message.
     jq_element.find(".close").on("click", dismiss);
     jq_element.find("a").on("click", dismiss);
-  }
+  },
 };
 
 export const semanticui = {
@@ -201,7 +201,7 @@ export const semanticui = {
     const value = ko.unwrap(value_accessor());
     for (const [key, value] of Object.entries(value)) {
       if (value !== undefined) {
-        console.debug('Setting up SemanticUI component:', key, value, element);
+        console.debug("Setting up SemanticUI component:", key, value, element);
         // Call jquery(element).search(value), but dynamically
         jquery(element)[key](value);
       }
