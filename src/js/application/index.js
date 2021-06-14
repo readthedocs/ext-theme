@@ -33,11 +33,12 @@ export class Application {
 
   configure() {
     // TODO make this a function somewhere
-    jquery(".ui[data-content]").popup();
-    jquery(".ui[data-html]").popup({ hoverable: true });
-    jquery(".ui[data-popup]").popup({ hoverable: true });
     jquery(".ui.progress").progress();
     jquery(".ui.accordion").accordion();
+    // We only enable popup functionality with a broad CSS selector here
+    // because `data-content` is very basic usage of a popup. Anything more
+    // complicated should use the `semanticui` KO plugin.
+    jquery(".ui[data-content]").popup();
     jquery(".ui.menu > .item[data-tab]").tab();
 
     // Dropdowns

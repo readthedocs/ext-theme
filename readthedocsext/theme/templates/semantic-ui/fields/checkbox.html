@@ -25,7 +25,7 @@
       {{ field.label|safe }}
 
       {% if field.help_text %}
-        <i class="ui small circular grey help icon" data-html="{{ field.help_text }}"></i>
+        <i class="ui small circular grey help icon" data-html="{{ field.help_text }}" data-bind="semanticui: {popup: {hoverable: true}}"></i>
       {% endif %}
     </label>
   {% endif %}
