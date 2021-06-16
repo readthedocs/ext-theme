@@ -227,7 +227,7 @@ export const semanticui = {
 
         // Set attribute for CSS selector on element. This is used to avoid
         // initializing SUI JQuery plugins twice on elements.
-        jq_element.attr('data-semanticui-' + key, true);
+        jq_element.attr("data-semanticui-" + key, true);
       }
     }
   },

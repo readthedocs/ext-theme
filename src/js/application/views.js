@@ -74,12 +74,12 @@ export class ApplicationView {
    */
   show_modal(modal_id) {
     return (data, event) => {
-      const selector = '[data-modal-id=' + modal_id + ']';
-      console.debug('Showing modal:', selector)
-      const found_modal = jquery(selector).modal('show');
+      const selector = "[data-modal-id=" + modal_id + "]";
+      console.debug("Showing modal:", selector);
+      const found_modal = jquery(selector).modal("show");
       if (found_modal.length === 0) {
-        console.debug('Modal not found:', selector);
+        console.debug("Modal not found:", selector);
       }
-    }
+    };
   }
 }

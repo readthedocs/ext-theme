@@ -52,10 +52,14 @@ export class Application {
   finalize() {
     jquery(".ui.progress:not([data-semanticui-progress])").progress();
     jquery(".ui.accordion:not([data-semanticui-accordion])").accordion();
-    jquery(".ui.dropdown:not([data-semanticui-dropdown])").dropdown({placeholder: ""});
+    jquery(".ui.dropdown:not([data-semanticui-dropdown])").dropdown({
+      placeholder: "",
+    });
     // Automatically convert ``<select>`` in a nested dropdown element. This is
     // used with Crispy form fields and other Django form fields mostly.
-    jquery(".ui.dropdown[data-semanticui-dropdown] > select").dropdown({placeholder: ""});
+    jquery(".ui.dropdown[data-semanticui-dropdown] > select").dropdown({
+      placeholder: "",
+    });
     // We only enable popup functionality with a broad CSS selector here
     // because `data-content` is very basic usage of a popup. Anything more
     // complicated should use the `semanticui` KO plugin.
