@@ -30,11 +30,11 @@
     </p>
 
     {% trans "Delete account" as action_text %}
-    <a class="ui button" data-modal="#modal-account-delete">
+    <a class="ui button" data-bind="click: $root.show_modal('delete-account')">
       <i class="trash icon"></i>
       {{ action_text }}
     </a>
-    <div class="ui mini modal" id="modal-account-delete">
+    <div class="ui mini modal" data-modal-id="delete-account">
       <div class="header">
         {{ action_text }}
       </div>

@@ -28,7 +28,7 @@
           </div>
 
           <div class="ui basic segment loading padded" data-bind="css: { loading: is_loading() }">
-            <div class="ui active progress" id="build-progress" data-bind="css: state_progress_css()">
+            <div class="ui active progress" data-bind="css: state_progress_css, semanticui: {progress: state_progress()}">
               <div class="bar"><div class="progress"></div></div>
               <div class="label">
                 <span data-bind="visible: !finished()" style="display: none;">
@@ -105,12 +105,12 @@
       <div class="right menu">
         {% if request.user.is_staff %}
           <div class="ui item">
-            <a class="ui mini red icon button" data-bind="click: show_debug">
+            <a class="ui mini red icon button" data-bind="click: $root.show_modal('build-debug')">
               <i class="bug icon"></i>
               Debug
             </a>
           </div>
-          <div class="ui modal" id="build-debug-modal">
+          <div class="ui modal" data-modal-id="build-debug">
             <div class="ui icon header">
               <i class="bug icon"></i>
               Debug

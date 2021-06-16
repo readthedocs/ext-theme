@@ -37,11 +37,11 @@
       {% endblocktrans %}
     </p>
 
-    <a class="ui button" data-modal="#modal-project-delete">
+    <a class="ui button" data-bind="click: $root.show_modal('project-delete')">
       <i class="trash icon"></i>
       {% trans "Delete project" %}
     </a>
-    <div class="ui mini modal" id="modal-project-delete">
+    <div class="ui mini modal" data-modal-id="project-delete">
       <div class="header">
         {% trans "Delete project" %}
       </div>

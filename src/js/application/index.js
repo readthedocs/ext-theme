@@ -50,7 +50,6 @@ export class Application {
    * plugins initialized.
    */
   finalize() {
-    // TODO make this a function somewhere
     jquery(".ui.progress:not([data-semanticui-progress])").progress();
     jquery(".ui.accordion:not([data-semanticui-accordion])").accordion();
     jquery(".ui.dropdown:not([data-semanticui-dropdown])").dropdown({placeholder: ""});
@@ -62,13 +61,6 @@ export class Application {
     // complicated should use the `semanticui` KO plugin.
     jquery(".ui[data-content]:not([data-semanticui-popup])").popup();
     jquery(".ui.menu > .item[data-tab]").tab();
-
-    jquery(".ui.button[data-modal]").on("click", function () {
-      var modal_selector = jquery(this).attr("data-modal");
-      if (modal_selector) {
-        jquery(modal_selector).modal("show");
-      }
-    });
 
     // Initialize clipboard, but only for data-clipboard-text. This is the most
     // generalized pattern for clipboard usage, so I won't yet worry about

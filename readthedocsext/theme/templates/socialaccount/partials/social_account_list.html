@@ -11,7 +11,7 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  <div class="ui tiny green icon button" data-modal="#socialaccount-connections-modal">
+  <div class="ui tiny green icon button" data-bind="click: $root.show_modal('socialaccount-connections')">
     <i class="plus icon"></i>
     {% trans "Add new connection" %}
   </div>

@@ -46,11 +46,11 @@
 
 {% block list_item_right_buttons %}
   <a class="ui{% if object == request.user %} disabled{% endif %} icon button"
-     data-modal="#modal-user-{{ object.username }}"
+     data-bind="click: $root.show_modal('user-{{ object.username }}')"
      data-content="{% trans "Remove maintainer" %}">
     <i class="trash icon"></i>
   </a>
-  <div class="ui mini modal" id="modal-user-{{ object.username }}">
+  <div class="ui mini modal" data-modal-id="user-{{ object.username }}">
     <div class="header">Remove user {{ object.username }}</div>
     <div class="content">
       Remove user <code>{{ object.username }}</code> as a maintainer?

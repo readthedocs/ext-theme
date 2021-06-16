@@ -130,7 +130,7 @@ export class BuildDetailView {
     this.is_loading = ko.observable(true);
 
     /* State subscriptions -- performed on load to ensure jquery plugins */
-    this.state_progress = this.state.subscribe((new_value) => {
+    this.state_progress = ko.computed(() => {
       const states = [
         "triggered",
         "queued",
@@ -140,11 +140,10 @@ export class BuildDetailView {
         "uploading",
         "finished",
       ];
-      var progress_value = states.indexOf(this.state());
-      jquery("#build-progress").progress({
-        value: progress_value,
+      return {
+        value: states.indexOf(this.state()),
         total: states.length - 1,
-      });
+      };
     });
     this.state_progress_css = ko.computed(() => {
       const finished = this.finished();
@@ -303,11 +302,6 @@ export class BuildDetailView {
       // Stop processing the event
       return false;
     }
-  }
-
-  /* Show modal with debug information, only available for site admins */
-  show_debug() {
-    jquery("#build-debug-modal").modal("show");
   }
 
   /* Debugging method for loading content from the main site */

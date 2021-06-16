@@ -31,11 +31,11 @@
 {% endcomment %}
 
 <a class="ui icon button"
-   data-modal="#modal-{{ id }}"
+   data-bind="click: $root.show_modal('remove-{{ id }}')"
    data-content="{{ action_text }}">
   <i class="trash icon"></i>
 </a>
-<div class="ui mini modal" id="modal-{{ id }}">
+<div class="ui mini modal" data-modal-id="remove-{{ id }}">
   <div class="header">{{ action_text }}</div>
   <div class="content">
     {{ content_text }}

@@ -201,6 +201,12 @@ export const semanticui = {
     const value = ko.unwrap(value_accessor());
     const jq_element = jquery(element);
     for (const [key, value] of Object.entries(value)) {
+      if (key === "modal") {
+        // modal is not supported here because the jQuery ``modal()`` plugin
+        // replaces ``<body>`` and this causes an error from Knockout, because
+        // the binding was applied to ``<body>`` more than once.
+        console.error("SemanticUI modal instantiation is not supported.");
+      }
       if (value !== undefined) {
         console.debug("Setting up SemanticUI component:", key, value, element);
 

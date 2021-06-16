@@ -43,11 +43,11 @@
 
 {% block list_item_right_buttons %}
   <a class="ui icon button"
-     data-modal="#modal-redirect-{{ object.pk }}"
+     data-bind="click: $root.show_modal('redirect-{{ object.pk }}')"
      data-content="{% trans "Remove redirect" %}">
     <i class="trash icon"></i>
   </a>
-  <div class="ui mini modal" id="modal-redirect-{{ object.pk }}">
+  <div class="ui mini modal" data-modal-id="redirect-{{ object.pk }}">
     <div class="header">Remove redirect?</div>
     <div class="content">
       Remove redirect {{ object }}?
