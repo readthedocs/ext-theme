@@ -88,6 +88,18 @@ export const element = {
   },
 };
 
+/**
+ * Chart binding
+ *
+ * Used in a couple places to instantiate chartjs on a ``<canvas>``.
+ *
+ * Usage:
+ *
+ *    <canvas width="400" height="150" data-bind="chart: config"></canvas>
+ *    <script type="application/json" data-bind="jsonInit: config">
+ *    {...}
+ *    </script>
+ */
 export const chart = {
   init: function (element, value_accessor) {
     var property = value_accessor();
