@@ -1,8 +1,40 @@
+/*******************************
+     User Global Variables
+*******************************/
+//@pageMinWidth  : 1049px;
+//@pageOverflowX : visible;
+
 //@emSize: 16px;
 //@fontSize: 16px;
+//@fontName : 'Arial';
 @importGoogleFonts: False;
 
+//@bigSize : (18 / 13);
+
+//@h1: 2.25em;
+
+//@defaultBorderRadius: 0.2307em;
+
+//@disabledOpacity: 0.3;
+
 /* Colors */
+//@red;
+@orange: #f05330;
+//@yellow;
+//@olive;
+//@green;
+//@teal;
+@blue: #1171b0;
+//@violet;
+//@purple;
+//@pink;
+//@brown;
+//@grey;
+@black: #252a31;
+
+@primaryColor: @blue;
+@secondaryColor: @orange;
+
 /*
 @positiveColor           : @olive;
 @positiveBackgroundColor : @olive;  //#FCFFF5;
@@ -10,6 +42,30 @@
 @positiveHeaderColor     : darken(@olive, 20%);  //#1A531B;
 @positiveTextColor       : @olive;  //#2C662D;
 */
+
+/* Links */
+//@linkColor: #4078C0;
+//@linkHoverColor: @linkColor;
+//@linkHoverUnderline: underline;
+
+/* Borders */
+//@borderColor: rgba(0, 0, 0, 0.13);
+//@solidBorderColor: #DDDDDD;
+//@internalBorderColor: rgba(0, 0, 0, 0.06);
+//@selectedBorderColor: #51A7E8;
+
+/* Breakpoints */
+//@largeMonitorBreakpoint: 1049px;
+//@computerBreakpoint: @largeMonitorBreakpoint;
+//@tabletBreakpoint: @largeMonitorBreakpoint;
+
+//@infoBackgroundColor: #E6F1F6;
+
+//@infoTextColor: #4E575B;
+//@warningTextColor: #613A00;
+//@errorTextColor: #991111;
+
+
 
 // TODO move these
 .ui.red.text { color: @red; }
