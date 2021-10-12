@@ -2,3 +2,25 @@
     padding-left: 0rem;
     padding-right: 0rem;
 }
+
+/*******************************
+            Sections
+*******************************/
+section.ui.vertical.segment.padded {
+  padding: 1.5rem 0;
+}
+section.ui.vertical.segment.padded {
+  padding: 5rem 0;
+}
+section.ui.vertical.segment.very.padded {
+  padding: 9rem 0;
+
+}
+section.ui.vertical.segment.extremely.padded {
+  padding: 12rem 0;
+
+}
+
+/*-------------------
+         sub
+--------------------*/

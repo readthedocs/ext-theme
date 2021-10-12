@@ -27,88 +27,89 @@
 
 {% block content-wrapper %}
   <!-- Lead -->
-  <section class="ui basic segment bottom inverted blue very padded">
-    <div class="ui container center aligned">
-      <div class="ui inverted icon header">
-        <i class="search icon"></i>
-        Technical documentation lives here
+  <section class="ui vertical segment inverted extremely padded" id="callout">
+
+    <div class="ui container">
+
+      <div class="ui grid centered">
+        <div class="column eight wide computer ten wide tablet sixteen wide mobile">
+          <h1 class="ui header inverted center aligned">
+            Callout title<br>conveys the site scope at a glance
+          </h1>
+          <p class="center aligned">
+            {% blocktrans trimmed %}
+            Callout text. A short paragraph extending the idea of the title above with just a bit more detail, grabbing the user attention so he looks for more information.
+            {% endblocktrans %}
+          </p>
+        </div>
       </div>
-      <p>
-        {% blocktrans trimmed %}
-        Read the Docs simplifies software documentation by automating building,
-        versioning, and hosting of your docs for you.
-        {% endblocktrans %}
-      </p>
+
     </div>
+
   </section>
 
-  <div class="ui container">
-    <section class="ui basic segment center aligned very padded">
-      <div class="ui icon header">
-        <i class="search icon"></i>
-        <h3>Free docs hosting</h3>
-      </div>
-      <p>
-        {% blocktrans trimmed %}
-        We will host your documentation for free forever.
-        There are no tricks. We help tens of thousands of open source projects
-        share their docs.
-        {% endblocktrans %}
-      </p>
-    </section>
+  
 
-    <section class="ui three column stackable grid very padded">
-      <div class="column">
-        <div class="ui segment center aligned">
-          <div class="ui icon header">
-            <i class="search icon"></i>
-            <h3>Webhooks</h3>
+  <section class="ui vertical segment">
+
+    <div class="ui container">
+      <div class="ui grid stackable three column">
+
+        <div class="column">
+          <div class="ui basic segment center aligned">
+            <div class="ui icon header">
+              <i class="search icon"></i>
+              <h3>Webhooks</h3>
+            </div>
+            <p>
+              {% blocktrans trimmed %}
+              Whenever you push code to your favorite version control system,
+              whether that is Git, Mercurial, Bazaar, or Subversion, we will
+              automatically build your docs so your code and documentation are
+              never out of sync.
+              {% endblocktrans %}
+            </p>
           </div>
-          <p>
-            {% blocktrans trimmed %}
-            Whenever you push code to your favorite version control system,
-            whether that is Git, Mercurial, Bazaar, or Subversion, we will
-            automatically build your docs so your code and documentation are
-            never out of sync.
-            {% endblocktrans %}
-          </p>
         </div>
-      </div>
-      <div class="column">
-        <div class="ui segment center aligned">
-          <div class="ui icon header">
-            <i class="search icon"></i>
-            <h3>Multiple formats</h3>
+        <div class="column">
+          <div class="ui basic segment center aligned">
+            <div class="ui icon header">
+              <i class="search icon"></i>
+              <h3>Multiple formats</h3>
+            </div>
+            <p>
+              {% blocktrans trimmed %}
+              Of course we build and host your docs for the web, but they are
+              also vieweable as PDFs, as single page HTML, and for eReaders.
+              No additional configuration is required.
+              {% endblocktrans %}
+            </p>
           </div>
-          <p>
-            {% blocktrans trimmed %}
-            Of course we build and host your docs for the web, but they are
-            also vieweable as PDFs, as single page HTML, and for eReaders.
-            No additional configuration is required.
-            {% endblocktrans %}
-          </p>
         </div>
-      </div>
-      <div class="column">
-        <div class="ui segment center aligned">
-          <div class="ui icon header">
-            <i class="search icon"></i>
-            <h3>Multiple versions</h3>
+        <div class="column">
+          <div class="ui basic segment center aligned">
+            <div class="ui icon header">
+              <i class="search icon"></i>
+              <h3>Multiple versions</h3>
+            </div>
+            <p>
+              {% blocktrans trimmed %}
+              We can host and build multiple versions of your docs so having a
+              1.0 version of your docs and a 2.0 version of your docs is as easy
+              as having a separate branch or tag in your version control system.
+              {% endblocktrans %}
+            </p>
           </div>
-          <p>
-            {% blocktrans trimmed %}
-            We can host and build multiple versions of your docs so having a
-            1.0 version of your docs and a 2.0 version of your docs is as easy
-            as having a separate branch or tag in your version control system.
-            {% endblocktrans %}
-          </p>
         </div>
+
       </div>
-    </section>
-  </div>
+    </div>
+
+  </section>
+  
 
   <!-- Call to action -->
-  <div class="ui inverted segment basic center aligned very padded">
+  <div class="ui vertical segment inverted center aligned very padded">
     <div class="ui container">
       <a href="https://docs.readthedocs.io/page/intro/getting-started-with-sphinx.html"
         class="ui button primary">{% trans 'Getting started guide' %}</a>
@@ -163,7 +164,7 @@
   {% endif %}
 
   <!-- Funding and Contributing -->
-  <section class="ui basic segment very padded">
+  <section class="ui vertical segment very padded">
     <div class="ui container">
       <h2 class="ui header center aligned">
         {% trans "Read the Docs is funded by the community" %}
