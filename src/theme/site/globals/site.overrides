@@ -1,0 +1,44 @@
+/*******************************
+             Page
+*******************************/
+
+
+/*******************************
+             Headers
+*******************************/
+
+
+/*******************************
+             Text
+*******************************/
+
+/*-------------------
+        Links
+--------------------*/
+
+/*-------------------
+      Utilities
+--------------------*/
+.ui.red.text { color: @red; }
+.ui.orange.text { color: @orange; }
+.ui.yellow.text { color: @yellow; }
+.ui.olive.text { color: @olive; }
+.ui.green.text { color: @green; }
+.ui.teal.text { color: @teal; }
+.ui.blue.text { color: @blue; }
+.ui.violet.text { color: @violet; }
+.ui.purple.text { color: @purple; }
+.ui.pink.text { color: @pink; }
+.ui.brown.text { color: @brown; }
+.ui.grey.text { color: @grey; }
+.ui.black.text { color: @black; }
+
+
+/*******************************
+         Scrollbars
+*******************************/
+
+
+/*******************************
+          Highlighting
+*******************************/
