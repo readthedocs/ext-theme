@@ -1,28 +1,28 @@
-import sys
 import os
+import sys
 
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath("."))
 
 import docext
 
-project = 'readthedocsext-theme'
-copyright = '2022, Read the Docs, Inc'
-author = 'Read the Docs, Inc'
+project = "readthedocsext-theme"
+copyright = "2022, Read the Docs, Inc"
+author = "Read the Docs, Inc"
 
-release = '1.0rc1'
+release = "1.0rc1"
 version = release
 
 extensions = [
-    'sphinxcontrib.autoanysrc',
+    "sphinxcontrib.autoanysrc",
 ]
 
-templates_path = ['_templates']
-html_static_path = ['_static']
+templates_path = ["_templates"]
+html_static_path = ["_static"]
 
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 autoanysrc_analyzers = {
-    'html': 'docext.DjangoTemplateAnalyzer',
+    "html": "docext.DjangoTemplateAnalyzer",
 }
 
-html_theme = 'sphinx_rtd_theme'
+html_theme = "sphinx_rtd_theme"
