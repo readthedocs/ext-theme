@@ -59,13 +59,26 @@
 
 {% block list_item_right_menu %}
   <div class="ui mini right floated buttons" data-bind="event: {mouseover: fetch}">
+
+    {% blocktrans trimmed with version=object.verbose_name asvar label_view %}
+      View documentation for version {{ version }}
+    {% endblocktrans %}
     <a class="ui icon{% if not object.built %} disabled{% endif %} button"
-       data-content="{% trans "View version documentation" %}"
-       data-bind="attr: {href: url_docs}">
+        data-bind="attr: {href: url_docs}"
+        target="_blank"
+        data-content="{{ label_view }}"
+        aria-label="{{ label_view }}">
       <i class="external icon"></i>
     </a>
 
-    <button class="ui icon{% if not object.has_epub and not object.has_htmlzip and not object.has_pdf %} disabled{% endif %} dropdown button" data-bind="event: {click: fetch}">
+    {% blocktrans trimmed with version=object.verbose_name asvar label_download %}
+      Downloadable formats for version {{ version }}
+    {% endblocktrans %}
+    <button
+        class="ui icon{% if not object.has_epub and not object.has_htmlzip and not object.has_pdf %} disabled{% endif %} dropdown button"
+        data-bind="event: {click: fetch}"
+        data-content="{{ label_download }}"
+        aria-label="{{ label_download }}">
       <i class="download icon"></i>
       <div class="menu">
         <div class="header">{% trans "Downloads" %}</div>
@@ -84,8 +97,11 @@
       </div>
     </button>
 
+    {% blocktrans trimmed with version=object.verbose_name asvar label_admin %}
+      Additional options for version {{ version }}
+    {% endblocktrans %}
     {% if is_project_admin %}
-      <div class="ui icon dropdown button">
+      <div class="ui icon dropdown button" data-content="{{ label_admin }}" aria-label="{{ label_admin }}">
         <i class="horizontal ellipsis icon"></i>
         <div class="menu">
           <div class="header">{% trans "Admin" %}</div>
@@ -101,12 +117,6 @@
             href="{% url "project_version_detail" project.slug object.slug %}">
             <i class="wrench icon"></i>
             {% trans "Configure version" %}
-          </a>
-          <a
-            class="item"
-            href="{% url "wipe_version" project.slug object.slug %}">
-            <i class="broom icon"></i>
-            {% trans "Wipe version"%}
           </a>
         </div>
       </div>
