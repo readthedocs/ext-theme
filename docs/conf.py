@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath("."))
 
-import docext
+import docext  # noqa
 
 project = "readthedocsext-theme"
 copyright = "2022, Read the Docs, Inc"
