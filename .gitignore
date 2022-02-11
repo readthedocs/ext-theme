@@ -7,6 +7,7 @@ __pycache__/
 *.egg-info
 *.DS_Store
 docs/_build/
+build/
 
 # Temporary. Not sure if we should submodule vendor this or not
 /crispy-semantic-ui.git/
