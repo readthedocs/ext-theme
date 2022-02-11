@@ -1,4 +1,5 @@
 import ko from "knockout";
+// Note: if debugging is needed, you can try this import instead.
 //import ko from "knockout/build/output/knockout-latest.debug.js";
 import jquery from "jquery";
 
@@ -7,11 +8,9 @@ import * as build from "../build";
 import * as docs from "../docs";
 
 /**
- * This is an explicit mapping of view name to view class
- *
- * This is required because we can't use something like
- * `ProjectListView.constructor.name``, as minification renames the class at
- * build time.
+ * This explicit mapping of view name to view class is required because we can't
+ * use something like `ProjectListView.constructor.name``, as minification
+ * renames the class at build time.
  */
 const views = {
   BuildDetailView: build.detail.BuildDetailView,
@@ -27,6 +26,21 @@ const views = {
   EmbedTopicsView: docs.EmbedTopicsView,
 };
 
+/**
+ * This is the top-level view that is added to ``<body>``, and is what surfaces
+ * all of the child view names to the templates. For instance, in the project
+ * creation template, we would use the :class:`ProjectCreateView` with:
+ *
+ * .. code:: html
+ *
+ *     <div data-bind="using: ProjectCreateView()">
+ *       ...
+ *     </div>
+ *
+ * This resets the bound view in Knockout for the element, and rebinds and
+ * resets the context, so that :class:`ApplicationView` is not the primary view
+ * anymore.
+ */
 export class ApplicationView {
   constructor() {
     console.debug("Configuring application view subviews");
@@ -44,6 +58,7 @@ export class ApplicationView {
 
   /**
    * Attach application main view
+   *
    * @param {string} selector - Selector string to use for view attachment
    */
   attach(selector = "body") {
@@ -52,16 +67,15 @@ export class ApplicationView {
   }
 
   /**
-   * The Knockout click callback
-   * @callback knockout_click
-   * @param {object} data - Knockout context data
-   * @param {MouseEventPrototype} event - Event object from click event
-   */
-
-  /**
-   * Show a modal using an event callback
+   * Show a modal using an event callback. This is set up on
+   * :class:`ApplicationView` so that this method is available as
+   * ``$root.show_modal(123);``. This is required because the modal plugin ends
+   * up altering ``<body>``, and this causes some havoc on the already attached
+   * view on ``<body>``.
    *
    * This should be used from an element data-bind, such as:
+   *
+   * .. code:: html
    *
    *     <button data-bind="click: $root.show_modal('delete')"></button>
    *     <div class="ui modal" data-modal-id="delete"></div>

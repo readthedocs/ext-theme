@@ -9,19 +9,39 @@ import * as plugins from "./plugins";
 export const docs = require("../docs");
 export const core = require("../core");
 
+/**
+ * This is the main entry point for the front end code and is used to set up and
+ * instantiate Webpack, Knockout, and SemanticUI. This class is used to set up
+ * and instantiate all of the front end functionality. The main entry point is
+ * :meth:`Application.run`.
+ */
 export class Application {
-  constructor() {}
+  /**
+   * This is the first method to be executed after instantiation. It handles
+   * all of the set up and instantiation.
+   *
+   * - :meth:`Application.load_config` loads the site configuration
+   * - :meth:`Application.configure_plugins` loads plugins
+   * - :meth:`Application.attach_view` does view routing and attaches the view
+   * - :meth:`Application.start_plugins` sets up jQuery plugins on some elements
+   */
+  run() {
+    this.load_config();
+    this.configure_plugins();
+    this.attach_view();
+    this.start_plugins();
+  }
 
   /**
-   * Load site configuration from JSON
+   * Load site configuration from a special ``application/json`` script element.
+   * This configures paths for Webpack async imports, console debugging.
    *
-   * This is a global configuration, for things like webpack asset URLs and
-   * debug mode.
+   * .. seealso::
+   *     Convention on :ref:`js-json-config`
    */
   load_config() {
     console.debug("Loading site front end configuration from script tag");
 
-    // TODO modularize this for reuse, or go global with additional settings?
     const site_config_src = jquery("script#site-config").text() || "{}";
     const site_config = JSON.parse(site_config_src);
     if (site_config.webpack_public_path) {
@@ -29,7 +49,7 @@ export class Application {
       global.__webpack_public_path__ = window.__webpack_public_path__ =
         site_config.webpack_public_path;
     }
-    // Null route debug logging
+    // Null route debug logging, don't do output anything that was debug
     if (!site_config.debug) {
       console.debug = () => {};
     }
@@ -38,18 +58,43 @@ export class Application {
   }
 
   /**
-   * Do final set up
-   *
-   * This is for jQuery and SUI jQuery plugins that were not explicitly set up
-   * in the templates. There are a number of places where an element needs to
-   * be initialized with specific plugin configuration, and so we can't do a
-   * blanket configuration of these plugins.
-   *
-   * The additional negative selectors here are added by the `semanticui` KO
-   * plugin and allow an easy way to detect elements that already have jQuery
-   * plugins initialized.
+   * Add jQuery and Knockout plugins so that HTML and JS can use these plugins.
+   * This is mainly just the various import logic and configuration, not where
+   * we would run something like ``$('.ui.modal').modal()``.
    */
-  finalize() {
+  configure_plugins() {
+    plugins.configure_jquery_plugins();
+    plugins.configure_knockout_plugins();
+  }
+
+  /**
+   * Attach the :class:`ApplicationView` view router, which gives templates
+   * access to all views that we have available. This is how we are able to
+   * reference a view in a Knockout data binding.
+   */
+  attach_view() {
+    const view = new ApplicationView();
+    view.attach();
+  }
+
+  /**
+   * Set up jQuery and SUI jQuery plugins that were not explicitly set up in
+   * templates. Elements that are configured inside templates use the Knockout
+   * plugin :func:`~application.plugins.semanticui`. This allows for explicit
+   * set up of an element's plugin, and should be the standard way to attach a
+   * jQuery plugin to an element.
+   *
+   * We don't do generic targeting of elements when setting up jQuery plugins as
+   * there are a number of places where an element needs to be initialized with
+   * specific plugin configuration. It's easiest to define in HTML what plugin
+   * and plugin configuration the element needs.
+   *
+   * .. warning::
+   *     Generic targeting use should be avoided and it's use deprecated.
+   */
+  add_jquery_plugins() {
+    // TODO remove instances of these in code and replace with the explicit
+    // semanticui KO plugin.
     jquery(".ui.progress:not([data-semanticui-progress])").progress();
     jquery(".ui.accordion:not([data-semanticui-accordion])").accordion();
     jquery(".ui.dropdown:not([data-semanticui-dropdown])").dropdown({
@@ -60,44 +105,20 @@ export class Application {
     jquery(".ui.dropdown[data-semanticui-dropdown] > select").dropdown({
       placeholder: "",
     });
-    // We only enable popup functionality with a broad CSS selector here
-    // because `data-content` is very basic usage of a popup. Anything more
-    // complicated should use the `semanticui` KO plugin.
+
+    // Enable popup functionality with a broad CSS selector here because
+    // `data-content` is very basic usage of a popup. Anything more complicated
+    // should use the semanticui KO plugin.
     jquery(".ui[data-content]:not([data-semanticui-popup])").popup();
     jquery(".ui.menu > .item[data-tab]").tab();
 
     // Initialize clipboard, but only for data-clipboard-text. This is the most
-    // generalized pattern for clipboard usage, so I won't yet worry about
+    // generalized pattern for clipboard usage, so we won't yet worry about
     // adding the other data binding selectors.
     var clipboard_global = new clipboard(".ui.button[data-clipboard-text]");
     jquery(".ui.button[data-clipboard-text]").popup({
       on: "click",
       hoverable: false,
     });
-  }
-
-  configure_plugins() {
-    plugins.configure_jquery();
-    ko.bindingHandlers.htmlInit = plugins.htmlInit;
-    ko.bindingHandlers.textInit = plugins.textInit;
-    ko.bindingHandlers.jsonInit = plugins.jsonInit;
-    ko.bindingHandlers.valueInit = plugins.valueInit;
-    ko.bindingHandlers.element = plugins.element;
-    ko.bindingHandlers.chart = plugins.chart;
-    ko.bindingHandlers.popup = plugins.popup;
-    ko.bindingHandlers.message = plugins.message;
-    ko.bindingHandlers.semanticui = plugins.semanticui;
-  }
-
-  attach_view() {
-    const view = new ApplicationView();
-    view.attach();
-  }
-
-  run() {
-    this.load_config();
-    this.configure_plugins();
-    this.attach_view();
-    this.finalize();
   }
 }

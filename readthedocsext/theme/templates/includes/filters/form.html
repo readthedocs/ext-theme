@@ -7,12 +7,16 @@
         <div class="ui manual dropdown" data-bind="semanticui: {dropdown: filter_config}">
 
           {% comment %}
-            Django-filter sometimes returns a string for the vlaue, sometimes a list.
+            Django-filter sometimes returns a string for the value, sometimes a list.
             Django doesn't surface a way to do this check in templates and this
             doesn't warrant a custom filter. This is a hack for now, I'm sorry.
 
-            If the first element length == 1, we are iterating over a string. So,
-            uh, don't use field values of length 1.
+            This should be replaced by a template filter that determines if the
+            value is an iterable of strings, or an iterable of a characters (str).
+
+            This assumes if the first element length == 1, we are iterating
+            over a string (iterable of characters). So, uh, don't use field
+            values of length 1.
           {% endcomment %}
           <input type="hidden" name="{{ field.name }}" value="{% if field.value.0|length == 1 %}{{ field.value|default:"" }}{% else %}{{ field.value.0|default:"" }}{% endif %}" />
           <div class="text">
