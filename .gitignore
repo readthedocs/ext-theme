@@ -8,6 +8,8 @@ __pycache__/
 *.DS_Store
 docs/_build/
 build/
+.python-version
+.node-version
 
 # Temporary. Not sure if we should submodule vendor this or not
 /crispy-semantic-ui.git/
