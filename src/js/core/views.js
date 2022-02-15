@@ -10,18 +10,21 @@ const breakpoints = {
   large_screen: 1200,
 };
 
-/*
- * ResponsiveView is used to create bindings that alter elements on changes to
- * the viewport width.
- *
- * Usage in a binding context:
- *
- *   <div class="ui menu" data-bind="css: {vertical: device.mobile()}">
- *   <div class="ui menu" data-bind="css: {vertical: device.tablet()}">
- *   <div class="ui menu" data-bind="css: {vertical: device.computer()}">
- *   <div class="ui menu" data-bind="css: {vertical: device.large_screen()}">
- */
 export class ResponsiveView {
+  /**
+   * :class:`ResponsiveView` is used to create bindings that alter elements on
+   * changes to the viewport width. This can be used to add an SUI class when the
+   * viewport width changes.
+   *
+   * Usage in a binding context:
+   *
+   * .. code:: html
+   *
+   *   <div class="ui menu" data-bind="css: {vertical: device.mobile()}">
+   *   <div class="ui menu" data-bind="css: {vertical: device.tablet()}">
+   *   <div class="ui menu" data-bind="css: {vertical: device.computer()}">
+   *   <div class="ui menu" data-bind="css: {vertical: device.large_screen()}">
+   */
   constructor() {
     this.viewport_width = ko.observable();
     this.device = {

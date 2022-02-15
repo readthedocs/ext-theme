@@ -71,17 +71,35 @@ class Project extends APIListItemView {
   }
 }
 
+/**
+ * View for project version creation and version activation.
+ *
+ * @class
+ * @extends {PopupView}
+ * @construtor
+ * @public
+ */
 export class ProjectVersionCreateView extends PopupView {
   constructor() {
     super();
 
-    // `config` comes from an inline `jsonInit` plugin. This configuration is
-    // passed in here as an observable via JSON
+    /** Observable for configuration passed in via :func:`~application.plugins.jsonInit`
+     * @function
+     * @param {Object} arg
+     * @returns {Object} Search configuration object */
     this.config = ko.observable();
 
+    /** Observable to show if search data is loading
+     * @function
+     * @param {boolean} arg
+     * @returns {boolean} True if we are in the middle of a request */
     this.is_loading = ko.observable(false);
 
-    // Load after config is loaded
+    /** Computed observable for rendering the final search configuration. This
+     * is used to initialize search as soon as the :func:`config` observable is
+     * set.
+     * @function
+     * @returns {Object} Search configuration object */
     this.search_config = ko.computed(() => {
       const config = this.config();
       if (config !== undefined) {
@@ -91,7 +109,13 @@ export class ProjectVersionCreateView extends PopupView {
   }
 
   /**
-   * Get the config for SUI search element
+   * Initialize the SUI search element using the configuration loaded in
+   * :func:`search_config`.
+   *
+   * This sets up various configuration for the search SUI element, but also
+   * sets up functions like `onSelect`, for performing actions on events.
+   *
+   * @param {object} config - configuration for search element
    */
   init_search(config) {
     const url = config.api_url + "?verbose_name={query}";
@@ -117,12 +141,32 @@ export class ProjectVersionCreateView extends PopupView {
   }
 }
 
+/**
+ * View for project version listing. This view wraps a list of :class:`Version`.
+ *
+ * @class
+ * @extends {PopupView}
+ * @construtor
+ * @public
+ */
 export class ProjectVersionListView extends PopupView {
   constructor() {
     super();
 
+    /** Observable array of :class:`Version` instances
+     * @function
+     * @param {[Version]} arg - List of versions for the listing
+     * @returns [Version] List of versions for the listing */
     this.versions = ko.observableArray();
+    /** Observable for configuration passed in via :func:`~application.plugins.jsonInit`
+     * @function
+     * @param {Object} arg
+     * @returns {Object} Search configuration object */
     this.config = ko.observable();
+    /** Observable for version filter
+     * @function
+     * @param {Object} arg
+     * @returns {Object} Search configuration object */
     this.filter_version_config = ko.observable();
 
     this.config.subscribe((config) => {

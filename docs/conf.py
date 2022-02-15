@@ -14,6 +14,7 @@ version = release
 
 extensions = [
     "sphinxcontrib.autoanysrc",
+    "sphinx_js",
 ]
 
 templates_path = ["_templates"]
@@ -24,5 +25,9 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 autoanysrc_analyzers = {
     "html": "docext.DjangoTemplateAnalyzer",
 }
+
+js_source_path = "../src/js"
+jsdoc_config_path = "jsdoc.json"
+primary_domain = "js"
 
 html_theme = "sphinx_rtd_theme"
