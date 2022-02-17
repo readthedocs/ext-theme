@@ -45,7 +45,8 @@ class BuildCommand {
 
     // Remove the path from display
     // TODO do this on the API level
-    const re_command_trim = /(\/usr\/src\/app|\/home\/docs)\/checkouts\/readthedocs.org\/user_builds\/[^\/]+\/[^\/]+\/[^\/]+\//g;
+    const re_command_trim =
+      /(\/usr\/src\/app|\/home\/docs)\/checkouts\/readthedocs.org\/user_builds\/[^\/]+\/[^\/]+\/[^\/]+\//g;
     let command = build_command.command.replace(re_command_trim, "");
 
     // Observables
