@@ -7,6 +7,11 @@ import RelativeTime from "dayjs/plugin/relativeTime";
 import Duration from "dayjs/plugin/duration";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
 
+/** Build command output subview, used in :class:`BuildCommand`
+ *
+ * .. note::
+ *     TODO write docs
+ */
 class BuildCommandOutput {
   constructor(build_command_output, view) {
     // Used for calls to the root view and parent command
@@ -28,6 +33,11 @@ class BuildCommandOutput {
   }
 }
 
+/** Build command subview, used in :class:`BuildDetailView`
+ *
+ * .. note::
+ *     TODO write docs
+ */
 class BuildCommand {
   constructor(build_command, view) {
     // Used for calls to the root view
@@ -112,6 +122,12 @@ class BuildCommand {
   }
 }
 
+/** Build detail view shows build metadata, build commands, and build command
+ * output.
+ *
+ * .. note::
+ *     TODO write docs
+ */
 export class BuildDetailView {
   constructor(build = {}) {
     /* Attributes */

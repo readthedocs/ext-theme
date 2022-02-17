@@ -155,8 +155,8 @@ export class ProjectVersionListView extends PopupView {
 
     /** Observable array of :class:`Version` instances
      * @function
-     * @param {[Version]} arg - List of versions for the listing
-     * @returns [Version] List of versions for the listing */
+     * @param {Array<Version>} arg - List of versions for the listing
+     * @returns {Array<Version>} List of versions for the listing */
     this.versions = ko.observableArray();
     /** Observable for configuration passed in via :func:`~application.plugins.jsonInit`
      * @function
@@ -218,6 +218,10 @@ export class ProjectVersionListView extends PopupView {
   }
 }
 
+/** Version subview
+ *
+ * .. note:: TODO needs docs
+ */
 class Version extends APIListItemView {
   constructor(version) {
     super(version);
