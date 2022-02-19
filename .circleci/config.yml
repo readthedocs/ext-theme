@@ -2,10 +2,11 @@ version: 2.1
 
 commands:
   run-lint:
-    description: "Run code linter"
+    description: "Run code tests and linter"
     steps:
       - checkout
       - run: npm ci
+      - run: npm test
       - run: npm run lint
   run-build:
     description: "Ensure built assets are up to date"
