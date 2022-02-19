@@ -36,7 +36,7 @@ export class Application {
     this.load_config();
     this.configure_plugins();
     this.attach_view();
-    this.start_plugins();
+    this.add_jquery_plugins();
   }
 
   /**

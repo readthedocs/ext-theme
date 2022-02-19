@@ -26,7 +26,6 @@ export class ApplicationView {
    */
   attach(selector = "body") {
     console.debug("Attaching application to selector:", selector);
-    this.registry.attach(this);
     ko.applyBindings(this, jquery(selector)[0]);
   }
 

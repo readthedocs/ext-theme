@@ -1,3 +1,5 @@
+import ko from "knockout";
+
 /**
  * Registry pattern for views, so that views can self-register where they are
  * defined.
