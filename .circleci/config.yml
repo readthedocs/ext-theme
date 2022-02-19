@@ -26,12 +26,12 @@ commands:
 jobs:
   lint:
     docker:
-      - image: 'cimg/node:16'
+      - image: 'cimg/node:16.14'
     steps:
       - run-lint: {}
   build:
     docker:
-      - image: 'cimg/node:16'
+      - image: 'cimg/node:16.14'
     steps:
       - run-build: {}
 
