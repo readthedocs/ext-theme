@@ -1,5 +1,5 @@
 {
-  "plugins": [],
+  "plugins": ["jsdocko"],
   "recurseDepth": 10,
   "source": {
     "includePattern": ".+\\.js(doc|x)?$",

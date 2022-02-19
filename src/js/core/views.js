@@ -10,21 +10,21 @@ const breakpoints = {
   large_screen: 1200,
 };
 
+/**
+ * :class:`ResponsiveView` is used to create bindings that alter elements on
+ * changes to the viewport width. This can be used to add an SUI class when the
+ * viewport width changes.
+ *
+ * Usage in a binding context:
+ *
+ * .. code:: html
+ *
+ *   <div class="ui menu" data-bind="css: {vertical: device.mobile()}">
+ *   <div class="ui menu" data-bind="css: {vertical: device.tablet()}">
+ *   <div class="ui menu" data-bind="css: {vertical: device.computer()}">
+ *   <div class="ui menu" data-bind="css: {vertical: device.large_screen()}">
+ */
 export class ResponsiveView {
-  /**
-   * :class:`ResponsiveView` is used to create bindings that alter elements on
-   * changes to the viewport width. This can be used to add an SUI class when the
-   * viewport width changes.
-   *
-   * Usage in a binding context:
-   *
-   * .. code:: html
-   *
-   *   <div class="ui menu" data-bind="css: {vertical: device.mobile()}">
-   *   <div class="ui menu" data-bind="css: {vertical: device.tablet()}">
-   *   <div class="ui menu" data-bind="css: {vertical: device.computer()}">
-   *   <div class="ui menu" data-bind="css: {vertical: device.large_screen()}">
-   */
   constructor() {
     this.viewport_width = ko.observable();
     this.device = {
@@ -53,11 +53,14 @@ export class ResponsiveView {
   }
 }
 
-/* Knockout binding to help show popups
+/**
+ * Knockout binding to help show popups
  *
  * This is used inside normal Django templates, where we iterate
  * over a list of objects inside the template, not inside hte KO
  * view. This binding will create individual popup contexts.
+ *
+ * Creates a :class:`Popup`.
  *
  */
 export class PopupView {
@@ -66,31 +69,55 @@ export class PopupView {
   }
 }
 
+/**
+ * Popupcard base class. Provides some helps to show/hide the popup
+ */
 export class Popup {
   constructor() {
+    /** @observable {Boolean} Is the popup showing currently? */
     this.is_showing = ko.observable(false);
   }
 
+  /** Show the popup */
   show() {
     this.is_showing(true);
   }
 
+  /** Hide the popup */
   hide() {
     this.is_showing(false);
   }
 }
 
+/**
+ * Base class for API listing views. Provides a foundation for waiting to load
+ * data from an API, loading data from an API request, and handling the data.
+ *
+ * ``data`` parameter needs an ``id`` and ``url`` property.
+ *
+ * @extends {PopupView}
+ */
 export class APIListItemView extends PopupView {
   constructor(data) {
     super();
     this.id = data.id;
     this.url = data.url;
+    /** @observable {Boolean} Is the API request started loading? */
     this.loaded = ko.observable(false);
+    /** @observable {Boolean} Is the API request done loading? */
     this.loading = ko.observable(false);
+    /** The central promise for the request.
+     * @type {Promise} */
     this.promise = null;
+    /** @observable {Object} The data returned from the API */
     this.data = ko.observable();
   }
 
+  /**
+   * Using the supplied configuration, perform an API request. Sets up
+   * :attr:`promise` so that the child class can manage promise resolve and
+   * reject
+   */
   fetch() {
     if (this.promise) {
       return this.promise;
