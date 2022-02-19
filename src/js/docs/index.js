@@ -1,6 +1,8 @@
 import jquery from "jquery";
 import ko from "knockout";
 
+import { Registry } from "../application/registry";
+
 class EmbedTopic {
   constructor(topic) {
     this.docs_url = ko.observable(topic.docs_url);
@@ -14,6 +16,8 @@ class EmbedTopic {
 }
 
 export class EmbedTopicsView {
+  static view_name = "EmbedTopicsView";
+
   constructor(doc) {
     this.doc = doc;
     this.topics = ko.observableArray();
@@ -62,3 +66,4 @@ export class EmbedTopicsView {
       });
   }
 }
+Registry.add_view(EmbedTopicsView);

@@ -3,29 +3,6 @@ import ko from "knockout";
 //import ko from "knockout/build/output/knockout-latest.debug.js";
 import jquery from "jquery";
 
-import * as project from "../project";
-import * as build from "../build";
-import * as docs from "../docs";
-
-/**
- * This explicit mapping of view name to view class is required because we can't
- * use something like `ProjectListView.constructor.name``, as minification
- * renames the class at build time.
- */
-const views = {
-  BuildDetailView: build.detail.BuildDetailView,
-  BuildListView: build.list.BuildListView,
-  ProjectListView: project.ProjectListView,
-  ProjectVersionCreateView: project.ProjectVersionCreateView,
-  ProjectVersionListView: project.ProjectVersionListView,
-  ProjectCreateView: project.create.ProjectCreateView,
-  ProjectSearchAnalyticsView: project.admin.ProjectSearchAnalyticsView,
-  ProjectTrafficAnalyticsView: project.admin.ProjectTrafficAnalyticsView,
-  ProjectRedirectView: project.admin.ProjectRedirectView,
-  ProjectAutomationRuleView: project.admin.ProjectAutomationRuleView,
-  EmbedTopicsView: docs.EmbedTopicsView,
-};
-
 /**
  * This is the top-level view that is added to ``<body>``, and is what surfaces
  * all of the child view names to the templates. For instance, in the project
@@ -42,20 +19,6 @@ const views = {
  * anymore.
  */
 export class ApplicationView {
-  constructor() {
-    console.debug("Configuring application view subviews");
-    for (const [view_name, view_class] of Object.entries(views)) {
-      this[view_name] = (params) => {
-        console.debug("Loading view with parameters:", view_name, params);
-        // ignoreDependencies is needed here or the context used by the subview
-        // is incorrect
-        return ko.ignoreDependencies(() => {
-          return new view_class(params);
-        }, this);
-      };
-    }
-  }
-
   /**
    * Attach application main view
    *

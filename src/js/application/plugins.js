@@ -15,7 +15,7 @@ import semantic_ui_tab from "semantic-ui-tab";
  * Set up jQuery plugins. SemanticUI jQuery plugins are brought in piecemeal,
  * through separate dependencies. This allows for a smaller footprint.
  */
-export function configure_jquery() {
+export function configure_jquery_plugins() {
   jquery.fn.transition = semantic_ui_transition;
   jquery.fn.dropdown = semantic_ui_dropdown;
   jquery.fn.popup = semantic_ui_popup;
