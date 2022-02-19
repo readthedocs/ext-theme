@@ -7,6 +7,8 @@ import RelativeTime from "dayjs/plugin/relativeTime";
 import Duration from "dayjs/plugin/duration";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
 
+import { Registry } from "../application/registry";
+
 /** Build command output subview, represented in :class:`BuildCommand` as an
  * array of output lines.
  *
@@ -178,6 +180,8 @@ class BuildCommand {
  * @param {Object} build - API data for a build.
  */
 export class BuildDetailView {
+  static view_name = "BuildDetailView";
+
   constructor(build = {}) {
     /** The build pk/id to fetch.
      * @type {number} */
@@ -430,3 +434,4 @@ export class BuildDetailView {
     this.legacy_output(true);
   }
 }
+Registry.add_view(BuildDetailView);

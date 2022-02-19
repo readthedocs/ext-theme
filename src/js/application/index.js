@@ -4,10 +4,13 @@ import clipboard from "clipboard";
 
 import { ApplicationView } from "./views";
 import * as plugins from "./plugins";
+import { Registry } from "./registry";
 
 // Application views
-export const docs = require("../docs");
-export const core = require("../core");
+import * as docs_views from "../docs";
+import * as core_views from "../core";
+import * as project_views from "../project";
+import * as build_views from "../build";
 
 /**
  * This is the main entry point for the front end code and is used to set up and
@@ -16,6 +19,10 @@ export const core = require("../core");
  * :meth:`Application.run`.
  */
 export class Application {
+  constructor() {
+    this.registry = new Registry();
+  }
+
   /**
    * This is the first method to be executed after instantiation. It handles
    * all of the set up and instantiation.
@@ -74,6 +81,7 @@ export class Application {
    */
   attach_view() {
     const view = new ApplicationView();
+    this.registry.attach(view);
     view.attach();
   }
 

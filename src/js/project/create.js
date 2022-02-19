@@ -4,6 +4,7 @@ import ko from "knockout";
 import * as tasks from "../tasks";
 import * as utils from "../core/utils";
 import { ResponsiveView } from "../core/views";
+import { Registry } from "../application/registry";
 
 /**
  * Remote repository instance for remote repository listing.
@@ -68,6 +69,8 @@ class RemoteRepository {
  * @extends {ResposiveView}
  */
 export class ProjectCreateView extends ResponsiveView {
+  static view_name = "ProjectCreateView";
+
   constructor() {
     super();
 
@@ -181,3 +184,4 @@ export class ProjectCreateView extends ResponsiveView {
     });
   }
 }
+Registry.add_view(ProjectCreateView);

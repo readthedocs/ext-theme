@@ -1,11 +1,16 @@
 import jquery from "jquery";
 import ko from "knockout";
 
-/* Project automation rule form view
+import { Registry } from "../application/registry";
+
+/**
+ * Project automation rule form view
  *
  * @param {Object} automation_rule - Initial instance data, optional
  */
 export class ProjectAutomationRuleView {
+  static view_name = "ProjectAutomationRuleView";
+
   constructor(automation_rule) {
     this.predefined_match_arg = ko.observable();
     this.is_match_arg_visible = ko.computed(() => {
@@ -23,12 +28,16 @@ export class ProjectAutomationRuleView {
     });
   }
 }
+Registry.add_view(ProjectAutomationRuleView);
 
-/* Project redirect rule form view
+/**
+ * Project redirect rule form view
  *
  * @param {Object} redirect - Initial instance data, optional
  */
 export class ProjectRedirectView {
+  static view_name = "ProjectRedirectView";
+
   constructor(redirect) {
     this.redirect_type = ko.observable();
     this.from_url = ko.observable("");
@@ -82,8 +91,10 @@ export class ProjectRedirectView {
     });
   }
 }
+Registry.add_view(ProjectRedirectView);
 
-/* Project search analytics view
+/**
+ * Project search analytics view
  *
  * Search analytics chart data and config is loaded from an inline
  * application/json script block, so that data, labels, and localized strings
@@ -92,6 +103,8 @@ export class ProjectRedirectView {
  * @param {Element} elem - Element that view is attached to
  */
 export class ProjectSearchAnalyticsView {
+  static view_name = "ProjectSearchAnalyticsView";
+
   constructor() {
     this.config = ko.observable();
     this.is_loading = ko.observable(true);
@@ -100,9 +113,14 @@ export class ProjectSearchAnalyticsView {
     });
   }
 }
+Registry.add_view(ProjectSearchAnalyticsView);
 
-/* Project traffic analytics view
+/**
+ * Project traffic analytics view
  *
  * This is identical to search analytics currently
  */
-export class ProjectTrafficAnalyticsView extends ProjectSearchAnalyticsView {}
+export class ProjectTrafficAnalyticsView extends ProjectSearchAnalyticsView {
+  static view_name = "ProjectTrafficAnalyticsView";
+}
+Registry.add_view(ProjectTrafficAnalyticsView);

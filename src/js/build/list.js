@@ -4,12 +4,15 @@ import jquery from "jquery";
 import ko from "knockout";
 
 import { PopupView, APIListItemView } from "../core/views";
+import { Registry } from "../application/registry";
 
 /** Build listing view for project builds.
  *
  * @extends {PopupView}
  */
 export class BuildListView extends PopupView {
+  static view_name = "BuildListView";
+
   constructor() {
     super();
 
@@ -59,3 +62,4 @@ export class BuildListView extends PopupView {
     };
   }
 }
+Registry.add_view(BuildListView);

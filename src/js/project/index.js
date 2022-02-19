@@ -5,6 +5,7 @@ import * as admin from "./admin";
 import * as create from "./create";
 
 import { PopupView, APIListItemView } from "../core/views";
+import { Registry } from "../application/registry";
 
 export { admin, create };
 
@@ -14,6 +15,8 @@ export { admin, create };
  * @extends {PopupView}
  */
 export class ProjectListView extends PopupView {
+  static view_name = "ProjectListView";
+
   constructor() {
     super();
 
@@ -76,6 +79,7 @@ export class ProjectListView extends PopupView {
     return project;
   }
 }
+Registry.add_view(ProjectListView);
 
 /**
  * Project object used for displaying individual projects in the project
@@ -109,6 +113,8 @@ class Project extends APIListItemView {
  * @public
  */
 export class ProjectVersionCreateView extends PopupView {
+  static view_name = "ProjectVersionCreateView";
+
   constructor() {
     super();
 
@@ -163,6 +169,7 @@ export class ProjectVersionCreateView extends PopupView {
     };
   }
 }
+Registry.add_view(ProjectVersionCreateView);
 
 /**
  * View for project version listing. This view wraps a list of :class:`Version`.
@@ -173,6 +180,8 @@ export class ProjectVersionCreateView extends PopupView {
  * @public
  */
 export class ProjectVersionListView extends PopupView {
+  static view_name = "ProjectVersionListView";
+
   constructor() {
     super();
 
@@ -240,6 +249,7 @@ export class ProjectVersionListView extends PopupView {
     return version;
   }
 }
+Registry.add_view(ProjectVersionListView);
 
 /** Version subview, used from :class:`ProjectVersionListView`.
  *
