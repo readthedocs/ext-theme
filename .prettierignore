@@ -2,6 +2,10 @@
 # pieces that would be mangled by Prettier.
 *.html
 /docs/_build/
+/docs/out/
+/build/
 /readthedocsext/theme/static/readthedocsext/theme/css/
 /readthedocsext/theme/static/readthedocsext/theme/js/
 /crispy-semantic-ui.git/
+/.tox/
+/common/

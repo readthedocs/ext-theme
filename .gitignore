@@ -1,5 +1,4 @@
 node_modules
-package-lock.json
 .ropeproject
 dist/
 __pycache__/
@@ -7,6 +6,10 @@ __pycache__/
 *.egg-info
 *.DS_Store
 docs/_build/
+docs/out/
+build/
+.python-version
+.node-version
 
 # Temporary. Not sure if we should submodule vendor this or not
 /crispy-semantic-ui.git/

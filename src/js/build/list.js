@@ -1,17 +1,26 @@
-// Build - detail view
+// Build - list view
 
 import jquery from "jquery";
 import ko from "knockout";
 
 import { PopupView, APIListItemView } from "../core/views";
 
+/** Build listing view for project builds.
+ *
+ * @extends {PopupView}
+ */
 export class BuildListView extends PopupView {
   constructor() {
     super();
 
+    /** This is loaded using :func:`application.plugins.jsonInit()`
+     * @observable {Object} JSON script for configuring search */
     this.config = ko.observable();
+    /** This is loaded using :func:`application.plugins.jsonInit()`
+     * @observable {Object} JSON script for configuring filtering */
     this.filter_version_config = ko.observable();
 
+    // Subscribe to changes of :func:`config`
     this.config.subscribe((config) => {
       if (config === undefined) {
         return;
