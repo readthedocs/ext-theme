@@ -9,6 +9,39 @@
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/automation_rule_list.html" with objects=object_list %}
+
+  <h3>{% trans "Recent Activity" %}</h3>
+  <div class="ui list divided relaxed">
+    <div class="item">
+      <i class="icon play"></i>
+      <div class="content">
+        <a class="header">Activate version</a>
+        <div class="description">Branch <a><b>mamba</b></a> matched <a><b>pattern ".*"</b></a> 3 weeks ago</div>
+      </div>
+    </div>
+    <div class="item">
+      <i class="icon eye slash outline"></i>
+      <div class="content">
+        <a class="header">Hide version</a>
+        <div class="description">Branch <a><b>mamba</b></a> matched <a><b>pattern ".*"</b></a> 3 weeks ago</div>
+      </div>
+    </div>
+    <div class="item">
+      <i class="icon play"></i>
+      <div class="content">
+        <a class="header">Set version as default</a>
+        <div class="description">Branch <a><b>mamba</b></a> matched <a><b>pattern ".*"</b></a> 3 weeks ago</div>
+      </div>
+    </div>
+    <div class="item">
+      <i class="icon minus circle red"></i>
+      <div class="content">
+        <a class="header">Delete version</a>
+        <div class="description">Branch <a><b>mamba</b></a> matched <a><b>pattern ".*"</b></a> 3 weeks ago</div>
+      </div>
+    </div>
+  </div>
+
 {% endblock %}
 
 {% block project_edit_sidebar_embed_doc %}automation-rules{% endblock %}
