@@ -4,7 +4,13 @@ import ko from "knockout";
 import * as tasks from "../tasks";
 import * as utils from "../core/utils";
 import { ResponsiveView } from "../core/views";
+import { Registry } from "../application/registry";
 
+/**
+ * Remote repository instance for remote repository listing.
+ *
+ * @param {Object} remote_repo - Remote repository API data
+ */
 class RemoteRepository {
   constructor(remote_repo) {
     // Just copy attributes over instead of prototyping. KO observables make a
@@ -15,20 +21,32 @@ class RemoteRepository {
 
     // Get project attributes from API using project PK
     const project_pk = this.project;
+    /** @observable {Object} Project API data loaded async */
     this.project = ko.observable();
     if (project_pk) {
       this.get_project(project_pk);
     }
 
+    /** @observable {Boolean} Is this repository private? */
     this.is_private = ko.observable(this.private);
+    /** @observable {Booleean} Is this repository active? */
     this.is_active = ko.observable(this.active);
+    /** @computed {Boolean} Can user import this repository? */
     this.is_locked = ko.computed(() => {
+      // TODO take stack private repo support into consideration
       return this.is_private() && !this.has_admin();
     });
+    /** @observable {Boolean} Does user have admin privilege on the repo? */
     this.has_admin = ko.observable(this.admin);
+    /** @observable {Boolean} Was the repository already imported? */
     this.has_project = ko.observable(false);
   }
 
+  /**
+   * Get project data from API
+   *
+   * @param {number} pk - Project pk to fetch
+   */
   get_project(pk) {
     // TODO convert to APIv3 and hopefully use a URL field from the
     // RemoteRepository APIv3 response to link here, instead of hardcoding.
@@ -44,36 +62,38 @@ class RemoteRepository {
   }
 }
 
+/**
+ * Project creation view, for setting up a new project or linking an existing
+ * repository to a new project.
+ *
+ * @extends {ResposiveView}
+ */
 export class ProjectCreateView extends ResponsiveView {
+  static view_name = "ProjectCreateView";
+
   constructor() {
     super();
 
+    /** Configuration passed in via :func:`~application.plugins.jsonInit`
+     * @observable {Object} View configuration */
     this.config = ko.observable();
+    /** Configuration passed in via :func:`~application.plugins.jsonInit`
+     * @observable {Object} Search configuration */
     this.search_config = ko.observable();
+    /** @observable {Array<RemoteRepository>} List of remote repo objects */
     this.remote_repos = ko.observableArray();
+    /** @observable {Object} The selected repository */
     this.selected = ko.observable();
+    /** @observable {Boolean} Is UI loading from the API currently? */
     this.is_loading = ko.observable(false);
+    /** @observable {Boolean} Are remote repositories current resyncing? */
     this.is_syncing = ko.observable(false);
+    /** @computed {Boolean} Is there a selected repository? */
     this.is_selected = ko.computed(() => {
       return this.selected() !== undefined;
     });
 
-    /*
-    // Viewport size for altering component display
-    this.viewport_width = ko.observable(jquery(window).width());
-    this.viewport_width.extend({ratelimit: 500});
-    this.is_breakpoint_computer = ko.computed(() => {
-      const width = this.viewport_width();
-      console.log(width);
-      return (width > 992);
-    });
-
-    jquery(window).on('resize', () => {
-      this.viewport_width(jquery(window).width());
-    });
-    */
-
-    // Wait for config to be loaded
+    // Wait for config to be loaded to init search
     this.config.subscribe((config) => {
       if (config !== undefined) {
         this.init_search();
@@ -81,6 +101,11 @@ export class ProjectCreateView extends ResponsiveView {
     });
   }
 
+  /**
+   * Sync remote repository objects using a call to our API. This sets the UI to
+   * a loading state so that user interaction can be limited. Configuration is
+   * loaded using :func:`config` and :func:`application.plugins.jsonInit`.
+   */
   sync_remote_repos() {
     const config = this.config();
 
@@ -91,13 +116,11 @@ export class ProjectCreateView extends ResponsiveView {
 
     this.is_syncing(true);
     this.is_loading(true);
-    //this.error(null);
 
     let promise = tasks
       .trigger_task(params)
       .fail((error) => {
         console.log(error);
-        //this.error(error);
       })
       .always(() => {
         this.is_syncing(false);
@@ -107,6 +130,19 @@ export class ProjectCreateView extends ResponsiveView {
     return promise;
   }
 
+  /**
+   * Set up SUI search once :func:`config` is fully loaded.
+   *
+   * This uses a Knockout template to make it easier to display the individual
+   * elements in the list. The template is loaded from the element
+   * ``remote-repo-results``.
+   *
+   * Ultimately, this sets :func:`search_config`, which is the configuration
+   * object that will be eventually be used by SUI search jQuery plugin.
+   *
+   * .. seealso::
+   *     https://knockoutjs.com/documentation/template-binding.html
+   */
   init_search() {
     const config = this.config();
     const url = config.urls.remoterepository_list + "?full_name={query}";
@@ -148,3 +184,4 @@ export class ProjectCreateView extends ResponsiveView {
     });
   }
 }
+Registry.add_view(ProjectCreateView);
