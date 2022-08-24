@@ -61,7 +61,12 @@
 }
 
 .loadUIOverrides() {
-  @import "@{themesFolder}/default/@{type}s/@{element}.overrides";
+  // Skip the default theme icon overrides file, because this conflicts with
+  // using Font Awesome directly, and establishes a lot of class definitions
+  // we'll never use. This requires setting up Font Awesome manually however.
+  & when not (@element = "icon") {
+    @import (optional) "@{themesFolder}/default/@{type}s/@{element}.overrides";
+  }
   @import (optional) "themes/rtd-common/@{type}s/@{element}.overrides";
   @import (optional) "themes/@{theme}/@{type}s/@{element}.overrides";
   @import (optional) "@{siteFolder}/@{type}s/@{element}.overrides";
