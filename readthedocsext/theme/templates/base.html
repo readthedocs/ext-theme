@@ -24,11 +24,18 @@
 }
     </script>
 
-    {# TODO remove these, from the existing theme #}
-    <!--
-    <script type="text/javascript" src="{{ MEDIA_URL }}javascript/instantsearch.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}javascript/base.js"></script>
-    -->
+    {% comment %}
+      This is our only external dependency. It's a fast way to get all the
+      versions of Font Awesome, and doesn't require spreading around a Font
+      Awesome Pro key.
+    {% endcomment %}
+    <script src="https://kit.fontawesome.com/66c8860b51.js" crossorigin="anonymous"></script>
+
+    {% comment %}
+      {# TODO remove these, from the existing theme #}
+      <script type="text/javascript" src="{{ MEDIA_URL }}javascript/instantsearch.js"></script>
+      <script type="text/javascript" src="{{ MEDIA_URL }}javascript/base.js"></script>
+    {% endcomment %}
   </head>
   <body class="{% block body_class %}{% endblock %}">
 
