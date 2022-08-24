@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
@@ -97,18 +98,25 @@ module.exports = (env, argv) => {
       ],
     },
     plugins: [
+      new webpack.DefinePlugin({
+        DEBUG_MODE: !is_production,
+      }),
       new MiniCssExtractPlugin({
         filename: "css/[name].css?[hash]",
         chunkFilename: "css/[name].css?[hash]",
       }),
+      new webpack.ProvidePlugin({
+        $: "jquery",
+        jquery: "jquery",
+        "window.jQuery": "jquery",
+        jQuery: "jquery",
+      }),
     ],
     resolve: {
       alias: {
-        // This is required to override the semanticui theme.config
-        "../../theme.config": path.join(__dirname, "src/theme/theme.config"),
-        "../../src/theme/site": path.join(__dirname, "src/theme/site"),
+        "../../theme.config": path.join(__dirname, "src/sui/theme.config"),
       },
-      extensions: [".less", ".js", ".json"],
+      extensions: [".less", ".js", ".json", ".overrides", ".variables"],
     },
 
     // Development options

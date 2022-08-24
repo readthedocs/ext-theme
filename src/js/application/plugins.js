@@ -1,31 +1,35 @@
 import jquery from "jquery";
 import ko from "knockout";
-import semantic_ui_transition from "semantic-ui-transition";
-import semantic_ui_dropdown from "semantic-ui-dropdown";
-import semantic_ui_popup from "semantic-ui-popup";
-import semantic_ui_modal from "semantic-ui-modal";
-import semantic_ui_dimmer from "semantic-ui-dimmer";
-import semantic_ui_progress from "semantic-ui-progress";
-import semantic_ui_search from "semantic-ui-search";
-import semantic_ui_api from "semantic-ui-api";
-import semantic_ui_accordion from "semantic-ui-accordion";
-import semantic_ui_tab from "semantic-ui-tab";
+
+/* Not import syntax on purpose */
+require("fomantic-ui-less/definitions/behaviors/visibility.js");
+require("fomantic-ui-less/definitions/behaviors/form.js");
+require("fomantic-ui-less/definitions/behaviors/state.js");
+require("fomantic-ui-less/definitions/behaviors/api.js");
+require("fomantic-ui-less/definitions/modules/transition.js");
+require("fomantic-ui-less/definitions/modules/tab.js");
+require("fomantic-ui-less/definitions/modules/dropdown.js");
+require("fomantic-ui-less/definitions/modules/modal.js");
+require("fomantic-ui-less/definitions/modules/search.js");
+require("fomantic-ui-less/definitions/modules/sticky.js");
+require("fomantic-ui-less/definitions/modules/shape.js");
+require("fomantic-ui-less/definitions/modules/accordion.js");
+require("fomantic-ui-less/definitions/modules/sidebar.js");
+require("fomantic-ui-less/definitions/modules/dimmer.js");
+require("fomantic-ui-less/definitions/modules/checkbox.js");
+require("fomantic-ui-less/definitions/modules/slider.js");
+require("fomantic-ui-less/definitions/modules/popup.js");
+require("fomantic-ui-less/definitions/modules/embed.js");
+require("fomantic-ui-less/definitions/modules/progress.js");
+require("fomantic-ui-less/definitions/modules/toast.js");
+require("fomantic-ui-less/definitions/globals/site.js");
 
 /**
  * Set up jQuery plugins. SemanticUI jQuery plugins are brought in piecemeal,
  * through separate dependencies. This allows for a smaller footprint.
  */
 export function configure_jquery_plugins() {
-  jquery.fn.transition = semantic_ui_transition;
-  jquery.fn.dropdown = semantic_ui_dropdown;
-  jquery.fn.popup = semantic_ui_popup;
-  jquery.fn.modal = semantic_ui_modal;
-  jquery.fn.dimmer = semantic_ui_dimmer;
-  jquery.fn.progress = semantic_ui_progress;
-  jquery.fn.search = semantic_ui_search;
-  jquery.fn.api = semantic_ui_api;
-  jquery.fn.accordion = semantic_ui_accordion;
-  jquery.fn.tab = semantic_ui_tab;
+  jquery.fn.site("normalize");
 }
 
 /**
