@@ -15,13 +15,13 @@
   <div class="item">
     <a class="ui green icon button"
        href="{% url 'projects_environmentvariables_create' project_slug=project.slug %}">
-      <i class="plus icon"></i>
+      <i class="fa-solid fa-plus icon"></i>
       {% trans "Add variable" %}
     </a>
   </div>
 {% endblock %}
 
-{% block list_placeholder_icon_class %}terminal{% endblock %}
+{% block list_placeholder_icon_class %}fa-duotone fa-shield-keyhole{% endblock %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No environment variables have been configured yet
@@ -42,7 +42,7 @@
   <a class="ui icon button"
      data-clipboard-text="{{ object.name }}"
      data-content="{% trans "Copied!" %}">
-    <i class="clipboard outline icon"></i>
+    <i class="fa-solid fa-clipboard icon"></i>
   </a>
 
   {% url 'projects_environmentvariables_delete' project_slug=project.slug environmentvariable_pk=object.pk as form_url %}

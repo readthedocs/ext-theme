@@ -15,28 +15,28 @@
           <span class="text">
             {{ request.user }}
           </span>
-          <i class="dropdown icon"></i>
+          <i class="fa-solid fa-caret-down icon"></i>
         </a>
         <div class="ui large inverted right top flowing popup">
           <div class="ui inverted large list">
             <a class="item" href="{% url 'projects_dashboard' %}">
-              <i class="inverted list alternate icon"></i>
+              <i class="fa-duotone fa-list icon"></i>
               {% trans "My projects" %}
             </a>
             <a class="item" href="{% url 'projects_import' %}">
-              <i class="inverted plus icon"></i>
+              <i class="fa-duotone fa-plus icon"></i>
               {% trans "Add project" %}
             </a>
             <a class="item" href="{% url 'profiles_profile_edit' %}">
-              <i class="inverted cog icon"></i>
+              <i class="fa-duotone fa-gears icon"></i>
               {% trans "Settings" %}
             </a>
             <a class="item" href="{% url 'support' %}">
-              <i class="inverted life ring icon"></i>
+              <i class="fa-duotone fa-life-ring icon"></i>
               {% trans "Support" %}
             </a>
             <a class="item" href="{% url 'account_logout' %}">
-              <i class="inverted sign out alternate icon"></i>
+              <i class="fa-duotone fa-sign-out icon"></i>
               {% trans "Log Out" %}
             </a>
           </div>

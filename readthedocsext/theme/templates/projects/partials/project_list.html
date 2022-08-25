@@ -23,7 +23,7 @@
     <div class="ui link search dropdown" data-bind="semanticui: {dropdown: filter_project_config()}">
       <input type="hidden" name="version" value="{{ filter.form.project.value|default:"" }}">
       <div class="default text">{% trans "All projects" %}</div>
-      <i class="dropdown icon"></i>
+      <i class="fa-solid fa-caret-down icon"></i>
       <div class="menu"></div>
     </div>
   </div>
@@ -51,20 +51,20 @@
 {% endblock list_item_start %}
 
 {% block list_item_right_menu %}
-  <div class="ui mini right floated buttons" data-bind="event: {mouseover: fetch}">
+  <div class="ui small right floated buttons" data-bind="event: {mouseover: fetch}">
     <button class="ui icon button"
        data-content="{% trans "View project documentation" %}"
        data-bind="attr: {href: url_docs}, css: {disabled: loading}">
-      <i class="external icon"></i>
+      <i class="fa-duotone fa-arrow-up-right-from-square icon"></i>
     </button>
 
     {% if request.user|is_admin:object %}
       <button class="ui icon dropdown button">
-        <i class="horizontal ellipsis icon"></i>
+        <i class="fa-solid fa-ellipsis icon"></i>
         <div class="menu">
           <div class="header">{% trans "Admin" %}</div>
           <a class="item" href="{% url "projects_edit" object.slug %}">
-            <i class="wrench icon"></i>
+            <i class="fa-duotone fa-wrench icon"></i>
             {% trans "Configure project" %}
           </a>
         </div>
@@ -80,7 +80,7 @@
 
   {% if object.translations.exists %}
     <span class="ui label">
-      <i class="language icon"></i>
+      <i class="fa-solid fa-language icon"></i>
       {% trans "Translations" %}
       <span class="detail">
         {{ object.translations.count }}
@@ -90,7 +90,7 @@
 
   {% if object.subprojects.exists %}
     <span class="ui label">
-      <i class="project diagram icon"></i>
+      <i class="fa-solid fa-project-diagram icon"></i>
       {% trans "Subprojects" %}
       <span class="detail">
         {{ object.subprojects.count }}
@@ -104,7 +104,7 @@
 
   {% if object.builds.count == 0 %}
     <span class="item">
-      <i class="half hourglass icon"></i>
+      <i class="fa-duotone fa-hourglass icon"></i>
       {% trans "No builds yets" %}
     </span>
   {% else %}

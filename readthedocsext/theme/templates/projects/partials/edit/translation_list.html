@@ -28,7 +28,7 @@
   {% endcomment %}
 {% endblock %}
 
-{% block list_placeholder_icon_class %}language{% endblock %}
+{% block list_placeholder_icon_class %}fa-duotone fa-language{% endblock %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No translations exist yet
@@ -64,7 +64,7 @@
 
 {% block list_item_meta %}
   <a class="item" href="{{ object.get_docs_url }}">
-    <i class="linkify icon"></i>
+    <i class="fa-duotone fa-link icon"></i>
     <code>{{ object.get_docs_url }}</code>
   </a>
 {% endblock list_item_meta %}

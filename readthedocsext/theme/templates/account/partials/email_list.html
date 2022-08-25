@@ -14,7 +14,7 @@
 {% block create_button %}
 {% endblock %}
 
-{% block list_placeholder_icon_class %}envelope outline{% endblock %}
+{% block list_placeholder_icon_class %}fa-duotone fa-envelope-dot{% endblock %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No email addresses have been configured yet
@@ -36,12 +36,12 @@
     <input type="hidden" name="email" {% if object.primary %}checked="checked"{% endif %} value="{{ object.email }}"/>
     {% if not object.primary %}
       <button class="ui icon button" name="action_primary" type="submit">
-        <i class="star icon"></i>
+        <i class="fa-solid fa-star icon"></i>
       </button>
     {% endif %}
     {% if not object.verified %}
       <button class="ui icon button" name="action_send" type="submit">
-        <i class="refresh icon"></i>
+        <i class="fa-solid fa-refresh icon"></i>
       </button>
     {% endif %}
   </form>
@@ -54,24 +54,25 @@
 
 {% block list_item_header %}
   <div class="ui basic label">
-    <i class="envelope outline icon"></i>
+    <i class="fa-duotone fa-envelope icon"></i>
     <code>{{ object.email }}</code>
   </div>
 
   {% if object.primary %}
     <span class="ui label">
-      <i class="star icon"></i>
+      <i class="fa-solid fa-star icon"></i>
       {% trans "Primary" %}
     </span>
   {% endif %}
 
   {% if object.verified %}
     <span class="ui green label">
+      <i class="fa-solid fa-check icon"></i>
       {% trans "Verified" %}
     </span>
   {% else %}
-    <span class="ui label">
-      <i class="yellow exclamation circle icon"></i>
+    <span class="ui orange basic label">
+      <i class="fa-solid fa-exclamation icon"></i>
       {% trans "Not verified" %}
     </span>
   {% endif %}

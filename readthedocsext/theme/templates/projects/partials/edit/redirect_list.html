@@ -28,7 +28,7 @@
   {% endcomment %}
 {% endblock %}
 
-{% block list_placeholder_icon_class %}directions{% endblock %}
+{% block list_placeholder_icon_class %}fa-duotone fa-signs-post{% endblock %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No redirects exist yet
@@ -45,7 +45,7 @@
   <a class="ui icon button"
      data-bind="click: $root.show_modal('redirect-{{ object.pk }}')"
      data-content="{% trans "Remove redirect" %}">
-    <i class="trash icon"></i>
+    <i class="fa-duotone fa-trash icon"></i>
   </a>
   <div class="ui mini modal" data-modal-id="redirect-{{ object.pk }}">
     <div class="header">Remove redirect?</div>
@@ -75,7 +75,7 @@
         {% endspaceless %}
       </code>
     {% else %}
-      <i class="small asterisk grey icon"></i>
+      <i class="small fa-solid fa-asterisk icon"></i>
     {% endif %}
   </div>
   <div class="ui label">
@@ -86,7 +86,7 @@
 {% block list_item_meta %}
   {% if object.to_url or object.redirect_type == "prefix" %}
     <div class="item">
-      <i class="directions icon"></i>
+      <i class="fa-duotone fa-signs-post icon"></i>
       <code>
         {% spaceless %}
           {% if object.redirect_type == "page" or object.redirect_type == "prefix" %}
