@@ -1,0 +1,16 @@
+{% load i18n %}
+{% load static %}
+
+<a class="card" href="{{ link }}" rel="noopener" target="_blank">
+  <div class="content">
+    <div class="header">{{ name }}</div>
+    <div class="meta">{{ service }}</div>
+    <div class="description">
+      <div class="ui basic center aligned segment">
+      {% with 'images/sponsors/'|add:image as image_path %}
+        <img class="ui tiny centered image" src="{% static image_path %}" alt="{{ name }}" />
+      {% endwith %}
+      </div>
+    </div>
+  </div>
+</a>
