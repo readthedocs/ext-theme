@@ -57,14 +57,15 @@
     {% block project_editing %}{% endblock %}
 
     {% block content-wrapper %}
-        <div class="ui very padded container">
+      <div class="ui container">
+        {% block admin-bar %}{% endblock %}
 
-          {% block admin-bar %}{% endblock %}
+        {% block content-header %}{% endblock %}
 
-          {% block content-header %}{% endblock %}
-
+        <div class="ui horizontally fitted very padded basic segment">
           {% block content %}{% endblock %}
         </div>
+      </div>
     {% endblock %}
 
     {% block footer %}
