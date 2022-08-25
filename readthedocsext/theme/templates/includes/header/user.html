@@ -1,0 +1,21 @@
+{% load i18n %}
+
+<div class="header">Projects</div>
+<a class="item" href="{% url 'projects_dashboard' %}">
+  <i class="fa-duotone fa-list icon"></i>
+  {% translate "My projects" %}
+</a>
+<a class="item" href="{% url 'projects_import' %}">
+  <i class="fa-duotone fa-plus icon"></i>
+  {% translate "Add project" %}
+</a>
+
+<div class="header">{% translate 'Account' %}</div>
+<a class="item" href="{% url 'profiles_profile_edit' %}">
+  <i class="fa-duotone fa-gears icon"></i>
+  {% translate "Settings" %}
+</a>
+<a class="item" href="{% url 'account_logout' %}">
+  <i class="fa-duotone fa-sign-out icon"></i>
+  {% translate "Log Out" %}
+</a>

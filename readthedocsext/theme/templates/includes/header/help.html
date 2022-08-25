@@ -1,0 +1,38 @@
+{% load i18n %}
+
+<a class="item" href="{% url 'support' %}">
+  <i class="fad fa-envelope primary icon"></i>
+  {% translate 'Support' %}
+</a>
+<a class="item" href="https://docs.readthedocs.io">
+  <i class="fad fa-book primary icon"></i>
+  {% translate 'Documentation' %}
+  <span class="description">
+    <i class="fad fa-external-link icon"></i>
+  </span>
+</a>
+<a class="item" href="https://docs.readthedocs.io/en/stable/tutorial/index.html#getting-started">
+  <i class="fad fa-rocket primary icon"></i>
+  {% translate 'Getting started' %}
+  <span class="description">
+    <i class="fad fa-external-link icon"></i>
+  </span>
+</a>
+<a class="item" href="http://status.readthedocs.com">
+  {% block menu_help_status %}
+    {% if has_status_check %}
+      {# TODO get some data from status page API to light this up #}
+      <i class="fad fa-circle-check green icon"></i>
+      {% translate 'Status' %}
+      <span class="description">
+        <span class="ui green text">Online</span>
+      </span>
+    {% else %}
+      <i class="fad fa-circle-check primary icon"></i>
+      {% translate 'Status' %}
+      <span class="description">
+        <i class="fad fa-external-link icon"></i>
+      </span>
+    {% endif %}
+  {% endblock menu_help_status %}
+</a>

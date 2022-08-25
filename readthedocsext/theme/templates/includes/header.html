@@ -2,62 +2,102 @@
 {% load gravatar %}
 {% load static %}
 
-<div class="ui inverted attached stackable menu">
+<div class="ui basic fitted attached segment">
   <div class="ui container">
-    <a class="header item" href="{% url "homepage" %}">
-      <img class="ui image" src="{% static 'readthedocsext/theme/images/logo-wordmark-light.svg' %}" width="220" alt="Read the Docs logo"/>
-    </a>
+    <div class="ui middle aligned vertically padded grid">
 
-    <div class="right menu">
-      {% if request.user.is_authenticated %}
-        <a class="ui item" data-bind="semanticui: {popup: {on: 'click'}}">
-          <img class="ui avatar image" src="{% gravatar_url request.user.email 24 %}">
-          <span class="text">
-            {{ request.user }}
-          </span>
-          <i class="fa-solid fa-caret-down icon"></i>
-        </a>
-        <div class="ui large inverted right top flowing popup">
-          <div class="ui inverted large list">
-            <a class="item" href="{% url 'projects_dashboard' %}">
-              <i class="fa-duotone fa-list icon"></i>
-              {% trans "My projects" %}
+      {% block header_logo %}
+        <div class="four wide computer five wide tablet eleven wide mobile left aligned column">
+          {# TODO compact this to remove redundancy #}
+          {% if request.user.is_authenticated %}
+            <a class="header item" href="{% url "projects_dashboard" %}" aria-label="Read the Docs projects">
+              <img class="ui image" src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}" width="220" alt="Read the Docs logo"/>
             </a>
-            <a class="item" href="{% url 'projects_import' %}">
-              <i class="fa-duotone fa-plus icon"></i>
-              {% trans "Add project" %}
+          {% else %}
+            <a class="header item" href="{% url "homepage" %}" aria-label="Read the Docs homepage">
+              <img class="ui image" src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}" width="220" alt="Read the Docs logo"/>
             </a>
-            <a class="item" href="{% url 'profiles_profile_edit' %}">
-              <i class="fa-duotone fa-gears icon"></i>
-              {% trans "Settings" %}
-            </a>
-            <a class="item" href="{% url 'support' %}">
-              <i class="fa-duotone fa-life-ring icon"></i>
-              {% trans "Support" %}
-            </a>
-            <a class="item" href="{% url 'account_logout' %}">
-              <i class="fa-duotone fa-sign-out icon"></i>
-              {% trans "Log Out" %}
-            </a>
+          {% endif %}
+        </div>
+      {% endblock header_logo %}
+
+      {# The top menu for mobile devices, doesn't show on tablet/computer. #}
+      {% block header_mobile_menu %}
+        <div class="five wide mobile only right aligned column">
+          <div class="ui wide dropdown" data-bind="semanticui: {dropdown: {action: 'select'}}">
+            <i class="fa-solid fa-bars large icon" style="--fa-secondary-opacity: 0.8;"></i>
+            <div class="menu">
+
+              {% if request.user.is_authenticated %}
+                {% include 'includes/header/user.html' %}
+              {% else %}
+                <div class="header">{% translate 'Account' %}</div>
+                <a class="item" href="{% url 'account_login' %}">
+                  <i class="fa-duotone fa-sign-in icon"></i>
+                  {% translate "Log In" %}
+                </a>
+                <a class="item" href="{% url "account_signup" %}">
+                  <i class="fa-duotone fa-user-plus icon"></i>
+                  {% translate "Sign up" %}
+                </a>
+              {% endif %}
+
+              <div class="divider"></div>
+
+              <div class="header">Help</div>
+              {% include 'includes/header/help.html' %}
+
+            </div>
           </div>
         </div>
-      {% else %}
-        {% url 'account_login' as login %}
-        {% if not request.path == login %}
-          <div class="item">
-            <a href="{% url 'account_login' %}" class="ui button">
-              {% trans "Log In" %}
-            </a>
+      {% endblock header_mobile_menu %}
+
+      {# The top menu shown on tablet/computer. Horizontal menu items instead of dropdown. #}
+      {% block header_menu %}
+        <div class="twelve wide computer eleven wide tablet left aligned tablet only computer only column">
+          <div class="ui huge borderless secondary menu">
+            {% include 'includes/header/main.html' %}
+
+            <div class="right menu">
+              <div class="ui wide dropdown item" data-bind="semanticui: {dropdown: {action: 'select', displayType: 'block'}}">
+                <span class="text">Help</span>
+                <i class="fad fa-caret-down icon"></i>
+                <div class="menu">
+                  {% include 'includes/header/help.html' %}
+                </div>
+              </div>
+              {% if request.user.is_authenticated %}
+                <div class="ui wide dropdown item" data-bind="semanticui: {dropdown: {action: 'select', displayType: 'block'}}">
+                  <img class="ui avatar image" src="{% gravatar_url request.user.email 24 %}">
+                  <span class="text">{{ request.user }}</span>
+                  <i class="fad fa-caret-down icon"></i>
+                  <div class="menu">
+                    {% include 'includes/header/user.html' %}
+                  </div>
+                </div>
+              {% else %}
+                {# Don't show a log in link on the log in page #}
+                {% url 'account_login' as login %}
+                {% if not request.path == login %}
+                  <div class="item">
+                    <a class="ui button" href="{% url 'account_login' %}">
+                      {% translate "Log In" %}
+                    </a>
+                  </div>
+                {% else %}
+                  <div class="item">
+                    <a class="ui button" href="{% url "account_signup" %}">
+                      {% translate "Sign up" %}
+                    </a>
+                  </div>
+                {% endif %}
+              {% endif %}
+            </div>
+
           </div>
-        {% endif %}
-        <div class="item">
-          <a class="ui button primary" href="{% url "account_signup" %}">
-            {% trans "Sign up" %}
-          </a>
         </div>
-      {% endif %}
+      {% endblock header_menu %}
 
     </div>
-
   </div>
 </div>

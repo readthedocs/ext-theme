@@ -1,0 +1,5 @@
+{% load i18n %}
+
+{% if request.user.is_authenticated %}
+  <a class="item" href="{% url "projects_dashboard" %}">{% translate 'Projects' %}</a>
+{% endif %}
