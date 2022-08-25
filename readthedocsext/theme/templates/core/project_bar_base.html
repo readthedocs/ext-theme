@@ -12,16 +12,16 @@
       <div class="ui large breadcrumb">
         <a class="section" href="{% url "projects_dashboard" %}">Projects</a>
 
-        <i class="right chevron icon divider"></i>
+        <i class="fa-duotone fa-chevron-right"></i>
 
         <div class="section">
           <div class="ui inline link search dropdown">
             <div class="text">{{ project }}</div>
-            <i class="dropdown icon"></i>
+            <i class="fa-solid fa-caret-down icon"></i>
 
             <div class="menu">
               <div class="ui search icon input">
-                <i class="search icon"></i>
+                <i class="fa-doli fa-magnifying-glass icon"></i>
                 <input type="text" name="search" placeholder="Search projects">
               </div>
 
@@ -50,7 +50,7 @@
       <div class="item">
         <div class="ui left icon input">
           <input type="text" placeholder="Search project...">
-          <i class="search icon"></i>
+          <i class="fa-duotone fa-magnifying-glass icon"></i>
           <!--<button class="ui button">Search</button>-->
         </div>
       </div>
@@ -160,7 +160,7 @@
     {% if request.user|is_admin:project %}
       <div class="right menu">
         <a class="item {{ edit_active }}" href="{% url "projects_edit" project.slug %}">
-          <i class="cog icon"></i>
+          <i class="fa-duotone fa-gears icon"></i>
           {% trans "Settings" %}
         </a>
       </div>

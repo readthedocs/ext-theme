@@ -5,7 +5,6 @@
 
 <footer class="ui basic segment very padded">
   <div class="ui horizontal divider very padded">
-    <i class="rocket icon"></i>
   </div>
 
   <div class="ui container">
@@ -19,8 +18,8 @@
           <div class="ui list">
             <a href="https://blog.readthedocs.com/" class="item">{% trans 'Blog' %}</a>
             <div class="item">
-              <a href="https://github.com/rtfd/readthedocs.org" rel="noopener noreferrer"><i class="large blue github icon"></i></a>
-              <a href="https://twitter.com/readthedocs" rel="noopener noreferrer"><i class="large blue twitter icon"></i></a>
+              <a href="https://github.com/rtfd/readthedocs.org" rel="noopener noreferrer"><i class="large blue fa-brands fa-github icon"></i></a>
+              <a href="https://twitter.com/readthedocs" rel="noopener noreferrer"><i class="large blue fa-brands fa-twitter icon"></i></a>
             </div>
           </div>
 
@@ -77,14 +76,14 @@
       <div class="ui basic center aligned segment">
         <div class="ui very relaxed horizontal list">
           <div class="left aligned item">
-            <i class="large copyright outline middle aligned icon"></i>
+            <i class="large fa-duotone fa-copyright middle aligned icon"></i>
             <div class="content">
               <div class="header">{% trans 'Copyright' %}</div>
               <div class="description">{% now "Y" %}, {% trans 'Read the Docs, Inc & contributors' %}</div>
             </div>
           </div>
           <div class="left aligned item">
-            <i class="large code branch icon"></i>
+            <i class="large fa-duotone fa-code-branch icon"></i>
             <div class="content">
               <div class="header">{% trans 'Version' %}</div>
               <div class="description">
@@ -95,7 +94,7 @@
             </div>
           </div>
           <div class="left aligned item">
-            <i class="large language icon"></i>
+            <i class="large fa-duotone fa-language icon"></i>
             <div class="content">
               <div class="header">{% trans 'Language' %}</div>
               <div class="description">
@@ -108,7 +107,7 @@
                     {% csrf_token %}
                     <div class="ui dropdown">
                       <span class="text">{{ current_lang | language_name_local }}</span>
-                      <i class="dropdown icon"></i>
+                      <i class="fa-solid fa-caret-down icon"></i>
                       <div class="menu">
                         {% for lang in LANGUAGES %}
                           <div class="item {% if lang.0 == current_lang %}active{% endif %}" data-value="{{ lang.0 }}">

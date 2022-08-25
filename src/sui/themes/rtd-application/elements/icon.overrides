@@ -19,3 +19,15 @@ i.icon.icon.icon.fa-brands {
   font-weight: 900;
 }
 
+/**
+ * Fix dropdown icons using FA natively
+ */
+.ui.form .field > .selection.dropdown {
+  & .dropdown.icon,
+  & .search.icon,
+  & .delete.icon {
+    // SUI includes icomoon here too
+    font-family: "Font Awesome 6 Pro", "Dropdown", sans-serif;
+    font-weight: 900;
+  }
+}

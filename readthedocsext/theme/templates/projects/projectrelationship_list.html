@@ -10,7 +10,7 @@
 {% block project_edit_content %}
   {% if superproject %}
     <div class="ui icon message">
-      <i class="exclamation icon"></i>
+      <i class="fa-duotone fa-circle-exclamation icon"></i>
       <div class="content">
         <div class="header">
           {% trans "Nested subprojects are not supported" %}
@@ -22,7 +22,7 @@
         </p>
 
         <p>
-          <a href="{% url 'projects_subprojects' project_slug=superproject.parent.slug %}">
+          <a href="{% url 'projects_subprojects' project_slug=superproject.parent %}">
             {% blocktrans trimmed with project=superproject.parent.name %}
               View all subprojects of {{ project }}
             {% endblocktrans %}

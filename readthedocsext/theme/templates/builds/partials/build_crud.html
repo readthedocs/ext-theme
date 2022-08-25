@@ -26,7 +26,7 @@
     <div class="ui link search dropdown" data-bind="semanticui: {dropdown: filter_version_config()}">
       <input type="hidden" name="version" value="{{ filter.form.version.value|default:"" }}">
       <div class="default text">{% if filter.form.version.value %}{{ filter.form.version.value }}{% else %}{% trans "All versions" %}{% endif %}</div>
-      <i class="dropdown icon"></i>
+      <i class="fa-solid fa-caret-down icon"></i>
       <div class="menu"></div>
     </div>
   </form>
@@ -51,7 +51,7 @@
       {% csrf_token %}
       <input type="hidden" name="version_slug" value="{{ object.version.slug }}">
       <button class="ui icon button" data-content="{% trans "Rebuild" %}">
-        <i class="refresh icon"></i>
+        <i class="fa-solid fa-refresh icon"></i>
       </button>
     </form>
   {% endif %}
@@ -68,7 +68,7 @@
 
   {% if object.is_external %}
     <div class="ui label">
-      <i class="ui hashtag icon"></i>
+      <i class="fa-solid fa-hashtag icon"></i>
       {{ object.external_version_name }}
     </div>
   {% endif %}
@@ -77,11 +77,11 @@
 
 {% block list_item_meta %}
   <a href="{{ object.commit_url }}" class="item">
-    <i class="code branch icon"></i>
+    <i class="fa-duotone fa-code-branch icon"></i>
     <code>{{ object.commit|slice:"0:8" }}</code>
   </a>
   <div class="item">
-    <i class="clock outline icon"></i>
+    <i class="fa-duotone fa-clock icon"></i>
     {% blocktrans with object.date|timesince as date trimmed %}
       {{ date }} ago
     {% endblocktrans %}

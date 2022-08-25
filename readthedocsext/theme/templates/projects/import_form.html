@@ -44,11 +44,11 @@
     <div class="ui sixteen wide tablet five wide computer four wide large screen column">
       <div class="ui fluid secondary pointing vertical menu" data-bind="css: {vertical: device.computer()}">
         <a class="item active" data-tab="automatic">
-          <i class="magic icon"></i>
+          <i class="fa-duotone fa-magic icon"></i>
           {% trans "Configure automatically" %}
         </a>
         <a class="item" data-tab="manual">
-          <i class="hand sparkles icon"></i>
+          <i class="fa-duotone fa-hand-sparkles icon"></i>
           {% trans "Configure manually" %}
         </a>
       </div>
@@ -68,7 +68,7 @@
                 class="ui right icon button"
                 data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}"
                 data-content="{% trans "Refresh repositories" %}">
-              <i class="refresh icon"></i>
+              <i class="fa-duotone fa-refresh icon"></i>
             </button>
           </div>
           <div class="results"></div>
@@ -93,13 +93,13 @@
       <div class="title">
         <span class="text" data-bind="text: full_name"></span>
         {# Because of the search popup, a nested popup using data-content doesn't do anything here #}
-        <i class="ui eye slash small grey icon"
+        <i class="fa-duotone fa-eye-slash small icon"
            style="display: none"
            data-bind="visible: private"></i>
-        <i class="ui magic small grey icon"
+        <i class="fa-duotone fa-magic small icon"
            style="display: none"
            data-bind="visible: admin"></i>
-        <i class="ui download small grey icon"
+        <i class="fa-duotone fa-download small icon"
            style="display: none"
            data-bind="visible: project"></i>
       </div>
@@ -118,7 +118,7 @@
 
           {% if not has_connected_accounts %}
             <div class="ui icon info message">
-              <i class="magic icon"></i>
+              <i class="fa-duotone fa-magic icon"></i>
               <div class="content">
                 <p>
                   {# Translators: "connected service" refers to the user setting page for "Connected Services" #}
@@ -173,7 +173,7 @@
 
                   {# Do we support private repositories? #}
                   <div class="item">
-                    <i class="eye icon" data-bind="css: {'slash': private}"></i>
+                    <i class="fa-duotone fa-eye icon" data-bind="css: {'slash': private}"></i>
                     <div class="content">
                       <div class="header">
                         <span data-bind="visible: !private">
@@ -206,7 +206,7 @@
 
                   {# Does user have admin privileges needed to import? #}
                   <div class="item">
-                    <i class="magic icon" data-bind="css: {red: !admin}"></i>
+                    <i class="fa-duotone fa-magic icon" data-bind="css: {red: !admin}"></i>
                     <div class="content">
                       <div class="header">
                         <span data-bind="visible: admin">
@@ -242,7 +242,7 @@
 
                   {# Is the repository already imported? #}
                   <div class="item" data-bind="if: has_project">
-                    <i class="plus icon"></i>
+                    <i class="fa-solid fa-plus icon"></i>
                     <div class="content">
                       <div class="header">
                         {% trans "Repository is already configured" %}
@@ -256,7 +256,7 @@
                         {% endblocktrans %}
                         </p>
                         <p data-bind="with: project">
-                          <i class="external icon"></i>
+                          <i class="fa-duotone fa-arrow-up-right-from-square icon"></i>
                           <a data-bind="text: name, attr: {href: url}" target="_blank"></a>
                         </p>
                       </div>
@@ -310,11 +310,11 @@
         </p>
         <div class="ui right aligned basic segment">
           <a class="ui basic button" href="https://docs.readthedocs.io/en/stable/intro/import-guide.html" target="_blank">
-            <i class="question icon"></i>
+            <i class="fa-duotone fa-question icon"></i>
             {% trans "Read more" %}
           </a>
           <a class="ui button" href="{% url 'projects_import_manual' %}">
-            <i class="exclamation icon"></i>
+            <i class="fa-solid fa-triangle-exclamation icon"></i>
             {% trans "Continue" %}
           </a>
         </div>
