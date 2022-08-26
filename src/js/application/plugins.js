@@ -1,6 +1,9 @@
 import jquery from "jquery";
 import ko from "knockout";
 
+window.jQuery = jquery;
+global.jQuery = jquery;
+
 /* Not import syntax on purpose */
 require("fomantic-ui-less/definitions/behaviors/visibility.js");
 require("fomantic-ui-less/definitions/behaviors/form.js");
