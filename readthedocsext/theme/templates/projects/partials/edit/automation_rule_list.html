@@ -15,13 +15,13 @@
   <div class="item">
     <a class="ui green icon button"
        href="{% url 'projects_automation_rule_regex_create' project_slug=project.slug %}">
-      <i class="plus icon"></i>
+      <i class="fa-solid fa-plus icon"></i>
       {% trans "Add rule" %}
     </a>
   </div>
 {% endblock %}
 
-{% block list_placeholder_icon_class %}robot{% endblock %}
+{% block list_placeholder_icon_class %}fa-duotone fa-swap-opacity fa-robot{% endblock %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No automation rules have been configured yet
@@ -47,7 +47,7 @@
               data-content="{{ button_up_text }}"
               aria-label="{{ button_up_text }}"
               title="{{ button_up_text }}">
-        <i class="arrow up icon"></i>
+        <i class="fa-solid fa-arrow-up icon"></i>
       </button>
     </form>
   {% endif %}
@@ -59,7 +59,7 @@
               data-content="{{ button_down_text }}"
               aria-label="{{ button_down_text }}"
               title="{{ button_down_text }}">
-        <i class="arrow down icon"></i>
+        <i class="fa-solid fa-arrow-down icon"></i>
       </button>
     </form>
   {% endif %}

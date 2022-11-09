@@ -13,12 +13,12 @@
 
 {% block create_button %}
   <a class="ui button" href="?download=true">
-    <i class="download icon"></i>
+    <i class="fa-duotone fa-download icon"></i>
     {% trans "Download search data" %}
   </a>
 {% endblock %}
 
-{% block list_placeholder_icon_class %}search{% endblock %}
+{% block list_placeholder_icon_class %}fa-duotone fa-magnifying-glass{% endblock %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No search queries are available yet

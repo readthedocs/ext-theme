@@ -7,7 +7,7 @@
         <label for="{{ field.id_for_label }}" class="ui {{ label_class }}"{% if field.help_text %} data-html="{{ field.help_text }}" data-bind="semanticui: {popup: {hoverable: true}}"{% endif %}>
           {{ field.label|safe }}
           {% if field.help_text %}
-            <i class="ui small circular grey help icon"></i>
+            <i class="ui small grey fa-duotone fa-circle-question icon"></i>
           {% endif %}
         </label>
       {% endif %}

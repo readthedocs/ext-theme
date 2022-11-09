@@ -44,12 +44,12 @@
         <div class="ui fluid card">
           <div class="content">
             <div class="header">
-              <i class="{% if version.type == "branch" %}code branch {% elif version.type == "tag" %}tag {% endif %}icon"></i>
+              <i class="fa-duotone {% if version.type == "branch" %}fa-code-branch {% elif version.type == "tag" %}fa-tag {% endif %}icon"></i>
               <code>{{ version.verbose_name }}</code>
             </div>
             <div class="meta">
               <span class="identifier">
-                <i class="code branch icon"></i>
+                <i class="fa-duotone fa-code-branch icon"></i>
                 <code>{{ version.identifier_friendly }}</code>
               </span>
             </div>
@@ -96,7 +96,7 @@
             <div class="ui fluid search" data-bind="semanticui: {search: search_config()}">
               <div class="ui fluid icon large input">
                 <input class="ui text" type="text" placeholder="{% trans "Search versions" %}" tabindex="0">
-                <i class="ui search icon"></i>
+                <i class="fa-duotone fa-magnifying-glass icon"></i>
               </div>
               <div class="results" tabindex="0"></div>
             </div>

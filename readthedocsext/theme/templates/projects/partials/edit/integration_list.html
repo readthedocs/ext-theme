@@ -15,13 +15,13 @@
   <div class="item">
     <a class="ui green icon button"
        href="{% url 'projects_integrations_create' project_slug=project.slug %}">
-      <i class="plus icon"></i>
+      <i class="fa-solid fa-plus icon"></i>
       {% trans "Add integration" %}
     </a>
   </div>
 {% endblock %}
 
-{% block list_placeholder_icon_class %}plug{% endblock %}
+{% block list_placeholder_icon_class %}fa-duotone fa-plug{% endblock %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No integrations have been configured yet
@@ -40,7 +40,7 @@
 {% block list_item_right_buttons %}
   <a class="ui icon button"
      href="{% url 'projects_integrations_detail' project_slug=project.slug integration_pk=object.pk %}">
-    <i class="wrench icon"></i>
+    <i class="fa-duotone fa-wrench icon"></i>
   </a>
 
   {% url 'projects_integrations_delete' project_slug=project.slug integration_pk=object.pk as form_url %}
@@ -56,13 +56,13 @@
     {{ object.get_integration_type_display }}
   </a>
   {% if object.has_sync and object.can_sync %}
-    <i class="ui magic grey icon" data-content="{% trans "Automatically managed" %}"></i>
+    <i class="fa-duotone fa-wand-magic-sparkles icon" data-content="{% trans "Automatically managed" %}"></i>
   {% endif %}
 {% endblock list_item_header %}
 
 {% block list_item_meta %}
   <div class="item">
-    <i class="exchange alternate icon"></i>
+    <i class="fa-duotone fa-exchange icon"></i>
     {{ object.exchanges.count }} exchanges
   </div>
 {% endblock list_item_meta %}
