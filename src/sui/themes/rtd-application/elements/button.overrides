@@ -1,0 +1,12 @@
+.ui.basic.buttons form > .button {
+  &:last-child {
+    border-top-right-radius: 0rem;
+    border-bottom-right-radius: 0rem;
+  }
+
+  &:hover {
+    box-shadow: none;
+  }
+
+  border-left: 0rem;
+}
