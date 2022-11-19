@@ -1,4 +1,0 @@
-/* Null src to skip supplied Font Awesome, use from node_modules instead,
- * through overrides */
-@src: "";
-@fallbackSRC: "";

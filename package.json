@@ -20,6 +20,7 @@
     "@babel/plugin-proposal-class-properties": "^7.16.7",
     "@babel/plugin-transform-modules-commonjs": "^7.10.4",
     "@babel/preset-env": "^7.10.2",
+    "@readthedocs/sui-common-theme": "github:readthedocs/sui-common-theme#cc51322",
     "ansi_up": "^4.0.4",
     "babel-loader": "^8.1.0",
     "chart.js": "^2.9.3",
