@@ -1,3 +1,9 @@
+// Override common theme rule. Use isn't really clear here, consider removing
+// this in the common theme too.
+.ui.list > .item > .content > .header {
+  font-weight: 600;
+}
+
 /* https://github.com/Semantic-Org/Semantic-UI-CSS/pull/68 */
 .ui.horizontal.list > .item > .icon + .content {
   width: auto;

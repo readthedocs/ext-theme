@@ -6,15 +6,15 @@
 
 {% block title %}{{ project.name }}{% endblock %}
 
-{% block project_editing %}
+{% block content-header %}
   {% with overview_active="active" %}
-    {% include "core/project_bar.html" %}
+    {% include "projects/partials/header.html" with is_expanded=True %}
   {% endwith %}
 {% endblock %}
 
 {% block content %}
   {% comment %}
-    This section should probably be sidebar content somewhere
+    TODO This section should probably be sidebar content somewhere
     {% if onboard %}
       <!-- BEGIN onboard -->
       {% include 'projects/onboard_detail.html' %}
@@ -23,16 +23,4 @@
   {% endcomment %}
 
   {% include "builds/partials/version_list.html" with objects=versions %}
-
-  {% comment %}
-    TODO remove this entirely?
-    {% if project.description %}
-      <div>
-        <h3>{% trans "Description" %}</h3>
-        <p>
-          {{ project.description|restructuredtext }}
-        </p>
-      </div>
-    {% endif %}
-  {% endcomment %}
 {% endblock %}
