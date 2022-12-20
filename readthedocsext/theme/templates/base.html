@@ -53,18 +53,15 @@
     {# TODO remove subnav-bar block, it isn't used #}
     {% block subnav-bar %}{% endblock %}
 
-    {# TODO remove project_editing block, it isn't used #}
-    {% block project_editing %}{% endblock %}
-
     {% block content-wrapper %}
-        <div class="ui very padded container">
+      <div class="ui very padded container">
+        {# TODO move admin-bar usage to content-header #}
+        {% block admin-bar %}{% endblock %}
 
-          {% block admin-bar %}{% endblock %}
+        {% block content-header %}{% endblock %}
 
-          {% block content-header %}{% endblock %}
-
-          {% block content %}{% endblock %}
-        </div>
+        {% block content %}{% endblock %}
+      </div>
     {% endblock %}
 
     {% block footer %}

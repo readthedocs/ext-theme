@@ -15,10 +15,10 @@
   </style>
 {% endblock %}
 
-{% block project_editing %}
+{% block content-header %}
   {% if project_obj %}
     {% with search_active="active" project=project_obj %}
-        {% include "core/project_bar.html" %}
+        {% include "projects/partials/header.html" %}
     {% endwith %}
   {% endif %}
 {% endblock %}
