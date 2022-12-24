@@ -61,6 +61,14 @@ def do_get_webpack_static_prefix():
     return (webpack_server or static_url).rstrip('/')
 
 
+@register.simple_tag(name="debug_enabled")
+def debug_enabled():
+    """
+    Helper for testing for debug mode, minus INTERNAL_IPS.
+    """
+    return getattr(settings, 'DEBUG', False)
+
+
 @register.simple_tag(name="alter_field", takes_context=True)
 def alter_field(context, field, data_bind=None, classes=None, label_classes=None):
     if not isinstance(field, boundfield.BoundField) and settings.DEBUG:
