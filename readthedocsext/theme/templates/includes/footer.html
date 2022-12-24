@@ -85,26 +85,37 @@
             <div class="content">
               <div class="header">{% trans 'Language' %}</div>
               <div class="description">
-                {% block language-select-form %}
+                {% block language_select_form %}
                   {% get_current_language as current_lang %}
                   <form action="/i18n/setlang/" method="post">
                     <div class="field">
                       <input name="next" type="hidden" value="/" />
                     </div>
                     {% csrf_token %}
-                    <div class="ui dropdown">
-                      <span class="text">{{ current_lang | language_name_local }}</span>
+                    <div class="ui very wide search dropdown" data-bind="semanticui: { dropdown: {direction: 'upward', fullTextSearch: true, cache: false}}">
+                      <input type="hidden" name="language" />
+                      <span class="default text">{{ current_lang | language_name_local }}</span>
                       <i class="fa-solid fa-caret-down icon"></i>
                       <div class="menu">
+                        <div class="ui icon search input">
+                          <i class="search icon"></i>
+                          <input type="text" />
+                        </div>
+                        <div class="divider"></div>
                         {% for lang in LANGUAGES %}
-                          <div class="item {% if lang.0 == current_lang %}active{% endif %}" data-value="{{ lang.0 }}">
-                            {{ lang.0 | language_name_local }} ({{ lang.1 }})
+                          <div class="vertical item {% if lang.0 == current_lang %}active{% endif %}" data-value="{{ lang.0 }}" data-text="{{ lang.0 | language_name_local }}">
+                            <div class="description">{{ lang.0 | language_name_translated }}</div>
+                            <div class="text">{{ lang.0 | language_name_local }}</div>
                           </div>
                         {% endfor %}
                       </div>
                     </div>
+                    {# TODO this button would be better off as a onChange event #}
+                    <button class="ui tiny compact basic inverted button">
+                      {% trans "Update" %}
+                    </button>
                   </form>
-                {% endblock language-select-form %}
+                {% endblock language_select_form %}
               </div>
             </div>
           </div>
