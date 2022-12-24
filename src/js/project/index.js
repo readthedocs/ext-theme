@@ -17,12 +17,10 @@ export { admin, create };
  * @public
  * @extends {PopupView}
  */
-export class ProjectHeaderView extends PopupView {
+export class ProjectHeaderView {
   static view_name = "ProjectHeaderView";
 
   constructor(expanded = false) {
-    super();
-
     /** @observable {Object} Whether the header view is collapsed by default */
     this.is_expanded = ko.observable(expanded);
 

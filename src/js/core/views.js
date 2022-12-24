@@ -1,6 +1,8 @@
 import ko from "knockout";
 import jquery from "jquery";
 
+import { Registry } from "../application/registry";
+
 // Constants, pulled from SUI:
 // https://semantic-ui.com/elements/container.html
 const breakpoints = {
@@ -136,3 +138,70 @@ export class APIListItemView extends PopupView {
     });
   }
 }
+
+// And some partial views for base template components
+
+/**
+ * HeaderView
+ */
+export class HeaderView {
+  static view_name = "HeaderView";
+
+  constructor() {
+    /** Configuration passed in via :func:`~application.plugins.jsonInit`
+     * @observable {Object} Header configuration, mostly for search */
+    this.config = ko.observable();
+    /** SUI search configuration object, used from templates
+     * @observable {Object} Search configuration */
+    this.search_project_config = ko.observable();
+
+    // Wait for :func:`config` to change before we init search
+    this.config.subscribe((config) => {
+      if (config === undefined) {
+        return;
+      }
+      // The URL from the config object is a relative URL, we'll use the
+      // window URL origin as the full URL
+      const url = new URL(config.api_projects_list_url, window.location.origin);
+      url.search = "?name={query}";
+      this.search_project_config({
+        type: "category",
+        apiSettings: {
+          url: url.href,
+          onResponse: (resp) => {
+            const projects = resp.results.map((elem, index) => {
+              // TODO description might be better off in the application model
+              let description = elem.slug;
+              if (elem.subproject_of) {
+                // TODO localize this
+                description = "Subproject of " + elem.subproject_of.name;
+              } else if (elem.translation_of) {
+                // TODO localize this
+                description =
+                  elem.language.name +
+                  " translation of " +
+                  elem.translation_of.name;
+              }
+              return {
+                title: elem.name,
+                description: description,
+                url: elem.urls.home,
+              };
+            });
+            const results = {
+              results: {
+                "category-projects": {
+                  name: "Projects",
+                  results: projects,
+                },
+              },
+            };
+            return results;
+          },
+        },
+        minCharacters: 2,
+      });
+    });
+  }
+}
+Registry.add_view(HeaderView);
