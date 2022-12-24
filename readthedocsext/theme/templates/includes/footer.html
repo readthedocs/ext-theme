@@ -1,87 +1,74 @@
-<!-- Inserted RTD Footer -->
 {% load i18n %}
 {% load core_tags %}
 {% load static %}
 
-<footer class="ui basic segment very padded">
-  <div class="ui horizontal divider very padded">
-  </div>
-
+<footer class="ui basic very padded inverted attached segment">
   <div class="ui container">
-    {% block footer-content %}
 
-      <div class="ui three column stackable doubling grid information very padded">
+    {% block footer_links %}
+      <div class="ui four column stackable grid very padded">
 
         <div class="column">
-          <h4 class="ui sub header">{% trans 'Stay Updated' %}</h4>
-
-          <div class="ui list">
-            <a href="https://blog.readthedocs.com/" class="item">{% trans 'Blog' %}</a>
-            <div class="item">
-              <a href="https://github.com/rtfd/readthedocs.org" rel="noopener noreferrer"><i class="large blue fa-brands fa-github icon"></i></a>
-              <a href="https://twitter.com/readthedocs" rel="noopener noreferrer"><i class="large blue fa-brands fa-twitter icon"></i></a>
-            </div>
-          </div>
-
-          <div class="ui form">
-            <form action="https://readthedocs.us3.list-manage.com/subscribe/post?u=a6a22369cc2b356379cf789ca&amp;id=a85a83a5a5" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-              <p>{% trans 'Sign up for our newsletter to get our latest blog updates delivered to your inbox weekly.' %}</p>
-
-              <div class="field">
-                <label for="mce-EMAIL">{% trans 'Email' %}</label>
-                <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="you@example.com">
+          <div class="ui vertical inverted text menu">
+            {% block menu_news %}
+              <h4 class="ui inverted sub header">Stay updated</h4>
+              <a class="item" href="https://blog.readthedocs.com/">Blog</a>
+              <a class="item" href="https://landing.mailerlite.com/webforms/landing/t0a9l4">Newsletter</a>
+              <a class="item" href="https://status.readthedocs.com/">Status</a>
+              <div class="item">
+                <a href="https://github.com/readthedocs/" aria-label="Read the Docs on GitHub" rel="noopener noreferrer"><i class="icon large fab fa-github"></i></a>
+                <a href="https://twitter.com/readthedocs" aria-label="Read the Docs on Twitter" rel="noopener noreferrer"><i class="icon large fab fa-twitter"></i></a>
+                <a href="https://fosstodon.org/@readthedocs" aria-label="Read the Docs on Mastodon / Fediverse" rel="me"><i class="icon large fab fa-mastodon"></i></a>
               </div>
-
-              <div id="mce-responses">
-                <div class="ui hidden response" id="mce-error-response"></div>
-                <div class="ui hidden response" id="mce-success-response"></div>
-              </div>
-              {% comment %}Real people should not fill this in and expect good things - do not remove this or risk form bot signups{% endcomment %}
-              <input type="hidden" aria-hidden="true" name="b_a6a22369cc2b356379cf789ca_a85a83a5a5" tabindex="-1" value="">
-
-              <input class="ui primary button" type="submit" value="{% trans 'Subscribe' %}" name="subscribe" id="mc-embedded-subscribe" class="button">
-            </form>
+            {% endblock menu_news %}
           </div>
         </div>
 
         <div class="column">
-          <h4 class="ui sub header">{% trans 'Get Involved' %}</h4>
-
-          <div class="ui list">
-            <a class="item" href="https://docs.readthedocs.io/page/intro/getting-started-with-sphinx.html">{% trans 'Getting Started Guide' %}</a>
-            <a class="item" href="https://docs.readthedocs.io">{% trans 'Documentation' %}</a>
-            <a class="item" href="https://docs.readthedocs.io/page/contribute.html">{% trans 'Contributing' %}</a>
-            <a class="item" href="https://docs.readthedocs.io/page/team.html">{% trans 'Team' %}</a>
-            <a class="item" href="https://docs.readthedocs.io/page/open-source-philosophy.html">{% trans 'Open Source Philosophy' %}</a>
+          <div class="ui vertical inverted text menu">
+            {% block menu_learn %}
+              <h4 class="ui inverted sub header">Learn more</h4>
+              <a class="item" href="https://docs.readthedocs.io">Documentation</a>
+              <a class="item" href="https://docs.readthedocs.io/page/tutorial/index.html">Getting started guide</a>
+              <a class="item" href="https://docs.readthedocs.io/page/config-file/v2.html">Configure your project</a>
+            {% endblock menu_learn %}
           </div>
         </div>
 
         <div class="column">
-          <h4 class="ui sub header">{% trans 'Business Info' %}</h4>
+          <div class="ui vertical inverted text menu">
+            {% block menu_services %}
+              <h4 class="ui inverted sub header">Services</h4>
+              <a class="item" href="https://about.readthedocs.com/pricing/">Pricing</a>
+              <a class="item" href="https://about.readthedocs.com/about/">Features</a>
+              <a class="item" href="https://www.ethicalads.io/advertisers/?ref=rtd">Advertise with Us</a>
+              <a class="item" href="https://docs.readthedocs.io/page/privacy-policy.html">Privacy Policy</a>
+              <a class="item" href="https://docs.readthedocs.io/page/terms-of-service.html">Terms of Service</a>
+            {% endblock menu_services %}
+          </div>
+        </div>
 
-          <div class="ui list">
-            {% url "advertising" as advertising_url %}
-            <a class="item" href="{{ advertising_url | default:'https://readthedocs.org/sustainability/advertising/' }}">{% trans 'Advertise with Us' %}</a>
-            <a class="item" href="https://readthedocs.com">{% trans 'Read the Docs for Business' %}</a>
-            {% url "donate" as donate_url %}
-            <a class="item" href='{{ donate_url }}'>{% trans 'Supporters' %}</a>
-            <a class="item" href="https://docs.readthedocs.io/page/privacy-policy.html">{% trans 'Privacy Policy' %}</a>
-            <a class="item" href="https://docs.readthedocs.io/page/terms-of-service.html">{% trans 'Terms of Service' %}</a>
-            <a class="item" href="https://read-the-docs-guidelines.readthedocs-hosted.com/">{% trans 'Branding' %}</a>
+        <div class="column">
+          <div class="ui vertical inverted text menu">
+            {% block menu_about %}
+              <h4 class="ui inverted sub header">About us</h4>
+              <a class="item" href="https://about.readthedocs.com/company/">Company</a>
+              <a class="item" href="https://docs.readthedocs.io/page/team.html">Team</a>
+              <a class="item" href="https://dev.readthedocs.io/page/contribute.html">Contributing</a>
+
+              {# TODO move this out of the footer and drop this menu from this block/column  #}
+              <h4 class="ui inverted sub header">Tools</h4>
+              <a class="item" href="https://about.readthedocs.com/tools/sphinx/">Sphinx</a>
+            {% endblock menu_about %}
           </div>
         </div>
 
       </div>
+    {% endblock footer_links %}
 
-      <div class="ui basic center aligned segment">
-        <div class="ui very relaxed horizontal list">
-          <div class="left aligned item">
-            <i class="large fa-duotone fa-copyright middle aligned icon"></i>
-            <div class="content">
-              <div class="header">{% trans 'Copyright' %}</div>
-              <div class="description">{% now "Y" %}, {% trans 'Read the Docs, Inc & contributors' %}</div>
-            </div>
-          </div>
+    {% block footer_metadata %}
+      <div class="ui basic center aligned inverted segment">
+        <div class="ui very relaxed horizontal inverted list">
           <div class="left aligned item">
             <i class="large fa-duotone fa-code-branch icon"></i>
             <div class="content">
@@ -123,15 +110,23 @@
           </div>
         </div>
       </div>
+    {% endblock footer_metadata %}
 
-      <div class="ui horizontal divider very padded">
+    {% block footer_copyright %}
+      <div class="ui basic center aligned inverted segment">
+        <i class="fad fa-copyright icon"></i>
+        Copyright 2022, Read the Docs, Inc &amp; contributors
+      </div>
+    {% endblock footer_copyright %}
+
+    {% block footer_sponsors %}
+      <div class="ui inverted horizontal divider very padded">
         Sponsored by
       </div>
 
-
       <div class="ui six column doubling grid container">
         <div class="column bottom aligned centered">
-          <div class="ui tiny header centered">
+          <div class="ui tiny inverted header centered">
             <a href="https://azure.microsoft.com" rel="noopener" target="_blank">
               <img class="ui tiny centered image" src="{% static 'images/sponsors/azure.png' %}" alt="Microsoft Azure" />
               Microsoft Azure
@@ -140,7 +135,7 @@
           </div>
         </div>
         <div class="column bottom aligned centered">
-          <div class="ui tiny header centered">
+          <div class="ui tiny inverted header centered">
             <a href="https://cloudflare.com" rel="noopener" target="_blank">
               <img class="ui tiny centered image" src="{% static 'images/sponsors/cloudflare.png' %}" alt="CloudFlare">
               Cloudflare
@@ -149,7 +144,7 @@
           </div>
         </div>
         <div class="column bottom aligned centered">
-          <div class="ui tiny header centered">
+          <div class="ui tiny inverted header centered">
             <a href="https://sentry.io/" rel="noopener" target="_blank">
               <img class="ui tiny centered image" src="{% static 'images/sponsors/sentry.png' %}" alt="Sentry">
               Sentry
@@ -158,7 +153,7 @@
           </div>
         </div>
         <div class="column bottom aligned centered">
-          <div class="ui tiny header centered">
+          <div class="ui tiny inverted header centered">
             <a href="https://www.elastic.co/" rel="noopener" target="_blank">
               <img class="ui tiny centered image" src="{% static 'images/sponsors/elastic.png' %}" alt="Elastic">
               Elastic
@@ -167,7 +162,7 @@
           </div>
         </div>
         <div class="column bottom aligned centered">
-          <div class="ui tiny header centered">
+          <div class="ui tiny inverted header centered">
             <a href="https://newrelic.com/" rel="noopener" target="_blank">
               <img class="ui tiny centered image" src="{% static 'images/sponsors/newrelic.png' %}" alt="New Relic">
               New Relic
@@ -176,7 +171,7 @@
           </div>
         </div>
         <div class="column bottom aligned centered">
-          <div class="ui tiny header centered">
+          <div class="ui tiny inverted header centered">
             <a href="https://www.pagerduty.com/" rel="noopener" target="_blank">
               <img class="ui tiny centered image" src="{% static 'images/sponsors/pagerduty.png' %}" alt="PagerDuty">
               PagerDuty
@@ -185,8 +180,7 @@
           </div>
         </div>
       </div>
-
-    {% endblock footer-content %}
+    {% endblock footer_sponsors %}
 
   </div>
 </footer>
