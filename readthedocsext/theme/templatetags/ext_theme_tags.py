@@ -21,10 +21,10 @@ class WebpackStaticNode(StaticNode):
 
     @classmethod
     def handle_simple(cls, path):
-        webpack_server = getattr(settings, 'RTD_EXT_THEME_DEV_SERVER', None)
+        webpack_server = getattr(settings, "RTD_EXT_THEME_DEV_SERVER", None)
         if webpack_server is not None:
             return urljoin(
-                PrefixNode.handle_simple('RTD_EXT_THEME_DEV_SERVER'),
+                PrefixNode.handle_simple("RTD_EXT_THEME_DEV_SERVER"),
                 path,
             )
         else:
@@ -56,9 +56,17 @@ def do_get_webpack_static_prefix():
     If the local dev webpack server is being used, it return this prefix.
     Otherwise, it fallbacks to regular STATIC_URL setting.
     """
-    webpack_server = getattr(settings, 'RTD_EXT_THEME_DEV_SERVER', None)
-    static_url = getattr(settings, 'STATIC_URL', None)
-    return (webpack_server or static_url).rstrip('/')
+    webpack_server = getattr(settings, "RTD_EXT_THEME_DEV_SERVER", None)
+    static_url = getattr(settings, "STATIC_URL", None)
+    return (webpack_server or static_url).rstrip("/")
+
+
+@register.simple_tag(name="debug_enabled")
+def debug_enabled():
+    """
+    Helper for testing for debug mode, minus INTERNAL_IPS.
+    """
+    return getattr(settings, "DEBUG", False)
 
 
 @register.simple_tag(name="alter_field", takes_context=True)
@@ -66,10 +74,10 @@ def alter_field(context, field, data_bind=None, classes=None, label_classes=None
     if not isinstance(field, boundfield.BoundField) and settings.DEBUG:
         raise Exception("data_bind got passed an invalid or inexistent field")
     if data_bind is not None:
-        field.field.widget.attrs['data-bind'] = data_bind
+        field.field.widget.attrs["data-bind"] = data_bind
     if classes is not None:
-        field.field.widget.attrs['class'] = classes
-    return ''
+        field.field.widget.attrs["class"] = classes
+    return ""
 
 
 @register.filter(name="data_bind")
@@ -84,5 +92,5 @@ def add_data_bind(field, data_bind):
     """
     if not isinstance(field, boundfield.BoundField) and settings.DEBUG:
         raise Exception("|data_bind got passed an invalid or inexistent field")
-    field.field.widget.attrs['data-bind'] = data_bind
+    field.field.widget.attrs["data-bind"] = data_bind
     return field

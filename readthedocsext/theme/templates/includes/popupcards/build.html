@@ -15,7 +15,7 @@
   <div class="description">
     <div class="ui list">
       <div class="item">
-        <i class="history icon"></i>
+        <i class="fa-duotone fa-history icon"></i>
         <div class="content">
           <div class="header">Total time</div>
           <div class="description">{{ build.length }}</div>
@@ -28,7 +28,7 @@
 {% block popupcard_extra_content %}
   <span>
     <a href="{{ build.get_commit_url }}">
-      <i class="code branch icon"></i>
+      <i class="fa-duotone fa-code-branch icon"></i>
       <code>{{ build.commit|slice:"0:8" }}</code>
     </a>
   </span>

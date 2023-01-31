@@ -49,8 +49,8 @@
       {% url 'api_webhook' project_slug=project.slug integration_pk=integration.pk as webhook_url %}
       {% with "//"|add:PRODUCTION_DOMAIN|add:webhook_url as integration_url %}
         <code>{{ integration_url }}</code>
-        <span class="ui mini compact icon basic button" data-clipboard-text="{{ integration_url }}" data-content="{% trans "Copied!" %}">
-          <i class="copy outline icon"></i>
+        <span class="ui compact icon basic button" data-clipboard-text="{{ integration_url }}" data-content="{% trans "Copied!" %}">
+          <i class="fa-duotone fa-copy icon"></i>
         </span>
       {% endwith %}
     </div>
@@ -71,7 +71,7 @@
     <form class="ui form" method="post" action="{% url 'projects_integrations_webhooks_sync' project_slug=project.slug integration_pk=integration.pk %}">
       {% csrf_token %}
       <button class="ui button">
-        <i class="refresh icon"></i>
+        <i class="fa-duotone fa-refresh icon"></i>
         {% trans "Resync webhook" %}
       </button>
     </form>

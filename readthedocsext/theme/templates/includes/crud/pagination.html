@@ -4,9 +4,9 @@
   <div class="ui pagination menu">
 
     {% if page_obj.has_previous %}
-      <a class="icon item" href="?page{{ page_suffix }}={{ page_obj.previous_page_number }}{{ getvars }}"><i class="left arrow icon"></i></a>
+      <a class="icon item" href="?page{{ page_suffix }}={{ page_obj.previous_page_number }}{{ getvars }}"><i class="fa-solid fa-arrow-left icon"></i></a>
     {% else %}
-      <a class="disabled icon item"><i class="left arrow icon"></i></a>
+      <a class="disabled icon item"><i class="fa-solid fa-arrow-left icon"></i></a>
     {% endif %}
 
     {% if display_page_links %}
@@ -28,9 +28,9 @@
     {% endif %}
 
     {% if page_obj.has_next %}
-      <a class="icon item" href="?page{{ page_suffix }}={{ page_obj.next_page_number }}{{ getvars }}"><i class="right arrow icon"></i></a>
+      <a class="icon item" href="?page{{ page_suffix }}={{ page_obj.next_page_number }}{{ getvars }}"><i class="fa-solid fa-arrow-right icon"></i></a>
     {% else %}
-      <a class="disabled icon item"><i class="right arrow icon"></i></a>
+      <a class="disabled icon item"><i class="fa-solid fa-arrow-right icon"></i></a>
     {% endif %}
 
   </div>

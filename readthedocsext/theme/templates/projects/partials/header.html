@@ -1,0 +1,240 @@
+{% load i18n %}
+{% load core_tags %}
+{% load privacy_tags %}
+{% load core_tags %}
+{% load gravatar %}
+
+{% comment %}
+
+This template is the header at the top of project dashboard pages. There are
+two modes to this header, full and collapsed. Full is the default view on the
+project detail page, while the collapsed view is the default for the other
+project dashboard pages. It is possible to expand the menu with a dropdown.
+
+Arguments:
+
+is_expanded (default: False)
+    The default view configuration, normally start this view off in a collapsed
+    state, besides the main project detail page.
+
+{% endcomment %}
+
+{% block project_header %}
+  {% comment %}
+    {# Project list link and separator #}
+    <a class="section" href="{% url "projects_dashboard" %}">Projects</a>
+    <i class="fa-duotone fa-chevron-right"></i>
+
+    {% for user in project.users.all %}
+    <!--
+      <a href="{% url "profiles_profile_detail" user.username %}">
+      <img class="ui avatar image" src="{% gravatar_url user.email 24 %}" data-title="{{ user.username }}" data-content="{{ user.username }}">
+      </a>
+    -->
+    <div class="ui image label">
+      <img src="{% gravatar_url user.email 24 %}">
+      {{ user.username }}
+    </div>
+    {% endfor %}
+
+      <div class="ui horizontal list">
+        {% if request.user.is_authenticated %}
+          <div class="item {{ tools_active }}">
+            <a href="{% url 'project_embed' project.slug %}">
+              {% trans "Tools" %}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+
+  {% endcomment %}
+  <div class="ui top attached segment" data-bind="using: ProjectHeaderView({{ is_expanded|yesno:"true,false" }})">
+
+    {% block project_header_metadata %}
+      <div class="ui stacking grid">
+
+        {% block project_header_title %}
+          <div class="eight wide computer sixteen wide tablet column">
+            <div class="ui medium monospace header">
+              <a href="{{ project.get_absolute_url }}">
+                {{ project.name | default:project.slug }}
+              </a>
+
+              {# The dropdown action button, to swap between expanded/collapsed #}
+              <span data-bind="click: toggle_expanded">
+                <i class="fas grey small icon" data-bind="class: dropdown_class"></i>
+              </span>
+            </div>
+          </div>
+        {% endblock project_header_title %}
+
+        {% block project_header_repo %}
+          <div class="right aligned eight wide computer sixteen wide tablet column">
+            {% if use_input %}
+              <div class="ui left icon action fluid input">
+                <i class="fad fa-link icon"></i>
+                <input type="text" readonly="" value="{{ project.repo }}">
+                <button class="ui teal icon button">
+                  <i class="fad fa-copy icon"></i>
+                </button>
+              </div>
+            {% else %}
+              <a href="{{ project.repo }}">
+                <i class="fad fa-link icon"></i>
+                <code>{{ project.repo }}</code>
+              </a>
+            {% endif %}
+          </div>
+        {% endblock project_header_repo %}
+
+        {% block project_header_metadata_left %}
+          <div class="eight wide computer sixteen wide tablet column" data-bind="visible: is_expanded" style="display: none;">
+
+            {% block project_header_description %}
+              {% if project.description %}
+                <p>
+                  {{ project.description|truncatewords:15 }}
+                </p>
+              {% endif %}
+            {% endblock %}
+
+            {% block project_header_tags %}
+              {% for organization in project.organizations.all %}
+                <a class="ui label" href="{{ organization.get_absolute_url }}">
+                  <i class="fad fa-building icon"></i>
+                  {{ organization.name }}  
+                </a>
+              {% endfor %}
+
+              {# Manual tags #}
+              {% for tag in project.tags.all %}
+                <a class="ui teal basic label" href="{% url "projects_tag_detail" tag.slug %}">{{ tag.name }}</a>
+              {% endfor %}
+            {% endblock project_header_tags %}
+
+            {% block project_header_related_projects %}
+              {% if project.superproject or project.subprojects.exists %}
+                <div class="ui sub header">
+                  {% trans "Related projects" %}
+                </div>
+                <div class="ui relaxed horizontal list">
+                  {% if project.superproject %}
+                    <div class="item">
+                      <i class="fa-duotone fa-diagram-nested icon"></i>
+                      <div class="content">
+                        <a class="header" href="{{ project.superproject.get_absolute_url }}">
+                          {{ project.superproject.name }}
+                        </a>
+                        <div class="description">{% trans "Parent project" %}</div>
+                      </div>
+                    </div>
+                  {% endif %}
+                  {# TODO this list probably needs to respect user permissions #}
+                  {% for project_rel in project.subprojects.all %}
+                    <div class="item">
+                      <i class="fa-duotone fa-diagram-nested icon"></i>
+                      <div class="content">
+                        <a class="header" href="{{ project_rel.child.get_absolute_url }}">
+                          {{ project_rel.child.name }}
+                        </a>
+                        <div class="description">{% trans "Subproject" %}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endblock project_header_related_projects %}
+
+            {% block project_header_translations %}
+              {% with localized_projects=project.main_language_project.translations|default:project.translations %}
+                {% if localized_projects.exists %}
+                  <div class="ui sub header">
+                    {% trans "Translations" %}
+                  </div>
+                  <div class="ui horizontal list">
+                    <div class="item">
+                      {% with localized_project=project.main_language_project|default:project %}
+                        <a class="ui teal label" href="{{ localized_project.get_absolute_url }}">
+                          {{ localized_project.language | language_name }}
+                          <span class="detail">
+                            {{ localized_project.language | upper }}
+                          </span>
+                        </a>
+                      {% endwith %}
+                    </div>
+                    {% for localized_project in localized_projects.all %}
+                      <div class="item">
+                        <a class="ui teal label" href="{{ localized_project.get_absolute_url }}">
+                          {{ localized_project.language | language_name }}
+                          <span class="detail">
+                            {{ localized_project.language | upper }}
+                          </span>
+                        </a>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              {% endwith %}
+            {% endblock project_header_translations %}
+
+          </div>
+        {% endblock project_header_metadata_left %}
+
+        {% block project_header_metadata_right %}
+          <div class="right aligned eight wide computer sixteen wide tablet column" data-bind="visible: is_expanded" style="display: none;">
+
+            {% block project_header_maintainers %}
+              <div class="ui sub header">
+                {% trans "Maintainers" %}
+              </div>
+
+              {# TODO project teams and organization #}
+
+              <div class="ui overlapping avatar images">
+                {% for user in project.users.all|slice:":8" %}
+                  <a href="{% url "profiles_profile_detail" user.username %}">
+                    <img class="ui image" src="{% gravatar_url user.email 32 %}" /> 
+                  </a>
+                {% endfor %}
+
+                {% with other_maintainers=project.users.all|slice:"8:"|length %}
+                  {% if other_maintainers %}
+                    <span>
+                      {% trans "... and {other_maintainers} others" %}
+                    </span>
+                  {% endif %}
+                {% endwith %}
+                  
+              </div>
+            {% endblock project_header_maintainers %}
+
+          </div>
+        {% endblock project_header_metadata_right %}
+
+      </div>
+    {% endblock project_header_metadata %}
+
+  </div>
+
+  {% block project_header_navigation %}
+    <div class="ui bottom attached stackable menu">
+      <a class="item {{ overview_active }}" href="{{ project.get_absolute_url }}">
+        {% trans "Versions" %}
+        <span class="ui tiny teal circular label">{{ project.active_versions.count }}</span>
+      </a>
+      <a class="item {{ builds_active }}" href="{{ project.get_builds_url }}">
+        {% trans "Builds" %}
+        <span class="ui tiny teal circular label">{{ project.builds.count }}</span>
+      </a>
+      {% if request.user|is_admin:project %}
+        <div class="right menu">
+          <a class="item {{ edit_active }}" href="{% url "projects_edit" project.slug %}">
+            <i class="fa-duotone fa-gears icon"></i>
+            {% trans "Settings" %}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  {% endblock project_header_navigation %}
+
+{% endblock project_header %}

@@ -1,0 +1,65 @@
+{% load i18n %}
+{% load gravatar %}
+{% load static %}
+
+{% comment %}
+
+Submenus of the user dropdown and the mobile viewport hamburger menus.
+
+{% endcomment %}
+
+<div class="header">{% trans 'Navigation' %}</div>
+<a class="item" href="{% url 'projects_dashboard' %}">
+  <i class="fa-duotone fa-list icon"></i>
+  {% trans "Projects" %}
+</a>
+
+<div class="divider"></div>
+
+<div class="header">{% trans 'Signed in as:' %} {{ request.user }}</div>
+<a class="item" href="{% url 'profiles_profile_edit' %}">
+  <i class="fa-duotone fa-gears icon"></i>
+  {% trans 'Settings' %}
+</a>
+<a class="item" href="{% url 'account_logout' %}">
+  <i class="fa-duotone fa-sign-out icon"></i>
+  {% trans 'Log out' %}
+</a>
+
+<div class="divider"></div>
+
+<div class="header">{% trans 'Help' %}</div>
+<a class="item" href="{% url 'support' %}">
+  <i class="fad fa-envelope primary icon"></i>
+  {% trans 'Support' %}
+</a>
+<a class="item" href="https://docs.readthedocs.io">
+  <i class="fad fa-book primary icon"></i>
+  {% trans 'Docs' %}
+  <span class="description">
+    <i class="fad fa-external-link icon"></i>
+  </span>
+</a>
+<a class="item" href="https://docs.readthedocs.io/en/stable/tutorial/index.html#getting-started">
+  <i class="fad fa-rocket primary icon"></i>
+  {% trans 'Getting started' %}
+  <span class="description">
+    <i class="fad fa-external-link icon"></i>
+  </span>
+</a>
+<a class="item" href="http://status.readthedocs.com">
+  {% block menu_help_status %}
+    <i class="fad fa-circle-check primary icon"></i>
+    {% trans 'Status' %}
+    {% if has_status_check %}
+      {# TODO get some data from status page API to light this up #}
+      <span class="description">
+        <span class="ui green text">Online</span>
+      </span>
+    {% else %}
+      <span class="description">
+        <i class="fad fa-external-link icon"></i>
+      </span>
+    {% endif %}
+  {% endblock menu_help_status %}
+</a>

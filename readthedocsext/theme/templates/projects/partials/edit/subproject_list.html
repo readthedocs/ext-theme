@@ -15,7 +15,7 @@
   <div class="item">
     <a class="ui green icon button"
        href="{% url 'projects_subprojects_create' project_slug=project.slug %}">
-      <i class="plus icon"></i>
+      <i class="fa-solid fa-plus icon"></i>
       {% trans "Add subproject" %}
     </a>
   </div>
@@ -40,7 +40,7 @@
 {% block list_item_right_buttons %}
   <a class="ui icon button"
      href="{% url 'projects_subprojects_update' project_slug=project.slug subproject_slug=object.child.slug %}">
-    <i class="wrench icon"></i>
+    <i class="fa-duotone fa-wrench icon"></i>
   </a>
 
   {% url 'projects_subprojects_delete' project_slug=project.slug subproject_slug=object.child.slug as form_url %}
@@ -59,7 +59,7 @@
 
 {% block list_item_meta %}
   <a class="item" href="{{ object.get_absolute_url }}">
-    <i class="linkify icon"></i>
+    <i class="fa-duotone fa-link icon"></i>
     <code>{{ object.get_absolute_url|truncatechars:60 }}</code>
   </a>
 {% endblock list_item_meta %}

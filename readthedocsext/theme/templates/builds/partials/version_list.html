@@ -26,7 +26,7 @@
     <div class="ui link search dropdown" data-bind="semanticui: {dropdown: filter_version_config()}">
       <input type="hidden" name="version" value="{{ filter.form.version.value|default:"" }}">
       <div class="default text">{% trans "All versions" %}</div>
-      <i class="dropdown icon"></i>
+      <i class="fa-solid fa-caret-down icon"></i>
       <div class="menu"></div>
     </div>
   </div>
@@ -41,7 +41,7 @@
 
 {% block create_button %}
   <a href="{% url "project_version_create" project.slug %}" class="ui primary button">
-    <i class="plus icon"></i>
+    <i class="fa-solid fa-plus icon"></i>
     <span class="text">{% trans "Add version" %}</span>
   </a>
 {% endblock %}
@@ -58,17 +58,17 @@
 {% endblock list_item_start %}
 
 {% block list_item_right_menu %}
-  <div class="ui mini right floated buttons" data-bind="event: {mouseover: fetch}">
+  <div class="ui small compact right floated icon buttons" data-bind="event: {mouseover: fetch}">
 
     {% blocktrans trimmed with version=object.verbose_name asvar label_view %}
       View documentation for version {{ version }}
     {% endblocktrans %}
-    <a class="ui icon{% if not object.built %} disabled{% endif %} button"
+    <a class="ui icon {% if not object.built %} disabled{% endif %} button"
         data-bind="attr: {href: url_docs}"
         target="_blank"
         data-content="{{ label_view }}"
         aria-label="{{ label_view }}">
-      <i class="external icon"></i>
+      <i class="fa-duotone fa-arrow-up-right-from-square icon"></i>
     </a>
 
     {% blocktrans trimmed with version=object.verbose_name asvar label_download %}
@@ -79,19 +79,19 @@
         data-bind="event: {click: fetch}"
         data-content="{{ label_download }}"
         aria-label="{{ label_download }}">
-      <i class="download icon"></i>
+      <i class="fa-duotone fa-download icon"></i>
       <div class="menu">
         <div class="header">{% trans "Downloads" %}</div>
         <a class="disabled item" data-bind="css: {disabled: !url_pdf()}, attr: {href: url_pdf()}">
-          <i class="pdf file icon"></i>
+          <i class="fa-duotone fa-file icon"></i>
           {% trans "PDF file" %}
         </a>
         <a class="disabled item" data-bind="css: {disabled: !url_epub()}, attr: {href: url_epub()}">
-          <i class="epub file icon"></i>
+          <i class="fa-duotone fa-file icon"></i>
           {% trans "ePUB file" %}
         </a>
         <a class="disabled item" data-bind="css: {disabled: !url_html()}, attr: {href: url_html()}">
-          <i class="zip file icon"></i>
+          <i class="fa-duotone fa-file-zipper icon"></i>
           {% trans "HTML archive" %}
         </a>
       </div>
@@ -102,20 +102,20 @@
     {% endblocktrans %}
     {% if is_project_admin %}
       <div class="ui icon dropdown button" data-content="{{ label_admin }}" aria-label="{{ label_admin }}">
-        <i class="horizontal ellipsis icon"></i>
+        <i class="fa-solid fa-ellipsis icon"></i>
         <div class="menu">
           <div class="header">{% trans "Admin" %}</div>
           <a
               class="item"
               {# Note, the syntax could be confusing here: trigger_build returns a closure #}
               data-bind="click: trigger_build('{% url "projects-versions-builds-list" project.slug object.slug %}', '{{ csrf_token }}')">
-            <i class="refresh icon"></i>
+            <i class="fa-duotone fa-refresh icon"></i>
             {% trans "Rebuild version" %}
           </a>
           <a
             class="item"
             href="{% url "project_version_detail" project.slug object.slug %}">
-            <i class="wrench icon"></i>
+            <i class="fa-duotone fa-wrench icon"></i>
             {% trans "Configure version" %}
           </a>
         </div>
@@ -128,7 +128,7 @@
   {% include "builds/includes/status_icon.html" with build=object.builds.first circular=True %}
 
   <a class="ui basic label" href="{% url "builds_project_list" object.project.slug %}?version={{ object.slug }}">
-    <i class="code branch icon"></i>
+    <i class="fa-duotone fa-code-branch icon"></i>
     <code>{{ object.verbose_name }}</code>
   </a>
   {% if object.slug == project.default_version %}
@@ -136,14 +136,14 @@
     {% blocktrans trimmed with version=object.verbose_name asvar popup %}
       Version {{ version }} is the default version
     {% endblocktrans %}
-    {% include "includes/components/config_label.html" with icon="asterisk" text=text popup=popup %}
+    {% include "includes/components/config_label.html" with icon="fa-solid fa-asterisk" text=text popup=popup %}
   {% endif %}
   {% if object.slug == project.stable_version %}
     {% trans "stable" context "Version is the stable version" as text %}
     {% blocktrans trimmed with version=object.verbose_name asvar popup %}
       Version {{ version }} is the stable version
     {% endblocktrans %}
-    {% include "includes/components/config_label.html" with icon="asterisk" text=text popup=popup %}
+    {% include "includes/components/config_label.html" with icon="fa-solid fa-asterisk" text=text popup=popup %}
   {% endif %}
 
   {% if request.user in project.users.all %}
@@ -152,7 +152,7 @@
       {% blocktrans trimmed with version=object.verbose_name asvar popup %}
         Version {{ version }} is private
       {% endblocktrans %}
-      {% include "includes/components/config_label.html" with icon="lock" text=text popup=popup %}
+      {% include "includes/components/config_label.html" with icon="fa-duotone fa-lock" text=text popup=popup %}
     {% endif %}
   {% endif %}
 
@@ -161,7 +161,7 @@
     {% blocktrans trimmed with version=object.verbose_name asvar popup %}
       Version {{ version }} is hidden
     {% endblocktrans %}
-    {% include "includes/components/config_label.html" with icon="eye slash" text=text popup=popup %}
+    {% include "includes/components/config_label.html" with icon="fa-duotone fa-eye-slash" text=text popup=popup %}
   {% endif %}
 {% endblock list_item_header %}
 
@@ -188,14 +188,14 @@
   </div>
 
   <a class="item">
-    <i class="code branch icon"></i>
+    <i class="fa-duotone fa-code-branch icon"></i>
     <code>{{ object.identifier_friendly }}</code>
   </a>
 
   <a
     class="item"
     href="{% url "builds_project_list" object.project.slug %}?version={{ object.slug }}">
-    <i class="history icon"></i>
+    <i class="fa-duotone fa-history icon"></i>
     {% blocktrans trimmed with count=object.builds.count %}
       {{ count }} total builds
     {% endblocktrans %}

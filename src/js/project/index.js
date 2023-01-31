@@ -10,6 +10,38 @@ import { Registry } from "../application/registry";
 export { admin, create };
 
 /**
+ * Project header view, provides a collapsible header
+ *
+ * @class
+ * @constructor
+ * @public
+ * @extends {PopupView}
+ */
+export class ProjectHeaderView {
+  static view_name = "ProjectHeaderView";
+
+  constructor(expanded = false) {
+    /** @observable {Object} Whether the header view is collapsed by default */
+    this.is_expanded = ko.observable(expanded);
+
+    /** Computed observable for the dropdown link class, so it swaps
+     *
+     * @computed {Object} CSS class for dropdown link
+     */
+    this.dropdown_class = ko.computed(() => {
+      //return this.is_expanded() ? "fa-caret-up" : "fa-caret-down";
+      return this.is_expanded() ? "fa-caret-down" : "fa-ellipsis";
+    });
+  }
+
+  toggle_expanded() {
+    const value = this.is_expanded();
+    this.is_expanded(!value);
+  }
+}
+Registry.add_view(ProjectHeaderView);
+
+/**
  * Project list view for listing projects
  *
  * @extends {PopupView}

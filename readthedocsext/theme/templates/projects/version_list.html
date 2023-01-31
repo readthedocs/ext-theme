@@ -1,4 +1,5 @@
-{% extends "base.html" %}
+{% extends "projects/base.html" %}
+
 {% load i18n %}
 {% load projects_tags %}
 {% load privacy_tags %}
@@ -8,9 +9,9 @@
 Versions
 {% endblock title %}
 
-{% block project_editing %}
+{% block content-header %}
   {% with versions_active="active" %}
-    {% include "core/project_bar.html" %}
+    {% include "projects/partials/header.html" %}
   {% endwith %}
 {% endblock %}
 
