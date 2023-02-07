@@ -1,25 +1,33 @@
 {% load i18n %}
 
-{% comment %}
+{% comment "rst" %}
+  config_label
+  ============
+
   This is used in list views, along the header line of each item. This is meant
   to describe how the item is configured, where the second line in these list
   views describes metadata about the item, if any.
 
   This include takes several optional arguments on the include call:
 
-  icon
+  .. describe:: icon
+
     The icon class to use in the label
 
-  text
+  .. describe:: text
+
     The text of the label, should be translated
 
-  url
+  .. describe:: url
+
     URL that the lable can lead to
 
-  popup
+  .. describe:: popup
+
     The text in the popup, also used for ARIA labels
 
-  classes
+  .. describe:: classes
+
     Additional classes to apply to the label
 
 {% endcomment %}

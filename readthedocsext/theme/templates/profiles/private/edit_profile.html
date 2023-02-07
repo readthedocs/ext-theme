@@ -30,11 +30,11 @@
     </p>
 
     {% trans "Delete account" as action_text %}
-    <a class="ui button" data-modal="#modal-account-delete">
-      <i class="trash icon"></i>
+    <a class="ui button" data-bind="click: $root.show_modal('delete-account')">
+      <i class="fa-duotone fa-trash icon"></i>
       {{ action_text }}
     </a>
-    <div class="ui mini modal" id="modal-account-delete">
+    <div class="ui mini modal" data-modal-id="delete-account">
       <div class="header">
         {{ action_text }}
       </div>
@@ -58,7 +58,7 @@
   <div class="ui card">
     <div class="image" data-tooltip="{% trans "Visit Gravatar to update your profile image" %}" data-position="bottom center">
       <a class="ui bottom right corner label">
-        <i class="edit icon"></i>
+        <i class="fa-duotone fa-edit icon"></i>
       </a>
       <img src="{% gravatar_url request.user.email 256 %}">
     </div>

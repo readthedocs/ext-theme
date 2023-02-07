@@ -15,13 +15,13 @@
   <div class="item">
     <a class="ui green icon button"
        href="{% url "projects_domains_create" project.slug %}">
-      <i class="plus icon"></i>
+      <i class="fa-solid fa-plus icon"></i>
       {% trans "Add domain" %}
     </a>
   </div>
 {% endblock %}
 
-{% block list_placeholder_icon_class %}atlas{% endblock %}
+{% block list_placeholder_icon_class %}fa-duotone fa-at{% endblock %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No domains are currently configured.
@@ -41,28 +41,28 @@
   <a class="ui icon button"
      href="{% url 'projects_domains_edit' project.slug object.pk %}"
      data-content="{% trans "Edit" %}">
-    <i class="wrench icon"></i>
+    <i class="fa-duotone fa-wrench icon"></i>
   </a>
   <a class="ui icon button"
      href="{% url 'projects_domains_delete' project.slug object.pk %}"
      data-content="{% trans "Delete" %}">
-    <i class="trash icon"></i>
+    <i class="fa-duotone fa-trash icon"></i>
   </a>
 {% endblock list_item_right_buttons %}
 
 {% block list_item_header %}
   <a class="ui basic label" href="{% url 'projects_domains_edit' project.slug object.pk %}">
-    <i class="linkify icon"></i>
+    <i class="fa-duotone fa-link icon"></i>
     <code>{{ object.domain }}</code>
   </a>
   {% if object.https  %}
-    <i class="ui shield grey icon" data-content="{% trans "HTTPS enabled" %}"></i>
+    <i class="fa-duotone fa-shield-check icon" data-content="{% trans "HTTPS enabled" %}"></i>
   {% endif %}
   {% if object.domainssl  %}
-    <i class="ui tachometer alternate grey icon" data-content="{% trans "CDN enabled" %}"></i>
+    <i class="fa-duotone fa-tachometer icon" data-content="{% trans "CDN enabled" %}"></i>
   {% endif %}
   {% if object.canonical %}
-    <i class="ui asterisk grey icon" data-content="{% trans "Canonical" %}"></i>
+    <i class="fa-duotone fa-asterisk icon" data-content="{% trans "Canonical" %}"></i>
   {% endif %}
 {% endblock list_item_header %}
 

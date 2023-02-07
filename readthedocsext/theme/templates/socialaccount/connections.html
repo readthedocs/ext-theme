@@ -9,8 +9,8 @@
 {% block edit_content %}
   {% include "socialaccount/partials/social_account_list.html" with objects=form.accounts %}
 
-  <div class="ui tiny modal" id="socialaccount-connections-modal">
-    <i class="close icon"></i>
+  <div class="ui tiny modal" data-modal-id="socialaccount-connections">
+    <i class="fa-solid fa-close icon"></i>
     <div class="header">
       {% trans "Add a connection" %}
     </div>

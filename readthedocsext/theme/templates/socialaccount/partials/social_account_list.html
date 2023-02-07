@@ -11,13 +11,13 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  <div class="ui tiny green icon button" data-modal="#socialaccount-connections-modal">
-    <i class="plus icon"></i>
+  <div class="ui tiny green icon button" data-bind="click: $root.show_modal('socialaccount-connections')">
+    <i class="fa-solid fa-plus icon"></i>
     {% trans "Add new connection" %}
   </div>
 {% endblock %}
 
-{% block list_placeholder_icon_class %}user circle{% endblock %}
+{% block list_placeholder_icon_class %}fa-duotone fa-user-unlock{% endblock %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     Your account is not connected to any services.
@@ -38,7 +38,7 @@
     {% csrf_token %}
     <input type="hidden" name="account" value="{{ object.id }}" />
     <button class="ui icon button" data-content="{% trans 'Disconnect account' %}">
-      <i class="trash icon"></i>
+      <i class="fa-duotone fa-trash icon"></i>
     </button>
   </form>
 {% endblock list_item_right_buttons %}
@@ -49,12 +49,12 @@
 
 {% block list_item_header %}
   <span class="ui basic label">
-    <i class="user icon"></i>
+    <i class="fa-duotone fa-user icon"></i>
     <code>{{ object }}</code>
   </span>
   {% with object.get_provider_account as provider %}
     <span class="ui label">
-      <i class="{{ object.provider }} {{ provider.get_brand.id }} icon"></i>
+      <i class="fa-brands fa-{{ object.provider }} fa-{{ provider.get_brand.id }} icon"></i>
       {{ provider.get_brand.name }}
     </span>
   {% endwith %}

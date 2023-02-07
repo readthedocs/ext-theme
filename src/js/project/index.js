@@ -5,17 +5,63 @@ import * as admin from "./admin";
 import * as create from "./create";
 
 import { PopupView, APIListItemView } from "../core/views";
+import { Registry } from "../application/registry";
 
 export { admin, create };
 
+/**
+ * Project header view, provides a collapsible header
+ *
+ * @class
+ * @constructor
+ * @public
+ * @extends {PopupView}
+ */
+export class ProjectHeaderView {
+  static view_name = "ProjectHeaderView";
+
+  constructor(expanded = false) {
+    /** @observable {Object} Whether the header view is collapsed by default */
+    this.is_expanded = ko.observable(expanded);
+
+    /** Computed observable for the dropdown link class, so it swaps
+     *
+     * @computed {Object} CSS class for dropdown link
+     */
+    this.dropdown_class = ko.computed(() => {
+      //return this.is_expanded() ? "fa-caret-up" : "fa-caret-down";
+      return this.is_expanded() ? "fa-caret-down" : "fa-ellipsis";
+    });
+  }
+
+  toggle_expanded() {
+    const value = this.is_expanded();
+    this.is_expanded(!value);
+  }
+}
+Registry.add_view(ProjectHeaderView);
+
+/**
+ * Project list view for listing projects
+ *
+ * @extends {PopupView}
+ */
 export class ProjectListView extends PopupView {
+  static view_name = "ProjectListView";
+
   constructor() {
     super();
 
+    /** @observable {Array<Project>} List of project instances in the list */
     this.projects = ko.observableArray();
+    /** Configuration passed in via :func:`~application.plugins.jsonInit`
+     * @observable {Object} Search configuration */
     this.config = ko.observable();
+    /** Configuration passed in via :func:`~application.plugins.jsonInit`
+     * @observable {Object} Filter configuration */
     this.filter_project_config = ko.observable();
 
+    // Wait for :func:`config` to change before we init search
     this.config.subscribe((config) => {
       if (config === undefined) {
         return;
@@ -25,13 +71,15 @@ export class ProjectListView extends PopupView {
       this.filter_project_config({
         apiSettings: {
           url: url,
+          cache: false,
         },
+        throttle: 500,
         fields: {
           name: "name",
           value: "slug",
         },
-        saveRemoteData: true,
-        filterRemoteData: true,
+        saveRemoteData: false,
+        filterRemoteData: false,
         sortSelect: true,
         onChange: (value, label, $elem) => {
           window.location.href = "?project=" + value;
@@ -40,46 +88,81 @@ export class ProjectListView extends PopupView {
     });
 
     this.filter_config = {
-      action: 'select',
+      action: "select",
       onChange: (value, label, $elem) => {
         // Note: limit use of jQuery selector aid. It's confusing to mix Django
         // templates, knockout, and random jQuery selections in the page. Most
         // of the time, you should be able to use a knockout binding, but this
         // was rather trivial and resulted in no additional observables on the
         // view.
-        const form = $elem.closest('form');
+        const form = $elem.closest("form");
         form.submit();
       },
     };
   }
 
+  /**
+   * Helper for adding new projects to :func:`projects`.
+   *
+   * @param {Object} data - Project data to pass to :class:`Project`
+   * @returns {Project}
+   */
   project(data) {
     const project = new Project(data);
     this.projects.push(project);
     return project;
   }
 }
+Registry.add_view(ProjectListView);
 
+/**
+ * Project object used for displaying individual projects in the project
+ * listing.
+ *
+ * @param {Object} project - Project API data
+ * @extends {APIListItemView}
+ */
 class Project extends APIListItemView {
   constructor(project) {
     super(project);
 
+    /** Asynchronously load documentation URL as rendering this URL for each
+     * project slows the dashboard down considerably. Instead, this is only
+     * fetched when it is needed.
+     * @observable {string} Documentation URL for the project */
     this.url_docs = ko.observable();
+    // Subscribe to the data loaded via :class:`APIListItemView`
     this.data.subscribe((data) => {
       this.url_docs(data.canonical_url);
     });
   }
 }
 
+/**
+ * View for project version creation and version activation.
+ *
+ * @class
+ * @extends {PopupView}
+ * @construtor
+ * @public
+ */
 export class ProjectVersionCreateView extends PopupView {
+  static view_name = "ProjectVersionCreateView";
+
   constructor() {
     super();
 
+    /** Configuration passed in via :func:`~application.plugins.jsonInit`
+     * @observable {Object} Search configuration */
     this.config = ko.observable();
 
+    /** @observable {Boolean} Is search data loading? */
     this.is_loading = ko.observable(false);
 
-    // Load after config is loaded
+    /** Computed observable for rendering the final search configuration. This
+     * is used to initialize search as soon as the :func:`config` observable is
+     * finalized.
+     * @computed {Object} Search configuration object */
     this.search_config = ko.computed(() => {
       const config = this.config();
       if (config !== undefined) {
@@ -88,6 +171,15 @@ export class ProjectVersionCreateView extends PopupView {
     });
   }
 
+  /**
+   * Initialize the SUI search element using the configuration loaded in
+   * :func:`search_config`.
+   *
+   * This sets up various configuration for the search SUI element, but also
+   * sets up functions like `onSelect`, for performing actions on events.
+   *
+   * @param {object} config - configuration for search element
+   */
   init_search(config) {
     const url = config.api_url + "?verbose_name={query}";
     const errors = config.errors || {};
@@ -105,21 +197,38 @@ export class ProjectVersionCreateView extends PopupView {
       },
       fullTextSearch: true,
       onSelect: (result, response) => {
-        window.location.href = result.urls.edit;
+        window.location.href = result.urls.dashboard.edit;
       },
       error: errors,
     };
   }
 }
+Registry.add_view(ProjectVersionCreateView);
 
+/**
+ * View for project version listing. This view wraps a list of :class:`Version`.
+ *
+ * @class
+ * @extends {PopupView}
+ * @construtor
+ * @public
+ */
 export class ProjectVersionListView extends PopupView {
+  static view_name = "ProjectVersionListView";
+
   constructor() {
     super();
 
+    /** @observable {Array<Version>} Versions for project version listing */
     this.versions = ko.observableArray();
+    /** Configuration passed in via :func:`~application.plugins.jsonInit`
+     * @observable {Object} Search configuration */
     this.config = ko.observable();
+    /** Configuration passed in via :func:`~application.plugins.jsonInit`
+     * @observable {Object} Filter configuration object */
     this.filter_version_config = ko.observable();
 
+    // Subscribe to changes to :func:`config` and set up search once we have it.
     this.config.subscribe((config) => {
       if (config === undefined) {
         return;
@@ -129,13 +238,25 @@ export class ProjectVersionListView extends PopupView {
       this.filter_version_config({
         apiSettings: {
           url: url,
+          cache: false,
+          // Use onResponse instead of ``fields`` here as there seems to be some
+          // problem the response structure. Dropdowns consistently give 0
+          // results.
+          onResponse: (response) => {
+            return {
+              results: response.results.map((result) => {
+                console.dir(result);
+                return {
+                  name: result.verbose_name,
+                  value: result.slug,
+                };
+              }),
+            };
+          },
         },
-        fields: {
-          name: "verbose_name",
-          value: "slug",
-        },
-        saveRemoteData: true,
-        filterRemoteData: true,
+        throttle: 500,
+        saveRemoteData: false,
+        filterRemoteData: false,
         sortSelect: true,
         onChange: (value, label, $elem) => {
           window.location.href = "?version=" + value;
@@ -144,40 +265,66 @@ export class ProjectVersionListView extends PopupView {
     });
 
     this.filter_config = {
-      action: 'select',
+      action: "select",
       onChange: (value, label, $elem) => {
         // Note: limit use of jQuery selector aid. It's confusing to mix Django
         // templates, knockout, and random jQuery selections in the page. Most
         // of the time, you should be able to use a knockout binding, but this
         // was rather trivial and resulted in no additional observables on the
         // view.
-        const form = $elem.closest('form');
+        const form = $elem.closest("form");
         form.submit();
       },
     };
   }
 
+  // TODO remove
   attach_add_version() {
-    console.log(arguments);
+    console.debug(arguments);
     return {};
   }
 
+  /**
+   * Add :class:`Version` to version list.
+   *
+   * @param {Object} data - Version data to use in creation
+   */
   version(data) {
     const version = new Version(data);
     this.versions.push(version);
     return version;
   }
 }
+Registry.add_view(ProjectVersionListView);
 
+/** Version subview, used from :class:`ProjectVersionListView`.
+ *
+ * This mutates project version API return data for use in the Knockout view.
+ *
+ * URLs for documentation output are lazy loaded when they are requested. We
+ * don't do an API call until the user interacts with the version object. This
+ * way we don't have to render all of the documentation artifact URLs at once
+ * through the resolver. This can cause 10s dashboard load times with a lot of
+ * versions.
+ *
+ * @param {Object} version - Version object data from API
+ * @extends {APIListItemView}
+ */
 class Version extends APIListItemView {
   constructor(version) {
     super(version);
+    /** @observable {string} Async loaded URL for version PDF */
     this.url_pdf = ko.observable();
+    /** @observable {string} Async loaded URL for version EPUB */
     this.url_epub = ko.observable();
+    /** @observable {string} Async loaded URL for version HTMLzip */
     this.url_html = ko.observable();
+    /** @observable {string} Async loaded URL for version docs */
     this.url_docs = ko.observable();
+    /** @observable {Boolean} is version successfully built? */
     this.is_built = ko.observable(true);
 
+    // On resolving the data from the API, fill out these observables.
     this.data.subscribe((data) => {
       this.url_pdf(data.downloads.pdf);
       this.url_epub(data.downloads.epub);
@@ -187,6 +334,16 @@ class Version extends APIListItemView {
     });
   }
 
+  /**
+   * Trigger a build task for a specific version. This replaces the build
+   * dropdown form and instead provides a link on each version admin menu, which
+   * is far more intuitive.
+   *
+   * @param {string} url - URL to post to, this is a project form view, so comes
+   * from the Django template
+   * @param {string} csrf_token - Also from the Django form, the CSRF token
+   * @returns {function} Callback function
+   */
   trigger_build(url, csrf_token) {
     return (context, ev) => {
       jquery
@@ -198,13 +355,11 @@ class Version extends APIListItemView {
           },
         })
         .then((data) => {
-          // The user could be redirected to the build that was just created here,
-          // but API v3 is missing the URL on the build object. I don't mind that
-          // the interaction leaves me on the same interface while showing the new
-          // build either.
-          // TODO maybe redirect the user to the new build?
-          // https://github.com/readthedocs/readthedocs.org/issues/7361
-          window.location.reload();
+          if (data.build.urls.build) {
+            window.location.href = data.build.urls.build;
+          } else {
+            console.debug("Redirect to new build failed");
+          }
         })
         .catch((err) => {
           console.error(err);

@@ -1,15 +1,20 @@
-{% comment %}
+{% comment "rst" %}
+  SemanticUI forms
+  ================
 
-This is a helper to display forms in SemanticUI markup. We don't use as_p here
-as the output does not style things like error listings.
+  For most form display, we use Cripsy. This might be an old artifact, so
+  probably don't use this unless you find a reason to.
 
-Inputs:
+  This is a helper to display forms in SemanticUI markup. We don't use as_p
+  here as the output does not style things like error listings.
 
-form
-    The Form object to iterate over
+  Inputs:
 
-error_title (optional)
-    The title for the form 
+  form
+      The Form object to iterate over
+
+  error_title (optional)
+      The title for the form
 
 {% endcomment %}
 

@@ -1,41 +1,61 @@
-{% comment %}
+{% comment "rst" %}
+  Remove button
+  =============
+
   Use in a list display to add a remove icon button. The remove icon button is
   responsible for activating a modal on click that will confirm the removal and
   submit the remove form to a view URL.  This removes the need to have a
   separate view just for removal, or a removal hidden in the edit form.
 
-  Variables
-  ---------
+  How this works is each list item would output the ``<div class="ui modal" />``
+  element, and when the corresponding remove button is clicked, the correct
+  modal element is targetted and is shown to the user.
 
-  id
-      Object id for the modal
+  Template parameters
+  -------------------
 
-  form_url
-      URL for the form post
+  .. describe:: id
 
-  field_name
+      Object id/pk for the modal. This is used to create a unique modal element
+      for each list item.
+
+  .. describe:: form_url
+
+      URL for the form post. This should normally be the delete/remove view for
+      the model being listed.
+
+  .. describe:: field_name
+
       Optional form field name for hidden field
 
-  field_value
+  .. describe:: field_value
+
       Optional form field value for hidden field
 
-  action_text
+  .. describe:: action_text
+
       Header and button text for modal
 
-  action_name
-      Form button name
+  .. describe:: action_name
 
-  content_text
+      Form button name, ie:
+
+      .. code:: html
+
+          <button name="{{ action_name }}" />
+
+  .. describe:: content_text
+
       Modal content text
 
 {% endcomment %}
 
 <a class="ui icon button"
-   data-modal="#modal-{{ id }}"
+   data-bind="click: $root.show_modal('remove-{{ id }}')"
    data-content="{{ action_text }}">
-  <i class="trash icon"></i>
+  <i class="fa-solid fa-trash icon"></i>
 </a>
-<div class="ui mini modal" id="modal-{{ id }}">
+<div class="ui mini modal" data-modal-id="remove-{{ id }}">
   <div class="header">{{ action_text }}</div>
   <div class="content">
     {{ content_text }}

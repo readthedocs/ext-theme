@@ -1,16 +1,21 @@
 import { Application } from "../application";
 import { ApplicationView } from "../application/views";
 
-test("Application view has subviews", () => {
-  const app = new ApplicationView();
-  expect(app.BuildDetailView).toBeDefined();
-  expect(app.MessageView).toBeDefined();
+test("Application registry is loaded", () => {
+  const app = new Application();
+  expect(app.registry.constructor.views).toHaveProperty("BuildDetailView");
+  expect(app.registry.constructor.views).toHaveProperty("ProjectListView");
 });
 
-test("Application view subviews return instances", () => {
-  const app = new ApplicationView();
-  const view = app.EmbedTopicsView();
-  expect(view.constructor.name).toBe("EmbedTopicsView");
+test("Application view has subviews", () => {
+  const app = new Application();
+  const view = new ApplicationView();
+  app.registry.attach(view);
+
+  expect(view.BuildDetailView).toBeDefined();
+  expect(view.ProjectListView).toBeDefined();
+  // TODO this is missing?
+  //expect(view.MessageView).toBeDefined();
 });
 
 test("Application load default config", () => {

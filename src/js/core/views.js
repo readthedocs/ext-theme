@@ -1,6 +1,8 @@
 import ko from "knockout";
 import jquery from "jquery";
 
+import { Registry } from "../application/registry";
+
 // Constants, pulled from SUI:
 // https://semantic-ui.com/elements/container.html
 const breakpoints = {
@@ -10,54 +12,14 @@ const breakpoints = {
   large_screen: 1200,
 };
 
-/*
- * MessageView.init('#messages .ui.message');
- */
-export class MessageView {
-  constructor(message = {}) {
-    this.message = message;
-    this.dismiss_url = message.attr("data-message-dismiss-url");
-
-    message.children(".close").on("click", this.dismiss());
-    message.children("a").on("click", this.dismiss());
-  }
-
-  /* Dismiss URL and redirect client to link location, if any */
-  dismiss() {
-    return (event) => {
-      const target = jquery(event.target);
-      const link_url = target.attr("href");
-
-      event.preventDefault();
-
-      if (this.dismiss_url) {
-        jquery
-          .get(this.dismiss_url)
-          .done((resp) => {
-            if (link_url) {
-              window.location = link_url;
-            }
-          })
-          .fail((error) => {
-            console.error(error);
-          })
-          .always(() => {
-            this.message.transition("fade");
-          });
-      } else {
-        this.message.transition("fade");
-      }
-
-      return false;
-    };
-  }
-}
-
-/*
- * ResponsiveView is used to create bindings that alter elements on changes to
- * the viewport width.
+/**
+ * :class:`ResponsiveView` is used to create bindings that alter elements on
+ * changes to the viewport width. This can be used to add an SUI class when the
+ * viewport width changes.
  *
  * Usage in a binding context:
+ *
+ * .. code:: html
  *
  *   <div class="ui menu" data-bind="css: {vertical: device.mobile()}">
  *   <div class="ui menu" data-bind="css: {vertical: device.tablet()}">
@@ -93,11 +55,14 @@ export class ResponsiveView {
   }
 }
 
-/* Knockout binding to help show popups
+/**
+ * Knockout binding to help show popups
  *
  * This is used inside normal Django templates, where we iterate
  * over a list of objects inside the template, not inside hte KO
  * view. This binding will create individual popup contexts.
+ *
+ * Creates a :class:`Popup`.
  *
  */
 export class PopupView {
@@ -106,31 +71,55 @@ export class PopupView {
   }
 }
 
+/**
+ * Popupcard base class. Provides some helps to show/hide the popup
+ */
 export class Popup {
   constructor() {
+    /** @observable {Boolean} Is the popup showing currently? */
     this.is_showing = ko.observable(false);
   }
 
+  /** Show the popup */
   show() {
     this.is_showing(true);
   }
 
+  /** Hide the popup */
   hide() {
     this.is_showing(false);
   }
 }
 
+/**
+ * Base class for API listing views. Provides a foundation for waiting to load
+ * data from an API, loading data from an API request, and handling the data.
+ *
+ * ``data`` parameter needs an ``id`` and ``url`` property.
+ *
+ * @extends {PopupView}
+ */
 export class APIListItemView extends PopupView {
   constructor(data) {
     super();
     this.id = data.id;
     this.url = data.url;
+    /** @observable {Boolean} Is the API request started loading? */
     this.loaded = ko.observable(false);
+    /** @observable {Boolean} Is the API request done loading? */
     this.loading = ko.observable(false);
+    /** The central promise for the request.
+     * @type {Promise} */
     this.promise = null;
+    /** @observable {Object} The data returned from the API */
     this.data = ko.observable();
   }
 
+  /**
+   * Using the supplied configuration, perform an API request. Sets up
+   * :attr:`promise` so that the child class can manage promise resolve and
+   * reject
+   */
   fetch() {
     if (this.promise) {
       return this.promise;
@@ -149,3 +138,81 @@ export class APIListItemView extends PopupView {
     });
   }
 }
+
+// And some partial views for base template components
+
+/**
+ * HeaderView
+ */
+export class HeaderView {
+  static view_name = "HeaderView";
+
+  constructor() {
+    /** Configuration passed in via :func:`~application.plugins.jsonInit`
+     * @observable {Object} Header configuration, mostly for search */
+    this.config = ko.observable();
+    /** SUI search configuration object, used from templates
+     * @observable {Object} Search configuration */
+    this.search_project_config = ko.observable();
+
+    // Wait for :func:`config` to change before we init search
+    this.config.subscribe((config) => {
+      if (config === undefined) {
+        return;
+      }
+      // The URL from the config object is a relative URL, we'll use the
+      // window URL origin as the full URL
+      const url = new URL(config.api_projects_list_url, window.location.origin);
+      url.search = "?name={query}";
+      this.search_project_config({
+        type: "category",
+        apiSettings: {
+          url: url.href,
+          onResponse: (resp) => {
+            const projects = resp.results.map((elem, index) => {
+              // TODO description might be better off in the application model
+              let description = elem.slug;
+              if (elem.subproject_of) {
+                // TODO localize this
+                description = "Subproject of " + elem.subproject_of.name;
+              } else if (elem.translation_of) {
+                // TODO localize this
+                description =
+                  elem.language.name +
+                  " translation of " +
+                  elem.translation_of.name;
+              }
+
+              // Normalize URL for use in non-standard domain names
+              // TODO this is a hack to support alternative domains, like our
+              // beta/staging instance. This can be removed when there is only
+              // one dashboard subdomain.
+              let url_project = new URL(elem.urls.home);
+              let url_window = new URL(window.location.href);
+              if (url_project.hostname != url_window.hostname) {
+                url_project.hostname = url_window.hostname;
+              }
+
+              return {
+                title: elem.name,
+                description: description,
+                url: url_project.toString(),
+              };
+            });
+            const results = {
+              results: {
+                "category-projects": {
+                  name: "Projects",
+                  results: projects,
+                },
+              },
+            };
+            return results;
+          },
+        },
+        minCharacters: 2,
+      });
+    });
+  }
+}
+Registry.add_view(HeaderView);

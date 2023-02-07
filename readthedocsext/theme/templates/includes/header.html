@@ -2,66 +2,134 @@
 {% load gravatar %}
 {% load static %}
 
-<!-- BEGIN header-->
-<div class="ui inverted attached stackable menu">
-  <div class="ui container">
-    <a class="header item" href="{% url "homepage" %}">
-      <div class="ui readthedocs-logo image"></div>
-    </a>
+{% comment %}
 
-    <!-- BEGIN header nav -->
-    <div class="right menu">
-      {% if request.user.is_authenticated %}
-        <a class="ui item" data-popup-on-click=1>
-          <img class="ui avatar image" src="{% gravatar_url request.user.email 24 %}">
-          <span class="text">
-            {{ request.user }}
-          </span>
-          <i class="dropdown icon"></i>
-        </a>
-        <div class="ui large inverted right top flowing popup">
-          <div class="ui inverted large list">
-            <a class="item" href="{% url 'projects_dashboard' %}">
-              <i class="inverted list alternate icon"></i>
-              {% trans "My projects" %}
-            </a>
-            <a class="item" href="{% url 'projects_import' %}">
-              <i class="inverted plus icon"></i>
-              {% trans "Add project" %}
-            </a>
-            <a class="item" href="{% url 'profiles_profile_edit' %}">
-              <i class="inverted cog icon"></i>
-              {% trans "Settings" %}
-            </a>
-            <a class="item" href="{% url 'support' %}">
-              <i class="inverted life ring icon"></i>
-              {% trans "Support" %}
-            </a>
-            <a class="item" href="{% url 'account_logout' %}">
-              <i class="inverted sign out alternate icon"></i>
-              {% trans "Log Out" %}
+Application header menu, for desktop and mobile display
+
+This template provides some blocks that parent templates will use to override
+menu display. Mostly, they are used to set the active navigation menu item. 
+These blocks are:
+
+active_item
+    The id of the menu item to show as active. Values are:
+
+    ``["projects"]``
+
+{% endcomment %}
+
+<div class="ui basic fitted attached segment" data-bind="using: HeaderView()">
+
+  {# Pass Django template tag specific configuration into ``HeaderView`` #}
+  <script type="application/json" data-bind="jsonInit: config">
+{
+  "api_projects_list_url": "{% url "projects-list" %}"
+}
+  </script>
+
+  <div class="ui container">
+    <div class="ui middle aligned grid">
+
+      {% block header_logo %}
+        <div class="four wide computer five wide tablet eleven wide mobile left aligned column">
+          <div class="ui horizontally fitted basic segment">
+            <a href="{{ SITEURL }}/" aria-label="Read the Docs homepage">
+              <img class="ui image" src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}" width="220" alt="Read the Docs logo"/>
             </a>
           </div>
         </div>
-      {% else %}
-        {% url 'account_login' as login %}
-        {% if not request.path == login %}
-          <div class="item">
-            <a href="{% url 'account_login' %}" class="ui button">
-              {% trans "Log In" %}
-            </a>
+      {% endblock header_logo %}
+
+      {% comment %}
+        The top menu for mobile devices, doesn't show on tablet/computer.
+      {% endcomment %}
+      {% block header_mobile_menu %}
+        <div class="five wide mobile only right aligned column">
+          <div class="ui wide dropdown" data-bind="semanticui: {dropdown: {action: 'select'}}">
+            <i class="fad fa-bars large icon" style="--fa-secondary-opacity: 0.8;"></i>
+            <div class="menu">
+              {% include "includes/utils/header_menus.html" %}
+            </div>
           </div>
-        {% endif %}
-        <div class="item">
-          <a class="ui button primary" href="{% url "account_signup" %}">
-            {% trans "Sign up" %}
-          </a>
         </div>
-      {% endif %}
+      {% endblock header_mobile_menu %}
+
+      {% comment %}
+        The top menu shown on tablet/computer. Horizontal menu items instead of dropdown.
+      {% endcomment %}
+      {% block header_menu %}
+        <div class="twelve wide computer eleven wide tablet left aligned tablet only computer only column">
+          <div class="ui huge borderless secondary menu">
+
+            {% block header_left_menu %}
+              <a class="{% if active_item == "projects" %}active {% endif %}item" href="{% url 'projects_dashboard' %}">
+                {% trans "Projects" %}
+              </a>
+            {% endblock header_left_menu %}
+
+            <div class="right menu">
+              {% block header_right_menu %}
+
+                {% block header_menu_search %}
+                  <div class="item">
+                    <div class="ui category search" data-bind="semanticui: {search: search_project_config()}">
+                      <div class="ui icon input">
+                        <input class="prompt" type="text">
+                        <i class="fa-duotone fa-search icon"></i>
+                      </div>
+                      <div class="results"></div>
+                    </div>
+                  </div>
+                {% endblock header_menu_search %}
+
+                {% block header_menu_icon_menus %}
+                  <div class="item">
+                    {# Extra divs for spacing #}
+                    <div>
+                      <div class="ui disabled wide dropdown circular basic icon button" data-bind="semanticui: {dropdown: {action: 'select', displayType: 'block'}}">
+                        <i class="fa-solid fa-bell icon"></i>
+                        {# TODO This feature doesn't do anything yet, see https://github.com/readthedocs/ext-theme/issues/16 #}
+                        {% if False %}
+                          <span class="ui floating circular red label">{{ messages|length }}</span>
+                        {% endif %}
+                        <div class="menu">
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <a class="ui circular basic icon button" href="{% url 'support' %}" aria-label="{% trans 'Get support' %}">
+                        <i class="fa-solid fa-message-question icon"></i>
+                      </a>
+                    </div>
+                  </div>
+                {% endblock header_menu_icon_menus %}
+
+                {% block header_menu_user %}
+                  {% if request.user.is_authenticated %}
+                    <div class="item">
+                      <div class="ui top right pointing wide dropdown" data-bind="semanticui: {dropdown: {action: 'select', displayType: 'block'}}">
+                        <img class="ui avatar image" src="{% gravatar_url request.user.email 16 %}" />
+                        <i class="fa-solid fa-caret-down icon"></i>
+                        <div class="wide menu">
+                          {% include "includes/utils/header_menus.html" %}
+                        </div>
+                      </div>
+                    </div>
+                  {% else %}
+                    <div class="item">
+                      <a class="ui button" href="{% url 'account_login' %}">
+                        {% trans "Log In" %}
+                      </a>
+                    </div>
+                  {% endif %}
+                {% endblock header_menu_user %}
+
+              {% endblock header_right_menu %}
+            </div>
+
+          </div>
+        </div>
+      {% endblock header_menu %}
 
     </div>
-    <!-- END header nav -->
-
   </div>
 </div>
-<!-- END header-->

@@ -18,7 +18,7 @@
   <form method="post" action="{% url "profiles_tokens_create" %}">
     {% csrf_token %}
     <button class="ui green {% if objects %}disabled {% endif %}button">
-      <i class="plus icon"></i>
+      <i class="fa-solid fa-plus icon"></i>
       {% trans "Generate API token" %}
     </button>
   </form>
@@ -40,21 +40,21 @@
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
-  <div class="ui basic icon button" data-clipboard-text="{{ object.key }}">
-    <i class="copy outline icon"></i>
+  <div class="ui icon button" data-clipboard-text="{{ object.key }}">
+    <i class="fa-duotone fa-copy icon"></i>
   </div>
   <form method="post" action="{% url "profiles_tokens_delete" %}">
     {% csrf_token %}
     {# TODO make the revoke form include a token id if we do many to many #}
     <button class="ui icon button" data-content="{% trans "Revoke token" %}">
-      <i class="trash icon"></i>
+      <i class="fa-duotone fa-trash icon"></i>
     </button>
   </form>
 {% endblock list_item_right_buttons %}
 
 {% block list_item_header %}
   <span class="ui basic label">
-    <i class="key icon"></i>
+    <i class="fa-duotone fa-key icon"></i>
     <code>{{ object.key }}</code>
   </span>
 {% endblock list_item_header %}

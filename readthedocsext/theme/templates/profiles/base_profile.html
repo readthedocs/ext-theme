@@ -21,15 +21,22 @@
       </h2>
 
       <div class="ui list">
-        <button class="ui button {% block profile-bar-profile %}{% endblock %}"><a href="{{ user.profile.get_absolute_url }}">{% trans "Profile" %}</a></button>
+        <a
+            class="ui button  {% block profile-bar-profile %}{% endblock %}"
+            href="{{ user.profile.get_absolute_url }}">
+          {% trans "Profile" %}
+        </a>
         {% if profile.user == user %}
-          <button class="ui secondary button {% block profile-bar-admin %}{% endblock %}"><a href="{% url "profiles_profile_edit" %}"><i class="cog icon"></i>{% trans "Admin" %}</a></button>
+          <a
+              class="ui button {% block profile-bar-admin %}{% endblock %}"
+              href="{% url "profiles_profile_edit" %}">
+            <i class="fa-duotone fa-gears icon"></i>
+            {% trans "Admin" %}
+          </a>
         {% endif %}
       </div>
 
     </div>
-
-    
 
   </div>
 </div>

@@ -1,4 +1,4 @@
-{% extends "projects/base_project.html" %}
+{% extends "projects/base.html" %}
 
 {% load i18n %}
 {% load privacy_tags %}
@@ -6,9 +6,9 @@
 
 {% block title %}{{ build.project.name }}{% endblock %}
 
-{% block project_editing %}
+{% block content-header %}
   {% with builds_active="active" %}
-    {% include "core/project_bar.html" %}
+    {% include "projects/partials/header.html" %}
   {% endwith %}
 {% endblock %}
 
@@ -28,7 +28,7 @@
           </div>
 
           <div class="ui basic segment loading padded" data-bind="css: { loading: is_loading() }">
-            <div class="ui active progress" id="build-progress" data-bind="css: state_progress_css()">
+            <div class="ui active progress" data-bind="css: state_progress_css, semanticui: {progress: state_progress()}">
               <div class="bar"><div class="progress"></div></div>
               <div class="label">
                 <span data-bind="visible: !finished()" style="display: none;">
@@ -51,28 +51,28 @@
         <div class="ui five wide middle aligned column">
           <div class="ui relaxed list">
             <div class="item">
-              <i class="grey calendar outline icon"></i>
+              <i class="grey fa-duotone fa-calendar icon"></i>
               <div class="content" data-bind="if: !is_loading()">
                 <div data-bind="attr: { 'data-tooltip': date_display() }, text: '{% trans "Build started" %} ' + date_display_since()"></div>
               </div>
             </div>
 
             <div class="item">
-              <i class="grey clock outline icon"></i>
+              <i class="grey fa-duotone fa-clock icon"></i>
               <div class="content" data-bind="if: finished">
                 <div data-bind="text: '{% trans "Build took %d" %}'.replace('%d', length_display())"></div>
               </div>
             </div>
 
             <div class="item">
-              <i class="grey code branch icon"></i>
+              <i class="grey fa-duotone fa-code-branch icon"></i>
               <div class="content" data-bind="if: !is_loading()">
                 <a data-bind="attr: {href: commit_url}"><code data-bind="text: commit_short"></code></a>
               </div>
             </div>
 
             <div class="item">
-              <i class="grey tag icon"></i>
+              <i class="grey fa-duotone fa-tag icon"></i>
               <div class="content" data-bind="if: !is_loading()">
                 {% comment %}TODO unfuck this django templating
                 {% if request.user|is_admin:project and not build.is_external %}
@@ -104,28 +104,35 @@
       </a>
       <div class="right menu">
         {% if request.user.is_staff %}
-          <div class="ui item">
-            <a class="ui mini red icon button" data-bind="click: show_debug">
-              <i class="bug icon"></i>
-              Debug
-            </a>
-          </div>
-          <div class="ui modal" id="build-debug-modal">
-            <div class="ui icon header">
-              <i class="bug icon"></i>
-              Debug
+          <a class="ui item" data-bind="click: $root.show_modal('build-debug')">
+            <i class="red fa-duotone fa-microscope icon"></i>
+            Debug
+          </a>
+          <div class="ui modal" data-modal-id="build-debug">
+            <div class="ui header">
+              <i class="fa-duotone fa-microscope icon"></i>
+              <div class="content">
+                Build debug
+              </div>
             </div>
             <div class="content">
               <div class="ui relaxed list">
-                <div class="item">Built on server <span data-bind="text: builder"></span></div>
-                <div class="item">Time to first command: TODO</div>
+                <div class="item">Built on server <code data-bind="text: builder"></code></div>
               </div>
-              <div class="ui heading">Config:</div>
-              <pre><code data-bind="text: config_display"></code></pre>
+
+              <div class="ui small attached secondary segment">
+                <i class="fa-duotone fa-file icon"></i>
+                <code>.readthedocs.yaml</code>
+              </div>
+              <div class="ui small attached segment">
+                <p>
+                <pre><code data-bind="text: config_display"></code></pre>
+                </p>
+              </div>
             </div>
             <div class="actions">
               <div class="ui green ok inverted button">
-                <i class="checkmark icon"></i>
+                <i class="fa-duotone fa-check icon"></i>
                 Fantastic
               </div>
             </div>
@@ -133,7 +140,7 @@
         {% endif %}
 
         <a class="disabled item" data-bind="css: {disabled: !finished() || !success()}, attr: {href: docs_url}">
-          <i class="external alternate icon"></i>
+          <i class="fa-duotone fa-arrow-up-right-from-square icon"></i>
           {% trans "View docs" %}
         </a>
       </div>
@@ -174,7 +181,7 @@
         Error list
       {% endcomment %}
       <div class="ui attached inverted red segment" data-bind="visible: error" style="display: none;">
-        <i class="exclamation circle icon"></i>
+        <i class="fa-solid fa-exclamation circular icon"></i>
         <span data-bind="text: error"></span>
         <span>{% trans "For more information on this error, see our documentation." %}
       </div>
@@ -232,7 +239,7 @@
              style="display: none;">
           <div class="item">
             <a class="ui icon left floated" data-bind="click: toggle_showing">
-              <i class="angle down grey icon"></i>
+              <i class="grey fa-solid fa-angle-down icon"></i>
             </a>
 
             <div class="command content">
@@ -244,7 +251,7 @@
               <div class="ui relaxed command output list" data-bind="foreach: output_lines">
                 <div class="item" data-bind="css: { highlight: is_highlighted() }">
                   <a class="ui icon left floated" data-bind="attr: {id: anchor_id(), href: '#' + anchor_id()};">
-                    <i class="linkify icon"></i>
+                    <i class="fa-regular fa-anchor grey icon"></i>
                   </a>
                   <div class="content">
                     <pre><code data-bind="html: output"></code></pre>
