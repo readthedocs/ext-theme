@@ -71,13 +71,15 @@ export class ProjectListView extends PopupView {
       this.filter_project_config({
         apiSettings: {
           url: url,
+          cache: false,
         },
+        throttle: 500,
         fields: {
           name: "name",
           value: "slug",
         },
-        saveRemoteData: true,
-        filterRemoteData: true,
+        saveRemoteData: false,
+        filterRemoteData: false,
         sortSelect: true,
         onChange: (value, label, $elem) => {
           window.location.href = "?project=" + value;
@@ -236,13 +238,25 @@ export class ProjectVersionListView extends PopupView {
       this.filter_version_config({
         apiSettings: {
           url: url,
+          cache: false,
+          // Use onResponse instead of ``fields`` here as there seems to be some
+          // problem the response structure. Dropdowns consistently give 0
+          // results.
+          onResponse: (response) => {
+            return {
+              results: response.results.map((result) => {
+                console.dir(result);
+                return {
+                  name: result.verbose_name,
+                  value: result.slug,
+                };
+              }),
+            };
+          },
         },
-        fields: {
-          name: "verbose_name",
-          value: "slug",
-        },
-        saveRemoteData: true,
-        filterRemoteData: true,
+        throttle: 500,
+        saveRemoteData: false,
+        filterRemoteData: false,
         sortSelect: true,
         onChange: (value, label, $elem) => {
           window.location.href = "?version=" + value;
@@ -341,13 +355,11 @@ class Version extends APIListItemView {
           },
         })
         .then((data) => {
-          // The user could be redirected to the build that was just created here,
-          // but API v3 is missing the URL on the build object. I don't mind that
-          // the interaction leaves me on the same interface while showing the new
-          // build either.
-          // TODO maybe redirect the user to the new build?
-          // https://github.com/readthedocs/readthedocs.org/issues/7361
-          window.location.reload();
+          if (data.build.urls.build) {
+            window.location.href = data.build.urls.build;
+          } else {
+            console.debug("Redirect to new build failed");
+          }
         })
         .catch((err) => {
           console.error(err);

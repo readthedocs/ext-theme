@@ -33,13 +33,25 @@ export class BuildListView extends PopupView {
       this.filter_version_config({
         apiSettings: {
           url: url,
+          cache: false,
+          // Use onResponse instead of ``fields`` here as there seems to be some
+          // problem the response structure. Dropdowns consistently give 0
+          // results.
+          onResponse: (response) => {
+            return {
+              results: response.results.map((result) => {
+                console.dir(result);
+                return {
+                  name: result.verbose_name,
+                  value: result.slug,
+                };
+              }),
+            };
+          },
         },
-        fields: {
-          name: "verbose_name",
-          value: "slug",
-        },
-        saveRemoteData: true,
-        filterRemoteData: true,
+        throttle: 500,
+        saveRemoteData: false,
+        filterRemoteData: false,
         sortSelect: true,
         onChange: (value, label, $elem) => {
           $elem.closest("form").submit();
