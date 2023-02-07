@@ -341,13 +341,11 @@ class Version extends APIListItemView {
           },
         })
         .then((data) => {
-          // The user could be redirected to the build that was just created here,
-          // but API v3 is missing the URL on the build object. I don't mind that
-          // the interaction leaves me on the same interface while showing the new
-          // build either.
-          // TODO maybe redirect the user to the new build?
-          // https://github.com/readthedocs/readthedocs.org/issues/7361
-          window.location.reload();
+          if (data.build.urls.build) {
+            window.location.href = data.build.urls.build;
+          } else {
+            console.debug("Redirect to new build failed")
+          }
         })
         .catch((err) => {
           console.error(err);
