@@ -182,10 +182,21 @@ export class HeaderView {
                   " translation of " +
                   elem.translation_of.name;
               }
+
+              // Normalize URL for use in non-standard domain names
+              // TODO this is a hack to support alternative domains, like our
+              // beta/staging instance. This can be removed when there is only
+              // one dashboard subdomain.
+              let url_project = new URL(elem.urls.home);
+              let url_window = new URL(window.location.href);
+              if (url_project.hostname != url_window.hostname) {
+                url_project.hostname = url_window.hostname;
+              }
+
               return {
                 title: elem.name,
                 description: description,
-                url: elem.urls.home,
+                url: url_project.toString(),
               };
             });
             const results = {
