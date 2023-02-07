@@ -71,13 +71,15 @@ export class ProjectListView extends PopupView {
       this.filter_project_config({
         apiSettings: {
           url: url,
+          cache: false,
         },
+        throttle: 500,
         fields: {
           name: "name",
           value: "slug",
         },
-        saveRemoteData: true,
-        filterRemoteData: true,
+        saveRemoteData: false,
+        filterRemoteData: false,
         sortSelect: true,
         onChange: (value, label, $elem) => {
           window.location.href = "?project=" + value;
@@ -236,13 +238,25 @@ export class ProjectVersionListView extends PopupView {
       this.filter_version_config({
         apiSettings: {
           url: url,
+          cache: false,
+          // Use onResponse instead of ``fields`` here as there seems to be some
+          // problem the response structure. Dropdowns consistently give 0
+          // results.
+          onResponse: (response) => {
+            return {
+              results: response.results.map((result) => {
+                console.dir(result);
+                return {
+                  name: result.verbose_name,
+                  value: result.slug,
+                };
+              }),
+            };
+          },
         },
-        fields: {
-          name: "verbose_name",
-          value: "slug",
-        },
-        saveRemoteData: true,
-        filterRemoteData: true,
+        throttle: 500,
+        saveRemoteData: false,
+        filterRemoteData: false,
         sortSelect: true,
         onChange: (value, label, $elem) => {
           window.location.href = "?version=" + value;
@@ -344,7 +358,7 @@ class Version extends APIListItemView {
           if (data.build.urls.build) {
             window.location.href = data.build.urls.build;
           } else {
-            console.debug("Redirect to new build failed")
+            console.debug("Redirect to new build failed");
           }
         })
         .catch((err) => {
