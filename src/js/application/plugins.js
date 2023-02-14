@@ -279,7 +279,8 @@ export const message = {
  *     The modal plugin is not supported in this configuration because of some
  *     fun interaction with jQuery.
  *
- * Usage:
+ * There are two methods of using this Knockout plugin. The first is using
+ * literal values from tempaltes:
  *
  * .. code:: html
  *
@@ -290,6 +291,52 @@ export const message = {
  * .. code:: js
  *
  *     $(".ui.item").popup({on: "click"});
+ *
+ * The second way of using this plugin is through an Knockout observable that
+ * returns either a literal object or a function from the observable.
+ *
+ * See :js:`BuildDetailView.progress_config` for an example of both.
+ *
+ * To pass a literal object via an observable, use an observable such as:
+ *
+ * .. code:: js
+ *
+ *     this.popup_config = ko.computed(() => {
+ *       return {
+ *         label: this.example_observable(),
+ *         on: "click",
+ *       }
+ *     });
+ *
+ * You can also return a function from an observable. This function will be
+ * called with a single argument: a callback function representing the jQuery
+ * plugin method for the underlying element. This allows for also executing
+ * module _behaviors_. Behaviors are listed on some SUI modules, such as:
+ * https://fomantic-ui.com/modules/progress.html#behavior
+ *
+ * For example, the bound element in template code would be:
+ *
+ * .. code:: html
+ *
+ *     <a class="ui item" data-bind="semanticui: {progress: progress_config() }">
+ *
+ * The the matching observable code to trigger a behavior:
+ *
+ * .. code:: js
+ *
+ *     this.progress_config = ko.computed(() => {
+ *       if (ko.computedContext.isInitial()) {
+ *         // First call, initialize the module
+ *         return {
+ *           total: 10,
+ *         }
+ *       } else {
+ *         return (progress) => {
+ *           progress("set progress", self.value());
+ *         }
+ *       }
+ *     });
+ *
  */
 export const semanticui = {
   update: (element, value_accessor, all_bindings) => {
@@ -301,15 +348,35 @@ export const semanticui = {
         // replaces ``<body>`` and this causes an error from Knockout, because
         // the binding was applied to ``<body>`` more than once.
         console.error("SemanticUI modal instantiation is not supported.");
+        return;
       }
       if (value !== undefined) {
-        console.debug("Setting up SemanticUI component:", key, value, element);
-
-        // Call jquery(element).search(value), but dynamically.
-        jq_element[key](value);
+        if (typeof value === "function") {
+          const callback = (behavior, ...args) => {
+            console.debug(
+              "Calling SemanticUI component behavior:",
+              key,
+              element,
+              behavior,
+              ...args
+            );
+            jq_element[key](behavior, ...args);
+          };
+          value(callback);
+        } else {
+          // The value is probably an object, and is almost certainly a module
+          // configuration for initializing the module
+          console.debug(
+            "Setting up SemanticUI component:",
+            key,
+            value,
+            element
+          );
+          jq_element[key](value);
+        }
 
         // Set attribute for CSS selector on element. This is used to avoid
-        // initializing SUI JQuery plugins twice on elements.
+        // initializing SUI jQuery plugins twice on elements.
         jq_element.attr("data-semanticui-" + key, true);
       }
     }
