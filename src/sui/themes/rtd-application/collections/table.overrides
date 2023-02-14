@@ -1,0 +1,69 @@
+// Build detail page command output table
+.ui.ui.ui.command.table {
+  tr {
+    border-bottom: 0px;
+    cursor: unset;
+
+    &.active {
+      background: fadeout(@white, 85%);
+    }
+
+    &.command a {
+      cursor: pointer;
+    }
+  }
+  td {
+    border-top: 0px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+
+    &.line.number {
+      user-select: none;
+      padding-left: .5rem;
+    }
+
+    &.stdout > code {
+      white-space: pre-wrap; 
+      word-wrap: break-word;
+
+      // ansi_up control character classes
+      span.ansi-black-fg { color: @black; }
+      span.ansi-red-fg { color: @lightRed; }
+      span.ansi-green-fg { color: @lightOlive; }
+      span.ansi-yellow-fg { color: @lightYellow; }
+      span.ansi-blue-fg { color: @lightBlue; }
+      span.ansi-magenta-fg { color: @lightViolet; }
+      span.ansi-cyan-fg { color: @lightPurple; }
+      span.ansi-white-fg { color: @white; }
+
+      span.ansi-black-bg { color: @black; }
+      span.ansi-red-bg { color: @lightRed; }
+      span.ansi-green-bg { color: @lightOlive; }
+      span.ansi-yellow-bg { color: @lightYellow; }
+      span.ansi-blue-bg { color: @lightBlue; }
+      span.ansi-magenta-bg { color: @lightViolet; }
+      span.ansi-cyan-bg { color: @lightPurple; }
+      span.ansi-white-bg { color: @white; }
+
+    }
+  }
+
+  // This is required to make the labels a bit more muted than they would be
+  // normally. On hover and active they are more pronounced.
+  .ui.label {
+    user-select: none;
+    vertical-align: middle;
+    padding: 4px 8px;
+    margin-left: 1em;
+    
+    &.inverted {
+      background: fadeout(@grey, 80%);
+      color: fadeout(@white, 70%);
+
+      &:hover, &:active {
+        background: fadeout(@grey, 60%);
+        color: @white;
+      }
+    }
+  }
+}
