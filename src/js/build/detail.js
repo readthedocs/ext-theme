@@ -65,11 +65,17 @@ class BuildCommand {
      * @type {BuildDetailView} */
     this.view = view;
 
-    // Remove the full path from build command display
-    // TODO do this on the API level probably.
+    // Remove the full path from build command display, and hack debug flag
+    // TODO rely on debug flag from build model when it's added
     const re_command_trim =
       /(\/usr\/src\/app|\/home\/docs)\/checkouts\/readthedocs.org\/user_builds\/[^\/]+\/[^\/]+\/[^\/]+\//g;
     let command = build_command.command.replace(re_command_trim, "");
+    let looks_like_debug = false;
+    if (build_command.is_debug === undefined) {
+      const re_commands = /^(pip freeze|cat .*conf.py)$/;
+      looks_like_debug = command.match(re_commands);
+    }
+    const is_debug = build_command.is_debug || looks_like_debug;
 
     /** @observable {number} Build command id */
     this.id = ko.observable(build_command.id);
@@ -83,19 +89,30 @@ class BuildCommand {
     });
     /** @observable {number} Command run time in seconds */
     this.run_time = ko.observable(build_command.run_time);
+    /** @computed {Boolean} This command is a debug class command */
+    this.is_debug = ko.observable(is_debug);
+    /** @computed {Boolean} Hide debug commands until debug mode is enabled */
+    this.is_visible = ko.computed(() => {
+      if (this.is_debug()) {
+        return view.show_debug();
+      } else {
+        return true;
+      }
+    });
+    /** @computed {string} Command text class */
+    this.command_class = ko.computed(() => {
+      if (this.is_debug()) {
+        return "grey";
+      } else {
+        return this.successful() ? "olive" : "red";
+      }
+    });
 
     // TODO I'm confused why this isn't a computed observable. It uses the
     // observable for success already, this seems off.
     const is_showing = this.successful() ? false : true;
     /** @observable {Boolean} Is this command expanded? */
     this.is_showing = ko.observable(is_showing);
-
-    /** @computed {string} CSS class used to show failure/success */
-    this.command_status = ko.computed(() => {
-      return this.successful()
-        ? "build-command-successful"
-        : "build-command-failed";
-    });
 
     /** Used by :func:`render_output`, which handles ANSI color codes and other
      * processing.
@@ -205,35 +222,58 @@ export class BuildDetailView {
     /** @observable {Boolean} Is the build data loading? */
     this.is_loading = ko.observable(true);
 
-    /** State value for progress bar. The progress bar value is just the step
-     * value that the build is on, nothing fancy. This could be something more
-     * intelligent later.
-     * @observable {number} Position of build state progress bar */
-    this.state_progress = ko.computed(() => {
-      const states = [
-        "triggered",
-        "queued",
-        "cloning",
-        "installing",
-        "building",
-        "uploading",
-        "finished",
-      ];
-      return {
-        value: states.indexOf(this.state()),
-        total: states.length - 1,
-      };
-    });
-    /** The CSS class for the progress bar, based on build success/failure
-     * @computed {string} Progress bar CSS class */
-    this.state_progress_css = ko.computed(() => {
-      const finished = this.finished();
-      const is_success = this.success();
-      return {
-        success: finished && is_success,
-        error: finished && !is_success,
-      };
-    });
+    /** SUI progress module config/behavior
+     * @computed {Object or Function} the parameters to pass to the module call
+     *
+     * See the `semanticui` Knockout plugin for more information */
+    this.progress_config = ko
+      .computed(() => {
+        const state = this.state();
+        const states = [
+          "triggered",
+          "queued",
+          "cloning",
+          "installing",
+          "building",
+          "uploading",
+          "finished",
+        ];
+        // If this is the first update, configure the module. If this is an
+        // update, then send progress updates using module behaviors instead.
+        if (ko.computedContext.isInitial()) {
+          return {
+            autoSuccess: false,
+            value: states.indexOf(state),
+            total: states.length - 1,
+            label: this.state_display(),
+          };
+        } else {
+          if (this.finished()) {
+            const has_failed = this.error() || this.success() === false;
+            if (has_failed) {
+              return (progress) => {
+                // TODO translate this in the application or templates
+                progress("set error", "Build failed");
+              };
+            } else {
+              return (progress) => {
+                // TODO translate this in the application or templates
+                progress("set success", "Build succeeded");
+              };
+            }
+          } else {
+            return (progress) => {
+              progress("set progress", states.indexOf(state));
+              progress("set label", this.state_display());
+            };
+          }
+        }
+      })
+      .extend({
+        // Debounce API updates, so we aren't triggering this once for each
+        // observable update -- from the API response for example.
+        throttle: 500,
+      });
 
     // Date and time manipulation
     /* @observable {number} Build date ... as integer? TBD */
@@ -264,12 +304,13 @@ export class BuildDetailView {
     this.builder = ko.observable(build.builder);
     /** @observable {Array.<Object>} Build command objects as an array */
     this.commands = ko.observableArray(build.commands);
+
     /** @observable {string} Repository commit for the build */
     this.commit = ko.observable(build.commit);
     /** @computed {string} A truncated version of the build commit */
     this.commit_short = ko.computed(() => {
       let commit = this.commit();
-      if (commit !== undefined) {
+      if (commit) {
         return commit.substring(0, 8);
       }
     });
@@ -286,19 +327,40 @@ export class BuildDetailView {
      * @observable {Boolean} Build output doesn't have build commands */
     this.legacy_output = ko.observable(false);
 
-    /* Debug */
-    /** @observable {Object} Build configuration used for the build */
-    this.config = ko.observable();
-    /** @computed {string} Human readable build configuration */
-    this.config_display = ko.computed(() => {
-      return JSON.stringify(this.config(), null, 2);
-    });
-
     // Anchor handling
     /** @observable {number} The permalink anchor part for selected command id */
     this.selected_command = ko.observable();
     /** @observable {number} The permalink anchro part for selected command line */
     this.selected_line = ko.observable();
+
+    /* Debug */
+    /** @observable {Object} Build configuration used for the build */
+    this.config = ko.observable();
+    /** @observable {Boolean} Show debug/info commands */
+    this.show_debug = ko.observable(false);
+    /** @computed {Array.<Object>} Prepend the commands with a mock command to
+     * show the generated configuration file the build used. */
+    this.commands_with_debug = ko
+      .computed(() => {
+        // Clone the commands observable to avoid altering it in place
+        let commands = ko.observableArray(this.commands.splice(0));
+        const config_command = new BuildCommand(
+          {
+            id: 0,
+            // Not `cat .readthedocs.yaml` as this is confusing, it won't match
+            // the file in the repository.
+            command: "readthedocs-build --show-config",
+            exit_code: 0,
+            run_time: 0,
+            is_debug: true,
+            output: JSON.stringify(this.config(), null, "  "),
+          },
+          this
+        );
+        commands.unshift(config_command);
+        return commands();
+      })
+      .extend({ throttle: 500 });
 
     this.poll_api();
   }
@@ -333,8 +395,6 @@ export class BuildDetailView {
       return;
     }
     jquery.getJSON(this.api_url + this.id + "/").then((data) => {
-      this.state(data.state);
-      this.state_display(data.state_display);
       this.date(data.date);
       this.success(data.success);
       this.error(data.error);
@@ -344,6 +404,8 @@ export class BuildDetailView {
       this.commit_url(data.commit_url);
       this.builder(data.builder);
       this.config(data.config);
+      this.state(data.state);
+      this.state_display(data.state_display);
 
       const commands = this.commands();
       if (data.commands.length !== commands.length) {
@@ -433,6 +495,13 @@ export class BuildDetailView {
   // TODO is this needed? This is likely old view cruft
   show_legacy_output() {
     this.legacy_output(true);
+  }
+
+  /** Helper for toggling debug mode on the view. This hides some informational
+   * commands and the configuration file output step */
+  toggle_debug() {
+    const show_debug = this.show_debug();
+    this.show_debug(!show_debug);
   }
 }
 Registry.add_view(BuildDetailView);

@@ -15,11 +15,12 @@
 {% block content %}
   <div class="ui basic segment padded" data-bind="using: BuildDetailView({id: {{ build.pk }}})">
 
-    <!-- top most -->
+    {% block build_detail_metadata %}
     <div class="ui top attached segment">
       <div class="ui stackable grid">
 
-        <!-- top left -->
+        {# Build progress on the left #}
+        {% block build_detail_metadata_left %}
         <div class="ui eleven wide column">
           <div class="ui header">
             {% blocktrans trimmed with build_id=build.pk %}
@@ -28,26 +29,16 @@
           </div>
 
           <div class="ui basic segment loading padded" data-bind="css: { loading: is_loading() }">
-            <div class="ui active progress" data-bind="css: state_progress_css, semanticui: {progress: state_progress()}">
+            <div class="ui active progress" data-bind="semanticui: {progress: progress_config()}">
               <div class="bar"><div class="progress"></div></div>
-              <div class="label">
-                <span data-bind="visible: !finished()" style="display: none;">
-                  <span data-bind="text: state_display"></span>
-                </span>
-                <span data-bind="visible: finished()" style="display: none;">
-                  <span data-bind="visible: success()">
-                    {% trans "Build complete!" %}
-                  </span>
-                  <span data-bind="visible: !success()">
-                    {% trans "Build failed" %}
-                  </span>
-                </span>
-              </div>
+              <div class="label"></div>
             </div>
           </div>
         </div>
+        {% endblock build_detail_metadata_left %}
 
-        <!-- top right -->
+        {# Build metadata on the right #}
+        {% block build_detail_metadata_right %}
         <div class="ui five wide middle aligned column">
           <div class="ui relaxed list">
             <div class="item">
@@ -74,71 +65,43 @@
             <div class="item">
               <i class="grey fa-duotone fa-tag icon"></i>
               <div class="content" data-bind="if: !is_loading()">
-                {% comment %}TODO unfuck this django templating
-                {% if request.user|is_admin:project and not build.is_external %}
-                  <a href="{% url "project_version_detail" build.version.project.slug build.version.slug %}">{{ build.version.slug }}</a>
-                {% elif build.is_external %}
+                {% if build.is_external %}
                   {% blocktrans with build.external_version_name as external_version_name %}
-                    <b>{{ external_version_name }}</b>
+                    {{ external_version_name }}
                   {% endblocktrans %}
-                  #<a href="{{ build.version.vcs_url }}">{{ build.version.verbose_name }}</a>
+                  <a href="{{ build.version.vcs_url }}"><code>{{ build.version.verbose_name }}</code></a>
                 {% else %}
-                  {{ build.version.slug }}
+                  <code>
+                    <a href="{% url "builds_project_list" build.version.project.slug %}?version={{ build.version.slug }}">
+                      {{ build.version.slug }}
+                    </a>
+                  </code>
                 {% endif %}
-              {% endcomment %}
-                <a data-bind="attr: {href: commit_url}"><code>{{ build.version.slug }}</code></a>
               </div>
             </div>
 
           </div>
         </div>
+        {% endblock build_detail_metadata_right %}
 
       </div>
     </div>
-    <!-- end top -->
+    {% endblock build_detail_metadata %}
 
     <div class="ui attached menu">
-      <a class="active item">Output</a>
+      <a class="active item">
+        <i class="fa-duotone fa-terminal icon"></i>
+        {% trans "Output" %}
+      </a>
       <a class="item" href="{% url "build-detail" build.pk "txt" %}">
+        <i class="fa-duotone fa-memo-circle-info icon"></i>
         {% trans "Raw log" %}
       </a>
+      <a class="ui item" data-bind="click: toggle_debug, css: {active: show_debug()}">
+        <i class="fa-duotone fa-microscope icon"></i>
+        {% trans "Debug" %}
+      </a>
       <div class="right menu">
-        {% if request.user.is_staff %}
-          <a class="ui item" data-bind="click: $root.show_modal('build-debug')">
-            <i class="red fa-duotone fa-microscope icon"></i>
-            Debug
-          </a>
-          <div class="ui modal" data-modal-id="build-debug">
-            <div class="ui header">
-              <i class="fa-duotone fa-microscope icon"></i>
-              <div class="content">
-                Build debug
-              </div>
-            </div>
-            <div class="content">
-              <div class="ui relaxed list">
-                <div class="item">Built on server <code data-bind="text: builder"></code></div>
-              </div>
-
-              <div class="ui small attached secondary segment">
-                <i class="fa-duotone fa-file icon"></i>
-                <code>.readthedocs.yaml</code>
-              </div>
-              <div class="ui small attached segment">
-                <p>
-                <pre><code data-bind="text: config_display"></code></pre>
-                </p>
-              </div>
-            </div>
-            <div class="actions">
-              <div class="ui green ok inverted button">
-                <i class="fa-duotone fa-check icon"></i>
-                Fantastic
-              </div>
-            </div>
-          </div>
-        {% endif %}
-
         <a class="disabled item" data-bind="css: {disabled: !finished() || !success()}, attr: {href: docs_url}">
           <i class="fa-duotone fa-arrow-up-right-from-square icon"></i>
           {% trans "View docs" %}
@@ -185,43 +148,6 @@
         <span data-bind="text: error"></span>
         <span>{% trans "For more information on this error, see our documentation." %}
       </div>
-      {% comment %}
-        Space for errors!
-      <div class="ui inverted grey segment">
-        <p>
-          {% url 'wipe_version' build.version.project.slug build.version.slug as wipe_url %}
-          {% blocktrans trimmed %}
-            Having trouble with your build environment?
-            Try <a href="{{ wipe_url }}">resetting it</a>.
-          {% endblocktrans %}
-        </p>
-      </div>
-      {% if build.finished and not build.using_latest_config %}
-        <div>
-          <p>
-            {% blocktrans trimmed with config_file_link="https://docs.readthedocs.io/page/config-file/v2.html" %}
-              <strong>Configure your documentation builds!</strong>
-              Adding a <a href="{{ config_file_link }}">.readthedocs.yml</a> file to your project
-              is the recommended way to configure your documentation builds.
-              You can declare dependencies, set up submodules, and many other great features.
-            {% endblocktrans %}
-          </p>
-        </div>
-      {% endif %}
-      {% if request.user|is_admin:project %}
-        {% elif not build.success and "setup.py install" in build.commands.last.output %}
-          <div class="ui basic segment">
-            <p>
-              {% url 'projects_advanced' build.version.project.slug as advanced_url %}
-              {% blocktrans trimmed %}
-                Don't want <em>setup.py install</em> called?
-                Change the <strong>Install Project</strong> setting in your <a href="{{ advanced_url }}">advanced settings</a>.
-              {% endblocktrans %}
-            </p>
-          </div>
-        {% endif %}
-      {% endif %}
-      {% endcomment %}
 
       <div class="ui inverted bottom attached segment transition slide">
 
@@ -234,34 +160,37 @@
         </div>
         <div class="ui basic segment very padded" data-bind="visible: is_loading()"></div>
 
-        <div class="ui inverted relaxed command list"
-             data-bind="visible: commands, foreach: commands"
-             style="display: none;">
-          <div class="item">
-            <a class="ui icon left floated" data-bind="click: toggle_showing">
-              <i class="grey fa-solid fa-angle-down icon"></i>
-            </a>
-
-            <div class="command content">
-              <pre><code data-bind="text: command"></code><a class="ui mini timing label" data-bind="text: run_time() + 's'"></a></pre>
-            </div>
-
-            <div class="output content" data-bind="visible: is_showing()">
-
-              <div class="ui relaxed command output list" data-bind="foreach: output_lines">
-                <div class="item" data-bind="css: { highlight: is_highlighted() }">
-                  <a class="ui icon left floated" data-bind="attr: {id: anchor_id(), href: '#' + anchor_id()};">
-                    <i class="fa-regular fa-anchor grey icon"></i>
-                  </a>
-                  <div class="content">
-                    <pre><code data-bind="html: output"></code></pre>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
+        <table
+            class="ui small very basic compact inverted selectable command table"
+            data-bind="visible: commands, foreach: commands_with_debug"
+            style="display: none;">
+          <tbody>
+            <tr class="top aligned command" data-bind="visible: is_visible">
+              <td class="collapsing">
+                <a class="ui icon left floated" data-bind="click: toggle_showing">
+                  <i class="grey fa-solid fa-angle-right icon" data-bind="class: is_showing() ? 'fa-angle-down' : 'fa-angle-right'"></i>
+                </a>
+              </td>
+              <td>
+                <code class="ui text" data-bind="text: command, class: command_class"></code>
+                <a class="ui mini inverted label" data-bind="text: run_time() + 's'"></a>
+                <a class="ui mini red label" data-bind="text: '{% trans "Exit" %}: ' + exit_code(), visible: exit_code() > 0"></a>
+              </td>
+            </tr>
+          </tbody>
+          <tbody data-bind="visible: is_showing(), foreach: output_lines">
+            <tr data-bind="css: {'left olive marked': is_highlighted()}" class="top aligned">
+              <td class="collapsing line number">
+                <a class="ui small grey left floated text" data-bind="attr: {id: anchor_id(), href: '#' + anchor_id(), text: line_number()};">
+                  <code data-bind="text: line_number()"></code>
+                </a>
+              </td>
+              <td class="stdout">
+                <code data-bind="html: output"></code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
         <div data-bind="visible: !is_loading()">
           <div data-bind="visible: !finished()" class="ui active inverted mini centered inline text loader"></div>
