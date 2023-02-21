@@ -13,14 +13,9 @@ import { Registry } from "../application/registry";
  * array of output lines.
  *
  * @param {Object} build_command_output - BuildCommand APIv2 data
- * @param {BuildCommand} view - Parent build command instance
  */
 class BuildCommandOutput {
-  constructor(build_command_output, view) {
-    /** Parent view that included this class, used for calls to the root view
-     * @type {BuildCommand} */
-    this.view = view;
-
+  constructor(build_command_output) {
     /** The command that was executed
      * @type {string} */
     this.command = build_command_output.command;
@@ -38,16 +33,9 @@ class BuildCommandOutput {
       return this.command.id() + "--" + this.line_number();
     });
 
-    /** Computed observable for determining whether the line is highlighted or
-     * not. This looks to see if the command and command line number match the
-     * window anchor. This could be not performant on large views
-     * @computed {Boolean} Boolean value if window hash matches command/line */
-    this.is_highlighted = ko.computed(() => {
-      return (
-        this.line_number() == this.view.selected_line() &&
-        this.command.id() == this.view.selected_command()
-      );
-    });
+    /** @observable {Boolean} Is the line selected/highlighted. Selected lines
+     * are lines that are linked to via URL hash */
+    this.is_selected = ko.observable(false);
   }
 }
 
@@ -57,14 +45,9 @@ class BuildCommandOutput {
  * :class:`BuildCommandOutput` objects to display individual lines of output.
  *
  * @param {Object} build_command - APIv2 build command data
- * @param {BuildDetailView} view - The build detail view display this command
  */
 class BuildCommand {
-  constructor(build_command, view) {
-    /** :class:`BuildDetailView` instance that invoked this command
-     * @type {BuildDetailView} */
-    this.view = view;
-
+  constructor(build_command) {
     // Remove the full path from build command display, and hack debug flag
     // TODO rely on debug flag from build model when it's added
     const re_command_trim =
@@ -92,13 +75,21 @@ class BuildCommand {
     /** @computed {Boolean} This command is a debug class command */
     this.is_debug = ko.observable(is_debug);
     /** @computed {Boolean} Hide debug commands until debug mode is enabled */
-    this.is_visible = ko.computed(() => {
-      if (this.is_debug()) {
-        return view.show_debug();
-      } else {
-        return true;
-      }
-    });
+    this.is_visible = ko.computed(
+      () => {
+        if (this.is_debug()) {
+          if (this.is_expanded()) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return true;
+        }
+      },
+      null,
+      { deferEvaluation: true }
+    );
     /** @computed {string} Command text class */
     this.command_class = ko.computed(() => {
       if (this.is_debug()) {
@@ -108,40 +99,52 @@ class BuildCommand {
       }
     });
 
-    // TODO I'm confused why this isn't a computed observable. It uses the
-    // observable for success already, this seems off.
-    const is_showing = this.successful() ? false : true;
     /** @observable {Boolean} Is this command expanded? */
-    this.is_showing = ko.observable(is_showing);
+    this.is_expanded = ko.observable(false);
+    this.exit_code.subscribe((exit_code) => {
+      if (exit_code !== undefined && exit_code > 0) {
+        this.is_expanded(true);
+      }
+    });
 
-    /** Used by :func:`render_output`, which handles ANSI color codes and other
-     * processing.
-     * @observable {string} Raw command output */
-    this.output = ko.observable(build_command.output);
-    /** @observable {Array.<BuildCommandOutput>} Rendered output lines */
-    this.output_lines = ko.observableArray([]);
-    this.render_output();
+    /** @observable {string} Raw command output */
+    this.output = ko.observable();
+    /** @computed {Array.<BuildCommandOutput>} Split output lines */
+    this.output_lines = ko.computed(
+      () => {
+        const output_lines = this.output().split(/\n/);
+
+        return output_lines.map((line, index) => {
+          return new BuildCommandOutput({
+            command: this,
+            output: line,
+            line_number: index + 1,
+          });
+        });
+      },
+      null,
+      { deferEvaluation: true }
+    );
+
+    this.output(build_command.output);
+    // TODO color output is disabled for now. This needs to be async due to the
+    // extra libraries loaded, and should block page load, polling, and updating
+    // the selected line. This also requires an application change.
+    // this.color_output(build_command.output);
   }
 
   /**
-   * Toggle :func:`is_showing`, used for single clicks on commands to expand
-   */
-  toggle_showing() {
-    this.is_showing(!this.is_showing());
-  }
-
-  /**
-   * Render :func:`output` into :class:`BuildCommandOutput` instances with ANSI
-   * coloring and other fun. Modules used here are dynamically loaded separate
-   * from the normal vendor bundle. This is to reduce the size of the standard
-   * vendor bundle.
+   * Add ANSI coloring and other fun to output string. Modules used here are
+   * dynamically loaded separate from the normal vendor bundle. This is to
+   * reduce the size of the standard vendor bundle.
    *
-   * This directly manipulates the obervable array :attr:`output_lines`.
+   * @param {string} output - The output string to colorize
+   * @returns {Promise}
    */
-  render_output() {
+  color_output(output) {
     // Dynamically load expensive chunks. These will be kept out of the normal
     // vendor bundle.
-    Promise.all([
+    return Promise.all([
       import(
         /* webpackChunkName: 'ansi_up' */
         "ansi_up"
@@ -161,26 +164,24 @@ class BuildCommand {
       // Build output lines
       let ansi_up = new AnsiUp();
       ansi_up.use_classes = true;
-      let output = ansi_up.ansi_to_html(this.output());
+      output = ansi_up.ansi_to_html(output);
       output = sanitize_html(output, {
         allowedTags: ["span"],
         allowedAttributes: { span: ["class"] },
       });
-
-      var output_lines = output.split(/\n/);
-      this.output_lines(
-        output_lines.map((line, index) => {
-          return new BuildCommandOutput(
-            {
-              command: this,
-              output: line,
-              line_number: index + 1,
-            },
-            this.view
-          );
-        })
-      );
+      return output;
     });
+  }
+
+  /**
+   * Toggle :func:`is_expanded`, used to expand command output
+   *
+   * This is triggered by a click event, so ``false`` is returned to avoid
+   * default behavior and event propagation.
+   */
+  toggle_expanded() {
+    this.is_expanded(!this.is_expanded());
+    return false;
   }
 }
 
@@ -219,7 +220,7 @@ export class BuildDetailView {
     this.finished = ko.computed(() => {
       return this.state() === "finished";
     });
-    /** @observable {Boolean} Is the build data loading? */
+    /** @observable {Boolean} Have we received data from the API yet? */
     this.is_loading = ko.observable(true);
 
     /** SUI progress module config/behavior
@@ -272,7 +273,7 @@ export class BuildDetailView {
       .extend({
         // Debounce API updates, so we aren't triggering this once for each
         // observable update -- from the API response for example.
-        throttle: 500,
+        deferred: true,
       });
 
     // Date and time manipulation
@@ -300,6 +301,8 @@ export class BuildDetailView {
     });
 
     /* Output */
+    /** @observable {Object} Build configuration used for the build */
+    this.config = ko.observable();
     /** @observable {string} The build instance to process the build */
     this.builder = ko.observable(build.builder);
     /** @observable {Array.<Object>} Build command objects as an array */
@@ -327,62 +330,46 @@ export class BuildDetailView {
      * @observable {Boolean} Build output doesn't have build commands */
     this.legacy_output = ko.observable(false);
 
-    // Anchor handling
-    /** @observable {number} The permalink anchor part for selected command id */
-    this.selected_command = ko.observable();
-    /** @observable {number} The permalink anchro part for selected command line */
+    // Selected line handling
+    /** The selected command and command line are updated when the window hash
+     * (anchor) changes. The hash is meant to be in the format of ``12--123``,
+     * which is the command id and the command id output line number.
+     * @observable {string} The window hash/anchor */
+    this.selected_hash = ko.observable(jquery(location).attr("hash"));
+    this.selected_hash.subscribe((selected_hash) => {
+      jquery(location).attr("hash", selected_hash);
+    });
+    /** @observable {BuildCommandOutput} The command line found from the selected hash*/
     this.selected_line = ko.observable();
-
-    /* Debug */
-    /** @observable {Object} Build configuration used for the build */
-    this.config = ko.observable();
-    /** @observable {Boolean} Show debug/info commands */
-    this.show_debug = ko.observable(false);
-    /** @computed {Array.<Object>} Prepend the commands with a mock command to
-     * show the generated configuration file the build used. */
-    this.commands_with_debug = ko
-      .computed(() => {
-        // Clone the commands observable to avoid altering it in place
-        let commands = ko.observableArray(this.commands.splice(0));
-        const config_command = new BuildCommand(
-          {
-            id: 0,
-            // Not `cat .readthedocs.yaml` as this is confusing, it won't match
-            // the file in the repository.
-            command: "readthedocs-build --show-config",
-            exit_code: 0,
-            run_time: 0,
-            is_debug: true,
-            output: JSON.stringify(this.config(), null, "  "),
-          },
-          this
-        );
-        commands.unshift(config_command);
-        return commands();
-      })
-      .extend({ throttle: 500 });
-
-    this.poll_api();
-  }
-
-  /**
-   * Initial static method used to create view instance and attach to DOM
-   *
-   * @returns {BuildDetailView}
-   */
-  static init(build, selector = "#build-detail") {
-    const hash = jquery(location).attr("hash");
-    build.hash = hash;
-
-    const view = new BuildDetailView(build);
-    const domobj = domobj || jquery(selector)[0];
-    ko.applyBindings(view, domobj);
-
-    jquery(window).bind("hashchange", () => {
-      view.handle_hash_change();
+    // Remove the selected state on the current/old selected line
+    this.selected_line.subscribe(
+      (selected_line_prev) => {
+        if (selected_line_prev) {
+          selected_line_prev.is_selected(false);
+        }
+      },
+      this,
+      "beforeChange"
+    );
+    // Update the new selected line
+    this.selected_line.subscribe((selected_line) => {
+      selected_line.command.is_expanded(true);
+      selected_line.is_selected(true);
+      this.selected_hash(selected_line.anchor_id());
     });
 
-    return view;
+    /* Debug */
+    /** @observable {Boolean} Show debug/info commands */
+    this.show_debug = ko.observable(false);
+
+    /** @observable {Boolean} Are we still polling the API? */
+    this.is_polling = ko.observable(true);
+    this.is_polling.subscribe((is_polling) => {
+      if (!is_polling) {
+        this.set_selected_line_from_hash(this.selected_hash());
+      }
+    });
+    this.poll_api();
   }
 
   /**
@@ -391,9 +378,6 @@ export class BuildDetailView {
    * finished, we stop recursive polling.
    */
   poll_api() {
-    if (this.finished()) {
-      return;
-    }
     jquery.getJSON(this.api_url + this.id + "/").then((data) => {
       this.date(data.date);
       this.success(data.success);
@@ -407,89 +391,126 @@ export class BuildDetailView {
       this.state(data.state);
       this.state_display(data.state_display);
 
-      const commands = this.commands();
-      if (data.commands.length !== commands.length) {
-        for (const n in data.commands) {
-          let command = data.commands[n];
-          const match = ko.utils.arrayFirst(commands, (command_cmp) => {
-            return command_cmp.id() === command.id;
-          });
-          if (!match) {
-            this.commands.push(new BuildCommand(command, this));
-          }
-        }
+      // This is a mock command used to preview the command output.
+      // TODO probably do this in the application instead
+      this.add_command({
+        id: 0,
+        command: "readthedocs-build --show-config",
+        output: JSON.stringify(data.config, null, "  "),
+        exit_code: 0,
+        run_time: 0,
+        is_debug: true,
+      });
+      for (const command of data.commands) {
+        this.add_command(command);
       }
+
+      // We've completed a request to the API. From here, we are not loading
+      // from the API, but we'll be polling until the build is finished.
       this.is_loading(false);
-      this.handle_hash_change();
     });
 
     // Continually poll API while build is not finished. If it is in a finished
-    // state, this method will return without setting another timer.
-    setTimeout(() => {
-      this.poll_api();
-    }, 2000);
+    // state, this method will return without setting another timer. We do not
+    // updated :attr:`is_polling` by computed/subscription as we want to ensure
+    // this update happens at the very end of API updates instead.
+    if (this.finished()) {
+      this.is_polling(false);
+    } else {
+      setTimeout(() => {
+        this.poll_api();
+      }, 2000);
+    }
+  }
+
+  /** Add a command to :attr:`commands` if it doesn't already exist
+   *
+   * @param {Object} command - Build command API data structure
+   */
+  add_command(command) {
+    const command_found = ko.utils.arrayFirst(
+      this.commands(),
+      (command_search) => {
+        return command_search.id() === command.id;
+      }
+    );
+    if (!command_found) {
+      this.commands.push(new BuildCommand(command));
+    }
   }
 
   /**
-   * Get a reference id for a command output line. This may not be used anymore.
+   * Set the selected line and focus on the new selected element
    *
-   * @param {number} command_id - Build comand id
-   * @param {number} line_number - Build command output line number
-   * @returns {string}
+   * This is called from :meth:`set_selected_line_from_hash`, but also from the
+   * line number link click event. We return ``false`` at the end to avoid the
+   * default behavior and event propagation.
+   *
+   * @param {BuildCommandOutput} selected_line - Command output line to target
    */
-  line_number(command_id, line_number) {
-    return command_id + "--" + line_number;
+  set_selected_line(selected_line) {
+    this.selected_line(selected_line);
+    // The attribute ``data-selected`` is set in the templates. This isn't
+    // ideal, but easier than a custom KO plugin.
+    const elem = document.querySelector("[data-selected=true]");
+    if (elem) {
+      if (elem.scrollIntoView) {
+        // Try modern centered focus on element, instead of focus at the top of
+        // the viewport.
+        elem.scrollIntoView({
+          behavior: "auto",
+          block: "center",
+          inline: "center",
+        });
+      } else {
+        // Back up to the default focus for old browsers
+        jquery(elem).focus();
+      }
+    }
+    return false;
   }
 
   /**
-   * Update this view's selected command and command line when the window hash
-   * (anchor) changes. The hash is meant to be in the format of ``12--123``,
-   * which is the command id and the command id output line index. This is
-   * updated on the view, but observable :func:`BuildCommandOutput.is_highlighted`
-   * uses the state change from this instance to update the DOM.
+   * Set the selected line by looking up the line that corresponds to the
+   * selected anchor hash.
    *
-   * This iterates over :func:`commands` to find a :class:`BuildCommand` with a
-   * matching id, and then calls :func:`BuildCommand.is_showing` to set the
-   * observable true.
+   * This loops over the commands and lines to reduce the number of operations.
+   * Normally, :attr:`BuildCommandOutput.is_selected` might be a computed
+   * observable, but then updates to the selected line are always O(n), for
+   * every line of output, across all commands. We can reduce this greatly by
+   * iterating over commands, then command lines.
+   *
+   * @param {string} selected_hash - Hash to lookup
    */
-  handle_hash_change() {
-    const hash = jquery(location).attr("hash");
-    const re_hash = /^#(\d+)--(\d+)$/;
+  set_selected_line_from_hash(selected_hash) {
+    const re_hash = /^#(\d+)--(\d+)$/; // (?:$|(\d+)$)/; // multiple lines!
 
-    if (hash) {
-      // Update selected command and line
-      let found = hash.match(re_hash);
+    if (selected_hash) {
+      let found = selected_hash.match(re_hash);
 
       if (!found) {
         return;
       }
 
-      const selected_command = found[1];
-      const selected_line = found[2];
-      this.selected_command(selected_command);
-      this.selected_line(selected_line);
+      const selected_command = ko.utils.arrayFirst(
+        this.commands(),
+        (command_search) => {
+          return command_search.id() == found[1];
+        }
+      );
+      if (selected_command) {
+        const selected_line = ko.utils.arrayFirst(
+          selected_command.output_lines(),
+          (output_line) => {
+            return output_line.line_number() == found[2];
+          }
+        );
 
-      // Iterate over commands to find a match and show the command
-      for (const command of this.commands()) {
-        if (command.id() == selected_command) {
-          command.is_showing(true);
+        if (selected_line) {
+          this.set_selected_line(selected_line);
         }
       }
-      jquery(hash).focus();
-
-      // Stop processing the event to avoid page reload/etc
-      return false;
     }
-  }
-
-  /* Debugging method for loading content from the main site */
-  // TODO remove this after debug phase, it's only useful locally
-  load_remote_build(build_id) {
-    this.id = build_id;
-    this.api_url = "https://readthedocs.org/api/v2/build/";
-    this.state("triggered");
-    this.commands([]);
-    this.poll_api();
   }
 
   // TODO is this needed? This is likely old view cruft
