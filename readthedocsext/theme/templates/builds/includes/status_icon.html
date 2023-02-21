@@ -6,6 +6,8 @@
   {% else %}
     <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}red {% if circular %}inverted circular {% endif %}fa-solid fa-xmark icon"></i>
   {% endif %}
+{% elif build.state == 'cancelled' %}
+  <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}yellow {% if circular %}inverted circular {% endif %}fa-solid fa-stop icon" title="{% trans 'Build cancelled' %}"></i>
 {% elif build.is_stale %}
   <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}orange {% if circular %}inverted circular {% endif %}fa-solid fa-exclamation icon" title="{% trans 'This build is still waiting to be built' %}"></i>
 {% else %}

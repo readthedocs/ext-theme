@@ -23,6 +23,7 @@
         {% block build_detail_metadata_left %}
         <div class="ui eleven wide column">
           <div class="ui header">
+            {% include "builds/includes/status_icon.html" with build=build circular=True %}
             {% blocktrans trimmed with build_id=build.pk %}
               Build #{{ build_id }}
             {% endblocktrans %}
@@ -62,14 +63,15 @@
               </div>
             </div>
 
+            {# Version type is static, so we can skip some KO code #}
             <div class="item">
-              <i class="grey fa-duotone fa-tag icon"></i>
+              <i class="grey fa-duotone {{ build.is_external | yesno:"fa-code-merge,fa-tag" }} icon"></i>
               <div class="content" data-bind="if: !is_loading()">
                 {% if build.is_external %}
                   {% blocktrans with build.external_version_name as external_version_name %}
                     {{ external_version_name }}
                   {% endblocktrans %}
-                  <a href="{{ build.version.vcs_url }}"><code>{{ build.version.verbose_name }}</code></a>
+                  <a href="{{ build.version.vcs_url }}"><code>#{{ build.version.verbose_name | title }}</code></a>
                 {% else %}
                   <code>
                     <a href="{% url "builds_project_list" build.version.project.slug %}?version={{ build.version.slug }}">
@@ -174,7 +176,7 @@
               <td>
                 <code class="ui text" data-bind="text: command, class: command_class, click: toggle_expanded"></code>
                 <a class="ui mini inverted label" data-bind="text: run_time() + 's'"></a>
-                <a class="ui mini red label" data-bind="text: '{% trans "Exit" %}: ' + exit_code(), visible: exit_code() > 0"></a>
+                <a class="ui mini inverted label" data-bind="text: '{% trans "Exit" %}: ' + exit_code(), visible: exit_code() > 0"></a>
               </td>
             </tr>
           </tbody>

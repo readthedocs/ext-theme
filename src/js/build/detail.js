@@ -67,8 +67,12 @@ class BuildCommand {
     /** @observable {number} Build command posix exit code */
     this.exit_code = ko.observable(build_command.exit_code || 0);
     /** @computed {Boolean} Was :func:`exit_code` successful? */
-    this.successful = ko.computed(() => {
+    this.is_successful = ko.computed(() => {
       return this.exit_code() === 0;
+    });
+    /** @computed {Boolean} Did command emit exit code 183? */
+    this.is_cancelled = ko.computed(() => {
+      return this.exit_code() === 183;
     });
     /** @observable {number} Command run time in seconds */
     this.run_time = ko.observable(build_command.run_time);
@@ -94,8 +98,10 @@ class BuildCommand {
     this.command_class = ko.computed(() => {
       if (this.is_debug()) {
         return "grey";
+      } else if (this.is_cancelled()) {
+        return "yellow";
       } else {
-        return this.successful() ? "olive" : "red";
+        return this.is_successful() ? "olive" : "red";
       }
     });
 
@@ -218,7 +224,7 @@ export class BuildDetailView {
     this.state_display = ko.observable(build.state_display);
     /** @computed {Boolean} Is the build in a finished state? */
     this.finished = ko.computed(() => {
-      return this.state() === "finished";
+      return ["finished", "cancelled"].includes(this.state());
     });
     /** @observable {Boolean} Have we received data from the API yet? */
     this.is_loading = ko.observable(true);
@@ -250,8 +256,13 @@ export class BuildDetailView {
           };
         } else {
           if (this.finished()) {
-            const has_failed = this.error() || this.success() === false;
-            if (has_failed) {
+            const is_cancelled = state === "cancelled";
+            const is_failed = this.error() || this.success() === false;
+            if (is_cancelled) {
+              return (progress) => {
+                progress("set warning", "Build cancelled");
+              };
+            } else if (is_failed) {
               return (progress) => {
                 // TODO translate this in the application or templates
                 progress("set error", "Build failed");
