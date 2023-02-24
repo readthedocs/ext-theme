@@ -61,8 +61,8 @@
 
     <div class="ui ten wide tablet four wide computer column">
       <h2 class="ui small header">{% trans "Help topics" %}</h2>
-      <div data-embed-doc-view="intro/import-guide"
-           data-bind="template: { name: 'doc-topics' }">
+      <div data-bind="using: EmbedTopicsView('intro/import-guide')">
+        <div data-bind="template: { name: 'doc-topics' }"></div>
       </div>
     </div>
   </div>
