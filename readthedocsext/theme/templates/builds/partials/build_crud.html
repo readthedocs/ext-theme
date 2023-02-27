@@ -68,8 +68,8 @@
 
   {% if object.is_external %}
     <div class="ui label">
-      <i class="fa-solid fa-hashtag icon"></i>
-      {{ object.external_version_name }}
+      <i class="fa-solid fa-code-pull-request icon"></i>
+      {{ object.external_version_name | lower | capfirst }}
     </div>
   {% endif %}
 
@@ -86,6 +86,12 @@
     <a href="{{ object.get_commit_url }}" class="item">
       <i class="fa-duotone fa-code-branch icon"></i>
       <code>{{ object.commit|slice:"0:8" }}</code>
+    </a>
+  {% endif %}
+  {% if object.is_external %}
+    <a href="{{ object.version.vcs_url }}" class="item">
+      <i class="fa-duotone fa-code-pull-request icon"></i>
+      <code>#{{ object.version.verbose_name }}</code>
     </a>
   {% endif %}
 {% endblock list_item_meta %}
