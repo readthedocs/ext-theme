@@ -56,13 +56,6 @@
               </div>
             </div>
 
-            <div class="item">
-              <i class="grey fa-duotone fa-code-branch icon"></i>
-              <div class="content" data-bind="if: !is_loading()">
-                <a data-bind="attr: {href: commit_url}"><code data-bind="text: commit_short"></code></a>
-              </div>
-            </div>
-
             {# Version type is static, so we can skip some KO code #}
             <div class="item">
               <i class="grey fa-duotone {{ build.is_external | yesno:"fa-code-merge,fa-tag" }} icon"></i>
@@ -79,6 +72,13 @@
                     </a>
                   </code>
                 {% endif %}
+              </div>
+            </div>
+
+            <div class="item" data-bind="visible: commit_short">
+              <i class="grey fa-duotone fa-code-branch icon"></i>
+              <div class="content" data-bind="if: !is_loading()">
+                <a data-bind="attr: {href: commit_url}"><code data-bind="text: commit_short"></code></a>
               </div>
             </div>
 
