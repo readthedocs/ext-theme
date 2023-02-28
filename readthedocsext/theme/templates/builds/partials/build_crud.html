@@ -68,22 +68,30 @@
 
   {% if object.is_external %}
     <div class="ui label">
-      <i class="fa-solid fa-hashtag icon"></i>
-      {{ object.external_version_name }}
+      <i class="fa-solid fa-code-pull-request icon"></i>
+      {{ object.external_version_name | lower | capfirst }}
     </div>
   {% endif %}
 
 {% endblock list_item_header %}
 
 {% block list_item_meta %}
-  <a href="{{ object.commit_url }}" class="item">
-    <i class="fa-duotone fa-code-branch icon"></i>
-    <code>{{ object.commit|slice:"0:8" }}</code>
-  </a>
-  <div class="item">
+  <div class="item" data-bind="semanticui: { popup: { content: '{{ object.date }}', position: 'top center', delay: { show: 500 }, variation: 'small'}}">
     <i class="fa-duotone fa-clock icon"></i>
     {% blocktrans with object.date|timesince as date trimmed %}
       {{ date }} ago
     {% endblocktrans %}
   </div>
+  {% if object.commit %}
+    <a href="{{ object.get_commit_url }}" class="item">
+      <i class="fa-duotone fa-code-branch icon"></i>
+      <code>{{ object.commit|slice:"0:8" }}</code>
+    </a>
+  {% endif %}
+  {% if object.is_external %}
+    <a href="{{ object.version.vcs_url }}" class="item">
+      <i class="fa-duotone fa-code-pull-request icon"></i>
+      <code>#{{ object.version.verbose_name }}</code>
+    </a>
+  {% endif %}
 {% endblock list_item_meta %}

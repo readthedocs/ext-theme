@@ -56,22 +56,13 @@
               </div>
             </div>
 
-            <div class="item">
-              <i class="grey fa-duotone fa-code-branch icon"></i>
-              <div class="content" data-bind="if: !is_loading()">
-                <a data-bind="attr: {href: commit_url}"><code data-bind="text: commit_short"></code></a>
-              </div>
-            </div>
-
             {# Version type is static, so we can skip some KO code #}
             <div class="item">
-              <i class="grey fa-duotone {{ build.is_external | yesno:"fa-code-merge,fa-tag" }} icon"></i>
+              <i class="grey fa-duotone {{ build.is_external | yesno:"fa-code-pull-request,fa-tag" }} icon"></i>
               <div class="content" data-bind="if: !is_loading()">
                 {% if build.is_external %}
-                  {% blocktrans with build.external_version_name as external_version_name %}
-                    {{ external_version_name }}
-                  {% endblocktrans %}
-                  <a href="{{ build.version.vcs_url }}"><code>#{{ build.version.verbose_name | title }}</code></a>
+                  {{ build.external_version_name | lower | capfirst }}
+                  <a href="{{ build.version.vcs_url }}"><code>#{{ build.version.verbose_name }}</code></a>
                 {% else %}
                   <code>
                     <a href="{% url "builds_project_list" build.version.project.slug %}?version={{ build.version.slug }}">
@@ -79,6 +70,13 @@
                     </a>
                   </code>
                 {% endif %}
+              </div>
+            </div>
+
+            <div class="item" data-bind="visible: commit_short">
+              <i class="grey fa-duotone fa-code-branch icon"></i>
+              <div class="content" data-bind="if: !is_loading()">
+                <a data-bind="attr: {href: commit_url}"><code data-bind="text: commit_short"></code></a>
               </div>
             </div>
 

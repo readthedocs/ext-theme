@@ -21,12 +21,15 @@ export function poll_task(data) {
         }
       })
       .fail(function (error) {
-        console.error("Error polling task:", error);
+        console.error("Error polling task");
         tries -= 1;
         if (tries > 0) {
           setTimeout(poll_task_loop, 2000);
         } else {
-          var error_msg = error.responseJSON.detail || error.statusText;
+          let error_msg = error.statusText;
+          if (error.responseJSON) {
+            error_msg = error.responseJSON.detail;
+          }
           defer.reject({ message: error_msg });
         }
       });
