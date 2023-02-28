@@ -8,7 +8,8 @@
       background: fadeout(@white, 85%);
     }
 
-    &.command a {
+    &.command a,
+    &.command > td > code {
       cursor: pointer;
     }
   }

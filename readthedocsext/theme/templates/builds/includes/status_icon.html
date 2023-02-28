@@ -2,10 +2,12 @@
 
 {% if build.state == 'finished' %}
   {% if build.success %}
-    <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}olive {% if circular %}inverted circular {% endif %}fa-solid fa-check icon"></i>
+    <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}green {% if circular %}inverted circular {% endif %}fa-solid fa-check icon"></i>
   {% else %}
     <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}red {% if circular %}inverted circular {% endif %}fa-solid fa-xmark icon"></i>
   {% endif %}
+{% elif build.state == 'cancelled' %}
+  <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}yellow {% if circular %}inverted circular {% endif %}fa-solid fa-stop icon" title="{% trans 'Build cancelled' %}"></i>
 {% elif build.is_stale %}
   <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}orange {% if circular %}inverted circular {% endif %}fa-solid fa-exclamation icon" title="{% trans 'This build is still waiting to be built' %}"></i>
 {% else %}

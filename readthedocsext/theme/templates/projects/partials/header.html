@@ -68,24 +68,11 @@ is_expanded (default: False)
           </div>
         {% endblock project_header_title %}
 
-        {% block project_header_repo %}
+        {% block project_header_labels %}
           <div class="right aligned eight wide computer sixteen wide tablet column">
-            {% if use_input %}
-              <div class="ui left icon action fluid input">
-                <i class="fad fa-link icon"></i>
-                <input type="text" readonly="" value="{{ project.repo }}">
-                <button class="ui teal icon button">
-                  <i class="fad fa-copy icon"></i>
-                </button>
-              </div>
-            {% else %}
-              <a href="{{ project.repo }}">
-                <i class="fad fa-link icon"></i>
-                <code>{{ project.repo }}</code>
-              </a>
-            {% endif %}
+            {% include "includes/components/config_label.html" with icon="fa-solid fa-language" text=project.language|upper popup=project.language|language_name_local %}
           </div>
-        {% endblock project_header_repo %}
+        {% endblock project_header_labels %}
 
         {% block project_header_metadata_left %}
           <div class="eight wide computer sixteen wide tablet column" data-bind="visible: is_expanded" style="display: none;">
@@ -182,6 +169,26 @@ is_expanded (default: False)
 
         {% block project_header_metadata_right %}
           <div class="right aligned eight wide computer sixteen wide tablet column" data-bind="visible: is_expanded" style="display: none;">
+
+            {% block project_header_repository %}
+              <div class="ui sub header">
+                {% trans "Repository" %}
+              </div>
+              
+              {% if project.remote_repository %}
+                {% with repo=project.remote_repository %}
+                  <a href="{{ repo.html_url }}">
+                    <img class="ui avatar image" src="{{ repo.avatar_url }}" />
+                    <code>{{ repo.full_name }}</code>
+                  </a>
+                {% endwith %}
+              {% else %}
+                <a href="{{ project.repo }}">
+                  <i class="fad fa-link icon"></i>
+                  <code>{{ project.repo }}</code>
+                </a>
+              {% endif %}
+            {% endblock project_header_repository %}
 
             {% block project_header_maintainers %}
               <div class="ui sub header">

@@ -19,13 +19,12 @@ class RemoteRepository {
       this[key] = remote_repo[key];
     }
 
-    // Get project attributes from API using project PK
-    const project_pk = this.project;
-    /** @observable {Object} Project API data loaded async */
-    this.project = ko.observable();
-    if (project_pk) {
-      this.get_project(project_pk);
-    }
+    /** @observable {Array.<string>} List of projects attached to the repo */
+    this.projects = ko.observableArray(
+      this.matches.map((match) => {
+        return match.url;
+      })
+    );
 
     /** @observable {Boolean} Is this repository private? */
     this.is_private = ko.observable(this.private);
@@ -33,32 +32,15 @@ class RemoteRepository {
     this.is_active = ko.observable(this.active);
     /** @computed {Boolean} Can user import this repository? */
     this.is_locked = ko.computed(() => {
-      // TODO take stack private repo support into consideration
+      // TODO take platform private repo setting into consideration
       return this.is_private() && !this.has_admin();
     });
     /** @observable {Boolean} Does user have admin privilege on the repo? */
     this.has_admin = ko.observable(this.admin);
     /** @observable {Boolean} Was the repository already imported? */
-    this.has_project = ko.observable(false);
-  }
-
-  /**
-   * Get project data from API
-   *
-   * @param {number} pk - Project pk to fetch
-   */
-  get_project(pk) {
-    // TODO convert to APIv3 and hopefully use a URL field from the
-    // RemoteRepository APIv3 response to link here, instead of hardcoding.
-    const url = "/api/v2/project/" + pk + "/";
-
-    let promise = jquery.getJSON(url).done((response) => {
-      response.url = "/projects/" + response.slug;
-      this.project(response);
-      this.has_project(true);
+    this.has_project = ko.computed(() => {
+      return this.projects().length > 0;
     });
-
-    return promise;
   }
 }
 
@@ -80,8 +62,6 @@ export class ProjectCreateView extends ResponsiveView {
     /** Configuration passed in via :func:`~application.plugins.jsonInit`
      * @observable {Object} Search configuration */
     this.search_config = ko.observable();
-    /** @observable {Array<RemoteRepository>} List of remote repo objects */
-    this.remote_repos = ko.observableArray();
     /** @observable {Object} The selected repository */
     this.selected = ko.observable();
     /** @observable {Boolean} Is UI loading from the API currently? */
@@ -92,6 +72,8 @@ export class ProjectCreateView extends ResponsiveView {
     this.is_selected = ko.computed(() => {
       return this.selected() !== undefined;
     });
+    /** @observable {string} The error message to show the user */
+    this.error = ko.observable();
 
     // Wait for config to be loaded to init search
     this.config.subscribe((config) => {
@@ -120,7 +102,8 @@ export class ProjectCreateView extends ResponsiveView {
     let promise = tasks
       .trigger_task(params)
       .fail((error) => {
-        console.log(error);
+        console.error("Error syncing remote repositories:", error.message);
+        this.error(error.message);
       })
       .always(() => {
         this.is_syncing(false);
@@ -146,6 +129,7 @@ export class ProjectCreateView extends ResponsiveView {
   init_search() {
     const config = this.config();
     const url = config.urls.remoterepository_list + "?full_name={query}";
+
     this.search_config({
       // We use a Knockout template here, embedded in the template as a script
       // element. This avoids string interpolation in JS and keeps HTML in one
@@ -158,7 +142,11 @@ export class ProjectCreateView extends ResponsiveView {
           ko.applyBindingsToNode(node_temp[0], {
             template: {
               name: "remote-repo-results",
-              data: response,
+              data: {
+                remote_repos: response.results.map((repo) => {
+                  return new RemoteRepository(repo);
+                }),
+              },
             },
           });
 

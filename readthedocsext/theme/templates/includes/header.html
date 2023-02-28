@@ -107,7 +107,7 @@ active_item
                   {% if request.user.is_authenticated %}
                     <div class="item">
                       <div class="ui top right pointing wide dropdown" data-bind="semanticui: {dropdown: {action: 'select', displayType: 'block'}}">
-                        <img class="ui avatar image" src="{% gravatar_url request.user.email 16 %}" />
+                        <img class="ui avatar image" src="{% gravatar_url request.user.email 64 %}" />
                         <i class="fa-solid fa-caret-down icon"></i>
                         <div class="wide menu">
                           {% include "includes/utils/header_menus.html" %}
