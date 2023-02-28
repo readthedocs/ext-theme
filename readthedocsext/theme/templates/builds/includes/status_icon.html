@@ -2,7 +2,7 @@
 
 {% if build.state == 'finished' %}
   {% if build.success %}
-    <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}olive {% if circular %}inverted circular {% endif %}fa-solid fa-check icon"></i>
+    <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}green {% if circular %}inverted circular {% endif %}fa-solid fa-check icon"></i>
   {% else %}
     <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}red {% if circular %}inverted circular {% endif %}fa-solid fa-xmark icon"></i>
   {% endif %}
