@@ -20,41 +20,13 @@ is_expanded (default: False)
 {% endcomment %}
 
 {% block project_header %}
-  {% comment %}
-    {# Project list link and separator #}
-    <a class="section" href="{% url "projects_dashboard" %}">Projects</a>
-    <i class="fa-duotone fa-chevron-right"></i>
-
-    {% for user in project.users.all %}
-    <!--
-      <a href="{% url "profiles_profile_detail" user.username %}">
-      <img class="ui avatar image" src="{% gravatar_url user.email 24 %}" data-title="{{ user.username }}" data-content="{{ user.username }}">
-      </a>
-    -->
-    <div class="ui image label">
-      <img src="{% gravatar_url user.email 24 %}">
-      {{ user.username }}
-    </div>
-    {% endfor %}
-
-      <div class="ui horizontal list">
-        {% if request.user.is_authenticated %}
-          <div class="item {{ tools_active }}">
-            <a href="{% url 'project_embed' project.slug %}">
-              {% trans "Tools" %}
-            </a>
-          </div>
-        {% endif %}
-      </div>
-
-  {% endcomment %}
   <div class="ui top attached segment" data-bind="using: ProjectHeaderView({{ is_expanded|yesno:"true,false" }})">
 
     {% block project_header_metadata %}
       <div class="ui stacking grid">
 
         {% block project_header_title %}
-          <div class="eight wide computer sixteen wide tablet column">
+          <div class="eight wide computer eight wide tablet sixteen wide mobile column">
             <div class="ui medium monospace header">
               <a href="{{ project.get_absolute_url }}">
                 {{ project.name | default:project.slug }}
@@ -69,13 +41,16 @@ is_expanded (default: False)
         {% endblock project_header_title %}
 
         {% block project_header_labels %}
-          <div class="right aligned eight wide computer sixteen wide tablet column">
+          <div class="right aligned eight wide computer eight wide tablet sixteen wide left aligned mobile column">
             {% include "includes/components/config_label.html" with icon="fa-solid fa-language" text=project.language|upper popup=project.language|language_name_local %}
+            {% for organization in project.organizations.all %}
+              {% include "includes/components/config_label.html" with icon="fa-solid fa-building" text=organization.name url=organization.get_absolute_url %}
+            {% endfor %}
           </div>
         {% endblock project_header_labels %}
 
         {% block project_header_metadata_left %}
-          <div class="eight wide computer sixteen wide tablet column" data-bind="visible: is_expanded" style="display: none;">
+          <div class="eight wide computer eight wide tablet sixteen wide mobile column" data-bind="visible: is_expanded" style="display: none;">
 
             {% block project_header_description %}
               {% if project.description %}
@@ -168,27 +143,7 @@ is_expanded (default: False)
         {% endblock project_header_metadata_left %}
 
         {% block project_header_metadata_right %}
-          <div class="right aligned eight wide computer sixteen wide tablet column" data-bind="visible: is_expanded" style="display: none;">
-
-            {% block project_header_repository %}
-              <div class="ui sub header">
-                {% trans "Repository" %}
-              </div>
-              
-              {% if project.remote_repository %}
-                {% with repo=project.remote_repository %}
-                  <a href="{{ repo.html_url }}">
-                    <img class="ui avatar image" src="{{ repo.avatar_url }}" />
-                    <code>{{ repo.full_name }}</code>
-                  </a>
-                {% endwith %}
-              {% else %}
-                <a href="{{ project.repo }}">
-                  <i class="fad fa-link icon"></i>
-                  <code>{{ project.repo }}</code>
-                </a>
-              {% endif %}
-            {% endblock project_header_repository %}
+          <div class="right aligned eight wide computer eight wide tablet sixteen wide mobile column" data-bind="visible: is_expanded" style="display: none;">
 
             {% block project_header_maintainers %}
               <div class="ui sub header">
@@ -214,6 +169,26 @@ is_expanded (default: False)
                   
               </div>
             {% endblock project_header_maintainers %}
+
+            {% block project_header_repository %}
+              <div class="ui sub header">
+                {% trans "Repository" %}
+              </div>
+              
+              {% if project.remote_repository %}
+                {% with repo=project.remote_repository %}
+                  <a href="{{ repo.html_url }}" class="ui basic image nowrap label">
+                    <img src="{{ repo.avatar_url }}" />
+                    <code>{{ repo.full_name }}</code>
+                  </a>
+                {% endwith %}
+              {% else %}
+                <a href="{{ project.repo }}" class="ui basic nowrap label">
+                  <i class="fas fa-code-fork icon"></i>
+                  <code>{{ project.repo }}</code>
+                </a>
+              {% endif %}
+            {% endblock project_header_repository %}
 
           </div>
         {% endblock project_header_metadata_right %}
