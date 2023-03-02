@@ -117,7 +117,13 @@ export class Application {
     // Enable popup functionality with a broad CSS selector here because
     // `data-content` is very basic usage of a popup. Anything more complicated
     // should use the semanticui KO plugin.
-    jquery(".ui[data-content]:not([data-semanticui-popup])").popup();
+    jquery("[data-content]:not([data-semanticui-popup])").popup({
+      position: "top center",
+      delay: {
+        show: 500,
+      },
+      variation: "small",
+    });
     jquery(".ui.menu > .item[data-tab]").tab();
 
     // Initialize clipboard, but only for data-clipboard-text. This is the most

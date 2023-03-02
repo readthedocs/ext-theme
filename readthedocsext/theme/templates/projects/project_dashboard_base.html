@@ -10,6 +10,47 @@
   {% url "projects_import" as projects_import_url %}
   {% url "socialaccount_connections" as social_accounts %}
 
-  {# TODO ??? {% include "projects/partials/project_list.html" with objects=filter.qs %} #}
-  {% include "projects/partials/project_list.html" with objects=project_list %}
+  <div class="ui stackable grid">
+    <div class="eleven wide computer sixteen wide tablet column">
+      {% include "projects/partials/project_list.html" with objects=project_list %}
+    </div>
+    <div class="five wide computer only column">
+      <div class="ui one cards">
+
+        <div class="basic card">
+          <div class="content">
+            <a class="header" href="https://docs.readthedocs.io/en/stable/">
+              {% trans "Learn more" %}
+            </a>
+            <div class="meta">{% trans "Some resources from our documentation" %}</div>
+            <div class="description">
+              <div class="ui bulleted list">
+                <a class="item" href="https://docs.readthedocs.io/en/stable/tutorial/index.html" target="_blank">
+                  Read the Docs tutorial
+                  <i class="fas fa-external-link small light grey middle aligned icon"></i>
+                </a>
+                <a class="item" href="https://docs.readthedocs.io/en/stable/intro/getting-started-with-sphinx.html" target="_blank">
+                  Getting started with Sphinx
+                  <i class="fas fa-external-link small light grey middle aligned icon"></i>
+                </a>
+                <a class="item" href="https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html" target="_blank">
+                  Getting started with MkDocs
+                  <i class="fas fa-external-link small light grey middle aligned icon"></i>
+                </a>
+                <a class="item" href="https://docs.readthedocs.io/en/stable/config-file/index.html" target="_blank">
+                  Configuration file reference
+                  <i class="fas fa-external-link small light grey middle aligned icon"></i>
+                </a>
+                <a class="item" href="https://docs.readthedocs.io/en/stable/build-customization.html" target="_blank">
+                  Build process customization
+                  <i class="fas fa-external-link small light grey middle aligned icon"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 {% endblock content %}

@@ -1,4 +1,4 @@
-{% extends "includes/crud/list.html" %}
+{% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
 
@@ -39,59 +39,68 @@
 
 {% block list_placeholder_icon_class %}{% endblock %}
 {% block list_placeholder_header %}
-  This project doesn't have any builds yet.
+  {% trans "This project doesn't have any builds yet." %}
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
-  <div class="ui primary button">Learn how to get started</div>
+  <div class="ui primary button">{% trans "Learn how to get started" %}</div>
 {% endblock list_placeholder_text %}
 
-{% block list_item_right_buttons %}
+{% block list_item_right_menu %}
   {% if request.user|is_admin:project %}
     <form method="post" action="{% url "projects_detail" project.slug %}">
       {% csrf_token %}
       <input type="hidden" name="version_slug" value="{{ object.version.slug }}">
-      <button class="ui icon button" data-content="{% trans "Rebuild" %}">
-        <i class="fa-solid fa-refresh icon"></i>
-      </button>
+      <div class="ui small icon buttons">
+
+        {% blocktrans with version=object.version.verbose_name trimmed asvar text_refresh %}
+          Retry build for version {{ version }}
+        {% endblocktrans %}
+        <button class="ui button" data-content="{{ text_refresh }}" aria-label="{{ text_fresh }}">
+          <i class="fa-solid fa-refresh icon"></i>
+        </button>
+
+      </div>
     </form>
   {% endif %}
-{% endblock list_item_right_buttons %}
+{% endblock list_item_right_menu %}
+
+{% block list_item_icon %}
+  {% include "builds/includes/status_icon.html" with build=object circular=True %}
+{% endblock list_item_icon %}
 
 {% block list_item_header %}
-
-  {% include "builds/includes/status_icon.html" with build=object circular=True %}
-
-  <a class="ui basic label" href="{{ object.get_absolute_url }}">
-    <code>{{ object.version.verbose_name }}</code>
-    <span class="detail">#{{ object.pk }}</span>
+  <a href="{{ object.get_absolute_url }}">
+    {{ object.version.verbose_name }} #{{ object.pk }}
   </a>
-
-  {% if object.is_external %}
-    <div class="ui label">
-      <i class="fa-solid fa-code-pull-request icon"></i>
-      {{ object.external_version_name | lower | capfirst }}
+  <div class="sub header">
+    <div class="item" data-bind="semanticui: { popup: { content: '{{ object.date }}', position: 'top center', delay: { show: 500 }, variation: 'small'}}">
+      {# Translators: this will read like "Started 1 month, 3 days ago" #}
+      {% blocktrans with object.date|timesince as date trimmed %}
+        Started {{ date }} ago
+      {% endblocktrans %}
     </div>
-  {% endif %}
-
+  </div>
 {% endblock list_item_header %}
 
-{% block list_item_meta %}
-  <div class="item" data-bind="semanticui: { popup: { content: '{{ object.date }}', position: 'top center', delay: { show: 500 }, variation: 'small'}}">
-    <i class="fa-duotone fa-clock icon"></i>
-    {% blocktrans with object.date|timesince as date trimmed %}
-      {{ date }} ago
-    {% endblocktrans %}
-  </div>
-  {% if object.commit %}
-    <a href="{{ object.get_commit_url }}" class="item">
-      <i class="fa-duotone fa-code-branch icon"></i>
-      <code>{{ object.commit|slice:"0:8" }}</code>
-    </a>
-  {% endif %}
+{% block list_item_meta_items %}
   {% if object.is_external %}
-    <a href="{{ object.version.vcs_url }}" class="item">
+    <a href="{{ object.version.vcs_url }}" class="item" >
       <i class="fa-duotone fa-code-pull-request icon"></i>
       <code>#{{ object.version.verbose_name }}</code>
     </a>
   {% endif %}
-{% endblock list_item_meta %}
+{% endblock list_item_meta_items %}
+
+{% block list_item_extra_items %}
+  {% if object.commit %}
+    {% with commit=object.commit|slice:"0:8" %}
+      {% blocktrans with commit=commit trimmed asvar text_commit %}
+        View commit {{ commit }}
+      {% endblocktrans %}
+      <a href="{{ object.get_commit_url }}" class="item" aria-label="{{ text_commit }}">
+        <i class="fa-duotone fa-code-commit icon"></i>
+        <code>{{ commit }}</code>
+      </a>
+    {% endwith %}
+  {% endif %}
+{% endblock list_item_extra_items %}
