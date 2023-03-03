@@ -1,0 +1,317 @@
+{% comment "rst" %}
+  Shared list base
+  ================
+
+  ``includes/crud/list.html``
+
+  This is the shared template that is used to produce a consistent list view.
+  All list views extend this common template, and so all list views share layout
+  and  functionality.
+
+  Template parameters
+  -------------------
+
+  .. describe:: objects
+
+      This is the queryset instance that the list view will iterate over. Views
+      use the context variable ``objects`` by default, but some of our views can
+      also use custom context variables, like ``projects`` or ``project_objects``.
+
+  .. describe:: skip_pagination
+
+      **Boolean, default=False**. Skip pagination calls and links
+
+  List top menu blocks
+  --------------------
+
+  .. describe:: view_binding
+
+      This is used to apply a Knockout ``data-bind``, used when the list is
+      JS/Knockout driven UI. This is the case for any list view that has dynamic
+      user interactions for each list item.
+
+      .. seealso:
+          Views like the project list view and the project detail (or project
+          version list view) show how this data binding would be configured.
+
+  .. describe:: top_left_menu_items
+
+      This is the block used to add list view filter elements to the top of the
+      list.
+
+  .. describe:: top_right_menu
+
+      This is the parent element for where we will insert an "Add" button. You
+      shouldn't need to alter this unless you are doing something different
+      with this block.
+
+      Contains ``top_right_menu_items``, which similarly doesn't normally require
+      overriding, and the child ``create_button``, which is the most common to
+      override
+
+  .. describe:: top_right_menu_itmes
+
+      Similar to ``top_right_menu``, this doesn't normaly require overriding. It
+      might be used if you need multiple buttons on the top right of the list.
+
+      You most likely want to override ``create_button``
+
+  .. describe:: create_button
+
+      This is the button that will usually link to a new page, or open a modal,
+      to create a new object type for the object list -- ie, create a new webhook
+      in the webhook list view.
+
+{% endcomment %}
+
+{% load i18n %}
+{% load pagination_tags %}
+
+<div {% block view_binding %}{% endblock view_binding %}>
+  {% block top_menu %}
+    <div class="ui text menu">
+      {% block top_left_menu_items %}
+        {% comment %}
+        <div class="header item">
+          Sort by
+        </div>
+        <a class="active item">
+          Recently built
+        </a>
+        <a class="item">
+          Name
+        </a>
+        {% endcomment %}
+      {% endblock top_left_menu_items %}
+
+      {% block top_right_menu %}
+        <div class="right menu">
+          {% block top_right_menu_items %}
+            <div class="item">
+              {% block create_button %}
+                {% comment %}
+                  <button class="ui button">Add</button>
+                {% endcomment %}
+              {% endblock %}
+            </div>
+          {% endblock top_right_menu_items %}
+        </div>
+      {% endblock top_right_menu %}
+    </div>
+  {% endblock top_menu %}
+
+  {% comment %}
+    Testing for boolean here is not efficient, but we support both querysets and arrays here #}
+    {% if not objects.exists %}
+  {% endcomment %}
+  {% if not objects %}
+    {% comment "rst" %}
+      Placeholder blocks
+      ------------------
+
+      The placeholder section is visible if there are no instances in the ``objects``
+      queryset. This would usually provide some onboarding level help, directing
+      the user to docs or object creation.
+
+      .. describe:: list_placeholder
+
+          Block to replace the whole placeholder content section. Useful if you
+          want to do something custom, like a divider placeholder.
+
+      .. describe:: list_placeholder_icon
+
+          Override this if you want to remove the icon completely.
+
+      .. describe:: list_placeholder_icon_class
+
+          This is the most common to override, and just specifies the icon class
+          name to use in the placeholder header.
+
+      .. describe:: list_placeholder_header
+
+          The header text to use in the placeholder
+
+      .. describe:: list_placeholder_text
+
+          The descriptive text to use in the placeholder, below the header
+
+    {% endcomment %}
+    <div class="ui placeholder segment">
+      {% block list_placeholder %}
+        <div class="ui icon header">
+          {% block list_placeholder_icon %}
+            <i class="{% block list_placeholder_icon_class %}{% endblock %} icon"></i>
+          {% endblock list_placeholder_icon %}
+          {% block list_placeholder_header %}
+            There are no objects here.
+          {% endblock list_placeholder_header %}
+        </div>
+        {% block list_placeholder_text %}
+        {% endblock list_placeholder_text %}
+      {% endblock list_placeholder %}
+    </div>
+  {% else %}
+    {% comment "rst" %}
+      Item list blocks
+      ----------------
+
+      The item list is where we iterate over each item in the ``objects``
+      queryset. Each item is a "row" in this list, and is comprised of an initial
+      row with the most important information, a second row with metadata and
+      extra links, and a right floating menu for all of the actions that can be
+      attributed to each list item. The right menu is always an icon menu.
+
+      .. describe:: list
+
+          You shouldn't need to override this, as this removes **all** child
+          blocks.
+
+      .. describe:: list_classes
+
+          Also not common to override. The standard styles are used for all list
+          views, but this is available if you need a custom style to the parent
+          unordered list.
+
+      .. describe:: list_item_start
+
+          This is the opening tag for the list item. It can be used in some cases
+          to either provide a Knockout binding to the list item, or perhaps
+          customize the list item classes. Neither should be common.
+
+      .. describe:: list_item
+
+          The contents of the list item element. If you override this element,
+          be sure to replicate all of the child structure here.
+
+      .. describe:: list_item_right_menu
+
+          Contains the ``list_item_right_buttons``. You might need to override
+          this if your buttons are custom actions instead of menus.
+
+      .. describe:: list_item_right_buttons
+
+          A list of ``<a class="ui icon button"/>`` elements. Can also contain
+          dropdown menus.
+
+          .. seealso::
+              The project version list view, for and example of including drop
+              down menu buttons.
+
+      .. describe:: list_item_image
+
+          This isn't used yet, but is intended to be used for a left image.
+
+      .. describe:: list_item_header
+
+          The header text for the list item. This compromises the first row of
+          the list view and should contain only the most important information.
+
+          Default: a string representation of the instance, for debugging.
+
+      .. describe:: list_item_description
+
+          The list menu for the secondary/metadata row of information. Unless
+          you are replacing the text menu, you probably want to override the
+          ``list_item_meta`` block instead.
+
+      .. describe:: list_item_meta
+
+          A list of ``<div class="item" />`` elements.
+
+      .. describe:: list_item_extra
+
+          Not often used. For additional elements after the second text line.
+
+    {% endcomment %}
+    {% block list %}
+      <div class="ui vertically fitted segment">
+        <table class="{% block list_classes %}ui very basic stacking table{% endblock %}">
+
+          {% if not skip_pagination %}
+            {% autopaginate objects 15 %}
+          {% endif %}
+
+          <tbody>
+          {% for object in objects %}
+            {# Item view for each object in objects queryset #}
+            {% block list_item_start %}<tr class="middle aligned">{% endblock list_item_start %}
+              {% block list_item %}
+
+                <td class="collapsing">
+                  <div class="ui tiny header">
+                    {% block list_item_image %}
+                      {% comment %}
+                        On the off chance you actually want an image here,
+                        override this whole block. We use a fake image here to
+                        avoid customizing CSS to avoid width/spacing issues.
+                      {% endcomment %}
+                      {# TODO consider making our own .ui.table .ui.icon.header styles #}
+                      <span class="ui center aligned image">
+                        {% block list_item_icon %}
+                          {% comment %}
+                            <i class="fas fa-folder icon"></i>
+                          {% endcomment %}
+                        {% endblock list_item_icon %}
+                      </span>
+                    {% endblock list_item_image %}
+                    <div class="content">
+                      {% block list_item_header %}
+                        {{ object }}
+                      {% endblock list_item_header %}
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  {% block list_item_meta %}
+                    <div class="ui relaxed stackable small middle aligned horizontal list">
+                      {% block list_item_meta_items %}
+                        {% comment %}
+                          <div class="item">
+                            <i class="fa-solid fa-code-branch icon"></i>
+                            <code>{{ build.commit|truncatechars:8 }}</code>
+                          </div>
+                        {% endcomment %}
+                      {% endblock list_item_meta_items %}
+                    </div>
+                  {% endblock list_item_meta %}
+                </td>
+
+                {% block list_item_extra %}
+                  <td class="collapsing">
+                    <div class="ui relaxed stackable small middle aligned horizontal list">
+                      {% block list_item_extra_items %}
+                      {% endblock list_item_extra_items %}
+                    </div>
+                  </td>
+                {% endblock list_item_extra %}
+
+                <td class="collapsing">
+                  {% block list_item_right_menu %}
+                    <div class="ui mini buttons">
+                      {% block list_item_right_buttons %}
+                        {% comment %}
+                          <a class="ui icon button">
+                            <i class="fa-solid fa-refresh icon"></i>
+                          </a>
+                        {% endcomment %}
+                      {% endblock list_item_right_buttons %}
+                    </div>
+                  {% endblock list_item_right_menu %}
+                </td>
+
+              {% endblock list_item %}
+            </tr>
+          {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+
+      {% if not skip_pagination %}
+        {% paginate using "includes/crud/pagination.html" %}
+      {% endif %}
+
+    {% endblock list %}
+  {% endif %}
+</div>
