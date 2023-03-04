@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content-wrapper %}
+  <div class="ui very padded container">
+    <div class="ui centered grid">
+      <div class="nine wide computer twelve wide tablet sixteen wide mobile column">
+        <div class="ui raised segment">
+          {% block content %}
+          {% endblock content %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content-wrapper %}

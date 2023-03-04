@@ -199,7 +199,16 @@
 
       .. describe:: list_item_image
 
-          This isn't used yet, but is intended to be used for a left image.
+          List item left image or icon. See ``list_item_icon`` for using a large
+          icon on the left of the row, it's implemented as a child block here
+          though.
+
+          Empty this block out if you don't need an image/icon.
+
+      .. describe:: list_item_icon
+
+          Use an icon instead of an image. Technically, this still uses a false
+          image, in order to avoid spacing/width issues with just icons.
 
       .. describe:: list_item_header
 
@@ -216,11 +225,26 @@
 
       .. describe:: list_item_meta
 
-          A list of ``<div class="item" />`` elements.
+          A list of ``<div class="item" />`` elements. You probably want to
+          overload ``list_item_meta_items`` though.
+
+      .. describe:: list_item_meta_items
+
+          ``.ui.list.item`` for the widest, middle column in the table. Useful for
+          label instances, or a `.sub.header` element.
 
       .. describe:: list_item_extra
 
-          Not often used. For additional elements after the second text line.
+          For additional items, pushed right on the table. Useful for a singular
+          secondary item, like a build, commit, or version, etc. Similar to the
+          meta list, this is just the list, in case you want to replace it.
+
+          See ``list_item_extra_items`` to add some items to the list.
+
+      .. describe:: list_item_extra_items
+
+          ``.ui.list.item`` for the right most column. Try to keep this to one
+          item usually.
 
     {% endcomment %}
     {% block list %}
@@ -286,7 +310,7 @@
                   </td>
                 {% endblock list_item_extra %}
 
-                <td class="collapsing">
+                <td class="right aligned collapsing">
                   {% block list_item_right_menu %}
                     <div class="ui mini buttons">
                       {% block list_item_right_buttons %}
