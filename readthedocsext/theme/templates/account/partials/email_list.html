@@ -1,4 +1,4 @@
-{% extends "includes/crud/list.html" %}
+{% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
 
@@ -29,54 +29,72 @@
   <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
 {% endblock list_placeholder_text %}
 
-{% block list_item_right_buttons %}
+{% block list_item_right_menu %}
   {% url "account_email" as form_url %}
-  <form action="{{ form_url }}" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="email" {% if object.primary %}checked="checked"{% endif %} value="{{ object.email }}"/>
+
+  <div class="ui small icon buttons">
     {% if not object.primary %}
-      <button class="ui icon button" name="action_primary" type="submit">
+      <div class="ui icon button" data-bind="click: $root.post_child_form">
         <i class="fa-solid fa-star icon"></i>
-      </button>
+        <form action="{{ form_url }}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="email" {% if object.primary %}checked="checked"{% endif %} value="{{ object.email }}"/>
+          <input type="hidden" name="action_primary" value="" />
+        </form>
+      </div>
     {% endif %}
     {% if not object.verified %}
-      <button class="ui icon button" name="action_send" type="submit">
+      <div class="ui icon button" data-bind="click: $root.post_child_form">
         <i class="fa-solid fa-refresh icon"></i>
-      </button>
+        <form action="{{ form_url }}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="email" {% if object.primary %}checked="checked"{% endif %} value="{{ object.email }}"/>
+          <input type="hidden" name="action_send" value="" />
+        </form>
+      </div>
     {% endif %}
-  </form>
-  {% trans "Remove email" as action_text %}
-  {% blocktrans trimmed asvar content_text with email=object.email %}
-    Remove email address {{ email }}?
-  {% endblocktrans %}
-  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_name="action_remove" action_text=action_text context_text=context_text field_name="email" field_value=object.email %}
-{% endblock list_item_right_buttons %}
+    {% trans "Remove email" as action_text %}
+    {% blocktrans trimmed asvar content_text with email=object.email %}
+      Remove email address {{ email }}?
+    {% endblocktrans %}
+    {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_name="action_remove" action_text=action_text context_text=context_text field_name="email" field_value=object.email %}
+  </div>
+{% endblock list_item_right_menu %}
+
+{% block list_item_image %}
+{% endblock list_item_image %}
 
 {% block list_item_header %}
-  <div class="ui basic label">
-    <i class="fa-duotone fa-envelope icon"></i>
-    <code>{{ object.email }}</code>
-  </div>
-
-  {% if object.primary %}
-    <span class="ui label">
+  <div>
+    {{ object.email }}
+    {% if object.primary %}
       <i class="fa-solid fa-star icon"></i>
-      {% trans "Primary" %}
-    </span>
-  {% endif %}
-
-  {% if object.verified %}
-    <span class="ui green label">
-      <i class="fa-solid fa-check icon"></i>
-      {% trans "Verified" %}
-    </span>
-  {% else %}
-    <span class="ui orange basic label">
-      <i class="fa-solid fa-exclamation icon"></i>
-      {% trans "Not verified" %}
-    </span>
-  {% endif %}
+    {% endif %}
+  </div>
+  <div class="sub header">
+    <div class="ui horizontal list">
+      {% if object.verified %}
+        <span class="ui green text item">
+          <i class="fa-solid fa-check-circle icon"></i>
+          {% trans "Verified" %}
+        </span>
+      {% else %}
+        <span class="ui red text item">
+          <i class="fa-solid fa-exclamation-triangle icon"></i>
+          {% trans "Pending verification" %}
+        </span>
+      {% endif %}
+      {% if object.primary %}
+        <span class="item">
+          {% trans "Primary email" %}
+        </span>
+      {% endif %}
+    </div>
+  </div>
 {% endblock list_item_header %}
 
-{% block list_item_meta %}
-{% endblock list_item_meta %}
+{% block list_item_meta_items %}
+{% endblock list_item_meta_items %}
+
+{% block list_item_extra %}
+{% endblock list_item_extra %}
