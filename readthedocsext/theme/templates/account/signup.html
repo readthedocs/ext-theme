@@ -1,36 +1,63 @@
 {% extends "account/base.html" %}
 
+{% load account socialaccount %}
+{% load crispy_forms_tags %}
 {% load i18n %}
 
 {% block head_title %}{% trans "Sign up" %}{% endblock %}
 
-{% block body_class %}signup-page{% endblock %}
-
 {% block content %}
-<h1>{% trans "Sign Up" %}</h1>
+  <div class="ui stackable padded grid">
 
-<p>
-  <small>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</small>
-</p>
+    <div class="violet four wide computer only column"></div>
 
-<form method="post" action="{% url 'account_signup' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <button class="ui primary button" type="submit">{% trans "Sign Up" %} &raquo;</button>
-  <p>
-    <small>{% blocktrans %}By signing up, you agree to our <a href="https://docs.readthedocs.io/page/terms-of-service.html">Terms of Service</a> and <a href="https://docs.readthedocs.io/page/privacy-policy.html">Privacy Policy</a>.{% endblocktrans %}</small>
-  </p>
-</form>
+    <div class="twelve wide computer sixteen wide tablet sixteen wide mobile column">
+      {% get_providers as socialaccount_providers %}
 
-<h3>{% trans 'Or' %}</h3>
+      <div class="ui small stackable aligned secondary menu" data-bind="semanticui: {tab: {autoTabActivation: 'vcs', ignoreFirstLoad: true}}">
+        {# This is purposely minimal, as the verbiage for "Log in with connected account" is a mountful #}
+        <a class="left item active" data-tab="vcs" data-content="{% trans "Connect your account" %}">
+          <i class="fad fa-cloud icon"></i>
+        </a>
+        <a class="right item" data-tab="email">
+          <i class="fad fa-envelope icon"></i>
+          {% trans "Sign up with email" %}
+        </a>
+      </div>
 
-<div class="ui vertical segment padded">
-  <ul class="ui list">
-    {% include "socialaccount/snippets/provider_list.html" with process="login" next="" verbiage="Sign up with" %}
-  </ul>
-</div>
+      <div class="ui basic center aligned tab segment active" data-tab="vcs">
+        <div class="ui relaxed list">
+          {# Translators: this will read "Log in with GitHub", where "log in" is a verb #}
+          {% blocktrans asvar text_log_in %}Log in using{% endblocktrans %}
+          {% include "socialaccount/snippets/provider_list.html" with process="login" next="" verbiage=text_log_in %}
+        </div>
+      </div>
+      <div class="ui basic vertically fitted tab clearing segment" data-tab="email">
+        <p class="ui center aligned vertically fitted small basic fluid segment">
+          {% blocktrans trimmed %}
+            Have an account? <a href="{{ login_url }}">Log in</a> instead.
+          {% endblocktrans %}
+        </p>
 
+        <form class="ui form" method="post" action="{% url 'account_signup' %}">
+          {% csrf_token %}
+          {{ form|crispy }}
+          {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+          {% endif %}
+
+          <button class="ui primary right floated button" type="submit">
+            {% trans "Sign up" %}
+          </button>
+        </form>
+      </div>
+
+      <p class="ui center aligned tiny basic vertically fitted basic segment">
+        {% blocktrans trimmed %}
+          By signing up for an account, you agree to our <a href="https://docs.readthedocs.io/page/terms-of-service.html">Terms of Service</a> and <a href="https://docs.readthedocs.io/page/privacy-policy.html">Privacy Policy</a>.
+        {% endblocktrans %}
+      </p>
+
+    </div>
+  </div>
 {% endblock %}
