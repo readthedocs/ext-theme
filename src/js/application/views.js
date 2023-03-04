@@ -59,4 +59,31 @@ export class ApplicationView {
       }
     };
   }
+
+  /**
+   * Submit a child form, useful for triggering a form POST with a link
+   *
+   * This could be used like:
+   *
+   * .. code:: html
+   *
+   *     <button data-bind="click: $root.post_child_form">
+   *       Log out
+   *       <form method="post" action="...">
+   *         ...
+   *       </form>
+   *     </button>
+   *
+   * @param {Object} data - Context data
+   * @param {Event} event - Click event
+   * @returns {knockout_click}
+   */
+  post_child_form(data, event) {
+    const elem = event.currentTarget;
+    const form = elem.querySelector(":scope > form");
+    if (form) {
+      form.submit();
+    }
+    return false;
+  }
 }
