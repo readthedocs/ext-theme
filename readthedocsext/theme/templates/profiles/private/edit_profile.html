@@ -12,6 +12,9 @@
   <form method="POST" action="." class="ui form">
     {% csrf_token %}
     {{ form|crispy }}
+    <button class="ui primary button" type="submit">
+      {% trans "Save" %}
+    </button>
   </form>
 
   <div class="ui horizontal divider">
@@ -55,7 +58,7 @@
 {% endblock edit_content %}
 
 {% block edit_sidebar %}
-  <div class="ui card">
+  <div class="ui fluid card">
     <div class="image" data-tooltip="{% trans "Visit Gravatar to update your profile image" %}" data-position="bottom center">
       <a class="ui bottom right corner label">
         <i class="fa-duotone fa-edit icon"></i>
