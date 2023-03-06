@@ -36,7 +36,10 @@
           <div class="item">
             <i class="fa-solid fa-link icon"></i>
             <div class="content">
-              {{ profile.homepage | urlize }}
+              {% blocktrans asvar text_homepage trimmed %}
+                User's homepage
+              {% endblocktrans %}
+              {% include "includes/elements/link.html" with is_external=True url=profile.homepage text=profile.homepage label=text_homepage %}
             </div>
           </div>
         {% endif %}
@@ -44,12 +47,12 @@
         {% for socialaccount in profile.user.socialaccount_set.all %}
           {% with socialaccount.get_provider_account as provider %}
             <div class="item">
-              <i class="fa-brands fa-{{ object.provider }} fa-{{ provider.get_brand.id }} icon"></i>
+              <i class="fa-brands fa-{{ provider.get_brand.name|lower }} icon"></i>
               <div class="content">
-                <a href="{{ socialaccount.get_profile_url }}" target="_blank">
-                  {{ socialaccount.extra_data.login }}
-                  <i class="fad fa-external-link small icon"></i>
-                </a>
+                {% blocktrans with provider=provider.get_brand.name asvar text_provider trimmed %}
+                  User's {{ provider }} profile
+                {% endblocktrans %}
+                {% include "includes/elements/link.html" with is_external=True url=socialaccount.get_profile_url text=socialaccount.extra_data.login label=text_provider %}
               </div>
             </div>
           {% endwith %}
