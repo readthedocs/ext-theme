@@ -1,0 +1,77 @@
+{% load i18n %}
+{% load gravatar %}
+
+<div class="ui centered card">
+  {% if is_editable %}
+    <div class="image" data-tooltip="{% trans "Visit Gravatar to update your profile image" %}" data-position="bottom center">
+      <a class="ui bottom right corner label">
+        <i class="fa-duotone fa-edit icon"></i>
+      </a>
+      <img src="{% gravatar_url profile.user.email 256 %}">
+    </div>
+  {% else %}
+    <img class="image" src="{% gravatar_url profile.user.email 256 %}">
+  {% endif %}
+  <div class="content">
+
+    {% with full_name=profile.user.get_full_name %}
+      {% if full_name %}
+        <div class="header">
+          {{ full_name }}
+        </div>
+        <div class="meta">
+          <code>{{ profile.user.username }}</code>
+        </div>
+      {% else %}
+        <div class="header">
+          {{ profile.user.username }}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="description">
+      <div class="ui list">
+
+        {% if profile.homepage %}
+          <div class="item">
+            <i class="fa-solid fa-link icon"></i>
+            <div class="content">
+              {{ profile.homepage | urlize }}
+            </div>
+          </div>
+        {% endif %}
+
+        {% for socialaccount in profile.user.socialaccount_set.all %}
+          {% with socialaccount.get_provider_account as provider %}
+            <div class="item">
+              <i class="fa-brands fa-{{ object.provider }} fa-{{ provider.get_brand.id }} icon"></i>
+              <div class="content">
+                <a href="{{ socialaccount.get_profile_url }}" target="_blank">
+                  {{ socialaccount.extra_data.login }}
+                  <i class="fad fa-external-link small icon"></i>
+                </a>
+              </div>
+            </div>
+          {% endwith %}
+        {% endfor %}
+
+      </div>
+
+      {% if is_editable %}
+        <p>
+          <a href="{{ profile.get_absolute_url }}">
+            {% trans "View profile" %}
+          </a>
+        </p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="extra content">
+    <time data-content="{{ profile.user.date_joined }}">
+      {# Translators: this will read like "Joined 2 year, 2 months ago" #}
+      {% blocktrans with time_since=profile.user.date_joined|timesince trimmed %}
+        Joined {{ time_since }} ago
+      {% endblocktrans %}
+    </time>
+  </div>
+</div>
