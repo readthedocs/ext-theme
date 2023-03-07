@@ -1,0 +1,137 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% comment %}
+  If `omit_user` is given, the username attached to the log
+  isn't shown. This is useful when listing logs for the same
+  user.
+{% endcomment %}
+
+{% load i18n %}
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  <a class="ui primary button"
+     href="?download=true&{{ request.GET.urlencode }}">
+    {% trans "Export log" %}
+  </a>
+{% endblock %}
+
+{% block list_placeholder_icon_class %}fa-clipboard-list{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    The security log is currently empty.
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      There are no security events logged yet.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_menu %}
+{% endblock list_item_right_menu %}
+
+{% block list_item_image %}
+{% endblock list_item_image %}
+
+{% block list_item_header %}
+  <span>
+    {% if object.action == AuditLog.AUTHN %}
+      {% blocktrans trimmed with action=object.action %}
+        User authenticated
+      {% endblocktrans %}
+    {% elif object.action == AuditLog.AUTHN_FAILURE %}
+      {% blocktrans trimmed with action=object.action %}
+        User failed to authenticate
+      {% endblocktrans %}
+    {% elif object.action == AuditLog.LOGOUT %}
+      {% blocktrans trimmed with action=object.action %}
+        User logged out
+      {% endblocktrans %}
+    {% elif object.action == AuditLog.PAGEVIEW %}
+      {% blocktrans trimmed with action=object.action %}
+        User visited a page
+      {% endblocktrans %}
+    {% elif object.action == AuditLog.DOWNLOAD %}
+      {% blocktrans trimmed with action=object.action %}
+        User downloaded a document
+      {% endblocktrans %}
+    {% elif object.action == AuditLog.INVITATION_SENT %}
+      {% blocktrans trimmed with action=object.action %}
+        User sent an invitation
+      {% endblocktrans %}
+    {% elif object.action == AuditLog.INVITATION_REVOKED %}
+      {% blocktrans trimmed with action=object.action %}
+        User revoked an invitation
+      {% endblocktrans %}
+    {% elif object.action == AuditLog.INVITATION_ACCEPTED %}
+      {% blocktrans trimmed with action=object.action %}
+        User accepted an invitation
+      {% endblocktrans %}
+    {% elif object.action == AuditLog.INVITATION_DECLINED %}
+      {% blocktrans trimmed with action=object.action %}
+        User declined an invitation
+      {% endblocktrans %}
+    {% endif %}
+  </span>
+
+  <span class="sub header">
+    <time data-tooltip="{{ object.created|date:"DATETIME_FORMAT" }}">
+      {# Translators: this will read "1 year, 2 months ago" #}
+      {% blocktrans trimmed with time_since=object.created|timesince %}
+        {{ time_since }} ago
+      {% endblocktrans %}
+    </time>
+  </span>
+{% endblock list_item_header %}
+
+{# Metadata in second column #}
+{% block list_item_meta %}
+  <div class="ui stackable tiny middle aligned horizontal list">
+    {% include "audit/includes/log_list_item.html" with field=_("Actor") value=object.log_user_username|default:_('Anonymous user') %}
+
+    {% if object.action == AuditLog.AUTHN or object.action == AuditLog.AUTHN_FAILURE or object.action == AuditLog.LOGOUT or object.action == AuditLog.PAGEVIEW or object.action == AuditLog.DOWNLOAD %}
+      {% if object.log_project_slug %}
+        {# TODO don't use slug here #}
+        {% include "audit/includes/log_list_item.html" with field=_("Project") value=object.log_project_slug %}
+      {% endif %}
+
+      {% if object.action == AuditLog.PAGEVIEW or object.action == AuditLog.DOWNLOAD %}
+        {% include "audit/includes/log_list_item.html" with field=_("Page") value=object.resource %}
+      {% endif %}
+    {% elif object.action == AuditLog.INVITATION_SENT or object.action == AuditLog.INVITATION_REVOKED or object.action == AuditLog.INVITATION_ACCEPTED or object.action == AuditLog.INVITATION_DECLINED %}
+      {% if object.data.to_user %}
+        {% include "audit/includes/log_list_item.html" with field=_("To user") value=object.data.to_user.username %}
+      {% elif object.data.to_email %}
+        {% include "audit/includes/log_list_item.html" with field=_("To email") value=object.data.to_email %}
+      {% endif %}
+
+      {% if object.data.object_type == "project" %}
+        {% include "audit/includes/log_list_item.html" with field=_("Project") value=object.data.object.slug %}
+
+        {% if object.data.object.organization %}
+          {% include "audit/includes/log_list_item.html" with field=_("Organization") value=object.data.object.organization.slug %}
+        {% endif %}
+      {% elif object.data.object_type == "team" %}
+        {% include "audit/includes/log_list_item.html" with field=_("Team") value=object.data.object.slug %}
+        {% include "audit/includes/log_list_item.html" with field=_("Organization") value=object.data.object.organization.slug %}
+      {% elif object.data.object_type == "organization" %}
+        {% include "audit/includes/log_list_item.html" with field=_("Organization") value=object.data.object.slug %}
+      {% endif %}
+    {% endif %}
+
+    {% include "audit/includes/log_list_item.html" with field=_("IP") value=object.ip %}
+    {% include "audit/includes/log_list_item.html" with field=_("Browser") value=object.browser|truncatewords:1 tooltip=object.browser %}
+  </div>
+{% endblock list_item_meta %}
+
+{# No right column #}
+{% block list_item_extra %}
+{% endblock list_item_extra %}
