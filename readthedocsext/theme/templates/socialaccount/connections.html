@@ -1,16 +1,16 @@
-{% extends "profiles/base_profile_edit.html" %}
+{% extends "profiles/base_edit.html" %}
 
 {% load i18n %}
 
-{% block title %}{% trans "Connected Services" %}{% endblock %}
-{% block edit_content_header %}{% trans "Connected Services" %}{% endblock %}
+{% block title %}{% trans "Connected services" %}{% endblock %}
+{% block edit_content_header %}{% trans "Connected services" %}{% endblock %}
 {% block profile_admin_social_accounts %}active{% endblock %}
 
 {% block edit_content %}
   {% include "socialaccount/partials/social_account_list.html" with objects=form.accounts %}
 
   <div class="ui tiny modal" data-modal-id="socialaccount-connections">
-    <i class="fa-solid fa-close icon"></i>
+    <i class="fa-solid fa-close close icon"></i>
     <div class="header">
       {% trans "Add a connection" %}
     </div>
@@ -21,7 +21,7 @@
             You can connect your account with any of the following providers:
           {% endblocktrans %}
         </p>
-        <div class="ui list">
+        <div class="ui relaxed list">
           {% include "socialaccount/snippets/provider_list.html" with process="connect" next="" %}
         </div>
       </div>

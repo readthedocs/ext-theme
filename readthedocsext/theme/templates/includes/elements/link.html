@@ -1,0 +1,40 @@
+{% comment "rst" %}
+
+  link
+  ====
+
+  This is a helper include for URL links, especially for
+  external links, that have a bit of boilerplate to them.
+
+  .. describe:: url
+  
+     The link URL
+
+  .. describe:: text
+
+     The link text
+
+  .. describe:: label
+
+     The link label, which is a popup and also the ARIA label
+
+  .. describe:: is_external
+
+     Does the URL link to an external site? This should be automatic in the
+     future.
+
+  .. describe:: class
+
+     Additional classes for the link, for use as a ``.ui.menu > .item``, for example
+
+{% endcomment %}
+
+<a href="{{ url }}"
+   class="{{ class }}"
+   {% if is_external %} target="_blank"{% endif %}
+   {% if label%} data-content="{{ label }}" aria-label="{{ label }}"{% endif %}>
+  {{ text }}
+  {% if is_external %}
+    <i class="fad fa-external-link small light gray middle aligned icon"></i>
+  {% endif %}
+</a>

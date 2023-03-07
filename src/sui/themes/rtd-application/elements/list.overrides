@@ -15,6 +15,7 @@
   &.center.aligned { text-align: center; }
 }
 
+// For old style vertical list CRUD views, deprecated in favor of table lists
 .ui.list > .item > .ui.menu.right,
 .ui.list > .item .description .ui.text.menu {
   min-height: auto;
@@ -26,6 +27,12 @@
     // now we likely will just always have a right float menu
     // padding-left: 0rem;
   }
+}
+
+.ui.table tr td .ui.horizontal.list .item {
+  vertical-align: middle;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 // Bug fix for a i.list.icon inside a div.ui.list

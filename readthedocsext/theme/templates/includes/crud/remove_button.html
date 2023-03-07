@@ -50,23 +50,28 @@
 
 {% endcomment %}
 
-<a class="ui icon button"
+<div class="ui icon button"
    data-bind="click: $root.show_modal('remove-{{ id }}')"
    data-content="{{ action_text }}">
   <i class="fa-solid fa-trash icon"></i>
-</a>
-<div class="ui mini modal" data-modal-id="remove-{{ id }}">
-  <div class="header">{{ action_text }}</div>
-  <div class="content">
-    {{ content_text }}
-  </div>
-  <div class="actions">
-    <form method="post" action="{{ form_url }}">
-      {% csrf_token %}
-      {% if field_name and field_value %}
-        <input type="hidden" name="{{ field_name }}" value="{{ field_value }}" />
-      {% endif %}
-      <input class="ui button" type="submit" value="{{ action_text }}" name="{{ action_name }}">
-    </form>
+
+  {% comment %}
+    This placement is important, as ``.ui.buttons`` uses :last-child, so we
+    can't place this after the last ``.ui.button``
+  {% endcomment %}
+  <div class="ui mini modal" data-modal-id="remove-{{ id }}">
+    <div class="header">{{ action_text }}</div>
+    <div class="content">
+      {{ content_text }}
+    </div>
+    <div class="actions">
+      <form method="post" action="{{ form_url }}">
+        {% csrf_token %}
+        {% if field_name and field_value %}
+          <input type="hidden" name="{{ field_name }}" value="{{ field_value }}" />
+        {% endif %}
+        <input class="ui button" type="submit" value="{{ action_text }}" name="{{ action_name }}">
+      </form>
+    </div>
   </div>
 </div>

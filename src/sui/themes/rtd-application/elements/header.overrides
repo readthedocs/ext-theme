@@ -1,0 +1,4 @@
+// Because h1.ui.medium.header is still sized as an h1
+.ui.ui.ui.medium.header {
+  font-size: @mediumFontSize;
+}

@@ -4,23 +4,19 @@
 {% endcomment %}
 
 {% if messages %}
-<div class="ui container">
-  <div class="ui basic segment">
-    {% for message in messages %}
-      {% if message.pk %}
-        <div class="ui message {{ message.tags }}"
-             data-bind="message: {dismiss_url: '{% url "message_mark_read" message.pk %}'}">
-          <i class="fa-duotone fa-circle-xmark close icon"></i>
-          <span>{{ message }}</span>
-        </div>
-      {% else %}
-        <div class="ui message {{ message.tags }}"
-             data-bind="message: {}">
-          <i class="fa-duotone fa-circle-xmark close icon"></i>
-          <span>{{ message }}</span>
-        </div>
-      {% endif %}
-    {% endfor %}
-  </div>
-</div>
+  {% for message in messages %}
+    {% if message.pk %}
+      <div class="ui message {{ message.tags }}"
+           data-bind="message: {dismiss_url: '{% url "message_mark_read" message.pk %}'}">
+        <i class="fa-duotone fa-circle-xmark close icon"></i>
+        <span>{{ message }}</span>
+      </div>
+    {% else %}
+      <div class="ui message {{ message.tags }}"
+           data-bind="message: {}">
+        <i class="fa-duotone fa-circle-xmark close icon"></i>
+        <span>{{ message }}</span>
+      </div>
+    {% endif %}
+  {% endfor %}
 {% endif %}

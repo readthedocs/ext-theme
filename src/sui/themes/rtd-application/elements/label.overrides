@@ -4,3 +4,10 @@
   border-color: @negativeBorderColor;
   background-color: @negativeBackgroundColor;
 }
+
+.ui.nowrap.label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}

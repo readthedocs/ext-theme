@@ -1,7 +1,6 @@
-{% extends "includes/crud/list.html" %}
+{% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
-{% load gravatar %}
 
 {% load core_tags %}
 {% load privacy_tags %}
@@ -18,7 +17,6 @@
   <form method="post" action="{% url "profiles_tokens_create" %}">
     {% csrf_token %}
     <button class="ui green {% if objects %}disabled {% endif %}button">
-      <i class="fa-solid fa-plus icon"></i>
       {% trans "Generate API token" %}
     </button>
   </form>
@@ -39,29 +37,37 @@
   <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
 {% endblock list_placeholder_text %}
 
-{% block list_item_right_buttons %}
-  <div class="ui icon button" data-clipboard-text="{{ object.key }}">
-    <i class="fa-duotone fa-copy icon"></i>
-  </div>
+{% block list_item_right_menu %}
   <form method="post" action="{% url "profiles_tokens_delete" %}">
     {% csrf_token %}
-    {# TODO make the revoke form include a token id if we do many to many #}
-    <button class="ui icon button" data-content="{% trans "Revoke token" %}">
-      <i class="fa-duotone fa-trash icon"></i>
-    </button>
+    <div class="ui small icon buttons">
+      <div class="ui icon button" data-clipboard-text="{{ object.key }}">
+        <i class="fas fa-copy icon"></i>
+      </div>
+      {# TODO make the revoke form include a token id if we do many to many #}
+      <button class="ui icon button" data-content="{% trans "Revoke token" %}">
+        <i class="fas fa-trash icon"></i>
+      </button>
+    </div>
   </form>
-{% endblock list_item_right_buttons %}
+{% endblock list_item_right_menu %}
+
+{% block list_item_image %}
+{% endblock list_item_image %}
 
 {% block list_item_header %}
-  <span class="ui basic label">
-    <i class="fa-duotone fa-key icon"></i>
-    <code>{{ object.key }}</code>
+  <span class="ui small text"><code>{{ object.key }}</code></span>
+  <span class="sub header">
+    <span data-tooltip="{{ object.created }}">
+      {% blocktrans with time_since=object.created|timesince trimmed %}
+        Created {{ time_since }} ago
+      {% endblocktrans %}
+    </span>
   </span>
 {% endblock list_item_header %}
 
 {% block list_item_meta %}
-  <span class="item">
-    <span>Created&nbsp;</span>
-    <span data-tooltip="{{ object.created }}">{{ object.created | timesince }} ago</span>
-  </span>
 {% endblock list_item_meta %}
+
+{% block list_item_extra %}
+{% endblock list_item_extra %}

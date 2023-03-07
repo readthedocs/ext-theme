@@ -1,26 +1,21 @@
-{% extends "profiles/base_profile.html" %}
+{% extends "base.html" %}
 
 {% load i18n %}
 {% load privacy_tags %}
 
 {% block title %}{% blocktrans with profile.user as user %}{{ user }}'s profile{% endblocktrans %}{% endblock %}
 
-{% block profile-bar-profile %}active{% endblock %}
-
 {% block content %}
-
-  <div class="ui basic segment padded">
-    <div class="ui container">
-      <div class="ui basic segment very padded">
-      {% get_public_projects profile.user %}
-        {% with public_projects as project_list %}
-          <!-- BEGIN projects list -->
-            <div class="ui list">
-              {% include "core/project_list_detailed.html" with omit=profile.user %}
-            </div>          
-          <!-- END projects list -->
-      {% endwith %}
+  <div class="ui stackable computer reversed grid">
+    {# Note reversed class above, so this is first on computer/tablet viewports #}
+    <div class="five wide computer sixteen wide tablet sixteen wide mobile column">
+      <div class="ui basic horizontally fitted segment">
+        {% include "profiles/includes/profile_card.html" with profile=profile %}
       </div>
+    </div>
+    <div class="eleven wide computer sixteen wide tablet column">
+      {% get_public_projects profile.user %}
+      {% include "profiles/partials/profile_project_list.html" with objects=project_list objects=public_projects %}
     </div>
   </div>
 {% endblock %}
