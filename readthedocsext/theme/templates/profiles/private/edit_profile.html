@@ -1,4 +1,4 @@
-{% extends "profiles/base_profile_edit.html" %}
+{% extends "profiles/base_edit.html" %}
 
 {% load i18n %}
 {% load gravatar %}
@@ -9,10 +9,20 @@
 {% block edit_content_header %}{% trans "Account" %}{% endblock %}
 
 {% block edit_content %}
-  <form method="POST" action="." class="ui form">
-    {% csrf_token %}
-    {{ form|crispy }}
-  </form>
+  <div class="ui computer reversed stackable grid">
+    <div class="eight wide computer sixteen wide tablet column">
+      {% include "profiles/includes/profile_card.html" with profile=request.user.profile is_editable=True %}
+    </div>
+    <div class="eight wide computer sixteen wide tablet column">
+      <form method="POST" action="." class="ui form">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button class="ui primary button" type="submit">
+          {% trans "Save" %}
+        </button>
+      </form>
+    </div>
+  </div>
 
   <div class="ui horizontal divider">
     {% trans "More" %}
@@ -55,23 +65,4 @@
 {% endblock edit_content %}
 
 {% block edit_sidebar %}
-  <div class="ui card">
-    <div class="image" data-tooltip="{% trans "Visit Gravatar to update your profile image" %}" data-position="bottom center">
-      <a class="ui bottom right corner label">
-        <i class="fa-duotone fa-edit icon"></i>
-      </a>
-      <img src="{% gravatar_url request.user.email 256 %}">
-    </div>
-    <div class="content">
-      <div class="header">{{ profile.user.first_name | default:profile.user.username }}</div>
-      <div class="meta">
-        <span class="date">Joined {{ profile.user.date_joined | timesince }} ago</span>
-      </div>
-      {% if profile.homepage %}
-        <div class="description">
-          {{ profile.homepage | urlize }}
-        </div>
-      {% endif %}
-    </div>
-  </div>
 {% endblock %}

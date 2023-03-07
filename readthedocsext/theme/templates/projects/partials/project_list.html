@@ -1,4 +1,4 @@
-{% extends "includes/crud/list.html" %}
+{% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
 
@@ -34,24 +34,24 @@
 
 {% block create_button %}
   <a class="ui green button" href="{{ projects_import_url }}">
-    {% trans "Add Project" %}
+    {% trans "Add project" %}
   </a>
 {% endblock %}
 
 {% block list_placeholder_icon_class %}{% endblock %}
 {% block list_placeholder_header %}
-  {% trans "You don't have any projects yet" %}
+  {% trans "There are no projects configured yet, or no projects match your filter criteria" %}
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
-  <div class="ui primary button">{% trans "Add your first project" %}</div>
+  <div class="ui primary button">{% trans "Add a project" %}</div>
 {% endblock list_placeholder_text %}
 
 {% block list_item_start %}
-  <div class="item" data-bind="with: project({id: {{ object.id }}, url: '{% url "project-detail" object.pk %}'})">
+  <tr data-bind="with: project({id: {{ object.id }}, url: '{% url "project-detail" object.pk %}'})">
 {% endblock list_item_start %}
 
 {% block list_item_right_menu %}
-  <div class="ui small right floated buttons" data-bind="event: {mouseover: fetch}">
+  <div class="ui small buttons" data-bind="event: {mouseover: fetch}">
     <button class="ui icon button"
        data-content="{% trans "View project documentation" %}"
        data-bind="attr: {href: url_docs}, css: {disabled: loading}">
@@ -73,114 +73,55 @@
   </div>
 {% endblock list_item_right_menu %}
 
+{% block list_item_image %}
+  {% if object.remote_repository %}
+    <img class="ui small rounded image" src="{{ object.remote_repository.avatar_url }}" />
+  {% else %}
+    {% comment %}
+      For now, this is using Dicebear, which has a few random generators for
+      user/project icons. We don't need to use Dicebear, but could use this or
+      similar to generate files on disk and use an md5 hash or similar to link
+      to the same image always.
+    {% endcomment %}
+    <img class="ui small rounded image" src="https://api.dicebear.com/5.x/shapes/svg?size=64&backgroundColor=b8abd4&shape1Color=8c74c1&shape2Color=7854c5&shape3Color=f0f0ff&seed={{ object.pk }}" />
+  {% endif %}
+{% endblock list_item_image %}
+
 {% block list_item_header %}
-  <a class="ui basic label" href="{% url "projects_manage" object.slug %}">
+  <a class="" href="{% url "projects_manage" object.slug %}">
     {{ object.name }}
   </a>
-
-  {% if object.translations.exists %}
-    <span class="ui label">
-      <i class="fa-solid fa-language icon"></i>
-      {% trans "Translations" %}
-      <span class="detail">
-        {{ object.translations.count }}
-      </span>
-    </span>
-  {% endif %}
-
-  {% if object.subprojects.exists %}
-    <span class="ui label">
-      <i class="fa-solid fa-project-diagram icon"></i>
-      {% trans "Subprojects" %}
-      <span class="detail">
-        {{ object.subprojects.count }}
-      </span>
-    </span>
-  {% endif %}
-
+  <div class="sub header">
+    {% if object.has_good_build %}
+      {% with build=object.get_latest_build %}
+        <time data-content="{{ build.date }}">
+          {# Translators: this will read like "Last built 1 year, 5 months ago" #}
+          {% blocktrans with time_since=build.date|timesince trimmed %}
+            Last built {{ time_since }} ago
+          {% endblocktrans %}
+        </time>
+      {% endwith %}
+    {% else %}
+      {% trans "Not built yet" %}
+    {% endif %}
+  </div>
 {% endblock list_item_header %}
 
-{% block list_item_meta %}
+{% block list_item_meta_items %}
+{% endblock list_item_meta_items %}
 
-  {% if object.builds.count == 0 %}
-    <span class="item">
-      <i class="fa-duotone fa-hourglass icon"></i>
-      {% trans "No builds yets" %}
-    </span>
-  {% else %}
-    {% with version_stable=object.get_stable_version %}
-      {% with build_last=object.get_latest_build %}
-
-        {# Show stable build #}
-        {% with build=version_stable.builds.last %}
-          {% if build %}
-            <div class="item">
-              {% include "builds/includes/status_icon.html" with build=build circular=False %}
-              <span data-bind="with: create_popup">
-                <a
-                  class="ui basic mini compact button"
-                  data-bind="popup: {}"
-                  href="{% url "builds_detail" object.slug build.pk %}">
-                  <code>{{ version_stable.verbose_name }} #{{ build.id }}</code>
-                </a>
-                {% include "includes/popupcards/build.html" with build=build %}
-                <span>was built {{ build.date|timesince }} ago</span>
-              </span>
-            </div>
-          {% endif %}
-        {% endwith %}
-
-        {% if build_last and build_last.version != version_stable %}
-          {% with build=build_last %}
-            <div class="item">
-              {% include "builds/includes/status_icon.html" with build=build circular=False %}
-
-              <span data-bind="with: create_popup">
-                <a
-                  class="ui basic mini compact button"
-                  data-bind="popup: {}"
-                  href="{% url "builds_detail" object.slug build.pk %}">
-                  <code>{{ build.version.verbose_name }} #{{ build.id }}</code>
-                </a>
-                {% include "includes/popupcards/build.html" with build=build %}
-                <span>was built {{ build.date|timesince }} ago</span>
-              </span>
-            </div>
-          {% endwith %}
-        {% endif %}
-      {% endwith %}
+{% block list_item_extra_items %}
+  {% if object.has_good_build %}
+    {% with build=object.get_latest_build %}
+      <div data-bind="with: create_popup">
+        <a class="ui basic label"
+           data-bind="popup: {}"
+           href="{% url "builds_detail" object.slug build.pk %}">
+          {% include "builds/includes/status_icon.html" with build=build circular=False %}
+          {{ build.version.verbose_name }} #{{ build.id }}
+        </a>
+        {% include "includes/popupcards/build.html" with build=build %}
+      </div>
     {% endwith %}
   {% endif %}
-
-{% endblock list_item_meta %}
-
-{# ui divided items #}
-
-{% comment %}
-  {# TESTING OLD LKDG #}
-{% block list_item_right_menu_items %}
-  <div class="item">
-    <i class="box icon"></i>
-    {% blocktrans trimmed %}
-      {{ object.builds.count }} builds
-    {% endblocktrans %}
-  </div>
-  <div class="item">
-    <i class="clock outline icon"></i>
-    {% blocktrans with "TODO" as date trimmed %}
-      Last built {{ date }} ago
-    {% endblocktrans %}
-  </div>
-{% endblock list_item_right_menu_items %}
-
-{% block list_item_right_buttons %}
-  {% if request.user|is_admin:project %}
-    <a class="ui icon button" href="">
-      <i class="wrench icon"></i>
-    </a>
-  {% endif %}
-{% endblock list_item_right_buttons %}
-
-{% block list_item_content %}
-{% endblock list_item_content %}
-{% endcomment %}
+{% endblock %}

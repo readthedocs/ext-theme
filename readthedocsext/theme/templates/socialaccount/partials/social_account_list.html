@@ -1,4 +1,4 @@
-{% extends "includes/crud/list.html" %}
+{% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
 {% load gravatar %}
@@ -7,12 +7,17 @@
 {% load privacy_tags %}
 {% load projects_tags %}
 
+{% block top_menu %}
+  {% if form.non_field_errors %}
+    <div class="ui error message">{{ form.non_field_errors }}</div>
+  {% endif %}
+  {{ block.super }}
+{% endblock top_menu %}
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  <div class="ui tiny green icon button" data-bind="click: $root.show_modal('socialaccount-connections')">
-    <i class="fa-solid fa-plus icon"></i>
+  <div class="ui green button" data-bind="click: $root.show_modal('socialaccount-connections')">
     {% trans "Add new connection" %}
   </div>
 {% endblock %}
@@ -33,32 +38,39 @@
   <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
 {% endblock list_placeholder_text %}
 
-{% block list_item_right_buttons %}
+{% block list_item_right_menu %}
   <form method="post" action="{% url 'socialaccount_connections' %}">
     {% csrf_token %}
     <input type="hidden" name="account" value="{{ object.id }}" />
-    <button class="ui icon button" data-content="{% trans 'Disconnect account' %}">
-      <i class="fa-duotone fa-trash icon"></i>
-    </button>
+    <div class="ui small icon buttons">
+      <button class="ui button" data-content="{% trans 'Disconnect account' %}">
+        <i class="fas fa-trash icon"></i>
+      </button>
+    </div>
   </form>
-{% endblock list_item_right_buttons %}
+{% endblock list_item_right_menu %}
 
 {% block list_item_image %}
-  <img class="image" src="{{ object.get_avatar_url }}" height=28 width=28 />
+  <img class="ui rounded image" src="{{ object.get_avatar_url }}" height=28 width=28 />
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  <span class="ui basic label">
-    <i class="fa-duotone fa-user icon"></i>
-    <code>{{ object }}</code>
-  </span>
+  {{ object.extra_data.login }}
+  <div class="sub header">
+    {% blocktrans with time_since=object.last_login|timesince trimmed %}
+      Logged in {{ time_since }} ago
+    {% endblocktrans %}
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_meta_items %}
   {% with object.get_provider_account as provider %}
     <span class="ui label">
       <i class="fa-brands fa-{{ object.provider }} fa-{{ provider.get_brand.id }} icon"></i>
       {{ provider.get_brand.name }}
     </span>
   {% endwith %}
-{% endblock list_item_header %}
+{% endblock list_item_meta_items %}
 
-{% block list_item_meta %}
-{% endblock list_item_meta %}
+{% block list_item_extra %}
+{% endblock list_item_extra %}

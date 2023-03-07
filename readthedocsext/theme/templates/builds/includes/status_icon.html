@@ -11,5 +11,5 @@
 {% elif build.is_stale %}
   <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}orange {% if circular %}inverted circular {% endif %}fa-solid fa-exclamation icon" title="{% trans 'This build is still waiting to be built' %}"></i>
 {% else %}
-  <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}yellow {% if circular %}inverted circular {% endif %}fa-solid fa-play icon"></i>
+  <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}loading grey {% if circular %}inverted circular {% endif %}fa-duotone fa-spinner-third icon"></i>
 {% endif %}

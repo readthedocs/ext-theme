@@ -1,0 +1,24 @@
+{% comment %}
+  A pseudo macro for redundant template logic in the
+  audit/partials/log_list template.
+{% endcomment %}
+
+<div class="item">
+  {% if icon %}
+    <i class="fas {{ icon }} icon"></i>
+  {% endif %}
+  <div class="content">
+    <div class="header">
+      {{ field }}
+    </div>
+    {% if url %}
+      <a href="{{ url }}">
+    {% endif %}
+    <span {% if tooltip %}data-content="{{ tooltip }}" aria-label="{{ tooltip }}"{% endif %}>
+      {{ value }}
+    </span>
+    {% if url %}
+      </a>
+    {% endif %}
+  </div>
+</div>

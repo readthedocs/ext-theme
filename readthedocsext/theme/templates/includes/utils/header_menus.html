@@ -21,9 +21,12 @@ Submenus of the user dropdown and the mobile viewport hamburger menus.
   <i class="fa-duotone fa-gears icon"></i>
   {% trans 'Settings' %}
 </a>
-<a class="item" href="{% url 'account_logout' %}">
+<a class="item" data-bind="click: $root.post_child_form">{# href="{% url 'account_logout' %}"> #}
   <i class="fa-duotone fa-sign-out icon"></i>
   {% trans 'Log out' %}
+  <form method="post" action="{% url 'account_logout' %}">
+    {% csrf_token %}
+  </form>
 </a>
 
 <div class="divider"></div>

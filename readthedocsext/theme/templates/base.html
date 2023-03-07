@@ -44,15 +44,15 @@
       {% include "includes/header.html" %}
     {% endblock header %}
 
-    {% block messages %}
-      {% include "includes/utils/messages.html" %}
-    {% endblock messages %}
-
     {# TODO remove subnav-bar block, it isn't used #}
     {% block subnav-bar %}{% endblock %}
 
     {% block content-wrapper %}
       <div class="ui very padded container">
+        {% block messages %}
+          {% include "includes/utils/messages.html" %}
+        {% endblock messages %}
+
         {# TODO move admin-bar usage to content-header #}
         {% block admin-bar %}{% endblock %}
 

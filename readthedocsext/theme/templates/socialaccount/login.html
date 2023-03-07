@@ -1,0 +1,38 @@
+{% extends "socialaccount/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Sign in" %}{% endblock %}
+
+{% block content_social %}
+  {% if process == "connect" %}
+    <h1>
+      {% blocktrans with provider.name as provider trimmed %}
+        Connect {{ provider }}
+      {% endblocktrans %}
+    </h1>
+
+    <p>
+      {% blocktrans with provider.name as provider trimmed %}
+        You are about to connect a new third party account from {{ provider }}.
+      {% endblocktrans %}
+    </p>
+  {% else %}
+    <h1>
+      {% blocktrans with provider.name as provider trimmed %}
+        Sign in via {{ provider }}
+      {% endblocktrans %}
+    </h1>
+
+    <p>
+      {% blocktrans with provider.name as provider trimmed %}
+        You are about to sign in using a third party account from {{ provider }}.
+      {% endblocktrans %}
+    </p>
+  {% endif %}
+
+  <form method="post" class="ui form">
+    {% csrf_token %}
+    <button class="ui button" type="submit">{% trans "Continue" %}</button>
+  </form>
+{% endblock content_social %}
