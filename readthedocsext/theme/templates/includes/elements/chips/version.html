@@ -1,0 +1,102 @@
+{% extends "includes/elements/chips/base.html" %}
+
+{% load i18n %}
+
+{% block chip_view_params %}'{% url "projects-versions-detail" version.project.slug version.slug %}'{% endblock %}
+
+{% block chip_url %}
+  {{ version.get_absolute_url }}
+{% endblock %}
+
+{% block chip_icon %}
+  <i class="fa-solid icon {% spaceless %}
+
+    {% if version.active %}
+      {% if version.built %}
+        fa-check
+      {% else %}
+        red fa-xmark
+      {% endif %}
+    {% else %}
+      light grey fa-question
+    {% endif %}
+
+  {% endspaceless %}"></i>
+{% endblock chip_icon %}
+    
+{% block chip_text %}
+  {% if version.is_external %}#{% endif %}{{ version.verbose_name }}
+{% endblock chip_text %}
+
+{% block chip_detail %}
+  <div class="detail">
+    <i class="fa-solid icon {% spaceless %}
+
+      {% if version.is_external %}
+        fa-code-pull-request
+      {% elif version.type == 'branch' %}
+        fa-code-branch
+      {% elif version.type == 'tag' %}
+        fa-tag
+      {% else %}
+        fa-code-commit
+      {% endif %}
+
+    {% endspaceless %}"></i>
+  </div>
+{% endblock chip_detail %}
+
+{% block popupcard_header %}
+  {{ version.verbose_name }}
+{% endblock popupcard_header %}
+
+{% block popupcard_right %}
+{% endblock popupcard_right %}
+
+{% block popupcard_meta %}
+{% endblock popupcard_meta %}
+
+{% block popupcard_content %}
+  <div class="ui list">
+   
+    <div class="item">
+      <i class="fa-duotone {{ version.is_external|yesno:'fa-code-pull-request,fa-code-branch' }} icon"></i>
+      <div class="content">
+        <div class="header">{{ version.get_type_display|default:'Commit' }}</div>
+        <div class="description">
+          <a href="{{ version.vcs_url }}">
+            {% if version.is_external %}#{% endif %}{{ version.verbose_name }}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" data-bind="if: urls && active && built">
+      <i class="fad fa-book icon"></i>
+      <div class="content">
+        <div class="header">{% trans "Documentation" %}</div>
+        <div class="description">
+          <a data-bind="text: urls.documentation, attr: { href: urls.documentation }"></a>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+{% endblock popupcard_content %}
+
+{% block popupcard_extra %}
+  <span>
+    
+  </span>
+
+  <div class="right floated">
+    <span>
+      Active
+      <i class="fas {{ version.active|yesno:'fa-check,red fa-xmark' }} icon"></i>
+    </span>
+    <span>
+      Built
+      <i class="fas {{ version.built|yesno:'fa-check,red fa-xmark' }} icon"></i>
+    </span>
+  </div>
+{% endblock popupcard_extra %}

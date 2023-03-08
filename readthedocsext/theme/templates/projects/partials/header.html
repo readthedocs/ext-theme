@@ -82,25 +82,13 @@ is_expanded (default: False)
                 <div class="ui relaxed horizontal list">
                   {% if project.superproject %}
                     <div class="item">
-                      <i class="fa-duotone fa-diagram-nested icon"></i>
-                      <div class="content">
-                        <a class="header" href="{{ project.superproject.get_absolute_url }}">
-                          {{ project.superproject.name }}
-                        </a>
-                        <div class="description">{% trans "Parent project" %}</div>
-                      </div>
+                      {% include "includes/elements/chips/project.html" with project=project.superproject detail=_("Parent project") %}
                     </div>
                   {% endif %}
                   {# TODO this list probably needs to respect user permissions #}
                   {% for project_rel in project.subprojects.all %}
                     <div class="item">
-                      <i class="fa-duotone fa-diagram-nested icon"></i>
-                      <div class="content">
-                        <a class="header" href="{{ project_rel.child.get_absolute_url }}">
-                          {{ project_rel.child.name }}
-                        </a>
-                        <div class="description">{% trans "Subproject" %}</div>
-                      </div>
+                      {% include "includes/elements/chips/project.html" with project=project_rel.child detail=_("Subproject") %}
                     </div>
                   {% endfor %}
                 </div>
@@ -108,31 +96,25 @@ is_expanded (default: False)
             {% endblock project_header_related_projects %}
 
             {% block project_header_translations %}
-              {% with localized_projects=project.main_language_project.translations|default:project.translations %}
-                {% if localized_projects.exists %}
+              {% with translations=project.main_language_project.translations|default:project.translations %}
+                {% if translations.exists %}
                   <div class="ui sub header">
                     {% trans "Translations" %}
                   </div>
                   <div class="ui horizontal list">
-                    <div class="item">
-                      {% with localized_project=project.main_language_project|default:project %}
-                        <a class="ui teal label" href="{{ localized_project.get_absolute_url }}">
-                          {{ localized_project.language | language_name }}
-                          <span class="detail">
-                            {{ localized_project.language | upper }}
-                          </span>
-                        </a>
-                      {% endwith %}
-                    </div>
-                    {% for localized_project in localized_projects.all %}
-                      <div class="item">
-                        <a class="ui teal label" href="{{ localized_project.get_absolute_url }}">
-                          {{ localized_project.language | language_name }}
-                          <span class="detail">
-                            {{ localized_project.language | upper }}
-                          </span>
-                        </a>
-                      </div>
+                    {% with project_translation=project.main_language_project|default:project %}
+                      {% if not project_translation == project %}
+                        <div class="item">
+                          {% include "includes/elements/chips/project.html" with project=project_translation detail=project_translation.language|language_name %}
+                        </div>
+                      {% endif %}
+                    {% endwith %}
+                    {% for project_translation in translations.all %}
+                      {% if not project_translation == project %}
+                        <div class="item">
+                          {% include "includes/elements/chips/project.html" with project=project_translation detail=project_translation.language|language_name %}
+                        </div>
+                      {% endif %}
                     {% endfor %}
                   </div>
                 {% endif %}
