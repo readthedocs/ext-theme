@@ -1,21 +1,32 @@
 {% extends "profiles/base_edit.html" %}
 
 {% load i18n %}
+{% load crispy_forms_tags %}
 
-{% block title %}{% trans "Delete Account" %}{% endblock %}
+{% block title %}{% trans "Delete account" %}{% endblock %}
 
-{% block profile-admin-delete-account %}active{% endblock %}
+{% block profile_admin_details %}active{% endblock %}
 
-{% block edit_content_header %}{% trans "Delete Account" %}{% endblock %}
+{% block edit_content_header %}{% trans "Delete account" %}{% endblock %}
 
 {% block edit_content %}
-  <div class="ui red warning message">
-    {% trans "Be careful! This cannot be undone!" %}
-  </div>
+  <p>
+    {% blocktrans %}
+      Please type your username to confirm.
+    {% endblocktrans %}
+  </p>
 
-  <form method="POST" action=".">
+  <form class="ui form" method="POST" action=".">
     {% csrf_token %}
-    {% trans "Delete Account" as submit_text %}
-    {% include "includes/forms/semanticui.html" with form=form submit_text=submit_text%}
+    {{ form|crispy }}
+
+    <button class="ui red icon button" type="submit">
+      <i class="fad fa-warning icon"></i>
+      {% trans "Delete account" %}
+    </button>
+
+    <p class="ui red text">
+      {% trans "Be careful! This cannot be undone!" %}
+    </p>
   </form>
 {% endblock %}
