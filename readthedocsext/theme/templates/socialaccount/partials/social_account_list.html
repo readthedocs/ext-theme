@@ -6,6 +6,7 @@
 {% load core_tags %}
 {% load privacy_tags %}
 {% load projects_tags %}
+{% load ext_theme_tags %}
 
 {% block top_menu %}
   {% if form.non_field_errors %}
@@ -55,29 +56,7 @@
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  {% with account=object.get_provider_account %}
-    {% comment %}
-      Allauth makes showing just the username field harder than it needs to be.
-      Normally, these show "display name" (which can be the full name on the user
-      profile), instead of the username.
-
-      This code is not ideal and should probably be backend code.
-    {% endcomment %}
-    {% with brand_id=account.get_brand.id %}
-      {% if brand_id == 'github' %}
-        {{ object.extra_data.login }}
-      {% elif brand_id == 'bitbucket_oauth2' %}
-        {{ object.extra_data.username }}
-      {% elif brand_id == 'gitlab' %}
-        {{ object.extra_data.username }}
-      {% elif brand_id == 'google' %}
-        {{ object.extra_data.email }}
-      {% else %}
-        {# Fall back, just in case. This uses the Account.to_str() method ultimately #}
-        {{ account }}
-      {% endif %}
-    {% endwith %}
-  {% endwith %}
+  {{ object|get_account_username }}
   <div class="sub header">
     {% blocktrans with time_since=object.last_login|timesince trimmed %}
       Logged in {{ time_since }} ago
