@@ -1,4 +1,4 @@
-{% extends "includes/crud/list.html" %}
+{% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
 
@@ -41,27 +41,29 @@
   {% trans "Move up" as button_up_text %}
   {% trans "Move down" as button_down_text %}
   {% if not forloop.first %}
-    <form method="post" action="{% url 'projects_automation_rule_move' project_slug=project.slug automation_rule_pk=object.pk steps=-1 %}">
-      {% csrf_token %}
-      <button class="ui icon button"
-              data-content="{{ button_up_text }}"
-              aria-label="{{ button_up_text }}"
-              title="{{ button_up_text }}">
-        <i class="fa-solid fa-arrow-up icon"></i>
-      </button>
-    </form>
+    <button class="ui icon button"
+            data-bind="click: $root.post_child_form"
+            data-content="{{ button_up_text }}"
+            aria-label="{{ button_up_text }}"
+            title="{{ button_up_text }}">
+        <form method="post" action="{% url 'projects_automation_rule_move' project_slug=project.slug automation_rule_pk=object.pk steps=-1 %}">
+          {% csrf_token %}
+        </form>
+      <i class="fa-solid fa-arrow-up icon"></i>
+    </button>
   {% endif %}
 
   {% if not forloop.last %}
-    <form method="post" action="{% url 'projects_automation_rule_move' project_slug=project.slug automation_rule_pk=object.pk steps=1 %}">
-      {% csrf_token %}
-      <button class="ui icon button"
-              data-content="{{ button_down_text }}"
-              aria-label="{{ button_down_text }}"
-              title="{{ button_down_text }}">
-        <i class="fa-solid fa-arrow-down icon"></i>
-      </button>
-    </form>
+    <button class="ui icon button"
+            data-bind="click: $root.post_child_form"
+            data-content="{{ button_down_text }}"
+            aria-label="{{ button_down_text }}"
+            title="{{ button_down_text }}">
+        <form method="post" action="{% url 'projects_automation_rule_move' project_slug=project.slug automation_rule_pk=object.pk steps=1 %}">
+          {% csrf_token %}
+        </form>
+      <i class="fa-solid fa-arrow-down icon"></i>
+    </button>
   {% endif %}
 
   {% url 'projects_automation_rule_delete' object.project.slug object.pk as form_url %}
@@ -72,19 +74,29 @@
   {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
 {% endblock list_item_right_buttons %}
 
+{% block list_item_image %}
+{% endblock list_item_image %}
+
 {% block list_item_header %}
-  <a class="ui basic label" href="{{ object.get_edit_url }}">
+  <a href="{{ object.get_edit_url }}">
     {{ object.get_description }}
   </a>
+  <div class="sub header">
+    {{ object.get_action_display }}
+  </div>
 {% endblock list_item_header %}
 
-{% block list_item_meta %}
-  <a class="item">
-    {{ object.get_action_display }}
-    for {{ object.get_version_type_display|lower }}
-    matching {{ object.get_predefined_match_arg_display|lower }}
-    {% if object.match_arg %}
-      <code>{{ object.match_arg }}</code>
-    {% endif %}
-  </a>
-{% endblock list_item_meta %}
+{% block list_item_meta_items %}
+  <div class="item">
+    <div class="content">
+      <div class="header">
+        {{ object.get_version_type_display }} matching {{ object.get_predefined_match_arg_display|lower }}
+      </div>
+      <div class="description">
+        {% if object.match_arg %}
+          <code class="ui tiny text">{{ object.match_arg|truncatechars:30 }}</code>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock list_item_meta_items %}
