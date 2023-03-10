@@ -82,7 +82,13 @@
     {{ object.get_description }}
   </a>
   <div class="sub header">
-    {{ object.get_action_display }}
+    {# TODO the text is special cased here because the model text has an additional note currently #}
+    {% if object.action == object.DELETE_VERSION_ACTION %}
+      {% trans "Delete version" %}
+      <i class="fad fa-question-circle grey icon" data-content="{% trans "Version deletion is only supported on branch or tag deletion events" %}"></i>
+    {% else %}
+      {{ object.get_action_display }}
+    {% endif %}
   </div>
 {% endblock list_item_header %}
 
