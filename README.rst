@@ -8,8 +8,7 @@ heavy lifting from SemanticUI.
 
 Documentation can be found here: https://read-the-docs-ext-theme.readthedocs-hosted.com/en/latest/index.html
 
-
-
+JavaScript help can be found here: https://github.com/readthedocs/meta/discussions/114
 
 .. warning::
     This package is alpha level quality, is not ready for use, and is not a
