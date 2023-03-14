@@ -1,15 +1,115 @@
 {% load i18n %}
 
-{% if build.state == 'finished' %}
-  {% if build.success %}
-    <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}green {% if circular %}inverted circular {% endif %}fa-solid fa-check icon"></i>
+{% comment "rst" %}
+
+  Build status icon
+  =================
+
+  This is the common icon used in a number of parts of the UI. It has two modes
+  of operation: as a static template, when the build instance is finished, and as
+  a partial Knockout view, when the build is in progress.
+
+  Template parameters:
+
+  build
+    The build instance for the icon.
+
+  size
+    Icon size class. Set to an empty string to use the default for the parent
+    element, default ``small``.
+
+  color
+    Normally configured dynamically, based on build state/status. Can be overridden
+    with this parameter however, if the icon is in an inverted element for example.
+
+  circular
+    Use an inverted circular icon, default ``False``.
+
+  classes
+    Additional class for the icon, default ``None``
+
+  data_bind
+    Add the Knockout view data binding if the build has not finished yet. This
+    is only really useful for views that use the build API.
+
+    This expects a response directly from the APIv3 build endpoint. You can mock
+    this data structure with ``<span data-bind="with: {status: {code: ... }}">``
+
+{% endcomment %}
+
+<i class="{% spaceless %}
+
+  ui icon 
+
+  {# Size class, pass falsey value to remove this #}
+  {{ size|default_if_none:"small" }}
+
+  {# Set color explicitly, for inverted labels, or use build status/state #}
+  {% if color %}
+    {{ color }}
   {% else %}
-    <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}red {% if circular %}inverted circular {% endif %}fa-solid fa-xmark icon"></i>
+    {% if build.state == 'finished' %}
+      {% if build.success %}
+        green
+      {% else %}
+        red
+      {% endif %}
+    {% elif build.state == 'cancelled' %}
+      yellow
+    {% elif build.is_stale %}
+      yellow
+    {% else %}
+      grey
+    {% endif %}
   {% endif %}
-{% elif build.state == 'cancelled' %}
-  <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}yellow {% if circular %}inverted circular {% endif %}fa-solid fa-stop icon" title="{% trans 'Build cancelled' %}"></i>
-{% elif build.is_stale %}
-  <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}orange {% if circular %}inverted circular {% endif %}fa-solid fa-exclamation icon" title="{% trans 'This build is still waiting to be built' %}"></i>
-{% else %}
-  <i class="ui {% if size %}{{ size }} {% else %}small {% endif %}loading grey {% if circular %}inverted circular {% endif %}fa-duotone fa-spinner-third icon"></i>
-{% endif %}
+
+  {# Circular icon  for most views except labels #}
+  {% if circular %}
+    inverted circular
+  {% endif %}
+
+  {# Font Awesome icon #}
+  {% if build.state == 'finished' %}
+    {% if build.success %}
+      fa-solid fa-check
+    {% else %}
+      fa-solid fa-xmark
+    {% endif %}
+  {% elif build.state == 'cancelled' %}
+    fa-solid fa-stop
+  {% elif build.is_stale %}
+    fa-solid fa-stop
+  {% else %}
+    loading fa-duotone fa-spinner-third
+  {% endif %}
+
+  {# And explicit classes #}
+  {{ classes|default_if_none:"" }}
+
+{% endspaceless %}" {% if data_bind and not build.finished %}data-bind="{% spaceless %}
+
+  {% comment %}
+    When a build is not finished yet, we will use Knockout to update the build
+    icon, through this data binding. The logic tries to approximate the above logic
+    as close as possible, but it is duplicate.
+
+    Be careful when adding a new rule that has overlap with an existing rule class.
+    For example, if we were to add a rule `green fa-turtle`, we'd need 3 rules:
+    one for `green`, one for `fa-check`, and a third for `fa-turtle`. Otherwise
+    the two rules will be in competition for the `green` class.
+  {% endcomment %}
+
+  css: {
+    'green fa-check': state.code == 'finished' && success,
+    'red fa-xmark': state.code == 'finished' && !success,
+    {% comment %}
+      Build.is_stale is not represented in the API response, so we'll treat all
+      triggered builds the same for now.
+
+      See https://github.com/readthedocs/readthedocs.org/issues/10122
+    {% endcomment %}
+    'yellow fa-stop': !success && (state.code == 'cancelled' || state.code == 'triggered'),
+    'loading grey fa-spinner-third': state.code !== 'finished' && state.code !== 'triggered' && state.code !== 'cancelled',
+  }
+
+{% endspaceless %}"{% endif %}></i>

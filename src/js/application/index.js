@@ -11,6 +11,7 @@ import * as docs_views from "../docs";
 import * as core_views from "../core";
 import * as project_views from "../project";
 import * as build_views from "../build";
+import * as module_views from "../modules";
 
 /**
  * This is the main entry point for the front end code and is used to set up and

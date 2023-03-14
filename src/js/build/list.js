@@ -3,19 +3,16 @@
 import jquery from "jquery";
 import ko from "knockout";
 
-import { PopupView, APIListItemView } from "../core/views";
+import { APIListItemView } from "../core/views";
 import { Registry } from "../application/registry";
 
 /** Build listing view for project builds.
  *
- * @extends {PopupView}
  */
-export class BuildListView extends PopupView {
+export class BuildListView {
   static view_name = "BuildListView";
 
   constructor() {
-    super();
-
     /** This is loaded using :func:`application.plugins.jsonInit()`
      * @observable {Object} JSON script for configuring search */
     this.config = ko.observable();

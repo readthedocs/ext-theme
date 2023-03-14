@@ -94,3 +94,19 @@ def add_data_bind(field, data_bind):
         raise Exception("|data_bind got passed an invalid or inexistent field")
     field.field.widget.attrs["data-bind"] = data_bind
     return field
+
+
+# TODO move this to the socialacccount app
+@register.filter(name="get_account_username")
+def get_account_username(socialaccount):
+    """
+    Return Allauth provider account username/email instead of default to_str()
+
+    The default way that Allauth shows provider accounts is with a "display
+    name", which can be a full name set up on the account profile. Instead, we
+    always want to show the username or email attached to the account, not the
+    name of the human attached to said account.
+    """
+    provider = socialaccount.get_provider()
+    extra_fields = provider.extract_common_fields(socialaccount.extra_data)
+    return extra_fields.get("username") or extra_fields.get("email")

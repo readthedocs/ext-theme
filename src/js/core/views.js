@@ -56,52 +56,14 @@ export class ResponsiveView {
 }
 
 /**
- * Knockout binding to help show popups
- *
- * This is used inside normal Django templates, where we iterate
- * over a list of objects inside the template, not inside hte KO
- * view. This binding will create individual popup contexts.
- *
- * Creates a :class:`Popup`.
- *
- */
-export class PopupView {
-  create_popup() {
-    return new Popup();
-  }
-}
-
-/**
- * Popupcard base class. Provides some helps to show/hide the popup
- */
-export class Popup {
-  constructor() {
-    /** @observable {Boolean} Is the popup showing currently? */
-    this.is_showing = ko.observable(false);
-  }
-
-  /** Show the popup */
-  show() {
-    this.is_showing(true);
-  }
-
-  /** Hide the popup */
-  hide() {
-    this.is_showing(false);
-  }
-}
-
-/**
  * Base class for API listing views. Provides a foundation for waiting to load
  * data from an API, loading data from an API request, and handling the data.
  *
  * ``data`` parameter needs an ``id`` and ``url`` property.
  *
- * @extends {PopupView}
  */
-export class APIListItemView extends PopupView {
+export class APIListItemView {
   constructor(data) {
-    super();
     this.id = data.id;
     this.url = data.url;
     /** @observable {Boolean} Is the API request started loading? */

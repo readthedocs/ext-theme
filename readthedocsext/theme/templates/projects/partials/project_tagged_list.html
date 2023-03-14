@@ -1,0 +1,26 @@
+{% extends "projects/partials/project_list.html" %}
+
+{% load i18n %}
+
+{% block top_left_menu_items %}
+  <div class="header item">{% trans "Projects tagged" %}</div>
+  <div class="active item">
+    <div class="ui link select dropdown" data-bind="semanticui: {dropdown: {}}">
+      {{ tag }}
+      <i class="fa-solid fa-caret-down icon"></i>
+      <div class="menu">
+        <div class="active item">{{ tag }}</div>
+      </div>
+    </div>
+  </div>
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+{% endblock %}
+
+{% block list_placeholder_icon_class %}fa-tag{% endblock %}
+{% block list_placeholder_header %}
+{% trans "There are no projects tagged {{ tag }}" %}
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+{% endblock list_placeholder_text %}
