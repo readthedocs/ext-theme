@@ -6,6 +6,7 @@
 {% load core_tags %}
 {% load privacy_tags %}
 {% load projects_tags %}
+{% load ext_theme_tags %}
 
 {% block top_menu %}
   {% if form.non_field_errors %}
@@ -55,7 +56,7 @@
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  {{ object.extra_data.login }}
+  {{ object|get_account_username }}
   <div class="sub header">
     {% blocktrans with time_since=object.last_login|timesince trimmed %}
       Logged in {{ time_since }} ago
@@ -66,7 +67,8 @@
 {% block list_item_meta_items %}
   {% with object.get_provider_account as provider %}
     <span class="ui label">
-      <i class="fa-brands fa-{{ object.provider }} fa-{{ provider.get_brand.id }} icon"></i>
+      {# get_brand.name|lower here because we can't use `id`, `Bitbucket2Provider.id == 'bitbucket_oauth2'` #}
+      <i class="fa-brands fa-{{ provider.get_brand.name|lower }} icon"></i>
       {{ provider.get_brand.name }}
     </span>
   {% endwith %}

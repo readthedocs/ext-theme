@@ -9,6 +9,7 @@
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/automation_rule_list.html" with objects=object_list %}
+  {% include "projects/partials/edit/automation_rule_activity.html" with objects=matches %}
 {% endblock %}
 
 {% block project_edit_sidebar_embed_doc %}automation-rules{% endblock %}

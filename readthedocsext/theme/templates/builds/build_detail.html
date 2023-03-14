@@ -23,7 +23,18 @@
         {% block build_detail_metadata_left %}
         <div class="ui eleven wide column">
           <div class="ui header">
-            {% include "builds/includes/status_icon.html" with build=build circular=True %}
+            {% comment %}
+              The state icon expects the build API response directly instead, so
+              we recreate the used fields here.
+
+              The `data_bind` attribute is used when the build has not finished
+              yet -- when we can expect the page might update with a new build
+              state. Otherwise, it's skipped and we can assume there is no data
+              binding.
+            {% endcomment %}
+            <span data-bind="with: {state: {code: state()}, success: success()}">
+              {% include "builds/includes/status_icon.html" with build=build size="small" circular=True data_bind=True %}
+            </span>
             {% blocktrans trimmed with build_id=build.pk %}
               Build #{{ build_id }}
             {% endblocktrans %}

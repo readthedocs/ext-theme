@@ -1,6 +1,7 @@
 {% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
+{% load humanize %}
 
 {% load privacy_tags %}
 {% load projects_tags %}
@@ -75,23 +76,14 @@
   <div class="sub header">
     <div class="item" data-bind="semanticui: { popup: { content: '{{ object.date }}', position: 'top center', delay: { show: 500 }, variation: 'small'}}">
       {# Translators: this will read like "Started 1 month, 3 days ago" #}
-      {% blocktrans with object.date|timesince as date trimmed %}
-        Started {{ date }} ago
+      {% blocktrans with object.date|naturaltime as date trimmed %}
+        Started {{ date }}
       {% endblocktrans %}
     </div>
   </div>
 {% endblock list_item_header %}
 
 {% block list_item_meta_items %}
-  {% if object.is_external %}
-    <a href="{{ object.version.vcs_url }}" class="item" >
-      <i class="fa-duotone fa-code-pull-request icon"></i>
-      <code>#{{ object.version.verbose_name }}</code>
-    </a>
-  {% endif %}
-{% endblock list_item_meta_items %}
-
-{% block list_item_extra_items %}
   {% if object.commit %}
     {% with commit=object.commit|slice:"0:8" %}
       {% blocktrans with commit=commit trimmed asvar text_commit %}
@@ -103,4 +95,10 @@
       </a>
     {% endwith %}
   {% endif %}
+{% endblock list_item_meta_items %}
+
+{% block list_item_extra_items %}
+  <div class="item">
+    {% include "includes/elements/chips/version.html" with version=object.version %}
+  </div>
 {% endblock list_item_extra_items %}

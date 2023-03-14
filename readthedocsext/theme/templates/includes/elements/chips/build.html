@@ -1,0 +1,64 @@
+{% extends "includes/elements/chips/base.html" %}
+
+{% load i18n %}
+{% load humanize %}
+{% block chip_view_params %}'{% url "projects-builds-detail" build.project.slug build.pk %}'{% endblock %}
+
+{% block chip_url %}
+  {% url "builds_detail" build.project.slug build.pk %}
+{% endblock %}
+
+{% block chip_icon %}
+  {% include "builds/includes/status_icon.html" with build=build size="" %}
+{% endblock chip_icon %}
+    
+{% block chip_text %}
+  {# Allow for override of the text for version listing, where version is already stated #}
+  {{ text|default:build.version.verbose_name }} 
+{% endblock chip_text %}
+
+{% block chip_detail_text %}
+  #{{ build.id }}
+{% endblock chip_detail_text %}
+
+{% block popupcard_header %}
+  {{ text|default:build.version.verbose_name }} #{{ build.id }}
+{% endblock popupcard_header %}
+
+{% block popupcard_right %}
+  {% include "builds/includes/status_icon.html" with build=build size="small" circular=True classes="right floated" data_bind=True %}
+{% endblock popupcard_right %}
+
+{% block popupcard_meta %}
+  <time data-content="{{ build.date }}">{{ build.date|naturaltime }}</time>
+{% endblock popupcard_meta %}
+
+{% block popupcard_content %}
+  {% if build.error %}
+    <p style="white-space: normal;">
+      {{ build.error }}
+    </p>
+  {% endif %}
+{% endblock popupcard_content %}
+
+{% block popupcard_extra %}
+  {% if build.commit %}
+    <span>
+      <i class="fad fa-code-commit icon"></i>
+      {{ build.commit|slice:"0:8" }}
+    </span>
+  {% endif %}
+  <div class="right floated">
+    {% if build.length %}
+      <span>
+        <i class="fad fa-timer icon"></i>
+        {{ build.length }} seconds
+      </span>
+    {% else %}
+      <span>
+        <i class="fad fa-spinner-third loading icon"></i>
+        {{ build.get_state_display }}
+      </span>
+    {% endif %}
+  </div>
+{% endblock popupcard_extra %}

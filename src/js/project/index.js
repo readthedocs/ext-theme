@@ -4,7 +4,7 @@ import jquery from "jquery";
 import * as admin from "./admin";
 import * as create from "./create";
 
-import { PopupView, APIListItemView } from "../core/views";
+import { APIListItemView } from "../core/views";
 import { Registry } from "../application/registry";
 
 export { admin, create };
@@ -15,7 +15,6 @@ export { admin, create };
  * @class
  * @constructor
  * @public
- * @extends {PopupView}
  */
 export class ProjectHeaderView {
   static view_name = "ProjectHeaderView";
@@ -43,15 +42,11 @@ Registry.add_view(ProjectHeaderView);
 
 /**
  * Project list view for listing projects
- *
- * @extends {PopupView}
  */
-export class ProjectListView extends PopupView {
+export class ProjectListView {
   static view_name = "ProjectListView";
 
   constructor() {
-    super();
-
     /** @observable {Array<Project>} List of project instances in the list */
     this.projects = ko.observableArray();
     /** Configuration passed in via :func:`~application.plugins.jsonInit`
@@ -142,16 +137,13 @@ class Project extends APIListItemView {
  * View for project version creation and version activation.
  *
  * @class
- * @extends {PopupView}
  * @construtor
  * @public
  */
-export class ProjectVersionCreateView extends PopupView {
+export class ProjectVersionCreateView {
   static view_name = "ProjectVersionCreateView";
 
   constructor() {
-    super();
-
     /** Configuration passed in via :func:`~application.plugins.jsonInit`
      * @observable {Object} Search configuration */
     this.config = ko.observable();
@@ -209,16 +201,13 @@ Registry.add_view(ProjectVersionCreateView);
  * View for project version listing. This view wraps a list of :class:`Version`.
  *
  * @class
- * @extends {PopupView}
  * @construtor
  * @public
  */
-export class ProjectVersionListView extends PopupView {
+export class ProjectVersionListView {
   static view_name = "ProjectVersionListView";
 
   constructor() {
-    super();
-
     /** @observable {Array<Version>} Versions for project version listing */
     this.versions = ko.observableArray();
     /** Configuration passed in via :func:`~application.plugins.jsonInit`
@@ -313,6 +302,7 @@ Registry.add_view(ProjectVersionListView);
 class Version extends APIListItemView {
   constructor(version) {
     super(version);
+
     /** @observable {string} Async loaded URL for version PDF */
     this.url_pdf = ko.observable();
     /** @observable {string} Async loaded URL for version EPUB */

@@ -1,8 +1,7 @@
 {% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
-
-{% load pagination_tags %}
+{% load humanize %}
 
 {% load privacy_tags %}
 {% load projects_tags %}
@@ -96,8 +95,8 @@
       {% with build=object.get_latest_build %}
         <time data-content="{{ build.date }}">
           {# Translators: this will read like "Last built 1 year, 5 months ago" #}
-          {% blocktrans with time_since=build.date|timesince trimmed %}
-            Last built {{ time_since }} ago
+          {% blocktrans with time_since=build.date|naturaltime trimmed %}
+            Last built {{ time_since }}
           {% endblocktrans %}
         </time>
       {% endwith %}
@@ -113,15 +112,7 @@
 {% block list_item_extra_items %}
   {% if object.has_good_build %}
     {% with build=object.get_latest_build %}
-      <div data-bind="with: create_popup">
-        <a class="ui basic label"
-           data-bind="popup: {}"
-           href="{% url "builds_detail" object.slug build.pk %}">
-          {% include "builds/includes/status_icon.html" with build=build circular=False %}
-          {{ build.version.verbose_name }} #{{ build.id }}
-        </a>
-        {% include "includes/popupcards/build.html" with build=build %}
-      </div>
+      {% include "includes/elements/chips/build.html" with build=build %}
     {% endwith %}
   {% endif %}
 {% endblock %}

@@ -1,5 +1,7 @@
 {% load i18n %}
+
 {% load gravatar %}
+{% load ext_theme_tags %}
 
 <div class="ui centered card">
   {% if is_editable %}
@@ -52,7 +54,7 @@
                 {% blocktrans with provider=provider.get_brand.name asvar text_provider trimmed %}
                   User's {{ provider }} profile
                 {% endblocktrans %}
-                {% include "includes/elements/link.html" with is_external=True url=socialaccount.get_profile_url text=socialaccount.extra_data.login label=text_provider %}
+                {% include "includes/elements/link.html" with is_external=True url=socialaccount.get_profile_url text=socialaccount|get_account_username label=text_provider %}
               </div>
             </div>
           {% endwith %}
