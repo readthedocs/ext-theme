@@ -3,13 +3,10 @@ Read the Docs -- Application theme
 
 Also known as: ``readthedocsext-theme``.
 
-This is meant as an extension to ``readthedocsext`` for now. The templates and
-asset source files will/may eventually be part of Read the Docs application core
-code, but are maintained in separate package/namespace while development is
-still in a alpha/beta phase.
-
-The documentation here is meant to aid in development, and describes many of the
-patterns used throughout the templates and our JavaScript.
+This is an addition to the ``readthedocsext`` package, and provides an
+alternative theme for the application UI. This package includes updated templates
+and new JavaScript sources, though still sticks to most of the patterns and
+tools already used in the application templates.
 
 .. toctree::
     :maxdepth: 2
