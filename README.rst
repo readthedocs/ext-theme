@@ -23,13 +23,51 @@ The recommended way of starting your local instance is:
 
    % inv docker.up --webpack --ext-theme  # `-we` for short
 
-This will start the Webpack container for hot/live reload of compiled assets
-and will alter the template load pattern to make use of templates in this
-package first.
+This will start the Webpack dev server container for hot/live reload of compiled
+assets and will alter the template load pattern to make use of templates in this
+package first. You do not need to rebuild the asset files until you open a pull
+request.
 
 You can run your local instance without Webpack, but you will lose live and hot
 reload for the front end assets and you will need to manually run
 ``collectstatic`` after every change to the front end assets.
+
+Testing
+-------
+
+Our standard JS stack uses Jest for testing. Execute tests as normal:
+
+.. code:: console
+
+   % npm test
+
+Linting
+-------
+
+Our standard JS stack uses Prettier for linting. Test linting with:
+
+.. code:: console
+
+   % npm run lint
+
+Reformat code with:
+
+.. code:: console
+
+   % npm run format
+
+Linting checks are performed at CI and will produce errors.
+
+Building
+--------
+
+CI checks will also check to see that the built CSS and JavaScript assets are up
+to date. When you submit a pull request, you'll need to rebuild the asset files
+included in the repository here:
+
+.. code:: console
+
+   % npm run build
 
 Resources
 ---------
