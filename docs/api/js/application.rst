@@ -6,3 +6,6 @@ Main application
 
 .. js:autoclass:: ApplicationView
     :members:
+
+.. js:autoclass:: Registry
+    :members:

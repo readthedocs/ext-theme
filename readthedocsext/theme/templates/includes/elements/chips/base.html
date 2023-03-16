@@ -1,17 +1,67 @@
-{# This is probably used inside another KO `with` binding, so we need to reference the root view #}
+{% comment "rst" %}
+  Chips 
+  =====
+
+  In a few other frameworks, like Material [1]_, chips represent an actionable
+  label or tag. SemanticUI has labels, which is the underlying element to this,
+  but to distinguish the two, I'll refer to these as "chips".
+
+  Chips represent linkable items, like projects, builds, or versions, and they
+  use a graphic element along with a label to allow the chip to stand out a bit
+  more than a text label would.
+
+  So far, chips will all trigger their own popup on hover, allowing more details
+  in a popup card view. This is a base template, and each individual chip type
+  will need to specify it's own popup contents, etc.
+
+  The following blocks are available for override:
+
+{% endcomment %}
+{# This is probably used inside another KO `with` binding, so we need to reference the root ApplicationView #}
 <div data-bind="with: $root.PopupcardView({% spaceless %}{% block chip_view_params %}{% endblock %}{% endspaceless %})">
   <a class="ui {% spaceless %}{% block chip_classes %}basic{% endblock %}{% endspaceless %} label"
      data-bind="semanticui: { popup: popup_config() }"
      href="{% spaceless %}{% block chip_url %}{% endblock %}{% endspaceless %}">
 
+    {% comment "rst" %}
+
+    .. describe:: chip_icon
+
+       The icon or image to the left of the label. See FomanticUI label docs for
+       each implementation.
+
+    {% endcomment %}
     {% block chip_icon %}
     {% endblock chip_icon %}
 
+    {% comment "rst" %}
+
+    .. describe:: chip_text
+
+       The main text of the chip
+
+    {% endcomment %}
     {% block chip_text %}
     {% endblock chip_text %}
 
+    {% comment "rst" %}
+
+    .. describe:: chip_detail
+
+       The wrapper for the label detail text. If empty, this block will not
+       output the right label detail text.
+
+    {% endcomment %}
     {% block chip_detail %}
       <div class="detail">
+        {% comment "rst" %}
+
+        .. describe:: chip_detail_text
+
+           The text to the right of the label, if any. Set ``chip_detail`` to an
+           empty block to remove this portion of the label.
+
+        {% endcomment %}
         {% block chip_detail_text %}
         {% endblock chip_detail_text %}
       </div>
@@ -20,34 +70,80 @@
   <div class="ui fluid popup" data-bind="using: data, css: { loading: is_loading() }">
     <div class="ui small wide basic horizontal card" data-bind="if: $parent.is_loaded()">
 
+      {% comment "rst" %}
+
+      .. describe:: popupcard_image
+
+         The left image to use in the popup card, however you likely want to
+         use an image or icon in ``popupcard_right`` instead.
+
+      {% endcomment %}
       {% block popupcard_image %}
       {% endblock popupcard_image %}
 
       <div class="content">
 
+        {% comment "rst" %}
+
+        .. describe:: popupcard_right
+
+           For floating an image or icon to the right of the card.
+
+           .. code:: html
+              :caption: Example
+
+              <i class="fa-solid right floated fa-check-mark icon"></i>
+
+        {% endcomment %}
         {% block popupcard_right %}
-          {% comment %}
-            <i class="fa-solid right floated fa-check-mark icon"></i>
-          {% endcomment %}
         {% endblock %}
 
         <div class="header">
+          {% comment "rst" %}
+
+          .. describe:: popupcard_header
+
+             Header text for the popup card.
+
+          {% endcomment %}
           {% block popupcard_header %}
           {% endblock popupcard_header %}
         </div>
 
         <div class="meta">
+          {% comment "rst" %}
+
+          .. describe:: popupcard_meta
+
+             The meta line below the header on the popup card.
+
+          {% endcomment %}
           {% block popupcard_meta %}
           {% endblock popupcard_meta %}
         </div>
 
         <div class="description">
+          {% comment "rst" %}
+
+          .. describe:: popupcard_content
+
+             The content of the popup card, usually a vertical list.
+
+          {% endcomment %}
           {% block popupcard_content %}
           {% endblock popupcard_content %}
         </div>
       </div>
 
       <div class="extra content">
+          {% comment "rst" %}
+
+          .. describe:: popupcard_extra
+
+             The extra content for the card, a line for metadata below the card
+             content.
+
+          {% endcomment %}
         {% block popupcard_extra %}
         {% endblock popupcard_extra %}
       </div>
