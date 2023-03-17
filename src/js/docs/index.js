@@ -17,11 +17,11 @@ class EmbedTopic {
 
 /**
  * Add embedded list of documentation topics from the embed API
- * 
+ *
  * This is currently using a deprecated API and we need to add this
  * functionality into something we're maintaining, or replace this with the
  * hoverxref implementation.
- */ 
+ */
 export class EmbedTopicsView {
   static view_name = "EmbedTopicsView";
 
