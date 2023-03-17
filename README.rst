@@ -74,11 +74,11 @@ included in the repository here:
 More resources
 --------------
 
-`ext-theme documentation <https://read-the-docs-ext-theme.readthedocs-hosted.com/en/latest/index.html>`_
+`ext-theme documentation <https://docs.ops.verbthenouns.com/projects/ext-theme/en/latest/>`_
     Some documentation of patterns, conventions, and API reference
 
-`JavaScript reference <https://read-the-docs-ext-theme.readthedocs-hosted.com/en/latest/api/javascript.html>`_
+`JavaScript reference <https://docs.ops.verbthenouns.com/projects/ext-theme/en/latest/api/javascript.html>`_
     API reference for JavaScript front end code
 
-`Template API reference <https://read-the-docs-ext-theme.readthedocs-hosted.com/en/latest/api/templates.html>`_
+`Template API reference <https://docs.ops.verbthenouns.com/projects/ext-theme/en/latest/api/templates.html>`_
     Template reference and documentation
