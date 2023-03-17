@@ -5,17 +5,19 @@ Common list view
 ----------------
 
 .. autoanysrc:: crud_list
-    :src: ../readthedocsext/theme/templates/includes/crud/list.html
+    :src: ../readthedocsext/theme/templates/includes/crud/table_list.html
     :analyzer: html
 
 .. autoanysrc:: crud_remove
     :src: ../readthedocsext/theme/templates/includes/crud/remove_button.html
     :analyzer: html
 
-Components
-----------
+Elements
+--------
 
-:Source: ``readthedocsext/theme/templates/includes/components``
+.. autoanysrc:: chips
+    :src: ../readthedocsext/theme/templates/includes/elements/chips/base.html
+    :analyzer: html
 
 .. autoanysrc:: config_label
     :src: ../readthedocsext/theme/templates/includes/components/config_label.html

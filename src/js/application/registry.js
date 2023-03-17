@@ -1,14 +1,24 @@
 import ko from "knockout";
 
 /**
- * Registry pattern for views, so that views can self-register where they are
- * defined.
+ * Registry pattern for views, to accumulate public views for templates
+ *
+ * To avoid using a routing library, or treating this JS as a single page
+ * application on top of a Django backend, we simply will make all views
+ * available to all templates. This registry ultimately attaches to the
+ * main :class:`ApplicationView` instance, and all views will be available in
+ * that bound context.
+ *
+ * See :class:`ApplicationView` here for examples and more information
  */
 export class Registry {
   static views = {};
 
   /**
    * Add view to registry. View should have ``view_name`` proprety defined.
+   *
+   * A ``view_name`` attribute is required as the class name will change when
+   * the sources are minified.
    *
    * @param {class} view - Knockout view to expose to the application
    */
