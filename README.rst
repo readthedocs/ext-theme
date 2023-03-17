@@ -1,12 +1,14 @@
 Read the Docs - ext-theme
 =========================
 
-This package aims to be a drop in replacement for the current templates for the
-Read the Docs application. This will replace the entire UI of Read the Docs, and
-uses a number of updated patterns for templates and front end code. 
+This package is the next generation theme for the Read the Docs application UI.
 
-All of the heavy lifting for the UI comes from FomanticUI (SemanticUI), and
-custom CSS is reduced to the bare minimum required.
+It aims to be a drop in replacement for the current templates for the Read the
+Docs application and will replace the entire UI for the application. It includes
+updated templates, new JavaScript sources, and UI based on FomanticUI
+(SemanticUI). It does still retain most of the patterns and tools already used
+in the existing application templates. It is an addition to the
+``readthedocsext`` package, and provides the ``theme`` Django application.
 
 .. warning::
     This package is still alpha level quality and is not ready for general use.
@@ -14,8 +16,8 @@ custom CSS is reduced to the bare minimum required.
 Usage
 -----
 
-You will need a Read the Docs application environment configured to use this
-package.
+This package is already installed with your local environment, which will need
+to be configured to use this package.
 
 The recommended way of starting your local instance is:
 
@@ -69,8 +71,8 @@ included in the repository here:
 
    % npm run build
 
-Resources
----------
+More resources
+--------------
 
 `ext-theme documentation <https://read-the-docs-ext-theme.readthedocs-hosted.com/en/latest/index.html>`_
     Some documentation of patterns, conventions, and API reference

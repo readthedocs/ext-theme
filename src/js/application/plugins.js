@@ -295,7 +295,7 @@ export const message = {
  * The second way of using this plugin is through an Knockout observable that
  * returns either a literal object or a function from the observable.
  *
- * See :js:`BuildDetailView.progress_config` for an example of both.
+ * See :func:`BuildDetailView.progress_config` for an example of both.
  *
  * To pass a literal object via an observable, use an observable such as:
  *

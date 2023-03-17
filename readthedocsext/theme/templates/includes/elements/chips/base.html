@@ -2,7 +2,7 @@
   Chips 
   =====
 
-  In a few other frameworks, like Material [1]_, chips represent an actionable
+  In a few other frameworks, like Material, chips represent an actionable
   label or tag. SemanticUI has labels, which is the underlying element to this,
   but to distinguish the two, I'll refer to these as "chips".
 
@@ -25,10 +25,10 @@
 
     {% comment "rst" %}
 
-    .. describe:: chip_icon
+      .. describe:: chip_icon
 
-       The icon or image to the left of the label. See FomanticUI label docs for
-       each implementation.
+         The icon or image to the left of the label. See FomanticUI label docs for
+         each implementation.
 
     {% endcomment %}
     {% block chip_icon %}
@@ -36,9 +36,9 @@
 
     {% comment "rst" %}
 
-    .. describe:: chip_text
+      .. describe:: chip_text
 
-       The main text of the chip
+         The main text of the chip
 
     {% endcomment %}
     {% block chip_text %}
@@ -46,20 +46,20 @@
 
     {% comment "rst" %}
 
-    .. describe:: chip_detail
+      .. describe:: chip_detail
 
-       The wrapper for the label detail text. If empty, this block will not
-       output the right label detail text.
+         The wrapper for the label detail text. If empty, this block will not
+         output the right label detail text.
 
     {% endcomment %}
     {% block chip_detail %}
       <div class="detail">
         {% comment "rst" %}
 
-        .. describe:: chip_detail_text
+          .. describe:: chip_detail_text
 
-           The text to the right of the label, if any. Set ``chip_detail`` to an
-           empty block to remove this portion of the label.
+             The text to the right of the label, if any. Set ``chip_detail`` to an
+             empty block to remove this portion of the label.
 
         {% endcomment %}
         {% block chip_detail_text %}
@@ -72,10 +72,10 @@
 
       {% comment "rst" %}
 
-      .. describe:: popupcard_image
+        .. describe:: popupcard_image
 
-         The left image to use in the popup card, however you likely want to
-         use an image or icon in ``popupcard_right`` instead.
+           The left image to use in the popup card, however you likely want to
+           use an image or icon in ``popupcard_right`` instead.
 
       {% endcomment %}
       {% block popupcard_image %}
@@ -85,14 +85,13 @@
 
         {% comment "rst" %}
 
-        .. describe:: popupcard_right
+          .. describe:: popupcard_right
 
-           For floating an image or icon to the right of the card.
+             For floating an image or icon to the right of the card. For example:
 
-           .. code:: html
-              :caption: Example
+             .. code:: html
 
-              <i class="fa-solid right floated fa-check-mark icon"></i>
+                <i class="fa-solid right floated fa-check-mark icon"></i>
 
         {% endcomment %}
         {% block popupcard_right %}
@@ -101,9 +100,9 @@
         <div class="header">
           {% comment "rst" %}
 
-          .. describe:: popupcard_header
+            .. describe:: popupcard_header
 
-             Header text for the popup card.
+               Header text for the popup card.
 
           {% endcomment %}
           {% block popupcard_header %}
@@ -113,9 +112,9 @@
         <div class="meta">
           {% comment "rst" %}
 
-          .. describe:: popupcard_meta
+            .. describe:: popupcard_meta
 
-             The meta line below the header on the popup card.
+               The meta line below the header on the popup card.
 
           {% endcomment %}
           {% block popupcard_meta %}
@@ -125,9 +124,9 @@
         <div class="description">
           {% comment "rst" %}
 
-          .. describe:: popupcard_content
+            .. describe:: popupcard_content
 
-             The content of the popup card, usually a vertical list.
+               The content of the popup card, usually a vertical list.
 
           {% endcomment %}
           {% block popupcard_content %}
@@ -138,10 +137,10 @@
       <div class="extra content">
           {% comment "rst" %}
 
-          .. describe:: popupcard_extra
+            .. describe:: popupcard_extra
 
-             The extra content for the card, a line for metadata below the card
-             content.
+               The extra content for the card, a line for metadata below the card
+               content.
 
           {% endcomment %}
         {% block popupcard_extra %}

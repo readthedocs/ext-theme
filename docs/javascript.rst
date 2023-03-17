@@ -18,6 +18,6 @@ Here are a few places you probably want to understand more about our JS:
 :class:`ApplicationView`
     The top level model view, a wrapper that provides globals to templates
 
-:func:`semanticui`
+:func:`application.plugins.semanticui`
     You'll see this used a lot. It's used to instantiate SemanticUI modules
     from templates.

@@ -10,6 +10,9 @@ docs/out/
 build/
 .python-version
 .node-version
+.tool-versions
+.direnv/
+.envrc
 
 # Temporary. Not sure if we should submodule vendor this or not
 /crispy-semantic-ui.git/

@@ -1,26 +1,24 @@
 Read the Docs -- Application theme
 ==================================
 
-Also known as: ``readthedocsext-theme``.
+.. toctree::
+   :maxdepth: 2
+   :hidden:
 
-This is an addition to the ``readthedocsext`` package, and provides an
-alternative theme for the application UI. This package includes updated templates
-and new JavaScript sources, though still sticks to most of the patterns and
-tools already used in the application templates.
+   templates
+   javascript
+   stylesheets
 
 .. toctree::
-    :maxdepth: 2
+   :maxdepth: 2
+   :hidden:
+   :caption: API reference
 
-    templates
-    javascript
-    stylesheets
+   api/templates
+   api/javascript
 
-.. toctree::
-    :maxdepth: 2
-    :caption: Reference
-
-    api/templates
-    api/javascript
+.. include:: ../README.rst
+   :start-line: 3
 
 Indices and tables
 ==================

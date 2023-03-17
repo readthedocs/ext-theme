@@ -18,7 +18,7 @@ A few of the conventions used in templates are:
 - In places where views are interactive and more dynamic, Knockout model views
   are used to glue some amount of JavaScript to template code.
 - SemanticUI components are configured inside templates for the most part, using
-  some Knockout helpers like the :func:`semanticui` binding.
+  some Knockout helpers like the :func:`application.plugins.semanticui` binding.
 - You will see JSON configuration in places where we pass Django URLs or
   translations through to our JS.
 
