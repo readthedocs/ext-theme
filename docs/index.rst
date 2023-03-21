@@ -1,29 +1,24 @@
 Read the Docs -- Application theme
 ==================================
 
-Also known as: ``readthedocsext-theme``.
+.. toctree::
+   :maxdepth: 2
+   :hidden:
 
-This is meant as an extension to ``readthedocsext`` for now. The templates and
-asset source files will/may eventually be part of Read the Docs application core
-code, but are maintained in separate package/namespace while development is
-still in a alpha/beta phase.
-
-The documentation here is meant to aid in development, and describes many of the
-patterns used throughout the templates and our JavaScript.
+   templates
+   javascript
+   stylesheets
 
 .. toctree::
-    :maxdepth: 2
+   :maxdepth: 2
+   :hidden:
+   :caption: API reference
 
-    templates
-    javascript
-    stylesheets
+   api/templates
+   api/javascript
 
-.. toctree::
-    :maxdepth: 2
-    :caption: Reference
-
-    api/templates
-    api/javascript
+.. include:: ../README.rst
+   :start-line: 3
 
 Indices and tables
 ==================

@@ -34,7 +34,9 @@ class DjangoTemplateAnalyzer(analyzers.BaseCommentAnalyzer):
             # So, first_indent == 2
             # Check that the indent is all whitespace
             line_indent = line[0:first_indent]
-            assert len(line_indent.strip()) == 0
+            if len(line_indent.strip()) != 0:
+                raise Exception(f'Line {lineno} is missing some indentation. '
+                                f'Try indenting the block inner text once.')
 
             yield (line[first_indent:], lineno)
 

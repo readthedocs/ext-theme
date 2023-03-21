@@ -10,14 +10,14 @@ Base
 .. js:autoclass:: ResponsiveView
     :members:
 
-.. js:autoclass:: PopupView
-    :members:
-
-.. js:autoclass:: Popup
+.. js:autoclass:: HeaderView 
     :members:
 
 Project
 -------
+
+.. js:autoclass:: ProjectHeaderView
+    :members:
 
 .. js:autoclass:: ProjectListView
     :members:
@@ -37,6 +37,18 @@ Project
 .. js:autoclass:: Version
     :members:
 
+.. js:autoclass:: ProjectAutomationRuleView
+    :members:
+
+.. js:autoclass:: ProjectRedirectView
+    :members:
+
+.. js:autoclass:: ProjectSearchAnalyticsView
+    :members:
+
+.. js:autoclass:: ProjectTrafficAnalyticsView
+    :members:
+
 Builds
 ~~~~~~
 
@@ -50,4 +62,10 @@ Builds
     :members:
 
 .. js:autoclass:: BuildCommandOutput
+    :members:
+
+Docs
+~~~~
+
+.. js:autoclass:: EmbedTopicsView
     :members:

@@ -4,19 +4,27 @@ import ko from "knockout";
 import jquery from "jquery";
 
 /**
- * This is the top-level view that is added to ``<body>``, and is what surfaces
- * all of the child view names to the templates. For instance, in the project
- * creation template, we would use the :class:`ProjectCreateView` with:
+ * ``ApplicationView`` is the top-level view that is bound to ``<body>``, and is
+ * what surfaces all registered view to templates. Registered views will be
+ * available as attributes on this instance, and can be referenced directly, or
+ * if the context is already in one of the views, can be referenced using
+ * ``$root``:
  *
  * .. code:: html
  *
- *     <div data-bind="using: ProjectCreateView()">
- *       ...
- *     </div>
+ *    <body>
+ *      <!-- The context is bound to ApplicationView() -->
+ *      <div data-bind="using: ProjectCreateView()">
+ *       <!-- The context is now bound to ProjectCreateView() -->
+ *       <div data-bind="using $root.DocEmbedView()">
+ *         <!-- The context is bound to DocEmbedView() -->
+ *       </div>
+ *      </div>
+ *    </body>
  *
- * This resets the bound view in Knockout for the element, and rebinds and
- * resets the context, so that :class:`ApplicationView` is not the primary view
- * anymore.
+ * This view also has a few utility methods that templates use directly. This is
+ * for a few quirks where Knockout or HTML required for SemanticUI need some
+ * additional code.
  */
 export class ApplicationView {
   /**
