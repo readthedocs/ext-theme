@@ -4,7 +4,7 @@ import ko from "knockout";
 window.jQuery = jquery;
 global.jQuery = jquery;
 
-/* Not import syntax on purpose */
+/* CommonJS require instead of import syntax on purpose */
 require("fomantic-ui-less/definitions/behaviors/visibility.js");
 require("fomantic-ui-less/definitions/behaviors/form.js");
 require("fomantic-ui-less/definitions/behaviors/state.js");
@@ -295,7 +295,7 @@ export const message = {
  * The second way of using this plugin is through an Knockout observable that
  * returns either a literal object or a function from the observable.
  *
- * See :js:`BuildDetailView.progress_config` for an example of both.
+ * See :func:`BuildDetailView.progress_config` for an example of both.
  *
  * To pass a literal object via an observable, use an observable such as:
  *
