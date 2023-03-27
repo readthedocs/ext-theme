@@ -26,8 +26,8 @@
           <i class="fa-solid fa-caret-down icon"></i>
 
           <div class="menu">
-            {% for option in field.field.widget.choices %}
-              <a class="item" data-value="{{ option.0 }}">{{ option.1 }}</a>
+            {% for value, label in field.field.widget.choices %}
+              <a class="item" data-value="{{ value }}">{{ label }}</a>
             {% endfor %}
           </div>
         </div>
