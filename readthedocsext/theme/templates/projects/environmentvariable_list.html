@@ -2,10 +2,10 @@
 
 {% load i18n %}
 
-{% block title %}{{ project.name }} - {% trans "Environment Variables" %}{% endblock %}
+{% block title %}{{ project.name }} - {% trans "Environment variables" %}{% endblock %}
 
 {% block project_environment_variables_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Environment Variables" %}{% endblock %}
+{% block project_edit_content_header %}{% trans "Environment variables" %}{% endblock %}
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/environment_variable_list.html" with objects=object_list %}
