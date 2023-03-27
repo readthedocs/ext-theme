@@ -9,19 +9,15 @@
 {% endblock %}
 
 {% block content %}
-  {# TODO don't do this. fix the spacing issue with the container #}
-  <p></p>
-
-  <div class="ui two column centered stackable grid">
-
-    <div class="ui three wide column">
+  <div class="ui stackable grid">
+    <div class="five wide computer five wide tablet sixteen wide mobile column">
 
       <div class="ui vertical pointing fluid menu">
         <a class="item {% block project_edit_active %}{% endblock %}" href="{% url "projects_edit" project.slug %}">
           {% trans "Settings" %}
         </a>
         <a class="item {% block project_advanced_active %}{% endblock %}" href="{% url "projects_advanced" project.slug %}">
-          {% trans "Advanced Settings" %}
+          {% trans "Advanced settings" %}
         </a>
         <a class="item {% block project_domains_active %}{% endblock %}" href="{% url "projects_domains" project.slug %}">
           {% trans "Domains" %}
@@ -39,10 +35,10 @@
           {% trans "Integrations" %}
         </a>
         <a class="item {% block project_environment_variables_active %}{% endblock %}" href="{% url "projects_environmentvariables" project.slug %}">
-          {% trans "Environment Variables" %}
+          {% trans "Environment variables" %}
         </a>
         <a class="item {% block project_automation_rules_active %}{% endblock %}" href="{% url "projects_automation_rule_list" project.slug %}">
-          {% trans "Automation Rules" %}
+          {% trans "Automation rules" %}
         </a>
         <a class="item {% block project_notifications_active %}{% endblock %}" href="{% url "projects_notifications" project.slug %}">
           {% trans "Notifications" %}
@@ -51,10 +47,10 @@
           {% trans "Redirects" %}
         </a>
         <a class="item {% block project_search_analytics_active %}{% endblock %}" href="{% url "projects_search_analytics" project.slug %}">
-          {% trans "Search Analytics" %}
+          {% trans "Search analytics" %}
         </a>
         <a class="item {% block project_traffic_analytics_active %}{% endblock %}" href="{% url "projects_traffic_analytics" project.slug %}">
-          {% trans "Traffic Analytics" %}
+          {% trans "Traffic analytics" %}
         </a>
         {% if USE_PROMOS %}
           <a class="item {% block project_ads_active %}{% endblock %}" href="{% url "projects_advertising" project.slug %}">
@@ -62,25 +58,6 @@
           </a>
         {% endif %}
       </div>
-    </div>
-
-    <div class="ui nine wide column">
-      <h2 class="ui medium dividing header">
-        {% block project_edit_content_header %}
-        {% endblock project_edit_content_header %}
-        <div class="sub header">
-          {% block project_edit_content_subheader %}
-          {% endblock project_edit_content_subheader %}
-        </div>
-      </h2>
-
-      <div id="edit-content">
-        {% block project_edit_content %}
-        {% endblock project_edit_content %}
-      </div>
-    </div>
-
-    <div class="ui four wide column" id="edit-right">
 
       {% block project_edit_sidebar %}
         <div class="ui basic segment">
@@ -96,6 +73,8 @@
             View our full docs
           </a>
         </div>
+  
+        {% include "includes/utils/embed_docs.html" %}
 
         {% block project_edit_sidebar_extra %}
         {% endblock project_edit_sidebar_extra %}
@@ -103,7 +82,22 @@
 
     </div>
 
-  </div>
+    <div class="eleven wide computer eleven wide tablet sixteen wide mobile column">
 
-  {% include "includes/utils/embed_docs.html" %}
+      <h2 class="ui medium dividing header">
+        {% block project_edit_content_header %}
+        {% endblock project_edit_content_header %}
+        <div class="sub header">
+          {% block project_edit_content_subheader %}
+          {% endblock project_edit_content_subheader %}
+        </div>
+      </h2>
+
+      <div id="edit-content">
+        {% block project_edit_content %}
+        {% endblock project_edit_content %}
+      </div>
+
+    </div>
+  </div>
 {% endblock content %}
