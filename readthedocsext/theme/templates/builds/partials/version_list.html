@@ -39,10 +39,12 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  <a href="{% url "project_version_create" project.slug %}" class="ui primary button">
-    <i class="fa-solid fa-plus icon"></i>
-    <span class="text">{% trans "Add version" %}</span>
-  </a>
+  {% if is_project_admin %}
+    <a href="{% url "project_version_create" project.slug %}" class="ui primary button">
+      <i class="fa-solid fa-plus icon"></i>
+      <span class="text">{% trans "Activate version" %}</span>
+    </a>
+  {% endif %}
 {% endblock %}
 
 {% block list_placeholder_icon_class %}{% endblock %}
@@ -50,7 +52,9 @@
   {% trans "No versions found for this project or filter" %}
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
-  <div class="ui primary button">{% trans "Activate a version" %}</div>
+  {% if is_project_admin %}
+    <div class="ui primary button">{% trans "Activate a version" %}</div>
+  {% endif %}
 {% endblock list_placeholder_text %}
 
 {% block list_item_start %}
@@ -68,7 +72,7 @@
         target="_blank"
         data-content="{{ label_view }}"
         aria-label="{{ label_view }}">
-      <i class="fa-duotone fa-arrow-up-right-from-square icon"></i>
+      <i class="fa-solid fa-book icon"></i>
     </a>
 
     {% blocktrans trimmed with version=object.verbose_name asvar label_download %}
@@ -79,7 +83,7 @@
         data-bind="event: {click: fetch}"
         data-content="{{ label_download }}"
         aria-label="{{ label_download }}">
-      <i class="fa-duotone fa-download icon"></i>
+      <i class="fa-solid fa-download icon"></i>
       <div class="menu">
         <div class="header">{% trans "Downloads" %}</div>
         <a class="disabled item" data-bind="css: {disabled: !url_pdf()}, attr: {href: url_pdf()}">
@@ -148,7 +152,7 @@
 {% block list_item_meta_items %}
 
   {% if object.slug == project.default_version %}
-    {% trans "default" context "Version is the default version" as text %}
+    {% trans "Default" context "Version is the default version" as text %}
     {% blocktrans trimmed with version=object.verbose_name asvar popup %}
       Version {{ version }} is the default version
     {% endblocktrans %}
@@ -158,7 +162,7 @@
   {% endif %}
 
   {% if object.slug == project.stable_version %}
-    {% trans "stable" context "Version is the stable version" as text %}
+    {% trans "Stable" context "Version is the stable version" as text %}
     {% blocktrans trimmed with version=object.verbose_name asvar popup %}
       Version {{ version }} is the stable version
     {% endblocktrans %}
@@ -169,7 +173,7 @@
 
   {% if request.user in project.users.all %}
     {% if object.privacy_level == 'private' %}
-      {% trans "private" context "Version is private" as text %}
+      {% trans "Private" context "Version is private" as text %}
       {% blocktrans trimmed with version=object.verbose_name asvar popup %}
         Version {{ version }} is private
       {% endblocktrans %}
@@ -180,7 +184,7 @@
   {% endif %}
 
   {% if object.hidden %}
-    {% trans "hidden" context "Version is hidden" as text %}
+    {% trans "Hidden" context "Version is hidden" as text %}
     {% blocktrans trimmed with version=object.verbose_name asvar popup %}
       Version {{ version }} is hidden
     {% endblocktrans %}

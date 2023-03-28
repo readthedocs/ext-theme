@@ -1,4 +1,4 @@
-{% extends "includes/crud/list.html" %}
+{% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
 
@@ -39,11 +39,12 @@
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
-  <a class="ui icon button"
-     data-clipboard-text="{{ object.name }}"
-     data-content="{% trans "Copied!" %}">
+  <div class="ui button"
+       data-clipboard-text="{{ object.name }}"
+       {# Translators: past tense as this shown after clicking #}
+       data-content="{% trans "Copied!" %}">
     <i class="fa-solid fa-clipboard icon"></i>
-  </a>
+  </div>
 
   {% url 'projects_environmentvariables_delete' project_slug=project.slug environmentvariable_pk=object.pk as form_url %}
   {% trans "Remove variable" as action_text %}
@@ -53,11 +54,34 @@
   {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
 {% endblock list_item_right_buttons %}
 
+{% block list_item_icon %}
+  {% if not object.public %}
+    <i class="fad fa-lock icon"
+       data-content="{% trans "Environment variable is not public" %}">
+    </i>
+  {% endif %}
+{% endblock list_item_icon %}
+
 {% block list_item_header %}
-  <a class="ui basic label" href="{% url 'projects_environmentvariables_detail' project_slug=project.slug environmentvariable_pk=object.pk %}">
+  <div class="ui small text">
     <code>{{ object.name }}</code>
-  </a>
+  </div>
+  <div class="sub header">
+    <code>
+      {% if object.public %}
+        {{ object.value }}
+      {% else %}
+        {% spaceless %}
+          {# Avoid exposing short secrets #}
+          {% if object.value|length > 4 %}{{ object.value|slice:"0:4" }}{% endif %}****
+        {% endspaceless %}
+      {% endif %}
+    </code>
+  </div>
 {% endblock list_item_header %}
+
+{% block list_item_extra %}
+{% endblock list_item_extra %}
 
 {% block list_item_meta %}
 {% endblock list_item_meta %}
