@@ -11,44 +11,6 @@
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/redirect_list.html" with objects=redirects %}
-
-  <h3 class="ui small heading">
-    {% trans "Add Redirect" %}
-  </h3>
-
-  <form class="ui form" method="post" action="." data-bind="using: ProjectRedirectView()">
-    {% csrf_token %}
-    {% alter_field form.redirect_type data_bind="value: redirect_type" %}
-    {% alter_field form.from_url data_bind="textInput: from_url, enable: is_from_url_visible" %}
-    {% alter_field form.to_url data_bind="textInput: to_url, enable: is_to_url_visible" %}
-    {{ form|crispy }}
-
-    <div class="ui disabled segment" data-bind="css: {disabled: is_example_disabled}">
-      <div class="ui sub header">
-        Example redirect:
-      </div>
-      <div data-bind="visible: !is_example_disabled()">
-        <div class="ui list">
-          <div class="item">
-            <div class="ui small basic label">
-              <i class="fa-duotone fa-sign-posts icon"></i>
-              Redirect from
-            </div>
-            <code data-bind="text: redirect_from"></code>
-          </div>
-          <div class="item">
-            <div class="ui small basic label">
-              <i class="fa-duotone fa-sign-posts icon"></i>
-              Redirect to
-            </div>
-            <code data-bind="text: redirect_to"></code>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <input class="ui primary button" type="submit" value="{% trans "Add redirect" %}">
-  </form>
 {% endblock %}
 
 {% block project_edit_sidebar_embed_doc %}user-defined-redirects{% endblock %}
