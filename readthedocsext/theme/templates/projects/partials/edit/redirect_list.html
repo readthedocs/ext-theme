@@ -1,4 +1,4 @@
-{% extends "includes/crud/list.html" %}
+{% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
 
@@ -8,24 +8,16 @@
 {% load privacy_tags %}
 {% load projects_tags %}
 
-{# Because we don't have filters and we have an inline create form, we don't need this yet #}
-{% block top_menu %}
-{% endblock top_menu %}
-
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  {% comment %}
-    {# TODO make this a view #}
-    <div class="item">
-      <a class="ui green icon button"
-        href="{% url "projects_domains_create" project.slug %}">
-        <i class="plus icon"></i>
-        {% trans "Add maintainer" %}
-      </a>
-    </div>
-  {% endcomment %}
+  <div class="item">
+    <a class="ui green icon button"
+       href="{% url 'projects_redirects_create' project_slug=project.slug %}">
+      {% trans "Add redirect" %}
+    </a>
+  </div>
 {% endblock %}
 
 {% block list_placeholder_icon_class %}fa-duotone fa-signs-post{% endblock %}
@@ -42,63 +34,92 @@
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
-  <a class="ui icon button"
+  <a class="ui button"
+     href="{% url 'projects_redirects_edit' project_slug=project.slug redirect_pk=object.pk %}"
+     data-content="{% trans "Edit redirect" %}">
+    <i class="fas fa-wrench icon"></i>
+  </a>
+
+  <div class="ui button"
      data-bind="click: $root.show_modal('redirect-{{ object.pk }}')"
      data-content="{% trans "Remove redirect" %}">
-    <i class="fa-duotone fa-trash icon"></i>
-  </a>
-  <div class="ui mini modal" data-modal-id="redirect-{{ object.pk }}">
-    <div class="header">Remove redirect?</div>
-    <div class="content">
-      Remove redirect {{ object }}?
-    </div>
-    <div class="actions">
-      <form method="post" action="{% url "projects_redirects_delete" project.slug %}">
-        {% csrf_token %}
-        <input type="hidden" name="id_pk" value="{{ object.pk }}" />
-        <input class="ui negative button" type="submit" value="{% trans "Remove" %}">
-      </form>
+    <i class="fas fa-trash icon"></i>
+
+    <div class="ui mini modal" data-modal-id="redirect-{{ object.pk }}">
+      <div class="header">{% trans "Remove redirect?" %}</div>
+      <div class="content">
+        {% blocktrans trimmed with redirect=object %}
+          Remove redirect {{redirect}}?
+        {% endblocktrans %}
+      </div>
+      <div class="actions">
+        <form method="post" action="{% url 'projects_redirects_delete' project_slug=project.slug redirect_pk=object.pk %}">
+          {% csrf_token %}
+          <input class="ui negative button" type="submit" value="{% trans "Remove" %}">
+        </form>
+      </div>
     </div>
   </div>
 {% endblock list_item_right_buttons %}
 
+{% block list_item_image %}
+{% endblock list_item_image %}
+
 {% block list_item_header %}
-  <div class="ui basic label">
-    {% if object.from_url %}
-      <code>
-        {% spaceless %}
+  <div>
+    {{ object.get_redirect_type_display }}
+  </div>
+  <div class="sub header">
+
+    <code class="ui small text">
+      {% spaceless %}
+        {% if object.from_url %}
           {% if object.redirect_type == "page" %}
             <span>/</span><span class="ui violet text">$lang</span>
             <span>/</span><span class="ui violet text">$version</span>
           {% endif %}
           <span>{{ object.from_url }}</span>
-        {% endspaceless %}
-      </code>
-    {% else %}
-      <i class="small fa-solid fa-asterisk icon"></i>
-    {% endif %}
-  </div>
-  <div class="ui label">
-    {{ object.get_redirect_type_display }}
-  </div>
-{% endblock list_item_header %}
+          {% if object.redirect_type == "prefix" %}
+            <span class="ui violet text">$1</span>
+          {% endif %}
+        {% else %}
+          {% if object.redirect_type == "sphinx_html" %}
+            <span>/**/</span><span class="ui violet text">$1</span><span>/</span>
+          {% elif object.redirect_type == "sphinx_htmldir" %}
+            <span>/**/</span><span class="ui violet text">$1</span><span>.html</span>
+          {% endif %}
+        {% endif %}
+      {% endspaceless %}
+    </code>
 
-{% block list_item_meta %}
-  {% if object.to_url or object.redirect_type == "prefix" %}
-    <div class="item">
-      <i class="fa-duotone fa-signs-post icon"></i>
-      <code>
-        {% spaceless %}
+    <i class="fas fa-right icon"></i>
+
+    <code class="ui small text">
+      {% spaceless %}
+        {% if object.from_url %}
           {% if object.redirect_type == "page" or object.redirect_type == "prefix" %}
             <span>/</span><span class="ui violet text">$lang</span>
             <span>/</span><span class="ui violet text">$version</span>
             {% if object.redirect_type == "prefix" %}
-              <span>/</span>
+              <span>/</span><span class="ui violet text">$1</span>
             {% endif %}
           {% endif %}
           <span>{{ object.to_url }}</span>
-        {% endspaceless %}
-      </code>
-    </div>
-  {% endif %}
+        {% else %}
+          {% if object.redirect_type == "sphinx_html" %}
+            <span>/**/</span><span class="ui violet text">$1</span><span>.html</span>
+          {% elif object.redirect_type == "sphinx_htmldir" %}
+            <span>/**/</span><span class="ui violet text">$1</span><span>/</span>
+          {% endif %}
+        {% endif %}
+      {% endspaceless %}
+    </code>
+
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
 {% endblock list_item_meta %}
+
+{% block list_item_extra %}
+{% endblock list_item_extra %}
