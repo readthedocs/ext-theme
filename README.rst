@@ -27,15 +27,25 @@ Clone both the readthedocs.org repo and ext-theme alongside each other:
    git clone git@github.com:readthedocs/readthedocs.org.git
    git clone git@github.com:readthedocs/ext-theme.git
 
-Before moving on,
-you should create a personal token (fine-grained or classic) with read rights to ext-theme (this repo) and the other private repo `readthedocs/readthedocs-ext <https://github.com/readthedocs/readthedocs-ext/>`__ and figure out a way to load the credentials into the ``GITHUB_USERNAME`` and ``GITHUB_TOKEN`` environment variables while you are calling ``inv docker.build`` (see below).
+   # Optional but nice to have a copy of as well
+   git clone git@github.com:readthedocs/readthedocs-ext.git
+
+.. note::
+
+    By maintaining the exact structure from above,
+    the repositories will be automatically mounted with the default Docker Compose setup.
+
+The normal development setup for readthedocs.org should be working before you move on.
+Please see: https://dev.readthedocs.io/en/latest/install.html
+
+You should create a personal token (try, fine-grained otherwise use classic) with reading rights to ext-theme (this repo) and the other private repo `readthedocs/readthedocs-ext <https://github.com/readthedocs/readthedocs-ext/>`__ and figure out a way to load the credentials into the ``GITHUB_USERNAME`` and ``GITHUB_TOKEN`` environment variables while you are calling ``inv docker.build`` (see below).
 
 In order to run the theme,
 you need to ``cd`` to the readthedocs.org folder:
 
 .. code:: console
 
-   # Define GITHUB_USER and GITHUB_TOKEN
+   # Make sure that you defined GITHUB_USER and GITHUB_TOKEN
    inv docker.build
 
    # Go to the readthedocs.org project to run the docker-compose setup
@@ -44,10 +54,17 @@ you need to ``cd`` to the readthedocs.org folder:
    
    # Now open a different terminal session for developing ext-theme
    cd ext-theme
-   # Create some virtual environment. Example using virtualenvwrapper
+   # Create some virtual environment.
+   # Example using virtualenvwrapper
+   # You can also use asdf
    mkvirtualenv ext-theme
    
-   # Install pre-commit
+   # If you want to do local npm stuff or build the docs,
+   # enable node on asdf if you haven't already
+   asdf local nodejs latest
+   
+   # Install local development environment
+   pip install '.[docs]'
    pip install pre-commit
    pre-commit install
 
