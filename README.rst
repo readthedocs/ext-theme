@@ -14,10 +14,6 @@ It does still retain most of the patterns and tools already used in the existing
 
 It is an addition to the ``readthedocsext`` package, and provides the ``theme`` Django application.
 
-Documentation can be found here: https://read-the-docs-ext-theme.readthedocs-hosted.com/en/latest/index.html
-
-JavaScript help can be found here: https://github.com/readthedocs/meta/discussions/114
-
 .. warning::
     This package is still alpha level quality and is not ready for general use.
 
@@ -120,3 +116,6 @@ More resources
 
 `Template API reference <https://docs.ops.verbthenouns.com/projects/ext-theme/en/latest/api/templates.html>`_
     Template reference and documentation
+
+`JavaScript help thread <https://github.com/readthedocs/meta/discussions/114>`_
+    Read the Docs core team JS thread
