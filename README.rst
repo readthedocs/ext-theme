@@ -10,6 +10,10 @@ updated templates, new JavaScript sources, and UI based on FomanticUI
 in the existing application templates. It is an addition to the
 ``readthedocsext`` package, and provides the ``theme`` Django application.
 
+Documentation can be found here: https://read-the-docs-ext-theme.readthedocs-hosted.com/en/latest/index.html
+
+JavaScript help can be found here: https://github.com/readthedocs/meta/discussions/114
+
 .. warning::
     This package is still alpha level quality and is not ready for general use.
 
