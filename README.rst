@@ -20,8 +20,13 @@ It is an addition to the ``readthedocsext`` package, and provides the ``theme`` 
 Getting started
 ---------------
 
-You need to have concluded a normal development setup for readthedocs.org before you move on.
-Please see: https://dev.readthedocs.io/en/latest/install.html
+.. seealso::
+
+    `Development installation <https://dev.readthedocs.io/en/latest/install.html>`__
+    You need to have concluded a normal development setup for readthedocs.org before you move on.
+
+Cloning
+~~~~~~~
 
 Clone both the readthedocs.org repo and ext-theme alongside each other:
 
@@ -36,10 +41,20 @@ Clone both the readthedocs.org repo and ext-theme alongside each other:
     By maintaining the exact structure from above,
     the ``ext-theme`` folder will be automatically mounted as a volume in the default Docker Compose setup.
 
-You should create a personal token (try, fine-grained otherwise use classic) with reading rights to ext-theme (this repo) and the other private repo `readthedocs/readthedocs-ext <https://github.com/readthedocs/readthedocs-ext/>`__ and figure out a way to load the credentials into the ``GITHUB_USERNAME`` and ``GITHUB_TOKEN`` environment variables while you are calling ``inv docker.build`` (see below).
+GitHub token
+~~~~~~~~~~~~
+
+For the next step,
+you need a personal GitHub token (try, fine-grained otherwise use classic) with reading rights to ext-theme (this repo) and the other private repo `readthedocs/readthedocs-ext <https://github.com/readthedocs/readthedocs-ext/>`__.
+
+You also need to figure out a way to load the credentials into the ``GITHUB_USERNAME`` and ``GITHUB_TOKEN`` environment variables.
+This is essential while you are calling ``inv docker.build`` (see below) but the environment isn't used in other steps.
+
+Running readthedocs.org with ext-theme
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to run the theme,
-you need to ``cd`` to the readthedocs.org folder:
+you need to ``cd`` to the ``readthedocs.org`` folder:
 
 .. code:: console
 
