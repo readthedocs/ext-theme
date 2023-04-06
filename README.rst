@@ -20,23 +20,21 @@ It is an addition to the ``readthedocsext`` package, and provides the ``theme`` 
 Getting started
 ---------------
 
+You need to have concluded a normal development setup for readthedocs.org before you move on.
+Please see: https://dev.readthedocs.io/en/latest/install.html
+
 Clone both the readthedocs.org repo and ext-theme alongside each other:
 
 .. code:: console
 
-   git clone git@github.com:readthedocs/readthedocs.org.git
-   git clone git@github.com:readthedocs/ext-theme.git
-
-   # Optional but nice to have a copy of as well
-   git clone git@github.com:readthedocs/readthedocs-ext.git
+   # Note: You can skip cloning readthedocs.org if you already have it cloned!
+   git clone --recurse-submodules git@github.com:readthedocs/readthedocs.org.git
+   git clone --recurse-submodules git@github.com:readthedocs/ext-theme.git
 
 .. note::
 
     By maintaining the exact structure from above,
-    the repositories will be automatically mounted with the default Docker Compose setup.
-
-The normal development setup for readthedocs.org should be working before you move on.
-Please see: https://dev.readthedocs.io/en/latest/install.html
+    the ``ext-theme`` folder will be automatically mounted as a volume in the default Docker Compose setup.
 
 You should create a personal token (try, fine-grained otherwise use classic) with reading rights to ext-theme (this repo) and the other private repo `readthedocs/readthedocs-ext <https://github.com/readthedocs/readthedocs-ext/>`__ and figure out a way to load the credentials into the ``GITHUB_USERNAME`` and ``GITHUB_TOKEN`` environment variables while you are calling ``inv docker.build`` (see below).
 
@@ -45,31 +43,33 @@ you need to ``cd`` to the readthedocs.org folder:
 
 .. code:: console
 
+   # Go to the readthedocs.org project to run the docker-compose setup
+   cd readthedocs.org
+
    # Make sure that you defined GITHUB_USER and GITHUB_TOKEN
    inv docker.build
 
-   # Go to the readthedocs.org project to run the docker-compose setup
-   cd readthedocs.org
+   # Run all the Read the Docs containers with the webpack container
+   # and ext-theme settings enabled
    inv docker.up --webpack --ext-theme  # `-we` for short
    
    # Now open a different terminal session for developing ext-theme
-   cd ext-theme
-   # Create some virtual environment.
-   # Example using virtualenvwrapper
-   # You can also use asdf
-   mkvirtualenv ext-theme
+   cd ../ext-theme
+
+   # Create an environment with asdf/virtualenv etc
+
+   # ...
    
-   # If you want to do local npm stuff or build the docs,
+   # If you want to do local npm commands (see below) or build the docs,
    # enable node on asdf if you haven't already
    asdf local nodejs latest
    
-   # Install local development environment
+   # Locally, you could want to install the documentation requirements, as
+   # well as pre-commit.
    pip install '.[docs]'
    pip install pre-commit
    pre-commit install
 
-If you want to use a different directory layout and store ``../ext-theme`` somewhere else,
-then define ``RTDDEV_PATH_EXT_THEME`` in your environment but use a relative path to ``readthedocs.org``.
 
 How does it work?
 -----------------
