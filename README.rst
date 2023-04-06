@@ -53,8 +53,8 @@ This is essential while you are calling ``inv docker.build`` (see below) but the
 Running readthedocs.org with ext-theme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In order to run the theme,
-you need to ``cd`` to the ``readthedocs.org`` folder:
+In order to run readthedocs.org with ext-theme,
+we use normal ``readthedocs.org`` commands invoke the general docker-compose setup:
 
 .. code:: console
 
