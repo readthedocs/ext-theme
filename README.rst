@@ -10,18 +10,28 @@ updated templates, new JavaScript sources, and UI based on FomanticUI
 in the existing application templates. It is an addition to the
 ``readthedocsext`` package, and provides the ``theme`` Django application.
 
-Documentation can be found here: https://read-the-docs-ext-theme.readthedocs-hosted.com/en/latest/index.html
-
-JavaScript help can be found here: https://github.com/readthedocs/meta/discussions/114
-
 .. warning::
     This package is still alpha level quality and is not ready for general use.
 
+Installation
+------------
+
+If you built your local development image with a GitHub token defined, this
+package is already installed in your built image. This should be the default for
+core team.
+
+If not, follow the application `installation directions <https://dev.readthedocs.io/en/latest/install.html>`__
+again, and make sure to set the neccessary GitHub token environment variables.
+
+You will want to check this repository out in the same path as your other
+repositories if you plan on doing development on the files in this repository:
+
+.. code:: console
+
+   % git clone --recurse-submodules git@github.com:readthedocs/ext-theme.git
+
 Usage
 -----
-
-This package is already installed with your local environment, which will need
-to be configured to use this package.
 
 The recommended way of starting your local instance is:
 
@@ -86,3 +96,6 @@ More resources
 
 `Template API reference <https://docs.ops.verbthenouns.com/projects/ext-theme/en/latest/api/templates.html>`_
     Template reference and documentation
+
+`Learning JavaScript <https://github.com/readthedocs/meta/discussions/114>`_
+    Some resources on learning modern JavaScript
