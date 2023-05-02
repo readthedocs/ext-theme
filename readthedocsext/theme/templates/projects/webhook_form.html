@@ -1,0 +1,51 @@
+{% extends "projects/webhook_list.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block project_edit_content_subheader %}
+  {% if webhook %}
+    {% trans "Update webhook" %}
+  {% else %}
+    {% trans "Add webhook" %}
+  {% endif %}
+{% endblock project_edit_content_subheader %}
+
+{% block project_edit_content %}
+  {% if webhook %}
+    {% url 'projects_webhooks_edit' project.slug domain.pk as action_url %}
+    {% trans "Save webhook" as button_text %}
+  {% else %}
+    {% url 'projects_webhooks_create' project.slug as action_url %}
+    {% trans "Add webhooks" as button_text %}
+  {% endif %}
+  <form class="ui form" method="post" action="{{ action_url }}">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input class="ui primary button" type="submit" value="{{ button_text }}">
+  </form>
+
+  <h3>{% trans "Recent Activity" %}</h3>
+
+  <div class="module-list-wrapper httpexchanges">
+    <ul>
+      {% for exchange in object.exchanges.all %}
+        <li class="module-item">
+          <span class="status status-{% if exchange.failed %}fail{% else %}pass{% endif %}">{{ exchange.status_code }}</span>
+          <a href="{% url 'projects_webhooks_exchange' project_slug=project.slug webhook_pk=object.pk webhook_exchange_pk=exchange.pk %}">
+            {% blocktrans trimmed with date=exchange.date|timesince %}
+              {{ date }} ago
+            {% endblocktrans %}
+          </a>
+        </li>
+      {% empty %}
+        <li class="module-item">
+          <span class="quiet">
+            {% trans 'There is no recent activity' %}
+          </span>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+{% endblock %}

@@ -1,4 +1,4 @@
-{% extends "includes/crud/list.html" %}
+{% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
 
@@ -21,7 +21,7 @@
   </div>
 {% endblock %}
 
-{% block list_placeholder_icon_class %}sitemap{% endblock %}
+{% block list_placeholder_icon_class %}fa-duotone fa-sitemap{% endblock %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No subprojects exist yet
@@ -51,15 +51,20 @@
   {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
 {% endblock list_item_right_buttons %}
 
+{% block list_item_image %}
+  {% include "projects/includes/project_image.html" with project=object %}
+{% endblock list_item_image %}
+
 {% block list_item_header %}
-  <a class="ui basic label" href="{% url 'projects_manage' project_slug=object.child.slug %}">
+  <a href="{% url 'projects_manage' project_slug=object.child.slug %}">
     {{ object.child.name }}
+  </a>
+  <a class="sub header" href="{{ object.get_absolute_url }}">
+    {{ object.get_absolute_url|truncatechars:60 }}
   </a>
 {% endblock list_item_header %}
 
-{% block list_item_meta %}
-  <a class="item" href="{{ object.get_absolute_url }}">
-    <i class="fa-duotone fa-link icon"></i>
-    <code>{{ object.get_absolute_url|truncatechars:60 }}</code>
-  </a>
-{% endblock list_item_meta %}
+{% block list_item_meta_list %}
+{% endblock list_item_meta_list %}
+{% block list_item_extra_list %}
+{% endblock list_item_extra_list %}

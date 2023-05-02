@@ -1,4 +1,4 @@
-{% extends "includes/crud/list.html" %}
+{% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
 
@@ -20,9 +20,9 @@
     {# TODO make this a view #}
     <div class="item">
       <a class="ui green icon button"
-        href="{% url "projects_domains_create" project.slug %}">
+        href="{% url "..." project.slug %}">
         <i class="plus icon"></i>
-        {% trans "Add maintainer" %}
+        {% trans "Add translation" %}
       </a>
     </div>
   {% endcomment %}
@@ -34,8 +34,9 @@
     No translations exist yet
   {% endblocktrans %}
   <div class="sub header">
-    {% blocktrans %}
-      Enable translations of your project by attaching projects configured with a different language.
+    {% blocktrans trimmed %}
+      Enable translations of your project by attaching projects configured
+      with a different language.
     {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
@@ -53,18 +54,22 @@
   {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
 {% endblock list_item_right_buttons %}
 
+{% block list_item_image %}
+  {% include "projects/includes/project_image.html" with project=object %}
+{% endblock list_item_image %}
+
 {% block list_item_header %}
-  <a class="ui basic label" href="{{ object.get_absolute_url }}">
+  <a href="{{ object.get_absolute_url }}">
     {{ object.name }}
   </a>
-  <span class="ui label">
+  <div class="sub header">
     {{ object.get_language_display }}
-  </span>
+  </div>
 {% endblock list_item_header %}
 
 {% block list_item_meta %}
   <a class="item" href="{{ object.get_docs_url }}">
     <i class="fa-duotone fa-link icon"></i>
-    <code>{{ object.get_docs_url }}</code>
+    {{ object.get_docs_url }}
   </a>
 {% endblock list_item_meta %}

@@ -1,4 +1,4 @@
-{% extends "includes/crud/list.html" %}
+{% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
 
@@ -41,7 +41,7 @@
   <a class="ui icon button"
      href="{% url 'projects_domains_edit' project.slug object.pk %}"
      data-content="{% trans "Edit" %}">
-    <i class="fa-duotone fa-wrench icon"></i>
+    <i class="fa-solid fa-wrench icon"></i>
   </a>
   <a class="ui icon button"
      href="{% url 'projects_domains_delete' project.slug object.pk %}"
@@ -50,21 +50,34 @@
   </a>
 {% endblock list_item_right_buttons %}
 
+{% block list_item_image %}
+{% endblock list_item_image %}
+
 {% block list_item_header %}
-  <a class="ui basic label" href="{% url 'projects_domains_edit' project.slug object.pk %}">
-    <i class="fa-duotone fa-link icon"></i>
-    <code>{{ object.domain }}</code>
+  <a href="{% url 'projects_domains_edit' project.slug object.pk %}">
+    {{ object.domain }}
   </a>
-  {% if object.https  %}
-    <i class="fa-duotone fa-shield-check icon" data-content="{% trans "HTTPS enabled" %}"></i>
-  {% endif %}
-  {% if object.domainssl  %}
-    <i class="fa-duotone fa-tachometer icon" data-content="{% trans "CDN enabled" %}"></i>
-  {% endif %}
-  {% if object.canonical %}
-    <i class="fa-duotone fa-asterisk icon" data-content="{% trans "Canonical" %}"></i>
-  {% endif %}
 {% endblock list_item_header %}
 
-{% block list_item_meta %}
-{% endblock list_item_meta %}
+{% block list_item_meta_items %}
+  <div class="item">
+    {% if object.https  %}
+      <div class="ui basic label">
+        <i class="fa-duotone fa-shield-check icon"></i>
+        {% trans "HTTPS enabled" %}
+      </div>
+    {% endif %}
+    {% if object.domainssl  %}
+      <div class="ui basic label">
+        <i class="fa-duotone fa-tachometer icon"></i>
+        {% trans "CDN enabled" %}
+      </div>
+    {% endif %}
+    {% if object.canonical %}
+      <div class="ui basic label">
+        <i class="fa-duotone fa-asterisk icon"></i>
+        {% trans "Canonical" %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock list_item_meta_items %}

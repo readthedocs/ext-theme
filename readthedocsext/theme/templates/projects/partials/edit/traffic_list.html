@@ -1,4 +1,4 @@
-{% extends "includes/crud/list.html" %}
+{% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
 
@@ -41,9 +41,7 @@
 {% endblock list_item_right_menu %}
 
 {% block list_item_header %}
-  <div class="ui basic label">
-    <code>{{ object.0 }}</code>
-  </div>
+  {{ object.0 }}
 {% endblock list_item_header %}
 
 {% block list_item_meta %}

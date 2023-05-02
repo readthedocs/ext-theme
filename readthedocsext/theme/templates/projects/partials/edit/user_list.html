@@ -1,4 +1,4 @@
-{% extends "includes/crud/list.html" %}
+{% extends "includes/crud/table_list.html" %}
 
 {% load i18n %}
 
@@ -31,17 +31,10 @@
 {% block list_placeholder_icon %}{% endblock %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
-    No domains are currently configured.
+    This project currently has no maintainers.
   {% endblocktrans %}
-  <div class="sub header">
-    {% blocktrans trimmed with docs_url='https://docs.readthedocs.io/page/custom_domains.html' %}
-      Configuring a custom domain allows you to serve your documentation from a
-      domain other than "{{ default_domain }}".
-    {% endblocktrans %}
-  </div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
-  <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
@@ -49,29 +42,48 @@
      data-bind="click: $root.show_modal('user-{{ object.username }}')"
      data-content="{% trans "Remove maintainer" %}">
     <i class="fa-duotone fa-trash icon"></i>
+
+    <div class="ui mini modal" data-modal-id="user-{{ object.username }}">
+      <div class="header">Remove user {{ object.username }}</div>
+      <div class="content">
+        Remove user <code>{{ object.username }}</code> as a maintainer?
+      </div>
+      <div class="actions">
+        <form method="post" action="{% url "projects_users_delete" project.slug %}">
+          {% csrf_token %}
+          <input type="hidden" name="username" value="{{ object.username }}" />
+          <input class="ui negative button" type="submit" value="{% trans "Remove" %}">
+        </form>
+      </div>
+    </div>
   </a>
-  <div class="ui mini modal" data-modal-id="user-{{ object.username }}">
-    <div class="header">Remove user {{ object.username }}</div>
-    <div class="content">
-      Remove user <code>{{ object.username }}</code> as a maintainer?
-    </div>
-    <div class="actions">
-      <form method="post" action="{% url "projects_users_delete" project.slug %}">
-        {% csrf_token %}
-        <input type="hidden" name="username" value="{{ object.username }}" />
-        <input class="ui negative button" type="submit" value="{% trans "Remove" %}">
-      </form>
-    </div>
-  </div>
 {% endblock list_item_right_buttons %}
 
+{% block list_item_image %}
+  <img class="ui rounded square image" src="{% gravatar_url object.email 64 %}">
+{% endblock list_item_image %}
+
 {% block list_item_header %}
-  <a class="ui basic label"
-     href="{% url "profiles_profile_detail" user.username %}">
-    <i class="fa-duotone fa-user icon"></i>
-    <code>{{ object.username }}</code>
-  </a>
+  {% with full_name=object.get_full_name %}
+    <a href="{% url "profiles_profile_detail" object.username %}">
+
+      {% if full_name %}
+        {{ full_name }}
+      {% else %}
+        {{ object.username }}
+      {% endif %}
+
+    </a>
+    {% if full_name %}
+      <div class="sub header">
+        {{ object.username }}
+      </div>
+    {% endif %}
+  {% endwith %}
 {% endblock list_item_header %}
 
 {% block list_item_meta %}
 {% endblock list_item_meta %}
+
+{% block list_item_extra %}
+{% endblock list_item_extra %}

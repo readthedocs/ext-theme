@@ -1,0 +1,64 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% load i18n %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block create_button %}
+  <div class="item">
+    <a class="ui green icon button"
+       href="{% url "projects_webhooks_create" project.slug %}">
+      <i class="fa-solid fa-plus icon"></i>
+      {% trans "Add webhook" %}
+    </a>
+  </div>
+{% endblock %}
+
+{% block list_placeholder_icon_class %}fa-duotone fa-webhook{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No webhooks have been configured yet
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      Webhooks can be used to emit HTTPS requests on build events.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  <a class="ui icon button"
+     href="{% url 'projects_webhooks_edit' project.slug object.pk %}"
+     data-content="{% trans "Edit webhook" %}">
+    <i class="fa-solid fa-wrench icon"></i>
+  </a>
+  {% url 'projects_webhooks_delete' project_slug=project.slug webhook_pk=object.pk as form_url %}
+  {% trans "Remove webhook" as action_text %}
+  {% blocktrans trimmed asvar content_text with url=object.url %}
+    Remove webhook to {{ url }}?
+  {% endblocktrans %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_icon %}
+  <i class="fa-duotone fa-webhook icon"></i>
+{% endblock list_item_icon %}
+
+{% block list_item_header %}
+  {{ object.url }}
+  <div class="sub header">
+    {% for event in object.events.all %}
+      {{ event }}
+    {% empty %}
+      {% trans "No subscribed events" %}
+    {% endfor %}
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+{% endblock list_item_meta %}
