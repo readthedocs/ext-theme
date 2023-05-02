@@ -73,17 +73,7 @@
 {% endblock list_item_right_menu %}
 
 {% block list_item_image %}
-  {% if object.remote_repository %}
-    <img class="ui small rounded image" src="{{ object.remote_repository.avatar_url }}" />
-  {% else %}
-    {% comment %}
-      For now, this is using Dicebear, which has a few random generators for
-      user/project icons. We don't need to use Dicebear, but could use this or
-      similar to generate files on disk and use an md5 hash or similar to link
-      to the same image always.
-    {% endcomment %}
-    <img class="ui small rounded image" src="https://api.dicebear.com/5.x/shapes/svg?size=64&backgroundColor=b8abd4&shape1Color=8c74c1&shape2Color=7854c5&shape3Color=f0f0ff&seed={{ object.pk }}" />
-  {% endif %}
+  {% include "projects/includes/project_image.html" with project=object %}
 {% endblock list_item_image %}
 
 {% block list_item_header %}

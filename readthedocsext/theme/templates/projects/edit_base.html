@@ -41,7 +41,10 @@
           {% trans "Automation rules" %}
         </a>
         <a class="item {% block project_notifications_active %}{% endblock %}" href="{% url "projects_notifications" project.slug %}">
-          {% trans "Notifications" %}
+          {% trans "Email notifications" %}
+        </a>
+        <a class="item {% block project_webhooks_active %}{% endblock %}" href="{% url "projects_webhooks" project.slug %}">
+          {% trans "Webhooks" %}
         </a>
         <a class="item {% block project_redirects_active %}{% endblock %}" href="{% url "projects_redirects" project.slug %}">
           {% trans "Redirects" %}
