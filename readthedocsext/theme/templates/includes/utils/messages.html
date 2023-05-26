@@ -18,12 +18,12 @@
         {{ message }}
       </div>
     {% else %}
-      {#
+      {% comment %}
         This is a little bit of a hack, as toasts are purely JS and don't
         require an underlying element. Django messages uses "tags" to specify
         info/success/error classes on the messages, which just happen to align
         with SUI classes too.
-      #}
+      {% endcomment %}
       {% spaceless %}
         <div style="display: none;"
              data-bind="
