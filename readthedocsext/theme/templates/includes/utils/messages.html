@@ -1,22 +1,43 @@
+{% load ext_theme_tags %}
+
 {% comment %}
   This template is used by the base template to provide a list of messages on
-  the top of the page.
+  the top of the page. If the message has a pk it is a persisent or sticky
+  message level. Otherwise, Django default level notifications are treated as
+  temporary messages, using SUI toast messages instead of block elements in the
+  page content pane.
 {% endcomment %}
 
 {% if messages %}
   {% for message in messages %}
+    {# Message is sticky/persistent, show these like normal. #}
     {% if message.pk %}
       <div class="ui message {{ message.tags }}"
            data-bind="message: {dismiss_url: '{% url "message_mark_read" message.pk %}'}">
         <i class="fa-duotone fa-circle-xmark close icon"></i>
-        <span>{{ message }}</span>
+        {{ message }}
       </div>
     {% else %}
-      <div class="ui message {{ message.tags }}"
-           data-bind="message: {}">
-        <i class="fa-duotone fa-circle-xmark close icon"></i>
-        <span>{{ message }}</span>
-      </div>
+      {#
+        This is a little bit of a hack, as toasts are purely JS and don't
+        require an underlying element. Django messages uses "tags" to specify
+        info/success/error classes on the messages, which just happen to align
+        with SUI classes too.
+      #}
+      {% spaceless %}
+        <div style="display: none;"
+             data-bind="
+semanticui: {
+  toast: {
+    message: '{{ message|escapejs }}',
+    showProgress: 'bottom',
+    classProgress: 'primary',
+    class: '{{ message.tags }}',
+    displayTime: 7500,
+  }
+}">
+        </div>
+      {% endspaceless %}
     {% endif %}
   {% endfor %}
 {% endif %}
