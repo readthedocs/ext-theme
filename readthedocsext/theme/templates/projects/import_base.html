@@ -6,9 +6,9 @@
 {% block title %}{% trans "Add Project" %}{% endblock %}
 
 {% block content %}
-  {% block project_add_content %}
     <div class="ui very padded centered stackable grid">
-      <div class="ui ten wide tablet six wide computer column">
+    {% block project_add_content %}
+      <div class="{% block project_add_css_classes %}ui ten wide tablet six wide computer column{% endblock project_add_css_classes %}">
 
         {% block project_add_content_header %}
           <h1 class="ui medium header">
@@ -21,6 +21,9 @@
             </div>
           </h1>
         {% endblock project_add_content_header %}
+
+        {% block project_add_content_main %}
+        {% endblock project_add_content_main %}
 
         <form class="ui form" action="{% url "projects_import_manual" %}" method="post">
 
@@ -42,6 +45,7 @@
           {% block wizard_actions %}
             <div>
               {% if wizard.steps.prev %}
+                {# TODO: the previous button should not validate the form #}
                 <button class="ui button" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">
                   {% trans "Previous" %}
                 </button>
@@ -56,15 +60,17 @@
           {% endblock wizard_actions %}
 
         </form>
-      {% endblock project_add_content %}
-    </div>
+      </div>
+    {% endblock project_add_content %}
 
+    {% block project_add_help_topics %}
     <div class="ui ten wide tablet four wide computer column">
       <h2 class="ui small header">{% trans "Help topics" %}</h2>
       <div data-bind="using: EmbedTopicsView('intro/import-guide')">
         <div data-bind="template: { name: 'doc-topics' }"></div>
       </div>
     </div>
+    {% endblock project_add_help_topics %}
   </div>
 
   {% include "includes/utils/embed_docs.html" %}
