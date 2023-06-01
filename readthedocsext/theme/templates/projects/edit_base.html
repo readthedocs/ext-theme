@@ -65,19 +65,30 @@
       {% block project_edit_sidebar %}
         <div class="ui basic segment">
           <h2 class="ui small header">{% trans "Help topics" %}</h2>
-          {% block project_edit_sidebar_help_topics %}
-            <div data-bind="using: EmbedTopicsView('{% block project_edit_sidebar_embed_doc %}{% endblock %}')">
-              <div data-bind="template: { name: 'doc-topics' }"></div>
-            </div>
-          {% endblock project_edit_sidebar_help_topics %}
+          <ul class="ui list">
+            <li class="item">
+              <div class="content">
+                <a class="header" href="https://docs.readthedocs.io/page/localization.html" target="_blank">
+                  {% trans "Localization of documentation" %}
+                </a>
+              </div>
+            </li>
+            <li class="item">
+              <div class="content">
+                <a class="header" href="https://docs.readthedocs.io/page/guides/manage-translations-sphinx.html" target="_blank">
+                  {% trans "How to manage translations for Sphinx projects" %}
+                </a>
+              </div>
+            </li>
+            <li class="item">
+              <div class="content">
+                <a class="header" href="https://docs.readthedocs.io/" target="_blank">
+                  {% trans "Documentation index" %}
+                </a>
+              </div>
+            </li>
+          </ul>
         </div>
-        <div class="ui basic segment">
-          <a href="https://docs.readthedocs.io/en/stable/" target="_blank">
-            View our full docs
-          </a>
-        </div>
-  
-        {% include "includes/utils/embed_docs.html" %}
 
         {% block project_edit_sidebar_extra %}
         {% endblock project_edit_sidebar_extra %}
