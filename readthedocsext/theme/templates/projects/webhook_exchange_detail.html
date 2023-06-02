@@ -1,0 +1,56 @@
+{% extends "projects/webhook_list.html" %}
+
+{% load i18n %}
+
+{% block project_edit_content_subheader %}
+  <div class="ui breadcrumb">
+    <a href="{% url 'projects_webhooks_edit' project.slug httpexchange.related_object.pk %}" class="section">
+      {{ httpexchange.related_object.url | truncatechars:50 }}
+    </a>
+    <span class="divider">/</span>
+    <div class="active section">
+      {% trans "Exchange" %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block project_edit_content %}
+  <h3 class="ui small header">{% trans "Response" %}</h3>
+
+  <div class="ui inverted segment">
+    <div class="ui http-exchange list">
+      <div class="item">
+        <span class="header"><code>Status:</code></span>
+        <span class="value"><code>{{ httpexchange.status_code }}</code></span>
+      </div>
+
+      {% for header, value in httpexchange.response_headers.items %}
+        <div class="item">
+          <span class="header"><code>{{ header }}:</code></span>
+          <span class="value"><code>{{ value }}</code></span>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="ui http-exchange text">
+      {{ httpexchange.formatted_response_body }}
+    </div>
+  </div>
+
+  <h3 class="ui small header">{% trans "Request" %}</h3>
+
+  <div class="ui inverted segment">
+    <div class="ui http-exchange list">
+      {% for header, value in httpexchange.request_headers.items %}
+        <div class="item">
+          <span class="header"><code>{{ header }}:</code></span>
+          <span class="value"><code>{{ value }}</code></span>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="ui http-exchange text">
+      {{ httpexchange.formatted_request_body }}
+    </div>
+  </div>
+{% endblock %}
