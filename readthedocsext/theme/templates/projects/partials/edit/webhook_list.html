@@ -53,13 +53,10 @@
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
-  {{ object.url }}
+  {{ object.url|truncatechars:50 }}
   <div class="sub header">
-    {% for event in object.events.all %}
-      {{ event }}
-    {% empty %}
-      {% trans "No subscribed events" %}
-    {% endfor %}
+    {% trans "Subscribed events:" %}
+    {{ object.events.all|join:", " }}
   </div>
 {% endblock list_item_header %}
 

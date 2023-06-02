@@ -1,11 +1,11 @@
-{% extends "projects/integration_list.html" %}
+{% extends "projects/webhook_list.html" %}
 
 {% load i18n %}
 
 {% block project_edit_content_subheader %}
   <div class="ui breadcrumb">
-    <a href="{% url 'projects_integrations_detail' project_slug=project.slug integration_pk=httpexchange.related_object.pk %}" class="section">
-      {{ httpexchange.related_object.get_integration_type_display }}
+    <a href="{% url 'projects_webhooks_edit' project.slug httpexchange.related_object.pk %}" class="section">
+      {{ httpexchange.related_object.url | truncatechars:50 }}
     </a>
     <span class="divider">/</span>
     <div class="active section">

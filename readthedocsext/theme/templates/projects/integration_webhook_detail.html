@@ -3,7 +3,11 @@
 {% load i18n %}
 
 {% block project_edit_content_subheader %}
-  {{ integration.get_integration_type_display }}
+  <div class="ui breadcrumb">
+    <div class="active section">
+      {{ integration.get_integration_type_display }}
+    </div>
+  </div>
 {% endblock %}
 
 {% block project_edit_content %}
