@@ -63,35 +63,17 @@
       </div>
 
       {% block project_edit_sidebar %}
+
+        {% block project_edit_sidebar_help_topics_container %}
         <div class="ui basic segment">
           <h2 class="ui small header">{% trans "Help topics" %}</h2>
-          <ul class="ui list">
-            <li class="item">
-              <div class="content">
-                <a class="header" href="https://docs.readthedocs.io/page/localization.html" target="_blank">
-                  {% trans "Localization of documentation" %}
-                  <i class="fad fa-external-link small light gray middle aligned icon" aria-hidden="true"></i>
-                </a>
-              </div>
-            </li>
-            <li class="item">
-              <div class="content">
-                <a class="header" href="https://docs.readthedocs.io/page/guides/manage-translations-sphinx.html" target="_blank">
-                  {% trans "How to manage translations for Sphinx projects" %}
-                  <i class="fad fa-external-link small light gray middle aligned icon" aria-hidden="true"></i>
-                </a>
-              </div>
-            </li>
-            <li class="item">
-              <div class="content">
-                <a class="header" href="https://docs.readthedocs.io/" target="_blank">
-                  {% trans "Documentation index" %}
-                  <i class="fad fa-external-link small light gray middle aligned icon" aria-hidden="true"></i>
-                </a>
-              </div>
-            </li>
-          </ul>
+          <div class="ui bulleted list">
+            {% block project_edit_sidebar_help_topics %}
+            {% endblock project_edit_sidebar_help_topics %}
+            {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/" text=_("Documentation index") is_external=True class="item" %}
+          </div>
         </div>
+        {% endblock project_edit_sidebar_help_topics_container %}
 
         {% block project_edit_sidebar_extra %}
         {% endblock project_edit_sidebar_extra %}

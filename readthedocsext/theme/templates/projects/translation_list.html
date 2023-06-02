@@ -45,19 +45,7 @@
   {% endif %}
 {% endblock %}
 
-{% block project_edit_sidebar_embed_doc %}localization{% endblock %}
 {% block project_edit_sidebar_help_topics %}
-  {{ block.super }}
-  <ul class="ui list">
-    <li class="item">
-      <div class="content">
-        <a class="header" href="https://docs.readthedocs.io/en/stable/guides/manage-translations.html" target="_blank">
-          Managing translations
-        </a>
-        <div class="description">
-          Guide
-        </div>
-      </div>
-    </li>
-  </ul>
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/localization.html" text=_("Localization of documentation") is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/manage-translations-sphinx.html" text=_("How to manage translations for Sphinx projects") is_external=True class="item" %}
 {% endblock project_edit_sidebar_help_topics %}
