@@ -5,7 +5,11 @@
 
 {% block project_edit_content_subheader %}
   {% if webhook %}
-    {% trans "Update webhook" %}
+    <div class="ui breadcrumb">
+      <div class="active section">
+        {{ webhook.url | truncatechars:50 }}
+      </div>
+    </div>
   {% else %}
     {% trans "Add webhook" %}
   {% endif %}
@@ -25,27 +29,25 @@
     <input class="ui primary button" type="submit" value="{{ button_text }}">
   </form>
 
-  <h3>{% trans "Recent Activity" %}</h3>
+  <h3 class="ui small header">{% trans "Recent activity" %}</h3>
 
-  <div class="module-list-wrapper httpexchanges">
-    <ul>
+  <div class="ui segment">
+    <div class="ui list">
       {% for exchange in object.exchanges.all %}
-        <li class="module-item">
-          <span class="status status-{% if exchange.failed %}fail{% else %}pass{% endif %}">{{ exchange.status_code }}</span>
+        <div class="item">
+          <span class="ui {% if exchange.failed %}red{% else %}green{% endif %} label">{{ exchange.status_code }}</span>
           <a href="{% url 'projects_webhooks_exchange' project_slug=project.slug webhook_pk=object.pk webhook_exchange_pk=exchange.pk %}">
             {% blocktrans trimmed with date=exchange.date|timesince %}
               {{ date }} ago
             {% endblocktrans %}
           </a>
-        </li>
+        </div>
       {% empty %}
-        <li class="module-item">
-          <span class="quiet">
-            {% trans 'There is no recent activity' %}
-          </span>
-        </li>
+        <div class="item">
+          {% trans 'There is no recent activity' %}
+        </div>
       {% endfor %}
-    </ul>
+    </div>
   </div>
 
 {% endblock %}
