@@ -25,9 +25,6 @@
     {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
-{% block list_placeholder_text %}
-  <a class="ui button" href="{{ docs_url }}">{% trans "Learn more" %}</a>.
-{% endblock list_placeholder_text %}
 
 {% block list_item_right_menu %}
   {% url "account_email" as form_url %}
