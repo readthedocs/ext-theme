@@ -2,6 +2,15 @@
   This is the Knockout template used for sidebar "Help topics" lists. This block
   is found on many of the project edit pages, as well as many of the other project
   pages that include forms.
+
+  Aside from including this file, you need to add this snippet:
+
+  {% block project_edit_sidebar_help_topics %}
+    <div data-bind="using: EmbedTopicsView('{% block project_edit_sidebar_embed_doc %}{% endblock %}')">
+      <div data-bind="template: { name: 'doc-topics' }"></div>
+    </div>
+  {% endblock project_edit_sidebar_help_topics %}
+
 {% endcomment %}
 
 <script type="text/html" id="doc-topics">

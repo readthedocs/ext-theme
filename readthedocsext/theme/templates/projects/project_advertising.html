@@ -123,3 +123,9 @@
     </p>
   </form>
 {% endblock %}
+
+{% block project_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/ethical-advertising.html" text="EthicalAds Documentation" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/open-source-philosophy.html" text="Read the Docs open source philosophy" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://www.ethicalads.io/" text="EthicalAds website" is_external=True class="item" %}
+{% endblock project_edit_sidebar_help_topics %}

@@ -60,3 +60,12 @@
     </div>
   </div>
 {% endblock %}
+
+{% block project_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/tutorial/index.html" text="Tutorial: Getting started" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/intro/getting-started-with-sphinx.html" text="Tutorial: Getting started with Sphinx" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/intro/getting-started-with-mkdocs.html" text="Tutorial: Getting started with MkDocs" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/intro/import-guide.html" text="Tutorial: Importing your documentation" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/config-file/v2.html" text="Reference for the .readthedocs.yaml configuration file" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/en/stable/faq.html#how-do-i-change-my-project-slug-the-url-your-docs-are-served-at" text="How do I change my project slug (the URL your docs are served at)?" is_external=True class="item" %}
+{% endblock project_edit_sidebar_help_topics %}

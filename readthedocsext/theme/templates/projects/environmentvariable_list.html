@@ -11,20 +11,8 @@
   {% include "projects/partials/edit/environment_variable_list.html" with objects=object_list %}
 {% endblock %}
 
-{# We don't have docs on env vars yet #}
 {% block project_edit_sidebar_help_topics %}
-  <ul class="ui list">
-    <li class="item">
-      <div class="content">
-        <a class="header"
-           href="https://docs.readthedocs.io/en/stable/guides/environment-variables.html"
-           target="_blank">
-          Using environment variables
-        </a>
-        <div class="description">
-          <div class="meta">Guide</div>
-        </div>
-      </div>
-    </li>
-  </ul>
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/environment-variables.html" text="How to use custom environment variables" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/environment-variables.html" text="Understanding environment variables" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/reference/environment-variables.html" text="Predefined environment variables" is_external=True class="item" %}
 {% endblock project_edit_sidebar_help_topics %}

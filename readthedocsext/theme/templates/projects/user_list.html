@@ -27,3 +27,7 @@
     <input class="ui primary button" type="submit" value="{% trans "Add maintainer" %}">
   </form>
 {% endblock %}
+
+{% block project_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/glossary.html#term-maintainer" text="Glossary: Definition of a 'maintainer' on Read the Docs Community" is_external=True class="item" %}
+{% endblock project_edit_sidebar_help_topics %}

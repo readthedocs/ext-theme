@@ -34,3 +34,7 @@
     {% include "projects/partials/edit/subproject_list.html" with objects=object_list %}
   {% endif %}
 {% endblock %}
+
+{% block project_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/subprojects.html" text="Subprojects: host multiple projects on a single domain" is_external=True class="item" %}
+{% endblock project_edit_sidebar_help_topics %}
