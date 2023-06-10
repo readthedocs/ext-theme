@@ -1,56 +1,54 @@
-{% extends "profiles/base_edit.html" %}
+{% extends "gold/subscription_detail.html" %}
+
 {% load static %}
 {% load i18n %}
+{% load crispy_forms_filters %}
 
-{% block profile-admin-gold-edit %}active{% endblock %}
+{% block title %}{% trans "Ad-free projects" %}{% endblock %}
 
-{% block title %}{% trans "Gold Projects" %}{% endblock %}
-
+{% block edit_content_subheader %}
+  <div class="ui breadcrumb">
+    <a class="section" href="{% url 'gold_detail' %}">
+      {% trans "Manage your subscription" %}
+    </a>
+    <span class="divider">/</span>
+    <div class="active section">
+      {% trans "Ad-free projects" %}
+    </div>
+  </div>
+{% endblock edit_content_subheader %}
 
 {% block edit_content %}
+  {% include "gold/partials/projects_list.html" with objects=projects gold_user=gold_user %}
 
-  <h3>{% trans "Gold Projects" %}</h3>
+  <h3 class="ui header">
+    {% trans "Add an ad-free project" %}
+  </h3>
+
   <p>
     {% blocktrans trimmed %}
-      Gold members may completely remove advertising for all visitors to their projects.
+      For each project that you would like to remove ads, we ask for:
     {% endblocktrans %}
   </p>
 
-  <div class="ui list">
-    <div class="item">{% trans 'For small businesses or personal projects, we ask for $5 per month to remove ads from a project.' %}</div>
-    <div class="item">{% trans 'For corporate supported open source projects, we ask for a $50 membership in order to cover our support and operations costs.' %}</div>
+  <div class="ui bulleted list">
+    <div class="item">{% trans 'A $5 subscription for small businesses or personal projects.' %}</div>
+    <div class="item">{% trans 'A $50 subscription for corporate supported open source projects.' %}</div>
   </div>
 
-  <h3>{% trans 'Ad-free projects' %}</h3>
-  <div class="ui list">
-    {% for project in projects %}
-      <div class="item">
-        <a href="{{ project.get_absolute_url }}">{{ project }}</a>
-        <span>(<a href="{% url "gold_projects_remove" project.slug %}">{% trans "Remove Ad-Free Status" %}</a>)</span>
-      </div>
-    {% empty %}
-      <p>{% trans 'No projects are currently ad-free.' %}</p>
-    {% endfor %}
-    </div>
-
-  <h3>{% trans "Make a project ad-free" %}</h3>
   {% if gold_user.num_supported_projects > projects|length %}
-    <p>
-      {% trans "Choose which project you would like to make ad-free." %}
-    </p>
-    <form class="ui form" method="post" action=".">{% csrf_token %}
-      {{ form.as_p }}
-      <p>
-        <input class="ui button" type="submit" value="{% trans "Make Project Ad-Free" %}">
-      </p>
+    <form class="ui form" method="post" action=".">
+      {% csrf_token %}
+      {{ form | crispy }}
+      <input class="ui button" type="submit" value="{% trans "Add an ad-free project" %}">
     </form>
   {% else %}
-    <p>
+    <div class="ui warning message">
       {% blocktrans trimmed with gold_level=gold_user.get_level_display gold_projects_count=gold_user.num_supported_projects %}
         You can't make any more projects ad-free with your current Gold membership of {{ gold_level }}.
         You can either increase the level of your membership or change which projects you make ad-free.
       {% endblocktrans %}
-    </p>
+    </div>
   {% endif %}
 
 {% endblock %}
