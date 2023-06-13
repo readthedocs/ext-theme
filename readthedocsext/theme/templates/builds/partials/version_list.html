@@ -77,7 +77,7 @@
     </a>
 
     {% blocktrans trimmed with version=object.verbose_name asvar label_download %}
-      Downloadable formats for version {{ version }}
+      Offline formats for version {{ version }}
     {% endblocktrans %}
     <button
         class="ui {% if not object.has_epub and not object.has_htmlzip and not object.has_pdf %} disabled{% endif %} dropdown button"
@@ -87,7 +87,7 @@
         tabindex="{% if object.has_epub or object.has_htmlzip or object.has_pdf %}0{% else %}-1{% endif %}">
       <i class="fa-solid fa-download icon"></i>
       <div class="menu">
-        <div class="header">{% trans "Downloads" %}</div>
+        <div class="header">{% trans "Offline formats" %}</div>
         <a class="disabled item" data-bind="css: {disabled: !url_pdf()}, attr: {href: url_pdf()}">
           <i class="fa-duotone fa-file icon"></i>
           {% trans "PDF file" %}
