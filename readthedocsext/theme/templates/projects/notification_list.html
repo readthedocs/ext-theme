@@ -19,3 +19,7 @@
     <input class="ui primary button" type="submit" value="{% trans "Add" %}">
   </form>
 {% endblock %}
+
+{% block project_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/build-notifications.html" text="How to setup build notifications and webhooks" is_external=True class="item" %}
+{% endblock project_edit_sidebar_help_topics %}

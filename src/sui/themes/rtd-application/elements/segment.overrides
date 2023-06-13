@@ -2,3 +2,7 @@
     padding-left: 0rem;
     padding-right: 0rem;
 }
+
+.ui.ui.ui.short.placeholder.segment {
+    min-height: 9rem;
+}

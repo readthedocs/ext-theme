@@ -7,11 +7,12 @@ import * as plugins from "./plugins";
 import { Registry } from "./registry";
 
 // Application views
-import * as docs_views from "../docs";
-import * as core_views from "../core";
-import * as project_views from "../project";
 import * as build_views from "../build";
+import * as core_views from "../core";
+import * as docs_views from "../docs";
+import * as gold_views from "../gold";
 import * as module_views from "../modules";
+import * as project_views from "../project";
 
 /**
  * This is the main entry point for the front end code and is used to set up and

@@ -1,64 +1,123 @@
 {% extends "profiles/base_edit.html" %}
+
 {% load static %}
 {% load i18n %}
+{% load crispy_forms_filters %}
 
-{% block profile-admin-gold-edit %}active{% endblock %}
+{% load ext_theme_tags %}
 
-{% block title %}{% trans "Gold Membership" %}{% endblock %}
+{% block profile_admin_gold_edit %}active{% endblock %}
 
-{% block extra_scripts %}
-  <script src="https://js.stripe.com/v2/" type="text/javascript"></script>
-  <script type="text/javascript" src="{% static 'vendor/knockout.js' %}"></script>
-  <script type="text/javascript" src="{% static 'gold/js/gold.js' %}"></script>
-  <script type="text/javascript">
-var gold_views = require('gold/gold');
-$(document).ready(function () {
-    var key;
-    //<![CDATA[
-    key = '{{ publishable }}';
-    //]]>
+{% block title %}{% trans "Gold membership" %}{% endblock %}
 
-    var view = gold_views.GoldView.init({
-      key: key,
-      form: $('form#gold-register')
-    });
-});
-  </script>
-{% endblock %}
+{% block edit_content_header %}
+  {% trans "Gold membership" %}
+{% endblock edit_content_header %}
+
+{% block edit_content_subheader %}
+  <div class="ui breadcrumb">
+    <div class="active section">
+      {% if golduser %}
+        {% trans "Manage your subscription" %}
+      {% else %}
+        {% trans "Sign up" %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock edit_content_subheader %}
 
 {% block edit_content %}
   <div class="ui basic segment">
-    <h2>{% trans "Gold Membership" %}</h2>
 
     <p>
       {% blocktrans trimmed %}
-        Thanks for supporting Read the Docs! It really means a lot to us.
+        Supporting Read the Docs lets us work more on features that people love.
+        Your money will go directly to maintenance and development of the
+        product.
       {% endblocktrans %}
     </p>
 
     <p>
-      <label>{% trans "Level" %}:</label>
-      <span>{{ golduser.get_level_display }}</span>
+      {% blocktrans trimmed %}
+        Becoming a Gold member makes Read the Docs ad-free when you are logged-in.
+        Gold members may also completely remove advertising for all visitors to their projects.
+      {% endblocktrans %}
+    </p>
+
+    <ul class="ui bulleted list">
+      <li class="item">{% trans 'For small businesses or personal projects, we ask for $5 per month to remove ads from a project.' %}</li>
+      <li class="item">{% trans 'For corporate supported open source projects, we ask for a $50 membership in order to cover our support and operations costs.' %}</li>
+    </ul>
+
+    <p>
+      {% blocktrans trimmed %}
+        If you are a company using Read the Docs,
+        please consider <a href="https://readthedocs.com/">Read the Docs for Business</a>.
+        This will help us cover our costs,
+        and provide you with a better experience on the site.
+      {% endblocktrans %}
     </p>
 
     <p>
-      <label>{% trans "Card" %}:</label>
-      <span>****-{{ golduser.last_4_card_digits }}</span>
+      {% blocktrans trimmed %}
+        For any questions about our Gold membership program,
+        please <a href="mailto:support@readthedocs.org?subject=Gold%20membership%20questions">email us</a>.
+      {% endblocktrans %}
     </p>
 
-    <form class="ui form" method="get" action="{% url "gold_subscription" %}" class="subscription-update">
-      <button class="ui button">{% trans "Update membership" %}</button>
-    </form>
+    {% if golduser %}
+      {% block gold_membership_active %}
 
-    <form class="ui form" method="get" action="{% url "gold_cancel" %}" class="subscription-cancel">
-      <button class="ui button">{% trans "Cancel membership" %}</button>
-    </form>
+        <h3>
+          {% blocktrans trimmed %}
+            Your gold membership
+          {% endblocktrans %}
+        </h3>
 
-    <h3>{% trans "Gold projects" %}</h3>
-    <p class="subscription-projects">{% trans 'Choose projects you would like to make ad-free.' %}</p>
+        <p>
+          {% blocktrans trimmed %}
+            Thanks for supporting Read the Docs! It really means a lot to us.
+          {% endblocktrans %}
+        </p>
 
-    <form class="ui form" method="get" action="{% url "gold_projects" %}" class="subscription-projects">
-      <button class="ui button">{% trans "Select Projects" %}</button>
-    </form>
+        <div class="ui segment">
+          <i class="fa-badge-check fas primary icon"></i>
+          <label>{% trans "Level" %}:</label>
+          <span>{{ golduser.get_level_display }}</span>
+        </div>
+
+        <form action="{% url "gold_subscription_portal" %}" method="post">
+          {% csrf_token %}
+          <input class="ui primary button" type="submit" value="{% trans "Manage subscription" %}" />
+        </form>
+
+        <h3>{% trans "Gold projects" %}</h3>
+        <p>{% trans 'Choose projects you would like to make ad-free.' %}</p>
+
+        <a class="ui primary button" href="{% url "gold_projects" %}">
+          {% trans "Select projects" %}
+        </a>
+
+      {% endblock gold_membership_active %}
+    {% else %}
+      {% block gold_membership_inactive %}
+
+        <div data-bind="using: new StripeCheckoutView({stripeKey: '{{ stripe_publishable }}', checkoutSessionUrl: '{% url "gold_checkout_create" %}', csrfToken: '{{ csrf_token }}'})">
+          <h3>
+            {% blocktrans trimmed %}
+              Become a Gold member
+            {% endblocktrans %}
+          </h3>
+
+          {# Note: not an actual form as the JS handles the POST and Stripe Checkout redirect #}
+          <div class="ui loading form" data-bind="css: { loading: stripeLoading }">
+            {% alter_field form.level data_bind="valueInit: priceId" %}
+            {{ form | crispy }}
+            <input class="ui primary button" type="submit" data-bind="click: createCheckoutSession" value="{% trans "Sign up" %}" />
+          </form>
+        </div>
+
+      {% endblock gold_membership_inactive %}
+    {% endif %}
   </div>
 {% endblock %}
