@@ -62,16 +62,17 @@
 {% endblock list_item_start %}
 
 {% block list_item_right_menu %}
-  <div class="ui small icon buttons" data-bind="event: {mouseover: fetch}">
+  <div class="ui small icon buttons">
 
-    {% blocktrans trimmed with version=object.verbose_name asvar label_view %}
+    {% blocktrans trimmed with version=object.verbose_name asvar label_link %}
       View documentation for version {{ version }}
     {% endblocktrans %}
     <a class="ui {% if not object.built %} disabled{% endif %} button"
-        data-bind="attr: {href: url_docs}"
+        data-bind="event: {mouseover: fetch, focusin: fetch}, attr: {href: url_docs}"
         target="_blank"
-        data-content="{{ label_view }}"
-        aria-label="{{ label_view }}">
+        data-content="{{ label_link }}"
+        aria-label="{{ label_link }}"
+        tabindex="{% if object.built %}0{% else %}-1{% endif %}">
       <i class="fa-solid fa-book icon"></i>
     </a>
 
@@ -80,9 +81,10 @@
     {% endblocktrans %}
     <button
         class="ui {% if not object.has_epub and not object.has_htmlzip and not object.has_pdf %} disabled{% endif %} dropdown button"
-        data-bind="event: {click: fetch}"
+        data-bind="event: {focusin: fetch, click: fetch}"
         data-content="{{ label_download }}"
-        aria-label="{{ label_download }}">
+        aria-label="{{ label_download }}"
+        tabindex="{% if object.has_epub or object.has_htmlzip or object.has_pdf %}0{% else %}-1{% endif %}">
       <i class="fa-solid fa-download icon"></i>
       <div class="menu">
         <div class="header">{% trans "Downloads" %}</div>
