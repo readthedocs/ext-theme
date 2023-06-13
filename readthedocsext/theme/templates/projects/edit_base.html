@@ -63,21 +63,17 @@
       </div>
 
       {% block project_edit_sidebar %}
+
+        {% block project_edit_sidebar_help_topics_container %}
         <div class="ui basic segment">
           <h2 class="ui small header">{% trans "Help topics" %}</h2>
-          {% block project_edit_sidebar_help_topics %}
-            <div data-bind="using: EmbedTopicsView('{% block project_edit_sidebar_embed_doc %}{% endblock %}')">
-              <div data-bind="template: { name: 'doc-topics' }"></div>
-            </div>
-          {% endblock project_edit_sidebar_help_topics %}
+          <div class="ui bulleted list">
+            {% block project_edit_sidebar_help_topics %}
+            {% endblock project_edit_sidebar_help_topics %}
+            {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/" text=_("Documentation index") is_external=True class="item" %}
+          </div>
         </div>
-        <div class="ui basic segment">
-          <a href="https://docs.readthedocs.io/en/stable/" target="_blank">
-            View our full docs
-          </a>
-        </div>
-  
-        {% include "includes/utils/embed_docs.html" %}
+        {% endblock project_edit_sidebar_help_topics_container %}
 
         {% block project_edit_sidebar_extra %}
         {% endblock project_edit_sidebar_extra %}

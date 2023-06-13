@@ -13,4 +13,8 @@
   {% include "projects/partials/edit/redirect_list.html" with objects=redirects %}
 {% endblock %}
 
-{% block project_edit_sidebar_embed_doc %}user-defined-redirects{% endblock %}
+{% block project_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/redirects.html" text="How to use custom URL redirects in documentation projects" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/user-defined-redirects.html" text="Custom and built-in redirects on Read the Docs" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/best-practice/links.html" text="Best practices for linking to your documentation" is_external=True class="item" %}
+{% endblock project_edit_sidebar_help_topics %}

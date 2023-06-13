@@ -1,0 +1,46 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% load i18n %}
+
+{% block top_menu %}
+{% endblock top_menu %}
+
+{% block list_placeholder_class %}ui short placeholder segment{% endblock %}
+{% block list_placeholder_icon %}{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    Ad-free projects
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      Gold members can add projects they maintain as ad-free projects for their membership.
+      Ad-free projects completely remove advertising for all visitors to the project's documentation.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  {% url "gold_projects_remove" project_slug=object.slug as form_url %}
+  {% trans "Remove ad-free status" as action_text %}
+  {% blocktrans trimmed asvar content_text with name=object.name %}
+    Remove ad-free status for project {{ name }}?
+  {% endblocktrans %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_image %}
+{% endblock list_item_image %}
+
+{% block list_item_header %}
+  <a href="{{ object.get_absolute_url }}">
+    {{ object }}
+  </a>
+{% endblock list_item_header %}
+
+{% block list_item_extra %}
+{% endblock list_item_extra %}
+
+{% block list_item_meta %}
+{% endblock list_item_meta %}

@@ -136,7 +136,7 @@
           The descriptive text to use in the placeholder, below the header
 
     {% endcomment %}
-    <div class="ui placeholder segment">
+    <div class="{% block list_placeholder_class %}ui placeholder segment{% endblock %}">
       {% block list_placeholder %}
         <div class="ui icon header">
           {% block list_placeholder_icon %}
