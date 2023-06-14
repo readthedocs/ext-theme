@@ -183,6 +183,20 @@
           The contents of the list item element. If you override this element,
           be sure to replicate all of the child structure here.
 
+      .. describe:: list_item_right_column
+
+          Block to override the entire contents of the right column. It should
+          not be necessary to override this content, except in the case of a big
+          edge case. Try overriding the column classes before you go this far.
+
+      .. describe:: list_item_right_column_classes
+
+          The classes applied to the right column. This column is where the list
+          item button menu is located, and is normally right aligned and collapses
+          down to a narrow column.
+
+          Default: `right aligned collapsing`
+
       .. describe:: list_item_right_menu
 
           Contains the ``list_item_right_buttons``. You might need to override
@@ -216,6 +230,25 @@
           the list view and should contain only the most important information.
 
           Default: a string representation of the instance, for debugging.
+
+      .. describe:: list_item_header_classes
+
+          The classes attached to the header element. Use this if you need to
+          tweak the display of the header element, but not the structure.
+
+          Default: `ui tiny header`
+
+      .. describe:: list_item_header_column
+
+          To override the whole table column/cell, you can use this block. This
+          is here for very edge case usage, you shouldn't need to define the whole
+          cell or deviate from a header inside a table cell.
+
+      .. describe:: list_item_header_column_classes
+
+          Instead of defining the whole column/cell, you might just need to define
+          extra/different classes on the table cell. Try this before overriding
+          the whole column block.
 
       .. describe:: list_item_description
 
@@ -262,8 +295,8 @@
               {% block list_item %}
 
                 {% block list_item_header_column %}
-                  <td class="collapsing">
-                    <div class="ui tiny header">
+                  <td class="{% block list_item_header_column_classes %}{% endblock %}">
+                    <div class="{% block list_item_header_classes %}ui tiny header{% endblock %}">
                       {% block list_item_image %}
                         {% comment %}
                           On the off chance you actually want an image here,
@@ -317,7 +350,7 @@
                 {% endblock list_item_extra_column %}
 
                 {% block list_item_right_column %}
-                  <td class="right aligned collapsing">
+                  <td class="{% block list_item_right_column_classes %}right aligned collapsing{% endblock %}">
                     {% block list_item_right_menu %}
                       <div class="ui mini icon buttons">
                         {% block list_item_right_buttons %}
