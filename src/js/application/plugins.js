@@ -4,6 +4,9 @@ import ko from "knockout";
 window.jQuery = jquery;
 global.jQuery = jquery;
 
+// Required for FUI tab module
+require("jquery-address");
+
 /* CommonJS require instead of import syntax on purpose */
 require("fomantic-ui-less/definitions/behaviors/visibility.js");
 require("fomantic-ui-less/definitions/behaviors/form.js");
@@ -33,6 +36,9 @@ require("fomantic-ui-less/definitions/globals/site.js");
  */
 export function configure_jquery_plugins() {
   jquery.fn.site("normalize");
+  jquery.fn.tabs = jquery_tabmenu;
+  // ``tabmenu`` was ported from our website, but ``tabs`` is nicer
+  jquery.fn.tabmenu = jquery_tabmenu;
 }
 
 /**
@@ -381,4 +387,27 @@ export const semanticui = {
       }
     }
   },
+};
+
+/**
+ * Tab group SUI module helper
+ *
+ * The tab module is instantiated in a unique way that conflicts with the normal
+  * patterns used for instantiating FUI modules here. Instead of being called on
+  * a singular element, the tab module is called on child elements of a menu.
+  * That is, the tab module would normally be set up on multiple modules at a
+  * time with ``$(".ui.menu > .item").tab({...})``.
+  *
+  * Calling the module on multiple ``.item`` elements in a query is important,
+  * or we end up instantiating a tab menu for each menu item and the tab menu
+  * does not work correctly.
+  *
+  * In short, this consolidates the tab module instantiation onto a query
+  * instead of a singular element like the ``semanticui`` data binding normal
+  * would.
+ */
+function jquery_tabmenu(settings) {
+  return this.each((index, elem) => {
+    $(elem).find(".item").tab(settings);
+  });
 };
