@@ -1,0 +1,8 @@
+// A helper from grid to hide some of the top navigation menu items as the
+// viewport narrows
+@media only screen and (max-width: @largestTabletScreen) {
+  .ui.ui.ui.menu > .computer.only.item, 
+  .ui.ui.ui.menu > .menu > .computer.only.item {
+    display: none;
+  }
+}

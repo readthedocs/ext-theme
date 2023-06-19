@@ -1,0 +1,6 @@
+// Mostly to make the top navigation menu wider at tablet widths
+@tabletWidth: auto;
+@tabletGridWidth: auto;
+@tabletRelaxedGridWidth: auto;
+@tabletVeryRelaxedGridWidth: auto;
+@tabletGutter: 1em;
