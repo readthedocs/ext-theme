@@ -53,12 +53,17 @@
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
-  {{ object.url|truncatechars:50 }}
+  <a href="{% url 'projects_webhooks_edit' project.slug object.pk %}">
+    {{ object.url }}
+  </a>
   <div class="sub header">
     {% trans "Subscribed events:" %}
     {{ object.events.all|join:", " }}
   </div>
 {% endblock list_item_header %}
 
-{% block list_item_meta %}
-{% endblock list_item_meta %}
+{% block list_item_meta_column %}
+{% endblock list_item_meta_column %}
+
+{% block list_item_extra_column %}
+{% endblock list_item_extra_column %}

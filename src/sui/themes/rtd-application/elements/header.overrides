@@ -2,3 +2,30 @@
 .ui.ui.ui.medium.header {
   font-size: @mediumFontSize;
 }
+
+// Try to avoid headers that wrap or overflow out of tables in table listing
+// display. Content cannot be both non-wrapping and also horizontally
+// constrained in a table. Table cells are meant to grow to content size, unless
+// using a fixed table layout or explicit cell widths.
+.ui.table tr > td {
+  > .ui.header {
+    // Don't allow icon/image/etc to wrap
+    white-space: nowrap;
+
+    > .content {
+      // But do allow wrapping on the content lines (sub header included)
+      white-space: initial;
+      word-break: break-word;
+    }
+
+    // TODO this might be better off in the header overrides, but for now it's
+    // probably only needed in the table view. It can be moved to a separate
+    // rule if it's useful. It's useful for some content like URLs that wrap
+    // poorly with break-word.
+    &.all.breaking {
+      > .content {
+        word-break: break-all;
+      }
+    }
+  }
+}

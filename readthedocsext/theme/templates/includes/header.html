@@ -58,49 +58,55 @@ active_item
       {% endcomment %}
       {% block header_menu %}
         <div class="twelve wide computer eleven wide tablet left aligned tablet only computer only column">
-          <div class="ui huge borderless secondary menu">
+          <div class="ui big borderless secondary menu">
 
             {% block header_left_menu %}
-              <a class="{% if active_item == "projects" %}active {% endif %}item" href="{% url 'projects_dashboard' %}">
-                {% trans "Projects" %}
-              </a>
+              {% if request.user.is_authenticated %}
+                <a class="{% if active_item == "projects" %}active {% endif %} computer only item" href="{% url 'projects_dashboard' %}">
+                  {% trans "Projects" %}
+                </a>
+              {% endif %}
             {% endblock header_left_menu %}
 
             <div class="right menu">
               {% block header_right_menu %}
 
                 {% block header_menu_search %}
-                  <div class="item">
-                    <div class="ui category search" data-bind="semanticui: {search: search_project_config()}">
-                      <div class="ui icon input">
-                        <input class="prompt" type="text">
-                        <i class="fa-duotone fa-search icon"></i>
+                  {% if request.user.is_authenticated %}
+                    <div class="item">
+                      <div class="ui category search" data-bind="semanticui: {search: search_project_config()}">
+                        <div class="ui icon input">
+                          <input class="prompt" type="text">
+                          <i class="fa-duotone fa-search icon"></i>
+                        </div>
+                        <div class="results"></div>
                       </div>
-                      <div class="results"></div>
                     </div>
-                  </div>
+                  {% endif %}
                 {% endblock header_menu_search %}
 
                 {% block header_menu_icon_menus %}
-                  <div class="item">
-                    {# Extra divs for spacing #}
-                    <div>
-                      <div class="ui disabled wide dropdown circular basic icon button" data-bind="semanticui: {dropdown: {action: 'select', displayType: 'block'}}">
-                        <i class="fa-solid fa-bell icon"></i>
-                        {# TODO This feature doesn't do anything yet, see https://github.com/readthedocs/ext-theme/issues/16 #}
-                        {% if False %}
-                          <span class="ui floating circular red label">{{ messages|length }}</span>
-                        {% endif %}
-                        <div class="menu">
+                  {% if request.user.is_authenticated %}
+                    <div class="item">
+                      {# Extra divs for spacing #}
+                      <div>
+                        <div class="ui disabled wide dropdown circular basic icon button" data-bind="semanticui: {dropdown: {action: 'select', displayType: 'block'}}">
+                          <i class="fa-solid fa-bell icon"></i>
+                          {# TODO This feature doesn't do anything yet, see https://github.com/readthedocs/ext-theme/issues/16 #}
+                          {% if False %}
+                            <span class="ui floating circular red label">{{ messages|length }}</span>
+                          {% endif %}
+                          <div class="menu">
+                          </div>
                         </div>
                       </div>
+                      <div>
+                        <a class="ui circular basic icon button" href="{% url 'support' %}" aria-label="{% trans 'Get support' %}">
+                          <i class="fa-solid fa-message-question icon"></i>
+                        </a>
+                      </div>
                     </div>
-                    <div>
-                      <a class="ui circular basic icon button" href="{% url 'support' %}" aria-label="{% trans 'Get support' %}">
-                        <i class="fa-solid fa-message-question icon"></i>
-                      </a>
-                    </div>
-                  </div>
+                  {% endif %}
                 {% endblock header_menu_icon_menus %}
 
                 {% block header_menu_user %}
@@ -116,8 +122,13 @@ active_item
                     </div>
                   {% else %}
                     <div class="item">
+                      <a href="{% url 'account_signup' %}">
+                        {% trans "Sign up" %}
+                      </a>
+                    </div>
+                    <div class="item">
                       <a class="ui button" href="{% url 'account_login' %}">
-                        {% trans "Log In" %}
+                        {% trans "Log in" %}
                       </a>
                     </div>
                   {% endif %}
