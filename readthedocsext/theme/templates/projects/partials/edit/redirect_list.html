@@ -66,63 +66,56 @@
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
+  <i class="fad fa-diamond-turn-right icon"></i>
 {% endblock list_item_image %}
 
+{% block list_item_header_classes %}{{ block.super }} all breaking{% endblock %}
+
 {% block list_item_header %}
-  <div>
-    {{ object.get_redirect_type_display }}
-  </div>
+  {% spaceless %}
+    {% if object.from_url %}
+      {% if object.redirect_type == "page" %}
+        <span>/</span><span class="ui violet text">$lang</span>
+        <span>/</span><span class="ui violet text">$version</span>
+      {% endif %}
+      <span>{{ object.from_url }}</span>
+      {% if object.redirect_type == "prefix" %}
+        <span class="ui violet text">$1</span>
+      {% endif %}
+    {% else %}
+      {% if object.redirect_type == "sphinx_html" %}
+        <span>/**/</span><span class="ui violet text">$1</span><span>/</span>
+      {% elif object.redirect_type == "sphinx_htmldir" %}
+        <span>/**/</span><span class="ui violet text">$1</span><span>.html</span>
+      {% endif %}
+    {% endif %}
+  {% endspaceless %}
+
   <div class="sub header">
-
-    <code class="ui small text">
-      {% spaceless %}
-        {% if object.from_url %}
-          {% if object.redirect_type == "page" %}
-            <span>/</span><span class="ui violet text">$lang</span>
-            <span>/</span><span class="ui violet text">$version</span>
-          {% endif %}
-          <span>{{ object.from_url }}</span>
+    <label>{% trans "Redirect to:" %}</label>
+    {% spaceless %}
+      {% if object.from_url %}
+        {% if object.redirect_type == "page" or object.redirect_type == "prefix" %}
+          <span>/</span><span class="ui violet text">$lang</span>
+          <span>/</span><span class="ui violet text">$version</span>
           {% if object.redirect_type == "prefix" %}
-            <span class="ui violet text">$1</span>
-          {% endif %}
-        {% else %}
-          {% if object.redirect_type == "sphinx_html" %}
-            <span>/**/</span><span class="ui violet text">$1</span><span>/</span>
-          {% elif object.redirect_type == "sphinx_htmldir" %}
-            <span>/**/</span><span class="ui violet text">$1</span><span>.html</span>
+            <span>/</span><span class="ui violet text">$1</span>
           {% endif %}
         {% endif %}
-      {% endspaceless %}
-    </code>
-
-    <i class="fas fa-right icon"></i>
-
-    <code class="ui small text">
-      {% spaceless %}
-        {% if object.from_url %}
-          {% if object.redirect_type == "page" or object.redirect_type == "prefix" %}
-            <span>/</span><span class="ui violet text">$lang</span>
-            <span>/</span><span class="ui violet text">$version</span>
-            {% if object.redirect_type == "prefix" %}
-              <span>/</span><span class="ui violet text">$1</span>
-            {% endif %}
-          {% endif %}
-          <span>{{ object.to_url }}</span>
-        {% else %}
-          {% if object.redirect_type == "sphinx_html" %}
-            <span>/**/</span><span class="ui violet text">$1</span><span>.html</span>
-          {% elif object.redirect_type == "sphinx_htmldir" %}
-            <span>/**/</span><span class="ui violet text">$1</span><span>/</span>
-          {% endif %}
+        <span>{{ object.to_url }}</span>
+      {% else %}
+        {% if object.redirect_type == "sphinx_html" %}
+          <span>/**/</span><span class="ui violet text">$1</span><span>.html</span>
+        {% elif object.redirect_type == "sphinx_htmldir" %}
+          <span>/**/</span><span class="ui violet text">$1</span><span>/</span>
         {% endif %}
-      {% endspaceless %}
-    </code>
-
+      {% endif %}
+    {% endspaceless %}
   </div>
 {% endblock list_item_header %}
 
-{% block list_item_meta %}
-{% endblock list_item_meta %}
+{% block list_item_meta_column %}
+{% endblock list_item_meta_column %}
 
-{% block list_item_extra %}
-{% endblock list_item_extra %}
+{% block list_item_extra_column %}
+{% endblock list_item_extra_column %}
