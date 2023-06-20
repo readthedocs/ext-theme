@@ -114,7 +114,7 @@
             {% alter_field form.level data_bind="valueInit: priceId" %}
             {{ form | crispy }}
             <input class="ui primary button" type="submit" data-bind="click: createCheckoutSession" value="{% trans "Sign up" %}" />
-          </form>
+          </div>
         </div>
 
       {% endblock gold_membership_inactive %}
