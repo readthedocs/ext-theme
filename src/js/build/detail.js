@@ -222,12 +222,21 @@ export class BuildDetailView {
     this.state = ko.observable(build.state);
     /** @observable {string} Build state as a display string */
     this.state_display = ko.observable(build.state_display);
-    /** @computed {Boolean} Is the build in a finished state? */
-    this.finished = ko.computed(() => {
-      return ["finished", "cancelled"].includes(this.state());
-    });
+
+    // State helpers that are not modeled from the backend API
+    /** @observable {Boolean} Is the build in a finished state? */
+    this.is_finished = ko.observable(false);
     /** @observable {Boolean} Have we received data from the API yet? */
     this.is_loading = ko.observable(true);
+    /** @observable {Boolean} Build can be cancelled */
+    this.can_cancel = ko.observable(false);
+    /** @observable {Boolean} Build can be retried */
+    this.can_retry = ko.observable(false);
+    /** @observable {Boolean} There was doc output in the build */
+    this.can_view_docs = ko.observable(false);
+
+    // Consolidate all of the observable updates that depend on build state
+    this.state.subscribe((state) => { this.update_state(state) });
 
     /** SUI progress module config/behavior
      * @computed {Object or Function} the parameters to pass to the module call
@@ -255,7 +264,7 @@ export class BuildDetailView {
             label: this.state_display(),
           };
         } else {
-          if (this.finished()) {
+          if (this.is_finished()) {
             const is_cancelled = state === "cancelled";
             const is_failed = this.error() || this.success() === false;
             if (is_cancelled) {
@@ -425,7 +434,7 @@ export class BuildDetailView {
     // state, this method will return without setting another timer. We do not
     // updated :attr:`is_polling` by computed/subscription as we want to ensure
     // this update happens at the very end of API updates instead.
-    if (this.finished()) {
+    if (this.is_finished()) {
       this.is_polling(false);
     } else {
       setTimeout(() => {
@@ -535,5 +544,27 @@ export class BuildDetailView {
     const show_debug = this.show_debug();
     this.show_debug(!show_debug);
   }
+
+  /** Update all attributes and observables that depend on build state */
+  update_state(state) {
+    // Is build in one of the finished states?
+    if (["finished", "cancelled"].includes(state)) {
+      this.is_finished(true);
+      this.can_cancel(false);
+      // TODO there is more logic on whether a build can retry in the
+      // application, but this is not surfaced in the API response.
+      this.can_retry(true);
+
+      if (this.success()) {
+        this.can_view_docs(true);
+      }
+    } else {
+      // We use any other status here to finally update ``can_cancel`` from
+      // it's default of ``false``. The default ensure we don't flash the
+      // button if the API response ends up showing that the build finished.
+      this.can_cancel(true);
+    }
+  }
 }
+
 Registry.add_view(BuildDetailView);

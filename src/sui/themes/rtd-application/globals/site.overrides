@@ -1,0 +1,20 @@
+// Knockout default styles
+//
+// Note: repeating a selector like this is a way to beef up specificity without
+// chaining more selectors. This rule will override most 3 and 4 selector rules
+// due to the artificially increased specificity in this rule.
+.ko.ko.ko.ko.ko {
+  
+  // There is the Knockout ``visible`` data binding, but this injects a hard
+  // coded style="display: none;" when the binding is false. This makes default
+  // styling on initial load hard with CSS and tends to flash the element to the
+  // user, before the JS loads.
+  //
+  // Instead, something like this is preferable:
+  //
+  //     <div class="ko hidden" data-bind="css: { hidden: !is_showing() }"></div>
+  &.hidden {
+    display: none;
+  }
+
+}
