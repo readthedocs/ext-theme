@@ -236,7 +236,9 @@ export class BuildDetailView {
     this.can_view_docs = ko.observable(false);
 
     // Consolidate all of the observable updates that depend on build state
-    this.state.subscribe((state) => { this.update_state(state) });
+    this.state.subscribe((state) => {
+      this.update_state(state);
+    });
 
     /** SUI progress module config/behavior
      * @computed {Object or Function} the parameters to pass to the module call
