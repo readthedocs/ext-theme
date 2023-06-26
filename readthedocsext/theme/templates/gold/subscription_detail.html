@@ -39,7 +39,6 @@
 
     <p>
       {% blocktrans trimmed %}
-        Becoming a Gold member makes Read the Docs ad-free when you are logged-in.
         Gold members may also completely remove advertising for all visitors to their projects.
       {% endblocktrans %}
     </p>
@@ -114,7 +113,7 @@
             {% alter_field form.level data_bind="valueInit: priceId" %}
             {{ form | crispy }}
             <input class="ui primary button" type="submit" data-bind="click: createCheckoutSession" value="{% trans "Sign up" %}" />
-          </form>
+          </div>
         </div>
 
       {% endblock gold_membership_inactive %}
