@@ -62,7 +62,7 @@
 
             <div class="item">
               <i class="grey fa-duotone fa-clock icon"></i>
-              <div class="content" data-bind="if: finished">
+              <div class="content" data-bind="if: is_finished">
                 <div data-bind="text: '{% trans "Build took %d" %}'.replace('%d', length_display())"></div>
               </div>
             </div>
@@ -113,8 +113,45 @@
         {% trans "Debug" %}
       </a>
       <div class="right menu">
-        <a class="disabled item" data-bind="css: {disabled: !finished() || !success()}, attr: {href: docs_url}">
-          <i class="fa-duotone fa-arrow-up-right-from-square icon"></i>
+
+        {% if request.user|is_admin:project %}
+          <a 
+              class="item ko hidden"
+              data-bind="click: $root.post_child_form, css: { hidden: !can_cancel() }">
+            <form method="post" action="{% url "builds_detail" build.version.project.slug build.pk %}">
+              {% csrf_token %}
+            </form>
+            <i class="fas fa-xmark-large red icon"></i>
+            {# Translators: this refers to cancelling a build #}
+            {% trans "Cancel" %}
+          </a>
+
+          {# Show rebuild button only if the version is external, active and it's the latest build for this version #}
+          {# see https://github.com/readthedocs/readthedocs.org/pull/6995#issuecomment-852918969 #}
+          {% if build.can_rebuild %}
+            <a 
+                class="item ko hidden"
+                data-bind="click: $root.post_child_form, css: { hidden: !can_retry() }">
+              <form method="post" name="rebuild_commit" action="{% url "builds_project_list" project.slug %}">
+                {% csrf_token %}
+                <input type="hidden" name="version_slug" value="{{ build.version.slug }}">
+                <input type="hidden" name="build_pk" value="{{ build.pk }}">
+              </form>
+              <i class="fas fa-arrows-rotate icon"></i>
+              {# Translators: this refers to retrying a build #}
+              {% trans "Retry" %}
+            </a>
+          {% endif %}
+
+        {% endif %}
+
+        {% trans "View documentation for this build" as text_view_docs %}
+        <a
+            class="disabled item"
+            data-bind="css: {disabled: !can_view_docs()}, attr: {href: docs_url}"
+            aria-label="{{ text_view_docs }}"
+            title="{{ text_view_docs }}">
+          <i class="fa-duotone fa-book icon"></i>
           {% trans "View docs" %}
         </a>
       </div>

@@ -1,0 +1,5 @@
+// Don't show required fields as invalid on initial form display. There is an
+// issue that will be closed by FUI 2.9.3:
+// https://github.com/fomantic/Fomantic-UI/issues/2749
+@variationInputInvalid: false;
+@variationFormInvalid: false;
