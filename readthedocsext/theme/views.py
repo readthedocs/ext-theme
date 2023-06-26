@@ -17,6 +17,7 @@ class AvatarImageBaseView(TemplateView):
     template_name = "theme/images/avatar.svg"
     content_type = "image/svg+xml"
 
+    # Primary to secondary color gradient, generated using a gradient generator
     COLORS = [
         "#0993af",
         "#0090b7",
@@ -56,7 +57,8 @@ class AvatarImageBaseView(TemplateView):
         raise NotImplementedError
 
     def get_context_data(self):
-        # Truncate letters, we want a max of 4
+        # Truncate letters, use a max of 5 letters for now. More than that and
+        # text is too tiny.
         letters = self.get_avatar_letters()[0:5]
         return {
             "letters": letters.lower(),
@@ -67,6 +69,15 @@ class AvatarImageBaseView(TemplateView):
 
 
 class AvatarImageProjectView(AvatarImageBaseView):
+
+    """
+    Project avatar configuration.
+
+    Use the project name or slug for the image letters, and use the project pk
+    to seed the randomization for background color. A remote URL can be
+    specified by the attached remote repository, if any.
+    """
+
     def get_queryset(self):
         return Project.objects.public(self.request.user)
 
@@ -93,5 +104,5 @@ class AvatarImageProjectView(AvatarImageBaseView):
         slug_words = self.object.slug.split("-")
         if len(slug_words) > len(words):
             words = slug_words
-        # Don't make the acronym too long, truncate it
+
         return "".join([word[0:1] for word in words])
