@@ -49,6 +49,12 @@
 
     {% block content-wrapper %}
       <div class="ui very padded container">
+
+        {# Temporal notification while we are in Beta #}
+        <div class="ui message info">
+            This dashboard is currently in Beta. Please report any feedback you may have.
+        </div>
+
         {% block messages %}
           {% include "includes/utils/messages.html" %}
         {% endblock messages %}
