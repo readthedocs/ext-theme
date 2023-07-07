@@ -3,12 +3,12 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-{% block title %}{% trans "Add Project" %}{% endblock %}
+{% block title %}{% trans "Add project" %}{% endblock %}
 
 {% block content %}
+  {% block project_add_content %}
     <div class="ui very padded centered stackable grid">
-    {% block project_add_content %}
-      <div class="{% block project_add_css_classes %}ui ten wide tablet six wide computer column{% endblock project_add_css_classes %}">
+      <div class="{% block project_add_content_classes %}ui fourteen wide tablet eight wide computer column{% endblock %}">
 
         {% block project_add_content_header %}
           <h1 class="ui medium header">
@@ -22,57 +22,56 @@
           </h1>
         {% endblock project_add_content_header %}
 
-        {% block project_add_content_main %}
-        {% endblock project_add_content_main %}
+        {% block project_add_content_form %}
+          <form class="ui form" action="{% url "projects_import_manual" %}" method="post">
 
-        <form class="ui form" action="{% url "projects_import_manual" %}" method="post">
+            {% csrf_token %}
+            {{ wizard.management_form }}
 
-          {% csrf_token %}
-          {{ wizard.management_form }}
-
-          {% block wizard_form %}
-            {% if wizard.form.forms %}
-              {{ wizard.form.management_form }}
-              {% for form in wizard.form.forms %}
-                {% csrf_token %}
-                {{ form|crispy }}
-              {% endfor %}
-            {% else %}
-              {{ wizard.form|crispy }}
-            {% endif %}
-          {% endblock wizard_form %}
-
-          {% block wizard_actions %}
-            <div>
-              {% if wizard.steps.prev %}
-                {# TODO: the previous button should not validate the form #}
-                <button class="ui button" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">
-                  {% trans "Previous" %}
-                </button>
-              {% endif %}
-
-              {% if wizard.steps.next %}
-                <input class="ui button primary" type="submit" value="{% trans "Next" %}" />
+            {% block wizard_form %}
+              {% if wizard.form.forms %}
+                {{ wizard.form.management_form }}
+                {% for form in wizard.form.forms %}
+                  {% csrf_token %}
+                  {{ form|crispy }}
+                {% endfor %}
               {% else %}
-                <input class="ui button primary" type="submit" value="{% trans "Finish" %}" />
+                {{ wizard.form|crispy }}
               {% endif %}
-            </div>
-          {% endblock wizard_actions %}
+            {% endblock wizard_form %}
 
-        </form>
+            {% block wizard_actions %}
+              <div>
+                {% if wizard.steps.prev %}
+                  <button class="ui button" name="wizard_goto_step" value="{{ wizard.steps.prev }}">
+                    {% trans "Previous" %}
+                  </button>
+                {% endif %}
+
+                {% if wizard.steps.next %}
+                  <input class="ui button primary" type="submit" value="{% trans "Next" %}" />
+                {% else %}
+                  <input class="ui button primary" type="submit" value="{% trans "Finish" %}" />
+                {% endif %}
+              </div>
+            {% endblock wizard_actions %}
+
+          </form>
+        {% endblock project_add_content_form %}
       </div>
-    {% endblock project_add_content %}
 
-    {% block project_add_help_topics %}
-    <div class="ui ten wide tablet four wide computer column">
-      <h2 class="ui small header">{% trans "Help topics" %}</h2>
-      <div data-bind="using: EmbedTopicsView('intro/import-guide')">
-        <div data-bind="template: { name: 'doc-topics' }"></div>
+      <div class="ui fourteen wide tablet four wide computer column">
+        {% block project_add_sidebar %}
+          <h2 class="ui small header">{% trans "Help topics" %}</h2>
+          <div class="ui bulleted list">
+            {% block project_add_sidebar_help_topics %}
+              {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/intro/import-guide.html" text="Connecting a repository" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/en/stable/tutorial/index.html" text="Read the Docs tutorial" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/examples.html" text="Example projects" is_external=True class="item" %}
+            {% endblock project_add_sidebar_help_topics %}
+          </div>
+        {% endblock project_add_sidebar %}
       </div>
     </div>
-    {% endblock project_add_help_topics %}
-  </div>
-
-  {% include "includes/utils/embed_docs.html" %}
-
-{% endblock %}
+  {% endblock project_add_content %}
+{% endblock content %}

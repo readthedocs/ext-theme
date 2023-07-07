@@ -130,10 +130,13 @@ export class Application {
     // Initialize clipboard, but only for data-clipboard-text. This is the most
     // generalized pattern for clipboard usage, so we won't yet worry about
     // adding the other data binding selectors.
-    var clipboard_global = new clipboard(".ui.button[data-clipboard-text]");
-    jquery(".ui.button[data-clipboard-text]").popup({
+    var clipboard_global = new clipboard(
+      "[data-clipboard-text], [data-clipboard-target]"
+    );
+    jquery("[data-clipboard-text], [data-clipboard-target]").popup({
       on: "click",
       hoverable: false,
+      content: "Copied!",
     });
   }
 }
