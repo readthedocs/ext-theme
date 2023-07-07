@@ -1,36 +1,33 @@
-{% extends "projects/base.html" %}
+{% extends "projects/import_base.html" %}
 
 {% load static %}
 {% load i18n %}
 {% load socialaccount %}
 
-{% block title %}{% trans "Add project" %}{% endblock %}
+{% block project_add_subheader %}
+  {% trans "Create a new project from a repository" %}
+{% endblock project_add_subheader %}
 
-{% block content %}
+{% block project_add_sidebar_content %}
+  <div class="ui fluid secondary pointing vertical menu" data-bind="css: {vertical: device.computer()}">
+    <a class="item active" data-tab="automatic">
+      <i class="fa-duotone fa-magic icon"></i>
+      {% trans "Configure automatically" %}
+    </a>
+    <a class="item" data-tab="manual">
+      <i class="fa-duotone fa-hand-sparkles icon"></i>
+      {% trans "Configure manually" %}
+    </a>
+  </div>
+{% endblock project_add_sidebar_content %}
+
+{% block project_add_data_bind %}data-bind="using: ProjectCreateView()"{% endblock %}
+
+{% block project_add_content_form %}
   {# Common URLs used in a few places #}
   {% url "socialaccount_connections" as url_connected_services %}
 
-  {# Header #}
-  <div class="ui very padded centered stackable grid">
-    <div class="ui five wide computer four wide large screen computer only column">
-      {# Placeholder for column offset #}
-    </div>
-    <div class="ui sixteen wide tablet eleven wide computer twelve wide large screen column">
-      <h1 class="ui medium header">
-        <div class="content">
-          {% trans "Add project" %}
-          <div class="sub header">
-            {% trans "Create a new project from a repository" %}
-          </div>
-        </div>
-      </h1>
-    </div>
-  </div>
-  {# End header #}
-
-  <div class="ui very padded stackable grid" data-bind="using: ProjectCreateView()">
-
-    <script type="application/json" data-bind="jsonInit: config">
+  <script type="application/json" data-bind="jsonInit: config">
 {
   "urls": {
       "api_sync_remote_repositories": "{% url 'api_sync_remote_repositories' %}",
@@ -38,59 +35,42 @@
   },
   "csrf_token": "{{ view_csrf_token }}"
 }
-    </script>
+  </script>
 
-    {# Sidebar #}
-    <div class="ui sixteen wide tablet five wide computer four wide large screen column">
-      <div class="ui fluid secondary pointing vertical menu" data-bind="css: {vertical: device.computer()}">
-        <a class="item active" data-tab="automatic">
-          <i class="fa-duotone fa-magic icon"></i>
-          {% trans "Configure automatically" %}
-        </a>
-        <a class="item" data-tab="manual">
-          <i class="fa-duotone fa-hand-sparkles icon"></i>
-          {% trans "Configure manually" %}
-        </a>
-      </div>
+  <div class="ui active tab" data-tab="automatic">
+
+    <div class="ui error small message"
+         data-bind="visible: error"
+         style="display: none;">
+      {% trans "There was an error while syncing your remote repositories" %}
     </div>
-    {# End sidebar #}
 
-    <div class="ui sixteen wide tablet eleven wide computer ten wide large screen column">
-
-      <div class="ui active tab" data-tab="automatic">
-
-        <div class="ui error small message"
-             data-bind="visible: error"
-             style="display: none;">
-          {% trans "There was an error while syncing your remote repositories" %}
+    {% if has_connected_accounts %}
+      {# Search prompt and dropdown #}
+      <label>
+        {% trans "Repository name:" %}
+      </label>
+      <div class="ui fluid disabled loading search" data-bind="semanticui: {search: search_config()}, css: {disabled: is_loading(), loading: is_loading()}">
+        <div class="ui fluid icon large input">
+          <input
+              class="ui text"
+              type="text"
+              autofocus=true />
+          <i class="fa-duotone fa-search icon"></i>
         </div>
+        <div class="results"></div>
 
-      {% if has_connected_accounts %}
-        {# Search prompt and dropdown #}
-        <label>
-          {% trans "Repository name:" %}
-        </label>
-        <div class="ui fluid disabled loading search" data-bind="semanticui: {search: search_config()}, css: {disabled: is_loading(), loading: is_loading()}">
-          <div class="ui fluid icon large input">
-            <input
-                class="ui text"
-                type="text"
-                autofocus=true />
-            <i class="fa-duotone fa-search icon"></i>
-          </div>
-          <div class="results"></div>
+        {% comment %}
+          This is the template used by Knockout to render the SUI search
+          template. The output format is similar, but there are additional
+          conditional blocks for display purposes. The `standard` search
+          template only uses image, title, and description.
 
-          {% comment %}
-            This is the template used by Knockout to render the SUI search
-            template. The output format is similar, but there are additional
-            conditional blocks for display purposes. The `standard` search
-            template only uses image, title, and description.
-
-            This template will be loaded on search results and rendered to a
-            string. The `response` object received by `onResponse` is used in
-            the context binding, but the attributes are observable attributes.
-          {% endcomment %}
-          <script type="text/html" id="remote-repo-results">
+          This template will be loaded on search results and rendered to a
+          string. The `response` object received by `onResponse` is used in
+          the context binding, but the attributes are observable attributes.
+        {% endcomment %}
+        <script type="text/html" id="remote-repo-results">
 <div data-bind="foreach: remote_repos" class="results">
   <a class="result">
     <div class="image">
@@ -119,256 +99,252 @@
     </div>
   </a>
 </div>
-          </script>
+        </script>
 
-        </div>
-        {# End of search prompt and dropdown #}
+      </div>
+      {# End of search prompt and dropdown #}
 
-        <div class="ui basic horizontally fitted segment" data-bind="visible: !is_selected()">
-          <div class="ui top attached placeholder segment">
+      <div class="ui basic horizontally fitted segment" data-bind="visible: !is_selected()">
+        <div class="ui top attached placeholder segment">
+          {% if not has_connected_accounts %}
+            <div class="ui icon info message">
+              <i class="fa-duotone fa-magic icon"></i>
+              <div class="content">
+                <p>
+                  {# Translators: "connected service" refers to the user setting page for "Connected Services" #}
+                  {% blocktrans trimmed %}
+                    To enable automatic configuration of repositories, you must first
+                    add a connected service to your account.
+                  {% endblocktrans %}
+                </p>
+                <button class="ui right floated button" href="{{ url_connected_services }}">
+                  {% trans "Add a connected service" %}
+                </button>
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="ui icon header">
             {% if not has_connected_accounts %}
-              <div class="ui icon info message">
-                <i class="fa-duotone fa-magic icon"></i>
-                <div class="content">
-                  <p>
-                    {# Translators: "connected service" refers to the user setting page for "Connected Services" #}
-                    {% blocktrans trimmed %}
-                      To enable automatic configuration of repositories, you must first
-                      add a connected service to your account.
-                    {% endblocktrans %}
-                  </p>
-                  <button class="ui right floated button" href="{{ url_connected_services }}">
-                    {% trans "Add a connected service" %}
-                  </button>
-                </div>
+              {# User does not yet have any connected accounts, don't ask to "select repository" #}
+              {% trans "Connect an account" %}
+
+              <div class="sub header">
+                {# Translators: "connected service" refers to the user setting page for "Connected Services" #}
+                {% blocktrans trimmed with url=url_connected_services %}
+                  To enable automatic configuration of repositories, you must first
+                  <a href="{{ url }}">add a connected service to your account</a>.
+                  If you do not have an account to connect, you may still be able
+                  to manually configure repositories.
+                {% endblocktrans %}
+              </div>
+            {% else %}
+              {# Push user towards searching using input above #}
+              <i class="fad fa-search icon"></i>
+              {% trans "Select a repository" %}
+
+              <div class="sub header">
+                {# User has connected accounts, don't point to connecting GitHub/etc #}
+                {% blocktrans trimmed %}
+                  Use the search above to find the repository you would like to
+                  use to build your new project. This project will be connected to
+                  the repository through your connected account.
+                {% endblocktrans %}
               </div>
             {% endif %}
-
-            <div class="ui icon header">
-              {% if not has_connected_accounts %}
-                {# User does not yet have any connected accounts, don't ask to "select repository" #}
-                {% trans "Connect an account" %}
-
-                <div class="sub header">
-                  {# Translators: "connected service" refers to the user setting page for "Connected Services" #}
-                  {% blocktrans trimmed with url=url_connected_services %}
-                    To enable automatic configuration of repositories, you must first
-                    <a href="{{ url }}">add a connected service to your account</a>.
-                    If you do not have an account to connect, you may still be able
-                    to manually configure repositories.
-                  {% endblocktrans %}
-                </div>
-              {% else %}
-                {# Push user towards searching using input above #}
-                <i class="fad fa-search icon"></i>
-                {% trans "Select a repository" %}
-
-                <div class="sub header">
-                  {# User has connected accounts, don't point to connecting GitHub/etc #}
-                  {% blocktrans trimmed %}
-                    Use the search above to find the repository you would like to
-                    use to build your new project. This project will be connected to
-                    the repository through your connected account.
-                  {% endblocktrans %}
-                </div>
-              {% endif %}
-            </div>
-
           </div>
-          <div class="ui small bottom attached center aligned message">
 
-            {% trans "Can't find the repository you are searching for?" %}
-
-            <button
-                class="ui mini black basic compact right aligned button" 
-                data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
-              <i class="fa-duotone fa-refresh icon"></i>
-              {% trans "Refresh your repositories" %}
-            </button>
-
-          </div>
         </div>
-        {# End placeholder segment when no repository is selected #}
+        <div class="ui small bottom attached center aligned message">
 
-        {% comment %}
-          Card display for selected remote repository
-          ===========================================
+          {% trans "Can't find the repository you are searching for?" %}
 
-          This block only shows when there is a selected project from the
-          search selction above. This block shows some information about using
-          the repository, such as where the repository has already been
-          connected and why the repository can/cannot be used.
-          
-        {% endcomment %}
-        <div class="ui fluid card" data-bind="visible: is_selected, with: selected" style="display: none;">
-          <div class="content">
-            <img class="ui right floated mini rounded image" data-bind="attr: { src: avatar_url }">
-            <div class="header" data-bind="text: full_name"></div>
-            <div class="meta" data-bind="text: clone_url"></div>
-            <div class="description">
+          <button
+              class="ui mini black basic compact right aligned button" 
+              data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
+            <i class="fa-duotone fa-refresh icon"></i>
+            {% trans "Refresh your repositories" %}
+          </button>
 
-              <div class="ui basic segment">
-                <div class="ui relaxed list">
+        </div>
+      </div>
+      {# End placeholder segment when no repository is selected #}
 
-                  {# Do we support private repositories? #}
-                  <div class="item">
-                    <i class="fa-duotone fa-eye icon" data-bind="css: {'slash': private}"></i>
-                    <div class="content">
-                      <div class="header">
-                        <span data-bind="visible: !private">
-                          {% trans "Repository is public" %}
-                        </span>
+      {% comment %}
+        Card display for selected remote repository
+        ===========================================
 
-                        <span class="ui red text" data-bind="visible: private">
-                          {% trans "Repository is private" %}
-                        </span>
-                      </div>
-                      <div class="description">
-                        <span data-bind="visible: !private">
-                          {% blocktrans trimmed %}
-                            This repository can be cloned.
-                          {% endblocktrans %}
-                        </span>
+        This block only shows when there is a selected project from the
+        search selction above. This block shows some information about using
+        the repository, such as where the repository has already been
+        connected and why the repository can/cannot be used.
+        
+      {% endcomment %}
+      <div class="ui fluid card" data-bind="visible: is_selected, with: selected" style="display: none;">
+        <div class="content">
+          <img class="ui right floated mini rounded image" data-bind="attr: { src: avatar_url }">
+          <div class="header" data-bind="text: full_name"></div>
+          <div class="meta" data-bind="text: clone_url"></div>
+          <div class="description">
 
-                        <p class="ui red text" data-bind="visible: private">
-                          {% blocktrans trimmed %}
-                            Private repositories are not supported
-                          {% endblocktrans %}
-                        </p>
-                        <p class="ui red text" data-bind="visible: private">
-                          <a class="ui red mini basic button">{% trans "Read more" %}</a>
-                        </p>
-                      </div>
+            <div class="ui basic segment">
+              <div class="ui relaxed list">
+
+                {# Do we support private repositories? #}
+                <div class="item">
+                  <i class="fa-duotone fa-eye icon" data-bind="css: {'slash': private}"></i>
+                  <div class="content">
+                    <div class="header">
+                      <span data-bind="visible: !private">
+                        {% trans "Repository is public" %}
+                      </span>
+
+                      <span class="ui red text" data-bind="visible: private">
+                        {% trans "Repository is private" %}
+                      </span>
+                    </div>
+                    <div class="description">
+                      <span data-bind="visible: !private">
+                        {% blocktrans trimmed %}
+                          This repository can be cloned.
+                        {% endblocktrans %}
+                      </span>
+
+                      <p class="ui red text" data-bind="visible: private">
+                        {% blocktrans trimmed %}
+                          Private repositories are not supported
+                        {% endblocktrans %}
+                      </p>
+                      <p class="ui red text" data-bind="visible: private">
+                        <a class="ui red mini basic button">{% trans "Read more" %}</a>
+                      </p>
                     </div>
                   </div>
-
-
-                  {# Does user have admin privileges needed to import? #}
-                  <div class="item">
-                    <i class="fa-duotone fa-magic icon" data-bind="css: {red: !admin}"></i>
-                    <div class="content">
-                      <div class="header">
-                        <span data-bind="visible: admin">
-                          {% trans "Repository can be automatically configured" %}
-                        </span>
-
-                        <span class="ui red text" data-bind="visible: !admin">
-                          {% trans "Repository must be manually configured" %}
-                        </span>
-                      </div>
-                      <div class="description">
-                        <span data-bind="visible: admin">
-                          {% blocktrans trimmed %}
-                            You have the necessary privileges needed to configure
-                            this repository.
-                          {% endblocktrans %}
-                        </span>
-
-                        <p class="ui red text" data-bind="visible: !admin">
-                          {% blocktrans trimmed %}
-                            You do not have the necessary permissions to
-                            automatically configure this repository. Additional steps
-                            will be required to configure this repository.
-                          {% endblocktrans %}
-                        </p>
-                        <p class="ui red text" data-bind="visible: !admin">
-                          <a class="ui red mini basic button" href="https://docs.readthedocs.io/page/intro/import-guide.html#manually-import-your-docs">
-                            {% trans "Learn how to manually configure this repository" %}
-                          </a>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {# Is the repository already imported? #}
-                  <div class="item" data-bind="if: has_project">
-                    <i class="fa-solid fa-plus icon"></i>
-                    <div class="content">
-                      <div class="header">
-                        {% trans "Repository is already configured" %}
-                      </div>
-                      <div class="description">
-                        <p>
-                          {% blocktrans trimmed %}
-                            This following projects were already configured to use this repository:
-                          {% endblocktrans %}
-                        </p>
-                        <div data-bind="foreach: matches">
-                          {% comment %}
-                            This is currently using the v2 API because the v3
-                            API doesn't support searching. Once the API v3
-                            supports searching, this can be switched to using
-                            the project chip template include. This will
-                            include the project name, avatar URL, and embedded
-                            popup for the project.
-
-                            We only have two fields here for now: url and id (slug)
-                          {% endcomment %}
-                          <a class="ui basic image label" data-bind="attr: {href: url}" target="_blank">
-                            {# TODO switch this to use the full response from the v3 API #}
-                            {# <img src="{{ project.remote_repository.avatar_url }}" /> #}
-                            <span data-bind="text: id"></span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
                 </div>
+
+
+                {# Does user have admin privileges needed to import? #}
+                <div class="item">
+                  <i class="fa-duotone fa-magic icon" data-bind="css: {red: !admin}"></i>
+                  <div class="content">
+                    <div class="header">
+                      <span data-bind="visible: admin">
+                        {% trans "Repository can be automatically configured" %}
+                      </span>
+
+                      <span class="ui red text" data-bind="visible: !admin">
+                        {% trans "Repository must be manually configured" %}
+                      </span>
+                    </div>
+                    <div class="description">
+                      <span data-bind="visible: admin">
+                        {% blocktrans trimmed %}
+                          You have the necessary privileges needed to configure
+                          this repository.
+                        {% endblocktrans %}
+                      </span>
+
+                      <p class="ui red text" data-bind="visible: !admin">
+                        {% blocktrans trimmed %}
+                          You do not have the necessary permissions to
+                          automatically configure this repository. Additional steps
+                          will be required to configure this repository.
+                        {% endblocktrans %}
+                      </p>
+                      <p class="ui red text" data-bind="visible: !admin">
+                        <a class="ui red mini basic button" href="https://docs.readthedocs.io/page/intro/import-guide.html#manually-import-your-docs">
+                          {% trans "Learn how to manually configure this repository" %}
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {# Is the repository already imported? #}
+                <div class="item" data-bind="if: has_project">
+                  <i class="fa-solid fa-plus icon"></i>
+                  <div class="content">
+                    <div class="header">
+                      {% trans "Repository is already configured" %}
+                    </div>
+                    <div class="description">
+                      <p>
+                        {% blocktrans trimmed %}
+                          This following projects were already configured to use this repository:
+                        {% endblocktrans %}
+                      </p>
+                      <div data-bind="foreach: matches">
+                        {% comment %}
+                          This is currently using the v2 API because the v3
+                          API doesn't support searching. Once the API v3
+                          supports searching, this can be switched to using
+                          the project chip template include. This will
+                          include the project name, avatar URL, and embedded
+                          popup for the project.
+
+                          We only have two fields here for now: url and id (slug)
+                        {% endcomment %}
+                        <a class="ui basic image label" data-bind="attr: {href: url}" target="_blank">
+                          {# TODO switch this to use the full response from the v3 API #}
+                          {# <img src="{{ project.remote_repository.avatar_url }}" /> #}
+                          <span data-bind="text: id"></span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
-
             </div>
-          </div>
-          <div class="extra content">
-            <span class="right floated">
-              <form action="{% url 'projects_import' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="name" data-bind="value: name" />
-                <input type="hidden" name="repo" data-bind="value: clone_url" />
-                <input type="hidden" name="repo_type" data-bind="value: vcs" />
-                <input type="hidden" name="project_url" data-bind="value: html_url" />
-                <input type="hidden" name="remote_repository" data-bind="value: id" />
 
-                <button class="ui primary button" data-bind="css: {disabled: !admin}">
-                  {% trans "Set up" %}
-                </button>
-              </form>
-            </span>
           </div>
         </div>
-        {# End card display for selected remote repository #}
+        <div class="extra content">
+          <span class="right floated">
+            <form action="{% url 'projects_import' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="name" data-bind="value: name" />
+              <input type="hidden" name="repo" data-bind="value: clone_url" />
+              <input type="hidden" name="repo_type" data-bind="value: vcs" />
+              <input type="hidden" name="project_url" data-bind="value: html_url" />
+              <input type="hidden" name="remote_repository" data-bind="value: id" />
 
-      {% endif %}
-      {# End conditional has_connected_accounts #}
-      </div>
-
-
-      <div class="ui tab" data-tab="manual">
-        <div class="ui warning message">
-          {% blocktrans trimmed %}
-            Extra steps will be required to complete repository setup.
-          {% endblocktrans %}
-        </div>
-        <p>
-          {% blocktrans trimmed %}
-            We recommend you only attempt manual configuration if you are
-            familiar with configuring your repository and have the necessary
-            admin privileges to configure this repository. Manual configuration
-            will require several steps after your project is created in order
-            to automatically build your project.
-          {% endblocktrans %}
-        </p>
-        <div class="ui right aligned basic segment">
-          <a class="ui basic button" href="https://docs.readthedocs.io/page/intro/import-guide.html" target="_blank">
-            {% trans "Learn more" %}
-          </a>
-          <a class="ui button" href="{% url 'projects_import_manual' %}">
-            <i class="fa-solid fa-triangle-exclamation icon"></i>
-            {% trans "Continue" %}
-          </a>
+              <button class="ui primary button" data-bind="css: {disabled: !admin}">
+                {% trans "Continue" %}
+              </button>
+            </form>
+          </span>
         </div>
       </div>
+      {# End card display for selected remote repository #}
 
+    {% endif %}
+    {# End conditional has_connected_accounts #}
+  </div>
+
+  <div class="ui tab" data-tab="manual">
+    <div class="ui warning message">
+      {% blocktrans trimmed %}
+        Extra steps will be required to complete repository setup.
+      {% endblocktrans %}
+    </div>
+    <p>
+      {% blocktrans trimmed %}
+        We recommend you only attempt manual configuration if you are
+        familiar with configuring your repository and have the necessary
+        admin privileges to configure this repository. Manual configuration
+        will require several steps after your project is created in order
+        to automatically build your project.
+      {% endblocktrans %}
+    </p>
+    <div class="ui right aligned basic segment">
+      <a class="ui basic button" href="https://docs.readthedocs.io/page/intro/import-guide.html" target="_blank">
+        {% trans "Learn more" %}
+      </a>
+      <a class="ui button" href="{% url 'projects_import_manual' %}">
+        <i class="fa-solid fa-triangle-exclamation icon"></i>
+        {% trans "Continue" %}
+      </a>
     </div>
   </div>
-{% endblock content %}
+{% endblock project_add_content_form %}
