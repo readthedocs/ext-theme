@@ -70,9 +70,7 @@
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
-  <a href="{{ object.get_absolute_url }}">
-    {{ object.version.verbose_name }} #{{ object.pk }}
-  </a>
+  {% include "builds/includes/build_name.html" with build=object %}
   <div class="sub header">
     <div class="item" data-bind="semanticui: { popup: { content: '{{ object.date }}', position: 'top center', delay: { show: 500 }, variation: 'small'}}">
       {# Translators: this will read like "Started 1 month, 3 days ago" #}
@@ -84,7 +82,12 @@
 {% endblock list_item_header %}
 
 {% block list_item_meta_items %}
-  {% if object.commit %}
+  {% if object.is_external %}
+    <a href="{{ object.version.vcs_url }}" class="item" aria-label="{{ object.external_version_name | lower | capfirst }} #{{ object.version.verbose_name }}">
+      <i class="fa-duotone fa-code-pull-request icon"></i>
+      <code>#{{ object.version.verbose_name }}</code>
+    </a>
+  {% elif object.commit %}
     {% with commit=object.commit|slice:"0:8" %}
       {% blocktrans with commit=commit trimmed asvar text_commit %}
         View commit {{ commit }}

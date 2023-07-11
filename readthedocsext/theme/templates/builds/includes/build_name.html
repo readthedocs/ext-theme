@@ -1,0 +1,63 @@
+{% comment %}
+
+  A common include for showing the build name in a heading or title 
+
+  This is a more complex heading than other elements. It uses a breadcrumb to
+  show the version the build was for, as well as the type of build in the case
+  that build is for a pull request version.
+
+  When used as a page title, on the build detail page, show some extra text and
+  nested breadcrumbs that we don't need to show in the build listing. This
+  gives some UI to link back to the build list or the version list. Normally,
+  the whole breadcrumb is linked as single link.
+
+{% endcomment %}
+
+{% load i18n %}
+
+{# When not a page title, treat the entire breadcrumb as a link to the build #}
+{% if not is_page_title %}<a href="{{ build.get_absolute_url }}">{% endif %}
+  <span class="ui {% if is_page_title %}large{% endif %} breadcrumb">
+    <span class="section">
+      {# When used a a page title, link the sections independently #}
+      {% if is_page_title %}
+        <a href="{% url "project_version_list" build.version.project.slug %}?version={{ build.version.slug }}">
+      {% endif %}
+
+      {% if build.is_external %}
+        {{ build.external_version_name | lower | capfirst }}
+        {{ build.version.verbose_name }}
+      {% else %}
+        {# Translators: this renders with the version name, example "Version latest" #}
+        {% blocktrans trimmed with version_name=build.version.verbose_name %}
+          Version {{ version_name }}
+        {% endblocktrans %}
+      {% endif %}
+
+      {% if is_page_title %}
+        </a>
+      {% endif %}
+    </span>
+    {% if is_page_title %}
+      {# When used as a page title, show a section link for the filtered build list #}
+      <span class="divider">/</span>
+      {# Translators: this refers to a list of builds for a single project #}
+      <a class="section" href="{% url "builds_project_list" build.version.project.slug %}?version={{ build.version.slug }}">
+        {% trans "Builds" %}
+      </a>
+    {% endif %}
+    <span class="divider">/</span>
+    <span class="active section">
+      {% if is_page_title %}
+        <a href="{{ build.get_absolute_url }}">
+      {% endif %}
+      <span class="ui grey text">
+        #{{ build.pk }}
+      </span>
+      {% if is_page_title %}
+        </a>
+      {% endif %}
+    </span>
+  </span>
+</a>
+{% if not is_page_title %}</a>{% endif %}
