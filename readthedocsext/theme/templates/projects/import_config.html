@@ -1,0 +1,96 @@
+{% extends "projects/import_base.html" %}
+{% load i18n %}
+
+{% block project_add_content_subheader %}
+  {% trans "Add a configuration file to your project" %}
+{% endblock project_add_content_subheader %}
+
+{% block project_add_content_classes %}ui fourteen wide tablet twelve wide computer column{% endblock %}
+
+{% block project_add_content_form %}
+  <div class="ui small info message">
+    {% blocktrans trimmed %}
+      A <code>.readthedocs.yaml</code> configuration file is required at the root of your repository in order to build your documentation.
+    {% endblocktrans %}
+   
+    <a href="https://docs.readthedocs.io/page/config-file/index.html" target="_blank">
+      {% trans "Learn how to add a configuration file to your project." %}
+    </a>
+  </div>
+ 
+  <div class="ui basic fitted right aligned segment">
+    <span>{% trans "Example configuration for:" %}</span>
+    <div class="ui inline dropdown" data-bind="semanticui: { dropdown: {}}">
+      <input type="hidden" name="tool" value="sphinx">
+      <span class="text">Sphinx</span>
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        <div class="item" data-value="sphinx">Sphinx</div>
+
+        {% comment %}
+          Adding a second option here will require a bit of JS or FUI:
+          https://github.com/readthedocs/ext-theme/issues/184
+        {% endcomment %}
+
+        {# The `actionable` class here prevents the select from selecting the text #}
+        <a class="actionable item" href="https://docs.readthedocs.io/page/config-file/index.html#getting-started-with-a-template" target="_blank">
+          {% trans "See more examples" %}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui mini padded inverted scrolling segment">
+    <div class="ui top attached label">
+      <code>.readthedocs.yaml</code>
+    </div>
+    <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-sphinx">
+      <i class="fas fa-copy icon"></i>
+    </a>
+    <code class="highlight">
+      <pre id="project-create-sample-sphinx">
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+# Required
+version: 2
+
+# Set the OS, Python version, and other tools you might need
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.11"
+    # You can also specify other tool versions:
+    # nodejs: "19"
+    # rust: "1.64"
+    # golang: "1.19"
+
+# Build documentation in the "docs/" directory with Sphinx
+sphinx:
+   configuration: docs/conf.py
+
+# Optionally build your docs in additional formats such as PDF and ePub
+# formats:
+#    - pdf
+#    - epub
+
+# Optionally, but recommended,
+# declare the Python requirements required to build your documentation
+# See https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
+# python:
+#    install:
+#    - requirements: docs/requirements.txt
+      </pre>
+    </code>
+  </div>
+
+  {# Show the base form #}
+  {{ block.super }}
+
+{% endblock project_add_content_form %}
+
+{% block project_add_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/config-file/index.html" text="Configuration file tutorial" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/config-file/v2.html" text="Configuration file reference" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/setup/git-repo-manual.html" text="Manually configuring a Git repository" is_external=True class="item" %}
+{% endblock project_add_sidebar_help_topics %}
