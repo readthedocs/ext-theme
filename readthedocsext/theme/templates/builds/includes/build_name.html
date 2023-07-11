@@ -21,7 +21,7 @@
     <span class="section">
       {# When used a a page title, link the sections independently #}
       {% if is_page_title %}
-        <a href="{% url "project_version_list" build.version.project.slug %}?version={{ build.version.slug }}">
+        <a href="{% url "projects_detail" build.version.project.slug %}?version={{ build.version.slug }}">
       {% endif %}
 
       {% if build.is_external %}
