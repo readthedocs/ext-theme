@@ -128,13 +128,17 @@ export class Application {
     });
     jquery(".ui.menu > .item[data-tab]").tab();
 
-    // Initialize clipboard, but only for data-clipboard-text. This is the most
-    // generalized pattern for clipboard usage, so we won't yet worry about
-    // adding the other data binding selectors.
-    var clipboard_global = new clipboard(".ui.button[data-clipboard-text]");
-    jquery(".ui.button[data-clipboard-text]").popup({
+    /* Initialize clipboard.js using a few selectors that we are using. This
+     * isn't a great fit for Knockout custom data binding or plugin, as the
+     * library uses some builtin/hardcoded selectors. */
+    var clipboard_global = new clipboard(
+      "[data-clipboard-text], [data-clipboard-target]"
+    );
+    // Provide the user with some visual feedback using FUI popups
+    jquery("[data-clipboard-text], [data-clipboard-target]").popup({
       on: "click",
       hoverable: false,
+      content: "Copied!",
     });
   }
 }
