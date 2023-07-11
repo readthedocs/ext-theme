@@ -52,6 +52,14 @@ export class PopupcardView {
   }
 
   fetch() {
+    if (!this.url) {
+      // This popupcard is for a local only request, there might not be an API
+      // to request from.
+      this.data({});
+      this.is_loaded(true);
+      this.is_loading(false);
+      return;
+    }
     if (this.promise) {
       return this.promise;
     }
@@ -60,14 +68,21 @@ export class PopupcardView {
         return resolve(data);
       }
       this.is_loading(true);
-      jquery.getJSON(this.url).then((data) => {
-        this.data(data);
-        this.is_loaded(true);
-        this.is_loading(false);
-        return resolve(data);
-      });
-    }).catch(() => {
+      jquery
+        .getJSON(this.url)
+        .then((data) => {
+          this.data(data);
+          this.is_loaded(true);
+          this.is_loading(false);
+          return resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }).catch((err) => {
+      console.debug("Error fetching from API:", err.responseJSON);
       this.is_loading(false);
+      this.is_loaded(false);
     });
   }
 

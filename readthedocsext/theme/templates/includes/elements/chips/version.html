@@ -2,7 +2,8 @@
 
 {% load i18n %}
 
-{% block chip_view_params %}'{% url "projects-versions-detail" version.project.slug version.slug %}'{% endblock %}
+{# Conditionally provide URL if there is an API v3 URL to request from. In the case of pull request versions, API requests 404 #}
+{% block chip_view_params %}'{% if not version.is_external %}{% url "projects-versions-detail" version.project.slug version.slug %}{% endif %}'{% endblock %}
 
 {% block chip_url %}
   {% url "projects_detail" version.project.slug %}?version={{ version.slug }}
@@ -95,15 +96,19 @@
       </div>
     </div>
 
-    <div class="item" data-bind="if: urls && active && built">
-      <i class="fad fa-book icon"></i>
-      <div class="content">
-        <div class="header">{% trans "Documentation" %}</div>
-        <div class="description">
-          <a data-bind="text: urls.documentation, attr: { href: urls.documentation }"></a>
+    {# Skip the Knockout view additions from the API, it responds 404 for external versions #}
+    {# TODO fix the API response or find a better way to provide a doc URL asynchronously #}
+    {% if not version.is_external %}
+      <div class="item" data-bind="if: urls && active && built">
+        <i class="fad fa-book icon"></i>
+        <div class="content">
+          <div class="header">{% trans "Documentation" %}</div>
+          <div class="description">
+            <a data-bind="text: urls.documentation, attr: { href: urls.documentation }"></a>
+          </div>
         </div>
       </div>
-    </div>
+    {% endif %}
     
   </div>
 {% endblock popupcard_content %}
