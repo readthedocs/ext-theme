@@ -49,7 +49,15 @@
 {% endblock chip_detail %}
 
 {% block popupcard_header %}
-  {{ version.verbose_name }}
+  {% if version.is_external %}
+    {{ version.external_version_name | lower | capfirst }}
+    {{ version.verbose_name }}
+  {% else %}
+    {# Translators: this renders with the version name, example "Version latest" #}
+    {% blocktrans trimmed with version_name=version.verbose_name %}
+      Version {{ version_name }}
+    {% endblocktrans %}
+  {% endif %}
 {% endblock popupcard_header %}
 
 {% block popupcard_right %}
