@@ -11,14 +11,15 @@
 {% block chip_icon %}
   <i class="fa-solid icon {% spaceless %}
 
-    {% if version.active %}
-      {% if version.built %}
-        fa-check
-      {% else %}
-        red fa-xmark
-      {% endif %}
+    {# Show the type of the version #}
+    {% if version.is_external %}
+      fa-code-pull-request
+    {% elif version.type == 'branch' %}
+      fa-code-branch
+    {% elif version.type == 'tag' %}
+      fa-tag
     {% else %}
-      light grey fa-question
+      fa-code-commit
     {% endif %}
 
   {% endspaceless %}"></i>
@@ -32,14 +33,15 @@
   <div class="detail">
     <i class="fa-solid icon {% spaceless %}
 
-      {% if version.is_external %}
-        fa-code-pull-request
-      {% elif version.type == 'branch' %}
-        fa-code-branch
-      {% elif version.type == 'tag' %}
-        fa-tag
+      {# Show some metadata on version status, almost always a check #}
+      {% if version.active %}
+        {% if version.built %}
+          fa-check
+        {% else %}
+          red fa-xmark
+        {% endif %}
       {% else %}
-        fa-code-commit
+        light grey fa-question
       {% endif %}
 
     {% endspaceless %}"></i>
