@@ -35,9 +35,7 @@
             <span data-bind="with: {state: {code: state()}, success: success()}">
               {% include "builds/includes/status_icon.html" with build=build size="small" circular=True data_bind=True %}
             </span>
-            {% blocktrans trimmed with build_id=build.pk %}
-              Build #{{ build_id }}
-            {% endblocktrans %}
+            {% include "builds/includes/build_name.html" with build=build is_page_title=True %}
           </div>
 
           <div class="ui basic segment loading padded" data-bind="css: { loading: is_loading() }">
