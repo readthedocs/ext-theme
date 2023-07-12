@@ -1,4 +1,9 @@
-{% comment %}
+{% comment "rst" %}
+
+  Build name
+  ==========
+
+  ``builds/includes/build_name.html``
 
   A common include for showing the build name in a heading or title 
 
@@ -10,6 +15,21 @@
   nested breadcrumbs that we don't need to show in the build listing. This
   gives some UI to link back to the build list or the version list. Normally,
   the whole breadcrumb is linked as single link.
+
+  Template parameters
+  -------------------
+
+  .. describe:: build
+
+     The build instance to generate a name/header for.
+
+  .. describe:: is_page_title
+
+      **Boolean, default=False**. Add full build breadcrumbs and link each
+      section separately. This is used in the build detail page, where we want
+      the breadcrumbs to act more like breadcrumbs and want to link back to the
+      list of version builds. On the build listing page, we only want to link
+      to the build detail page for the build.
 
 {% endcomment %}
 
