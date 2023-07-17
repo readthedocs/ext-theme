@@ -2,23 +2,25 @@
 
 {% load i18n %}
 
-{% block chip_view_params %}'{% url "projects-versions-detail" version.project.slug version.slug %}'{% endblock %}
+{# Conditionally provide URL if there is an API v3 URL to request from. In the case of pull request versions, API requests 404 #}
+{% block chip_view_params %}'{% if not version.is_external %}{% url "projects-versions-detail" version.project.slug version.slug %}{% endif %}'{% endblock %}
 
 {% block chip_url %}
-  {{ version.get_absolute_url }}
+  {% url "projects_detail" version.project.slug %}?version={{ version.slug }}
 {% endblock %}
 
 {% block chip_icon %}
   <i class="fa-solid icon {% spaceless %}
 
-    {% if version.active %}
-      {% if version.built %}
-        fa-check
-      {% else %}
-        red fa-xmark
-      {% endif %}
+    {# Show the type of the version #}
+    {% if version.is_external %}
+      fa-code-pull-request
+    {% elif version.type == 'branch' %}
+      fa-code-branch
+    {% elif version.type == 'tag' %}
+      fa-tag
     {% else %}
-      light grey fa-question
+      fa-code-commit
     {% endif %}
 
   {% endspaceless %}"></i>
@@ -32,14 +34,15 @@
   <div class="detail">
     <i class="fa-solid icon {% spaceless %}
 
-      {% if version.is_external %}
-        fa-code-pull-request
-      {% elif version.type == 'branch' %}
-        fa-code-branch
-      {% elif version.type == 'tag' %}
-        fa-tag
+      {# Show some metadata on version status, almost always a check #}
+      {% if version.active %}
+        {% if version.built %}
+          fa-check
+        {% else %}
+          red fa-xmark
+        {% endif %}
       {% else %}
-        fa-code-commit
+        light grey fa-question
       {% endif %}
 
     {% endspaceless %}"></i>
@@ -47,7 +50,15 @@
 {% endblock chip_detail %}
 
 {% block popupcard_header %}
-  {{ version.verbose_name }}
+  {% if version.is_external %}
+    {{ version.external_version_name | lower | capfirst }}
+    {{ version.verbose_name }}
+  {% else %}
+    {# Translators: this renders with the version name, example "Version latest" #}
+    {% blocktrans trimmed with version_name=version.verbose_name %}
+      Version {{ version_name }}
+    {% endblocktrans %}
+  {% endif %}
 {% endblock popupcard_header %}
 
 {% block popupcard_right %}
@@ -58,7 +69,21 @@
 
 {% block popupcard_content %}
   <div class="ui list">
-   
+
+    <div class="item">
+      <i class="fa-duotone fa-box icon"></i>
+      <div class="content">
+        <div class="header">{% trans "Builds" %}</div>
+        <div class="description">
+          <a class="item" href="{% url "builds_project_list" version.project.slug %}?version={{ version.slug }}">
+            {% blocktrans trimmed with version_name=version.verbose_name %}
+              For version {{ version_name }}
+            {% endblocktrans %}
+          </a>
+        </div>
+      </div>
+    </div>
+
     <div class="item">
       <i class="fa-duotone {{ version.is_external|yesno:'fa-code-pull-request,fa-code-branch' }} icon"></i>
       <div class="content">
@@ -71,31 +96,36 @@
       </div>
     </div>
 
-    <div class="item" data-bind="if: urls && active && built">
-      <i class="fad fa-book icon"></i>
-      <div class="content">
-        <div class="header">{% trans "Documentation" %}</div>
-        <div class="description">
-          <a data-bind="text: urls.documentation, attr: { href: urls.documentation }"></a>
+    {# Skip the Knockout view additions from the API, it responds 404 for external versions #}
+    {# TODO fix the API response or find a better way to provide a doc URL asynchronously #}
+    {% if not version.is_external %}
+      <div class="item" data-bind="if: urls && active && built">
+        <i class="fad fa-book icon"></i>
+        <div class="content">
+          <div class="header">{% trans "Documentation" %}</div>
+          <div class="description">
+            <a data-bind="text: urls.documentation, attr: { href: urls.documentation }"></a>
+          </div>
         </div>
       </div>
-    </div>
+    {% endif %}
     
   </div>
 {% endblock popupcard_content %}
 
 {% block popupcard_extra %}
-  <span>
-    
-  </span>
+  {# Placeholder for the left #}
+  <span></span>
 
   <div class="right floated">
     <span>
-      Active
+      {# Translators: this is a checkbox that describes whether the Version instance is enabled for building #}
+      {% trans "Active" %}
       <i class="fas {{ version.active|yesno:'fa-check,red fa-xmark' }} icon"></i>
     </span>
     <span>
-      Built
+      {# Translators: this is a checkbox that describes whether the Version instance is successfully built #}
+      {% trans "Built" %}
       <i class="fas {{ version.built|yesno:'fa-check,red fa-xmark' }} icon"></i>
     </span>
   </div>
