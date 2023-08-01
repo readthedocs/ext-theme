@@ -66,6 +66,11 @@ active_item
                   {% trans "Projects" %}
                 </a>
               {% endif %}
+              {% if USE_ORGANIZATIONS %}
+                <a class="{% if active_item == "organizations" %}active {% endif %} computer only item" href="{% url 'organization_list' %}">
+                  {% trans "Organizations" %}
+                </a>
+              {% endif %}
             {% endblock header_left_menu %}
 
             <div class="right menu">

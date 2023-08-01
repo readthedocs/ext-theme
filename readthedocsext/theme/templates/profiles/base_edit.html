@@ -14,9 +14,9 @@
           <a class="item {% block profile_admin_social_accounts %}{% endblock %}" href="{% url 'socialaccount_connections' %}">{% trans "Connected services" %}</a>
           <a class="item {% block profile-admin-security-log %}{% endblock %}" href="{% url 'profiles_security_log' %}">{% trans "Security log" %}</a>
           <a class="item {% block profile_admin_tokens %}{% endblock %}" href="{% url 'profiles_tokens' %}">{% trans "API tokens" %}</a>
-          <a class="item {% block profile_admin_gold_edit %}{% endblock %}" href="{% url 'gold_detail' %}">{% trans "Gold membership" %}</a>
 
           {% if USE_PROMOS %}
+            <a class="item {% block profile_admin_gold_edit %}{% endblock %}" href="{% url 'gold_detail' %}">{% trans "Gold membership" %}</a>
             <a class="item {% block profile_admin_advertising %}{% endblock %}" href="{% url 'account_advertising' %}">{% trans "Advertising" %}</a>
           {% endif %}
         {% endblock %}
