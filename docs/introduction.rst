@@ -11,9 +11,10 @@ What is this?
 -------------
 
 This repository is the next generation dashboard for the Read the Docs
-application. It can currently be used by visiting https://beta.readthedocs.org
-and logging in with your normal user account. It is added as a Django
-application to an existing Read the Docs instance.
+application. Read the Docs Community users can try this new dashboard by
+visiting https://beta.readthedocs.org and logging in with their normal user
+account. It is added as a Django application to an existing Read the Docs
+instance.
 
 On the technical side, it is a replacement set of templates, JavaScript code,
 and stylesheets that replaces the legacy dashboard used by both Read the Docs
@@ -30,18 +31,24 @@ our front end stack mostly similar. These pieces are:
 
 FomanticUI/SemanticUI
    FomanticUI is the active project name, though these refer to the same thing
-   mostly. FUI/SUI aim to provide all of the component and elements that we will
-   be using in the application, and there is little to no CSS is required.
-   Currently, the application uses less than 100 lines of CSS customization to
-   elements.
+   mostly. FUI/SUI is a style framework for components and elements, but more
+   importantly, it has native interactive components and JS driven UI that we do
+   not need to maintain ourselves -- search components, tabs, popups, modals,
+   menus, etc. The goal with FUI is to avoid core team writing CSS and JS for
+   basic elements. In fact, there is very little CSS used at all. Currently, the
+   application uses less than 100 lines of CSS customization to elements.
 
    FUI/SUI use Less.js as a CSS compiler. Compilation is performed during the
-   Webpack bundle build process.
+   Webpack bundle build process. FUI relies on jQuery still, as all plugins are
+   implemented on top of jQuery.
 
 Knockout.js
    To reuse much of the code we already have, Knockout.js was used for what API
    driven interfaces we do have. Where possible, views are driven by application
    logic and Django templates however.
+
+   UI that requires dynamic manipulation, two-way data binding, or API reponse
+   rendering will use Knockout.js.
 
 Tools used
 ~~~~~~~~~~
@@ -86,9 +93,10 @@ JavaScript
 HTML
    We aren't strict about HTML, but a few rules to guide HTML authoring are:
 
-   - Elements should always rely on FomanticUI native elements.
+   - Element classes and styles should always rely on FomanticUI native elements.
    - Elements do not use inline styles in tags.
-   - When in doubt, use a ``<div>``.
+   - When in doubt, use a ``<div>`` for the element, but most FUI
+     components/elements can be constructed on any valid HTML tag.
    - Don't use extra elements like ``<br />`` to fix spacing issues. You likely
      want multiple paragraphs, ``class="ui padded segment"``, or something similar instead.
    
@@ -156,9 +164,9 @@ Where to start
 ``````````````
 
 The `FomanticUI documentation`_ is the first place you should look. The
-documentation is split up between components. _Elements_ can be used without
-additional JavaScript, where components like _collections_ and _modules_ can
-require some JavaScript to use.
+documentation is split up between components. _Elements_ are components that can
+be used without additional JavaScript, where components like _collections_ and
+_modules_ can require some JavaScript to use.
 
 Each element has a large number of variations that you can use which can alter
 spacing, padding, color, size, positioning, and layout. You can see the FUI/SUI
@@ -168,6 +176,11 @@ each example.
 For example, the `FomanticUI segment documentation`_ shows all sorts of
 variations, of which we commonly use ``padded``, ``fitted``, ``scrolling``, and
 ``basic``.
+
+.. tip::
+   It's best to look through other templates to see what patterns were used.
+   There are many variants, many of which we don't use, and so there still is a
+   lot of variability of what you can output using the framework natively.
 
 .. _FomanticUI documentation: https://fomantic-ui.com/
 .. _FomanticUI segment documentation: https://fomantic-ui.com/elements/segment.html
@@ -200,6 +213,11 @@ How do I make a responsive layout?
    wide mobile`` for granular control of the layout. Make sure to test the
    various viewport sizes as you go.
 
+   Sometimes, you might run into a place where it makes more sense to alter the
+   order of columns, or hide columns entirely, on narrow viewport sizes. You can
+   use ``computer only column`` or ``reversed column`` to tune column display
+   and ordering.
+
 How do I use icons?
    _This is special!_ The native FUI/SUI icons do no include the icon set we want
    to use in most cases, FontAwesome Duotone, so we use the icon library more
@@ -213,6 +231,10 @@ How do I use icons?
    The end result should be something like:
 
    ```<i class="fad fa-search icon"></i>```
+
+   We are currently using a hosted kit from Font Awesome, but will eventually
+   likely compile something ourselves. We have an account with Font Awesome and
+   have multiple kits set up on our account there.
 
 .. [1] https://fomantic-ui.com/elements/segment.html#padded
 .. [2] https://fomantic-ui.com/elements/segment.html#fitted
