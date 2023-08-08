@@ -14,17 +14,12 @@ import { Registry } from "../application/registry";
 class RemoteRepository {
   constructor(remote_repo) {
     // Just copy attributes over instead of prototyping. KO observables make a
-    // prototype change more awkward.
+    // prototype change more awkward. Note, ``projects`` now comes directly from
+    // the API response, there is no need to parse this data from the v2
+    // ``matches`` response.
     for (const key of Object.keys(remote_repo)) {
       this[key] = remote_repo[key];
     }
-
-    /** @observable {Array.<string>} List of projects attached to the repo */
-    this.projects = ko.observableArray(
-      this.matches.map((match) => {
-        return match.url;
-      })
-    );
 
     /** @observable {Boolean} Is this repository private? */
     this.is_private = ko.observable(this.private);
@@ -39,7 +34,7 @@ class RemoteRepository {
     this.has_admin = ko.observable(this.admin);
     /** @observable {Boolean} Was the repository already imported? */
     this.has_project = ko.computed(() => {
-      return this.projects().length > 0;
+      return this.projects.length > 0;
     });
   }
 }
@@ -128,7 +123,8 @@ export class ProjectCreateView extends ResponsiveView {
    */
   init_search() {
     const config = this.config();
-    const url = config.urls.remoterepository_list + "?full_name={query}";
+    const url =
+      config.urls.remoterepository_list + "?expand=projects&full_name={query}";
 
     this.search_config({
       // We use a Knockout template here, embedded in the template as a script

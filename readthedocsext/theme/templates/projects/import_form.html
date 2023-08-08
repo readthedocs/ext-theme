@@ -31,7 +31,7 @@
 {
   "urls": {
       "api_sync_remote_repositories": "{% url 'api_sync_remote_repositories' %}",
-      "remoterepository_list": "{% url 'remoterepository-list' %}"
+      "remoterepository_list": "{% url 'remoterepositories-list' %}"
   },
   "csrf_token": "{{ view_csrf_token }}"
 }
@@ -273,21 +273,11 @@
                           These following projects were already configured to use this repository:
                         {% endblocktrans %}
                       </p>
-                      <div data-bind="foreach: matches">
-                        {% comment %}
-                          This is currently using the v2 API because the v3
-                          API doesn't support searching. Once the API v3
-                          supports searching, this can be switched to using
-                          the project chip template include. This will
-                          include the project name, avatar URL, and embedded
-                          popup for the project.
-
-                          We only have two fields here for now: url and id (slug)
-                        {% endcomment %}
-                        <a class="ui basic image label" data-bind="attr: {href: url}" target="_blank">
-                          {# TODO switch this to use the full response from the v3 API #}
-                          {# <img src="{{ project.remote_repository.avatar_url }}" /> #}
-                          <span data-bind="text: id"></span>
+                      {# TODO this could be a proper project chip and popup card, but would need https://github.com/readthedocs/ext-theme/issues/196 #}
+                      <div data-bind="foreach: projects">
+                        <a class="ui basic image label" data-bind="attr: {href: urls.home }" target="_blank">
+                          <img data-bind="if: $parent.avatar_url, attr: {src: $parent.avatar_url}" />
+                          <span data-bind="text: name"></span>
                         </a>
                       </div>
                     </div>
