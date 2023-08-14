@@ -12,7 +12,7 @@
     {% if display_page_links %}
       {% for page in pages %}
         {% if page %}
-          {% ifequal page page_obj.number %}
+          {% if page == page_obj.number %}
             <div class="active item">{{ page }}</div>
           {% else %}
             {% if disable_link_for_first_page and page == 1 %}
@@ -20,7 +20,7 @@
             {% else %}
               <a href="?page{{ page_suffix }}={{ page }}{{ getvars }}" class="item">{{ page }}</a>
             {% endif %}
-          {% endifequal %}
+          {% endif %}
         {% else %}
           <div class="disabled item">...</div>
         {% endif %}
