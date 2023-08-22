@@ -1,0 +1,31 @@
+{% extends "projects/project_edit_base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load crispy_forms_filters %}
+
+{% block title %}{% trans "Documentation pull requests" %}{% endblock %}
+
+{% block project_pull_requests_active %}active{% endblock %}
+{% block project_edit_content_header %}{% trans "Documentation pull requests" %}{% endblock %}
+
+{% block project_edit_content %}
+  <p>
+    {% blocktrans trimmed %}
+    Enable builds of your pull requests to easily preview changes to your documentation.
+    {% endblocktrans %}
+  </p>
+
+  <form class="ui form" method="post" action=".">
+    {% csrf_token %}
+    {{ form | crispy }}
+
+    <p>
+      <input class="ui button primary" type="submit" value="{% trans "Update" %}">
+    </p>
+  </form>
+{% endblock %}
+
+{% block project_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/en/stable/pull-requests.html" text="Pull request build documentation" is_external=True class="item" %}
+{% endblock project_edit_sidebar_help_topics %}
