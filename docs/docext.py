@@ -23,7 +23,7 @@ class DjangoTemplateAnalyzer(analyzers.BaseCommentAnalyzer):
     def process(self, content):
         first_indent = None
 
-        for (line, lineno) in super().process(content):
+        for line, lineno in super().process(content):
             line_stripped = line.lstrip()
 
             # Get the initial indent from the first comment line
@@ -35,8 +35,10 @@ class DjangoTemplateAnalyzer(analyzers.BaseCommentAnalyzer):
             # Check that the indent is all whitespace
             line_indent = line[0:first_indent]
             if len(line_indent.strip()) != 0:
-                raise Exception(f'Line {lineno} is missing some indentation. '
-                                f'Try indenting the block inner text once.')
+                raise Exception(
+                    f"Line {lineno} is missing some indentation. "
+                    f"Try indenting the block inner text once."
+                )
 
             yield (line[first_indent:], lineno)
 
