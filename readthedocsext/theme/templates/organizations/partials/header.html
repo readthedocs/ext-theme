@@ -1,0 +1,123 @@
+{% load i18n %}
+{% load core_tags %}
+{% load privacy_tags %}
+{% load core_tags %}
+{% load gravatar %}
+
+{% comment %}
+
+This template is the header at the top of organization dashboard pages. There are
+two modes to this header, full and collapsed. Full is the default view on the
+organization detail page, while the collapsed view is the default for the other
+organization dashboard pages. It is possible to expand the menu with a dropdown.
+
+Arguments:
+
+is_collapsed (default: True)
+    The default view configuration, normally start this view off in a collapsed
+    state, except on the main detail page.
+
+{% endcomment %}
+
+{% block organization_header %}
+  <div class="ui top attached segment" data-bind="using: CollapsingHeaderView({{ is_collapsed|default_if_none:True|yesno:"true,false" }})">
+
+    {% block organization_header_metadata %}
+      <div class="ui stacking grid">
+
+        {% block organization_header_title %}
+          <div class="eight wide computer eight wide tablet sixteen wide mobile column">
+            <div class="ui medium monospace header">
+              <a href="{{ organization.get_absolute_url }}">
+                {{ organization.name }}
+              </a>
+
+              {# The dropdown action button, to swap between expanded/collapsed #}
+              <span data-bind="click: toggle_collapsed">
+                <i class="fas grey small icon" data-bind="class: dropdown_class"></i>
+              </span>
+            </div>
+          </div>
+        {% endblock organization_header_title %}
+
+        {% block organization_header_labels %}
+          <div class="right aligned eight wide computer eight wide tablet sixteen wide left aligned mobile column">
+            {# TODO something here? #}
+          </div>
+        {% endblock organization_header_labels %}
+
+        {% block organization_header_metadata_left %}
+          <div
+              class="eight wide computer eight wide tablet sixteen wide mobile column"
+              data-bind="visible: !is_collapsed()" style="display: none;">
+
+            {% block organization_header_description %}
+              {% if organization.description %}
+                <p>
+                  {{ organization.description|truncatewords:15 }}
+                </p>
+              {% endif %}
+            {% endblock %}
+
+            {% if organization.url %}
+              <a href="{{ organization.url }}">
+                <i class="fad fa-link icon"></i>
+                {% trans "Website" %}
+              </a>
+            {% endif %}
+
+          </div>
+        {% endblock organization_header_metadata_left %}
+
+        {% block organization_header_metadata_right %}
+          <div
+              class="right aligned eight wide computer eight wide tablet sixteen wide mobile column"
+              data-bind="visible: !is_collapsed()" style="display: none;">
+
+            {% block organization_header_owners %}
+              <div class="ui sub header">
+                {% trans "Owners" %}
+              </div>
+
+              <div class="ui overlapping avatar images">
+                {% for user in organization.owners.all|slice:":8" %}
+                  <a href="{% url "profiles_profile_detail" user.username %}">
+                    <img class="ui image" src="{% gravatar_url user.email 32 %}" /> 
+                  </a>
+                {% endfor %}
+
+                {% with more_owners=organization.owners.all|slice:"8:"|length %}
+                  {% if more_owners %}
+                    <span>
+                      {% trans "... and {more_maintainers} others" %}
+                    </span>
+                  {% endif %}
+                {% endwith %}
+              </div>
+            {% endblock organization_header_owners %}
+
+          </div>
+        {% endblock organization_header_metadata_right %}
+
+      </div>
+    {% endblock organization_header_metadata %}
+
+  </div>
+
+  {% block organization_header_navigation %}
+    <div class="ui bottom attached stackable menu">
+      <a class="item {{ teams_active }}" href="{{ organization.get_absolute_url }}">
+        {% trans "Teams" %}
+      </a>
+      {% if request.user|is_admin:organization %}
+        <div class="right menu">
+          <a class="item {{ edit_active }}" href="{% url "organization_edit" organization.slug %}">
+            <i class="fa-duotone fa-gears icon"></i>
+            {% trans "Settings" %}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  {% endblock organization_header_navigation %}
+
+{% endblock organization_header %}

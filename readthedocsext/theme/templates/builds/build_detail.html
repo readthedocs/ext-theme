@@ -7,9 +7,7 @@
 {% block title %}{{ build.project.name }}{% endblock %}
 
 {% block content-header %}
-  {% with builds_active="active" %}
-    {% include "projects/partials/header.html" %}
-  {% endwith %}
+  {% include "projects/partials/header.html" builds_active="active" %}
 {% endblock %}
 
 {% block content %}
