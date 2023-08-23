@@ -4,15 +4,15 @@
 {% load static %}
 {% load crispy_forms_filters %}
 
-{% block title %}{% trans "Documentation pull requests" %}{% endblock %}
+{% block title %}{% trans "Pull request builds" %}{% endblock %}
 
 {% block project_pull_requests_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Documentation pull requests" %}{% endblock %}
+{% block project_edit_content_header %}{% trans "Pull request builds" %}{% endblock %}
 
 {% block project_edit_content %}
   <p>
     {% blocktrans trimmed %}
-    Enable builds of your pull requests to easily preview changes to your documentation.
+    Enable builds for your pull requests and easily preview changes to your documentation.
     {% endblocktrans %}
   </p>
 
@@ -27,5 +27,5 @@
 {% endblock %}
 
 {% block project_edit_sidebar_help_topics %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/en/stable/pull-requests.html" text="Pull request build documentation" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/en/stable/pull-requests.html" text="Pull request builds" is_external=True class="item" %}
 {% endblock project_edit_sidebar_help_topics %}
