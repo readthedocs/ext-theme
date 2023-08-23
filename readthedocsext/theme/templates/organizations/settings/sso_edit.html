@@ -11,6 +11,10 @@
 {% block organization_sso_active %}active{% endblock %}
 {% block organization_edit_content_header %}{% trans "Authorization" %}{% endblock %}
 
+{% block organization_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/en/stable/commercial/single-sign-on.html" text=_("Organization single sign-on") is_external=True class="item" %}
+{% endblock organization_edit_sidebar_help_topics %}
+
 {% block organization_edit_content %}
   <p>
     {% blocktrans trimmed %}
