@@ -1,0 +1,31 @@
+{% extends "organizations/settings/base.html" %}
+
+{% load i18n %}
+
+{% load crispy_forms_tags %}
+{% load gravatar %}
+
+{% block title %}{{ organization.name }} - {% trans "Owners" %}{% endblock %}
+
+{% block organization_owners_active %}active{% endblock %}
+{% block organization_edit_content_header %}{% trans "Owners" %}{% endblock %}
+
+{% block organization_edit_content %}
+  {% include "organizations/partials/owners_list.html" with objects=owners %}
+{% endblock organization_edit_content %}
+
+{% comment %}
+  TODO uh, these.
+  {% include "invitations/includes/invitation_list.html" with invitations=invitations %}
+
+    <div class="module-item">
+      <h3>{% trans "Add Owner" %}</h3>
+      <form method="post" action="{% url "organization_owner_add" organization.slug %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="{% trans "Add Owner" %}">
+      </form>
+    </div>
+
+  </div>
+{% endcomment %}

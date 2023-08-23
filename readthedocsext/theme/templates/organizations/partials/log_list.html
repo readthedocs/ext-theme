@@ -1,0 +1,47 @@
+{% extends "audit/partials/log_list.html" %}
+
+{% load i18n %}
+
+{% block top_left_menu_items %}
+  <div class="header item">{% trans "Duration" %}</div>
+  <div class="active item">
+    <div class="ui link dropdown" data-bind="semanticui: {dropdown: {action: 'select'}}">
+      <span class="text">
+        {% if days_limit and days_limit > 0 %}
+          {% blocktrans trimmed with duration=days_limit %}
+            {{ duration }} days
+          {% endblocktrans %}
+        {% else %}
+          {# Translators: this is meant as "Show logs from with unlimited duration" #}
+          {% trans "All time" %}
+        {% endif %}
+      </span>
+      <i class="fa-solid fa-caret-down icon"></i>
+      <div class="menu">
+        <div class="active item">
+          {% if days_limit and days_limit > 0 %}
+            {% blocktrans trimmed with duration=days_limit %}
+              Show last {{ duration }} days
+            {% endblocktrans %}
+          {% else %}
+            {% trans "Show all log history" %}
+          {% endif %}
+        </div>
+        {% if days_limit and days_limit > 0 %}
+          {# We don't show upgrade information if the duration is unlimited #}
+          <div class="divider"></div>
+          <a class="item" href="#">
+            <span class="header">
+              {% trans "Need longer retention?" %}
+            </span>
+            <p>
+              {% blocktrans trimmed with days_limit=days_limit %}
+                Upgrade your plan to increase the log storage duration.
+              {% endblocktrans %}
+            </p>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock top_left_menu_items %}
