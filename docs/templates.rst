@@ -19,8 +19,9 @@ A few of the conventions used in templates are:
   JavaScript away inside HTML sources.
 - Templates use a singular base view for all CRUD listing interfaces, avoiding
   conflicting listing UI patterns.
-- All UI is native SemanticUI components. This removes almost all need for
-  custom CSS and custom JS driving dynamic elements.
+- All UI is constructed using native SemanticUI components.
+  This removes almost all need for custom CSS and custom JS driving dynamic elements.
+  SemenaticUI/FomanticUI usage is covered in :doc:`stylesheets`.
 - Most of the heavy lifting in the template is still done with Django template code.
 - In places where views are interactive and more dynamic, Knockout model views
   are used to glue some amount of JavaScript to template code.
@@ -28,6 +29,8 @@ A few of the conventions used in templates are:
   Knockout helpers like the :func:`~application.plugins.semanticui` binding.
 - You will see JSON configuration in places where we pass Django URLs or
   translations through to our JS.
+
+.. _FomanticUI documentation: https://fomantic-ui.com/
 
 Python
 ~~~~~~
@@ -70,7 +73,8 @@ The new model listing pattern:
 - Is viewport fluid, and at least wraps at tablet and phone viewport sizes
 - Uses a modal for confirming deletion. Previously, only some views had a
   confirmation view and it was always a separate page load
-- Shows helpful placeholder content when there is nothing to list
+- :ref:`Shows helpful placeholder content <api-template-list-placeholder>`
+  when there is nothing to list.
 
 You will find several parts when working with new or existing model listing pages:
 

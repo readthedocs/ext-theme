@@ -79,7 +79,7 @@ How do I make a responsive layout?
    and ordering.
 
 How do I use icons?
-   _This is special!_ The native FUI/SUI icons do no include the icon set we want
+   **This is special!** The native FUI/SUI icons do no include the icon set we want
    to use in most cases, FontAwesome Duotone, so we use the icon library more
    directly instead.
 
