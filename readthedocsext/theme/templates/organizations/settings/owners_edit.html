@@ -19,11 +19,11 @@
   {% include "invitations/includes/invitation_list.html" with invitations=invitations %}
 
     <div class="module-item">
-      <h3>{% trans "Add Owner" %}</h3>
+      <h3>{% trans "Add owner" %}</h3>
       <form method="post" action="{% url "organization_owner_add" organization.slug %}">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="{% trans "Add Owner" %}">
+        {{ form|crispy }}
+        <input type="submit" value="{% trans "Add owner" %}">
       </form>
     </div>
 
