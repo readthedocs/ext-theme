@@ -23,7 +23,7 @@ export class CollapsingHeaderView {
      */
     this.dropdown_class = ko.computed(() => {
       //return this.is_expanded() ? "fa-caret-up" : "fa-caret-down";
-      return this.is_collapsed() ? "fa-ellipsis": "fa-caret-down";
+      return this.is_collapsed() ? "fa-ellipsis" : "fa-caret-down";
     });
   }
 
