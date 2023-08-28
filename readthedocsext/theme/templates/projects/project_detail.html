@@ -7,9 +7,7 @@
 {% block title %}{{ project.name }}{% endblock %}
 
 {% block content-header %}
-  {% with overview_active="active" %}
-    {% include "projects/partials/header.html" with is_expanded=True %}
-  {% endwith %}
+  {% include "projects/partials/header.html" with overview_active="active" is_collapsed=False %}
 {% endblock %}
 
 {% block content %}

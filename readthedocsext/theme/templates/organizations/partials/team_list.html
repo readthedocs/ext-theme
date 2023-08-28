@@ -1,0 +1,73 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% load i18n %}
+{% load gravatar %}
+{% load privacy_tags %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  {% if request.user|is_admin:organization %}
+    <a class="ui green button" href="">
+      {% trans "Add team" %}
+    </a>
+  {% endif %}
+{% endblock %}
+
+{% block list_placeholder_icon_class %}fad fa-users icon{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No teams match your filter criteria.
+  {% endblocktrans %}
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  {% if request.user|is_admin:organization %}
+    <div class="ui primary button">{% trans "Create a new team" %}</div>
+  {% endif %}
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  {% if request.user|is_admin:organization %}
+    {% blocktrans trimmed with team_name=object.name asvar label_configure %}
+      Configure team {{ team_name }}
+    {% endblocktrans %}
+    <a class="ui button"
+       href="{% url "organization_team_edit" slug=object.organization.slug team=object.slug %}"
+       data-content="{{ label_configure }}"
+       aria-label="{{ label_configure }}"
+       tabindex="0">
+      <i class="fa-duotone fa-wrench icon"></i>
+    </a>
+  {% endif %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_icon %}
+  <i class="fad fa-users icon"></i>
+{% endblock list_item_icon %}
+
+{% block list_item_header %}
+  <a href="{{ object.get_absolute_url }}">
+    {{ object.name }}
+  </a>
+  <div class="sub header">
+    {% blocktrans trimmed count object.members.count as member_count %}
+      {{ member_count }} member
+    {% plural %}
+      {{ member_count }} members
+    {% endblocktrans %}
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_meta_items %}
+  <a class="item" href="{% url 'projects_dashboard' %}?team_slug=object.slug">
+    {% blocktrans trimmed count object.projects.count as project_count %}
+      {{ project_count }} project
+    {% plural %}
+      {{ project_count }} projects
+    {% endblocktrans %}
+  </a>
+{% endblock list_item_meta_items %}
+
+{% block list_item_extra %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+{% load gravatar %}
+{% load organizations %}
+
+{% block title %}{{ organization.name }}{% endblock %}
+
+{% block content-header %}
+  {% include "organizations/partials/header.html" with organization=organization teams_active="active" is_collapsed=False %}
+{% endblock %}
+
+{% block content %}
+  {% include "organizations/partials/team_list.html" with objects=teams %}
+{% endblock content %}

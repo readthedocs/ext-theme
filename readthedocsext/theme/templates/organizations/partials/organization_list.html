@@ -1,0 +1,106 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% load i18n %}
+{% load humanize %}
+{% load gravatar %}
+
+{% load privacy_tags %}
+
+{% block view_binding %}data-bind="with: OrganizationListView()"{% endblock view_binding %}
+
+{% block top_left_menu_items %}
+  <script type="application/json" data-bind="jsonInit: config">
+{
+  "api_url": "{% url "organizations-list" %}"
+}
+  </script>
+
+  {# Separate UI for the version search selection field #}
+  <div class="header item">Organization</div>
+  <div class="active item">
+    <div class="ui link search dropdown" data-bind="semanticui: {dropdown: filter_organization_config()}">
+      <input type="hidden" name="organization" value="{{ filter.form.organization.value|default:"" }}">
+      <div class="default text">{% trans "All organizations" %}</div>
+      <i class="fa-solid fa-caret-down icon"></i>
+      <div class="menu"></div>
+    </div>
+  </div>
+
+  {% include "includes/filters/form.html" with fields=filter.form %}
+
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  {# See below for more background on why we conditionally show a create button here #}
+  {% if request.user and request.user.organizations.count == 0 %}
+    <a class="ui green button" href="{{ organization_create }}">
+      {% trans "Create organization" %}
+    </a>
+  {% endif %}
+{% endblock %}
+
+{% comment %}
+  We are specific to check whether an organization exists here as we do not want
+  the user creating a new organization accidentally. This view can be used with
+  an active filter, so Organization.objects.count == 0 does not necessarily imply
+  that the user doesn't below to an organization. Instead this means the user
+  selected a filter that returns no organizations (typo, etc?)
+{% endcomment %}
+{% block list_placeholder_icon_class %}fad fa-building icon{% endblock %}
+{% block list_placeholder_header %}
+  {# TODO this should probably be application logic to consolidate DB queries #}
+  {% if request.user and request.user.organizations.count == 0 %}
+    {% blocktrans trimmed %}
+      You are not a member of an organization yet.
+      To start a free trial, create a new organization.
+    {% endblocktrans %}
+  {% else %}
+    {% blocktrans trimmed %}
+      No organizations match your filter criteria.
+    {% endblocktrans %}
+  {% endif %}
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  {% if request.user and request.user.organizations.count == 0 %}
+    <div class="ui primary button">{% trans "Create an organization" %}</div>
+  {% endif %}
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  {% if request.user|is_admin:object %}
+    {% blocktrans trimmed with organization=object.name asvar label_configure %}
+      Configure organization {{ organization }}
+    {% endblocktrans %}
+    <a class="ui button"
+       href="{% url "organization_edit" object.slug %}"
+       data-content="{{ label_configure }}"
+       aria-label="{{ label_configure }}"
+       tabindex="0">
+      <i class="fa-duotone fa-wrench icon"></i>
+    </a>
+  {% endif %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_image %}
+  <img class="ui image" src="{% gravatar_url object.email 48 %}" />
+{% endblock list_item_image %}
+
+{% block list_item_header %}
+  <a href="{{ object.get_absolute_url }}">
+    {{ object.name }}
+  </a>
+  <div class="sub header">
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_meta_items %}
+  <a class="item" href="{{ object.get_absolute_url }}">
+    {{ object.projects.count }} projects
+  </a>
+  <a class="item" href="{{ object.get_absolute_url }}">
+    {{ object.teams.count }} teams
+  </a>
+{% endblock list_item_meta_items %}
+
+{% block list_item_extra %}
+{% endblock %}
