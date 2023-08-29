@@ -20,7 +20,7 @@
   </script>
 
   {# Separate UI for the version search selection field #}
-  <div class="header item">Version</div>
+  <div class="header item">{% trans "Version" %}</div>
   <div class="active item">
     <div class="ui link search dropdown" data-bind="semanticui: {dropdown: filter_version_config()}">
       <input type="hidden" name="version" value="{{ filter.form.version.value|default:"" }}">
