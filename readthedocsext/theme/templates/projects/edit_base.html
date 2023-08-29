@@ -3,9 +3,7 @@
 {% load i18n %}
 
 {% block content-header %}
-  {% with edit_active="active" %}
-    {% include "projects/partials/header.html" %}
-  {% endwith %}
+  {% include "projects/partials/header.html" with edit_active="active" is_collapsed=True %}
 {% endblock %}
 
 {% block content %}

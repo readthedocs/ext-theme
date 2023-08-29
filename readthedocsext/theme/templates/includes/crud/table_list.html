@@ -106,12 +106,23 @@
   {% endcomment %}
   {% if not objects %}
     {% comment "rst" %}
+
+      .. _api-template-list-placeholder:
+
       Placeholder blocks
       ------------------
 
       The placeholder section is visible if there are no instances in the ``objects``
       queryset. This would usually provide some onboarding level help, directing
       the user to docs or object creation.
+
+      The placeholder block ultimately uses an `FUI placeholder segment`_.
+      The placeholder can include an icon, heading, paragraph content,
+      and should at least have a link out to documentation or a link to an admin page.
+
+      This aims to replace a minimalist pattern of just a simple sentence: "No projects found", etc.
+
+      .. _FUI placeholder segment: https://fomantic-ui.com/elements/segment.html#placeholder-segment
 
       .. describe:: list_placeholder
 

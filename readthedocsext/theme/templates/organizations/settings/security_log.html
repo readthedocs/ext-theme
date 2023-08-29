@@ -1,0 +1,23 @@
+{% extends "organizations/settings/base.html" %}
+
+{% load i18n %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}{{ organization.name }} - {% trans "Security log" %}{% endblock %}
+
+{% block organization_security_log_active %}active{% endblock %}
+{% block organization_edit_content_header %}{% trans "Security log" %}{% endblock %}
+
+{% block organization_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/security-log.html#organization-security-log" text=_("Organization security log") is_external=True class="item" %}
+{% endblock organization_edit_sidebar_help_topics %}
+
+{% block organization_edit_content %}
+  {% if not enabled %}
+    {# TODO this template #}
+    {% include 'projects/includes/feature_disabled.html' with organization=organization %}
+  {% else %}
+    {% include "organizations/partials/log_list.html" with objects=object_list omit_user=False %}
+  {% endif %}
+{% endblock organization_edit_content %}

@@ -4,4 +4,4 @@ from django.apps import AppConfig
 
 
 class ThemeConfig(AppConfig):
-    name = 'readthedocsext.theme'
+    name = "readthedocsext.theme"

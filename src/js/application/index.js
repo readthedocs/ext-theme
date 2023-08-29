@@ -12,6 +12,7 @@ import * as core_views from "../core";
 import * as docs_views from "../docs";
 import * as gold_views from "../gold";
 import * as module_views from "../modules";
+import * as organization_views from "../organization";
 import * as project_views from "../project";
 
 /**

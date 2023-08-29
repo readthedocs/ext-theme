@@ -4,6 +4,8 @@ Template API
 Common list view
 ----------------
 
+.. _api-template-crud-list:
+
 .. autoanysrc:: crud_list
     :src: ../readthedocsext/theme/templates/includes/crud/table_list.html
     :analyzer: html

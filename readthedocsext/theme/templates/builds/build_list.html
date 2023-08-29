@@ -5,9 +5,7 @@
 {% block title %}{% trans "Builds" %}{% endblock %}
 
 {% block content-header %}
-  {% with builds_active="active" %}
-    {% include "projects/partials/header.html" %}
-  {% endwith %}
+  {% include "projects/partials/header.html" with builds_active="active" is_collapsed=True %}
 {% endblock %}
 
 {% block content %}
