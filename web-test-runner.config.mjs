@@ -23,7 +23,6 @@ export default {
     rollupAdapter(rollupLitCss()),
     pluginCommonjs({
       include: ["node_modules/**"],
-      exclude: ["node_modules/jquery-address/**"],
       requireReturnsDefault: "preferred",
     }),
   ],
