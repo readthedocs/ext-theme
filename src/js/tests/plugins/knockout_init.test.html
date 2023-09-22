@@ -1,9 +1,15 @@
 <html>
   <body>
     <div data-bind="using: TestView()">
-      <script type="application/json" data-bind="jsonInit: configJson">{ "test": true }</script>
-      <script type="text/plain" data-bind="textInit: configText">{ "test": true }</script>
-      <script type="text/html" data-bind="htmlInit: configHtml"><test true></test></script>
+      <script type="application/json" data-bind="jsonInit: configJson">
+        { "test": true }
+      </script>
+      <script type="text/plain" data-bind="textInit: configText">
+        { "test": true }
+      </script>
+      <script type="text/html" data-bind="htmlInit: configHtml">
+        <test true></test>
+      </script>
       <input value="test: true" data-bind="valueInit: configValue" />
     </div>
     <script type="module">
@@ -21,7 +27,7 @@
       let promiseValue;
 
       const app = new Application();
-        
+
       class TestView {
         static view_name = "TestView";
 
@@ -63,15 +69,15 @@
         describe("Knockout init plugin", () => {
           it("loads Json", async () => {
             const dataJson = await promiseJson;
-            expect(dataJson).to.deep.equal({"test": true});
+            expect(dataJson).to.deep.equal({ test: true });
           });
           it("loads Text", async () => {
             const dataText = await promiseText;
-            expect(dataText).to.equal('{ "test": true }');
+            expect(dataText).to.include('{ "test": true }');
           });
           it("loads Html", async () => {
             const dataHtml = await promiseHtml;
-            expect(dataHtml).to.equal("<test true></test>");
+            expect(dataHtml).to.include("<test true></test>");
           });
           it("loads Value", async () => {
             const dataValue = await promiseValue;

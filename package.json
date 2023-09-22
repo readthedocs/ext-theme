@@ -39,7 +39,6 @@
     "dayjs": "^1.8.29",
     "file-loader": "^3.0.1",
     "imports-loader": "^0.8.0",
-    "jest": "^26.4.2",
     "jquery": "^3.4.1",
     "jquery-address": "^1.6.0",
     "jsdoc": "^3.6.3",
@@ -86,11 +85,6 @@
           "@babel/plugin-proposal-class-properties"
         ]
       }
-    }
-  },
-  "jest": {
-    "globals": {
-      "__webpack_public_path__": null
     }
   }
 }
