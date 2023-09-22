@@ -30,12 +30,12 @@
 
           <form class="ui form" method="get" action="{{ project.get_docs_url }}">
             <p>
-            {% blocktrans trimmed %}
-              Your documentation has been built.
-              Ensure your documentation is kept up to date with every commit to
-              your repository, by
-              <a href="http://docs.readthedocs.io/page/webhooks.html">setting up a webhook</a>.
-            {% endblocktrans %}
+              {% blocktrans trimmed %}
+                Your documentation has been built.
+                Ensure your documentation is kept up to date with every commit to
+                your repository, by
+                <a href="http://docs.readthedocs.io/page/webhooks.html">setting up a webhook</a>.
+              {% endblocktrans %}
             </p>
 
             <input class="ui button primary" type="submit" value="{% trans "View your documentation" %}"/>
@@ -46,33 +46,33 @@
 
           <form class="ui form" method="get" action="{% url "builds_detail" project_slug=project.slug build_pk=onboard.build.pk %}">
             <p>
-            {% blocktrans trimmed %}
-              There was a problem building your documentation,
-              you can see what went wrong in the build output.
-              If you need more help, check out some of the
-              <a href="http://docs.readthedocs.io/page/faq.html">problems frequently encountered</a>
-              during builds.
-            {% endblocktrans %}
+              {% blocktrans trimmed %}
+                There was a problem building your documentation,
+                you can see what went wrong in the build output.
+                If you need more help, check out some of the
+                <a href="http://docs.readthedocs.io/page/faq.html">problems frequently encountered</a>
+                during builds.
+              {% endblocktrans %}
             </p>
 
             <input class="ui button" type="submit" value="{% trans "View build output" %}"/>
           </form>
         {% endif %}
       {% else %}
-        
+
         {% url "builds_detail" project_slug=project.slug build_pk=onboard.build.pk as latest_build_url %}
         <a href="{{ latest_build_url }}"><h2>{% trans "Your documentation is building" %}</h2></a>
-        
+
         <p>
-        {% blocktrans trimmed %}
-          You'll be able to view your documentation in a minute or two,
-          once your project is done building.
-        {% endblocktrans %}
+          {% blocktrans trimmed %}
+            You'll be able to view your documentation in a minute or two,
+            once your project is done building.
+          {% endblocktrans %}
         </p>
       {% endif %}
 
-  {% endif %}
+    {% endif %}
   </div>
-  {% endif %}
+{% endif %}
 
 <!-- END onboard import project -->

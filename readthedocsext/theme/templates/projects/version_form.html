@@ -85,12 +85,12 @@
 
             {# Pass information from Django into site JS, avoid CSP as inline JS #}
             <script type="application/json" data-bind="jsonInit: config">
-{
-  "api_url": "{% url "projects-versions-list" project.slug %}",
-  "errors": {
-    "noResults": "{% filter escapejs %}{% trans "No matching versions found" %}{% endfilter %}"
-  }
-}
+              {
+                "api_url": "{% url "projects-versions-list" project.slug %}",
+                "errors": {
+                  "noResults": "{% filter escapejs %}{% trans "No matching versions found" %}{% endfilter %}"
+                }
+              }
             </script>
 
             <div class="ui fluid search" data-bind="semanticui: {search: search_config()}">
@@ -150,27 +150,27 @@
 {% block wtf %}
   {% if is_project_admin %}
     {% if not version.active and version.built %}
-        <form class="ui form" name="version_delete_html" method="post" action="{% url "project_version_delete_html" project.slug version.slug %}">
-          {% csrf_token %}
-        </form>
-        <p>
-          {# We are submitting the form using javascript because it breaks the UI design if we use buttons #}
-          {% blocktrans trimmed %}
-            This version is inactive but its documentation is still available online.
-            You can <a href="#" onclick="document.forms['version_delete_html'].submit();">delete this version's documentation</a> if you want to remove it completely.
-          {% endblocktrans %}
-        </p>
-      {% endif %}
-    {% endif %}
-
-
-    <form class="ui form" method="post" action=".">
-      {% csrf_token %}
-      {{ form.as_p }}
+      <form class="ui form" name="version_delete_html" method="post" action="{% url "project_version_delete_html" project.slug version.slug %}">
+        {% csrf_token %}
+      </form>
       <p>
-        <input class="ui button" style="display: inline;" type="submit" value="{% trans "Save" %}">
-        {% trans "or" %}
-        <a href="{% url "wipe_version" version.project.slug version.slug %}">{% trans "wipe "%}</a>
+          {# We are submitting the form using javascript because it breaks the UI design if we use buttons #}
+        {% blocktrans trimmed %}
+          This version is inactive but its documentation is still available online.
+          You can <a href="#" onclick="document.forms['version_delete_html'].submit();">delete this version's documentation</a> if you want to remove it completely.
+        {% endblocktrans %}
       </p>
-    </form>
+    {% endif %}
+  {% endif %}
+
+
+  <form class="ui form" method="post" action=".">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p>
+      <input class="ui button" style="display: inline;" type="submit" value="{% trans "Save" %}">
+      {% trans "or" %}
+      <a href="{% url "wipe_version" version.project.slug version.slug %}">{% trans "wipe "%}</a>
+    </p>
+  </form>
 {% endblock %}

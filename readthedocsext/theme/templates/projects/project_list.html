@@ -5,7 +5,7 @@
 {% block title %}
   {% blocktrans with tag.name as tag %}Projects tagged with {{ tag }}{% endblocktrans %}
 {% endblock %}
-  
+
 {% block content %}
   {% include "projects/partials/project_tagged_list.html" with objects=project_list tag=tag %}
 {% endblock %}

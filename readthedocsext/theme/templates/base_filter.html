@@ -7,17 +7,17 @@
 {% block content-header %}
 
     <!-- BEGIN filter bar -->
-    <div id="project_bar">
-      <div class="ui basic segment">
-        
-          <h1>{% trans "Filter" %}</h1>
-      
-          <ul>
-            {% block filter_bar %}{% endblock %}
-          </ul>
+  <div id="project_bar">
+    <div class="ui basic segment">
 
-      </div>
+      <h1>{% trans "Filter" %}</h1>
+
+      <ul>
+        {% block filter_bar %}{% endblock %}
+      </ul>
+
     </div>
+  </div>
     <!-- END filter bar -->
 
 {% endblock %}

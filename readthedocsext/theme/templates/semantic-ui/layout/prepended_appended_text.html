@@ -14,15 +14,15 @@
         <div class="{{ field_class }}">
             <div class="ui{% if crispy_appended_text %} right{% endif %} labeled input">
                 {% if crispy_prepended_text %}
-                  <div class="ui label{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">
-                    {{ crispy_prepended_text|safe }}
-                  </div>
+                    <div class="ui label{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">
+                        {{ crispy_prepended_text|safe }}
+                    </div>
                 {% endif %}
                 {% crispy_field field %}
                 {% if crispy_appended_text %}
-                  <div class="ui label{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">
-                    {{ crispy_appended_text|safe }}
-                  </div>
+                    <div class="ui label{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">
+                        {{ crispy_appended_text|safe }}
+                    </div>
                 {% endif %}
             </div>
 
@@ -31,4 +31,3 @@
 
     </div>
 {% endif %}
-

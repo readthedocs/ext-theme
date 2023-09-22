@@ -2,18 +2,18 @@
 {% load i18n %}
 
 {% block content-header %}
-<h1>{% trans "Read the Docs Archive" %}</h1>
+    <h1>{% trans "Read the Docs Archive" %}</h1>
 {% endblock %}
 
 {% block content %}
-{% for project, versions in doc_index.items %}
-	<h2>{{ project }}</h2>
-	<ul class="ui list">
-		{% for version in versions %}
-		<li class="item">
-			<a href="/{{ project }}/rtd-builds/{{ version }}/">{{ version }}</a>
-		</li>
-		{% endfor %}
-	</ul>
-{% endfor %}
+    {% for project, versions in doc_index.items %}
+        <h2>{{ project }}</h2>
+        <ul class="ui list">
+            {% for version in versions %}
+                <li class="item">
+                    <a href="/{{ project }}/rtd-builds/{{ version }}/">{{ version }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
 {% endblock %}

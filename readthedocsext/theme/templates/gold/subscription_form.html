@@ -20,18 +20,18 @@
   <script src="https://js.stripe.com/v2/" type="text/javascript"></script>
   <script type="text/javascript" src="{% static 'gold/js/gold.js' %}"></script>
   <script type="text/javascript">
-var gold_views = require('gold/gold');
-$(document).ready(function () {
-    var key;
+    var gold_views = require('gold/gold');
+    $(document).ready(function () {
+      var key;
     //<![CDATA[
-    key = '{{ stripe_publishable }}';
+      key = '{{ stripe_publishable }}';
     //]]>
 
-    var view = gold_views.GoldView.init({
-      key: key,
-      form: $('form#gold-register')
+      var view = gold_views.GoldView.init({
+        key: key,
+        form: $('form#gold-register')
+      });
     });
-});
   </script>
 {% endblock %}
 

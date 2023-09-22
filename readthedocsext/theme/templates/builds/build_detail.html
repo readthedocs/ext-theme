@@ -14,13 +14,13 @@
   <div class="ui basic segment padded" data-bind="using: BuildDetailView({id: {{ build.pk }}})">
 
     {% block build_detail_metadata %}
-    <div class="ui top attached segment">
-      <div class="ui stackable grid">
+      <div class="ui top attached segment">
+        <div class="ui stackable grid">
 
         {# Build progress on the left #}
-        {% block build_detail_metadata_left %}
-        <div class="ui eleven wide column">
-          <div class="ui header">
+          {% block build_detail_metadata_left %}
+            <div class="ui eleven wide column">
+              <div class="ui header">
             {% comment %}
               The state icon expects the build API response directly instead, so
               we recreate the used fields here.
@@ -30,69 +30,69 @@
               state. Otherwise, it's skipped and we can assume there is no data
               binding.
             {% endcomment %}
-            <span data-bind="with: {state: {code: state()}, success: success()}">
-              {% include "builds/includes/status_icon.html" with build=build size="small" circular=True data_bind=True %}
-            </span>
-            {% include "builds/includes/build_name.html" with build=build is_page_title=True %}
-          </div>
+                <span data-bind="with: {state: {code: state()}, success: success()}">
+                  {% include "builds/includes/status_icon.html" with build=build size="small" circular=True data_bind=True %}
+                </span>
+                {% include "builds/includes/build_name.html" with build=build is_page_title=True %}
+              </div>
 
-          <div class="ui basic segment loading padded" data-bind="css: { loading: is_loading() }">
-            <div class="ui active progress" data-bind="semanticui: {progress: progress_config()}">
-              <div class="bar"><div class="progress"></div></div>
-              <div class="label"></div>
+              <div class="ui basic segment loading padded" data-bind="css: { loading: is_loading() }">
+                <div class="ui active progress" data-bind="semanticui: {progress: progress_config()}">
+                  <div class="bar"><div class="progress"></div></div>
+                  <div class="label"></div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        {% endblock build_detail_metadata_left %}
+          {% endblock build_detail_metadata_left %}
 
         {# Build metadata on the right #}
-        {% block build_detail_metadata_right %}
-        <div class="ui five wide middle aligned column">
-          <div class="ui relaxed list">
-            <div class="item">
-              <i class="grey fa-duotone fa-calendar icon"></i>
-              <div class="content" data-bind="if: !is_loading()">
-                <div data-bind="attr: { 'data-tooltip': date_display() }, text: '{% trans "Build started" %} ' + date_display_since()"></div>
-              </div>
-            </div>
+          {% block build_detail_metadata_right %}
+            <div class="ui five wide middle aligned column">
+              <div class="ui relaxed list">
+                <div class="item">
+                  <i class="grey fa-duotone fa-calendar icon"></i>
+                  <div class="content" data-bind="if: !is_loading()">
+                    <div data-bind="attr: { 'data-tooltip': date_display() }, text: '{% trans "Build started" %} ' + date_display_since()"></div>
+                  </div>
+                </div>
 
-            <div class="item">
-              <i class="grey fa-duotone fa-clock icon"></i>
-              <div class="content" data-bind="if: is_finished">
-                <div data-bind="text: '{% trans "Build took %d" %}'.replace('%d', length_display())"></div>
-              </div>
-            </div>
+                <div class="item">
+                  <i class="grey fa-duotone fa-clock icon"></i>
+                  <div class="content" data-bind="if: is_finished">
+                    <div data-bind="text: '{% trans "Build took %d" %}'.replace('%d', length_display())"></div>
+                  </div>
+                </div>
 
             {# Version type is static, so we can skip some KO code #}
-            <div class="item">
-              <i class="grey fa-duotone {{ build.is_external | yesno:"fa-code-pull-request,fa-tag" }} icon"></i>
-              <div class="content" data-bind="if: !is_loading()">
-                {% if build.is_external %}
-                  {{ build.external_version_name | lower | capfirst }}
-                  <a href="{{ build.version.vcs_url }}"><code>#{{ build.version.verbose_name }}</code></a>
-                {% else %}
-                  <code>
-                    <a href="{% url "builds_project_list" build.version.project.slug %}?version={{ build.version.slug }}">
-                      {{ build.version.slug }}
-                    </a>
-                  </code>
-                {% endif %}
+                <div class="item">
+                  <i class="grey fa-duotone {{ build.is_external | yesno:"fa-code-pull-request,fa-tag" }} icon"></i>
+                  <div class="content" data-bind="if: !is_loading()">
+                    {% if build.is_external %}
+                      {{ build.external_version_name | lower | capfirst }}
+                      <a href="{{ build.version.vcs_url }}"><code>#{{ build.version.verbose_name }}</code></a>
+                    {% else %}
+                      <code>
+                        <a href="{% url "builds_project_list" build.version.project.slug %}?version={{ build.version.slug }}">
+                          {{ build.version.slug }}
+                        </a>
+                      </code>
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="item" data-bind="visible: commit_short">
+                  <i class="grey fa-duotone fa-code-branch icon"></i>
+                  <div class="content" data-bind="if: !is_loading()">
+                    <a data-bind="attr: {href: commit_url}"><code data-bind="text: commit_short"></code></a>
+                  </div>
+                </div>
+
               </div>
             </div>
+          {% endblock build_detail_metadata_right %}
 
-            <div class="item" data-bind="visible: commit_short">
-              <i class="grey fa-duotone fa-code-branch icon"></i>
-              <div class="content" data-bind="if: !is_loading()">
-                <a data-bind="attr: {href: commit_url}"><code data-bind="text: commit_short"></code></a>
-              </div>
-            </div>
-
-          </div>
         </div>
-        {% endblock build_detail_metadata_right %}
-
       </div>
-    </div>
     {% endblock build_detail_metadata %}
 
     <div class="ui attached menu">
@@ -111,9 +111,9 @@
       <div class="right menu">
 
         {% if request.user|is_admin:project %}
-          <a 
-              class="item ko hidden"
-              data-bind="click: $root.post_child_form, css: { hidden: !can_cancel() }">
+          <a
+            class="item ko hidden"
+            data-bind="click: $root.post_child_form, css: { hidden: !can_cancel() }">
             <form method="post" action="{% url "builds_detail" build.version.project.slug build.pk %}">
               {% csrf_token %}
             </form>
@@ -125,9 +125,9 @@
           {# Show rebuild button only if the version is external, active and it's the latest build for this version #}
           {# see https://github.com/readthedocs/readthedocs.org/pull/6995#issuecomment-852918969 #}
           {% if build.can_rebuild %}
-            <a 
-                class="item ko hidden"
-                data-bind="click: $root.post_child_form, css: { hidden: !can_retry() }">
+            <a
+              class="item ko hidden"
+              data-bind="click: $root.post_child_form, css: { hidden: !can_retry() }">
               <form method="post" name="rebuild_commit" action="{% url "builds_project_list" project.slug %}">
                 {% csrf_token %}
                 <input type="hidden" name="version_slug" value="{{ build.version.slug }}">
@@ -143,10 +143,10 @@
 
         {% trans "View documentation for this build" as text_view_docs %}
         <a
-            class="disabled item"
-            data-bind="css: {disabled: !can_view_docs()}, attr: {href: docs_url}"
-            aria-label="{{ text_view_docs }}"
-            title="{{ text_view_docs }}">
+          class="disabled item"
+          data-bind="css: {disabled: !can_view_docs()}, attr: {href: docs_url}"
+          aria-label="{{ text_view_docs }}"
+          title="{{ text_view_docs }}">
           <i class="fa-duotone fa-book icon"></i>
           {% trans "View docs" %}
         </a>
@@ -191,56 +191,56 @@
         <i class="fa-solid fa-exclamation circular icon"></i>
         <span data-bind="text: error"></span>
         <span>{% trans "For more information on this error, see our documentation." %}
-      </div>
+        </div>
 
-      <div class="ui inverted bottom attached segment transition slide">
+        <div class="ui inverted bottom attached segment transition slide">
 
         {% comment %}
           This is a loading placeholder. The extra element is to fill out the
           extra space in the div
         {% endcomment %}
-        <div class="ui hidden active dimmer" data-bind="visible: is_loading()">
-          <div class="ui text loader">Loading</div>
-        </div>
-        <div class="ui basic segment very padded" data-bind="visible: is_loading()"></div>
+          <div class="ui hidden active dimmer" data-bind="visible: is_loading()">
+            <div class="ui text loader">Loading</div>
+          </div>
+          <div class="ui basic segment very padded" data-bind="visible: is_loading()"></div>
 
-        <table
+          <table
             class="ui small very basic compact inverted selectable command table"
             data-bind="visible: commands, foreach: commands"
             style="display: none;">
-          <tbody>
-            <tr class="top aligned command" data-bind="visible: is_visible() || $parent.show_debug()">
-              <td class="collapsing">
-                <a class="ui icon left floated" data-bind="click: toggle_expanded">
-                  <i class="grey fa-solid fa-angle-right icon" data-bind="class: is_expanded() ? 'fa-angle-down' : 'fa-angle-right'"></i>
-                </a>
-              </td>
-              <td>
-                <code class="ui text" data-bind="text: command, class: command_class, click: toggle_expanded"></code>
-                <a class="ui mini inverted label" data-bind="text: run_time() + 's'"></a>
-                <a class="ui mini inverted label" data-bind="text: '{% trans "Exit" %}: ' + exit_code(), visible: exit_code() > 0"></a>
-              </td>
-            </tr>
-          </tbody>
-          <tbody data-bind="visible: is_expanded(), foreach: output_lines">
-            <tr data-bind="css: {'left olive marked': is_selected()}" class="top aligned">
-              <td class="collapsing line number">
-                <a class="ui small grey left floated text" data-bind="attr: {href: '#' + anchor_id(), 'data-selected': is_selected()}, click: function() { $parents[1].set_selected_line($data) }">
-                  <code data-bind="text: line_number()"></code>
-                </a>
-              </td>
-              <td class="stdout">
-                <code data-bind="html: output"></code>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <tbody>
+              <tr class="top aligned command" data-bind="visible: is_visible() || $parent.show_debug()">
+                <td class="collapsing">
+                  <a class="ui icon left floated" data-bind="click: toggle_expanded">
+                    <i class="grey fa-solid fa-angle-right icon" data-bind="class: is_expanded() ? 'fa-angle-down' : 'fa-angle-right'"></i>
+                  </a>
+                </td>
+                <td>
+                  <code class="ui text" data-bind="text: command, class: command_class, click: toggle_expanded"></code>
+                  <a class="ui mini inverted label" data-bind="text: run_time() + 's'"></a>
+                  <a class="ui mini inverted label" data-bind="text: '{% trans "Exit" %}: ' + exit_code(), visible: exit_code() > 0"></a>
+                </td>
+              </tr>
+            </tbody>
+            <tbody data-bind="visible: is_expanded(), foreach: output_lines">
+              <tr data-bind="css: {'left olive marked': is_selected()}" class="top aligned">
+                <td class="collapsing line number">
+                  <a class="ui small grey left floated text" data-bind="attr: {href: '#' + anchor_id(), 'data-selected': is_selected()}, click: function() { $parents[1].set_selected_line($data) }">
+                    <code data-bind="text: line_number()"></code>
+                  </a>
+                </td>
+                <td class="stdout">
+                  <code data-bind="html: output"></code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-        <div data-bind="visible: is_polling() && !is_loading()" style="display: none;">
-          <div data-bind="visible: is_polling" class="ui active inverted mini centered inline text loader"></div>
+          <div data-bind="visible: is_polling() && !is_loading()" style="display: none;">
+            <div data-bind="visible: is_polling" class="ui active inverted mini centered inline text loader"></div>
+          </div>
+
         </div>
-
-      </div>
     {% endif %}
 
   </div>
