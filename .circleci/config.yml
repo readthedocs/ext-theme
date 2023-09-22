@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  browser-tools: circleci/browser-tools@1.4.6
+
 commands:
   run-lint:
     description: "Run code linter"
@@ -23,8 +26,10 @@ commands:
               exit 1
             fi
   run-test:
-    description: "Run code tests"
+    description: "Run test suite"
     steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - checkout
       - run: npm ci
       - run: npm test
