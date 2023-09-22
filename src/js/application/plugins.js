@@ -347,9 +347,9 @@ export const message = {
  */
 export const semanticui = {
   update: (element, value_accessor, all_bindings) => {
-    const value = ko.unwrap(value_accessor());
+    const binding_value = ko.unwrap(value_accessor());
     const jq_element = jquery(element);
-    for (const [key, value] of Object.entries(value)) {
+    for (const [key, value] of Object.entries(binding_value)) {
       if (key === "modal") {
         // modal is not supported here because the jQuery ``modal()`` plugin
         // replaces ``<body>`` and this causes an error from Knockout, because
