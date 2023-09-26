@@ -1,0 +1,48 @@
+<html>
+  <body>
+    <div class="ui dropdown" data-bind="semanticui: { dropdown: {}}">
+      Dropdown
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        <div class="item">Choice 1</div>
+        <div class="item">Choice 2</div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { expect } from "@open-wc/testing";
+      import { runTests } from "@web/test-runner-mocha";
+      import { default as ko } from "knockout";
+      import { default as jquery } from "jquery";
+
+      import { Application } from "../../application";
+      import { Registry } from "../../application/registry";
+
+      const app = new Application({ debug: true });
+      app.run();
+
+      runTests(async () => {
+        describe("Knockout semanticui plugin", () => {
+          it("SUI module initialized successfully", () => {
+            const elem = jquery(".ui.dropdown");
+
+            // The HTML attribute we add. Note `data()` is a jQuery method that
+            // can convert HTML data attributes to camelCase attribute names.
+            const data = elem.data();
+            expect(data.semanticuiDropdown).to.be.true;
+
+            // Inspect internal attributes added to the element by the FUI
+            // module plugin. For example, the module is attached to the element
+            // here:
+            // https://github.com/fomantic/Fomantic-UI/blob/b19851433cef2feba58b036cc19dcc72da176f1b/src/definitions/modules/dropdown.js#L143C26-L149
+            const moduleData = elem.data("module-dropdown");
+            expect(moduleData.can.show()).to.be.true;
+            expect(moduleData.is.active()).to.be.false;
+            expect(moduleData.is.disabled()).to.be.false;
+            expect(moduleData.is.empty()).to.be.false;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
