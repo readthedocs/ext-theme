@@ -1,0 +1,48 @@
+<html>
+  <body>
+    <button
+      data-bind="with: $root.show_modal('modal-form'), click: $root.show_modal('modal-form')"
+    >
+      Show modal
+    </button>
+    <div class="ui mini modal" data-modal-id="modal-form">
+      <div class="header">Test</div>
+    </div>
+
+    <script type="module">
+      import { expect } from "@open-wc/testing";
+      import { runTests } from "@web/test-runner-mocha";
+      import { default as jquery } from "jquery";
+
+      import { Application } from "../../application";
+
+      const app = new Application();
+      app.run();
+
+      runTests(async () => {
+        describe("SemanticUI modal with form", async () => {
+          it("shows automatically", () => {
+            const elem = jquery("[data-modal-id='modal-form']");
+
+            // Inspect internal attributes added to the element by the FUI
+            // module plugin.
+            const moduleData = elem.data("module-modal");
+            expect(moduleData.is.active()).to.be.true;
+          });
+          it("can manually show", () => {
+            const button = jquery("button");
+            const elem = jquery("[data-modal-id='modal-form']");
+
+            // Inspect internal attributes added to the element by the FUI
+            // module plugin.
+            const moduleData = elem.data("module-modal");
+            moduleData.hideModal();
+            expect(moduleData.is.active()).to.be.false;
+            button.click();
+            expect(moduleData.is.active()).to.be.true;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

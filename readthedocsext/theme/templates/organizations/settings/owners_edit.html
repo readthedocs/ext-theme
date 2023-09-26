@@ -2,9 +2,6 @@
 
 {% load i18n %}
 
-{% load crispy_forms_tags %}
-{% load gravatar %}
-
 {% block title %}{{ organization.name }} - {% trans "Owners" %}{% endblock %}
 
 {% block organization_owners_active %}active{% endblock %}
@@ -12,20 +9,28 @@
 
 {% block organization_edit_content %}
   {% include "organizations/partials/owners_list.html" with objects=owners %}
+
+  {% comment %}
+    This is a bit of a hack to avoid manipulating the view to work with
+    multiple querysets on two separate models. On the owners/team member views,
+    there will also be a listing of invitations (the `Invitation` model). But,
+    the invitiation list will not respond to pagination. This at least allows
+    the owner listing to paginate and not affect the invitation list. It also
+    means that any number of invitation over the pagination limit probably won't
+    show or at least will clog up the UI.
+
+    Ideally, both OrganizationOwner and Invitation model queryset would be
+    joined into a single queryset listing, but for now this will use a separate
+    element to list the outstanding invitations. I would not recommend repeating
+    this pattern outside invitations.
+  {% endcomment %}
+  {% if invitations.exists %}
+    <h3 class="ui small header">
+      {% trans "Pending invitations" %}
+      <span class="ui circular small label">
+        {{ invitations.count }}
+      </span>
+    </h3>
+    {% include "organizations/partials/invitation_list.html" with objects=invitations skip_pagination=True %}
+  {% endif %}
 {% endblock organization_edit_content %}
-
-{% comment %}
-  TODO uh, these.
-  {% include "invitations/includes/invitation_list.html" with invitations=invitations %}
-
-    <div class="module-item">
-      <h3>{% trans "Add owner" %}</h3>
-      <form method="post" action="{% url "organization_owner_add" organization.slug %}">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <input type="submit" value="{% trans "Add owner" %}">
-      </form>
-    </div>
-
-  </div>
-{% endcomment %}

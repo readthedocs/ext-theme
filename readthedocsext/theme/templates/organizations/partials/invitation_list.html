@@ -1,0 +1,103 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% load i18n %}
+{% load gravatar %}
+{% load humanize %}
+{% load privacy_tags %}
+
+{% comment %}
+  This is a bit of a hack to avoid manipulating the view to work with
+  querysets against two separate models. On the owners/team member views,
+  there will also be a listing of invitations (the `Invitation` model).
+  Listing against two models breaks the patterns used for this include and
+  the rest of the listing UIs.
+
+  Ideally, both OrganizationOwner and Invitation model queryset would be
+  joined into a single queryset listing, but for now this will use a separate
+  element to list the outstanding invitations. I would not recommend repeating
+  this pattern.
+{% endcomment %}
+
+{% block top_menu %}
+{% endblock top_menu %}
+
+{% block create_button %}
+{% endblock %}
+
+{# Don't use placeholder content to avoid competing with the primary model listing view #}
+{% block list_placeholder %}
+{% endblock list_placeholder %}
+
+{% block list_item_right_buttons %}
+  {% if request.user|is_admin:organization %}
+    <a class="ui icon button"
+       data-bind="click: $root.show_modal('invitation-{{ object.pk }}')"
+       data-content="{% trans "Revoke invitation" %}">
+      <i class="fa-solid fa-xmark icon"></i>
+
+      <div class="ui mini modal" data-modal-id="invitation-{{ object.pk }}">
+        <div class="header">
+          {% blocktrans trimmed %}
+            Revoke invitation
+          {% endblocktrans %}
+        </div>
+        <div class="content">
+          {% if object.to_user %}
+            {% blocktrans trimmed with username=object.to_user.username organization=organization.name %}
+              Revoke organization owner invitation for user {{ username }} to {{ organization }}?
+            {% endblocktrans %}
+          {% else %}
+            {% blocktrans trimmed with email=object.to_email organization=organization.name %}
+              Revoke organization owner invitation for email {{ email }} to {{ organization }}?
+            {% endblocktrans %}
+          {% endif %}
+        </div>
+        <div class="actions">
+          <form method="post" action="{% url "invitations_revoke" invitation_pk=object.pk %}">
+            {% csrf_token %}
+            <input class="ui negative button" type="submit" value="{% trans "Revoke invitation" %}">
+          </form>
+        </div>
+      </div>
+    </a>
+  {% endif %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_image %}
+  {% if object.to_user %}
+    <img class="ui rounded square image" src="{% gravatar_url object.to_user.email 64 %}">
+  {% else %}
+    <img class="ui rounded square image" src="{% gravatar_url object.to_email 64 %}">
+  {% endif %}
+{% endblock list_item_image %}
+
+{% block list_item_header %}
+  {% if object.to_user %}
+    {% with full_name=object.to_user.get_full_name %}
+      {% if full_name %}
+        {{ full_name }}
+      {% else %}
+        {{ object.to_user.username }}
+      {% endif %}
+    {% endwith %}
+  {% else %}
+    {{ object.to_email }}
+  {% endif %}
+
+  <div class="sub header">
+    {% if object.to_user %}
+      {{ object.to_user.username }}
+    {% endif %}
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_meta_items %}
+  <div class="item">
+    {% blocktrans trimmed with until_expiration=object.expiration_date|naturaltime %}
+      Expires in {{ until_expiration }}
+    {% endblocktrans %}
+  </div>
+{% endblock list_item_meta_items %}
+
+{% block list_item_extra %}
+{% endblock %}
