@@ -1,12 +1,14 @@
 version: 2.1
 
+orbs:
+  browser-tools: circleci/browser-tools@1.4.6
+
 commands:
   run-lint:
-    description: "Run code tests and linter"
+    description: "Run code linter"
     steps:
       - checkout
       - run: npm ci
-      - run: npm test
       - run: npm run lint
   run-build:
     description: "Ensure built assets are up to date"
@@ -23,6 +25,14 @@ commands:
               git status readthedocsext/ --porcelain
               exit 1
             fi
+  run-test:
+    description: "Run test suite"
+    steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - checkout
+      - run: npm ci
+      - run: npm test
 
 jobs:
   lint:
@@ -35,6 +45,11 @@ jobs:
       - image: "cimg/node:16.14"
     steps:
       - run-build: {}
+  test:
+    docker:
+      - image: "cimg/node:16.14"
+    steps:
+      - run-test: {}
 
 workflows:
   version: 2
@@ -42,3 +57,4 @@ workflows:
     jobs:
       - lint
       - build
+      - test
