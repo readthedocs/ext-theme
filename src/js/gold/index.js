@@ -1,6 +1,6 @@
 import jquery from "jquery";
 import ko from "knockout";
-import { loadStripe } from "@stripe/stripe-js/pure";
+import { loadStripe } from "@stripe/stripe-js/dist/pure.esm.js";
 
 import { Registry } from "../application/registry";
 
