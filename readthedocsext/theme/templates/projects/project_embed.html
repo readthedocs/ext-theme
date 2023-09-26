@@ -6,7 +6,7 @@
 {% load static %}
 
 {% block title %}
-Tools
+  Tools
 {% endblock title %}
 
 {% block content-header %}
@@ -20,14 +20,14 @@ Tools
   <script type="text/javascript" src="{% static 'vendor/knockout.js' %}"></script>
   <script type="text/javascript" src="{% static 'projects/js/tools.js' %}"></script>
   <script type="text/javascript">
-var project_tools = require('projects/tools');
-$(document).ready(function () {
-    project_tools.init_embed({
+    var project_tools = require('projects/tools');
+    $(document).ready(function () {
+      project_tools.init_embed({
         api_host: '{{ settings.PUBLIC_API_URL }}',
         uri: '{{ settings.URI }}',
         project: '{{ project.slug }}'
+      });
     });
-});
   </script>
 {% endblock %}
 
@@ -81,7 +81,7 @@ $(document).ready(function () {
   </div>
 
   <script>
-  $('select.dropdown')
-  .dropdown();
+    $('select.dropdown')
+      .dropdown();
   </script>
 {% endblock %}

@@ -11,10 +11,10 @@
 {% block chip_icon %}
   {% include "builds/includes/status_icon.html" with build=build size="" %}
 {% endblock chip_icon %}
-    
+
 {% block chip_text %}
   {# Allow for override of the text for version listing, where version is already stated #}
-  {{ text|default:build.version.verbose_name }} 
+  {{ text|default:build.version.verbose_name }}
 {% endblock chip_text %}
 
 {% block chip_detail_text %}

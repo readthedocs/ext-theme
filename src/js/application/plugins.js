@@ -66,7 +66,7 @@ export const htmlInit = add_init_handler(
   },
   (property) => {
     return { html: property };
-  }
+  },
 );
 
 /**
@@ -79,7 +79,7 @@ export const textInit = add_init_handler(
   },
   (property) => {
     return { text: property };
-  }
+  },
 );
 
 /**
@@ -92,7 +92,7 @@ export const valueInit = add_init_handler(
   },
   (property) => {
     return { value: property };
-  }
+  },
 );
 
 /**
@@ -209,7 +209,7 @@ export const popup = {
           context.$rawData.hide();
         },
       },
-      value_accessor()
+      value_accessor(),
     );
     const jq_element = jquery(element);
     jq_element.popup(config).hover(() => {
@@ -365,7 +365,7 @@ export const semanticui = {
               key,
               element,
               behavior,
-              ...args
+              ...args,
             );
             jq_element[key](behavior, ...args);
           };
@@ -377,7 +377,7 @@ export const semanticui = {
             "Setting up SemanticUI component:",
             key,
             value,
-            element
+            element,
           );
           jq_element[key](value);
         }

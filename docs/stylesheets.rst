@@ -99,7 +99,7 @@ How do I use icons?
 .. [1] https://fomantic-ui.com/elements/segment.html#padded
 .. [2] https://fomantic-ui.com/elements/segment.html#fitted
 .. [3] https://fomantic-ui.com/elements/segment.html#basic
-.. [4] https://fomantic-ui.com/collections/grid.html 
+.. [4] https://fomantic-ui.com/collections/grid.html
 
 
 Working with CSS

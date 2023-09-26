@@ -33,14 +33,14 @@
       {% block organization_edit_sidebar %}
 
         {% block organization_edit_sidebar_help_topics_container %}
-        <div class="ui basic segment">
-          <h2 class="ui small header">{% trans "Help topics" %}</h2>
-          <div class="ui bulleted list">
-            {% block organization_edit_sidebar_help_topics %}
-            {% endblock organization_edit_sidebar_help_topics %}
-            {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/" text=_("Documentation index") is_external=True class="item" %}
+          <div class="ui basic segment">
+            <h2 class="ui small header">{% trans "Help topics" %}</h2>
+            <div class="ui bulleted list">
+              {% block organization_edit_sidebar_help_topics %}
+              {% endblock organization_edit_sidebar_help_topics %}
+              {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/" text=_("Documentation index") is_external=True class="item" %}
+            </div>
           </div>
-        </div>
         {% endblock organization_edit_sidebar_help_topics_container %}
 
         {% block organization_edit_sidebar_extra %}

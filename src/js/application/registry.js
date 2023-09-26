@@ -45,7 +45,7 @@ export class Registry {
    */
   attach(view) {
     for (const [view_name, view_class] of Object.entries(
-      this.constructor.views
+      this.constructor.views,
     )) {
       view[view_name] = view_class;
     }

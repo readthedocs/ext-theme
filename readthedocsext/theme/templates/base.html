@@ -16,10 +16,10 @@
 
     {# This block is used to pass settings between our application and JS #}
     <script type="application/json" id="site-config">
-{
-  "debug": {% debug_enabled as is_debug_enabled %}{{ is_debug_enabled | yesno:"true,false" }},
-  "webpack_public_path": "{% get_webpack_static_prefix %}/readthedocsext/theme/"
-}
+      {
+        "debug": {% debug_enabled as is_debug_enabled %}{{ is_debug_enabled | yesno:"true,false" }},
+        "webpack_public_path": "{% get_webpack_static_prefix %}/readthedocsext/theme/"
+      }
     </script>
 
     {% comment %}

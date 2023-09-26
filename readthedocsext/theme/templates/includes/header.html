@@ -7,7 +7,7 @@
 Application header menu, for desktop and mobile display
 
 This template provides some blocks that parent templates will use to override
-menu display. Mostly, they are used to set the active navigation menu item. 
+menu display. Mostly, they are used to set the active navigation menu item.
 These blocks are:
 
 active_item
@@ -21,9 +21,9 @@ active_item
 
   {# Pass Django template tag specific configuration into ``HeaderView`` #}
   <script type="application/json" data-bind="jsonInit: config">
-{
-  "api_projects_list_url": "{% url "projects-list" %}"
-}
+    {
+      "api_projects_list_url": "{% url "projects-list" %}"
+    }
   </script>
 
   <div class="ui container">

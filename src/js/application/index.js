@@ -135,7 +135,7 @@ export class Application {
      * isn't a great fit for Knockout custom data binding or plugin, as the
      * library uses some builtin/hardcoded selectors. */
     var clipboard_global = new clipboard(
-      "[data-clipboard-text], [data-clipboard-target]"
+      "[data-clipboard-text], [data-clipboard-target]",
     );
     // Provide the user with some visual feedback using FUI popups
     jquery("[data-clipboard-text], [data-clipboard-target]").popup({
