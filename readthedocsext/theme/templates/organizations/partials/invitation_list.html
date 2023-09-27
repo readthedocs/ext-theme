@@ -6,16 +6,11 @@
 {% load privacy_tags %}
 
 {% comment %}
-  This is a bit of a hack to avoid manipulating the view to work with
-  querysets against two separate models. On the owners/team member views,
-  there will also be a listing of invitations (the `Invitation` model).
-  Listing against two models breaks the patterns used for this include and
-  the rest of the listing UIs.
-
-  Ideally, both OrganizationOwner and Invitation model queryset would be
-  joined into a single queryset listing, but for now this will use a separate
-  element to list the outstanding invitations. I would not recommend repeating
-  this pattern.
+  For now, this include is a secondary listing on the owner/team member listing
+  page. See the parent templates for an example of using this include. Note, I
+  do not recommend repeating the pattern there, we should instead work towards
+  either splitting these into dedicated UIs or combining them into a single model
+  listing.
 {% endcomment %}
 
 {% block top_menu %}
