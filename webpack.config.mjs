@@ -21,13 +21,15 @@ export default (env, argv) => {
       filename: "js/[name].js?[contenthash]",
       chunkFilename: "js/vendors~[name].js?[contenthash]",
       publicPath: "./",
-      path: path.resolve(path.join(
-        "readthedocsext",
-        "theme",
-        "static",
-        "readthedocsext",
-        "theme",
-      )),
+      path: path.resolve(
+        path.join(
+          "readthedocsext",
+          "theme",
+          "static",
+          "readthedocsext",
+          "theme",
+        ),
+      ),
     },
     optimization: {
       minimize: is_production,
