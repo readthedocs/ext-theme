@@ -31,7 +31,16 @@ export default (env, argv) => {
     },
     optimization: {
       minimize: is_production,
-      minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
+      minimizer: [
+        new TerserPlugin({
+          // Avoids creating a `.LICENSE.txt` file
+          extractComments: false,
+          terserOptions: {
+            sourceMap: true,
+          },
+        }),
+        new CssMinimizerPlugin(),
+      ],
       chunkIds: "named",
       splitChunks: {
         cacheGroups: {
