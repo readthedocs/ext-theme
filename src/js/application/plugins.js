@@ -121,7 +121,12 @@ export const valueInit = add_init_handler(
  *     })
  */
 export const jsonInit = add_init_handler((element) => {
-  return JSON.parse(element.innerHTML);
+  try {
+    return JSON.parse(element.innerHTML);
+  } catch (err) {
+    console.error(err);
+    return {};
+  }
 });
 
 function add_init_handler(getter, setter) {
