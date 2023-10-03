@@ -46,9 +46,9 @@
             data-content="{{ button_up_text }}"
             aria-label="{{ button_up_text }}"
             title="{{ button_up_text }}">
-        <form method="post" action="{% url 'projects_automation_rule_move' project_slug=project.slug automation_rule_pk=object.pk steps=-1 %}">
-          {% csrf_token %}
-        </form>
+      <form method="post" action="{% url 'projects_automation_rule_move' project_slug=project.slug automation_rule_pk=object.pk steps=-1 %}">
+        {% csrf_token %}
+      </form>
       <i class="fa-solid fa-arrow-up icon"></i>
     </button>
   {% endif %}
@@ -59,9 +59,9 @@
             data-content="{{ button_down_text }}"
             aria-label="{{ button_down_text }}"
             title="{{ button_down_text }}">
-        <form method="post" action="{% url 'projects_automation_rule_move' project_slug=project.slug automation_rule_pk=object.pk steps=1 %}">
-          {% csrf_token %}
-        </form>
+      <form method="post" action="{% url 'projects_automation_rule_move' project_slug=project.slug automation_rule_pk=object.pk steps=1 %}">
+        {% csrf_token %}
+      </form>
       <i class="fa-solid fa-arrow-down icon"></i>
     </button>
   {% endif %}

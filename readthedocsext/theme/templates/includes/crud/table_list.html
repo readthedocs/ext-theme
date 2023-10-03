@@ -300,9 +300,9 @@
           {% endif %}
 
           <tbody>
-          {% for object in objects %}
+            {% for object in objects %}
             {# Item view for each object in objects queryset #}
-            {% block list_item_start %}<tr class="middle aligned">{% endblock list_item_start %}
+              {% block list_item_start %}<tr class="middle aligned">{% endblock list_item_start %}
               {% block list_item %}
 
                 {% block list_item_header_column %}
@@ -377,8 +377,8 @@
                 {% endblock list_item_right_column %}
 
               {% endblock list_item %}
-            </tr>
-          {% endfor %}
+              </tr>
+            {% endfor %}
 
           </tbody>
         </table>

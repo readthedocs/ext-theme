@@ -13,19 +13,19 @@
   <i class="fa-solid icon {% spaceless %}
 
     {# Show the type of the version #}
-    {% if version.is_external %}
-      fa-code-pull-request
-    {% elif version.type == 'branch' %}
-      fa-code-branch
-    {% elif version.type == 'tag' %}
-      fa-tag
-    {% else %}
-      fa-code-commit
-    {% endif %}
+              {% if version.is_external %}
+                fa-code-pull-request
+              {% elif version.type == 'branch' %}
+                fa-code-branch
+              {% elif version.type == 'tag' %}
+                fa-tag
+              {% else %}
+                fa-code-commit
+              {% endif %}
 
-  {% endspaceless %}"></i>
+            {% endspaceless %}"></i>
 {% endblock chip_icon %}
-    
+
 {% block chip_text %}
   {% if version.is_external %}#{% endif %}{{ version.verbose_name }}
 {% endblock chip_text %}
@@ -35,17 +35,17 @@
     <i class="fa-solid icon {% spaceless %}
 
       {# Show some metadata on version status, almost always a check #}
-      {% if version.active %}
-        {% if version.built %}
-          fa-check
-        {% else %}
-          red fa-xmark
-        {% endif %}
-      {% else %}
-        light grey fa-question
-      {% endif %}
+                {% if version.active %}
+                  {% if version.built %}
+                    fa-check
+                  {% else %}
+                    red fa-xmark
+                  {% endif %}
+                {% else %}
+                  light grey fa-question
+                {% endif %}
 
-    {% endspaceless %}"></i>
+              {% endspaceless %}"></i>
   </div>
 {% endblock chip_detail %}
 
@@ -109,7 +109,7 @@
         </div>
       </div>
     {% endif %}
-    
+
   </div>
 {% endblock popupcard_content %}
 

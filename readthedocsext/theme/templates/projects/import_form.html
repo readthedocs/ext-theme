@@ -28,13 +28,13 @@
   {% url "socialaccount_connections" as url_connected_services %}
 
   <script type="application/json" data-bind="jsonInit: config">
-{
-  "urls": {
-      "api_sync_remote_repositories": "{% url 'api_sync_remote_repositories' %}",
-      "remoterepository_list": "{% url 'remoterepositories-list' %}"
-  },
-  "csrf_token": "{{ view_csrf_token }}"
-}
+    {
+      "urls": {
+        "api_sync_remote_repositories": "{% url 'api_sync_remote_repositories' %}",
+        "remoterepository_list": "{% url 'remoterepositories-list' %}"
+      },
+      "csrf_token": "{{ view_csrf_token }}"
+    }
   </script>
 
   <div class="ui active tab" data-tab="automatic">
@@ -53,9 +53,9 @@
       <div class="ui fluid disabled loading search" data-bind="semanticui: {search: search_config()}, css: {disabled: is_loading(), loading: is_loading()}">
         <div class="ui fluid icon large input">
           <input
-              class="ui text"
-              type="text"
-              autofocus=true />
+            class="ui text"
+            type="text"
+            autofocus=true />
           <i class="fa-duotone fa-search icon"></i>
         </div>
         <div class="results"></div>
@@ -71,6 +71,7 @@
           the context binding, but the attributes are observable attributes.
         {% endcomment %}
         <script type="text/html" id="remote-repo-results">
+{# fmt:off #}
 <div data-bind="foreach: remote_repos" class="results">
   <a class="result">
     <div class="image">
@@ -99,6 +100,7 @@
     </div>
   </a>
 </div>
+{# fmt:on #}
         </script>
 
       </div>
@@ -160,8 +162,8 @@
           {% trans "Can't find the repository you are searching for?" %}
 
           <button
-              class="ui mini black basic compact right aligned button" 
-              data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
+            class="ui mini black basic compact right aligned button"
+            data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
             <i class="fa-duotone fa-refresh icon"></i>
             {% trans "Refresh your repositories" %}
           </button>
@@ -178,7 +180,7 @@
         search selection above. This block shows some information about using
         the repository, such as where the repository has already been
         connected and why the repository can/cannot be used.
-        
+
       {% endcomment %}
       <div class="ui fluid card" data-bind="visible: is_selected, with: selected" style="display: none;">
         <div class="content">

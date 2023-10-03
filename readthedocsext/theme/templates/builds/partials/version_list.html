@@ -14,9 +14,9 @@
 {% block top_left_menu_items %}
   {# Pass information from Django into site JS #}
   <script type="application/json" data-bind="jsonInit: config">
-{
-  "api_url": "{% url "projects-versions-list" project.slug %}"
-}
+    {
+      "api_url": "{% url "projects-versions-list" project.slug %}"
+    }
   </script>
 
   {# Separate UI for the version search selection field #}
@@ -68,11 +68,11 @@
       View documentation for version {{ version }}
     {% endblocktrans %}
     <a class="ui {% if not object.built %} disabled{% endif %} button"
-        data-bind="event: {mouseover: fetch, focusin: fetch}, attr: {href: url_docs}"
-        target="_blank"
-        data-content="{{ label_link }}"
-        aria-label="{{ label_link }}"
-        tabindex="{% if object.built %}0{% else %}-1{% endif %}">
+       data-bind="event: {mouseover: fetch, focusin: fetch}, attr: {href: url_docs}"
+       target="_blank"
+       data-content="{{ label_link }}"
+       aria-label="{{ label_link }}"
+       tabindex="{% if object.built %}0{% else %}-1{% endif %}">
       <i class="fa-solid fa-book icon"></i>
     </a>
 
@@ -80,11 +80,11 @@
       Offline formats for version {{ version }}
     {% endblocktrans %}
     <button
-        class="ui {% if not object.has_epub and not object.has_htmlzip and not object.has_pdf %} disabled{% endif %} dropdown button"
-        data-bind="event: {focusin: fetch, click: fetch}"
-        data-content="{{ label_download }}"
-        aria-label="{{ label_download }}"
-        tabindex="{% if object.has_epub or object.has_htmlzip or object.has_pdf %}0{% else %}-1{% endif %}">
+      class="ui {% if not object.has_epub and not object.has_htmlzip and not object.has_pdf %} disabled{% endif %} dropdown button"
+      data-bind="event: {focusin: fetch, click: fetch}"
+      data-content="{{ label_download }}"
+      aria-label="{{ label_download }}"
+      tabindex="{% if object.has_epub or object.has_htmlzip or object.has_pdf %}0{% else %}-1{% endif %}">
       <i class="fa-solid fa-download icon"></i>
       <div class="menu">
         <div class="header">{% trans "Offline formats" %}</div>
@@ -112,9 +112,9 @@
         <div class="menu">
           <div class="header">{% trans "Admin" %}</div>
           <a
-              class="item"
+            class="item"
               {# Note, the syntax could be confusing here: trigger_build returns a closure #}
-              data-bind="click: trigger_build('{% url "projects-versions-builds-list" project.slug object.slug %}', '{{ csrf_token }}')">
+            data-bind="click: trigger_build('{% url "projects-versions-builds-list" project.slug object.slug %}', '{{ csrf_token }}')">
             <i class="fa-duotone fa-refresh icon"></i>
             {% trans "Rebuild version" %}
           </a>

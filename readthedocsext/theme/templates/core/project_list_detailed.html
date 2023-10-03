@@ -6,14 +6,14 @@
 
     {% with project.users.all as users %}
       {% if users|length > 1 %}
-      ({% for user in project.users.all|slice:":3" %}
-        {% if omit and user.pk != omit.pk %}
-          <a href="{{ user.get_absolute_url }}">{{ user }}</a>
-        {% endif %}
-        {% if not omit %}
-          <a href="{{ user.get_absolute_url }}">{{ user }}</a>
-        {% endif %}
-      {% endfor %})
+        ({% for user in project.users.all|slice:":3" %}
+          {% if omit and user.pk != omit.pk %}
+            <a href="{{ user.get_absolute_url }}">{{ user }}</a>
+          {% endif %}
+          {% if not omit %}
+            <a href="{{ user.get_absolute_url }}">{{ user }}</a>
+          {% endif %}
+        {% endfor %})
       {% else %}
         {% if omit and users.0.pk == omit.pk %}{% else %}{% with project.users.all.0 as user %}
           (<a href="{{ user.get_absolute_url }}">{{ user }}</a>)
@@ -23,9 +23,9 @@
     {% endwith %}
 
     {% if project.has_good_build %}
-    <span>{% blocktrans with date=project.get_latest_build.date|timesince %}{{ date }} ago{% endblocktrans %}</span>
+      <span>{% blocktrans with date=project.get_latest_build.date|timesince %}{{ date }} ago{% endblocktrans %}</span>
     {% else %}
-    <span>{% trans "No builds" %}</span>
+      <span>{% trans "No builds" %}</span>
     {% endif %}
 
     <ul class="list">

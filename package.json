@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Read the Docs site theme",
   "main": "src/js/index.js",
+  "type": "commonjs",
   "scripts": {
     "clean-js": "rm -v readthedocsext/theme/static/readthedocsext/theme/js/*.js; exit 0",
     "clean-css": "rm -v readthedocsext/theme/static/readthedocsext/theme/css/*.css; exit 0",
@@ -11,7 +12,9 @@
     "dev": "webpack-dev-server --mode=development",
     "lint": "prettier -c .",
     "format": "prettier --write .",
-    "test": "jest src/js/tests/"
+    "test": "web-test-runner",
+    "test:dev": "web-test-runner --watch",
+    "test:debug": "web-test-runner --manual --open"
   },
   "author": "",
   "license": "ISC",
@@ -20,8 +23,14 @@
     "@babel/plugin-proposal-class-properties": "^7.16.7",
     "@babel/plugin-transform-modules-commonjs": "^7.10.4",
     "@babel/preset-env": "^7.10.2",
+    "@open-wc/testing": "^3.2.0",
     "@readthedocs/sui-common-theme": "github:readthedocs/sui-common-theme#236e6b1",
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-image": "^3.0.2",
+    "@rollup/plugin-json": "^6.0.0",
     "@stripe/stripe-js": "^1.54.0",
+    "@web/dev-server-import-maps": "^0.1.1",
+    "@web/test-runner": "^0.17.1",
     "ansi_up": "^4.0.4",
     "babel-loader": "^8.1.0",
     "chart.js": "^2.9.3",
@@ -30,7 +39,6 @@
     "dayjs": "^1.8.29",
     "file-loader": "^3.0.1",
     "imports-loader": "^0.8.0",
-    "jest": "^26.4.2",
     "jquery": "^3.4.1",
     "jquery-address": "^1.6.0",
     "jsdoc": "^3.6.3",
@@ -41,8 +49,9 @@
     "matchdep": "~1.0.1",
     "mini-css-extract-plugin": "^0.6.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "prettier": "^2.0.5",
+    "prettier": "^3.0.3",
     "resolve-url-loader": "^2.2.1",
+    "rollup-plugin-lit-css": "^4.0.1",
     "sanitize-html": "^1.23.0",
     "style-loader": "^0.23.1",
     "url-loader": "^0.6.2",
@@ -76,11 +85,6 @@
           "@babel/plugin-proposal-class-properties"
         ]
       }
-    }
-  },
-  "jest": {
-    "globals": {
-      "__webpack_public_path__": null
     }
   }
 }

@@ -234,51 +234,51 @@
           {% for object in objects %}
             {# Item view for each object in objects queryset #}
             {% block list_item_start %}<div class="item">{% endblock list_item_start %}
-              {% block list_item %}
+            {% block list_item %}
 
-                {% block list_item_right_menu %}
-                  <div class="ui mini right floated buttons">
-                    {% block list_item_right_buttons %}
+              {% block list_item_right_menu %}
+                <div class="ui mini right floated buttons">
+                  {% block list_item_right_buttons %}
                       {% comment %}
                         <a class="ui icon button">
                           <i class="fa-solid fa-refresh icon"></i>
                         </a>
                       {% endcomment %}
-                    {% endblock list_item_right_buttons %}
-                  </div>
-                {% endblock list_item_right_menu %}
+                  {% endblock list_item_right_buttons %}
+                </div>
+              {% endblock list_item_right_menu %}
 
-                {% block list_item_image %}
-                {% endblock list_item_image %}
+              {% block list_item_image %}
+              {% endblock list_item_image %}
 
-                <div class="content">
+              <div class="content">
 
-                  <div class="header">
-                    {% block list_item_header %}
-                      {{ object }}
-                    {% endblock list_item_header %}
-                  </div>
+                <div class="header">
+                  {% block list_item_header %}
+                    {{ object }}
+                  {% endblock list_item_header %}
+                </div>
 
-                  <div class="description">
-                    {% block list_item_description %}
-                      <div class="ui stackable text menu">
-                        {% block list_item_meta %}
+                <div class="description">
+                  {% block list_item_description %}
+                    <div class="ui stackable text menu">
+                      {% block list_item_meta %}
                           {% comment %}
                             <div class="item">
                               <i class="fa-solid fa-code-branch icon"></i>
                               <code>{{ build.commit|truncatechars:8 }}</code>
                             </div>
                           {% endcomment %}
-                        {% endblock list_item_meta %}
-                      </div>
-                    {% endblock list_item_description %}
-                  </div>
+                      {% endblock list_item_meta %}
+                    </div>
+                  {% endblock list_item_description %}
                 </div>
+              </div>
 
-                {% block list_item_extra %}
-                {% endblock list_item_extra %}
+              {% block list_item_extra %}
+              {% endblock list_item_extra %}
 
-              {% endblock list_item %}
+            {% endblock list_item %}
             </div>
           {% endfor %}
 

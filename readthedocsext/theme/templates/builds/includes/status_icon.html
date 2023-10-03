@@ -37,9 +37,10 @@
 
 {% endcomment %}
 
+{# fmt:off #}
 <i class="{% spaceless %}
 
-  ui icon 
+  ui icon
 
   {# Size class, pass falsey value to remove this #}
   {{ size|default_if_none:"small" }}
@@ -113,3 +114,4 @@
   }
 
 {% endspaceless %}"{% endif %}></i>
+{# fmt:on #}

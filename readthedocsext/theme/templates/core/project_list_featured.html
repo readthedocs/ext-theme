@@ -4,7 +4,7 @@
   <li class="item">
     <a href="{{ project.get_absolute_url }}">{{ project.name }}</a>
     {% for user in project.users.all %}
-        <a href="{{ user.get_absolute_url }}">({{ user }})</a>
+      <a href="{{ user.get_absolute_url }}">({{ user }})</a>
     {% endfor %}
 
     <ul class="list">

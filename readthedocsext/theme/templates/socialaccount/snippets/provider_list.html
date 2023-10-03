@@ -7,7 +7,7 @@
   {# OpenID is not implemented #}
   {% if provider.id != 'bitbucket' %}
     <li class="item">
-      <form class="ui form" 
+      <form class="ui form"
             method="post"
             action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
         {% csrf_token %}

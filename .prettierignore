@@ -1,6 +1,7 @@
 # Don't do templates at all. Prettier is opinionated and there is extra Django
 # pieces that would be mangled by Prettier.
 *.html
+!/src/js/tests/**/*.html
 /docs/_build/
 /docs/out/
 /build/

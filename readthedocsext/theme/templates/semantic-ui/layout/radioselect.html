@@ -12,7 +12,7 @@
                 {{ choice.1|unlocalize }}
             </label>
             <input type="radio" {% if choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.id_for_label }}_{{ forloop.counter }}" value="{{ choice.0|unlocalize }}" {{ field.field.widget.attrs|flatatt }}>
-          {% if not inline_class %}</div></div>{% endif %}
+            {% if not inline_class %}</div></div>{% endif %}
         {% endfor %}
 
         {% include 'semantic-ui/layout/help_text.html' %}

@@ -11,9 +11,9 @@
 {% block top_left_menu_items %}
   {# Pass information from Django into site JS #}
   <script type="application/json" data-bind="jsonInit: config">
-{
-  "api_url": "{% url "projects-versions-list" project.slug %}"
-}
+    {
+      "api_url": "{% url "projects-versions-list" project.slug %}"
+    }
   </script>
 
   {# Separate UI for the version search filter field #}

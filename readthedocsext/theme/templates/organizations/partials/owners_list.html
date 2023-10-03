@@ -7,16 +7,33 @@
 
 {% load i18n %}
 {% load gravatar %}
+{% load humanize %}
 {% load privacy_tags %}
+{% load crispy_forms_tags %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
   {% if request.user|is_admin:organization %}
-    <a class="ui green button" href="">
+    {# Note the `with` binding duplicating the modal below: this is require to automatically show the modal on form errors #}
+    <a class="ui green button"
+       data-bind="{% if form.errors %}with: $root.show_modal('invite-owner'), {% endif %}click: $root.show_modal('invite-owner')">
       {% trans "Invite owner" %}
     </a>
+
+    <div class="ui mini modal" data-modal-id="invite-owner">
+      <div class="header">
+        {% trans "Invite organization owner" %}
+      </div>
+      <div class="content">
+        <form class="ui form" method="post" action="{% url "organization_owner_add" organization.slug %}">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <input class="ui button" type="submit" value="{% trans "Invite owner" %}">
+        </form>
+      </div>
+    </div>
   {% endif %}
 {% endblock %}
 
@@ -40,7 +57,9 @@
       <i class="fa-duotone fa-trash icon"></i>
 
       <div class="ui mini modal" data-modal-id="owner-{{ object.username }}">
-        <div class="header">Remove user {{ object.username }}</div>
+        <div class="header">
+          {% trans "Remove owner" %}
+        </div>
         <div class="content">
           {% blocktrans trimmed with username=object.username organization=organization.name %}
             Remove user {{ object.username }} as an owner of the {{ organization }} organization?

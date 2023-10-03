@@ -6,9 +6,9 @@
 {% block top_menu %}
   {# Pass Django template tag specific configuration into ``ProjectListView`` #}
   <script type="application/json" data-bind="jsonInit: config">
-{
-  "api_url": "{% url "projects-list" %}"
-}
+    {
+      "api_url": "{% url "projects-list" %}"
+    }
   </script>
 {% endblock top_menu %}
 
