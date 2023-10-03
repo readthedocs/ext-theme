@@ -27,7 +27,7 @@ module.exports = (env, argv) => {
         "theme",
         "static",
         "readthedocsext",
-        "theme"
+        "theme",
       ),
     },
     optimization: {

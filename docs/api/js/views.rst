@@ -10,7 +10,7 @@ Base
 .. js:autoclass:: ResponsiveView
     :members:
 
-.. js:autoclass:: HeaderView 
+.. js:autoclass:: HeaderView
     :members:
 
 .. js:autoclass:: CollapsingHeaderView

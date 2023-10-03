@@ -20,8 +20,8 @@
   </div>
 
   <form class="ui form"
-      method="post"
-      action="{% url 'projects_environmentvariables_create' project_slug=project.slug %}">
+        method="post"
+        action="{% url 'projects_environmentvariables_create' project_slug=project.slug %}">
     {% csrf_token %}
     {{ form|crispy }}
 

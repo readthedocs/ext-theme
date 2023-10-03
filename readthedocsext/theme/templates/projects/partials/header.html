@@ -64,7 +64,7 @@ is_collapsed (default: True)
               {% for organization in project.organizations.all %}
                 <a class="ui label" href="{{ organization.get_absolute_url }}">
                   <i class="fad fa-building icon"></i>
-                  {{ organization.name }}  
+                  {{ organization.name }}
                 </a>
               {% endfor %}
 
@@ -137,7 +137,7 @@ is_collapsed (default: True)
               <div class="ui overlapping avatar images">
                 {% for user in project.users.all|slice:":8" %}
                   <a href="{% url "profiles_profile_detail" user.username %}">
-                    <img class="ui image" src="{% gravatar_url user.email 32 %}" /> 
+                    <img class="ui image" src="{% gravatar_url user.email 32 %}" />
                   </a>
                 {% endfor %}
 
@@ -148,7 +148,7 @@ is_collapsed (default: True)
                     </span>
                   {% endif %}
                 {% endwith %}
-                  
+
               </div>
             {% endblock project_header_maintainers %}
 
@@ -156,7 +156,7 @@ is_collapsed (default: True)
               <div class="ui sub header">
                 {% trans "Repository" %}
               </div>
-              
+
               {% if project.remote_repository %}
                 {% with repo=project.remote_repository %}
                   <a href="{{ repo.html_url }}" class="ui basic image nowrap label">

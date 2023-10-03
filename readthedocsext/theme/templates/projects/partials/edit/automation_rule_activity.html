@@ -22,26 +22,26 @@
               This probably isn't the best logic for a template, but also solidly
               not backend logic.
             {% endcomment %}
-            {% if match.action == match.rule.ACTIVATE_VERSION_ACTION %}
-              fa-toggle-on
-            {% elif match.action == match.rule.HIDE_VERSION_ACTION %}
-              fa-eye-slash
-            {% elif match.action == match.rule.MAKE_VERSION_PUBLIC_ACTION %}
-              fa-unlock
-            {% elif match.action == match.rule.MAKE_VERSION_PRIVATE_ACTION %}
-              fa-lock
-            {% elif match.action == match.rule.SET_DEFAULT_VERSION_ACTION %}
-              fa-asterisk
-            {% elif match.action == match.rule.DELETE_VERSION_ACTION %}
-              fa-trash
-            {% else %}
-              fa-circle-exclamation
-            {% endif %}
+                      {% if match.action == match.rule.ACTIVATE_VERSION_ACTION %}
+                        fa-toggle-on
+                      {% elif match.action == match.rule.HIDE_VERSION_ACTION %}
+                        fa-eye-slash
+                      {% elif match.action == match.rule.MAKE_VERSION_PUBLIC_ACTION %}
+                        fa-unlock
+                      {% elif match.action == match.rule.MAKE_VERSION_PRIVATE_ACTION %}
+                        fa-lock
+                      {% elif match.action == match.rule.SET_DEFAULT_VERSION_ACTION %}
+                        fa-asterisk
+                      {% elif match.action == match.rule.DELETE_VERSION_ACTION %}
+                        fa-trash
+                      {% else %}
+                        fa-circle-exclamation
+                      {% endif %}
 
-          {% endspaceless %} icon"></i>
+                    {% endspaceless %} icon"></i>
           <div class="content">
             <div class="header">
-              {# Translators: description is an arbitrary string, this will read like "Version activated by rule <a>Add new versions</a>" #} 
+              {# Translators: description is an arbitrary string, this will read like "Version activated by rule <a>Add new versions</a>" #}
               {% blocktrans trimmed with action=match.get_action_past_tense|default:match.get_action_display description=match.rule.description type=match.get_version_type_display|lower version=match.version_name url=match.rule.get_edit_url %}
                 {{ action }} by rule <a href="{{ url }}">{{ description }}</a>
               {% endblocktrans %}

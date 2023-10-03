@@ -45,7 +45,7 @@ export class EmbedTopicsView {
             docs_url: data.url + ".html",
             section: section,
             text: text,
-          })
+          }),
         );
       }
     }

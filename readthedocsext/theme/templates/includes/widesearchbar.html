@@ -4,13 +4,13 @@
 <h3>{% trans "Search all the docs" %}</h3>
 
 <div class="ui basic segment">
-    <form class="ui stackable two column grid" action="{% url "search" %}" method="GET">
-      <div class="thirteen wide computer twelve wide tablet column ui input">
-        <input class="ui button" type="text" name="q" value="{{ term }}" placeholder="{% trans 'Search Read the Docs' %}">
-      </div>
-      <div class="three wide computer four wide tablet column">
+  <form class="ui stackable two column grid" action="{% url "search" %}" method="GET">
+    <div class="thirteen wide computer twelve wide tablet column ui input">
+      <input class="ui button" type="text" name="q" value="{{ term }}" placeholder="{% trans 'Search Read the Docs' %}">
+    </div>
+    <div class="three wide computer four wide tablet column">
         {% comment %} Translators: This is about starting a search {% endcomment %}
-        <input class="ui button" type="submit" value="{% trans "Let's do this." %}">
-      </div>
-    </form>
+      <input class="ui button" type="submit" value="{% trans "Let's do this." %}">
+    </div>
+  </form>
 </div>

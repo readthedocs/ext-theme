@@ -15,8 +15,7 @@
                 {% include "semantic-ui/field.html" %}
             {% endif %}
         {% endfor %}
-    {% if not forloop.last or not fieldset_open %}
-        </fieldset>
-    {% endif %}
+        {% if not forloop.last or not fieldset_open %}
+            </fieldset>
+        {% endif %}
 {% endfor %}
-
