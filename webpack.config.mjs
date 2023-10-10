@@ -1,11 +1,11 @@
-const path = require("path");
-const webpack = require("webpack");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
+import path from "path";
+import webpack from "webpack";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
+import TerserPlugin from "terser-webpack-plugin";
 
 // Use export as a function to inspect `--mode`
-module.exports = (env, argv) => {
+export default (env, argv) => {
   const is_production = argv.mode == "production";
 
   return {
@@ -18,24 +18,36 @@ module.exports = (env, argv) => {
       moment: "moment",
     },
     output: {
-      filename: "js/[name].js?[hash]",
-      chunkFilename: "js/[name].js?[hash]",
+      filename: "js/[name].js?[contenthash]",
+      chunkFilename: "js/vendors~[name].js?[contenthash]",
       publicPath: "./",
-      path: path.join(
-        __dirname,
-        "readthedocsext",
-        "theme",
-        "static",
-        "readthedocsext",
-        "theme",
+      path: path.resolve(
+        path.join(
+          "readthedocsext",
+          "theme",
+          "static",
+          "readthedocsext",
+          "theme",
+        ),
       ),
     },
     optimization: {
       minimize: is_production,
-      minimizer: [new TerserPlugin(), new OptimizeCssAssetsPlugin({})],
+      minimizer: [
+        new TerserPlugin({
+          // Avoids creating a `.LICENSE.txt` file
+          extractComments: false,
+          terserOptions: {
+            sourceMap: true,
+          },
+        }),
+        new CssMinimizerPlugin(),
+      ],
+      chunkIds: "named",
       splitChunks: {
         cacheGroups: {
-          commons: {
+          default: false,
+          defaultVendors: {
             test: /[\\/]node_modules[\\/].*\.js/,
             name: "vendor",
             chunks: "initial",
@@ -48,6 +60,10 @@ module.exports = (env, argv) => {
         {
           test: /\.js$/,
           exclude: /(node_modules)/,
+          resolve: {
+            // Disable Webpack 5 full resolution for ES modules
+            fullySpecified: false,
+          },
           use: {
             loader: "babel-loader",
             options: {
@@ -75,25 +91,21 @@ module.exports = (env, argv) => {
             {
               loader: "file-loader",
               options: {
-                name: "[name].[ext]?[hash]",
+                name: "[name].[ext]?[contenthash]",
                 outputPath: "css/images/",
-                publicPath: "images/",
+                publicPath: "css/images/",
               },
             },
           ],
         },
         {
           test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
-          use: [
-            {
-              loader: "file-loader",
-              options: {
-                name: "[name].[ext]?[hash]",
-                outputPath: "css/fonts/",
-                publicPath: "fonts/",
-              },
-            },
-          ],
+          type: "asset/resource",
+          generator: {
+            filename: "[name][ext]?[contenthash]",
+            outputPath: "css/fonts/",
+            publicPath: "css/fonts/",
+          },
         },
       ],
     },
@@ -102,8 +114,8 @@ module.exports = (env, argv) => {
         DEBUG_MODE: !is_production,
       }),
       new MiniCssExtractPlugin({
-        filename: "css/[name].css?[hash]",
-        chunkFilename: "css/[name].css?[hash]",
+        filename: "css/[name].css?[contenthash]",
+        chunkFilename: "css/[name].css?[contenthash]",
       }),
       new webpack.ProvidePlugin({
         $: "jquery",
@@ -114,7 +126,7 @@ module.exports = (env, argv) => {
     ],
     resolve: {
       alias: {
-        "../../theme.config": path.join(__dirname, "src/sui/theme.config"),
+        "../../theme.config": path.resolve(path.join("src/sui/theme.config")),
       },
       extensions: [".less", ".js", ".json", ".overrides", ".variables"],
     },
@@ -133,11 +145,15 @@ module.exports = (env, argv) => {
       open: false,
       hot: false,
       liveReload: true,
-      publicPath: "/readthedocsext/theme/",
-      disableHostCheck: true,
       headers: {
         "Access-Control-Allow-Origin": "*",
       },
+      devMiddleware: {
+        publicPath: "/readthedocsext/theme",
+        index: true,
+      },
+      static: false,
+      allowedHosts: "all",
     },
   };
 };
