@@ -18,14 +18,6 @@ describe("Application", () => {
     expect(view.ProjectListView).to.not.be.undefined;
   });
 
-  it("has registered view inside views as well", () => {
-    const app = new Application();
-    const view = new ApplicationView();
-    app.registry.attach(view);
-    expect(view.BuildDetailView).to.not.be.undefined;
-    expect(view.ProjectListView).to.not.be.undefined;
-  });
-
   it("can load site configuration", async () => {
     const app = new Application();
     document.body.innerHTML = `

@@ -58,8 +58,7 @@ export class Application {
     }
     if (this.config.webpack_public_path) {
       __webpack_public_path__ = this.config.webpack_public_path;
-      global.__webpack_public_path__ = window.__webpack_public_path__ =
-        this.config.webpack_public_path;
+      globalThis.__webpack_public_path__ = this.config.webpack_public_path;
     }
     // Null route debug logging, don't do output anything that was debug
     if (!this.config.debug) {
