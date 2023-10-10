@@ -15,6 +15,4 @@
  */
 
 import jquery from "jquery";
-if (window !== undefined) {
-  window.jQuery = jquery;
-}
+globalThis.jQuery = jquery;
