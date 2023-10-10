@@ -20,7 +20,7 @@
     </p>
     <p>
       {% url 'api_webhook' project_slug=project.slug integration_pk=integration.pk as webhook_url %}
-      <a href="//{{ PRODUCTION_DOMAIN }}{{ webhook_url }}">{{ PRODUCTION_DOMAIN }}{{ webhook_url }}</a>
+      <a href="{{ PUBLIC_API_URL }}{{ webhook_url }}">{{ PUBLIC_API_URL }}{{ webhook_url }}</a>
     </p>
   {% else %}
     {% comment %}
@@ -51,7 +51,7 @@
 
     <div class="ui segment">
       {% url 'api_webhook' project_slug=project.slug integration_pk=integration.pk as webhook_url %}
-      {% with "//"|add:PRODUCTION_DOMAIN|add:webhook_url as integration_url %}
+      {% with PUBLIC_API_URL|add:webhook_url as integration_url %}
         <code>{{ integration_url }}</code>
         <span class="ui compact icon basic button" data-clipboard-text="{{ integration_url }}" data-content="{% trans "Copied!" %}">
           <i class="fa-duotone fa-copy icon"></i>
