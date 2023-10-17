@@ -16,14 +16,14 @@
           {% trans "Nested subprojects are not supported" %}
         </div>
         <p>
-          {% blocktrans trimmed with project=superproject.parent.name %}
+          {% blocktrans trimmed with project=superproject.name %}
             This project is already configured as a subproject of {{ project }}.
           {% endblocktrans %}
         </p>
 
         <p>
-          <a href="{% url 'projects_subprojects' project_slug=superproject.parent %}">
-            {% blocktrans trimmed with project=superproject.parent.name %}
+          <a href="{% url 'projects_subprojects' project_slug=superproject.slug %}">
+            {% blocktrans trimmed with project=superproject.name %}
               View all subprojects of {{ project }}
             {% endblocktrans %}
           </a>
