@@ -1,0 +1,23 @@
+{% extends "organizations/teams/base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load organizations %}
+
+{% block subtitle %}{% trans "Invite member" %}{% endblock %}
+{% block subview_content_header %}{% trans "Invite member" %}{% endblock %}
+{% block team_sidebar_members %}active{% endblock %}
+
+{% block subview_content_subheader_breadcrumbs %}
+  {% include "organizations/includes/team_breadcrumbs.html" with team=team last_active=False %}
+  <span class="divider">/</span>
+  <span class="section active">{% trans "Members" %}</a>
+{% endblock subview_content_subheader_breadcrumbs %}
+
+{% block subview_content %}
+  <form class="ui form" method="post" action=".">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input class="ui primary button" type="submit" value="{% trans "Save" %}" />
+  </form>
+{% endblock subview_content %}

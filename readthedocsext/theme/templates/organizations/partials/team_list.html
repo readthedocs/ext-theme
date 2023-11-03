@@ -5,11 +5,14 @@
 {% load privacy_tags %}
 
 {% block top_left_menu_items %}
+  <div data-bind="using: FilterView()">
+    {% include "includes/filters/form.html" with fields=filter.form %}
+  </div>
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
   {% if request.user|is_admin:organization %}
-    <a class="ui green button" href="">
+    <a class="ui green button" href="{% url "organization_team_add" organization.slug %}">
       {% trans "Add team" %}
     </a>
   {% endif %}
@@ -29,6 +32,24 @@
 
 {% block list_item_right_buttons %}
   {% if request.user|is_admin:organization %}
+    {# and request.user|org_owner:team %} #}
+    <button class="ui dropdown button">
+      <i class="fa-solid fa-ellipsis icon"></i>
+      <div class="menu">
+        <div class="header">{% trans "Admin" %}</div>
+        <a class="item"
+           href="{% url "organization_team_project_edit" organization.slug object.slug %}">
+          <i class="fa-solid fa-plus icon"></i>
+          {% trans "Manage projects" %}
+        </a>
+        <a class="item"
+           href="{% url "organization_team_member_add" organization.slug object.slug %}">
+          <i class="fa-duotone fa-user-plus icon"></i>
+          {% trans "Invite member" %}
+        </a>
+      </div>
+    </button>
+
     {% blocktrans trimmed with team_name=object.name asvar label_configure %}
       Configure team {{ team_name }}
     {% endblocktrans %}
@@ -51,16 +72,19 @@
     {{ object.name }}
   </a>
   <div class="sub header">
+    {{ object.get_access_display }}
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_meta_items %}
+  <a class="item" href="{% url "organization_members" organization.slug %}?teams__slug={{ object.slug }}">
     {% blocktrans trimmed count object.members.count as member_count %}
       {{ member_count }} member
     {% plural %}
       {{ member_count }} members
     {% endblocktrans %}
-  </div>
-{% endblock list_item_header %}
-
-{% block list_item_meta_items %}
-  <a class="item" href="{% url 'projects_dashboard' %}?team_slug=object.slug">
+  </a>
+  <a class="item" href="{% url "organization_detail" organization.slug %}?teams__slug={{ object.slug }}">
     {% blocktrans trimmed count object.projects.count as project_count %}
       {{ project_count }} project
     {% plural %}

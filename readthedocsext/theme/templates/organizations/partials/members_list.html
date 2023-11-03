@@ -1,0 +1,22 @@
+{% extends "organizations/partials/team_member_list.html" %}
+
+{% load i18n %}
+{% load privacy_tags %}
+
+{% block create_button %}
+{% endblock %}
+
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No members found or no matches found for your filter criteria.
+  {% endblocktrans %}
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  {% if request.user|is_admin:organization %}
+    <p>
+      {% blocktrans trimmed %}
+        To add members to your organization, invite new members to an existing organization team.
+      {% endblocktrans %}
+    </p>
+  {% endif %}
+{% endblock list_placeholder_text %}
