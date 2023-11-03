@@ -1,0 +1,65 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% block subtitle %}{% if team %}{{ team.name }}{% else %}{% trans "New team" %}{% endif %}{% endblock %} - {{ organization.name }}{% endblock %}
+
+{% block content-header %}
+  {% include "organizations/partials/header.html" with teams_active="active" is_collapsed=True %}
+{% endblock %}
+
+{# This UI uses the same structure from the project creation form views #}
+{% block content %}
+  <div class="ui very padded centered stackable grid">
+    {% block content_sidebar %}
+      {% if team %}
+        <div class="sixteen wide tablet sixteen wide mobile five wide computer column">
+          <div class="ui vertical pointing fluid menu">
+            <a class="item {% block team_sidebar_members %}{% endblock %}"
+               href="{% url "organization_team_detail" organization.slug team.slug %}">
+              {% trans "Members" %}
+              <span class="ui label">
+                {{ team.members.count }}
+              </span>
+            </a>
+            <a class="item {% block team_sidebar_projects %}{% endblock %}"
+               href="{% url "organization_team_project_edit" organization.slug team.slug %}">
+              {% trans "Projects" %}
+              <span class="ui label">
+                {{ team.projects.count }}
+              </span>
+            </a>
+            <a class="item {% block team_sidebar_settings %}{% endblock %}"
+               href="{% url "organization_team_edit" slug=organization.slug team=team.slug %}">
+              {% trans "Settings" %}
+            </a>
+          </div>
+        </div>
+      {% endif %}
+    {% endblock content_sidebar %}
+
+    <div class="ui sixteen wide tablet eleven wide computer ten wide large screen column">
+      <h1 class="ui medium dividing header">
+        <div class="content">
+          {% block subview_content_header %}
+            {{ team.name }}
+          {% endblock subview_content_header %}
+          <div class="sub header">
+            {% block subview_content_subheader %}
+              <div class="ui breadcrumb">
+                {% block subview_content_subheader_breadcrumbs %}
+                  {% include "organizations/includes/team_breadcrumbs.html" with team=team %}
+                {% endblock subview_content_subheader_breadcrumbs %}
+              </div>
+            {% endblock subview_content_subheader %}
+          </div>
+        </div>
+      </h1>
+
+      {% block subview_content %}
+      {% endblock subview_content %}
+
+    </div>
+  </div>
+{% endblock content %}

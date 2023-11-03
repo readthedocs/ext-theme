@@ -7,9 +7,9 @@
 {% block title %}{{ organization.name }}{% endblock %}
 
 {% block content-header %}
-  {% include "organizations/partials/header.html" with organization=organization teams_active="active" is_collapsed=False %}
+  {% include "organizations/partials/header.html" with organization=organization projects_active="active" is_collapsed=True %}
 {% endblock %}
 
 {% block content %}
-  {% include "organizations/partials/team_list.html" with objects=teams %}
+  {% include "organizations/partials/project_list.html" with objects=projects %}
 {% endblock content %}

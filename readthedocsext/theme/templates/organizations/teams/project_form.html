@@ -1,0 +1,27 @@
+{% extends "organizations/teams/base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load organizations %}
+
+{% block subtitle %}{% trans "Projects" %}{% endblock %}
+{% block subview_content_header %}
+  {% trans "Projects" %}
+{% endblock subview_content_header %}
+{% block team_sidebar_projects %}active{% endblock %}
+
+{% block subview_content %}
+  <div class="ui small info message">
+    {% blocktrans trimmed with team_name=team.name access_level=team.get_access_display|lower count project_count=team.projects.count %}
+      Team {{ team_name }} currently grants {{ access_level }} access to {{ project_count }} project.
+    {% plural %}
+      Team {{ team_name }} currently grants {{ access_level }} access to {{ project_count }} projects.
+    {% endblocktrans %}
+  </div>
+
+  <form class="ui form" method="post" action=".">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input class="ui primary button" type="submit" value="{% trans "Save" %}" />
+  </form>
+{% endblock subview_content %}

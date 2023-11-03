@@ -7,10 +7,9 @@
 
 {% comment %}
   For now, this include is a secondary listing on the owner/team member listing
-  page. See the parent templates for an example of using this include. Note, I
-  do not recommend repeating the pattern there, we should instead work towards
-  either splitting these into dedicated UIs or combining them into a single model
-  listing.
+  page. See the parent templates for an example of using this include. Note,
+  do not repeat the pattern there. Pages should not have multiple, competing
+  model lists.
 {% endcomment %}
 
 {% block top_menu %}
@@ -88,8 +87,9 @@
 
 {% block list_item_meta_items %}
   <div class="item">
+    {# Translators: this will read "Expires 2 weeks from now" #}
     {% blocktrans trimmed with until_expiration=object.expiration_date|naturaltime %}
-      Expires in {{ until_expiration }}
+      Expires {{ until_expiration }}
     {% endblocktrans %}
   </div>
 {% endblock list_item_meta_items %}

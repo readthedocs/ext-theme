@@ -1,5 +1,12 @@
 {% extends "projects/partials/project_list.html" %}
 
+{% block top_left_menu_items %}
+  {# This partial is used a few times and ``filter`` isn't used in some views #}
+  {% if filter %}
+    {% include "includes/filters/form.html" with fields=filter.form %}
+  {% endif %}
+{% endblock top_left_menu_items %}
+
 {# Don't show the create button on any of the org/team UIs #}
 {% block create_button %}
 {% endblock create_button %}
