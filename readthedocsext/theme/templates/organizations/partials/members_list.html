@@ -13,7 +13,7 @@
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
   {% if request.user|is_admin:organization %}
-    <p>
+    <p class="inline">
       {% blocktrans trimmed %}
         To add members to your organization, invite new members to an existing organization team.
       {% endblocktrans %}
