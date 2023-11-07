@@ -106,8 +106,14 @@ is_collapsed (default: True)
 
   {% block organization_header_navigation %}
     <div class="ui bottom attached stackable menu">
-      <a class="item {{ teams_active }}" href="{{ organization.get_absolute_url }}">
+      <a class="item {{ projects_active }}" href="{{ organization.get_absolute_url }}">
+        {% trans "Projects" %}
+      </a>
+      <a class="item {{ teams_active }}" href="{% url "organization_team_list" organization.slug %}">
         {% trans "Teams" %}
+      </a>
+      <a class="item {{ members_active }}" href="{% url "organization_members" organization.slug %}">
+        {% trans "Members" %}
       </a>
       {% if request.user|is_admin:organization %}
         <div class="right menu">

@@ -1,0 +1,78 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% comment %}
+  NOTE: If you are editing the UI in this template, you likely also want to
+  update the templates for project maintainers and owner lists
+{% endcomment %}
+
+{% load i18n %}
+{% load gravatar %}
+{% load privacy_tags %}
+
+{% block top_left_menu_items %}
+  {% if filter %}
+    <div data-bind="using: FilterView()">
+      {% include "includes/filters/form.html" with fields=filter.form %}
+    </div>
+  {% endif %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  {% if request.user|is_admin:organization %}
+    <a class="ui green button"
+       href="{% url "organization_team_member_add" organization.slug team.slug %}">
+      {% trans "Invite member" %}
+    </a>
+  {% endif %}
+{% endblock %}
+
+{% block list_placeholder_icon_class %}fad fa-user-plus icon{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No team members match your filter criteria.
+  {% endblocktrans %}
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  {% if request.user|is_admin:organization %}
+    <div class="ui primary button">{% trans "Invite member" %}</div>
+  {% endif %}
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_image %}
+  <img class="ui rounded square image" src="{% gravatar_url object.email 64 %}">
+{% endblock list_item_image %}
+
+{% block list_item_header %}
+  {% with full_name=object.get_full_name %}
+    <a href="{% url "profiles_profile_detail" object.username %}">
+
+      {% if full_name %}
+        {{ full_name }}
+      {% else %}
+        {{ object.username }}
+      {% endif %}
+
+      {% comment %}
+        This would be a great place to use labels to explain the user's access
+        level. We'd need a property on the User model to get the highest level
+        of access through one of the available teams/organization owners. Use a
+        label element to show the labels, similar to the version listing and
+        other listing views.
+      {% endcomment %}
+    </a>
+    {% if full_name %}
+      <div class="sub header">
+        {{ object.username }}
+      </div>
+    {% endif %}
+  {% endwith %}
+{% endblock list_item_header %}
+
+{% block list_item_meta_items %}
+{% endblock list_item_meta_items %}
+
+{% block list_item_extra %}
+{% endblock list_item_extra %}

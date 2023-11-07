@@ -1,0 +1,15 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+{% load gravatar %}
+{% load organizations %}
+
+{% block title %}{{ organization.name }} - {% trans "Members" %}{% endblock %}
+
+{% block content-header %}
+  {% include "organizations/partials/header.html" with organization=organization members_active="active" is_collapsed=False %}
+{% endblock %}
+
+{% block content %}
+  {% include "organizations/partials/members_list.html" with objects=members %}
+{% endblock content %}

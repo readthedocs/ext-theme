@@ -1,0 +1,14 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+{% load organizations %}
+
+{% block title %}{{ organization.name }} - {% trans "Teams" %}{% endblock %}
+
+{% block content-header %}
+  {% include "organizations/partials/header.html" with organization=organization teams_active="active" is_collapsed=True %}
+{% endblock %}
+
+{% block content %}
+  {% include "organizations/partials/team_list.html" with objects=teams %}
+{% endblock content %}

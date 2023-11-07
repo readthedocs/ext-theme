@@ -1,14 +1,15 @@
-{% extends "organizations/settings/base.html" %}
+{% extends "organizations/teams/base.html" %}
 
 {% load i18n %}
 
-{% block title %}{{ organization.name }} - {% trans "Owners" %}{% endblock %}
+{% block team_sidebar_members %}active{% endblock %}
 
-{% block organization_owners_active %}active{% endblock %}
-{% block organization_edit_content_header %}{% trans "Owners" %}{% endblock %}
+{% block subview_content_header %}
+  {% trans "Members" %}
+{% endblock subview_content_header %}
 
-{% block organization_edit_content %}
-  {% include "organizations/partials/owners_list.html" with objects=owners %}
+{% block subview_content %}
+  {% include "organizations/partials/team_member_list.html" with objects=team_members %}
 
   {% comment %}
     TODO move owner/team member invitations to a dedicated view.
@@ -37,7 +38,8 @@
           {{ invitations.count }}
         </span>
       </h2>
+
       {% include "organizations/partials/invitation_list.html" with objects=invitations skip_pagination=True %}
     {% endif %}
   {% endblock team_invitations %}
-{% endblock organization_edit_content %}
+{% endblock subview_content %}

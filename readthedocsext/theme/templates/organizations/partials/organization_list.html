@@ -9,25 +9,7 @@
 {% block view_binding %}data-bind="with: OrganizationListView()"{% endblock view_binding %}
 
 {% block top_left_menu_items %}
-  <script type="application/json" data-bind="jsonInit: config">
-    {
-      "api_url": "{% url "organizations-list" %}"
-    }
-  </script>
-
-  {# Separate UI for the version search selection field #}
-  <div class="header item">Organization</div>
-  <div class="active item">
-    <div class="ui link search dropdown" data-bind="semanticui: {dropdown: filter_organization_config()}">
-      <input type="hidden" name="organization" value="{{ filter.form.organization.value|default:"" }}">
-      <div class="default text">{% trans "All organizations" %}</div>
-      <i class="fa-solid fa-caret-down icon"></i>
-      <div class="menu"></div>
-    </div>
-  </div>
-
   {% include "includes/filters/form.html" with fields=filter.form %}
-
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
@@ -95,10 +77,14 @@
 
 {% block list_item_meta_items %}
   <a class="item" href="{{ object.get_absolute_url }}">
-    {{ object.projects.count }} projects
+    {% blocktrans trimmed with project_count=object.projects.count %}
+      {{ project_count }} projects
+    {% endblocktrans %}
   </a>
-  <a class="item" href="{{ object.get_absolute_url }}">
-    {{ object.teams.count }} teams
+  <a class="item" href="{% url "organization_team_list" slug=object.slug %}">
+    {% blocktrans trimmed with team_count=object.teams.count %}
+      {{ team_count }} teams
+    {% endblocktrans %}
   </a>
 {% endblock list_item_meta_items %}
 
