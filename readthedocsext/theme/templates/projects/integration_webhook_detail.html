@@ -47,45 +47,67 @@
   </p>
 
   <div class="ui segment">
-    {% url 'api_webhook' project_slug=project.slug integration_pk=integration.pk as webhook_url %}
-    {% with PUBLIC_API_URL|add:webhook_url as integration_url %}
-      <code>{{ integration_url }}</code>
-      <span class="ui compact icon basic button" data-clipboard-text="{{ integration_url }}" data-content="{% trans "Copied!" %}">
-        <i class="fa-duotone fa-copy icon"></i>
-      </span>
-    {% endwith %}
+    <div class="ui list">
+      <div class="item">
+        <div class="content">
+          <div class="header">
+            {% trans "Webhook URL" %}
+          </div>
+          <div class="description">
+            {% url 'api_webhook' project_slug=project.slug integration_pk=integration.pk as webhook_url %}
+            {% with PUBLIC_API_URL|add:webhook_url as integration_url %}
+            <code>{{ integration_url }}</code>
+            <span class="ui compact icon basic button" data-clipboard-text="{{ integration_url }}" data-content="{% trans "Copied!" %}">
+              <i class="fa-duotone fa-copy icon"></i>
+            </span>
+            {% endwith %}
+          </div>
+        </div>
+      </div>
+
+      {% if not integration.has_sync %}
+        {# For generic webhooks #}
+        <div class="item">
+          <div class="content">
+            <div class="header">
+              {% trans "Secret" %}
+            </div>
+            <div class="description">
+              <code>{{ integration.token }}</code>
+              <span class="ui compact icon basic button" data-clipboard-text="{{ integration.token }}" data-content="{% trans "Copied!" %}">
+                <i class="fa-duotone fa-copy icon"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      {% elif integration.secret %}
+        <div class="item">
+          <div class="content">
+            <div class="header">
+              {% trans "Secret" %}
+            </div>
+            <div class="description">
+              <code>{{ integration.secret }}</code>
+              <span class="ui compact icon basic button" data-clipboard-text="{{ integration.secret }}" data-content="{% trans "Copied!" %}">
+                <i class="fa-duotone fa-copy icon"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
   </div>
 
-  {% block integration_details %}
-    {% if integration.secret %}
-      <div class="ui segment">
-        <ul class="ui list">
-          <li class="item">
-            <div class="content">
-              <div class="header">
-                {% trans "Secret" %}
-              </div>
-              <div class="description">
-                <code>{{ integration.secret }}</code>
-                <span class="ui compact icon basic button" data-clipboard-text="{{ integration.secret }}" data-content="{% trans "Copied!" %}">
-                  <i class="fa-duotone fa-copy icon"></i>
-                </span>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    {% else %}
-      <div class="ui warning message">
-          {% blocktrans trimmed %}
-          This integration does not have a secret,
-          the authenticity of the incoming webhook cannot be verified.
-          <strong>Click on "Resync webhook" to generate a secret.</strong>
-          Read more in our <a href="https://blog.readthedocs.com/security-update-on-incoming-webhooks/">blog post</a>.
-          {% endblocktrans %}
-      </div>
-    {% endif %}
-  {% endblock %}
+  {% if integration.has_sync and not integration.secret %}
+  <div class="ui warning message">
+    {% blocktrans trimmed %}
+    This integration does not have a secret,
+    the authenticity of the incoming webhook cannot be verified.
+    <strong>Click on "Resync webhook" to generate a secret.</strong>
+    Read more in our <a href="https://blog.readthedocs.com/security-update-on-incoming-webhooks/">blog post</a>.
+    {% endblocktrans %}
+  </div>
+  {% endif %}
 
   {% if not integration.can_sync %}
     <p>
