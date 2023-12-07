@@ -25,12 +25,12 @@
     <div class="ui raised segment">
       <div class="ui info message">
         {% if object.access_type == "http_header_token" %}
-          <i class="fa-solid fa-right-left-large icon"></i>
+          <i class="fa-solid fa-code icon"></i>
           {% blocktrans trimmed %}
             Add this HTTP header to requests to allow access to your documentation.
           {% endblocktrans %}
         {% elif object.access_type == "password" %}
-          <i class="fa-duotone fa-share-nodes icon"></i>
+          <i class="fa-duotone fa-pen-field icon"></i>
           {% blocktrans trimmed %}
             Share this link and the configured password to allow access to your documentation.
           {% endblocktrans %}

@@ -55,11 +55,11 @@
 
 {% block list_item_icon %}
   {% if object.access_type == "password" %}
-    <i class="fa-duotone fa-input-text icon" data-content="{{ object.get_access_type_display }}"></i>
+    <i class="fa-duotone fa-pen-field icon" data-content="{{ object.get_access_type_display }}"></i>
   {% elif object.access_type == "token" %}
-    <i class="fa-solid fa-link icon" data-content="{{ object.get_access_type_display }}"></i>
+    <i class="fa-duotone fa-link icon" data-content="{{ object.get_access_type_display }}"></i>
   {% elif object.access_type == "http_header_token" %}
-    <i class="fa-solid fa-right-left-large icon" data-content="{{ object.get_access_type_display }}"></i>
+    <i class="fa-duotone fa-code icon" data-content="{{ object.get_access_type_display }}"></i>
   {% endif %}
 {% endblock list_item_icon %}
 
