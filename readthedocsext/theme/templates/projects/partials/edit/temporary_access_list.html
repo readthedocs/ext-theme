@@ -1,0 +1,108 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% load i18n %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  <div class="item">
+    <a class="ui green icon button"
+       href="{% url "projects_temporary_access_create" project.slug %}">
+      <i class="fa-solid fa-plus icon"></i>
+      {% trans "Add share" %}
+    </a>
+  </div>
+{% endblock %}
+
+{% block list_placeholder_icon_class %}fa-duotone fa-share-nodes{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No active shares are configured yet
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      Sharing tokens can be used to share private documentation projects to users outside your organization.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="https://docs.readthedocs.io/page/commercial/sharing.html">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  {% if object.access_type != "http_header_token" %}
+    {# TODO make this a dropdown menu so we can provide a bit more context #}
+    {# TODO maybe also make this button disabled if there is not sharing URL? #}
+    <a class="ui icon button"
+       href="{{ object.get_absolute_url }}"
+       data-content="Share access URL">
+      <i class="fa-solid fa-share-nodes icon"></i>
+    </a>
+  {% endif %}
+
+  {% url "projects_temporary_access_delete" object.project.slug object.pk as form_url %}
+  {% trans "Remove share" as action_text %}
+  {% blocktrans trimmed asvar content_text with share=object.description %}
+    Remove share {{ share }}?
+  {% endblocktrans %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_icon %}
+  {% if object.access_type == "password" %}
+    <i class="fa-duotone fa-input-text icon" data-content="{{ object.get_access_type_display }}"></i>
+  {% elif object.access_type == "token" %}
+    <i class="fa-solid fa-link icon" data-content="{{ object.get_access_type_display }}"></i>
+  {% elif object.access_type == "http_header_token" %}
+    <i class="fa-solid fa-right-left-large icon" data-content="{{ object.get_access_type_display }}"></i>
+  {% endif %}
+{% endblock list_item_icon %}
+
+{% block list_item_header %}
+  <a href="{% url "projects_temporary_access_edit" project.slug object.pk %}">
+    {{ object.description|truncatechars:24 }}
+  </a>
+  <div class="sub header">
+    {% if object.allow_all %}
+      {% blocktrans trimmed %}
+        All versions
+      {% endblocktrans %}
+    {% else %}
+      {# TODO consider listing the actual versions here #}
+      {% blocktrans trimmed %}
+        Select versions
+      {% endblocktrans %}
+    {% endif %}
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_meta_items %}
+  <div class="item">
+    {% if object.access_type == "password" %}
+      {# Nothing useful to display, but take up the same space #}
+    {% elif object.access_type == "token" %}
+      <code>{{ object.token|slice:"0:4" }}****</code>
+    {% elif object.access_type == "http_header_token" %}
+      <code>{{ object.token|slice:"0:4" }}****</code>
+    {% endif %}
+  </div>
+{% endblock list_item_meta_items %}
+
+{% block list_item_extra_items %}
+  {# There is no reason to show expired status here as these shares just disappear #}
+  <div class="item">
+    <div class="content">
+      <div class="header">
+        {% trans "Expires" %}
+      </div>
+      <div class="description">
+        {{ object.expires }}
+      </div>
+    </div>
+  </div>
+{% endblock %}
