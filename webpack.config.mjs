@@ -3,6 +3,7 @@ import webpack from "webpack";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 import TerserPlugin from "terser-webpack-plugin";
+import chokidar from "chokidar";
 
 // Use export as a function to inspect `--mode`
 export default (env, argv) => {
@@ -154,6 +155,15 @@ export default (env, argv) => {
       },
       static: false,
       allowedHosts: "all",
+      onBeforeSetupMiddleware: (server) => {
+        chokidar
+          .watch(["readthedocsext/theme/templates/**/*.html"])
+          .on("all", () => {
+            for (const client of server.webSocketServer.clients) {
+              client.send('{"type": "static-changed"}');
+            }
+          });
+      },
     },
   };
 };
