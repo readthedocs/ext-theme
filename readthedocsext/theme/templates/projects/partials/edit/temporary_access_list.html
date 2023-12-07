@@ -73,10 +73,13 @@
         All versions
       {% endblocktrans %}
     {% else %}
-      {# TODO consider listing the actual versions here #}
-      {% blocktrans trimmed %}
-        Select versions
-      {% endblocktrans %}
+      {% with versions=object.versions.all %}
+        {% blocktrans trimmed count version_count=versions|length with version_name=versions.0.verbose_name %}
+          Version {{ version_name }}
+        {% plural %}
+          {{ version_count }} versions
+        {% endblocktrans %}
+      {% endwith %}
     {% endif %}
   </div>
 {% endblock list_item_header %}
