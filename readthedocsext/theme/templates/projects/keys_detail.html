@@ -1,0 +1,42 @@
+{% extends "projects/keys_list.html" %}
+
+{% load i18n %}
+
+{% block project_edit_content_subheader %}
+  <div class="ui breadcrumb">
+    <a class="section" href="{% url "projects_keys" project.slug %}">
+      {% trans "SSH keys" %}
+    </a>
+    <span class="divider">/</span>
+    <div class="active section">
+      {% if object %}
+        {{ object.fingerprint }}
+      {% else %}
+        {% trans "Add SSH key" %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock project_edit_content_subheader %}
+
+{% block project_edit_content %}
+  <div class="ui form">
+    <div class="field">
+      <label>{% trans "Fingerprint" %}</label>
+      <div class="ui fluid action input">
+        <input type="text" value="{{ corporateprofile.fingerprint }}" id="ssh-key-fingerprint" readonly=true>
+        <button class="ui teal right icon button" data-clipboard-target="input#ssh-key-fingerprint">
+          <i class="fa-solid fa-copy icon"></i>
+        </button>
+      </div>
+    </div>
+    <div class="field">
+      <label>{% trans "Public SSH key" %}</label>
+      <div class="ui fluid action input">
+        <input type="text" value="{{ corporateprofile.public_key }}" id="ssh-key-public" readonly=true>
+        <button class="ui teal right icon button" data-clipboard-target="input#ssh-key-public">
+          <i class="fa-solid fa-copy icon"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+{% endblock %}
