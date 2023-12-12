@@ -101,10 +101,17 @@
   {% endblock top_menu %}
 
   {% comment %}
-    Testing for boolean here is not efficient, but we support both querysets and arrays here #}
-    {% if not objects.exists %}
+    We usually pass in a queryset here, but some views emit arrays of objects
+    instead, so we support these as well. Therefore, the check here needs to be
+    for an empty array or an empty queryset. Because Django templates aim to
+    be as difficult as possible to use, this conditional looks pretty silly.
+
+    This cannot be a simple `if not objects` as this performs poorly when
+    there are many objects returned in the queryset.
+
+    Order on the conditional matters here, `and` has higher precedence.
   {% endcomment %}
-  {% if not objects %}
+  {% if objects.exists is None and objects|length == 0 or objects.exists == False %}
     {% comment "rst" %}
 
       .. _api-template-list-placeholder:
