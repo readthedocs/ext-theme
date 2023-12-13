@@ -106,10 +106,16 @@
     for an empty array or an empty queryset. Because Django templates aim to
     be as difficult as possible to use, this conditional looks pretty silly.
 
-    This cannot be a simple `if not objects` as this performs poorly when
-    there are many objects returned in the queryset.
+    This cannot be a simple `if not objects` as this executes the query, which
+    can cause the view to timeout when the query is very large. See ``bool``
+    evaluation in:
 
-    Order on the conditional matters here, `and` has higher precedence.
+    https://docs.djangoproject.com/en/4.2/ref/models/querysets/
+
+    Order on the conditional matters here, `and` has higher precedence. Django
+    templates don't support parenthesis in conditionals.
+
+    https://docs.djangoproject.com/en/5.0/ref/templates/builtins/#boolean-operators
   {% endcomment %}
   {% if objects.exists is None and objects|length == 0 or objects.exists == False %}
     {% comment "rst" %}
