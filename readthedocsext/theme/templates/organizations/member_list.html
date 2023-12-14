@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load gravatar %}
+
 {% load organizations %}
 
 {% block title %}{{ organization.name }} - {% trans "Members" %}{% endblock %}
@@ -11,5 +12,10 @@
 {% endblock %}
 
 {% block content %}
-  {% include "organizations/partials/members_list.html" with objects=members %}
+  {% if organization|has_sso_enabled:"allauth" %}
+    {# We still have owners listed in this UI, which are included in the members union queryset #}
+    {% include "organizations/partials/has_sso/members_list.html"  with objects=members %}
+  {% else %}
+    {% include "organizations/partials/members_list.html" with objects=members %}
+  {% endif %}
 {% endblock content %}
