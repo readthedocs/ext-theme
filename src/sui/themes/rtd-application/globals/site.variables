@@ -3,3 +3,19 @@
 // https://github.com/fomantic/Fomantic-UI/issues/2749
 @variationInputInvalid: false;
 @variationFormInvalid: false;
+
+// CSS variables
+@property --readthedocs-dashboard-primary {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: @teal;
+}
+@property --readthedocs-dashboard-secondary {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: @violet;
+}
+
+// Colors
+//@primaryColor: var(--readthedocs-dashboard-primary);
+//@secondaryColor: var(--readthedocs-dashboard-secondary);

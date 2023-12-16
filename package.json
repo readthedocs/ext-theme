@@ -24,7 +24,7 @@
     "@babel/plugin-transform-modules-commonjs": "^7.23.0",
     "@babel/preset-env": "^7.22.20",
     "@open-wc/testing": "^3.2.0",
-    "@readthedocs/sui-common-theme": "github:readthedocs/sui-common-theme#236e6b1",
+    "@readthedocs/sui-common-theme": "github:readthedocs/sui-common-theme#cdcf281",
     "@rollup/plugin-commonjs": "^25.0.4",
     "@rollup/plugin-image": "^3.0.2",
     "@rollup/plugin-json": "^6.0.0",
