@@ -91,7 +91,9 @@ export default (env, argv) => {
                   paths: [
                     path.resolve(path.join(".")),
                     path.resolve(path.join("src/sui/")),
-                    path.resolve(path.join("node_modules/@readthedocs/sui-common-theme/")),
+                    path.resolve(
+                      path.join("node_modules/@readthedocs/sui-common-theme/"),
+                    ),
                     path.resolve(path.join("node_modules/fomantic-ui-less/")),
                   ],
                 },
