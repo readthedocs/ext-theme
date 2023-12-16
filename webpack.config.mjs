@@ -3,7 +3,6 @@ import webpack from "webpack";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 import TerserPlugin from "terser-webpack-plugin";
-import chokidar from "chokidar";
 
 // Use export as a function to inspect `--mode`
 export default (env, argv) => {
@@ -83,6 +82,22 @@ export default (env, argv) => {
             },
             {
               loader: "less-loader",
+              options: {
+                lessOptions: {
+                  // LESS loader will try to load these before Webpack resolver
+                  // kicks in, which is the recommended method. These include
+                  // paths are a hack to theme.config and the theme loading
+                  // pattern. See `src/sui/theme.config` for more.
+                  paths: [
+                    path.resolve(path.join(".")),
+                    path.resolve(path.join("src/sui/")),
+                    path.resolve(
+                      path.join("node_modules/@readthedocs/sui-common-theme/"),
+                    ),
+                    path.resolve(path.join("node_modules/fomantic-ui-less/")),
+                  ],
+                },
+              },
             },
           ],
         },
@@ -153,17 +168,12 @@ export default (env, argv) => {
         publicPath: "/readthedocsext/theme",
         index: true,
       },
-      static: false,
-      allowedHosts: "all",
-      onBeforeSetupMiddleware: (server) => {
-        chokidar
-          .watch(["readthedocsext/theme/templates/**/*.html"])
-          .on("all", () => {
-            for (const client of server.webSocketServer.clients) {
-              client.send('{"type": "static-changed"}');
-            }
-          });
+      static: {
+        directory: path.join("readthedocsext/theme"),
+        serveIndex: true,
       },
+      allowedHosts: "all",
+      watchFiles: ["readthedocsext/theme/**/*.html"],
     },
   };
 };
