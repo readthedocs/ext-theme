@@ -1,0 +1,49 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  {% blocktrans %}Create a new organization{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+  <div class="ui very padded container">
+    <div class="ui stackable centered grid">
+      <div class="eight wide computer sixteen wide tablet left aligned column">
+
+        <h2 class="ui medium heading">
+          {% trans "Create a new organization" %}
+        </h2>
+
+        <form class="ui form" action="" method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+
+          <button class="ui primary button" type="submit">
+            {% trans "Get started" %}
+          </button>
+        </form>
+      </div>
+      <div class="five wide computer only middle aligned left aligned column">
+        <div class="ui one cards">
+
+          <div class="basic card">
+            <div class="content">
+              <div class="header">
+                {% trans "30 day trial" %}
+              </div>
+              <div class="description">
+                {% blocktrans %}
+                  No need to decide now. You can pick a plan that fits your
+                  organization after a 30 day trial.
+                {% endblocktrans %}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
