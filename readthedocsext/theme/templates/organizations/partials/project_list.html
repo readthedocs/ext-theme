@@ -1,5 +1,17 @@
 {% extends "projects/partials/project_list.html" %}
 
+{% comment "rst" %}
+  This template uses an additional include argument, so that we can conditionally
+  show some UI elements on main project listings, but not on subviews, like the
+  team project listing.
+
+  ``show_create_button``
+      Boolean. Show the add button in the top menu.
+
+{% endcomment %}
+
+{% load privacy_tags %}
+
 {% block top_left_menu_items %}
   {# This partial is used a few times and ``filter`` isn't used in some views #}
   {% if filter %}
@@ -7,6 +19,8 @@
   {% endif %}
 {% endblock top_left_menu_items %}
 
-{# Don't show the create button on any of the org/team UIs #}
 {% block create_button %}
+  {% if show_create_button and request.user|is_admin:organization %}
+    {{ block.super }}
+  {% endif %}
 {% endblock create_button %}

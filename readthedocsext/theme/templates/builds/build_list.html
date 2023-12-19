@@ -2,6 +2,8 @@
 
 {% load i18n %}
 
+{% load privacy_tags %}
+
 {% block title %}{% trans "Builds" %}{% endblock %}
 
 {% block content-header %}
@@ -9,5 +11,6 @@
 {% endblock %}
 
 {% block content %}
-  {% include "builds/partials/build_list.html" with objects=build_qs %}
+  {# Note: consolidated `is_admin` check here for performance. This could be replaced by a more global solution #}
+  {% include "builds/partials/build_list.html" with objects=build_qs is_project_admin=request.user|is_admin:project %}
 {% endblock %}

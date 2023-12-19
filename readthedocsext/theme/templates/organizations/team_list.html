@@ -1,6 +1,7 @@
 {% extends "organizations/base.html" %}
 
 {% load i18n %}
+
 {% load organizations %}
 
 {% block title %}{{ organization.name }} - {% trans "Teams" %}{% endblock %}
@@ -10,5 +11,9 @@
 {% endblock %}
 
 {% block content %}
-  {% include "organizations/partials/team_list.html" with objects=teams %}
+  {% if organization|has_sso_enabled:"allauth" %}
+    {% include "organizations/partials/has_sso/team_list.html" %}
+  {% else %}
+    {% include "organizations/partials/team_list.html" with objects=teams %}
+  {% endif %}
 {% endblock content %}
