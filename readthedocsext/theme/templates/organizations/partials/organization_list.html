@@ -4,6 +4,7 @@
 {% load humanize %}
 {% load gravatar %}
 
+{% load organizations %}
 {% load privacy_tags %}
 
 {% block view_binding %}data-bind="with: OrganizationListView()"{% endblock view_binding %}
@@ -70,23 +71,33 @@
 {% block list_item_header %}
   <a href="{{ object.get_absolute_url }}">
     {{ object.name }}
+
+    {% if object|has_sso_enabled:"allauth" %}
+      {% trans "SSO" context "Acronym for single sign-on" as text %}
+      {% blocktrans trimmed with version=object.verbose_name asvar popup %}
+        Single sign-on is enabled
+      {% endblocktrans %}
+      {% include "includes/components/config_label.html" with icon="fad fa-user-check" text=text popup=popup %}
+    {% endif %}
   </a>
   <div class="sub header">
   </div>
 {% endblock list_item_header %}
 
-{% block list_item_meta_items %}
+{% block list_item_meta %}
+{% endblock list_item_meta %}
+
+{% block list_item_extra_items %}
   <a class="item" href="{{ object.get_absolute_url }}">
     {% blocktrans trimmed with project_count=object.projects.count %}
       {{ project_count }} projects
     {% endblocktrans %}
   </a>
-  <a class="item" href="{% url "organization_team_list" slug=object.slug %}">
-    {% blocktrans trimmed with team_count=object.teams.count %}
-      {{ team_count }} teams
-    {% endblocktrans %}
-  </a>
-{% endblock list_item_meta_items %}
-
-{% block list_item_extra %}
-{% endblock %}
+  {% if not object|has_sso_enabled:"allauth" %}
+    <a class="item" href="{% url "organization_team_list" slug=object.slug %}">
+      {% blocktrans trimmed with team_count=object.teams.count %}
+        {{ team_count }} teams
+      {% endblocktrans %}
+    </a>
+  {% endif %}
+{% endblock list_item_extra_items %}

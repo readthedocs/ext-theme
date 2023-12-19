@@ -14,9 +14,9 @@
 {% endblock organization_edit_sidebar_help_topics %}
 
 {% block organization_edit_content %}
+  {# Note: this feature is enabled for most modern subscription, but disabled for old subscriptions #}
   {% if not enabled %}
-    {# TODO this template #}
-    {% include 'projects/includes/feature_disabled.html' with organization=organization %}
+    {% include 'organizations/includes/feature_disabled.html' with organization=organization %}
   {% else %}
     {% include "organizations/partials/log_list.html" with objects=object_list omit_user=False %}
   {% endif %}

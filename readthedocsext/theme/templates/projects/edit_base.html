@@ -26,9 +26,16 @@
         <a class="item {% block project_domains_active %}{% endblock %}" href="{% url "projects_domains" project.slug %}">
           {% trans "Domains" %}
         </a>
-        <a class="item {% block project_users_active %}{% endblock %}" href="{% url "projects_users" project.slug %}">
-          {% trans "Maintainers" %}
-        </a>
+        {% if not USE_ORGANIZATIONS %}
+          <a class="item {% block project_users_active %}{% endblock %}" href="{% url "projects_users" project.slug %}">
+            {% trans "Maintainers" %}
+          </a>
+        {% endif %}
+        {% if USE_ORGANIZATIONS %}
+          <a class="item {% block project_access_tokens_active %}{% endblock %}" href="{% url "projects_temporary_access_list" project.slug %}">
+            {% trans "Sharing" %}
+          </a>
+        {% endif %}
         <a class="item {% block project_translations_active %}{% endblock %}" href="{% url "projects_translations" project.slug %}">
           {% trans "Translations" %}
         </a>
@@ -38,6 +45,11 @@
         <a class="item {% block project_integrations_active %}{% endblock %}" href="{% url "projects_integrations" project.slug %}">
           {% trans "Integrations" %}
         </a>
+        {% if USE_ORGANIZATIONS %}
+          <a class="item {% block project_keys_active %}{% endblock %}" href="{% url "projects_keys" project.slug %}">
+            {% trans "SSH keys" %}
+          </a>
+        {% endif %}
         <a class="item {% block project_environment_variables_active %}{% endblock %}" href="{% url "projects_environmentvariables" project.slug %}">
           {% trans "Environment variables" %}
         </a>
@@ -71,11 +83,13 @@
         {% block project_edit_sidebar_help_topics_container %}
           <div class="ui basic segment">
             <h2 class="ui small header">{% trans "Help topics" %}</h2>
-            <div class="ui bulleted list">
-              {% block project_edit_sidebar_help_topics %}
-              {% endblock project_edit_sidebar_help_topics %}
-              {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/" text=_("Documentation index") is_external=True class="item" %}
-            </div>
+            {% block project_edit_sidebar_help_topics_content %}
+              <div class="ui bulleted list">
+                {% block project_edit_sidebar_help_topics %}
+                {% endblock project_edit_sidebar_help_topics %}
+                {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/" text=_("Documentation index") is_external=True class="item" %}
+              </div>
+            {% endblock project_edit_sidebar_help_topics_content %}
           </div>
         {% endblock project_edit_sidebar_help_topics_container %}
 

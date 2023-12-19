@@ -32,7 +32,7 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  <a class="ui green button" href="{{ projects_import_url }}">
+  <a class="ui green button" href="{% url "projects_import" %}">
     {% trans "Add project" %}
   </a>
 {% endblock %}

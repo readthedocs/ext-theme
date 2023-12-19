@@ -1,0 +1,39 @@
+{% extends "organizations/partials/members_list.html" %}
+
+{% load i18n %}
+{% load privacy_tags %}
+
+{# Don't show filters, they aren't usable #}
+{% block top_menu %}
+  <div class="ui info message">
+    <i class="fas fa-exclamation-circle icon"></i>
+    {% blocktrans trimmed %}
+      This organization has single sign-on enabled.
+      Only organization owners are listed below.
+    {% endblocktrans %}
+  </div>
+{% endblock top_menu %}
+
+{% block top_left_menu_items %}
+  <div class="item">
+    <div class="content">
+      <div class="ui sub header">
+        Access
+      </div>
+      Owners
+    </div>
+  </div>
+{% endblock top_left_menu_items %}
+
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    Teams and members are disabled for this organization
+  {% endblocktrans %}
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <p class="inline">
+    {% blocktrans trimmed %}
+      This organization has single sign-on enabled. Members are managed with your authentication provider.
+    {% endblocktrans %}
+  </p>
+{% endblock list_placeholder_text %}
