@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load gravatar %}
+
 {% load organizations %}
 
 {% block title %}{{ organization.name }}{% endblock %}
@@ -11,5 +12,9 @@
 {% endblock %}
 
 {% block content %}
-  {% include "organizations/partials/project_list.html" with objects=projects %}
+  {% if organization|has_sso_enabled:"allauth" %}
+    {% include "organizations/partials/has_sso/project_list.html" with objects=projects show_create_button=True %}
+  {% else %}
+    {% include "organizations/partials/project_list.html" with objects=projects show_create_button=True %}
+  {% endif %}
 {% endblock content %}
