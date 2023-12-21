@@ -8,7 +8,17 @@
 {% load privacy_tags %}
 {% load projects_tags %}
 
+{% comment %}
+  Conditionally show this block if feature is enabled for organization. The
+  ``enabled`` variable comes from the view.
+
+  If the feature is enabled the top menu child blocks below will show. Otherwise
+  overriding the ``top_menu`` block causes these blocks to not render.
+{% endcomment %}
 {% block top_menu %}
+  {% if not enabled %}
+    {% include "organizations/includes/feature_disabled.html" with project=project %}
+  {% endif %}
 {% endblock top_menu %}
 
 {% block top_left_menu_items %}

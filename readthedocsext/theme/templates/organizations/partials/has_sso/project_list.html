@@ -1,0 +1,28 @@
+{% extends "organizations/partials/project_list.html" %}
+
+{% load i18n %}
+
+{% load privacy_tags %}
+
+{% block list_placeholder_icon_class %}{% endblock %}
+{% block list_placeholder_header %}
+  {% trans "There are no projects configured yet, or no projects match your filter criteria" %}
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  {% with is_owner=request.user|is_admin:organization %}
+    {% if not is_owner %}
+      <div class="inline">
+        {% blocktrans trimmed %}
+          Single sign-on is enabled for this organization.
+          Contact an organization owner to add new projects.
+        {% endblocktrans %}
+      </div>
+    {% else %}
+      <a
+        class="ui {% if not is_owner %} disabled {% else %} primary {% endif %} button"
+        href="{% url "projects_import" %}">
+        {% trans "Add a project" %}
+      </a>
+    {% endif %}
+  {% endwith %}
+{% endblock list_placeholder_text %}
