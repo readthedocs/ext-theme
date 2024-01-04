@@ -197,7 +197,12 @@
         <span>{{ notification.get_message.get_rendered_body|safe }}</span>
         {% endif %}
         {% endfor %}
-        <span>{% trans "For more information on this error, see our documentation." %}
+        <span>{% trans "For more information on this error, see our documentation." %}</span>
+      </div>
+      {% else %}
+      <div class="ui attached inverted red segment" data-bind="visible: error" style="display: none;">
+        <span data-bind="text: error"></span>
+        <span>{% trans "For more information on this error, see our documentation." %}</span>
       </div>
       {% endif %}
 
