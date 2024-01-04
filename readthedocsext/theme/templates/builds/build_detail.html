@@ -189,7 +189,6 @@
         Error list
       {% endcomment %}
       {% if build.notifications.exists %}
-        {# Show error notifications as "build-error" #}
         {% for notification in build.notifications.all %}
           {% if notification.get_message.type == "error" %}
             <div class="ui attached inverted red segment">
