@@ -189,16 +189,16 @@
         Error list
       {% endcomment %}
       {% if build.notifications.exists %}
-      <div class="ui attached inverted red segment">
-        <i class="fa-solid fa-exclamation circular icon"></i>
         {# Show error notifications as "build-error" #}
         {% for notification in build.notifications.all %}
         {% if notification.get_message.type == "error" %}
-        <span>{{ notification.get_message.get_rendered_body|safe }}</span>
-        {% endif %}
+          <div class="ui attached inverted red segment">
+          <i class="fa-solid fa-exclamation circular icon"></i>
+          <span>{{ notification.get_message.get_rendered_body|safe }}</span>
+          <span>{% trans "For more information on this error, see our documentation." %}</span>
+          </div>
+          {% endif %}
         {% endfor %}
-        <span>{% trans "For more information on this error, see our documentation." %}</span>
-      </div>
       {% else %}
       <div class="ui attached inverted red segment" data-bind="visible: error" style="display: none;">
         <span data-bind="text: error"></span>
