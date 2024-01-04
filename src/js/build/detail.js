@@ -444,9 +444,6 @@ export class BuildDetailView {
     if (this.is_finished()) {
       this.is_polling(false);
 
-      console.log(this.poll_api_counts);
-
-
       // HACK: this is a small hack to avoid implementing the new notification system
       // on ext-theme at this point. This will come in a future PR.
       // The notifications are rendered properly via Django template in a static way.
