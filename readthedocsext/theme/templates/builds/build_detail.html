@@ -191,19 +191,19 @@
       {% if build.notifications.exists %}
         {# Show error notifications as "build-error" #}
         {% for notification in build.notifications.all %}
-        {% if notification.get_message.type == "error" %}
-          <div class="ui attached inverted red segment">
-          <i class="fa-solid fa-exclamation circular icon"></i>
-          <span>{{ notification.get_message.get_rendered_body|safe }}</span>
-          <span>{% trans "For more information on this error, see our documentation." %}</span>
-          </div>
+          {% if notification.get_message.type == "error" %}
+            <div class="ui attached inverted red segment">
+              <i class="fa-solid fa-exclamation circular icon"></i>
+              <span>{{ notification.get_message.get_rendered_body|safe }}</span>
+              <span>{% trans "For more information on this error, see our documentation." %}</span>
+            </div>
           {% endif %}
         {% endfor %}
       {% else %}
-      <div class="ui attached inverted red segment" data-bind="visible: error" style="display: none;">
-        <span data-bind="text: error"></span>
-        <span>{% trans "For more information on this error, see our documentation." %}</span>
-      </div>
+        <div class="ui attached inverted red segment" data-bind="visible: error" style="display: none;">
+          <span data-bind="text: error"></span>
+          <span>{% trans "For more information on this error, see our documentation." %}</span>
+        </div>
       {% endif %}
 
         <div class="ui inverted bottom attached segment transition slide">
