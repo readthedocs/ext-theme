@@ -19,12 +19,8 @@
     {% endblocktrans %}
   </div>
 
-  <form class="ui form"
-        method="post"
-        action="{% url 'projects_addons' project_slug=project.slug %}">
-    {% csrf_token %}
-    {{ form|crispy }}
+  <div class="ui form">
+    {% crispy form %}
+  </div>
 
-    <input class="ui primary button" type="submit" value="{% trans "Save" %}">
-  </form>
 {% endblock %}
