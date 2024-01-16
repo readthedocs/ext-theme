@@ -20,6 +20,16 @@ is_collapsed (default: True)
 {% endcomment %}
 
 {% block organization_header %}
+  {# Render all the notifications attached to the organization.#}
+  {% for notification in organization.notifications.all %}
+    <div class="ui message">
+      <i class="fa-solid {{ notification.get_message.get_display_icon_classes }}"></i>
+      <span>{{ notification.get_message.get_rendered_body|safe }}</span>
+    </div>
+  {% endfor %}
+
+
+
   <div class="ui top attached segment" data-bind="using: CollapsingHeaderView({{ is_collapsed|default_if_none:True|yesno:"true,false" }})">
 
     {% block organization_header_metadata %}
@@ -125,14 +135,5 @@ is_collapsed (default: True)
       {% endif %}
     </div>
   {% endblock organization_header_navigation %}
-
-{# Render all the notifications attached to the organization.#}
-  {% for notification in organization.notifications.all %}
-    <div class="ui message">
-      <i class="fa-solid {{ notification.get_message.get_display_icon_classes }}"></i>
-      <span>{{ notification.get_message.get_rendered_body|safe }}</span>
-    </div>
-  {% endfor %}
-
 
 {% endblock organization_header %}

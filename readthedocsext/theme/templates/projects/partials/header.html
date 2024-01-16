@@ -20,6 +20,14 @@ is_collapsed (default: True)
 {% endcomment %}
 
 {% block project_header %}
+  {# Render all the notifications attached to the project.#}
+  {% for notification in project.notifications.all %}
+    <div class="ui message">
+      <i class="fa-solid {{ notification.get_message.get_display_icon_classes }}"></i>
+      <span>{{ notification.get_message.get_rendered_body|safe }}</span>
+    </div>
+  {% endfor %}
+
   <div class="ui top attached segment" data-bind="using: CollapsingHeaderView({{ is_collapsed|default_if_none:True|yesno:"true,false" }})">
 
     {% block project_header_metadata %}
@@ -200,13 +208,5 @@ is_collapsed (default: True)
       {% endif %}
     </div>
   {% endblock project_header_navigation %}
-
-{# Render all the notifications attached to the project.#}
-  {% for notification in project.notifications.all %}
-    <div class="ui message">
-      <i class="fa-solid {{ notification.get_message.get_display_icon_classes }}"></i>
-      <span>{{ notification.get_message.get_rendered_body|safe }}</span>
-    </div>
-  {% endfor %}
 
 {% endblock project_header %}
