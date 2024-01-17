@@ -131,6 +131,8 @@
     {% endblock footer_copyright %}
 
     {% block footer_sponsors %}
+
+    {% if USE_PROMOS %}
       <div class="ui inverted horizontal divider very padded">
         Sponsored by
       </div>
@@ -191,6 +193,7 @@
           </div>
         </div>
       </div>
+    {% endif %}
     {% endblock footer_sponsors %}
 
   </div>
