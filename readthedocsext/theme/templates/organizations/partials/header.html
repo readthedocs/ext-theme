@@ -23,7 +23,7 @@ is_collapsed (default: True)
   {# Render all the notifications attached to the organization.#}
   {% for notification in organization.notifications.all %}
     <div class="ui message">
-      <i class="fa-solid {{ notification.get_message.get_display_icon_classes }}"></i>
+      <i class="{{ notification.get_message.get_display_icon_classes }} icon"></i>
       <span>{{ notification.get_message.get_rendered_body|safe }}</span>
     </div>
   {% endfor %}
