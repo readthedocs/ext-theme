@@ -20,6 +20,16 @@ is_collapsed (default: True)
 {% endcomment %}
 
 {% block organization_header %}
+  {# Render all the notifications attached to the organization.#}
+  {% for notification in organization.notifications.all %}
+    <div class="ui message">
+      <i class="{{ notification.get_message.get_display_icon_classes }} icon"></i>
+      <span>{{ notification.get_message.get_rendered_body|safe }}</span>
+    </div>
+  {% endfor %}
+
+
+
   <div class="ui top attached segment" data-bind="using: CollapsingHeaderView({{ is_collapsed|default_if_none:True|yesno:"true,false" }})">
 
     {% block organization_header_metadata %}

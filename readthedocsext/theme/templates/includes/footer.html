@@ -131,66 +131,70 @@
     {% endblock footer_copyright %}
 
     {% block footer_sponsors %}
-      <div class="ui inverted horizontal divider very padded">
-        Sponsored by
-      </div>
+      {% if USE_PROMOS %}
 
-      <div class="ui six column doubling grid container">
-        <div class="column bottom aligned centered">
-          <div class="ui tiny inverted header centered">
-            <a href="https://aws.amazon.com" rel="noopener" target="_blank">
-              <img class="ui tiny centered image" src="{% static 'images/sponsors/aws.png' %}" alt="Amazon Web Services" />
-              AWS
-              <div class="sub header">Cloud Computing</div>
-            </a>
+        <div class="ui inverted horizontal divider very padded">
+          Sponsored by
+        </div>
+
+        <div class="ui six column doubling grid container">
+          <div class="column bottom aligned centered">
+            <div class="ui tiny inverted header centered">
+              <a href="https://aws.amazon.com" rel="noopener" target="_blank">
+                <img class="ui tiny centered image" src="{% static 'images/sponsors/aws.png' %}" alt="Amazon Web Services" />
+                AWS
+                <div class="sub header">Cloud Computing</div>
+              </a>
+            </div>
+          </div>
+          <div class="column bottom aligned centered">
+            <div class="ui tiny inverted header centered">
+              <a href="https://cloudflare.com" rel="noopener" target="_blank">
+                <img class="ui tiny centered image" src="{% static 'images/sponsors/cloudflare.png' %}" alt="CloudFlare">
+                Cloudflare
+                <div class="sub header">DNS &amp; SSL</div>
+              </a>
+            </div>
+          </div>
+          <div class="column bottom aligned centered">
+            <div class="ui tiny inverted header centered">
+              <a href="https://sentry.io/" rel="noopener" target="_blank">
+                <img class="ui tiny centered image" src="{% static 'images/sponsors/sentry.png' %}" alt="Sentry">
+                Sentry
+                <div class="sub header">Monitoring</div>
+              </a>
+            </div>
+          </div>
+          <div class="column bottom aligned centered">
+            <div class="ui tiny inverted header centered">
+              <a href="https://www.elastic.co/" rel="noopener" target="_blank">
+                <img class="ui tiny centered image" src="{% static 'images/sponsors/elastic.png' %}" alt="Elastic">
+                Elastic
+                <div class="sub header">Search</div>
+              </a>
+            </div>
+          </div>
+          <div class="column bottom aligned centered">
+            <div class="ui tiny inverted header centered">
+              <a href="https://newrelic.com/" rel="noopener" target="_blank">
+                <img class="ui tiny centered image" src="{% static 'images/sponsors/newrelic.png' %}" alt="New Relic">
+                New Relic
+                <div class="sub header">Performance</div>
+              </a>
+            </div>
+          </div>
+          <div class="column bottom aligned centered">
+            <div class="ui tiny inverted header centered">
+              <a href="https://www.pagerduty.com/" rel="noopener" target="_blank">
+                <img class="ui tiny centered image" src="{% static 'images/sponsors/pagerduty.png' %}" alt="PagerDuty">
+                PagerDuty
+                <div class="sub header">Monitoring</div>
+              </a>
+            </div>
           </div>
         </div>
-        <div class="column bottom aligned centered">
-          <div class="ui tiny inverted header centered">
-            <a href="https://cloudflare.com" rel="noopener" target="_blank">
-              <img class="ui tiny centered image" src="{% static 'images/sponsors/cloudflare.png' %}" alt="CloudFlare">
-              Cloudflare
-              <div class="sub header">DNS &amp; SSL</div>
-            </a>
-          </div>
-        </div>
-        <div class="column bottom aligned centered">
-          <div class="ui tiny inverted header centered">
-            <a href="https://sentry.io/" rel="noopener" target="_blank">
-              <img class="ui tiny centered image" src="{% static 'images/sponsors/sentry.png' %}" alt="Sentry">
-              Sentry
-              <div class="sub header">Monitoring</div>
-            </a>
-          </div>
-        </div>
-        <div class="column bottom aligned centered">
-          <div class="ui tiny inverted header centered">
-            <a href="https://www.elastic.co/" rel="noopener" target="_blank">
-              <img class="ui tiny centered image" src="{% static 'images/sponsors/elastic.png' %}" alt="Elastic">
-              Elastic
-              <div class="sub header">Search</div>
-            </a>
-          </div>
-        </div>
-        <div class="column bottom aligned centered">
-          <div class="ui tiny inverted header centered">
-            <a href="https://newrelic.com/" rel="noopener" target="_blank">
-              <img class="ui tiny centered image" src="{% static 'images/sponsors/newrelic.png' %}" alt="New Relic">
-              New Relic
-              <div class="sub header">Performance</div>
-            </a>
-          </div>
-        </div>
-        <div class="column bottom aligned centered">
-          <div class="ui tiny inverted header centered">
-            <a href="https://www.pagerduty.com/" rel="noopener" target="_blank">
-              <img class="ui tiny centered image" src="{% static 'images/sponsors/pagerduty.png' %}" alt="PagerDuty">
-              PagerDuty
-              <div class="sub header">Monitoring</div>
-            </a>
-          </div>
-        </div>
-      </div>
+
+      {% endif %}
     {% endblock footer_sponsors %}
 
   </div>
