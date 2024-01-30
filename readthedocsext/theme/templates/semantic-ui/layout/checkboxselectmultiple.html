@@ -3,7 +3,7 @@
 
 <select
   multiple="true"
-  class="ui {% if field_class %} {{ field_class }}{% endif %} dropdown"
+  class="ui {% if field_class %} {{ field_class }}{% endif %} search dropdown"
   name="{{ field.html_name }}"
   id="id_{{ field.html_name }}"
   {% if flat_attrs %}{{ flat_attrs|safe }}{% endif %}
