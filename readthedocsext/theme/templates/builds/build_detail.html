@@ -205,54 +205,54 @@
         </div>
       {% endif %}
 
-        <div class="ui inverted bottom attached segment transition slide">
+      <div class="ui inverted bottom attached segment transition slide">
 
         {% comment %}
           This is a loading placeholder. The extra element is to fill out the
           extra space in the div
         {% endcomment %}
-          <div class="ui hidden active dimmer" data-bind="visible: is_loading()">
-            <div class="ui text loader">Loading</div>
-          </div>
-          <div class="ui basic segment very padded" data-bind="visible: is_loading()"></div>
-
-          <table
-            class="ui small very basic compact inverted selectable command table"
-            data-bind="visible: commands, foreach: commands"
-            style="display: none;">
-            <tbody>
-              <tr class="top aligned command" data-bind="visible: is_visible() || $parent.show_debug()">
-                <td class="collapsing">
-                  <a class="ui icon left floated" data-bind="click: toggle_expanded">
-                    <i class="grey fa-solid fa-angle-right icon" data-bind="class: is_expanded() ? 'fa-angle-down' : 'fa-angle-right'"></i>
-                  </a>
-                </td>
-                <td>
-                  <code class="ui text" data-bind="text: command, class: command_class, click: toggle_expanded"></code>
-                  <a class="ui mini inverted label" data-bind="text: run_time() + 's'"></a>
-                  <a class="ui mini inverted label" data-bind="text: '{% trans "Exit" %}: ' + exit_code(), visible: exit_code() > 0"></a>
-                </td>
-              </tr>
-            </tbody>
-            <tbody data-bind="visible: is_expanded(), foreach: output_lines">
-              <tr data-bind="css: {'left olive marked': is_selected()}" class="top aligned">
-                <td class="collapsing line number">
-                  <a class="ui small grey left floated text" data-bind="attr: {href: '#' + anchor_id(), 'data-selected': is_selected()}, click: function() { $parents[1].set_selected_line($data) }">
-                    <code data-bind="text: line_number()"></code>
-                  </a>
-                </td>
-                <td class="stdout">
-                  <code data-bind="html: output"></code>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div data-bind="visible: is_polling() && !is_loading()" style="display: none;">
-            <div data-bind="visible: is_polling" class="ui active inverted mini centered inline text loader"></div>
-          </div>
-
+        <div class="ui hidden active dimmer" data-bind="visible: is_loading()">
+          <div class="ui text loader">Loading</div>
         </div>
+        <div class="ui basic segment very padded" data-bind="visible: is_loading()"></div>
+
+        <table
+          class="ui small very basic compact inverted selectable command table"
+          data-bind="visible: commands, foreach: commands"
+          style="display: none;">
+          <tbody>
+            <tr class="top aligned command" data-bind="visible: is_visible() || $parent.show_debug()">
+              <td class="collapsing">
+                <a class="ui icon left floated" data-bind="click: toggle_expanded">
+                  <i class="grey fa-solid fa-angle-right icon" data-bind="class: is_expanded() ? 'fa-angle-down' : 'fa-angle-right'"></i>
+                </a>
+              </td>
+              <td>
+                <code class="ui text" data-bind="text: command, class: command_class, click: toggle_expanded"></code>
+                <a class="ui mini inverted label" data-bind="text: run_time() + 's'"></a>
+                <a class="ui mini inverted label" data-bind="text: '{% trans "Exit" %}: ' + exit_code(), visible: exit_code() > 0"></a>
+              </td>
+            </tr>
+          </tbody>
+          <tbody data-bind="visible: is_expanded(), foreach: output_lines">
+            <tr data-bind="css: {'left olive marked': is_selected()}" class="top aligned">
+              <td class="collapsing line number">
+                <a class="ui small grey left floated text" data-bind="attr: {href: '#' + anchor_id(), 'data-selected': is_selected()}, click: function() { $parents[1].set_selected_line($data) }">
+                  <code data-bind="text: line_number()"></code>
+                </a>
+              </td>
+              <td class="stdout">
+                <code data-bind="html: output"></code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div data-bind="visible: is_polling() && !is_loading()" style="display: none;">
+          <div data-bind="visible: is_polling" class="ui active inverted mini centered inline text loader"></div>
+        </div>
+
+      </div>
     {% endif %}
 
   </div>
