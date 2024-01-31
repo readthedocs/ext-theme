@@ -14,7 +14,7 @@
 
 {% block chip_text %}
   {# Allow for override of the text for version listing, where version is already stated #}
-  {{ text|default:build.version.verbose_name }}
+  {% firstof text build.version_name build.version.verbose_name %}
 {% endblock chip_text %}
 
 {% block chip_detail_text %}
@@ -22,7 +22,7 @@
 {% endblock chip_detail_text %}
 
 {% block popupcard_header %}
-  {{ text|default:build.version.verbose_name }} #{{ build.id }}
+  {% firstof text build.version_name build.version.verbose_name %} #{{ build.id }}
 {% endblock popupcard_header %}
 
 {% block popupcard_right %}
