@@ -17,19 +17,19 @@
       <div class="ui top attached segment">
         <div class="ui stackable grid">
 
-        {# Build progress on the left #}
+          {# Build progress on the left #}
           {% block build_detail_metadata_left %}
             <div class="ui eleven wide column">
               <div class="ui header">
-            {% comment %}
-              The state icon expects the build API response directly instead, so
-              we recreate the used fields here.
+                {% comment %}
+                  The state icon expects the build API response directly instead, so
+                  we recreate the used fields here.
 
-              The `data_bind` attribute is used when the build has not finished
-              yet -- when we can expect the page might update with a new build
-              state. Otherwise, it's skipped and we can assume there is no data
-              binding.
-            {% endcomment %}
+                  The `data_bind` attribute is used when the build has not finished
+                  yet -- when we can expect the page might update with a new build
+                  state. Otherwise, it's skipped and we can assume there is no data
+                  binding.
+                {% endcomment %}
                 <span data-bind="with: {state: {code: state()}, success: success()}">
                   {% include "builds/includes/status_icon.html" with build=build size="small" circular=True data_bind=True %}
                 </span>
@@ -45,7 +45,7 @@
             </div>
           {% endblock build_detail_metadata_left %}
 
-        {# Build metadata on the right #}
+          {# Build metadata on the right #}
           {% block build_detail_metadata_right %}
             <div class="ui five wide middle aligned column">
               <div class="ui relaxed list">
@@ -63,17 +63,17 @@
                   </div>
                 </div>
 
-            {# Version type is static, so we can skip some KO code #}
+                {# Version type is static, so we can skip some KO code #}
                 <div class="item">
                   <i class="grey fa-duotone {{ build.is_external | yesno:"fa-code-pull-request,fa-tag" }} icon"></i>
                   <div class="content" data-bind="if: !is_loading()">
                     {% if build.is_external %}
                       {{ build.external_version_name | lower | capfirst }}
-                      <a href="{{ build.version.vcs_url }}"><code>#{{ build.version.verbose_name }}</code></a>
+                      <a href="{{ build.version.vcs_url }}"><code>#{{ build.get_version_name }}</code></a>
                     {% else %}
                       <code>
-                        <a href="{% url "builds_project_list" build.version.project.slug %}?version={{ build.version.slug }}">
-                          {{ build.version.slug }}
+                        <a href="{% url "builds_project_list" build.project.slug %}?version={{ build.get_version_slug }}">
+                          {{ build.get_version_name }}
                         </a>
                       </code>
                     {% endif %}
@@ -114,7 +114,7 @@
           <a
             class="item ko hidden"
             data-bind="click: $root.post_child_form, css: { hidden: !can_cancel() }">
-            <form method="post" action="{% url "builds_detail" build.version.project.slug build.pk %}">
+            <form method="post" action="{% url "builds_detail" build.project.slug build.pk %}">
               {% csrf_token %}
             </form>
             <i class="fas fa-xmark-large red icon"></i>
@@ -130,7 +130,7 @@
               data-bind="click: $root.post_child_form, css: { hidden: !can_retry() }">
               <form method="post" name="rebuild_commit" action="{% url "builds_project_list" project.slug %}">
                 {% csrf_token %}
-                <input type="hidden" name="version_slug" value="{{ build.version.slug }}">
+                <input type="hidden" name="version_slug" value="{{ build.get_version_slug }}">
                 <input type="hidden" name="build_pk" value="{{ build.pk }}">
               </form>
               <i class="fas fa-arrows-rotate icon"></i>
