@@ -13,8 +13,13 @@
 {% endblock chip_icon %}
 
 {% block chip_text %}
-  {# Allow for override of the text for version listing, where version is already stated #}
-  {% firstof text build.version_name build.version.verbose_name %}
+  {% comment %}
+    Allow for override of the text for version listing, where version is
+    already stated. Also use build method to get version name, in case version
+    instance was deleted at some point. The version name is stored on the build
+    in this scenario.
+  {% endcomment %}
+  {% firstof text build.get_version_name %}
 {% endblock chip_text %}
 
 {% block chip_detail_text %}
@@ -22,7 +27,10 @@
 {% endblock chip_detail_text %}
 
 {% block popupcard_header %}
-  {% firstof text build.version_name build.version.verbose_name %} #{{ build.id }}
+  {% comment %}
+    This block is the same as the chip_text block above.
+  {% endcomment %}
+  {% firstof text build.get_version_name %} #{{ build.id }}
 {% endblock popupcard_header %}
 
 {% block popupcard_right %}
