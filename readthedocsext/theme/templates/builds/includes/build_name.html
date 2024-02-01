@@ -41,15 +41,15 @@
   <span class="section">
       {# When used a a page title, link the sections independently #}
     {% if is_page_title %}
-      <a href="{% url "projects_detail" build.version.project.slug %}?version={{ build.version.slug }}">
+      <a href="{% url "projects_detail" build.project.slug %}?version={{ build.get_version_slug }}">
     {% endif %}
 
     {% if build.is_external %}
       {{ build.external_version_name | lower | capfirst }}
-      {{ build.version.verbose_name }}
+      {{ build.get_version_name }}
     {% else %}
-        {# Translators: this renders with the version name, example "Version latest" #}
-      {% blocktrans trimmed with version_name=build.version.verbose_name %}
+      {# Translators: this renders with the version name, example "Version latest" #}
+      {% blocktrans trimmed with version_name=build.get_version_name %}
         Version {{ version_name }}
       {% endblocktrans %}
     {% endif %}
@@ -59,10 +59,10 @@
     {% endif %}
   </span>
   {% if is_page_title %}
-      {# When used as a page title, show a section link for the filtered build list #}
+    {# When used as a page title, show a section link for the filtered build list #}
     <span class="divider">/</span>
-      {# Translators: this refers to a list of builds for a single project #}
-    <a class="section" href="{% url "builds_project_list" build.version.project.slug %}?version={{ build.version.slug }}">
+    {# Translators: this refers to a list of builds for a single project #}
+    <a class="section" href="{% url "builds_project_list" build.project.slug %}?version={{ build.get_version_slug }}">
       {% trans "Builds" %}
     </a>
   {% endif %}
