@@ -174,6 +174,9 @@ export default (env, argv) => {
       },
       allowedHosts: "all",
       watchFiles: ["readthedocsext/theme/**/*.html"],
+      client: {
+        overlay: false,
+      },
     },
   };
 };
