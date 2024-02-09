@@ -235,6 +235,8 @@ export class BuildDetailView {
     /** @observable {Boolean} There was doc output in the build */
     this.can_view_docs = ko.observable(false);
 
+    this.poll_api_counts = 0;
+
     // Consolidate all of the observable updates that depend on build state
     this.state.subscribe((state) => {
       this.update_state(state);
@@ -413,6 +415,9 @@ export class BuildDetailView {
       this.state(data.state);
       this.state_display(data.state_display);
 
+      this.poll_api_counts = this.poll_api_counts + 1;
+
+
       // This is a mock command used to preview the command output.
       // TODO probably do this in the application instead
       this.add_command({
@@ -438,6 +443,16 @@ export class BuildDetailView {
     // this update happens at the very end of API updates instead.
     if (this.is_finished()) {
       this.is_polling(false);
+
+      // HACK: this is a small hack to avoid implementing the new notification system
+      // on ext-theme at this point. This will come in a future PR.
+      // The notifications are rendered properly via Django template in a static way.
+      // So, we refresh the page once the build has finished to make Django render the notifications.
+      // We use a check of 1 API poll for those builds that are already finished when opened.
+      // The new dashboard will implement the new notification system in a nicer way using APIv3.
+      if (this.poll_api_counts !== 1) {
+        location.reload();
+      }
     } else {
       setTimeout(() => {
         this.poll_api();

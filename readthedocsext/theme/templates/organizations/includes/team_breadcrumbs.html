@@ -1,0 +1,13 @@
+{% comment %}
+  This is a small include for the breadcrumb on the top of the team subview pages.
+
+  :param team: Team object for breadcrumb
+  :param last_active: Set the last item as active? False if the view has more
+                      breadcrumbs to add. Default: ``True``
+{% endcomment %}
+
+<span class="section">Teams</span>
+<span class="divider">/</span>
+<span class="{% if last_active|default_if_none:True %}active{% endif %} section">
+  {{ team.name }}
+</span>

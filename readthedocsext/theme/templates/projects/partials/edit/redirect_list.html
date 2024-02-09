@@ -37,6 +37,34 @@
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
+  {% trans "Move up" as button_up_text %}
+  {% trans "Move down" as button_down_text %}
+  {% if not forloop.first %}
+    <button class="ui icon button"
+            data-bind="click: $root.post_child_form"
+            data-content="{{ button_up_text }}"
+            aria-label="{{ button_up_text }}"
+            title="{{ button_up_text }}">
+      <form method="post" action="{% url 'projects_redirects_insert' project_slug=project.slug redirect_pk=object.pk position=object.position|add:"-1" %}">
+        {% csrf_token %}
+      </form>
+      <i class="fa-solid fa-arrow-up icon"></i>
+    </button>
+  {% endif %}
+
+  {% if not forloop.last %}
+    <button class="ui icon button"
+            data-bind="click: $root.post_child_form"
+            data-content="{{ button_down_text }}"
+            aria-label="{{ button_down_text }}"
+            title="{{ button_down_text }}">
+      <form method="post" action="{% url 'projects_redirects_insert' project_slug=project.slug redirect_pk=object.pk position=object.position|add:"1" %}">
+        {% csrf_token %}
+      </form>
+      <i class="fa-solid fa-arrow-down icon"></i>
+    </button>
+  {% endif %}
+
   <a class="ui button"
      href="{% url 'projects_redirects_edit' project_slug=project.slug redirect_pk=object.pk %}"
      data-content="{% trans "Edit redirect" %}">
@@ -44,8 +72,8 @@
   </a>
 
   <div class="ui button"
-     data-bind="click: $root.show_modal('redirect-{{ object.pk }}')"
-     data-content="{% trans "Remove redirect" %}">
+       data-bind="click: $root.show_modal('redirect-{{ object.pk }}')"
+       data-content="{% trans "Remove redirect" %}">
     <i class="fas fa-trash icon"></i>
 
     <div class="ui mini modal" data-modal-id="redirect-{{ object.pk }}">
@@ -79,13 +107,10 @@
         <span>/</span><span class="ui violet text">$version</span>
       {% endif %}
       <span>{{ object.from_url }}</span>
-      {% if object.redirect_type == "prefix" %}
-        <span class="ui violet text">$1</span>
-      {% endif %}
     {% else %}
-      {% if object.redirect_type == "sphinx_html" %}
+      {% if object.redirect_type == "clean_url_to_html" %}
         <span>/**/</span><span class="ui violet text">$1</span><span>/</span>
-      {% elif object.redirect_type == "sphinx_htmldir" %}
+      {% elif object.redirect_type == "html_to_clean_url" %}
         <span>/**/</span><span class="ui violet text">$1</span><span>.html</span>
       {% endif %}
     {% endif %}
@@ -95,18 +120,15 @@
     <label>{% trans "Redirect to:" %}</label>
     {% spaceless %}
       {% if object.from_url %}
-        {% if object.redirect_type == "page" or object.redirect_type == "prefix" %}
+        {% if object.redirect_type == "page" %}
           <span>/</span><span class="ui violet text">$lang</span>
           <span>/</span><span class="ui violet text">$version</span>
-          {% if object.redirect_type == "prefix" %}
-            <span>/</span><span class="ui violet text">$1</span>
-          {% endif %}
         {% endif %}
         <span>{{ object.to_url }}</span>
       {% else %}
-        {% if object.redirect_type == "sphinx_html" %}
+        {% if object.redirect_type == "clean_url_to_html" %}
           <span>/**/</span><span class="ui violet text">$1</span><span>.html</span>
-        {% elif object.redirect_type == "sphinx_htmldir" %}
+        {% elif object.redirect_type == "html_to_clean_url" %}
           <span>/**/</span><span class="ui violet text">$1</span><span>/</span>
         {% endif %}
       {% endif %}

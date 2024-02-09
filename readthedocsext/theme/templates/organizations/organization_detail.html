@@ -1,0 +1,20 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+{% load gravatar %}
+
+{% load organizations %}
+
+{% block title %}{{ organization.name }}{% endblock %}
+
+{% block content-header %}
+  {% include "organizations/partials/header.html" with organization=organization projects_active="active" is_collapsed=True %}
+{% endblock %}
+
+{% block content %}
+  {% if organization|has_sso_enabled:"allauth" %}
+    {% include "organizations/partials/has_sso/project_list.html" with objects=projects show_create_button=True %}
+  {% else %}
+    {% include "organizations/partials/project_list.html" with objects=projects show_create_button=True %}
+  {% endif %}
+{% endblock content %}

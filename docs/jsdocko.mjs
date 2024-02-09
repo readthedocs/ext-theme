@@ -41,7 +41,7 @@ function transform_observable(doclet) {
   return doclet;
 }
 
-exports.handlers = {
+export const handlers = {
   newDoclet: function (e) {
     let doclet = e.doclet;
     doclet = transform_observable(doclet);

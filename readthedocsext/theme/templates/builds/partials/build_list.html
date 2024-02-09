@@ -11,9 +11,9 @@
 {% block top_left_menu_items %}
   {# Pass information from Django into site JS #}
   <script type="application/json" data-bind="jsonInit: config">
-{
-  "api_url": "{% url "projects-versions-list" project.slug %}"
-}
+    {
+      "api_url": "{% url "projects-versions-list" project.slug %}"
+    }
   </script>
 
   {# Separate UI for the version search filter field #}
@@ -47,7 +47,8 @@
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_menu %}
-  {% if request.user|is_admin:project %}
+  {# Note: for better performance, avoid multiple `is_admin` checks. Call this include with `is_project_admin` #}
+  {% if is_project_admin is not None and is_project_admin or request.user|is_admin:project %}
     <form method="post" action="{% url "projects_detail" project.slug %}">
       {% csrf_token %}
       <input type="hidden" name="version_slug" value="{{ object.version.slug }}">

@@ -9,10 +9,18 @@ Submenus of the user dropdown and the mobile viewport hamburger menus.
 {% endcomment %}
 
 <div class="header">{% trans 'Navigation' %}</div>
+
 <a class="item" href="{% url 'projects_dashboard' %}">
   <i class="fa-duotone fa-list icon"></i>
   {% trans "Projects" %}
 </a>
+
+{% if USE_ORGANIZATIONS %}
+  <a class="{% if active_item == "organizations" %}active {% endif %} computer only item" href="{% url 'organization_list' %}">
+    <i class="fa-duotone fa-building icon"></i>
+    {% trans "Organizations" %}
+  </a>
+{% endif %}
 
 <div class="divider"></div>
 

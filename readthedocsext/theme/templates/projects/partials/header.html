@@ -13,14 +13,22 @@ project dashboard pages. It is possible to expand the menu with a dropdown.
 
 Arguments:
 
-is_expanded (default: False)
+is_collapsed (default: True)
     The default view configuration, normally start this view off in a collapsed
-    state, besides the main project detail page.
+    state, except on the main detail page.
 
 {% endcomment %}
 
 {% block project_header %}
-  <div class="ui top attached segment" data-bind="using: ProjectHeaderView({{ is_expanded|yesno:"true,false" }})">
+  {# Render all the notifications attached to the project.#}
+  {% for notification in project.notifications.all %}
+    <div class="ui message">
+      <i class="{{ notification.get_message.get_display_icon_classes }} icon"></i>
+      <span>{{ notification.get_message.get_rendered_body|safe }}</span>
+    </div>
+  {% endfor %}
+
+  <div class="ui top attached segment" data-bind="using: CollapsingHeaderView({{ is_collapsed|default_if_none:True|yesno:"true,false" }})">
 
     {% block project_header_metadata %}
       <div class="ui stacking grid">
@@ -33,7 +41,7 @@ is_expanded (default: False)
               </a>
 
               {# The dropdown action button, to swap between expanded/collapsed #}
-              <span data-bind="click: toggle_expanded">
+              <span data-bind="click: toggle_collapsed">
                 <i class="fas grey small icon" data-bind="class: dropdown_class"></i>
               </span>
             </div>
@@ -50,7 +58,7 @@ is_expanded (default: False)
         {% endblock project_header_labels %}
 
         {% block project_header_metadata_left %}
-          <div class="eight wide computer eight wide tablet sixteen wide mobile column" data-bind="visible: is_expanded" style="display: none;">
+          <div class="eight wide computer eight wide tablet sixteen wide mobile column" data-bind="visible: !is_collapsed()" style="display: none;">
 
             {% block project_header_description %}
               {% if project.description %}
@@ -64,7 +72,7 @@ is_expanded (default: False)
               {% for organization in project.organizations.all %}
                 <a class="ui label" href="{{ organization.get_absolute_url }}">
                   <i class="fad fa-building icon"></i>
-                  {{ organization.name }}  
+                  {{ organization.name }}
                 </a>
               {% endfor %}
 
@@ -125,7 +133,7 @@ is_expanded (default: False)
         {% endblock project_header_metadata_left %}
 
         {% block project_header_metadata_right %}
-          <div class="right aligned eight wide computer eight wide tablet sixteen wide mobile column" data-bind="visible: is_expanded" style="display: none;">
+          <div class="right aligned eight wide computer eight wide tablet sixteen wide mobile column" data-bind="visible: !is_collapsed()" style="display: none;">
 
             {% block project_header_maintainers %}
               <div class="ui sub header">
@@ -137,7 +145,7 @@ is_expanded (default: False)
               <div class="ui overlapping avatar images">
                 {% for user in project.users.all|slice:":8" %}
                   <a href="{% url "profiles_profile_detail" user.username %}">
-                    <img class="ui image" src="{% gravatar_url user.email 32 %}" /> 
+                    <img class="ui image" src="{% gravatar_url user.email 32 %}" />
                   </a>
                 {% endfor %}
 
@@ -148,7 +156,7 @@ is_expanded (default: False)
                     </span>
                   {% endif %}
                 {% endwith %}
-                  
+
               </div>
             {% endblock project_header_maintainers %}
 
@@ -156,7 +164,7 @@ is_expanded (default: False)
               <div class="ui sub header">
                 {% trans "Repository" %}
               </div>
-              
+
               {% if project.remote_repository %}
                 {% with repo=project.remote_repository %}
                   <a href="{{ repo.html_url }}" class="ui basic image nowrap label">

@@ -1,0 +1,169 @@
+{% extends "organizations/settings/base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% load static %}
+{% load humanize %}
+
+{% block title %}{{ organization.name }} - {% trans "Subscription" %}{% endblock %}
+
+{% block organization_subscription_active %}active{% endblock %}
+{% block organization_edit_content_header %}{% trans "Subscription" %}{% endblock %}
+
+{% block organization_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://about.readthedocs.com/pricing/" text=_("Pricing plans") is_external=True class="item" %}
+{% endblock organization_edit_sidebar_help_topics %}
+
+{% block organization_edit_content %}
+  {% if stripe_subscription and stripe_subscription.status != 'canceled' %}
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="right floated">
+          <span class="ui small basic secondary label">
+            {{ stripe_subscription.get_status_display }}
+          </span>
+        </div>
+        <div class="header">
+          {{ main_product.stripe_price.product.name }}
+        </div>
+        <div class="meta">
+          {{ main_product.stripe_price.human_readable_price }}
+        </div>
+        <div class="description">
+          <div class="ui list">
+
+            {% if extra_products %}
+              <div class="item">
+                <div class="content">
+                  <div class="header">
+                    {% trans "Extra products:" %}
+                  </div>
+                  <div class="description">
+                    <div class="ui list">
+                      {% for extra_product in extra_products %}
+                        <div class="item">
+                          <div class="content">
+                            <div class="header">
+                              {{ extra_product.stripe_price.product.name }}
+                            </div>
+                            <div class="description">
+                              {{ extra_product.stripe_price.human_readable_price }}
+                              {% if extra_product.quantity > 1 %}
+                                <span>
+                                  (x{{ extra_product.quantity }})
+                                </span>
+                              {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if features %}
+              <div class="item">
+                <div class="content">
+                  <div class="header">
+                    {% trans "Features:" %}
+                  </div>
+                  <div class="description">
+                    <div class="ui list">
+                      {% for feature in features %}
+                        <div class="item">
+                          {{ feature.get_description }}
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if stripe_subscription.start_date %}
+              <div class="item">
+                <div class="content">
+                  <div class="header">
+                    {% trans "Started:" %}
+                  </div>
+                  <div class="description">
+                    {# Translators: this is the subscription start date, used here as "4 days ago" or "5 months ago" #}
+                    {% blocktrans with time_since_signup=stripe_subscription.start_date|timesince trimmed %}
+                      Started {{ time_since_signup }} ago.
+                    {% endblocktrans %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+            {% if stripe_subscription.trial_end or subscription_end_date %}
+              <div class="item">
+                <div class="content">
+                  <div class="header">
+                    {% trans "Ends:" %}
+                  </div>
+                  <div class="description">
+                    {% if stripe_subscription.status == 'trialing' and stripe_subscription.trial_end %}
+                      {% blocktrans trimmed with date_end=stripe_subscription.trial_end|date:"SHORT_DATE_FORMAT" %}
+                        Trial ends {{ date_end }}
+                      {% endblocktrans %}
+                    {% elif subscription_end_date %}
+                      {% blocktrans trimmed with date_end=subscription_end_date|date:"SHORT_DATE_FORMAT" %}
+                        Subscription ends {{ date_end }}
+                      {% endblocktrans %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if stripe_subscription.status == 'trialing' %}
+      <div class="ui info message">
+        {# TODO better message here #}
+        Your organization will need to upgrade to one of our paid plans soon.
+        See our plan pricing for more information.
+      </div>
+    {% endif %}
+
+    <form class="ui form" method="post" action="{% url "stripe_customer_portal" organization.slug %}">
+      {% csrf_token %}
+      <button class="ui primary button">
+        {% if stripe_subscription.status == 'trialing' %}
+          {% trans "Start subscription" %}
+        {% else %}
+          {% trans "Manage subscription" %}
+        {% endif %}
+      </button>
+    </form>
+
+  {% else %}
+    {% comment %}
+      This shows if the organization cancelled their subscription or for some
+      reason doese not have an attached subscription object
+    {% endcomment %}
+    <div class="ui warning message">
+      <div class="header">
+        {% blocktrans trimmed %}
+          Your organization doesn't currently have an active subscription
+        {% endblocktrans %}
+      </div>
+      <p>
+        {% blocktrans trimmed with pricing_url="https://about.readthedocs.com/pricing/" %}
+          Start a new subscription for your organization to continue using Read the Docs for Business.
+        {% endblocktrans %}
+      </p>
+    </div>
+    <form class="ui form" action="" method="post">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <input class="ui primary button" type="submit" value="{% trans "Start subscription" %}" />
+    </form>
+  {% endif %}
+{% endblock %}

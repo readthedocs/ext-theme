@@ -1,0 +1,144 @@
+{% extends "organizations/settings/base.html" %}
+
+{% load i18n %}
+{% load organizations %}
+{% load corporate %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}{{ organization.name }} - {% trans "Authorization" %}{% endblock %}
+
+{% block organization_sso_active %}active{% endblock %}
+{% block organization_edit_content_header %}{% trans "Authorization" %}{% endblock %}
+
+{% block organization_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/en/stable/commercial/single-sign-on.html" text=_("Organization single sign-on") is_external=True class="item" %}
+{% endblock organization_edit_sidebar_help_topics %}
+
+{% block organization_edit_content %}
+  <p>
+    {% blocktrans trimmed %}
+      Change how users authenticate in your organization and reuse permissions from another service to control access to your projects and documentation.
+    {% endblocktrans %}
+  </p>
+
+  {% if organization.ssointegration %}
+    <div class="ui message">
+      <div class="header">
+        {% trans "Invite users into your organization" %}
+      </div>
+      <p>
+        {% trans "You can invite people to join your organization by sending them this link:" %}
+      </p>
+
+      <div class="ui fluid action input">
+        <input type="text" readonly="" id="organization-link" value="https://{{ PRODUCTION_DOMAIN }}{% url 'account_signup' %}?organization={{ organization.slug }}" />
+        <button class="ui primary right labeled icon button" data-clipboard-target="#organization-link">
+          <i class="fas fa-copy icon"></i>
+          {% trans "Copy" %}
+        </button>
+      </div>
+    </div>
+  {% endif %}
+
+  <form class="ui form" method="POST" action=".">
+    {% csrf_token %}
+
+    {% comment %}
+      Django built in forms don't provide enough flexibility to make this UI nice,
+      so we build the entire form outside the backend forms and models instead.
+
+      {# form | crispy #}
+    {% endcomment %}
+
+
+    <div class="grouped fields">
+
+      {# TODO Reused the existing title for now, but is "authorization" the most correct here? #}
+      <label for="provider">
+        {% trans "Organization authorization provider:" %}
+      </label>
+      <div class="field">
+        <div class="ui radio checkbox checked" data-bind="semanticui: {checkbox: {}}">
+          <label>
+            <strong>{% trans "Read the Docs teams" %}</strong>
+            <p>
+              {% blocktrans trimmed %}
+                Use built-in organization teams to manage access to your projects and documentation.
+              {% endblocktrans %}
+            </p>
+          </label>
+          <input type="radio" name="provider" tabindex="0" class="hidden" value checked />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="ui radio checkbox" data-bind="semanticui: {checkbox: {}}">
+          <label>
+            <strong>{% trans "GitHub, GitLab, or Bitbucket" %}</strong>
+            <p>
+              {% blocktrans trimmed %}
+                Control all access to your projects by reusing permissions from your project's version control provider.
+                This replaces Read the Docs managed teams.
+              {% endblocktrans %}
+            </p>
+          </label>
+          <input type="radio" name="provider" tabindex="0" class="hidden" value="allauth" />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="ui radio disabled checkbox" data-bind="semanticui: {checkbox: {}}">
+          <label>
+            <strong>Google</strong>
+            {% if not has_google_sso_feature %}
+              <span class="ui small secondary label">
+                Pro plan
+              </span>
+            {% endif %}
+            <p>
+              {% blocktrans trimmed %}
+                Include all users from your Google Domains organization in a specific team,
+                allowing them access to a subset of your projects.
+              {% endblocktrans %}
+            </p>
+          </label>
+          <input type="radio" name="provider" tabindex="0" class="hidden" value="email" />
+        </div>
+        {% if not has_google_sso_feature %}
+          {# Because the field above is disabled, the label above isn't linkable. This is a redundant element for now #}
+          <a class="ui small basic secondary pointing up label" href="{% url 'subscription_detail' organization.slug %}">
+            {% trans "Upgrade your plan" %}
+          </a>
+        {% endif %}
+      </div>
+
+    </div>
+
+    {# TODO expose domain field and move jQuery logic to a knockout view #}
+    {% comment %}
+    {% block extra_scripts %}
+    <script type="text/javascript">
+     $(document).ready(function() {
+         var value = $('#id_provider').val();
+         if (value !== 'email') {
+             $('#id_domain').parent().hide();
+         }
+
+         $('#id_provider').bind('change', function (ev) {
+             if (this.value === 'email') {
+                 $('#id_domain').parent().show();
+                 $('#id_domain').attr('required', true);
+             } else {
+                 $('#id_domain').parent().hide();
+                 $('#id_domain').attr('required', false);
+             }
+         })
+     })
+    </script>
+    {% endblock %}
+    {% endcomment %}
+
+    <input class="ui primary button" type="submit" name="submit" value="{% trans "Save" %}" />
+  </form>
+{% endblock organization_edit_content %}

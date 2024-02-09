@@ -101,17 +101,41 @@
   {% endblock top_menu %}
 
   {% comment %}
-    Testing for boolean here is not efficient, but we support both querysets and arrays here #}
-    {% if not objects.exists %}
+    We usually pass in a queryset here, but some views emit arrays of objects
+    instead, so we support these as well. Therefore, the check here needs to be
+    for an empty array or an empty queryset. Because Django templates aim to
+    be as difficult as possible to use, this conditional looks pretty silly.
+
+    This cannot be a simple `if not objects` as this executes the query, which
+    can cause the view to timeout when the query is very large. See ``bool``
+    evaluation in:
+
+    https://docs.djangoproject.com/en/4.2/ref/models/querysets/
+
+    Order on the conditional matters here, `and` has higher precedence. Django
+    templates don't support parenthesis in conditionals.
+
+    https://docs.djangoproject.com/en/5.0/ref/templates/builtins/#boolean-operators
   {% endcomment %}
-  {% if not objects %}
+  {% if objects.exists is None and objects|length == 0 or objects.exists == False %}
     {% comment "rst" %}
+
+      .. _api-template-list-placeholder:
+
       Placeholder blocks
       ------------------
 
       The placeholder section is visible if there are no instances in the ``objects``
       queryset. This would usually provide some onboarding level help, directing
       the user to docs or object creation.
+
+      The placeholder block ultimately uses an `FUI placeholder segment`_.
+      The placeholder can include an icon, heading, paragraph content,
+      and should at least have a link out to documentation or a link to an admin page.
+
+      This aims to replace a minimalist pattern of just a simple sentence: "No projects found", etc.
+
+      .. _FUI placeholder segment: https://fomantic-ui.com/elements/segment.html#placeholder-segment
 
       .. describe:: list_placeholder
 
@@ -289,9 +313,9 @@
           {% endif %}
 
           <tbody>
-          {% for object in objects %}
+            {% for object in objects %}
             {# Item view for each object in objects queryset #}
-            {% block list_item_start %}<tr class="middle aligned">{% endblock list_item_start %}
+              {% block list_item_start %}<tr class="middle aligned">{% endblock list_item_start %}
               {% block list_item %}
 
                 {% block list_item_header_column %}
@@ -366,8 +390,8 @@
                 {% endblock list_item_right_column %}
 
               {% endblock list_item %}
-            </tr>
-          {% endfor %}
+              </tr>
+            {% endfor %}
 
           </tbody>
         </table>

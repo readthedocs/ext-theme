@@ -1,0 +1,59 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% load i18n %}
+
+{% load core_tags %}
+{% load privacy_tags %}
+{% load projects_tags %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% comment %}
+  Do not show an empty menu bar at the top. Once users can add SSH keys, we can
+  remove this override and enable the ``create_button`` block
+{% endcomment %}
+{% block top_menu %}{% endblock %}
+{% block create_button %}
+  {% comment %}
+  {# TODO this is not supported currently, and is an admin only action #}
+  <div class="disabled item">
+    <a class="ui disabled icon button"
+       href="{# {% url "..." project.slug %} #}">
+      <i class="fa-solid fa-plus icon"></i>
+      {% trans "Add SSH key" %}
+    </a>
+  </div>
+  {% endcomment %}
+{% endblock %}
+
+{% block list_placeholder_icon_class %}fa-duotone fa-lock-keyhole{% endblock %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No SSH keys are configured for this project.
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      SSH keys allow your project to clone from private repositories.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button" href="https://docs.readthedocs.io/page/guides/importing-private-repositories.html">{% trans "Learn more" %}</a>.
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_icon %}
+  <i class="fa-duotone fa-fingerprint icon"></i>
+{% endblock list_item_icon %}
+
+{% block list_item_header %}
+  <a href="{% url 'projects_keys_detail' project.slug object.pk %}">
+    <code>{{ object.fingerprint|slice:"23" }}</code>
+  </a>
+{% endblock list_item_header %}
+
+{% block list_item_meta %}{% endblock %}
+{% block list_item_extra %}{% endblock %}

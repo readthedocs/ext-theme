@@ -1,34 +1,35 @@
 import jquery from "jquery";
 import ko from "knockout";
 
-window.jQuery = jquery;
-global.jQuery = jquery;
+// TODO this is only really needed while testing, it could be behind a
+// conditional
+import "./globals";
 
 // Required for FUI tab module
-require("jquery-address");
+import * as jqueryAddress from "jquery-address";
 
 /* CommonJS require instead of import syntax on purpose */
-require("fomantic-ui-less/definitions/behaviors/visibility.js");
-require("fomantic-ui-less/definitions/behaviors/form.js");
-require("fomantic-ui-less/definitions/behaviors/state.js");
-require("fomantic-ui-less/definitions/behaviors/api.js");
-require("fomantic-ui-less/definitions/modules/transition.js");
-require("fomantic-ui-less/definitions/modules/tab.js");
-require("fomantic-ui-less/definitions/modules/dropdown.js");
-require("fomantic-ui-less/definitions/modules/modal.js");
-require("fomantic-ui-less/definitions/modules/search.js");
-require("fomantic-ui-less/definitions/modules/sticky.js");
-require("fomantic-ui-less/definitions/modules/shape.js");
-require("fomantic-ui-less/definitions/modules/accordion.js");
-require("fomantic-ui-less/definitions/modules/sidebar.js");
-require("fomantic-ui-less/definitions/modules/dimmer.js");
-require("fomantic-ui-less/definitions/modules/checkbox.js");
-require("fomantic-ui-less/definitions/modules/slider.js");
-require("fomantic-ui-less/definitions/modules/popup.js");
-require("fomantic-ui-less/definitions/modules/embed.js");
-require("fomantic-ui-less/definitions/modules/progress.js");
-require("fomantic-ui-less/definitions/modules/toast.js");
-require("fomantic-ui-less/definitions/globals/site.js");
+import * as fomanticVisibility from "fomantic-ui-less/definitions/behaviors/visibility.js";
+import * as fomaticForm from "fomantic-ui-less/definitions/behaviors/form.js";
+import * as fomaticState from "fomantic-ui-less/definitions/behaviors/state.js";
+import * as fomaticAPI from "fomantic-ui-less/definitions/behaviors/api.js";
+import * as fomaticTransition from "fomantic-ui-less/definitions/modules/transition.js";
+import * as fomaticTab from "fomantic-ui-less/definitions/modules/tab.js";
+import * as fomaticDropdown from "fomantic-ui-less/definitions/modules/dropdown.js";
+import * as fomaticModal from "fomantic-ui-less/definitions/modules/modal.js";
+import * as fomaticSearch from "fomantic-ui-less/definitions/modules/search.js";
+import * as fomaticSticky from "fomantic-ui-less/definitions/modules/sticky.js";
+import * as fomaticShape from "fomantic-ui-less/definitions/modules/shape.js";
+import * as fomaticAccordian from "fomantic-ui-less/definitions/modules/accordion.js";
+import * as fomaticSidebar from "fomantic-ui-less/definitions/modules/sidebar.js";
+import * as fomaticDimmer from "fomantic-ui-less/definitions/modules/dimmer.js";
+import * as fomaticCheckbox from "fomantic-ui-less/definitions/modules/checkbox.js";
+import * as fomaticSlider from "fomantic-ui-less/definitions/modules/slider.js";
+import * as fomaticPopup from "fomantic-ui-less/definitions/modules/popup.js";
+import * as fomaticEmbed from "fomantic-ui-less/definitions/modules/embed.js";
+import * as fomaticProgress from "fomantic-ui-less/definitions/modules/progress.js";
+import * as fomaticToast from "fomantic-ui-less/definitions/modules/toast.js";
+import * as fomaticSite from "fomantic-ui-less/definitions/globals/site.js";
 
 /**
  * Set up jQuery plugins. SemanticUI jQuery plugins are brought in piecemeal,
@@ -65,7 +66,7 @@ export const htmlInit = add_init_handler(
   },
   (property) => {
     return { html: property };
-  }
+  },
 );
 
 /**
@@ -78,7 +79,7 @@ export const textInit = add_init_handler(
   },
   (property) => {
     return { text: property };
-  }
+  },
 );
 
 /**
@@ -91,7 +92,7 @@ export const valueInit = add_init_handler(
   },
   (property) => {
     return { value: property };
-  }
+  },
 );
 
 /**
@@ -120,7 +121,12 @@ export const valueInit = add_init_handler(
  *     })
  */
 export const jsonInit = add_init_handler((element) => {
-  return JSON.parse(element.innerHTML);
+  try {
+    return JSON.parse(element.innerHTML);
+  } catch (err) {
+    console.error(err);
+    return {};
+  }
 });
 
 function add_init_handler(getter, setter) {
@@ -208,7 +214,7 @@ export const popup = {
           context.$rawData.hide();
         },
       },
-      value_accessor()
+      value_accessor(),
     );
     const jq_element = jquery(element);
     jq_element.popup(config).hover(() => {
@@ -346,9 +352,9 @@ export const message = {
  */
 export const semanticui = {
   update: (element, value_accessor, all_bindings) => {
-    const value = ko.unwrap(value_accessor());
+    const binding_value = ko.unwrap(value_accessor());
     const jq_element = jquery(element);
-    for (const [key, value] of Object.entries(value)) {
+    for (const [key, value] of Object.entries(binding_value)) {
       if (key === "modal") {
         // modal is not supported here because the jQuery ``modal()`` plugin
         // replaces ``<body>`` and this causes an error from Knockout, because
@@ -364,7 +370,7 @@ export const semanticui = {
               key,
               element,
               behavior,
-              ...args
+              ...args,
             );
             jq_element[key](behavior, ...args);
           };
@@ -376,7 +382,7 @@ export const semanticui = {
             "Setting up SemanticUI component:",
             key,
             value,
-            element
+            element,
           );
           jq_element[key](value);
         }

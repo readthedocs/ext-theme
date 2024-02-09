@@ -12,6 +12,7 @@ import * as core_views from "../core";
 import * as docs_views from "../docs";
 import * as gold_views from "../gold";
 import * as module_views from "../modules";
+import * as organization_views from "../organization";
 import * as project_views from "../project";
 
 /**
@@ -21,7 +22,8 @@ import * as project_views from "../project";
  * :meth:`Application.run`.
  */
 export class Application {
-  constructor() {
+  constructor(config) {
+    this.config = config;
     this.registry = new Registry();
   }
 
@@ -49,21 +51,21 @@ export class Application {
    *     Convention on :ref:`js-json-config`
    */
   load_config() {
-    console.debug("Loading site front end configuration from script tag");
-
-    const site_config_src = jquery("script#site-config").text() || "{}";
-    const site_config = JSON.parse(site_config_src);
-    if (site_config.webpack_public_path) {
-      __webpack_public_path__ = site_config.webpack_public_path;
-      global.__webpack_public_path__ = window.__webpack_public_path__ =
-        site_config.webpack_public_path;
+    if (this.config === undefined) {
+      console.debug("Loading site front end configuration from script tag");
+      const site_config_src = jquery("script#site-config").text() || "{}";
+      this.config = JSON.parse(site_config_src);
+    }
+    if (this.config.webpack_public_path) {
+      __webpack_public_path__ = this.config.webpack_public_path;
+      globalThis.__webpack_public_path__ = this.config.webpack_public_path;
     }
     // Null route debug logging, don't do output anything that was debug
-    if (!site_config.debug) {
+    if (!this.config.debug) {
       console.debug = () => {};
     }
 
-    return site_config;
+    return this.config;
   }
 
   /**
@@ -132,7 +134,7 @@ export class Application {
      * isn't a great fit for Knockout custom data binding or plugin, as the
      * library uses some builtin/hardcoded selectors. */
     var clipboard_global = new clipboard(
-      "[data-clipboard-text], [data-clipboard-target]"
+      "[data-clipboard-text], [data-clipboard-target]",
     );
     // Provide the user with some visual feedback using FUI popups
     jquery("[data-clipboard-text], [data-clipboard-target]").popup({

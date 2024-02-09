@@ -1,0 +1,40 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+  {% blocktrans %}Organizations{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+  {% url "organization_create" as organization_create_url %}
+
+  <div class="ui stackable grid">
+    <div class="eleven wide computer sixteen wide tablet column">
+      {% include "organizations/partials/organization_list.html" with objects=organization_list %}
+    </div>
+    <div class="five wide computer only column">
+      <div class="ui one cards">
+
+        <div class="basic card">
+          <div class="content">
+            <div class="header">
+              {% trans "Get started" %}
+            </div>
+            <div class="meta">{% trans "Create a new organization" %}</div>
+            <div class="description">
+              <p>
+                If you are just getting started, create a new organization for
+                your team and start your 1 month trial.
+              </p>
+              <a class="item" href="{{ organization_create_url }}">
+                {% trans "Create a new organization" %}
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+{% endblock content %}

@@ -22,32 +22,32 @@
     <div class="ui loading segment" data-bind="css: {loading: is_loading()}">
       <canvas width="400" height="150" data-bind="chart: config"></canvas>
       <script type="application/json" data-bind="jsonInit: config">
-{
-  "type": "line",
-  "data": {
-    "labels": [
-      {% for label in page_data.labels %}
-        "{{ label|escapejs }}"{% if not forloop.last %},{% endif %}
-      {% endfor %}
-    ],
-    "datasets": [
-      {
-        "label": "{% trans "Number of views" %}",
-        "data": {{ page_data.int_data|escapejs }},
-        "fill": false
-      }
-    ]
-  },
-  "options": {
-    "scales": {
-      "yAxes": [{
-        "ticks": {
-          "beginAtZero": true
+        {
+          "type": "line",
+          "data": {
+            "labels": [
+              {% for label in page_data.labels %}
+                "{{ label|escapejs }}"{% if not forloop.last %},{% endif %}
+              {% endfor %}
+            ],
+            "datasets": [
+              {
+                "label": "{% trans "Number of views" %}",
+                "data": {{ page_data.int_data|escapejs }},
+                "fill": false
+              }
+            ]
+          },
+          "options": {
+            "scales": {
+              "yAxes": [{
+                "ticks": {
+                  "beginAtZero": true
+                }
+              }]
+            }
+          }
         }
-      }]
-    }
-  }
-}
       </script>
     </div>
   </div>

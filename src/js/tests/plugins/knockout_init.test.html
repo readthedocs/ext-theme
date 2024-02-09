@@ -1,0 +1,121 @@
+<html>
+  <body>
+    <div data-bind="using: TestView()">
+      <script type="application/json" data-bind="jsonInit: configJson">
+        { "test": true }
+      </script>
+      <script type="application/json" data-bind="jsonInit: configJsonBad">
+        TBD some bad JSON syntax
+      </script>
+      <script type="text/plain" data-bind="textInit: configText">
+        { "test": true }
+      </script>
+      <script type="text/html" data-bind="htmlInit: configHtml">
+        <test true></test>
+      </script>
+      <input value="test: true" data-bind="valueInit: configValue" />
+      <input data-bind="valueInit: configValueMissing" />
+    </div>
+    <script type="module">
+      import { expect } from "@open-wc/testing";
+      import { runTests } from "@web/test-runner-mocha";
+      import { default as ko } from "knockout";
+
+      import { Application } from "../../application";
+      import { Registry } from "../../application/registry";
+
+      // Future note: multiple promises here probably aren't necessary, but this
+      // is certainly a thorough way of testing that the field is bound and has
+      // been processed by Knockout. There is probably a less redundant pattern
+      // here though, if you are using this test as the base for a new test.
+      let promiseJson;
+      let promiseJsonBad;
+      let promiseHtml;
+      let promiseText;
+      let promiseValue;
+      let promiseValueMissing;
+
+      const app = new Application();
+
+      class TestView {
+        static view_name = "TestView";
+
+        constructor() {
+          this.configJson = ko.observable();
+          promiseJson = new Promise((resolve) => {
+            this.configJson.subscribe((value) => {
+              resolve(value);
+            });
+          });
+
+          this.configJsonBad = ko.observable();
+          promiseJsonBad = new Promise((resolve) => {
+            this.configJsonBad.subscribe((value) => {
+              resolve(value);
+            });
+          });
+
+          this.configText = ko.observable();
+          promiseText = new Promise((resolve) => {
+            this.configText.subscribe((value) => {
+              resolve(value);
+            });
+          });
+
+          this.configHtml = ko.observable();
+          promiseHtml = new Promise((resolve) => {
+            this.configHtml.subscribe((value) => {
+              resolve(value);
+            });
+          });
+
+          this.configValue = ko.observable();
+          promiseValue = new Promise((resolve) => {
+            this.configValue.subscribe((value) => {
+              resolve(value);
+            });
+          });
+
+          this.configValueMissing = ko.observable();
+          promiseValueMissing = new Promise((resolve) => {
+            this.configValueMissing.subscribe((value) => {
+              resolve(value);
+            });
+          });
+        }
+      }
+
+      Registry.add_view(TestView);
+      app.run();
+
+      runTests(async () => {
+        describe("Knockout init plugin", () => {
+          it("loads JSON", async () => {
+            const dataJson = await promiseJson;
+            expect(dataJson).to.deep.equal({ test: true });
+          });
+          it("doesn't throw an exception for JSON with bad syntax", async () => {
+            const dataJsonBad = await promiseJsonBad;
+            expect(dataJsonBad).to.deep.equal({});
+          });
+          it("loads text", async () => {
+            const dataText = await promiseText;
+            expect(dataText).to.include('{ "test": true }');
+          });
+          it("loads HTML", async () => {
+            const dataHtml = await promiseHtml;
+            expect(dataHtml).to.include("<test true></test>");
+          });
+          it("loads value attribute", async () => {
+            const dataValue = await promiseValue;
+            expect(dataValue).to.deep.equal("test: true");
+          });
+          it("doesn't throw an exception for missing value attribute", async () => {
+            const dataValueMissing = await promiseValueMissing;
+            expect(dataValueMissing).to.equal("");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

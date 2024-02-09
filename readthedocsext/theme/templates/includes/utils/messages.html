@@ -2,31 +2,40 @@
 
 {% comment %}
   This template is used by the base template to provide a list of messages on
-  the top of the page. If the message has a pk it is a persisent or sticky
-  message level. Otherwise, Django default level notifications are treated as
+  the top of the page. Django default level notifications are treated as
   temporary messages, using SUI toast messages instead of block elements in the
   page content pane.
 {% endcomment %}
 
+{% comment %}
+``user_notifications`` comes from a Context Processor.
+We need to use a CustomUser to have access to "user.notifications"
+See https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-AUTH_USER_MODEL
+{% endcomment %}
+{% if user_notifications %}
+  {% for notification in user_notifications %}
+    <div class="ui message">
+    {% comment %}
+    Add this Xmark here once we implement dismissing notifications.
+    <i class="fa-duotone fa-circle-xmark close icon"></i>
+    {% endcomment %}
+      {{ notification.get_message.get_rendered_body|safe }}
+    </div>
+  {% endfor %}
+{% endif %}
+
 {% if messages %}
   {% for message in messages %}
-    {# Message is sticky/persistent, show these like normal. #}
-    {% if message.pk %}
-      <div class="ui message {{ message.tags }}"
-           data-bind="message: {dismiss_url: '{% url "message_mark_read" message.pk %}'}">
-        <i class="fa-duotone fa-circle-xmark close icon"></i>
-        {{ message }}
-      </div>
-    {% else %}
-      {% comment %}
-        This is a little bit of a hack, as toasts are purely JS and don't
-        require an underlying element. Django messages uses "tags" to specify
-        info/success/error classes on the messages, which just happen to align
-        with SUI classes too.
-      {% endcomment %}
-      {% spaceless %}
-        <div style="display: none;"
-             data-bind="
+    {% comment %}
+      This is a little bit of a hack, as toasts are purely JS and don't
+      require an underlying element. Django messages uses "tags" to specify
+      info/success/error classes on the messages, which just happen to align
+      with SUI classes too.
+    {% endcomment %}
+    {# fmt:off #}
+    {% spaceless %}
+      <div style="display: none;"
+           data-bind="
 semanticui: {
   toast: {
     message: '{{ message|escapejs }}',
@@ -37,7 +46,7 @@ semanticui: {
   }
 }">
         </div>
-      {% endspaceless %}
-    {% endif %}
+    {% endspaceless %}
+    {# fmt:on #}
   {% endfor %}
 {% endif %}

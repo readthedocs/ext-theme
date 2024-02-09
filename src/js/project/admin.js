@@ -94,6 +94,28 @@ export class ProjectRedirectView {
 Registry.add_view(ProjectRedirectView);
 
 /**
+ * Project sharing form view
+ *
+ * @param {Object} share - Initial instance data, optional
+ */
+export class ProjectTemporaryAccessView {
+  static view_name = "ProjectTemporaryAccessView";
+
+  constructor(share) {
+    this.access_type = ko.observable();
+    this.show_password_field = ko.computed(() => {
+      return this.access_type() == "password";
+    });
+
+    this.allow_all = ko.observable(share.allow_all);
+    this.show_versions_list = ko.computed(() => {
+      return this.allow_all() === false;
+    });
+  }
+}
+Registry.add_view(ProjectTemporaryAccessView);
+
+/**
  * Project search analytics view
  *
  * Search analytics chart data and config is loaded from an inline

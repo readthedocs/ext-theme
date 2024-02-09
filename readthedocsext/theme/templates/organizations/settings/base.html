@@ -1,0 +1,70 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+
+{% block content-header %}
+  {% include "organizations/partials/header.html" with edit_active="active" is_collapsed=True %}
+{% endblock %}
+
+{% block content %}
+  <div class="ui stackable grid">
+    <div class="five wide computer five wide tablet sixteen wide mobile column">
+
+      <div class="ui vertical pointing fluid menu">
+        <a class="item {% block organization_details_active %}{% endblock %}" href="{% url 'organization_edit' organization.slug %}">
+          {% trans "Details" %}
+        </a>
+        <a class="item {% block organization_owners_active %}{% endblock %}" href="{% url 'organization_owners' organization.slug %}">
+          {% trans "Owners" %}
+        </a>
+        <a class="item {% block organization_security_log_active %}{% endblock %}" href="{% url 'organization_security_log' organization.slug %}">
+          {% trans "Security log" %}
+        </a>
+        {% if USE_ORGANIZATIONS %}
+          <a class="item {% block organization_subscription_active %}{% endblock %}" href="{% url 'subscription_detail' organization.slug %}">
+            {% trans "Subscription" %}
+          </a>
+          <a class="item {% block organization_sso_active %}{% endblock %}" href="{% url 'organization_sso' organization.slug %}">
+            {% trans "Authorization" %}
+          </a>
+        {% endif %}
+      </div>
+
+      {% block organization_edit_sidebar %}
+
+        {% block organization_edit_sidebar_help_topics_container %}
+          <div class="ui basic segment">
+            <h2 class="ui small header">{% trans "Help topics" %}</h2>
+            <div class="ui bulleted list">
+              {% block organization_edit_sidebar_help_topics %}
+              {% endblock organization_edit_sidebar_help_topics %}
+              {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/" text=_("Documentation index") is_external=True class="item" %}
+            </div>
+          </div>
+        {% endblock organization_edit_sidebar_help_topics_container %}
+
+        {% block organization_edit_sidebar_extra %}
+        {% endblock organization_edit_sidebar_extra %}
+      {% endblock organization_edit_sidebar %}
+
+    </div>
+
+    <div class="eleven wide computer eleven wide tablet sixteen wide mobile column">
+
+      <h2 class="ui medium dividing header">
+        {% block organization_edit_content_header %}
+        {% endblock organization_edit_content_header %}
+        <div class="sub header">
+          {% block organization_edit_content_subheader %}
+          {% endblock organization_edit_content_subheader %}
+        </div>
+      </h2>
+
+      <div id="edit-content">
+        {% block organization_edit_content %}
+        {% endblock organization_edit_content %}
+      </div>
+
+    </div>
+  </div>
+{% endblock content %}

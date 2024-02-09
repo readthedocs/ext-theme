@@ -1,0 +1,45 @@
+{% extends "organizations/teams/base.html" %}
+
+{% load i18n %}
+
+{% block team_sidebar_members %}active{% endblock %}
+
+{% block subview_content_header %}
+  {% trans "Members" %}
+{% endblock subview_content_header %}
+
+{% block subview_content %}
+  {% include "organizations/partials/team_member_list.html" with objects=team_members %}
+
+  {% comment %}
+    TODO move owner/team member invitations to a dedicated view.
+
+    Do not reuse this pattern, it is a bad pattern.
+
+    This is a bit of a hack to avoid manipulating the view to work with
+    multiple querysets on two separate models. On the owners/team member views,
+    there will also be a listing of invitations (the `Invitation` model). But,
+    the invitiation list will not respond to pagination without altering the
+    view to support multi model pagination.
+
+    This means that invitations could clog up the UI, as they won't be paginated,
+    and the invitations will to stuffed below the view model listing, so really
+    hard to find.
+
+    Ideally, these should either be separate views entirely, or both
+    OrganizationOwner and Invitation model queryset would be joined into a
+    single queryset listing.
+  {% endcomment %}
+  {% block team_invitations %}
+    {% if invitations.exists %}
+      <h2 class="ui small header">
+        {% trans "Pending invitations" %}
+        <span class="ui circular small label">
+          {{ invitations.count }}
+        </span>
+      </h2>
+
+      {% include "organizations/partials/invitation_list.html" with objects=invitations skip_pagination=True %}
+    {% endif %}
+  {% endblock team_invitations %}
+{% endblock subview_content %}

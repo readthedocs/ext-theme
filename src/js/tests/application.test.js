@@ -1,44 +1,33 @@
+import { expect } from "@open-wc/testing";
+
 import { Application } from "../application";
 import { ApplicationView } from "../application/views";
 
-test("Application registry is loaded", () => {
-  const app = new Application();
-  expect(app.registry.constructor.views).toHaveProperty("BuildDetailView");
-  expect(app.registry.constructor.views).toHaveProperty("ProjectListView");
-});
+describe("Application", () => {
+  it("has registered views", () => {
+    const app = new Application();
+    expect(app.registry.constructor.views.BuildDetailView).to.not.be.undefined;
+    expect(app.registry.constructor.views.ProjectListView).to.not.be.undefined;
+  });
 
-test("Application view has subviews", () => {
-  const app = new Application();
-  const view = new ApplicationView();
-  app.registry.attach(view);
+  it("exposes registered views on all registered views", () => {
+    const app = new Application();
+    const view = new ApplicationView();
+    app.registry.attach(view);
+    expect(view.BuildDetailView).to.not.be.undefined;
+    expect(view.ProjectListView).to.not.be.undefined;
+  });
 
-  expect(view.BuildDetailView).toBeDefined();
-  expect(view.ProjectListView).toBeDefined();
-  // TODO this is missing?
-  //expect(view.MessageView).toBeDefined();
-});
-
-test("Application load default config", () => {
-  const app = new Application();
-  document.body.innerHTML =
-    '<script type="application/json" id="site-config">{}</script>';
-  const config = app.load_config();
-  expect(config.webpack_public_path).toBeUndefined();
-  expect(config.debug).toBeFalsy();
-  expect(window.__webpack_public_path).toBeUndefined();
-});
-
-test("Application load custom config", () => {
-  const app = new Application();
-  document.body.innerHTML = `
-  <script type="application/json" id="site-config">
-  {
-    "webpack_public_path": "/foo",
-    "debug": true
-  }
-  </script>`;
-  const config = app.load_config();
-  expect(config.debug).toBeTruthy();
-  expect(config.webpack_public_path).toBe("/foo");
-  expect(global.__webpack_public_path__).toBe("/foo");
+  it("can load site configuration", async () => {
+    const app = new Application();
+    document.body.innerHTML = `
+      <script type="application/json" id="site-config">
+        {"debug": true}
+      </script>
+    `;
+    const config = app.load_config();
+    expect(config.webpack_public_path).to.be.undefined;
+    expect(config.debug).to.be.true;
+    expect(window.__webpack_public_path).to.be.undefined;
+  });
 });

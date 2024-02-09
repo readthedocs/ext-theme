@@ -10,14 +10,14 @@ Base
 .. js:autoclass:: ResponsiveView
     :members:
 
-.. js:autoclass:: HeaderView 
+.. js:autoclass:: HeaderView
+    :members:
+
+.. js:autoclass:: CollapsingHeaderView
     :members:
 
 Project
 -------
-
-.. js:autoclass:: ProjectHeaderView
-    :members:
 
 .. js:autoclass:: ProjectListView
     :members:
