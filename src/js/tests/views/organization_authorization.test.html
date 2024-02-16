@@ -1,0 +1,68 @@
+<html>
+  <body>
+    <div data-bind="using: TestView()">
+      <form>
+        <input
+          type="text"
+          name="provider"
+          value="email"
+          data-bind="valueInit: provider, value: provider"
+        />
+      </form>
+      <div data-bind="text: done()"></div>
+    </div>
+
+    <script type="module">
+      import { expect } from "@open-wc/testing";
+      import { runTests } from "@web/test-runner-mocha";
+      import { default as ko } from "knockout";
+      import { default as jquery } from "jquery";
+
+      import { Application } from "../../application";
+      import { Registry } from "../../application/registry";
+      import { OrganizationSettingsAuthorizationView } from "../../organization/index";
+
+      const app = new Application({ debug: true });
+
+      let view;
+      let promise;
+
+      class TestView extends OrganizationSettingsAuthorizationView {
+        static view_name = "TestView";
+
+        constructor() {
+          super();
+          view = this;
+          promise = new Promise((resolve) => {
+            this._promise_resolve = resolve;
+          });
+        }
+
+        done() {
+          this._promise_resolve();
+        }
+      }
+
+      Registry.add_view(TestView);
+      app.run();
+
+      runTests(async () => {
+        describe("Organization settings authorization view", () => {
+          it("observables show correct changes", async () => {
+            await promise;
+            expect(view.provider_original).to.be.undefined;
+            expect(view.provider()).to.be.equal("email");
+            expect(view.show_warning()).to.be.false;
+            expect(view.use_domain()).to.be.true;
+
+            view.provider("allauth");
+            expect(view.provider_original).to.be.equal("email");
+            expect(view.provider()).to.be.equal("allauth");
+            expect(view.show_warning()).to.be.true;
+            expect(view.use_domain()).to.be.false;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
