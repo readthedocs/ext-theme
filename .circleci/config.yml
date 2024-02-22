@@ -28,7 +28,9 @@ commands:
   run-test:
     description: "Run test suite"
     steps:
-      - browser-tools/install-chrome
+      - browser-tools/install-chrome:
+          replace-existing: true
+          chrome-version: 116.0.5845.110
       - browser-tools/install-chromedriver
       - checkout
       - run: npm ci
