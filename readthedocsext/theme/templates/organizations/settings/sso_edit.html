@@ -85,7 +85,7 @@
             <div class="content">
               <div class="header">
                 {{ form.PROVIDER_EMAIL }}
-                {% if not has_google_sso_feature %}
+                {% if not form.has_google_sso_feature %}
                   <a class="ui secondary horizontal label" href="{% url 'subscription_detail' organization.slug %}">
                     Pro plan
                   </a>
@@ -108,6 +108,10 @@
         {% alter_field form.provider data_bind="valueInit: provider, value: provider" %}
         {{ form.provider | as_crispy_field }}
 
+        <div class="ko hidden ui field" data-bind="css: { hidden: !use_domain() }">
+          {{ form.domain | as_crispy_field }}
+        </div>
+
         <div class="ui warning message ko hidden" data-bind="css: { hidden: !show_warning() }">
           <i class="fad fa-circle-exclamation icon"></i>
           {% blocktrans trimmed %}
@@ -115,11 +119,6 @@
             through your current provider may be discarded. Ensure your new
             authentication provider is configured correctly before making this change.
           {% endblocktrans %}
-        </div>
-
-        <div class="disabled field" data-bind="css: { disabled: !use_domain(), required: use_domain }">
-          {% alter_field form.domain data_bind="enable: use_domain, attr: { required: use_domain }" %}
-          {{ form.domain | as_crispy_field }}
         </div>
       </div>
 
