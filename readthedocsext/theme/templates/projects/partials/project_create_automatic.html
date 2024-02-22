@@ -157,23 +157,23 @@
                     {% trans "Repository is public" %}
                   </span>
 
-                  <span class="ui text" data-bind="visible: private, css: { red: !$parent.is_cloning_supported($data) }">
+                  <span class="ui text" data-bind="visible: private, css: { red: !$parent.is_repository_supported($data) }">
                     {% trans "Repository is private" %}
                   </span>
                 </div>
                 <div class="description">
-                  <span data-bind="visible: $parent.is_cloning_supported($data)">
+                  <span data-bind="visible: $parent.is_repository_supported($data)">
                     {% blocktrans trimmed %}
                       This repository can be cloned.
                     {% endblocktrans %}
                   </span>
 
-                  <p class="ui red text" data-bind="visible: !$parent.is_cloning_supported($data)">
+                  <p class="ui red text" data-bind="visible: !$parent.is_repository_supported($data)">
                     {% blocktrans trimmed %}
                       Private repositories are not supported
                     {% endblocktrans %}
                   </p>
-                  <p class="ui red text" data-bind="visible: !$parent.is_cloning_supported($data)">
+                  <p class="ui red text" data-bind="visible: !$parent.is_repository_supported($data)">
                     <a class="ui red mini basic button">{% trans "Read more" %}</a>
                   </p>
                 </div>

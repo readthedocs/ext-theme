@@ -171,8 +171,8 @@ export class ProjectCreateView extends ResponsiveView {
     });
   }
 
-  /** {Boolean} Can user clone repository based on permissions? */
-  is_cloning_supported(repo) {
+  /** {Boolean} Is repository supported, based on permissions? */
+  is_repository_supported(repo) {
     if (repo.is_private()) {
       return this.allow_private_repos();
     }
