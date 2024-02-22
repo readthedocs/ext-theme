@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  browser-tools: circleci/browser-tools@1.4.6
+  browser-tools: circleci/browser-tools@1.4.7
 
 commands:
   run-lint:
@@ -28,8 +28,9 @@ commands:
   run-test:
     description: "Run test suite"
     steps:
-      - browser-tools/install-browser-tools:
-          chrome-version: 121.0.6167.85
+      #- browser-tools/install-browser-tools:
+      #    chrome-version: 121.0.6167.85
+      - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - checkout
       - run: npm ci
