@@ -56,6 +56,12 @@
           </div>
 
           <div class="content">
+            {% if version.active %}
+              <div class="ui warning message">
+                {% trans 'Deactivating a version will result in the deletion of its documentation.' %}
+              </div>
+            {% endif %}
+
             <form class="ui inline form" method="post" action=".">
               {% csrf_token %}
 
