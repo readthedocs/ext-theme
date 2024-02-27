@@ -85,17 +85,15 @@
             <div class="content">
               <div class="header">
                 {{ form.PROVIDER_EMAIL }}
-                {% if not form.has_google_sso_feature %}
-                  <a class="ui secondary horizontal label" href="{% url 'subscription_detail' organization.slug %}">
-                    Pro plan
-                  </a>
-                {% endif %}
+                <a class="ui secondary horizontal label" href="{% url 'subscription_detail' organization.slug %}">
+                  Pro plan
+                </a>
               </div>
               <div class="description">
                 {% blocktrans trimmed %}
-                  Users with a verified Google Workspace email account matching
-                  your domain will auto-join your organization. This can be
-                  used on top of Read the Docs teams.
+                  Users with a verified Google Workspace email account matching your domain will auto-join your organization.
+                  All users in your organization are required to have a connected Google account.
+                  Project permissions and authorization are managed using Read the Docs teams.
                 {% endblocktrans %}
               </div>
             </div>
@@ -108,7 +106,7 @@
         {% alter_field form.provider data_bind="valueInit: provider, value: provider" %}
         {{ form.provider | as_crispy_field }}
 
-        <div class="ko hidden ui field" data-bind="css: { hidden: !use_domain() }">
+        <div class="ko hidden" data-bind="css: { hidden: !use_domain() }">
           {{ form.domain | as_crispy_field }}
         </div>
 
