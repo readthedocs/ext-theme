@@ -1,14 +1,21 @@
 {% load i18n %}
 
 {% if form.errors and form.non_field_errors %}
-  <div class="ui small negative message">
-    <div class="header">
-      {% trans "Error" %}
+  {% for error in form.non_field_errors %}
+    <div class="ui small {% firstof error.message_class 'error' %} message">
+      <div class="header">
+        {% trans "Error" as default_header %}
+        {% firstof error.header default_header %}
+      </div>
+      {% if error.messages|length == 1%}
+        {{ error.messages|first|safe }}
+      {% else %}
+        <ul class="list">
+          {% for message in error.messages %}
+            <li>{{ message|safe }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
-    <ul class="list">
-      {% for error in form.non_field_errors %}
-        <li>{{ error|escape }}</li>
-      {% endfor %}
-    </ul>
-  </div>
+  {% endfor %}
 {% endif %}
