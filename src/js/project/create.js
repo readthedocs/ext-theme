@@ -25,13 +25,13 @@ class RemoteRepository {
     this.is_private = ko.observable(this.private);
     /** @observable {Booleean} Is this repository active? */
     this.is_active = ko.observable(this.active);
+    /** @observable {Boolean} Does user have admin privilege on the repo? */
+    this.has_admin = ko.observable(this.admin);
     /** @computed {Boolean} Can user import this repository? */
     this.is_locked = ko.computed(() => {
       // TODO take platform private repo setting into consideration
       return this.is_private() && !this.has_admin();
     });
-    /** @observable {Boolean} Does user have admin privilege on the repo? */
-    this.has_admin = ko.observable(this.admin);
     /** @observable {Boolean} Was the repository already imported? */
     this.has_project = ko.computed(() => {
       return this.projects.length > 0;
@@ -67,12 +67,15 @@ export class ProjectCreateView extends ResponsiveView {
     this.is_selected = ko.computed(() => {
       return this.selected() !== undefined;
     });
+    /** @observable {Boolean} Can private repositories be imported */
+    this.allow_private_repos = ko.observable(false);
     /** @observable {string} The error message to show the user */
     this.error = ko.observable();
 
     // Wait for config to be loaded to init search
     this.config.subscribe((config) => {
       if (config !== undefined) {
+        this.allow_private_repos(config.allow_private_repos);
         this.init_search();
       }
     });
@@ -166,6 +169,14 @@ export class ProjectCreateView extends ResponsiveView {
         this.selected(new RemoteRepository(result));
       },
     });
+  }
+
+  /** {Boolean} Is repository supported, based on permissions? */
+  is_repository_supported(repo) {
+    if (repo.is_private()) {
+      return this.allow_private_repos();
+    }
+    return true;
   }
 }
 Registry.add_view(ProjectCreateView);
