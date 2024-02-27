@@ -43,7 +43,7 @@
   {% endif %}
 
   <div data-bind="using: new OrganizationSettingsAuthorizationView()">
-    <form class="ui form" method="POST" action=".", data-bind="css: { warning: show_warning }">
+    <form class="ui form" method="POST" action="." data-bind="css: { warning: show_warning }">
       {% csrf_token %}
 
       <div class="ui top attached segment">
@@ -73,7 +73,7 @@
               <div class="header">{{ form.PROVIDER_ALLAUTH }}</div>
               <div class="description">
                 {% blocktrans trimmed %}
-                  Control all access to your projects by reusing permissions from your project's version control provider.
+                  Control all access to your projects by reusing permissions from your repository's version control provider.
                   This replaces Read the Docs managed teams.
                 {% endblocktrans %}
               </div>
