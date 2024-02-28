@@ -5,8 +5,4 @@
   to the same image always.
 {% endcomment %}
 
-{% if project.remote_repository %}
-  <img class="ui small rounded image" src="{{ project.remote_repository.avatar_url }}" />
-{% else %}
-  <img class="ui small rounded image" src="https://api.dicebear.com/5.x/shapes/svg?size=64&backgroundColor=b8abd4&shape1Color=8c74c1&shape2Color=7854c5&shape3Color=f0f0ff&seed={{ project.pk }}" />
-{% endif %}
+<img class="ui small rounded image" src="{% url 'theme_avatar_project' project.slug %}" />
