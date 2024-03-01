@@ -7,7 +7,7 @@
 {% block title %}{{ organization.name }} - {% trans "Teams" %}{% endblock %}
 
 {% block content-header %}
-  {% include "organizations/partials/header.html" with organization=organization teams_active="active" is_collapsed=True %}
+  {% include "organizations/partials/header.html" with organization=organization teams_active="active" %}
 {% endblock %}
 
 {% block content %}
