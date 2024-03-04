@@ -6,7 +6,7 @@
 {% block title %}{% block subtitle %}{% if team %}{{ team.name }}{% else %}{% trans "New team" %}{% endif %}{% endblock %} - {{ organization.name }}{% endblock %}
 
 {% block content-header %}
-  {% include "organizations/partials/header.html" with teams_active="active" is_collapsed=True %}
+  {% include "organizations/partials/header.html" with teams_active="active" %}
 {% endblock %}
 
 {# This UI uses the same structure from the project creation form views #}
