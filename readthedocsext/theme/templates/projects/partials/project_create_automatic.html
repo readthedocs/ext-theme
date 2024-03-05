@@ -255,7 +255,8 @@
           <input type="hidden" name="repo" data-bind="value: clone_url" />
           <input type="hidden" name="repo_type" data-bind="value: vcs" />
           <input type="hidden" name="project_url" data-bind="value: html_url" />
-          <input type="hidden" name="remote_repository" data-bind="value: id" />
+          <input type="hidden" name="remote_repository" data-bind="value: pk" />
+          <input type="hidden" name="default_branch" data-bind="value: default_branch" />
 
           <button class="ui primary button" data-bind="css: {disabled: !admin}">
             {% trans "Continue" %}

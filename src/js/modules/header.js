@@ -13,7 +13,7 @@ import { Registry } from "../application/registry";
 export class CollapsingHeaderView {
   static view_name = "CollapsingHeaderView";
 
-  constructor(collapsed = false) {
+  constructor(collapsed = true) {
     /** @observable {Object} Whether the header view is collapsed by default */
     this.is_collapsed = ko.observable(collapsed);
 
@@ -22,8 +22,7 @@ export class CollapsingHeaderView {
      * @computed {Object} CSS class for dropdown link
      */
     this.dropdown_class = ko.computed(() => {
-      //return this.is_expanded() ? "fa-caret-up" : "fa-caret-down";
-      return this.is_collapsed() ? "fa-ellipsis" : "fa-caret-down";
+      return this.is_collapsed() ? "fa-caret-down" : "fa-caret-up";
     });
   }
 
