@@ -7,15 +7,8 @@
 {% comment %}
 
 This template is the header at the top of organization dashboard pages. There are
-two modes to this header, full and collapsed. Full is the default view on the
-organization detail page, while the collapsed view is the default for the other
-organization dashboard pages. It is possible to expand the menu with a dropdown.
-
-Arguments:
-
-is_collapsed (default: True)
-    The default view configuration, normally start this view off in a collapsed
-    state, except on the main detail page.
+two modes to this header, full and collapsed. The header always starts off as
+collapsed, to save visual space and can be expanded with the right label.
 
 {% endcomment %}
 
@@ -28,31 +21,26 @@ is_collapsed (default: True)
     </div>
   {% endfor %}
 
-
-
-  <div class="ui top attached segment" data-bind="using: CollapsingHeaderView({{ is_collapsed|default_if_none:True|yesno:"true,false" }})">
+  <div class="ui top attached segment" data-bind="using: CollapsingHeaderView(true)">
 
     {% block organization_header_metadata %}
       <div class="ui stacking grid">
 
         {% block organization_header_title %}
-          <div class="eight wide computer eight wide tablet sixteen wide mobile column">
-            <div class="ui medium monospace header">
-              <a href="{{ organization.get_absolute_url }}">
-                {{ organization.name }}
-              </a>
-
-              {# The dropdown action button, to swap between expanded/collapsed #}
-              <span data-bind="click: toggle_collapsed">
-                <i class="fas grey small icon" data-bind="class: dropdown_class"></i>
-              </span>
-            </div>
+          <div class="eight wide computer eight wide tablet sixteen wide mobile middle aligned column">
+            <img class="ui micro rounded right spaced inline image" src="{% gravatar_url organization.email 48 %}" />
+            <a class="ui medium text" href="{{ organization.get_absolute_url }}">
+              {{ organization.name }}
+            </a>
           </div>
         {% endblock organization_header_title %}
 
         {% block organization_header_labels %}
           <div class="right aligned eight wide computer eight wide tablet sixteen wide left aligned mobile column">
-            {# TODO something here? #}
+            {# The dropdown action button, to swap between expanded/collapsed #}
+            <a class="ui icon primary label" data-bind="click: toggle_collapsed" data-content="{% trans "More organization information" %}">
+              <i class="fas fa-caret-down icon" data-bind="class: dropdown_class"></i>
+            </a>
           </div>
         {% endblock organization_header_labels %}
 
@@ -68,14 +56,6 @@ is_collapsed (default: True)
                 </p>
               {% endif %}
             {% endblock %}
-
-            {% if organization.url %}
-              <a href="{{ organization.url }}">
-                <i class="fad fa-link icon"></i>
-                {% trans "Website" %}
-              </a>
-            {% endif %}
-
           </div>
         {% endblock organization_header_metadata_left %}
 

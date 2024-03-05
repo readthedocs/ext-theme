@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block content-header %}
-  {% include "projects/partials/header.html" with edit_active="active" is_collapsed=True %}
+  {% include "projects/partials/header.html" with edit_active="active" %}
 {% endblock %}
 
 {% block content %}
@@ -13,9 +13,6 @@
       <div class="ui vertical pointing fluid menu">
         <a class="item {% block project_edit_active %}{% endblock %}" href="{% url "projects_edit" project.slug %}">
           {% trans "Settings" %}
-        </a>
-        <a class="item {% block project_advanced_active %}{% endblock %}" href="{% url "projects_advanced" project.slug %}">
-          {% trans "Advanced settings" %}
         </a>
         <a class="item {% block project_addons_active %}{% endblock %}" href="{% url "projects_addons" project.slug %}">
           {% trans "Addons" %}
