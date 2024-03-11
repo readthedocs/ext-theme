@@ -7,22 +7,10 @@
   page content pane.
 {% endcomment %}
 
-{% comment %}
-``user_notifications`` comes from a Context Processor.
-We need to use a CustomUser to have access to "user.notifications"
-See https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-AUTH_USER_MODEL
-{% endcomment %}
-{% if user_notifications %}
-  {% for notification in user_notifications %}
-    <div class="ui message">
-    {% comment %}
-    Add this Xmark here once we implement dismissing notifications.
-    <i class="fa-duotone fa-circle-xmark close icon"></i>
-    {% endcomment %}
-      {{ notification.get_message.get_rendered_body|safe }}
-    </div>
-  {% endfor %}
-{% endif %}
+<rtd-notification-list
+  url="{% url "users-notifications-list" request.user.username %}"
+  csrf-token="{{ csrf_token }}">
+</rtd-notification-list>
 
 {% if messages %}
   {% for message in messages %}
