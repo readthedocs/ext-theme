@@ -202,9 +202,17 @@
 
     {% else %}
 
+      {% block build_detail_notifications %}
+        <div class="ui inverted basic fitted segment">
+          {# Build notifications only #}
+          <rtd-notification-list
+            url="{% url "projects-builds-notifications-list" project.slug build.pk %}"
+            csrf-token="{{ csrf_token }}">
+          </rtd-notification-list>
+        </div>
+      {% endblock build_detail_notifications %}
+
       {% comment %}
-        Error list
-      {% endcomment %}
       {% if build.notifications.exists %}
         {% for notification in build.notifications.all %}
           {% if notification.get_message.type == "error" %}
@@ -221,6 +229,7 @@
           <span>{% trans "For more information on this error, see our documentation." %}</span>
         </div>
       {% endif %}
+      {% endcomment %}
 
       <div class="ui inverted bottom attached segment transition slide">
 

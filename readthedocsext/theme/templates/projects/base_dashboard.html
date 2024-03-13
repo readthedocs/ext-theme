@@ -6,6 +6,15 @@
 
 {% block title %}{% trans "Projects" %}{% endblock %}
 
+{% block notifications %}
+  <rtd-notification-list
+    url="{% url "users-notifications-list" request.user.username %}"
+    csrf-token="{{ csrf_token }}">
+  </rtd-notification-list>
+
+  {{ block.super }}
+{% endblock notifications %}
+
 {% block content %}
   {% url "projects_import" as projects_import_url %}
   {% url "socialaccount_connections" as social_accounts %}

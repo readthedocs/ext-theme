@@ -7,11 +7,6 @@
   page content pane.
 {% endcomment %}
 
-<rtd-notification-list
-  url="{% url "users-notifications-list" request.user.username %}"
-  csrf-token="{{ csrf_token }}">
-</rtd-notification-list>
-
 {% if messages %}
   {% for message in messages %}
     {% comment %}
