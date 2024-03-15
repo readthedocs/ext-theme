@@ -1,0 +1,28 @@
+{% extends "support/index.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Support request submitted" %}{% endblock %}
+
+{% block support_form %}
+  <div class="ui positive message">
+    <div class="header">
+      {% blocktrans trimmed %}
+        Support request submitted!
+      {% endblocktrans %}
+    </div>
+    <span>
+      {% blocktrans trimmed %}
+        We will get back to you as soon as we can.
+      {% endblocktrans %}
+    </span>
+  </div>
+
+  <p>
+    {% blocktrans trimmed with url="https://docs.readthedocs.io/en/latest/index.html#step-by-step-guides" %}
+      While you are waiting for a response,
+      you might want to browse <a href="{{ url }}">our guides</a>,
+      which provide step-by-step solutions to common support questions.
+    {% endblocktrans %}
+  </p>
+{% endblock support_form %}
