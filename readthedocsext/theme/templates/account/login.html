@@ -76,8 +76,8 @@
       </div>
 
       {% if project_password_url %}
-      {# TODO: make this look nicer! #}
-      <div>
+      <div class="ui info message">
+        <i class="fa-duotone fa-lock icon"></i>
         {% blocktrans trimmed with project_password_url=project_password_url %}
         Do you have a password to access this documentation?
         <a href="{{ project_password_url }}">Access here</a>.
