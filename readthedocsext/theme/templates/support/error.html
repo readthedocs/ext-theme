@@ -1,0 +1,26 @@
+{% extends "support/index.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Support request error" %}{% endblock %}
+
+{% block support_form %}
+  <div class="ui error message">
+    <div class="header">
+      {% blocktrans trimmed %}
+        There has been an error submitting your support request.
+      {% endblocktrans %}
+    </div>
+    <span>
+      {% blocktrans trimmed %}
+        Please try again, filling out all form fields.
+      {% endblocktrans %}
+    </span>
+  </div>
+
+  <a href="javascript:history.back()"
+    class="ui primary button">
+    <i class="fad fa-chevron-left icon"></i>
+    {% trans "Go back" %}
+  </a>
+{% endblock support_form %}
