@@ -16,7 +16,11 @@
 
       <div class="ui medium header">
         {% block authentication_header %}
-          {% trans "Log in to continue" %}
+          {% if is_from_cas_login %}
+            {% trans "Log in to view this documentation" %}
+          {% else %}
+            {% trans "Log in to continue" %}
+          {% endif %}
         {% endblock authentication_header %}
       </div>
 
@@ -28,11 +32,13 @@
           {% block authentication_vcs_text %}{% trans "Connected account" %}{% endblock %}
         </a>
 
-        <a class="item" data-tab="email">
-          <i class="fad fa-envelope icon"></i>
-          {% block authentication_email_text %}{% trans "Log in with email" %}{% endblock %}
-        </a>
-
+        {% if not allowed_providers %}
+        {# If allowed providers is given, don't show the username/password form #}
+          <a class="item" data-tab="email">
+            <i class="fad fa-envelope icon"></i>
+            {% block authentication_email_text %}{% trans "Log in with email" %}{% endblock %}
+          </a>
+        {% endif %}
       </div>
 
       <div class="ui basic center aligned tab segment" data-tab="vcs">
@@ -68,6 +74,16 @@
           </form>
         {% endblock authentication_email %}
       </div>
+
+      {% if project_password_url %}
+      {# TODO: make this look nicer! #}
+      <div>
+        {% blocktrans trimmed with project_password_url=project_password_url %}
+        Do you have a password to access this documentation?
+        <a href="{{ project_password_url }}">Access here</a>.
+        {% endblocktrans %}
+      </div>
+      {% endif %}
 
       {% block authentication_extra %}{% endblock %}
 
