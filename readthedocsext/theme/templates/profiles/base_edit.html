@@ -5,10 +5,10 @@
 
 {% block notifications %}
   {# User notifications only #}
-  <rtd-notification-list
+  <readthedocs-notification-list
     url="{% url "users-notifications-list" request.user.username %}"
     csrf-token="{{ csrf_token }}">
-  </rtd-notification-list>
+  </readthedocs-notification-list>
 
   {{ block.super }}
 {% endblock notifications %}

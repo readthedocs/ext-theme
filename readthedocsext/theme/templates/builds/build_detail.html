@@ -203,12 +203,20 @@
     {% else %}
 
       {% block build_detail_notifications %}
-        <div class="ui inverted basic fitted segment">
-          {# Build notifications only #}
-          <rtd-notification-list
+        <div class="ui attached inverted basic fitted segment">
+          {% comment %}
+            Build notifications only
+
+            Note, this is the first place we are trying to mix web components and
+            Knockout views. This may eventually be replaced with a web component
+            entirely. For now, be careful reusing this pattern.
+          {% endcomment %}
+          <readthedocs-notification-list
+            class="ui vertical relaxed list"
             url="{% url "projects-builds-notifications-list" project.slug build.pk %}"
-            csrf-token="{{ csrf_token }}">
-          </rtd-notification-list>
+            csrf-token="{{ csrf_token }}"
+            data-bind="webcomponent: {build: 'foo'}">
+          </readthedocs-notification-list>
         </div>
       {% endblock build_detail_notifications %}
 

@@ -7,12 +7,11 @@
 {% block notifications %}
   {# Project specific notifications only #}
   {% if project %}
-    <rtd-notification-list
+    <readthedocs-notification-list
       url="{% url "projects-notifications-list" project.slug %}"
       csrf-token="{{ csrf_token }}">
-    </rtd-notification-list>
+    </readthedocs-notification-list>
   {% endif %}
 
   {{ block.super }}
 {% endblock notifications %}
-

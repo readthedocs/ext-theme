@@ -7,10 +7,11 @@
 {% block title %}{% trans "Projects" %}{% endblock %}
 
 {% block notifications %}
-  <rtd-notification-list
+  {# User notifications only #}
+  <readthedocs-notification-list
     url="{% url "users-notifications-list" request.user.username %}"
     csrf-token="{{ csrf_token }}">
-  </rtd-notification-list>
+  </readthedocs-notification-list>
 
   {{ block.super }}
 {% endblock notifications %}
