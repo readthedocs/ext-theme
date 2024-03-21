@@ -24,7 +24,10 @@
         {% endblock authentication_header %}
       </div>
 
-      <div class="ui small stackable secondary two item menu" data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
+      <div
+          {# The password URL is listed as an additional tab if present #}
+          class="ui small stackable secondary item menu {% if project_password_url %}three{% else %}two{% endif %}"
+          data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
 
         {# This is purposely minimal, as the verbiage for "Log in with connected account" is a mountful #}
         <a class="item" data-tab="vcs">
