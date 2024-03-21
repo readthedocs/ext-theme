@@ -1,0 +1,74 @@
+// Fix primary link color on inverted segments
+
+.notificationMessage(@color, @isInverted: false) {
+  @colorBackground: if(@isInverted, @color, @background);
+  @colorForeground: contrast(@colorBackground, @black, @white);
+
+  background-color: @colorBackground;
+  color: @colorForeground;
+
+  .header {
+    color: @colorForeground;
+  }
+
+  > i.icon:not(.close),
+  .header > i.icon {
+    & when (@isInverted = true) {
+      color: @colorForeground;
+    }
+    & when (@isInverted = false) {
+      color: @color;
+    }
+  }
+
+  a when (@isInverted = true) {
+    &:link,
+    &:visited,
+    &:hover,
+    &:active {
+      color: @colorForeground;
+      font-weight: 500;
+      text-decoration: underline;
+    }
+  }
+}
+
+// Note: "consequences" is terminology from FUI messages and other places.
+// Reusing that here. We cannot expand the list of consequence classes however,
+// as these are fairly hard coded in FUI.
+@variationNotificationConsequences: error, warning, info, note, tip;
+
+each(@variationNotificationConsequences, {
+  @consequence: @value;
+  @config: @notificationConsequences[@@consequence];
+
+  @color: @config[color];
+  @isInverted: if(isdefined(@config[inverted]), @config[inverted], false);
+
+  .ui.notification.@{consequence}.message {
+    box-shadow: none;
+
+    .header {
+      display: inline;
+
+      & + p {
+        display: inline;
+
+        &::before {
+          // emdash + space before paragraph for separation. Not all messages have
+          // punctuation and some extra spacing is needed to visually break up the
+          // header and the paragraph content.
+          content: '\2014\20';
+        }
+      }
+    }
+
+    .notificationMessage(@color, @isInverted);
+  }
+
+  & when (@variationMessageInverted) {
+    .ui.inverted.notification.@{consequence}.message {
+      .notificationMessage(@color, true);
+    }
+  }
+});

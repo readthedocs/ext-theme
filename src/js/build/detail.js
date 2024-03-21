@@ -207,17 +207,26 @@ class BuildCommand {
 export class BuildDetailView {
   static view_name = "BuildDetailView";
 
-  constructor(build = {}) {
+  constructor(build = {}, build_api_url, notification_api_url) {
     /** The build pk/id to fetch.
      * @type {number} */
     this.id = build.id;
-    // TODO make this configurable?
-    this.api_url = "/api/v2/build/";
 
     /** @observable {Boolean} Was for successful build or not */
     this.success = ko.observable(build.success);
+    // TODO subscribe here and add the error to missing notifications
     /** @observable {string} Build error message */
     this.error = ko.observable(build.error);
+    /** @observableArray {Object} List of notifications from API */
+    this.notifications = ko.observableArray();
+    /** @computed {Boolean} Has notifications? */
+    this.has_notifications = ko.observable(false);
+    this.notifications.subscribe((notifications) => {
+      if (notifications.length > 0) {
+        this.has_notifications(true);
+      }
+    });
+
     /** @obsevable {string} Build state */
     this.state = ko.observable(build.state);
     /** @observable {string} Build state as a display string */
@@ -393,7 +402,13 @@ export class BuildDetailView {
         this.set_selected_line_from_hash(this.selected_hash());
       }
     });
-    this.poll_api();
+
+    if (build_api_url) {
+      this.poll_api(build_api_url);
+    }
+    if (notification_api_url) {
+      this.poll_notifications_api(notification_api_url);
+    }
   }
 
   /**
@@ -401,10 +416,11 @@ export class BuildDetailView {
    * and BuildCommandOutput states. When the API return indicates the build is
    * finished, we stop recursive polling.
    */
-  poll_api() {
-    jquery.getJSON(this.api_url + this.id + "/").then((data) => {
+  poll_api(url) {
+    jquery.getJSON(url).then((data) => {
       this.date(data.date);
       this.success(data.success);
+      // TODO use this as a fallback
       this.error(data.error);
       this.length(data.length);
       this.commit(data.commit);
@@ -416,7 +432,6 @@ export class BuildDetailView {
       this.state_display(data.state_display);
 
       this.poll_api_counts = this.poll_api_counts + 1;
-
 
       // This is a mock command used to preview the command output.
       // TODO probably do this in the application instead
@@ -443,21 +458,37 @@ export class BuildDetailView {
     // this update happens at the very end of API updates instead.
     if (this.is_finished()) {
       this.is_polling(false);
-
-      // HACK: this is a small hack to avoid implementing the new notification system
-      // on ext-theme at this point. This will come in a future PR.
-      // The notifications are rendered properly via Django template in a static way.
-      // So, we refresh the page once the build has finished to make Django render the notifications.
-      // We use a check of 1 API poll for those builds that are already finished when opened.
-      // The new dashboard will implement the new notification system in a nicer way using APIv3.
-      if (this.poll_api_counts !== 1) {
-        location.reload();
-      }
     } else {
       setTimeout(() => {
         this.poll_api();
       }, 2000);
     }
+  }
+
+  /** Poll APIv3 build notification API directly
+    *
+    * We have to do this because we rely on the build APIv2 for everything else
+    * and the APIv3 build endpoints don't have the data required yet.
+    *
+    * This has to do the same polling mechanism as the build APIv2 polling above
+    *
+   * @param {str} url - APIv3 build notification endpoint
+    */
+  poll_notifications_api(url) {
+    // TODO make this not poll twice
+    // TODO wrap this in a poll(url, url) so that there arent two spots for recurring polling
+    jquery.getJSON(url).then((data) => {
+      this.notifications(data.results);
+    });
+
+    // Similar to poll_api above, recursively poll until the build is finished.
+    if (!this.is_finished()) {
+      setTimeout(() => {
+        this.poll_notifications_api(url);
+      }, 2000);
+    }
+
+    return this;
   }
 
   /** Add a command to :attr:`commands` if it doesn't already exist

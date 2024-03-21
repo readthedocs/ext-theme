@@ -83,6 +83,7 @@ export default (env, argv) => {
             {
               loader: "less-loader",
               options: {
+                lessLogAsWarnOrErr: true,
                 lessOptions: {
                   // LESS loader will try to load these before Webpack resolver
                   // kicks in, which is the recommended method. These include

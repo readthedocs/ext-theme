@@ -5,11 +5,12 @@ import { when } from "lit/directives/when.js";
 import { classMap } from "lit/directives/class-map.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
-/* Notification
+/**
+ * Notification
  *
  * Used internally and directly to render a notification API response. This
  * element is not rendered using element attributes.
- */
+ **/
 export class Notification extends LitElement {
   static properties = {
     csrfToken: { type: String, attribute: "csrf-token" },
@@ -26,7 +27,7 @@ export class Notification extends LitElement {
       return nothing;
     }
     return html`
-      <div class="ui small ${this.notification.message.type} message">
+      <div class="ui ${this.notification.message.type} notification message">
         ${when(
           this.notification.dismissable,
           () => html`
@@ -40,7 +41,7 @@ export class Notification extends LitElement {
           <i class="fad ${this.notification.message.icon_classes} icon"></i>
           ${unsafeHTML(this.notification.message.header)}
         </h5>
-        ${unsafeHTML(this.notification.message.body)}
+        <p>${unsafeHTML(this.notification.message.body)}</p>
       </div>
     `;
   }
@@ -115,8 +116,6 @@ export class NotificationList extends LitElement {
     this.fetchNotifications();
 
     if (this.notifications && this.notifications.length > 0) {
-      //return html`
-      //    ${repeat(
       return repeat(
         this.notifications,
         (notification) => notification.id,
@@ -130,8 +129,6 @@ export class NotificationList extends LitElement {
           return elem;
         },
       );
-      //    )}
-      //`;
     } else {
       return nothing;
     }

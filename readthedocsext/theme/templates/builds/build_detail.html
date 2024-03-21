@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="ui basic segment padded" data-bind="using: BuildDetailView({id: {{ build.pk }}})">
+  <div class="ui basic segment padded" data-bind="using: BuildDetailView({}, '{% url "build-detail" build.id %}', '{% url "projects-builds-notifications-list" build.project.slug build.id %}')">
 
     {% block build_detail_metadata %}
       <div class="ui top attached segment">
@@ -203,41 +203,23 @@
     {% else %}
 
       {% block build_detail_notifications %}
-        <div class="ui attached inverted basic fitted segment">
-          {% comment %}
-            Build notifications only
+        {% comment %}
+          Build notification and error list
 
-            Note, this is the first place we are trying to mix web components and
-            Knockout views. This may eventually be replaced with a web component
-            entirely. For now, be careful reusing this pattern.
-          {% endcomment %}
-          <readthedocs-notification-list
-            class="ui vertical relaxed list"
-            url="{% url "projects-builds-notifications-list" project.slug build.pk %}"
+          This uses ``readthedocs-notification`` directly, so that the build
+          detail view can handle all of the API requests in one place.
+
+          We pass the entire API notification response object into the web
+          component, which handles the data the same way as the notification
+          list element.
+        {% endcomment %}
+        <div class="ko hidden ui attached fitted inverted basic segment" data-bind="css: { hidden: !has_notifications() }, foreach: notifications">
+          <readthedocs-notification
             csrf-token="{{ csrf_token }}"
-            data-bind="webcomponent: {build: 'foo'}">
-          </readthedocs-notification-list>
+            data-bind="webcomponent: {notification: $data}">
+          </readthedocs-notification>
         </div>
       {% endblock build_detail_notifications %}
-
-      {% comment %}
-      {% if build.notifications.exists %}
-        {% for notification in build.notifications.all %}
-          {% if notification.get_message.type == "error" %}
-            <div class="ui attached inverted red segment">
-              <i class="fa-solid fa-exclamation circular icon"></i>
-              <span>{{ notification.get_message.get_rendered_body|safe }}</span>
-              <span>{% trans "For more information on this error, see our documentation." %}</span>
-            </div>
-          {% endif %}
-        {% endfor %}
-      {% else %}
-        <div class="ui attached inverted red segment" data-bind="visible: error" style="display: none;">
-          <span data-bind="text: error"></span>
-          <span>{% trans "For more information on this error, see our documentation." %}</span>
-        </div>
-      {% endif %}
-      {% endcomment %}
 
       <div class="ui inverted bottom attached segment transition slide">
 
