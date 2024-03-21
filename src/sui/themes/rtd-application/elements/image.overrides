@@ -11,6 +11,6 @@
 // Used in the project/organization headers for now, to keep consistent line height
 @microWidth: 26px;
 .ui.micro.image {
-    width: @microWidth;
-    height: auto;
+  width: @microWidth;
+  height: auto;
 }

@@ -4,12 +4,18 @@ orbs:
   browser-tools: circleci/browser-tools@1.4.7
 
 commands:
-  run-lint:
-    description: "Run code linter"
+  run-lint-node:
+    description: "Run Node linting"
     steps:
       - checkout
       - run: npm ci
       - run: npm run lint
+  run-lint-python:
+    description: "Run Python linting"
+    steps:
+      - checkout
+      - run: pip install djhtml
+      - run: djhtml --tabwidth 2 readthedocsext/
   run-build:
     description: "Ensure built assets are up to date"
     steps:
@@ -35,11 +41,16 @@ commands:
       - run: npm test
 
 jobs:
-  lint:
+  lint-node:
     docker:
       - image: "cimg/node:16.14"
     steps:
-      - run-lint: {}
+      - run-lint-node: {}
+  lint-python:
+    docker:
+      - image: "cimg/python:3.11.8"
+    steps:
+      - run-lint-python: {}
   build:
     docker:
       - image: "cimg/node:16.14"
@@ -55,6 +66,7 @@ workflows:
   version: 2
   tests:
     jobs:
-      - lint
+      - lint-node
+      - lint-python
       - build
       - test

@@ -56,10 +56,10 @@
           <div class="description">
             {% url 'api_webhook' project_slug=project.slug integration_pk=integration.pk as webhook_url %}
             {% with PUBLIC_API_URL|add:webhook_url as integration_url %}
-            <code>{{ integration_url }}</code>
-            <span class="ui compact icon basic button" data-clipboard-text="{{ integration_url }}" data-content="{% trans "Copied!" %}">
-              <i class="fa-duotone fa-copy icon"></i>
-            </span>
+              <code>{{ integration_url }}</code>
+              <span class="ui compact icon basic button" data-clipboard-text="{{ integration_url }}" data-content="{% trans "Copied!" %}">
+                <i class="fa-duotone fa-copy icon"></i>
+              </span>
             {% endwith %}
           </div>
         </div>
@@ -99,14 +99,14 @@
   </div>
 
   {% if integration.has_sync and not integration.secret %}
-  <div class="ui warning message">
-    {% blocktrans trimmed %}
-    This integration does not have a secret,
-    the authenticity of the incoming webhook cannot be verified.
-    <strong>Click on "Resync webhook" to generate a secret.</strong>
-    Read more in our <a href="https://blog.readthedocs.com/security-update-on-incoming-webhooks/">blog post</a>.
-    {% endblocktrans %}
-  </div>
+    <div class="ui warning message">
+      {% blocktrans trimmed %}
+        This integration does not have a secret,
+        the authenticity of the incoming webhook cannot be verified.
+        <strong>Click on "Resync webhook" to generate a secret.</strong>
+        Read more in our <a href="https://blog.readthedocs.com/security-update-on-incoming-webhooks/">blog post</a>.
+      {% endblocktrans %}
+    </div>
   {% endif %}
 
   {% if not integration.can_sync %}
