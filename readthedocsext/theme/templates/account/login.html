@@ -32,12 +32,22 @@
           {% block authentication_vcs_text %}{% trans "Connected account" %}{% endblock %}
         </a>
 
-        {% if not allowed_providers %}
-        {# If allowed providers is given, don't show the username/password form #}
-          <a class="item" data-tab="email">
-            <i class="fad fa-envelope icon"></i>
-            {% block authentication_email_text %}{% trans "Log in with email" %}{% endblock %}
-          </a>
+        {# If allowed providers is given, disable the username/password form #}
+        <a class="item {% if allowed_providers %}disabled{% endif %}"
+           data-tab="email"
+           {% if allowed_providers %}
+           title="Log in using email is not enabled for this organization"
+           aria-label="Log in using email is not enabled for this organization"
+           {% endif %}>
+          <i class="fad fa-envelope icon"></i>
+          {% block authentication_email_text %}{% trans "Log in with email" %}{% endblock %}
+        </a>
+
+        {% if project_password_url %}
+        <a class="item" href="{{ project_password_url }}">
+          <i class="fad fa-lock icon"></i>
+          {% trans "Use a password" %}
+        </a>
         {% endif %}
       </div>
 
@@ -74,16 +84,6 @@
           </form>
         {% endblock authentication_email %}
       </div>
-
-      {% if project_password_url %}
-      <div class="ui info message">
-        <i class="fa-duotone fa-lock icon"></i>
-        {% blocktrans trimmed with project_password_url=project_password_url %}
-        Do you have a password to access this documentation?
-        <a href="{{ project_password_url }}">Access here</a>.
-        {% endblocktrans %}
-      </div>
-      {% endif %}
 
       {% block authentication_extra %}{% endblock %}
 
