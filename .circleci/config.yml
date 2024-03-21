@@ -2,14 +2,20 @@ version: 2.1
 
 orbs:
   browser-tools: circleci/browser-tools@1.4.7
+  python: circleci/python@2.1.1
 
 commands:
   run-lint:
     description: "Run code linter"
     steps:
       - checkout
+      - python/install-packages:
+          args: djhtml
+          pkg-manager: pip
+          pypi-cache: false
       - run: npm ci
       - run: npm run lint
+      - run: djhtml --tabwidth 2 readthedocsext/
   run-build:
     description: "Ensure built assets are up to date"
     steps:
