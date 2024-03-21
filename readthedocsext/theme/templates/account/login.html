@@ -36,10 +36,10 @@
         </a>
 
         {# If allowed providers is given, disable the username/password form #}
+        {% blocktrans asvar text_email_disabled %}Log in using email is disabled for this organization{% endblocktrans %}
         <a class="item {% if allowed_providers %}disabled{% endif %}"
            data-tab="email"
            {% if allowed_providers %}
-           {% trans "Log in using email is disabled for this organization" asvar text_email_disabled %}
            data-content="{{ text_email_disabled }}"
            aria-label="{{ text_email_disabled }}"
            {% endif %}>
