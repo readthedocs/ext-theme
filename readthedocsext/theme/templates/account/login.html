@@ -39,8 +39,9 @@
         <a class="item {% if allowed_providers %}disabled{% endif %}"
            data-tab="email"
            {% if allowed_providers %}
-           title="Log in using email is not enabled for this organization"
-           aria-label="Log in using email is not enabled for this organization"
+           {% trans "Log in using email is disabled for this organization" asvar text_email_disabled %}
+           data-content="{{ text_email_disabled }}"
+           aria-label="{{ text_email_disabled }}"
            {% endif %}>
           <i class="fad fa-envelope icon"></i>
           {% block authentication_email_text %}{% trans "Log in with email" %}{% endblock %}
