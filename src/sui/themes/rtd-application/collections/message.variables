@@ -6,15 +6,12 @@
 @notificationConsequences: {
   @error: {
     color: @red;
-    inverted: true;
   };
   @warning: {
     color: @lightOrange;
-    inverted: true;
   };
   @info: {
     color: @teal;
-    inverted: true;
   };
   @note: {
     color: @blue;

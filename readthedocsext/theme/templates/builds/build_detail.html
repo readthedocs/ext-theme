@@ -215,9 +215,25 @@
         {% endcomment %}
         <div class="ko hidden ui attached fitted inverted basic segment" data-bind="css: { hidden: !has_notifications() }, foreach: notifications">
           <readthedocs-notification
+            inverted=true
             csrf-token="{{ csrf_token }}"
             data-bind="webcomponent: {notification: $data}">
           </readthedocs-notification>
+        </div>
+
+        {% comment %}
+          Support for old style build errors, without notifications. In these
+          builds, ``error`` is a string and there is no header, so we use a
+          generic header instead.
+        {% endcomment %}
+        <div class="ko hidden ui attached fitted inverted basic segment" data-bind="css: { hidden: !error() }">
+          <div class="ui inverted error notification message">
+            <div class="header">
+              <i class="fad fa-circle-exclamation icon"></i>
+              {% trans "There was an error with this build" %}
+            </div>
+            <p data-bind="text: error"></p>
+          </div>
         </div>
       {% endblock build_detail_notifications %}
 
