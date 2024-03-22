@@ -113,7 +113,7 @@ export class NotificationList extends LightDOMElement {
     inverted: { type: Boolean },
 
     notifications: { state: true },
-    finished: { state: true, type: Boolean },
+    request: { state: true },
   };
 
   constructor() {
@@ -122,13 +122,13 @@ export class NotificationList extends LightDOMElement {
   }
 
   fetchNotifications() {
-    if (!this.url || this.finished) {
+    if (!this.url || this.request !== undefined) {
       return;
     }
     const params = new URLSearchParams({
       state: this.state,
     });
-    fetch(`${this.url}?${params}`)
+    this.request = fetch(`${this.url}?${params}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Request failed");
@@ -148,9 +148,6 @@ export class NotificationList extends LightDOMElement {
       })
       .catch((err) => {
         console.error(`Error fetching notifications from ${this.url}`, err);
-      })
-      .finally(() => {
-        this.finished = true;
       });
   }
 
