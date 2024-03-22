@@ -118,7 +118,7 @@ export class NotificationList extends LightDOMElement {
 
   constructor() {
     super();
-    this.state = "unread";
+    this.state = "read,unread";
   }
 
   fetchNotifications() {
@@ -126,7 +126,7 @@ export class NotificationList extends LightDOMElement {
       return;
     }
     const params = new URLSearchParams({
-      state: this.state,
+      state__in: this.state,
     });
     this.request = fetch(`${this.url}?${params}`)
       .then((response) => {

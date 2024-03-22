@@ -471,8 +471,10 @@ export class BuildDetailView {
    * @param {str} url - APIv3 build notification endpoint
     */
   poll_api_notifications() {
-    console.log("POLLINGAPINOT");
-    jquery.getJSON(this.url_api_notifications).then((data) => {
+    const params = {
+      state__in: "read,unread",
+    };
+    jquery.getJSON(this.url_api_notifications, params).then((data) => {
       if (data.results) {
         this.notifications(data.results);
       }

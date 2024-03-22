@@ -256,14 +256,8 @@ export const webcomponent = {
     for (const [key, value] of Object.entries(binding_value)) {
       if (value !== undefined) {
         if (typeof value === "function") {
-          console.debug("Unsupported function in data binding");
+          console.error("Unsupported function in data binding");
         } else {
-          console.debug(
-            "Setting up web component via data binding:",
-            key,
-            value,
-            element,
-          );
           element[key] = value;
         }
       }
