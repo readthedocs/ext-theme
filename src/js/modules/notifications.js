@@ -19,7 +19,7 @@ import { LightDOMElement } from "../application/elements";
  * @param {string} csrfToken - CSRF token from Django, attribute ``csrf-token``
  * @param {Boolean} inverted - Whether the message is ``inverted`` variant
  **/
-export class Notification extends LightDOMElement {
+export class NotificationElement extends LightDOMElement {
   static properties = {
     csrfToken: { type: String, attribute: "csrf-token" },
     notification: { state: true },
@@ -94,9 +94,9 @@ export class Notification extends LightDOMElement {
 }
 
 /**
- * NotificationList
+ * NotificationListElement
  *
- * This is the wrapper to :js:class:`Notification`, and provides the initial
+ * This is the wrapper to :js:class:`NotificationElement`, and provides the initial
  * API interaction to populate all of the notification element instances with
  * data.
  *
@@ -105,7 +105,7 @@ export class Notification extends LightDOMElement {
  * @param {string} state - Notification states to filter for
  * @param {Boolean} inverted - Whether inverted variant should be forced
  **/
-export class NotificationList extends LightDOMElement {
+export class NotificationListElement extends LightDOMElement {
   static properties = {
     url: { type: String },
     csrfToken: { type: String, attribute: "csrf-token" },
@@ -176,5 +176,5 @@ export class NotificationList extends LightDOMElement {
   }
 }
 
-customElements.define("readthedocs-notification", Notification);
-customElements.define("readthedocs-notification-list", NotificationList);
+customElements.define("readthedocs-notification", NotificationElement);
+customElements.define("readthedocs-notification-list", NotificationListElement);
