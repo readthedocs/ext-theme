@@ -4,7 +4,6 @@
 // chaining more selectors. This rule will override most 3 and 4 selector rules
 // due to the artificially increased specificity in this rule.
 .ko.ko.ko.ko.ko {
-
   // There is the Knockout ``visible`` data binding, but this injects a hard
   // coded style="display: none;" when the binding is false. This makes default
   // styling on initial load hard with CSS and tends to flash the element to the
@@ -16,5 +15,4 @@
   &.hidden {
     display: none;
   }
-
 }

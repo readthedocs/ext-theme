@@ -4,13 +4,13 @@
 
 {% block content %}
 
-    {% for build in builds %}
-        <div style="float: left; width: {{ build_percent }}%;">
-            <h3>{{ build.project }}</h3>
+  {% for build in builds %}
+    <div style="float: left; width: {{ build_percent }}%;">
+      <h3>{{ build.project }}</h3>
         <pre><span id="build-output-{{ build.id }}">{{ build.output }}</span></pre>
-        </div>
-    {% endfor %}
-    <form class="ui form" id="form" style="display: none;">
-        <input class="ui button" type="submit">
-    </form>
+    </div>
+  {% endfor %}
+  <form class="ui form" id="form" style="display: none;">
+    <input class="ui button" type="submit">
+  </form>
 {% endblock %}

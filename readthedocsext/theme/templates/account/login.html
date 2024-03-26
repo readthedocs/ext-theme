@@ -16,11 +16,18 @@
 
       <div class="ui medium header">
         {% block authentication_header %}
-          {% trans "Log in to continue" %}
+          {% if is_from_cas_login %}
+            {% trans "Log in to view this documentation" %}
+          {% else %}
+            {% trans "Log in to continue" %}
+          {% endif %}
         {% endblock authentication_header %}
       </div>
 
-      <div class="ui small stackable secondary two item menu" data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
+      <div
+          {# The password URL is listed as an additional tab if present #}
+        class="ui small stackable secondary item menu {% if project_password_url %}three{% else %}two{% endif %}"
+        data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
 
         {# This is purposely minimal, as the verbiage for "Log in with connected account" is a mountful #}
         <a class="item" data-tab="vcs">
@@ -28,11 +35,24 @@
           {% block authentication_vcs_text %}{% trans "Connected account" %}{% endblock %}
         </a>
 
-        <a class="item" data-tab="email">
+        {# If allowed providers is given, disable the username/password form #}
+        {% blocktrans asvar text_email_disabled %}Log in using email is disabled for this organization{% endblocktrans %}
+        <a class="item {% if allowed_providers %}disabled{% endif %}"
+           data-tab="email"
+           {% if allowed_providers %}
+             data-content="{{ text_email_disabled }}"
+             aria-label="{{ text_email_disabled }}"
+           {% endif %}>
           <i class="fad fa-envelope icon"></i>
           {% block authentication_email_text %}{% trans "Log in with email" %}{% endblock %}
         </a>
 
+        {% if project_password_url %}
+          <a class="item" href="{{ project_password_url }}">
+            <i class="fad fa-lock icon"></i>
+            {% trans "Use a password" %}
+          </a>
+        {% endif %}
       </div>
 
       <div class="ui basic center aligned tab segment" data-tab="vcs">

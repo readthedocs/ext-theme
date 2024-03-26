@@ -30,6 +30,7 @@ repos:
     rev: "3.0.6"
     hooks:
       - id: djhtml
+        entry: djhtml --tabwidth 2
         files: '^readthedocsext/theme/templates/.*\.html'
   - repo: local
     hooks:

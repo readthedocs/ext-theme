@@ -9,6 +9,8 @@ Display
 
 .. autofunction:: ./application/plugins.semanticui
 
+.. autofunction:: ./application/plugins.webcomponent
+
 Data
 ~~~~
 
@@ -24,8 +26,6 @@ How to pass data between the templates and our JavaScript in a secure manner.
 
 Modules
 ~~~~~~~
-
-.. autofunction:: ./application/plugins.message
 
 .. autofunction:: ./application/plugins.chart
 
