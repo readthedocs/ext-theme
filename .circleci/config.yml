@@ -34,8 +34,9 @@ jobs:
     docker:
       - image: "cimg/python:3.11.8"
     steps:
+      - checkout
       - node/install:
-          node-version: '16.20'
+          node-version: '20.12'
       - run: node --version
       - run: npm ci
       - run: npm run lint
