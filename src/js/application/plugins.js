@@ -5,6 +5,8 @@ import ko from "knockout";
 // conditional
 import "./globals";
 
+import Plausible from "plausible-tracker";
+
 // Required for FUI tab module
 import * as jqueryAddress from "jquery-address";
 
@@ -40,6 +42,7 @@ export function configure_jquery_plugins() {
   jquery.fn.tabs = jquery_tabmenu;
   // ``tabmenu`` was ported from our website, but ``tabs`` is nicer
   jquery.fn.tabmenu = jquery_tabmenu;
+  jquery.fn.plausible = jquery_plausible;
 }
 
 /**
@@ -53,8 +56,8 @@ export function configure_knockout_plugins() {
   ko.bindingHandlers.element = element;
   ko.bindingHandlers.chart = chart;
   ko.bindingHandlers.popup = popup;
-  ko.bindingHandlers.message = message;
   ko.bindingHandlers.semanticui = semanticui;
+  ko.bindingHandlers.webcomponent = webcomponent;
 }
 
 /**
@@ -224,62 +227,44 @@ export const popup = {
 };
 
 /**
- * Message plugin for Knockout for displaying messages that can be dismissed by
- * either closing via the close button, or clicking the link in the message.
- * This will fade out the message.
+ * Web component bridge binding
  *
- * This is a plugin as we manipulate JQuery elements directly. Knockout views
- * are not a good fit here because the underlying JQuery element is not
- * surfaced to Knockout views.
+ * This binding is used to help bridge Knockout views and web components, but
+ * allowing observables to set web component attributes when updated.
  *
- * Usage:
+ * It's important to note that there is likely a bit of extra overhead here as
+ * both Knockout and Lit have differing patterns for property/observable
+ * lifecycles. That is, Knockout will process the observable change with
+ * multiple calls, and then pass the value off to the LitElement, which will do
+ * its own round of internal calls to update the property value.
+ *
+ * Either way, this binding can help with the transition to web components.
+ *
+ * With an underlying Knockout view, a web component property can be updated
+ * with this data binding like so:
  *
  * .. code:: html
  *
- *     <div data-bind="message: {}"></div>
- *     <div data-bind="message: {dismiss_url: '/foo'}"></div>
+ *     <readthedocs-foo data-bind="webcomponent: {someProperty: someObservable}">
  *
+ * In the above example here, the web component property ``someProperty`` is
+ * updated by the Knockout view observable ``someObservable``. When there is an
+ * update to the observable in the Knockout view, this property will then be
+ * updated on the web component. This can be a full object, this pattern is not
+ * limited to data primitives, like when using web components from HTML.
  */
-export const message = {
-  init: (element, value_accessor, bindings, view, context) => {
-    const jq_element = jquery(element);
-
-    const config = value_accessor();
-
-    // This intercepts the normal function of the button, and injects a call to
-    // first dismiss the message.
-    const dismiss = (event) => {
-      const target = jquery(event.target);
-      const link_url = target.attr("href");
-
-      event.preventDefault();
-
-      if (config.dismiss_url) {
-        jquery
-          .get(config.dismiss_url)
-          .done((resp) => {
-            if (link_url) {
-              window.location = link_url;
-            }
-          })
-          .fail((error) => {
-            console.error(error);
-          })
-          .always(() => {
-            jq_element.transition("fade");
-          });
-      } else {
-        jq_element.transition("fade");
+export const webcomponent = {
+  update: (element, value_accessor, all_bindings) => {
+    const binding_value = ko.unwrap(value_accessor());
+    for (const [key, value] of Object.entries(binding_value)) {
+      if (value !== undefined) {
+        if (typeof value === "function") {
+          console.error("Unsupported function in data binding");
+        } else {
+          element[key] = value;
+        }
       }
-
-      return false;
-    };
-
-    // We will use the above handler on both the close button, and also on any
-    // links in the text of the message. This ensures both options dismiss the
-    // notification message.
-    jq_element.find(".close").on("click", dismiss);
-    jq_element.find("a").on("click", dismiss);
+    }
   },
 };
 
@@ -394,6 +379,81 @@ export const semanticui = {
     }
   },
 };
+
+/**
+ * Plausible tracking module
+ *
+ * This reuses jQuery to provide explicit tracking of events at Plausible. To
+ * use events, add the ``data-analytics`` attribute to an element. In most
+ * cases, this should be a link element, however in the case of other UI
+ * components, it may be a ``<div>`` or ``<button>``:
+ *
+ *     <button class="ui button" data-analytics="some-event-id">Something</button>
+ *
+ * In the case of a link with a ``href`` attribute, the link will continue
+ * redirecting after the callback from Plausible fires off.
+ */
+function jquery_plausible(domain, debug = false) {
+  let plausible_settings = { domain: domain };
+  if (debug === true) {
+    plausible_settings.trackLocalhost = true;
+  }
+  const { trackEvent } = Plausible(plausible_settings);
+  const { trackPageview } = Plausible(plausible_settings);
+
+  // Track pageview for all pages
+  trackPageview();
+
+  return this.each((index, elem) => {
+    elem.addEventListener("click", on_click_event);
+    elem.addEventListener("auxclick", on_click_event);
+
+    function on_click_event(event) {
+      const event_names = elem.getAttribute("data-analytics").split(/,(.+)/);
+      const is_link =
+        elem.tagName != undefined && elem.tagName.toLowerCase() == "a";
+      const is_middle_click = event.type == "auxclick" && event.which == 2;
+      const is_click = event.type == "click";
+      const is_link_click =
+        is_link &&
+        is_click &&
+        !elem.target &&
+        !(event.ctrlKey || event.metaKey || event.shiftKey);
+
+      if (is_middle_click || is_click) {
+        function redirect_link() {
+          if (is_link_click && elem.href && elem.href != "#") {
+            console.debug("Plausible: resuming redirect to", elem.href);
+            location.href = elem.href;
+          }
+        }
+        for (const event_name of event_names) {
+          trackEvent(event_name, {
+            callback: () => {
+              console.debug("Plausible: tracked event", event_name);
+              redirect_link();
+            },
+          });
+          setTimeout(() => {
+            console.debug(
+              "Plausible: didn't receive response, continuing anyways",
+            );
+            redirect_link();
+          }, 150);
+        }
+      }
+
+      // If this is a normal click of an anchor element, prevent the default
+      // event from propagating and instead wait until the callback
+      // returns/expires to redirect the current page URL. If the user held
+      // control/shift/meta while clicking, we're assuming the browser is doing
+      // something special instead and will not block the default event.
+      if (is_link_click) {
+        event.preventDefault();
+      }
+    }
+  });
+}
 
 /**
  * Tab group SUI module helper

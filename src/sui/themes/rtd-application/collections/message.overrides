@@ -1,0 +1,88 @@
+/**
+ * notificationMessage mixin
+ *
+ * This makes it easier to style both inverted and normal variants the same way.
+ *
+ * Arguments:
+ *
+ * ``color``
+ *     Primary color used for the message. For normal variants, this affects just
+ *     a few highlights colors and eventually a box shadow color. On inverted
+ *     messages, this is the background color.
+ * ``isInverted``
+ *     Whether this is the inverted variant or not.
+ **/
+.notificationMessage(@color, @isInverted: false) {
+  @colorBackground: if(@isInverted, @color, @background);
+  @colorForeground: contrast(@colorBackground, @black, @white);
+
+  background-color: @colorBackground;
+  color: @colorForeground;
+
+  .header {
+    color: @colorForeground;
+  }
+
+  > i.icon:not(.close),
+  .header > i.icon {
+    & when (@isInverted = true) {
+      color: @colorForeground;
+    }
+    & when (@isInverted = false) {
+      color: @color;
+    }
+  }
+
+  // Avoids default link color on colored background messages. Links are instead
+  // bold and underlined, but the link color matches the text node color.
+  a when (@isInverted = true) {
+    &:link,
+    &:visited,
+    &:hover,
+    &:active {
+      color: @colorForeground;
+      font-weight: 500;
+      text-decoration: underline;
+    }
+  }
+}
+
+// Note: "consequences" is terminology from FUI messages and other places.
+// Reusing that here. We cannot expand the list of consequence classes however,
+// as these are fairly hard coded in FUI.
+@variationNotificationConsequences: error, warning, info, note, tip;
+
+each(@variationNotificationConsequences, {
+  @consequence: @value;
+  @config: @notificationConsequences[@@consequence];
+  @color: @config[color];
+
+  .ui.notification.@{consequence}.message {
+    box-shadow: @boxShadow;
+
+    // Displayed inline to reduce vertical space requirements. Headers incur a
+    // lot of dead space in the message.
+    .header {
+      display: inline;
+
+      & + p {
+        display: inline;
+
+        &::before {
+          // emdash + space before paragraph for separation. Not all messages have
+          // punctuation and some extra spacing is needed to visually break up the
+          // header and the paragraph content.
+          content: '\2014\20';
+        }
+      }
+    }
+
+    .notificationMessage(@color, false);
+  }
+
+  & when (@variationMessageInverted) {
+    .ui.inverted.notification.@{consequence}.message {
+      .notificationMessage(@color, true);
+    }
+  }
+});

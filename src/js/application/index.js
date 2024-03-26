@@ -142,5 +142,11 @@ export class Application {
       hoverable: false,
       content: "Copied!",
     });
+
+    // Plausible
+    jquery("[data-analytics]").plausible(
+      this.config.production_domain,
+      this.config.debug,
+    );
   }
 }

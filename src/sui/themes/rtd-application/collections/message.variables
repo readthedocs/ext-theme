@@ -1,0 +1,22 @@
+@headerFontSize: @relativeMedium;
+@boxShadow: none;
+@borderRadius: 0px;
+@messageTextOpacity: 1;
+
+@notificationConsequences: {
+  @error: {
+    color: @red;
+  };
+  @warning: {
+    color: @lightOrange;
+  };
+  @info: {
+    color: @teal;
+  };
+  @note: {
+    color: @blue;
+  };
+  @tip: {
+    color: @violet;
+  };
+};
