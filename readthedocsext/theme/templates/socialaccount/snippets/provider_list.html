@@ -6,20 +6,20 @@
 {% for provider in socialaccount_providers %}
   {# OpenID is not implemented #}
   {% if provider.id != 'bitbucket' %}
-  {% if allowed_providers and provider.id in allowed_providers or not allowed_providers %}
-    <li class="item">
-      <form class="ui form"
-            method="post"
-            action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
-        {% csrf_token %}
-        <button class="ui button" type="submit" title="{{ provider.name }}">
-          <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
-          {% blocktrans trimmed with provider_name=provider.name verbiage=verbiage|default:'Connect to' %}
-            {{ verbiage }} {{ provider_name }}
-          {% endblocktrans %}
-        </button>
-      </form>
-    </li>
-  {% endif %}
+    {% if allowed_providers and provider.id in allowed_providers or not allowed_providers %}
+      <li class="item">
+        <form class="ui form"
+              method="post"
+              action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+          {% csrf_token %}
+          <button class="ui button" type="submit" title="{{ provider.name }}">
+            <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
+            {% blocktrans trimmed with provider_name=provider.name verbiage=verbiage|default:'Connect to' %}
+              {{ verbiage }} {{ provider_name }}
+            {% endblocktrans %}
+          </button>
+        </form>
+      </li>
+    {% endif %}
   {% endif %}
 {% endfor %}

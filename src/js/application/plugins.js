@@ -56,8 +56,8 @@ export function configure_knockout_plugins() {
   ko.bindingHandlers.element = element;
   ko.bindingHandlers.chart = chart;
   ko.bindingHandlers.popup = popup;
-  ko.bindingHandlers.message = message;
   ko.bindingHandlers.semanticui = semanticui;
+  ko.bindingHandlers.webcomponent = webcomponent;
 }
 
 /**
@@ -227,62 +227,44 @@ export const popup = {
 };
 
 /**
- * Message plugin for Knockout for displaying messages that can be dismissed by
- * either closing via the close button, or clicking the link in the message.
- * This will fade out the message.
+ * Web component bridge binding
  *
- * This is a plugin as we manipulate JQuery elements directly. Knockout views
- * are not a good fit here because the underlying JQuery element is not
- * surfaced to Knockout views.
+ * This binding is used to help bridge Knockout views and web components, but
+ * allowing observables to set web component attributes when updated.
  *
- * Usage:
+ * It's important to note that there is likely a bit of extra overhead here as
+ * both Knockout and Lit have differing patterns for property/observable
+ * lifecycles. That is, Knockout will process the observable change with
+ * multiple calls, and then pass the value off to the LitElement, which will do
+ * its own round of internal calls to update the property value.
+ *
+ * Either way, this binding can help with the transition to web components.
+ *
+ * With an underlying Knockout view, a web component property can be updated
+ * with this data binding like so:
  *
  * .. code:: html
  *
- *     <div data-bind="message: {}"></div>
- *     <div data-bind="message: {dismiss_url: '/foo'}"></div>
+ *     <readthedocs-foo data-bind="webcomponent: {someProperty: someObservable}">
  *
+ * In the above example here, the web component property ``someProperty`` is
+ * updated by the Knockout view observable ``someObservable``. When there is an
+ * update to the observable in the Knockout view, this property will then be
+ * updated on the web component. This can be a full object, this pattern is not
+ * limited to data primitives, like when using web components from HTML.
  */
-export const message = {
-  init: (element, value_accessor, bindings, view, context) => {
-    const jq_element = jquery(element);
-
-    const config = value_accessor();
-
-    // This intercepts the normal function of the button, and injects a call to
-    // first dismiss the message.
-    const dismiss = (event) => {
-      const target = jquery(event.target);
-      const link_url = target.attr("href");
-
-      event.preventDefault();
-
-      if (config.dismiss_url) {
-        jquery
-          .get(config.dismiss_url)
-          .done((resp) => {
-            if (link_url) {
-              window.location = link_url;
-            }
-          })
-          .fail((error) => {
-            console.error(error);
-          })
-          .always(() => {
-            jq_element.transition("fade");
-          });
-      } else {
-        jq_element.transition("fade");
+export const webcomponent = {
+  update: (element, value_accessor, all_bindings) => {
+    const binding_value = ko.unwrap(value_accessor());
+    for (const [key, value] of Object.entries(binding_value)) {
+      if (value !== undefined) {
+        if (typeof value === "function") {
+          console.error("Unsupported function in data binding");
+        } else {
+          element[key] = value;
+        }
       }
-
-      return false;
-    };
-
-    // We will use the above handler on both the close button, and also on any
-    // links in the text of the message. This ensures both options dismiss the
-    // notification message.
-    jq_element.find(".close").on("click", dismiss);
-    jq_element.find("a").on("click", dismiss);
+    }
   },
 };
 

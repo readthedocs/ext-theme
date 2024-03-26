@@ -15,7 +15,7 @@ commands:
     steps:
       - checkout
       - run: pip install djhtml
-      - run: djhtml --tabwidth 2 readthedocsext/
+      - run: djhtml --check --tabwidth 2 readthedocsext/
   run-build:
     description: "Ensure built assets are up to date"
     steps:

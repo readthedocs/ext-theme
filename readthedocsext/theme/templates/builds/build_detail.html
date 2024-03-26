@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="ui basic segment padded" data-bind="using: BuildDetailView({id: {{ build.pk }}})">
+  <div class="ui basic segment padded" data-bind="using: BuildDetailView({}, '{% url "build-detail" build.id %}', '{% url "projects-builds-notifications-list" build.project.slug build.id %}')">
 
     {% block build_detail_metadata %}
       <div class="ui top attached segment">
@@ -202,25 +202,40 @@
 
     {% else %}
 
-      {% comment %}
-        Error list
-      {% endcomment %}
-      {% if build.notifications.exists %}
-        {% for notification in build.notifications.all %}
-          {% if notification.get_message.type == "error" %}
-            <div class="ui attached inverted red segment">
-              <i class="fa-solid fa-exclamation circular icon"></i>
-              <span>{{ notification.get_message.get_rendered_body|safe }}</span>
-              <span>{% trans "For more information on this error, see our documentation." %}</span>
-            </div>
-          {% endif %}
-        {% endfor %}
-      {% else %}
-        <div class="ui attached inverted red segment" data-bind="visible: error" style="display: none;">
-          <span data-bind="text: error"></span>
-          <span>{% trans "For more information on this error, see our documentation." %}</span>
+      {% block build_detail_notifications %}
+        {% comment %}
+          Build notification and error list
+
+          This uses ``readthedocs-notification`` directly, so that the build
+          detail view can handle all of the API requests in one place.
+
+          We pass the entire API notification response object into the web
+          component, which handles the data the same way as the notification
+          list element.
+        {% endcomment %}
+        <div class="ko hidden ui attached fitted inverted basic segment" data-bind="css: { hidden: !has_notifications() }, foreach: notifications">
+          <readthedocs-notification
+            inverted=true
+            csrf-token="{{ csrf_token }}"
+            data-bind="webcomponent: {notification: $data}">
+          </readthedocs-notification>
         </div>
-      {% endif %}
+
+        {% comment %}
+          Support for old style build errors, without notifications. In these
+          builds, ``error`` is a string and there is no header, so we use a
+          generic header instead.
+        {% endcomment %}
+        <div class="ko hidden ui attached fitted inverted basic segment" data-bind="css: { hidden: !error() }">
+          <div class="ui inverted error notification message">
+            <div class="header">
+              <i class="fad fa-circle-exclamation icon"></i>
+              {% trans "There was an error with this build" %}
+            </div>
+            <p data-bind="text: error"></p>
+          </div>
+        </div>
+      {% endblock build_detail_notifications %}
 
       <div class="ui inverted bottom attached segment transition slide">
 

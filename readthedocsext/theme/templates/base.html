@@ -50,9 +50,9 @@
 
     {% block content-wrapper %}
       <div class="ui very padded container">
-        {% block messages %}
+        {% block notifications %}
           {% include "includes/utils/messages.html" %}
-        {% endblock messages %}
+        {% endblock notifications %}
 
         {# TODO move admin-bar usage to content-header #}
         {% block admin-bar %}{% endblock %}
