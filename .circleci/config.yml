@@ -5,12 +5,6 @@ orbs:
   node: circleci/node@5.2.0
 
 commands:
-  run-lint-python:
-    description: "Run Python linting"
-    steps:
-      - checkout
-      - run: pip install djhtml
-      - run: djhtml --check --tabwidth 2 readthedocsext/
   run-build:
     description: "Ensure built assets are up to date"
     steps:
@@ -41,7 +35,7 @@ jobs:
       - image: "cimg/python:3.11.8"
     steps:
       - node/install:
-          node-version: '20.12'
+          node-version: '16.20'
       - run: node --version
       - run: npm ci
       - run: npm run lint
