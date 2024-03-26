@@ -2,14 +2,9 @@ version: 2.1
 
 orbs:
   browser-tools: circleci/browser-tools@1.4.7
+  node: circleci/node@5.2.0
 
 commands:
-  run-lint-node:
-    description: "Run Node linting"
-    steps:
-      - checkout
-      - run: npm ci
-      - run: npm run lint
   run-lint-python:
     description: "Run Python linting"
     steps:
@@ -41,16 +36,17 @@ commands:
       - run: npm test
 
 jobs:
-  lint-node:
-    docker:
-      - image: "cimg/node:16.14"
-    steps:
-      - run-lint-node: {}
-  lint-python:
+  lint:
     docker:
       - image: "cimg/python:3.11.8"
     steps:
-      - run-lint-python: {}
+      - node/install:
+          node-version: '20.12'
+      - run: node --version
+      - run: npm ci
+      - run: npm run lint
+      - run: pip install pre-commit
+      - run: pre-commit run --all-files
   build:
     docker:
       - image: "cimg/node:16.14"
@@ -66,7 +62,6 @@ workflows:
   version: 2
   tests:
     jobs:
-      - lint-node
-      - lint-python
+      - lint
       - build
       - test
