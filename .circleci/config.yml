@@ -36,8 +36,7 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: '20.12'
-      - run: node --version
+          node-version: "20.12"
       - run: npm ci
       - run: npm run lint
       - run: pip install pre-commit
