@@ -65,11 +65,11 @@ active_item
                 <a class="{% if active_item == "projects" %}active {% endif %} computer only item" href="{% url 'projects_dashboard' %}">
                   {% trans "Projects" %}
                 </a>
-              {% endif %}
-              {% if USE_ORGANIZATIONS %}
-                <a class="{% if active_item == "organizations" %}active {% endif %} computer only item" href="{% url 'organization_list' %}">
-                  {% trans "Organizations" %}
-                </a>
+                {% if USE_ORGANIZATIONS %}
+                  <a class="{% if active_item == "organizations" %}active {% endif %} computer only item" href="{% url 'organization_list' %}">
+                    {% trans "Organizations" %}
+                  </a>
+                {% endif %}
               {% endif %}
             {% endblock header_left_menu %}
 
