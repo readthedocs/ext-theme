@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% comment %}
+  Errors extending from this base are _strictly_ dashboard errors. These errors
+  will look and feel like part of the application, where errors emit from
+  Proxito will display as an unbranded or minimally branded page.
+{% endcomment %}
+
+{% block content %}
+  <section>
+    <div class="ui hero padded container">
+      <div class="ui very padded text container">
+        <div class="ui vertically padded centered grid">
+          {# TODO there is probably a way to combine the two columns below and not repeat icon definition #}
+          <div class="ui computer only tablet only right aligned three wide computer three wide tablet column">
+            {% block error_icon_computer %}
+              <i class="fad {% block error_icon_computer_name %}{% endblock %} big black inverted shadowed circular icon"
+                 style="{% block error_icon_computer_style %}--fa-secondary-opacity: .5;{% endblock %}"></i>
+            {% endblock error_icon_computer %}
+          </div>
+          <div class="ui mobile only center aligned sixteen wide column">
+            {% block error_icon_mobile %}
+              <i class="fad {% block error_icon_mobile_name %}{% endblock %} big black inverted shadowed circular icon"
+                 style="{% block error_icon_mobile_style %}--fa-secondary-opacity: .5;{% endblock %}"></i>
+            {% endblock error_icon_mobile %}
+          </div>
+
+          <div class="ui ten wide computer eleven wide tablet sixteen wide mobile column">
+            <h1 class="ui small left aligned monospace header">
+              {% block error_title %}
+                <span class="ui grey text">
+                  {% block error_status %}
+                  {% endblock error_status %}
+                </span>
+              {% endblock error_title %}
+            </h1>
+
+            {% block error_content %}
+            {% endblock error_content %}
+
+            {% block error_content_help %}
+              <p>
+                <a class="ui button" href="javascript:history.back();">{% trans "Go back" %}</a>
+              </p>
+            {% endblock error_content_help %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}
