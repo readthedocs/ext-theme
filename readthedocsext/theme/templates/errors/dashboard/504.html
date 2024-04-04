@@ -26,6 +26,9 @@
       We have encountered a problem and Read the Docs is currently unavailable.
     {% endblocktrans %}
   </p>
+{% endblock error_content %}
+
+{% block error_content_help %}
   {% url 'support' as url_support %}
   <p>
     {% blocktrans trimmed with url_support=url_support %}
@@ -34,4 +37,4 @@
     {% endblocktrans %}
   </p>
   {{ block.super }}
-{% endblock error_content %}
+{% endblock error_content_help %}
