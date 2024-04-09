@@ -1,0 +1,36 @@
+{% extends "errors/dashboard/base.html" %}
+
+{% load core_tags %}
+{% load i18n %}
+
+{% block title %}{% trans "Unauthorized request" %}{% endblock %}
+
+{% block error_status %}401{% endblock %}
+{% block error_title %}
+  {{ block.super }}
+  {% trans "Unauthorized request" %}
+{% endblock error_title %}
+
+{% block error_icon_computer_name %}fa-lock-keyhole{% endblock %}
+{% block error_icon_mobile_name %}fa-lock-keyhole{% endblock %}
+{% block error_icon_computer_style %}--fa-primary-color: orange;{% endblock %}
+{% block error_icon_mobile_style %}--fa-primary-color: orange;{% endblock %}
+
+{% block error_content %}
+  <p>
+    {% blocktrans trimmed %}
+      You may not be logged in, or your account may not have the necessary permissions to view this page.
+    {% endblocktrans %}
+  </p>
+{% endblock error_content %}
+
+{% block error_content_help %}
+  <p>
+    {% blocktrans trimmed %}
+      Try logging in again or logging in with a different account. If this does
+      not help, verify that your account has the necessary permissions to view
+      this page.
+    {% endblocktrans %}
+  </p>
+  {{ block.super }}
+{% endblock error_content_help %}

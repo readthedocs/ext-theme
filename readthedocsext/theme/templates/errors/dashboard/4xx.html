@@ -1,0 +1,37 @@
+{% extends "errors/dashboard/base.html" %}
+
+{% load core_tags %}
+{% load i18n %}
+
+{% comment %}
+  Leaving this as a technically-not-accurate "bad request", as this works okay
+  for being a fallback for missing error templates.
+{% endcomment %}
+{% block title %}{% trans "Bad request" %}{% endblock %}
+
+{% block error_status %}{% endblock %}
+{% block error_title %}
+  {% trans "Bad request" %}
+{% endblock error_title %}
+
+{% block error_icon_computer_name %}fa-cloud-exclamation{% endblock %}
+{% block error_icon_mobile_name %}fa-cloud-exclamation{% endblock %}
+
+{% block error_content %}
+  <p>
+    {% blocktrans trimmed with url_support=url_support %}
+      Your request is either unsupported or we didn't understand it.
+    {% endblocktrans %}
+  </p>
+{% endblock error_content %}
+
+{% block error_content_help %}
+  <p>
+    {% url 'support' as url_support %}
+    {% blocktrans trimmed with url_support=url_support %}
+      Try again later or <a href="{{ url_support }}">contact us</a>
+      if this problem persists.
+    {% endblocktrans %}
+  </p>
+  {{ block.super }}
+{% endblock error_content_help %}
