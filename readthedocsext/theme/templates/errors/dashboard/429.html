@@ -1,0 +1,36 @@
+{% extends "errors/dashboard/base.html" %}
+
+{% load core_tags %}
+{% load i18n %}
+
+{% block title %}{% trans "Too many requests" %}{% endblock %}
+
+{% block error_status %}429{% endblock %}
+{% block error_title %}
+  {{ block.super }}
+  {% trans "Too many requests" %}
+{% endblock error_title %}
+
+{% block error_icon_computer_name %}fa-turtle fa-swap-opacity{% endblock %}
+{% block error_icon_mobile_name %}fa-turtle fa-swap-opacity{% endblock %}
+{% block error_icon_computer_style %}--fa-primary-color: palegreen; --fa-secondary-color: palegreen;{% endblock %}
+{% block error_icon_mobile_style %}--fa-primary-color: palegreen; --fa-secondary-color: palegreen;{% endblock %}
+
+{% block error_content %}
+  <p>
+    {# Translators: this is colloquial and silly and doesn't need verbatim translation #}
+    {% trans "Slow down there, partner." %}
+    {% blocktrans trimmed %}
+      You sent too many requests in a short period of time.
+    {% endblocktrans %}
+  </p>
+{% endblock error_content %}
+
+{% block error_content_help %}
+  <p>
+    {% blocktrans trimmed %}
+      Wait several minutes before trying your request again.
+    {% endblocktrans %}
+  </p>
+  {{ block.super }}
+{% endblock error_content_help %}

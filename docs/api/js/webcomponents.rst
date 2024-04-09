@@ -4,10 +4,10 @@ Web components
 Elements
 --------
 
-.. js:autoclass:: NotificationListElement 
+.. js:autoclass:: NotificationListElement
     :members:
 
-.. js:autoclass:: NotificationElement 
+.. js:autoclass:: NotificationElement
     :members:
 
 Views

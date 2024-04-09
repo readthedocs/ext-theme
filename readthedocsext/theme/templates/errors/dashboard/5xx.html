@@ -1,0 +1,37 @@
+{% extends "errors/dashboard/base.html" %}
+
+{# The dashboard 5xx page, shows like it is part of the application #}
+
+{% load core_tags %}
+{% load i18n %}
+
+{% block title %}{% trans "Server error" %}{% endblock %}
+
+{% block error_status %}500{% endblock %}
+{% block error_title %}
+  {% trans "Something went wrong" %}
+{% endblock error_title %}
+
+{% block error_icon_computer_name %}fa-fire fa-swap-opacity{% endblock %}
+{% block error_icon_mobile_name %}fa-fire fa-swap-opacity{% endblock %}
+{% block error_icon_computer_style %}--fa-primary-color: red; --fa-secondary-color: orangered;{% endblock %}
+{% block error_icon_mobile_style %}--fa-primary-color: red; --fa-secondary-color: orangered;{% endblock %}
+
+{% block error_content %}
+  <p>
+    {% blocktrans trimmed %}
+      There was an unexpected error while trying to view this page.
+      You may have encountered a bug or a temporary issue affecting our services.
+    {% endblocktrans %}
+  </p>
+{% endblock error_content %}
+
+{% block error_content_help %}
+  <p>
+    {% url 'support' as url_support %}
+    {% blocktrans trimmed %}
+      <a href="{{ url_support }}">Contact us</a> if you continue to notice this error.
+    {% endblocktrans %}
+  </p>
+  {{ block.super }}
+{% endblock error_content_help %}
