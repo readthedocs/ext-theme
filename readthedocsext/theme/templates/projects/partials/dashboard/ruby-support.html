@@ -1,9 +1,20 @@
-<div class="ui card">
-  <div class="content">
-    <a class="header" target="_blank" href="https://about.readthedocs.com/blog/2024/03/read-the-docs-loves-ruby/">{% trans "New: support for Ruby" %}</a>
-    <div class="description">
-      Does your project use Jekyll, RDoc, or YARD?
-      Ruby is now officially supported on Read the Docs as a pre-defined build tool option!
+{% load i18n %}
+
+{% with "https://about.readthedocs.com/blog/2024/03/read-the-docs-loves-ruby/" as url %}
+  <div class="ui card">
+    <div class="content">
+      <a class="header" target="_blank" href="{{ url }}">{% trans "New: support for Ruby" %}</a>
+      <div class="description">
+        {% blocktrans %}
+          Does your project use Jekyll, RDoc, or YARD?
+          Ruby is now officially supported on Read the Docs as a pre-defined build tool option!
+        {% endblocktrans %}
+      </div>
+    </div>
+    <div class="ui grid extra content">
+      <a class="ui sixteen wide column positive basic button" target="_blank" href="{{ url }}">
+        {% trans "Use Ruby to build your docs" %}
+      </a>
     </div>
   </div>
-</div>
+{% endwith %}

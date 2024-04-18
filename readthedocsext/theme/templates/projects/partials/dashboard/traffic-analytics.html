@@ -1,10 +1,21 @@
-<div class="ui card">
-  <div class="content">
-    <a class="header" target="_blank" href="https://docs.readthedocs.io/en/stable/analytics.html">Prioritize your most-read pages</a>
-    <div class="description">
-      Use <strong>traffic analytics</strong> to know <em>which</em> documents your users are reading.
-      This allows you to understand how your documentation is being used and learn more about your audience.
-      Then you can prioritize your efforts on expanding and updating pages people are reading most.
+{% load i18n %}
+
+{% with "https://docs.readthedocs.io/page/analytics.html" as url %}
+  <div class="ui card">
+    <div class="content">
+      <a class="header" target="_blank" href="{{ url }}">{% trans "Prioritize your most-read pages" %}</a>
+      <div class="description">
+        {% blocktrans %}
+          Use <strong>traffic analytics</strong> to know <em>which</em> documents your users are reading.
+          This allows you to understand how your documentation is being used and learn more about your audience.
+          Then you can prioritize your efforts on expanding and updating pages people are reading most.
+        {% endblocktrans %}
+      </div>
+    </div>
+    <div class="ui grid extra content">
+      <a class="ui sixteen wide column positive basic button" target="_blank" href="{{ url }}">
+        {% trans "Enable pull request previews" %}
+      </a>
     </div>
   </div>
-</div>
+{% endwith %}
