@@ -27,6 +27,15 @@
     <div class="five wide computer only column">
       <div class="ui one cards">
 
+        {% comment %}
+          Include a feature promotion in the right bar.
+
+          The promotion HTML to include comes from the backend at `ProjectDashboard` view.
+        {% endcomment %}
+        {% if promotion %}
+          {% include promotion %}
+        {% endif %}
+
         <div class="basic card">
           <div class="content">
             <a class="header" href="https://docs.readthedocs.io/en/stable/">

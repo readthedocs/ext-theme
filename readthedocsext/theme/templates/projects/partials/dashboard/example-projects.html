@@ -1,0 +1,20 @@
+{% load i18n %}
+
+{% with "https://docs.readthedocs.io/page/examples.html" as url %}
+  <div class="ui card">
+    <div class="content">
+      <a class="header" target="_blank" href="{{ url }}">{% trans "Get inspiration from example projects" %}</a>
+      <div class="description">
+        {% blocktrans %}
+          Not sure how to get started?
+          Check out these example projects for a few common tools to get some inspiration.
+        {% endblocktrans %}
+      </div>
+    </div>
+    <div class="ui extra content">
+      <a class="ui small primary fluid basic button" target="_blank" href="{{ url }}">
+        {% trans "Check out example projects" %}
+      </a>
+    </div>
+  </div>
+{% endwith %}
