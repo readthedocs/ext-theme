@@ -38,9 +38,9 @@
   {% endblocktrans %}
   {# Repeating the include because Django templates make conditional variables impossible #}
   {% if object == request.user %}
-    {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text is_disabled=True %}
+    {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url field_name="username" field_value=object.username action_text=action_text context_text=context_text is_disabled=True %}
   {% else %}
-    {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text is_disabled=False %}
+    {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url field_name="username" field_value=object.username action_text=action_text context_text=context_text is_disabled=False %}
   {% endif %}
 {% endblock list_item_right_buttons %}
 
