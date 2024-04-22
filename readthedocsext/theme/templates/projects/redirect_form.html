@@ -4,10 +4,13 @@
 {% load crispy_forms_tags %}
 {% load ext_theme_tags %}
 
-{% block title %}{% trans "Redirect" %}{% endblock %}
-
-{% block project_redirects_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Redirects" %}{% endblock %}
+{% block project_edit_content_subheader %}
+  {% if object %}
+    {% trans "Update redirect" %}
+  {% else %}
+    {% trans "Add redirect" %}
+  {% endif %}
+{% endblock %}
 
 {% block project_edit_content %}
   <form class="ui form" method="post" action="." data-bind="using: ProjectRedirectView()">
