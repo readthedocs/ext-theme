@@ -11,23 +11,37 @@
 {% block project_edit_content %}
   {% include "projects/partials/edit/user_list.html" with objects=users %}
 
-  <h3 class="ui medium header">
-    {% trans "Add maintainer" %}
-  </h3>
+  {% comment %}
+    TODO move maintainer invitations to a dedicated view.
 
-  <div class="ui info message">
-    <i class="fa-duotone fa-circle-info icon"></i>
-    {% blocktrans trimmed %}
-      Adding a user as a maintainer will give the user admin access to this project.
-    {% endblocktrans %}
-  </div>
+    Do not reuse this pattern, it is a bad pattern.
 
-  <form class="ui form" method="post" action=".">{% csrf_token %}
-    {{ form | crispy }}
-    <input class="ui primary button" type="submit" value="{% trans "Add maintainer" %}">
-  </form>
+    This is a bit of a hack to avoid manipulating the view to work with
+    multiple querysets on two separate models. On the maintainer view,
+    there will also be a listing of invitations (the `Invitation` model). But,
+    the invitiation list will not respond to pagination without altering the
+    view to support multi model pagination.
+
+    This means that invitations could clog up the UI, as they won't be paginated,
+    and the invitations will to stuffed below the view model listing, so will be
+    harder to find.
+
+    Ideally, these should either be separate views entirely, or both
+    listing queries would be joined into a single queryset listing.
+  {% endcomment %}
+  {% block maintainer_invitations %}
+    {% if invitations.exists %}
+      <h2 class="ui small header">
+        {% trans "Pending invitations" %}
+        <span class="ui circular small label">
+          {{ invitations.count }}
+        </span>
+      </h2>
+      {% include "invitations/partials/invitation_list.html" with objects=invitations skip_pagination=True %}
+    {% endif %}
+  {% endblock maintainer_invitations %}
 {% endblock %}
 
 {% block project_edit_sidebar_help_topics %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/glossary.html#term-maintainer" text="Glossary: Definition of a 'maintainer' on Read the Docs Community" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/glossary.html#term-maintainer" text="What is a maintainer?" is_external=True class="item" %}
 {% endblock project_edit_sidebar_help_topics %}
