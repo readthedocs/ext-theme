@@ -12,13 +12,9 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  <div class="item">
-    <a class="ui green button"
-       href="{% url "projects_translations_create" project.slug %}">
-      <i class="fas fa-plus icon"></i>
-      {% trans "Add translation" %}
-    </a>
-  </div>
+  {% url "projects_translations_create" project.slug as create_url %}
+  {% trans "Add translation" as create_text %}
+  {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
 {% endblock %}
 
 {% block list_placeholder_icon_class %}fa-duotone fa-language{% endblock %}

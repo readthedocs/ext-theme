@@ -12,12 +12,9 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  <div class="item">
-    <a class="ui green icon button"
-       href="{% url 'projects_redirects_create' project_slug=project.slug %}">
-      {% trans "Add redirect" %}
-    </a>
-  </div>
+  {% url "projects_redirects_create" project_slug=project.slug as create_url %}
+  {% trans "Add redirect" as create_text %}
+  {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
 {% endblock %}
 
 {% block list_placeholder_icon_class %}fa-duotone fa-signs-post{% endblock %}
@@ -71,26 +68,12 @@
     <i class="fas fa-wrench icon"></i>
   </a>
 
-  <div class="ui button"
-       data-bind="click: $root.show_modal('redirect-{{ object.pk }}')"
-       data-content="{% trans "Remove redirect" %}">
-    <i class="fas fa-trash icon"></i>
-
-    <div class="ui mini modal" data-modal-id="redirect-{{ object.pk }}">
-      <div class="header">{% trans "Remove redirect?" %}</div>
-      <div class="content">
-        {% blocktrans trimmed with redirect=object %}
-          Remove redirect {{redirect}}?
-        {% endblocktrans %}
-      </div>
-      <div class="actions">
-        <form method="post" action="{% url 'projects_redirects_delete' project_slug=project.slug redirect_pk=object.pk %}">
-          {% csrf_token %}
-          <input class="ui negative button" type="submit" value="{% trans "Remove" %}">
-        </form>
-      </div>
-    </div>
-  </div>
+  {% url "projects_redirects_delete" project_slug=project.slug redirect_pk=object.pk as form_url %}
+  {% trans "Remove redirect" as action_text %}
+  {% blocktrans trimmed asvar content_text with redirect=object %}
+    Remove redirect {{redirect}}?
+  {% endblocktrans %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}

@@ -32,9 +32,9 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  <a class="ui green button" href="{% url "projects_import" %}">
-    {% trans "Add project" %}
-  </a>
+  {% url "projects_import" as create_url %}
+  {% trans "Add project" as create_text %}
+  {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
 {% endblock %}
 
 {% block list_placeholder_icon_class %}{% endblock %}

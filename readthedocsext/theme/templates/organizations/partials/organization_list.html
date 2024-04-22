@@ -16,9 +16,8 @@
 {% block create_button %}
   {# See below for more background on why we conditionally show a create button here #}
   {% if request.user and request.user.organizations.count == 0 %}
-    <a class="ui green button" href="{{ organization_create }}">
-      {% trans "Create organization" %}
-    </a>
+    {% trans "Add organization" as create_text %}
+    {% include "includes/crud/create_button.html" with url=organization_create text=create_text %}
   {% endif %}
 {% endblock %}
 
