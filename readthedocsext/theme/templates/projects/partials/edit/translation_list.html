@@ -8,24 +8,17 @@
 {% load privacy_tags %}
 {% load projects_tags %}
 
-{# Because we don't have filters and we have an inline create form, we don't need this yet #}
-{% block top_menu %}
-{% endblock top_menu %}
-
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  {% comment %}
-    {# TODO make this a view #}
-    <div class="item">
-      <a class="ui green icon button"
-        href="{% url "..." project.slug %}">
-        <i class="plus icon"></i>
-        {% trans "Add translation" %}
-      </a>
-    </div>
-  {% endcomment %}
+  <div class="item">
+    <a class="ui green button"
+       href="{% url "projects_translations_create" project.slug %}">
+      <i class="fas fa-plus icon"></i>
+      {% trans "Add translation" %}
+    </a>
+  </div>
 {% endblock %}
 
 {% block list_placeholder_icon_class %}fa-duotone fa-language{% endblock %}
@@ -48,6 +41,15 @@
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
+  {% comment %}
+    {# TODO there is no edit view for this model, only create and delete #}
+  <a class="ui button"
+     href="{% url 'projects_translations_edit' project_slug=project.slug translation_pk=object.pk %}"
+     data-content="{% trans "Edit translation" %}">
+    <i class="fas fa-wrench icon"></i>
+  </a>
+  {% endcomment %}
+
   {% url "projects_translations_delete" project.slug object.slug as form_url %}
   {% trans "Remove translation" as action_text %}
   {% blocktrans trimmed asvar content_text with language=object.get_language_display name=project.name %}
