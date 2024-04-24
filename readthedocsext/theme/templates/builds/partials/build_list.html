@@ -102,7 +102,10 @@
 {% endblock list_item_meta_items %}
 
 {% block list_item_extra_items %}
-  <div class="item">
-    {% include "includes/elements/chips/version.html" with version=object.version %}
-  </div>
+  {# Builds can have a null version #}
+  {% if object.version %}
+    <div class="item">
+      {% include "includes/elements/chips/version.html" with version=object.version %}
+    </div>
+  {% endif %}
 {% endblock list_item_extra_items %}
