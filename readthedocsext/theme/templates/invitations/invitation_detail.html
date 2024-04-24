@@ -61,7 +61,7 @@
         <div class="extra content">
           <form class="ui two buttons" action="." method="post">
             {% csrf_token %}
-            <input class="ui positive basic button" type="submit" name="accept" value="{% trans "Accept" %}" {% if invitation.expired%}disabled{% endif %}>
+            <input class="ui positive basic button" type="submit" name="accept" value="{% trans "Accept" %}" {% if invitation.expired %}disabled{% endif %}>
             <input class="ui negative basic button" type="submit" name="decline" value="{% trans "Decline" %}">
           </form>
         </div>
