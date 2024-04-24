@@ -146,7 +146,10 @@ export class ProjectVersionCreateView {
    * @param {object} config - configuration for search element
    */
   init_search(config) {
-    const url = config.api_url + "?limit=30&verbose_name={query}";
+    const maxResults = 30;
+    // String interpolation over URLSearchParams here as FUI uses basic string
+    // replacement for `{query}`, but this is encoded for URLSearchParams.
+    const url = config.api_url + `?limit=${maxResults}&verbose_name={query}`;
     const errors = config.errors || {};
     return {
       apiSettings: {
@@ -154,7 +157,7 @@ export class ProjectVersionCreateView {
       },
       error: errors,
       fullTextSearch: true,
-      maxResults: 30,
+      maxResults: maxResults,
       onSelect: (result, response) => {
         window.location.href = result.urls.dashboard.edit;
       },
