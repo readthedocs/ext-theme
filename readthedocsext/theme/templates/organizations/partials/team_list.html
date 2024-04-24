@@ -12,9 +12,9 @@
 
 {% block create_button %}
   {% if request.user|is_admin:organization %}
-    <a class="ui green button" href="{% url "organization_team_add" organization.slug %}">
-      {% trans "Add team" %}
-    </a>
+    {% url "organization_team_add" organization.slug as create_url %}
+    {% trans "Add team" as create_text %}
+    {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
   {% endif %}
 {% endblock %}
 

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+  {% trans "Invitation request" %}
+{% endblock %}
+
+{% block content %}
+  <div class="ui very padded text container">
+    <div class="ui fluid card">
+      <div class="content">
+
+        <div class="header">
+          {% blocktrans trimmed with target_name=invitation.object.name|default:target_name target_type=target_type %}
+            Invitation to join the {{ target_name }} {{ target_type }}
+          {% endblocktrans %}
+        </div>
+
+        <div class="meta">
+          {% if invitation.expired %}
+            <span class="ui red text">
+              {% trans "Invitation expired" %}
+            </span>
+          {% else %}
+            {% blocktrans trimmed with valid_until=invitation.expiration_date|timeuntil expiration_date=invitation.expiration_date|date %}
+              Expires in <time datetime="{{ expiration_date }}">{{ valid_until }}</time>
+            {% endblocktrans %}
+          {% endif %}
+        </div>
+
+        <div class="center aligned description">
+          {% block invitation_content %}
+            <p>
+              {% url "profiles_profile_detail" invitation.from_user.username as profile_url %}
+              {% with from_name=invitation.from_user.get_full_name|default:invitation.from_user.username %}
+                {% blocktrans trimmed with requestor_name=requestor_name requestor_url=requestor_url target_name=invitation.object.name|default:target_name target_type=target_type %}
+                  <a href="{{ requestor_url }}">{{ requestor_name }}</a>
+                  has invited you to join the {{ target_name }} {{ target_type }}.
+                {% endblocktrans %}
+              {% endwith %}
+            </p>
+          {% endblock invitation_content %}
+
+          {% if invitation.expired %}
+            {% block invitation_expired %}
+              <p class="ui error message">
+                {% trans "Unfortunately, this invitation has expired." %}
+                {% if invitation.object_type == "organization" or invitation.object_type == "team" %}
+                  {% trans "Ask an admin of the organization to invite you again." %}
+                {% else %}
+                  {% trans "Ask one of the maintainers of the project to invite you again." %}
+                {% endif %}
+              </p>
+            {% endblock invitation_expired %}
+          {% endif %}
+        </div>
+      </div>
+
+      {% block invitation_actions %}
+        <div class="extra content">
+          <form class="ui two buttons" action="." method="post">
+            {% csrf_token %}
+            <input class="ui positive basic button" type="submit" name="accept" value="{% trans "Accept" %}" {% if invitation.expired %}disabled{% endif %}>
+            <input class="ui negative basic button" type="submit" name="decline" value="{% trans "Decline" %}">
+          </form>
+        </div>
+      {% endblock invitation_actions %}
+
+    </div>
+  </div>
+{% endblock content %}

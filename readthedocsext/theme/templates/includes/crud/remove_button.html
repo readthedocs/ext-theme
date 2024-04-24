@@ -48,9 +48,13 @@
 
       Modal content text
 
+  .. describe:: is_disabled
+
+      Show the button as disabled
+
 {% endcomment %}
 
-<div class="ui icon button"
+<div class="ui {% if is_disabled %}disabled{% endif %} icon button"
      data-bind="click: $root.show_modal('remove-{{ id }}')"
      data-content="{{ action_text }}">
   <i class="fa-solid fa-trash icon"></i>
