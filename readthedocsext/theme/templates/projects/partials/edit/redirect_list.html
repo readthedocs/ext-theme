@@ -71,7 +71,7 @@
   {% url "projects_redirects_delete" project_slug=project.slug redirect_pk=object.pk as form_url %}
   {% trans "Remove redirect" as action_text %}
   {% blocktrans trimmed asvar content_text with redirect=object %}
-    Remove redirect {{redirect}}?
+    Remove redirect {{ redirect }}?
   {% endblocktrans %}
   {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
 {% endblock list_item_right_buttons %}
