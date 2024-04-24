@@ -1,5 +1,9 @@
 import ko from "knockout";
 import jquery from "jquery";
+import { html, render } from "lit";
+import { map } from "lit/directives/map.js";
+import { when } from "lit/directives/when.js";
+import { classMap } from "lit/directives/class-map.js";
 
 import * as admin from "./admin";
 import * as create from "./create";
@@ -142,25 +146,85 @@ export class ProjectVersionCreateView {
    * @param {object} config - configuration for search element
    */
   init_search(config) {
-    const url = config.api_url + "?verbose_name={query}";
+    const maxResults = 30;
+    // String interpolation over URLSearchParams here as FUI uses basic string
+    // replacement for `{query}`, but this is encoded for URLSearchParams.
+    const url = config.api_url + `?limit=${maxResults}&verbose_name={query}`;
     const errors = config.errors || {};
     return {
       apiSettings: {
         url: url,
       },
-      selector: {
-        // Required because the default of ``.ui.prompt`` is a rounded input
-        prompt: ".ui.text",
-      },
-      fields: {
-        title: "verbose_name",
-        description: "identifier",
-      },
+      error: errors,
       fullTextSearch: true,
+      maxResults: maxResults,
       onSelect: (result, response) => {
         window.location.href = result.urls.dashboard.edit;
       },
-      error: errors,
+      selector: {
+        // Required because this uses ``.ui.text`` instead of ``.ui.prompt``
+        // because prompt uses a rounded input style
+        prompt: ".ui.text",
+        // Required as ``.title`` is a complex element in our use, not a simple
+        // string like normal. The inner ``.title .text`` sets the field result
+        // to just the string value.
+        title: ".title .text",
+      },
+      // Show results immediately on focus
+      minCharacters: 0,
+      searchOnFocus: true,
+      // Use custom template for rich result display
+      type: "versions",
+      templates: {
+        versions: (response) => {
+          // Using Lit here as this will likely very soon just be a web component
+          // anyways. The project create form references a Knockout observable
+          // and a template in HTML. This uses a temporary element to render down
+          // to HTML, then removes the element from ``document`` immediately.
+          const container = document.createElement("div");
+          const results = html`
+            <div class="results">
+              ${map(
+                response.results,
+                (version) => html`
+                  <a class="result">
+                    <div class="image"></div>
+                    <div class="content">
+                      <div class="title">
+                        <span class="text">${version.verbose_name}</span>
+                        <i
+                          class="fas ${classMap({
+                            "fa-code-branch": version.type === "branch",
+                            "fa-tag": version.type === "tag",
+                          })} small icon"
+                        ></i>
+                        ${when(
+                          version.active,
+                          () => html`
+                            <span class="ui horizontal label">
+                              <i class="fas fa-check icon"></i>
+                              Active
+                            </span>
+                          `,
+                        )}
+                      </div>
+                      <div class="description">
+                        <code>${version.identifier}</code>
+                      </div>
+                    </div>
+                  </a>
+                `,
+              )}
+            </div>
+          `;
+
+          // Lit renders on an element, but FUI search templates expect HTML return
+          render(results, container);
+          const htmlResults = container.innerHTML;
+          container.remove();
+          return htmlResults;
+        },
+      },
     };
   }
 }
@@ -203,7 +267,6 @@ export class ProjectVersionListView {
           onResponse: (response) => {
             return {
               results: response.results.map((result) => {
-                console.dir(result);
                 return {
                   name: result.verbose_name,
                   value: result.slug,
