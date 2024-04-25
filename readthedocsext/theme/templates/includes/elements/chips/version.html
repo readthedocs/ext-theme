@@ -10,20 +10,22 @@
 {% endblock %}
 
 {% block chip_icon %}
+  {# fmt:off #}
   <i class="fa-solid icon {% spaceless %}
 
     {# Show the type of the version #}
-              {% if version.is_external %}
-                fa-code-pull-request
-              {% elif version.type == 'branch' %}
-                fa-code-branch
-              {% elif version.type == 'tag' %}
-                fa-tag
-              {% else %}
-                fa-code-commit
-              {% endif %}
+    {% if version.is_external %}
+      fa-code-pull-request
+    {% elif version.type == 'branch' %}
+      fa-code-branch
+    {% elif version.type == 'tag' %}
+      fa-tag
+    {% else %}
+      fa-code-commit
+    {% endif %}
 
-            {% endspaceless %}"></i>
+  {% endspaceless %}"></i>
+  {# fmt:off #}
 {% endblock chip_icon %}
 
 {% block chip_text %}
