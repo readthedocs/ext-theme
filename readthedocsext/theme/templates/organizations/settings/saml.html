@@ -12,130 +12,130 @@
 
 {% block organization_edit_content %}
 
-<div class="ui padded segment">
-  <h4>
-    {% trans "Organization SAML settings" %}
-  </h4>
+  <div class="ui padded segment">
+    <h4>
+      {% trans "Organization SAML settings" %}
+    </h4>
 
-  <div class="ui message">
-    <p>
-    {% blocktrans %}
-    Use the following information to configure your SAML integration.
-    {% endblocktrans %}
-    </p>
+    <div class="ui message">
+      <p>
+        {% blocktrans %}
+          Use the following information to configure your SAML integration.
+        {% endblocktrans %}
+      </p>
+    </div>
+
+    <div class="ui form">
+      <div class="field">
+        <label>{% trans "Single sign on URL" %}</label>
+        <div class="ui fluid action input">
+          <input type="text" value="{{ rtd_saml_sso_url }}" id="saml-sso-url" readonly=true>
+          <button class="ui teal right icon button" data-clipboard-target="input#saml-sso-url">
+            <i class="fa-solid fa-copy icon"></i>
+          </button>
+        </div>
+      </div>
+      <div class="field">
+        <label>{% trans "Audience URI (SP entity ID)" %}</label>
+        <div class="ui fluid action input">
+          <input type="text" value="{{ rtd_saml_sp_url }}" id="saml-sp-url" readonly=true>
+          <button class="ui teal right icon button" data-clipboard-target="input#saml-sp-url">
+            <i class="fa-solid fa-copy icon"></i>
+          </button>
+        </div>
+      </div>
+      <div class="field">
+        <label>{% trans "Name ID format" %}</label>
+        <div class="ui fluid action input">
+          <input type="text" value="EmailAddress" id="saml-name-id-format" readonly=true>
+          <button class="ui teal right icon button" data-clipboard-target="input#saml-name-id-format">
+            <i class="fa-solid fa-copy icon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="ui form">
-    <div class="field">
-      <label>{% trans "Single sign on URL" %}</label>
-      <div class="ui fluid action input">
-        <input type="text" value="{{ rtd_saml_sso_url }}" id="saml-sso-url" readonly=true>
-        <button class="ui teal right icon button" data-clipboard-target="input#saml-sso-url">
-          <i class="fa-solid fa-copy icon"></i>
-        </button>
-      </div>
-    </div>
-    <div class="field">
-      <label>{% trans "Audience URI (SP entity ID)" %}</label>
-      <div class="ui fluid action input">
-        <input type="text" value="{{ rtd_saml_sp_url }}" id="saml-sp-url" readonly=true>
-        <button class="ui teal right icon button" data-clipboard-target="input#saml-sp-url">
-          <i class="fa-solid fa-copy icon"></i>
-        </button>
-      </div>
-    </div>
-    <div class="field">
-      <label>{% trans "Name ID format" %}</label>
-      <div class="ui fluid action input">
-        <input type="text" value="EmailAddress" id="saml-name-id-format" readonly=true>
-        <button class="ui teal right icon button" data-clipboard-target="input#saml-name-id-format">
-          <i class="fa-solid fa-copy icon"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+  {% if sso_integration %}
+    <div class="ui padded segment">
+      <h4>
+        {% trans "Read the Docs login URL" %}
+      </h4>
 
-{% if sso_integration %}
-<div class="ui padded segment">
-  <h4>
-    {% trans "Read the Docs login URL" %}
-  </h4>
+      <div class="ui message">
+        <p>
+          {% blocktrans %}
+            Use this URL to log in to Read the Docs with your SAML credentials:
+          {% endblocktrans %}
+        </p>
+        <div class="ui fluid action input">
+          <input type="text" readonly id="rtd-saml-login-url" value="{{ rtd_saml_login_url }}" />
+          <button class="ui teal right icon button" data-clipboard-target="input#rtd-saml-login-url">
+            <i class="fas fa-copy icon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
 
-  <div class="ui message">
-  <p>
-    {% blocktrans %}
-    Use this URL to log in to Read the Docs with your SAML credentials:
-    {% endblocktrans %}
-  </p>
-  <div class="ui fluid action input">
-    <input type="text" readonly id="rtd-saml-login-url" value="{{ rtd_saml_login_url }}" />
-    <button class="ui teal right icon button" data-clipboard-target="input#rtd-saml-login-url">
-      <i class="fas fa-copy icon"></i>
-    </button>
-  </div>
-  </div>
-</div>
+    <div class="ui padded segment">
+      <h4>
+        {% trans "SAML integration details" %}
+      </h4>
 
-<div class="ui padded segment">
-  <h4>
-    {% trans "SAML integration details" %}
-  </h4>
-
-  <div class="ui form">
-    <div class="field">
-      <label>{% trans "Domain" %}</label>
-      <div class="ui fluid input">
-        <input type="text" value="{{ domain }}" readonly>
-      </div>
-    </div>
-    <div class="field">
-      <label>{% trans "Metadata URL" %}</label>
-      <div class="ui fluid input">
-        <input type="text" value="{{ metadata_url }}" readonly>
-      </div>
-    </div>
-    <div class="field">
-      <label>{% trans "Entity ID" %}</label>
-      <div class="ui fluid input">
-        <input type="text" value="{{ entity_id }}" readonly>
-      </div>
-    </div>
-    <div class="field">
-      <label>{% trans "Single sign on URL" %}</label>
-      <div class="ui fluid input">
-        <input type="text" value="{{ sso_url }}" readonly>
-      </div>
-    </div>
-    <div class="field">
-      <label>{% trans "Single log out URL" %}</label>
-      <div class="ui fluid input">
-        <input type="text" value="{{ slo_url }}" readonly>
-      </div>
-    </div>
-    <div class="field">
-      <label>{% trans "Certificate" %}</label>
-      <div class="ui fluid input">
+      <div class="ui form">
+        <div class="field">
+          <label>{% trans "Domain" %}</label>
+          <div class="ui fluid input">
+            <input type="text" value="{{ domain }}" readonly>
+          </div>
+        </div>
+        <div class="field">
+          <label>{% trans "Metadata URL" %}</label>
+          <div class="ui fluid input">
+            <input type="text" value="{{ metadata_url }}" readonly>
+          </div>
+        </div>
+        <div class="field">
+          <label>{% trans "Entity ID" %}</label>
+          <div class="ui fluid input">
+            <input type="text" value="{{ entity_id }}" readonly>
+          </div>
+        </div>
+        <div class="field">
+          <label>{% trans "Single sign on URL" %}</label>
+          <div class="ui fluid input">
+            <input type="text" value="{{ sso_url }}" readonly>
+          </div>
+        </div>
+        <div class="field">
+          <label>{% trans "Single log out URL" %}</label>
+          <div class="ui fluid input">
+            <input type="text" value="{{ slo_url }}" readonly>
+          </div>
+        </div>
+        <div class="field">
+          <label>{% trans "Certificate" %}</label>
+          <div class="ui fluid input">
         <!--<input type="text" value="{{ certificate }}" readonly>-->
-        <textarea readonly>{{ certificate }}</textarea>
+            <textarea readonly>{{ certificate }}</textarea>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-{% elif not sso_saml_enabled %}
-  {% include 'organizations/includes/feature_disabled.html' with organization=organization %}
-{% else %}
+  {% elif not sso_saml_enabled %}
+    {% include 'organizations/includes/feature_disabled.html' with organization=organization %}
+  {% else %}
 
-<div class="ui padded segment">
-  <h4>
-    {% trans "Create SAML integration" %}
-  </h4>
+    <div class="ui padded segment">
+      <h4>
+        {% trans "Create SAML integration" %}
+      </h4>
 
-  <form class="ui form" method="POST" action=".">
-    {% csrf_token %}
-    {{ form | crispy }}
-    <input class="ui submit primary button" type="submit" name="submit" value="{% trans "Create" %}" />
-  </form>
-</div>
-{% endif %}
+      <form class="ui form" method="POST" action=".">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <input class="ui submit primary button" type="submit" name="submit" value="{% trans "Create" %}" />
+      </form>
+    </div>
+  {% endif %}
 {% endblock organization_edit_content %}
