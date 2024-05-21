@@ -13,21 +13,19 @@
 {% block organization_edit_content %}
 
   <div class="ui padded segment">
-    <h4>
+    <h3>
       {% trans "Organization SAML settings" %}
-    </h4>
+    </h3>
 
-    <div class="ui message">
-      <p>
-        {% blocktrans %}
-          Use the following information to configure your SAML integration.
-        {% endblocktrans %}
-      </p>
-    </div>
+    <p>
+      {% blocktrans %}
+        Use the following information to configure your SAML integration in your Identity Provider.
+      {% endblocktrans %}
+    </p>
 
     <div class="ui form">
       <div class="field">
-        <label>{% trans "Single sign on URL" %}</label>
+        <label>{% trans "Single sign-on URL" %}</label>
         <div class="ui fluid action input">
           <input type="text" value="{{ rtd_saml_sso_url }}" id="saml-sso-url" readonly=true>
           <button class="ui teal right icon button" data-clipboard-target="input#saml-sso-url">
@@ -58,9 +56,9 @@
 
   {% if sso_integration %}
     <div class="ui padded segment">
-      <h4>
+      <h3>
         {% trans "Read the Docs login URL" %}
-      </h4>
+      </h3>
 
       <div class="ui message">
         <p>
@@ -78,9 +76,9 @@
     </div>
 
     <div class="ui padded segment">
-      <h4>
+      <h3>
         {% trans "SAML integration details" %}
-      </h4>
+      </h3>
 
       <div class="ui form">
         <div class="field">
@@ -102,13 +100,13 @@
           </div>
         </div>
         <div class="field">
-          <label>{% trans "Single sign on URL" %}</label>
+          <label>{% trans "Single sign-on URL" %}</label>
           <div class="ui fluid input">
             <input type="text" value="{{ sso_url }}" readonly>
           </div>
         </div>
         <div class="field">
-          <label>{% trans "Single log out URL" %}</label>
+          <label>{% trans "Single logout URL" %}</label>
           <div class="ui fluid input">
             <input type="text" value="{{ slo_url }}" readonly>
           </div>
@@ -116,7 +114,6 @@
         <div class="field">
           <label>{% trans "Certificate" %}</label>
           <div class="ui fluid input">
-        <!--<input type="text" value="{{ certificate }}" readonly>-->
             <textarea readonly>{{ certificate }}</textarea>
           </div>
         </div>
@@ -127,9 +124,9 @@
   {% else %}
 
     <div class="ui padded segment">
-      <h4>
+      <h3>
         {% trans "Create SAML integration" %}
-      </h4>
+      </h3>
 
       <form class="ui form" method="POST" action=".">
         {% csrf_token %}
