@@ -1,0 +1,14 @@
+// Listing view filter dropdowns
+.ui.ui.ui.filter.dropdown {
+  > .ui.sub.header {
+    margin-top: 0rem;
+  }
+
+  // Truncate text length for long choice labels
+  > .text {
+    max-width: 8rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

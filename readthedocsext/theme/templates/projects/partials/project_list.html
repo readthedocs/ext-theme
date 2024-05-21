@@ -6,29 +6,10 @@
 {% load privacy_tags %}
 {% load projects_tags %}
 
-{% block view_binding %}data-bind="with: ProjectListView()"{% endblock view_binding %}
-
 {% block top_left_menu_items %}
-  {# Pass Django template tag specific configuration into ``ProjectListView`` #}
-  <script type="application/json" data-bind="jsonInit: config">
-    {
-      "api_url": "{% url "projects-list" %}"
-    }
-  </script>
-
-  {# Separate UI for the version search selection field #}
-  <div class="header item">Project</div>
-  <div class="active item">
-    <div class="ui link search dropdown" data-bind="semanticui: {dropdown: filter_project_config()}">
-      <input type="hidden" name="version" value="{{ filter.form.project.value|default:"" }}">
-      <div class="default text">{% trans "All projects" %}</div>
-      <i class="fa-solid fa-caret-down icon"></i>
-      <div class="menu"></div>
-    </div>
+  <div data-bind="using: FilterView()">
+    {% include "includes/filters/form.html" with fields=filter.form %}
   </div>
-
-  {% include "includes/filters/form.html" with fields=filter.form %}
-
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
@@ -46,7 +27,7 @@
 {% endblock list_placeholder_text %}
 
 {% block list_item_start %}
-  <tr data-bind="with: project({id: {{ object.id }}, url: '{% url "project-detail" object.pk %}'})">
+  <tr data-bind="using: ProjectListItemView({id: {{ object.id }}, url: '{% url "project-detail" object.pk %}'})">
 {% endblock list_item_start %}
 
 {% block list_item_right_menu %}

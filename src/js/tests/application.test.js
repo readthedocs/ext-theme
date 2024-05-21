@@ -7,7 +7,8 @@ describe("Application", () => {
   it("has registered views", () => {
     const app = new Application();
     expect(app.registry.constructor.views.BuildDetailView).to.not.be.undefined;
-    expect(app.registry.constructor.views.ProjectListView).to.not.be.undefined;
+    expect(app.registry.constructor.views.ProjectListItemView).to.not.be
+      .undefined;
   });
 
   it("exposes registered views on all registered views", () => {
@@ -15,7 +16,7 @@ describe("Application", () => {
     const view = new ApplicationView();
     app.registry.attach(view);
     expect(view.BuildDetailView).to.not.be.undefined;
-    expect(view.ProjectListView).to.not.be.undefined;
+    expect(view.ProjectListItemView).to.not.be.undefined;
   });
 
   it("can load site configuration", async () => {
