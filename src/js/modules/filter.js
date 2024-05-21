@@ -23,7 +23,7 @@ export class FilterView {
 
   constructor() {
     this.filter_config = {
-      action: "select",
+      action: "activate",
       onChange: (value, label, $elem) => {
         // Note: limit use of jQuery selector aid. It's confusing to mix Django
         // templates, knockout, and random jQuery selections in the page. Most

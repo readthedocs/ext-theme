@@ -6,33 +6,10 @@
 {% load privacy_tags %}
 {% load projects_tags %}
 
-{% block view_binding %}data-bind="with: BuildListView()"{% endblock %}
-
 {% block top_left_menu_items %}
-  {# Pass information from Django into site JS #}
-  <script type="application/json" data-bind="jsonInit: config">
-    {
-      "api_url": "{% url "projects-versions-list" project.slug %}"
-    }
-  </script>
-
-  {# Separate UI for the version search filter field #}
-  <div class="header item">For version</div>
-  <form class="active item" action="." method="get">
-    {% for field in filter.form.visible_fields %}
-      {% if field != filter.form.version %}
-        <input type="hidden" name="{{ field.name }}" value="{{ field.value|default:"" }}" />
-      {% endif %}
-    {% endfor %}
-    <div class="ui link search dropdown" data-bind="semanticui: {dropdown: filter_version_config()}">
-      <input type="hidden" name="version" value="{{ filter.form.version.value|default:"" }}">
-      <div class="default text">{% if filter.form.version.value %}{{ filter.form.version.value }}{% else %}{% trans "All versions" %}{% endif %}</div>
-      <i class="fa-solid fa-caret-down icon"></i>
-      <div class="menu"></div>
-    </div>
-  </form>
-
-  {% include "includes/filters/form.html" with fields=filter.form %}
+  <div data-bind="using: FilterView()">
+    {% include "includes/filters/form.html" with fields=filter.form %}
+  </div>
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
@@ -102,7 +79,10 @@
 {% endblock list_item_meta_items %}
 
 {% block list_item_extra_items %}
-  <div class="item">
-    {% include "includes/elements/chips/version.html" with version=object.version %}
-  </div>
+  {# Builds can have a null version #}
+  {% if object.version %}
+    <div class="item">
+      {% include "includes/elements/chips/version.html" with version=object.version %}
+    </div>
+  {% endif %}
 {% endblock list_item_extra_items %}

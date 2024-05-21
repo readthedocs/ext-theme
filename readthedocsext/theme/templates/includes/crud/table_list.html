@@ -69,19 +69,8 @@
 
 <div {% block view_binding %}{% endblock view_binding %}>
   {% block top_menu %}
-    <div class="ui text menu">
+    <div class="ui stackable text menu">
       {% block top_left_menu_items %}
-        {% comment %}
-        <div class="header item">
-          Sort by
-        </div>
-        <a class="active item">
-          Recently built
-        </a>
-        <a class="item">
-          Name
-        </a>
-        {% endcomment %}
       {% endblock top_left_menu_items %}
 
       {% block top_right_menu %}

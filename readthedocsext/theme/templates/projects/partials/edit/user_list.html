@@ -8,24 +8,13 @@
 {% load privacy_tags %}
 {% load projects_tags %}
 
-{# Because we don't have filters and an inline create form, we don't need this yet #}
-{% block top_menu %}
-{% endblock top_menu %}
-
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  {% comment %}
-    {# TODO make this a view #}
-    <div class="item">
-      <a class="ui green icon button"
-        href="{% url "projects_domains_create" project.slug %}">
-        <i class="plus icon"></i>
-        {% trans "Add maintainer" %}
-      </a>
-    </div>
-  {% endcomment %}
+  {% url "projects_users_create" project.slug as create_url %}
+  {% trans "Add maintainer" as create_text %}
+  {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
 {% endblock %}
 
 {% block list_placeholder_icon %}{% endblock %}
@@ -38,25 +27,17 @@
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
-  <a class="ui{% if object == request.user %} disabled{% endif %} icon button"
-     data-bind="click: $root.show_modal('user-{{ object.username }}')"
-     data-content="{% trans "Remove maintainer" %}">
-    <i class="fa-duotone fa-trash icon"></i>
-
-    <div class="ui mini modal" data-modal-id="user-{{ object.username }}">
-      <div class="header">Remove user {{ object.username }}</div>
-      <div class="content">
-        Remove user <code>{{ object.username }}</code> as a maintainer?
-      </div>
-      <div class="actions">
-        <form method="post" action="{% url "projects_users_delete" project.slug %}">
-          {% csrf_token %}
-          <input type="hidden" name="username" value="{{ object.username }}" />
-          <input class="ui negative button" type="submit" value="{% trans "Remove" %}">
-        </form>
-      </div>
-    </div>
-  </a>
+  {% url "projects_users_delete" project.slug as form_url %}
+  {% trans "Remove maintainer" as action_text %}
+  {% blocktrans trimmed asvar content_text with username=object.username name=project.name %}
+    Remove user {{ username }} as a maintainer?
+  {% endblocktrans %}
+  {# Repeating the include because Django templates make conditional variables impossible #}
+  {% if object == request.user %}
+    {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url field_name="username" field_value=object.username action_text=action_text context_text=context_text is_disabled=True %}
+  {% else %}
+    {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url field_name="username" field_value=object.username action_text=action_text context_text=context_text is_disabled=False %}
+  {% endif %}
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}

@@ -39,7 +39,7 @@
         </span>
       </h2>
 
-      {% include "organizations/partials/invitation_list.html" with objects=invitations skip_pagination=True %}
+      {% include "invitations/partials/invitation_list.html" with objects=invitations skip_pagination=True %}
     {% endif %}
   {% endblock team_invitations %}
 {% endblock subview_content %}

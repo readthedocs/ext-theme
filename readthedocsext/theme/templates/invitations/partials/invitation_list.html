@@ -6,10 +6,12 @@
 {% load privacy_tags %}
 
 {% comment %}
-  For now, this include is a secondary listing on the owner/team member listing
-  page. See the parent templates for an example of using this include. Note,
-  do not repeat the pattern there. Pages should not have multiple, competing
-  model lists.
+  For now, this include is used for secondary listings on maintainer and
+  organization listing views. See these parent templates for examples of using
+  this base.
+
+  NOTE: do not repeat the patterns here or there. Listing views should not have
+  multiple, competing model lists.
 {% endcomment %}
 
 {% block top_menu %}
@@ -23,11 +25,12 @@
 {% endblock list_placeholder %}
 
 {% block list_item_right_buttons %}
-  {% if request.user|is_admin:organization %}
+  {# Invitation has a more direct method ``can_revoke_invitation`` but Django templates can't call methods with arguments #}
+  {% if request.user|is_admin:object.object %}
     <a class="ui icon button"
        data-bind="click: $root.show_modal('invitation-{{ object.pk }}')"
        data-content="{% trans "Revoke invitation" %}">
-      <i class="fa-solid fa-xmark icon"></i>
+      <i class="fa-solid fa-trash icon"></i>
 
       <div class="ui mini modal" data-modal-id="invitation-{{ object.pk }}">
         <div class="header">
@@ -36,15 +39,17 @@
           {% endblocktrans %}
         </div>
         <div class="content">
-          {% if object.to_user %}
-            {% blocktrans trimmed with username=object.to_user.username organization=organization.name %}
-              Revoke organization owner invitation for user {{ username }} to {{ organization }}?
-            {% endblocktrans %}
-          {% else %}
-            {% blocktrans trimmed with email=object.to_email organization=organization.name %}
-              Revoke organization owner invitation for email {{ email }} to {{ organization }}?
-            {% endblocktrans %}
-          {% endif %}
+          {% block list_item_remove_modal_content %}
+            {% if object.to_user %}
+              {% blocktrans trimmed with username=object.to_user.username target_type=object.object_type target_name=object.object_name %}
+                Revoke invitation for user {{ username }} to {{ target_type }} {{ target_name }}?
+              {% endblocktrans %}
+            {% else %}
+              {% blocktrans trimmed with email=object.to_email target_type=object.target_type target_name=object.target_name %}
+                Revoke invitation for email {{ email }} to {{ target_type }} {{ target_name }}?
+              {% endblocktrans %}
+            {% endif %}
+          {% endblock list_item_remove_modal_content %}
         </div>
         <div class="actions">
           <form method="post" action="{% url "invitations_revoke" invitation_pk=object.pk %}">

@@ -7,13 +7,9 @@
 {% load projects_tags %}
 
 {% block create_button %}
-  <div class="item">
-    <a class="ui green icon button"
-       href="{% url "projects_webhooks_create" project.slug %}">
-      <i class="fa-solid fa-plus icon"></i>
-      {% trans "Add webhook" %}
-    </a>
-  </div>
+  {% url "projects_webhooks_create" project.slug as create_url %}
+  {% trans "Add webhook" as create_text %}
+  {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
 {% endblock %}
 
 {% block list_placeholder_icon_class %}fa-duotone fa-webhook{% endblock %}
