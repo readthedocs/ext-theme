@@ -19,7 +19,7 @@ Base
 Project
 -------
 
-.. js:autoclass:: ProjectListView
+.. js:autoclass:: ProjectListItemView
     :members:
 
 .. js:autoclass:: ProjectCreateView
@@ -28,13 +28,7 @@ Project
 .. js:autoclass:: ProjectVersionCreateView
     :members:
 
-.. js:autoclass:: ProjectVersionListView
-    :members:
-
-.. js:autoclass:: Project
-    :members:
-
-.. js:autoclass:: Version
+.. js:autoclass:: VersionListItemView
     :members:
 
 .. js:autoclass:: ProjectAutomationRuleView
@@ -51,9 +45,6 @@ Project
 
 Builds
 ~~~~~~
-
-.. js:autoclass:: BuildListView
-    :members:
 
 .. js:autoclass:: BuildDetailView
     :members:

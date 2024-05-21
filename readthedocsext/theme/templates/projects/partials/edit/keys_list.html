@@ -17,13 +17,9 @@
 {% block create_button %}
   {% comment %}
   {# TODO this is not supported currently, and is an admin only action #}
-  <div class="disabled item">
-    <a class="ui disabled icon button"
-       href="{# {% url "..." project.slug %} #}">
-      <i class="fa-solid fa-plus icon"></i>
-      {% trans "Add SSH key" %}
-    </a>
-  </div>
+  {% url "..." project.slug as create_url %}
+  {% trans "Add SSH key" as create_text %}
+  {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
   {% endcomment %}
 {% endblock %}
 

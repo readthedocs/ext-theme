@@ -48,14 +48,6 @@
     </div>
   {% else %}
     {% include "projects/partials/edit/translation_list.html" with objects=lang_projects %}
-
-    {% trans "Add translation" as action_text %}
-    <h3 class="ui small heading">{{ action_text }}</h3>
-    <form class="ui form" method="post" action=".">
-      {% csrf_token %}
-      {{ form|crispy }}
-      <input class="ui primary button" type="submit" value="{{ action_text }}">
-    </form>
   {% endif %}
 {% endblock %}
 

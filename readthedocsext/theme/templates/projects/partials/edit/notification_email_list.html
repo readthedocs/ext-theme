@@ -8,14 +8,13 @@
 {% load privacy_tags %}
 {% load projects_tags %}
 
-{# TODO we aren't showing a top menu here, because of the pattern used on this view #}
-{% block top_menu %}
-{% endblock top_menu %}
-
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
+  {% url "projects_notifications_create" project.slug as create_url %}
+  {% trans "Add notification" as create_text %}
+  {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
 {% endblock %}
 
 {% block list_placeholder_icon_class %}fa-duotone fa-envelope-dot{% endblock %}
