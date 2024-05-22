@@ -52,6 +52,19 @@
       <div class="ui very padded container">
         {% block notifications %}
           {% include "includes/utils/messages.html" %}
+
+          {% if user.is_impersonate %}
+            <div class="ui small basic fitted center aligned segment">
+              <i class="fad fa-warning violet icon"></i>
+              Be careful!
+              <strong>
+                You are impersonating
+              </strong>
+              the user "<em>{{ request.user.username }}</em>".
+              <a href="{% url 'impersonate-stop' %}">Stop impersonating</a> when you are finished.
+            </div>
+          {% endif %}
+
         {% endblock notifications %}
 
         {# TODO move admin-bar usage to content-header #}
