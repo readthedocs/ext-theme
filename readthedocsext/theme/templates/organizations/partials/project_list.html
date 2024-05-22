@@ -15,7 +15,9 @@
 {% block top_left_menu_items %}
   {# This partial is used a few times and ``filter`` isn't used in some views #}
   {% if filter %}
-    {% include "includes/filters/form.html" with fields=filter.form %}
+    <div data-bind="using: FilterView()">
+      {% include "includes/filters/form.html" with fields=filter.form %}
+    </div>
   {% endif %}
 {% endblock top_left_menu_items %}
 

@@ -14,83 +14,15 @@ import { Registry } from "../application/registry";
 export { admin, create };
 
 /**
- * Project list view for listing projects
- */
-export class ProjectListView {
-  static view_name = "ProjectListView";
-
-  constructor() {
-    /** @observable {Array<Project>} List of project instances in the list */
-    this.projects = ko.observableArray();
-    /** Configuration passed in via :func:`~application.plugins.jsonInit`
-     * @observable {Object} Search configuration */
-    this.config = ko.observable();
-    /** Configuration passed in via :func:`~application.plugins.jsonInit`
-     * @observable {Object} Filter configuration */
-    this.filter_project_config = ko.observable();
-
-    // Wait for :func:`config` to change before we init search
-    this.config.subscribe((config) => {
-      if (config === undefined) {
-        return;
-      }
-      const url = config.api_url + "?name={query}";
-      const errors = config.errors || {};
-      this.filter_project_config({
-        apiSettings: {
-          url: url,
-          cache: false,
-        },
-        throttle: 500,
-        fields: {
-          name: "name",
-          value: "slug",
-        },
-        saveRemoteData: false,
-        filterRemoteData: false,
-        sortSelect: true,
-        onChange: (value, label, $elem) => {
-          window.location.href = "?project=" + value;
-        },
-      });
-    });
-
-    this.filter_config = {
-      action: "select",
-      onChange: (value, label, $elem) => {
-        // Note: limit use of jQuery selector aid. It's confusing to mix Django
-        // templates, knockout, and random jQuery selections in the page. Most
-        // of the time, you should be able to use a knockout binding, but this
-        // was rather trivial and resulted in no additional observables on the
-        // view.
-        const form = $elem.closest("form");
-        form.submit();
-      },
-    };
-  }
-
-  /**
-   * Helper for adding new projects to :func:`projects`.
-   *
-   * @param {Object} data - Project data to pass to :class:`Project`
-   * @returns {Project}
-   */
-  project(data) {
-    const project = new Project(data);
-    this.projects.push(project);
-    return project;
-  }
-}
-Registry.add_view(ProjectListView);
-
-/**
- * Project object used for displaying individual projects in the project
+ * Project item view object used for displaying individual projects in the project
  * listing.
  *
  * @param {Object} project - Project API data
  * @extends {APIListItemView}
  */
-class Project extends APIListItemView {
+export class ProjectListItemView extends APIListItemView {
+  static view_name = "ProjectListItemView";
+
   constructor(project) {
     super(project);
 
@@ -105,6 +37,7 @@ class Project extends APIListItemView {
     });
   }
 }
+Registry.add_view(ProjectListItemView);
 
 /**
  * View for project version creation and version activation.
@@ -230,95 +163,7 @@ export class ProjectVersionCreateView {
 }
 Registry.add_view(ProjectVersionCreateView);
 
-/**
- * View for project version listing. This view wraps a list of :class:`Version`.
- *
- * @class
- * @construtor
- * @public
- */
-export class ProjectVersionListView {
-  static view_name = "ProjectVersionListView";
-
-  constructor() {
-    /** @observable {Array<Version>} Versions for project version listing */
-    this.versions = ko.observableArray();
-    /** Configuration passed in via :func:`~application.plugins.jsonInit`
-     * @observable {Object} Search configuration */
-    this.config = ko.observable();
-    /** Configuration passed in via :func:`~application.plugins.jsonInit`
-     * @observable {Object} Filter configuration object */
-    this.filter_version_config = ko.observable();
-
-    // Subscribe to changes to :func:`config` and set up search once we have it.
-    this.config.subscribe((config) => {
-      if (config === undefined) {
-        return;
-      }
-      const url = config.api_url + "?verbose_name={query}&active=True";
-      const errors = config.errors || {};
-      this.filter_version_config({
-        apiSettings: {
-          url: url,
-          cache: false,
-          // Use onResponse instead of ``fields`` here as there seems to be some
-          // problem the response structure. Dropdowns consistently give 0
-          // results.
-          onResponse: (response) => {
-            return {
-              results: response.results.map((result) => {
-                return {
-                  name: result.verbose_name,
-                  value: result.slug,
-                };
-              }),
-            };
-          },
-        },
-        throttle: 500,
-        saveRemoteData: false,
-        filterRemoteData: false,
-        sortSelect: true,
-        onChange: (value, label, $elem) => {
-          window.location.href = "?version=" + value;
-        },
-      });
-    });
-
-    this.filter_config = {
-      action: "select",
-      onChange: (value, label, $elem) => {
-        // Note: limit use of jQuery selector aid. It's confusing to mix Django
-        // templates, knockout, and random jQuery selections in the page. Most
-        // of the time, you should be able to use a knockout binding, but this
-        // was rather trivial and resulted in no additional observables on the
-        // view.
-        const form = $elem.closest("form");
-        form.submit();
-      },
-    };
-  }
-
-  // TODO remove
-  attach_add_version() {
-    console.debug(arguments);
-    return {};
-  }
-
-  /**
-   * Add :class:`Version` to version list.
-   *
-   * @param {Object} data - Version data to use in creation
-   */
-  version(data) {
-    const version = new Version(data);
-    this.versions.push(version);
-    return version;
-  }
-}
-Registry.add_view(ProjectVersionListView);
-
-/** Version subview, used from :class:`ProjectVersionListView`.
+/** Version list item subview
  *
  * This mutates project version API return data for use in the Knockout view.
  *
@@ -331,7 +176,9 @@ Registry.add_view(ProjectVersionListView);
  * @param {Object} version - Version object data from API
  * @extends {APIListItemView}
  */
-class Version extends APIListItemView {
+export class VersionListItemView extends APIListItemView {
+  static view_name = "VersionListItemView";
+
   constructor(version) {
     super(version);
 
@@ -389,3 +236,4 @@ class Version extends APIListItemView {
     };
   }
 }
+Registry.add_view(VersionListItemView);

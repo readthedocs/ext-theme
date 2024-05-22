@@ -1,37 +1,49 @@
-<form class="ui secondary menu" action="." method="get">
-  {% for field in fields %}
-    {% if field.is_hidden %}
-      <input type="hidden" name="{{ field.name }}" value="{% if field.value.0|length == 1 %}{{ field.value|default:"" }}{% else %}{{ field.value.0|default:"" }}{% endif %}" />
-    {% else %}
-      <div class="header item">
-        <div class="ui manual dropdown" data-bind="semanticui: {dropdown: filter_config}">
+<div class="ui basic vertically fitted segment">
+  <form class="ui wrapping secondary menu" action="." method="get">
+    <div class="item">
+      <i class="fad fa-filters icon"></i>
+    </div>
+    {% for field in fields %}
+      {% if field.is_hidden %}
+        <input type="hidden" name="{{ field.name }}" value="{% if field.value.0|length == 1 %}{{ field.value|default:"" }}{% else %}{{ field.value.0|default:"" }}{% endif %}" />
+      {% else %}
+        <div class="item">
+          <div class="content">
+            <div class="ui manual {% if field.field.has_search %}scrolling{% endif %} filter dropdown" data-bind="semanticui: {dropdown: filter_config}">
+            {% comment %}
+              Django-filter sometimes returns a string for the value, sometimes a list.
+              Django doesn't surface a way to do this check in templates and this
+              doesn't warrant a custom filter. This is a hack for now, I'm sorry.
 
-          {% comment %}
-            Django-filter sometimes returns a string for the value, sometimes a list.
-            Django doesn't surface a way to do this check in templates and this
-            doesn't warrant a custom filter. This is a hack for now, I'm sorry.
+              This should be replaced by a template filter that determines if the
+              value is an iterable of strings, or an iterable of a characters (str).
 
-            This should be replaced by a template filter that determines if the
-            value is an iterable of strings, or an iterable of a characters (str).
-
-            This assumes if the first element length == 1, we are iterating
-            over a string (iterable of characters). So, uh, don't use field
-            values of length 1.
-          {% endcomment %}
-          <input type="hidden" name="{{ field.name }}" value="{% if field.value.0|length == 1 %}{{ field.value|default:"" }}{% else %}{{ field.value.0|default:"" }}{% endif %}" />
-          <div class="text">
-            {% if field.value %}<span class="ui floating tiny empty circular olive label"></span>{% endif %}
-            {{ field.label }}
-          </div>
-          <i class="fa-solid fa-caret-down icon"></i>
-
-          <div class="menu">
-            {% for value, label in field.field.widget.choices %}
-              <a class="item" data-value="{{ value }}">{{ label }}</a>
-            {% endfor %}
+              This assumes if the first element length == 1, we are iterating
+              over a string (iterable of characters). So, uh, don't use field
+              values of length 1.
+            {% endcomment %}
+              <input type="hidden" name="{{ field.name }}" value="{% if field.value.0|length == 1 %}{{ field.value|default:"" }}{% else %}{{ field.value.0|default:"" }}{% endif %}" />
+              <div class="ui sub header">
+                {{ field.label|safe }}
+                <i class="fa-solid fa-caret-down small icon"></i>
+              </div>
+            {# This is filled using the FUI `activate` action on the dropdown #}
+              <div class="text"></div>
+              <div class="menu">
+                {% if field.field.has_search %}
+                  <div class="ui icon search input">
+                    <i class="search icon"></i>
+                    <input type="text" placeholder="Search">
+                  </div>
+                {% endif %}
+                {% for value, label in field.field.widget.choices %}
+                  <a class="item" data-value="{{ value }}">{{ label|safe }}</a>
+                {% endfor %}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    {% endif %}
-  {% endfor %}
-</form>
+      {% endif %}
+    {% endfor %}
+  </form>
+</div>
