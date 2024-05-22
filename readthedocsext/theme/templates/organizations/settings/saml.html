@@ -12,9 +12,43 @@
 
 {% block organization_edit_content %}
 
-  <div class="ui padded segment">
+  {% if sso_integration %}
+    <div class="ui message">
+      <div class="header">
+        {% trans "Invite new users into your organization" %}
+      </div>
+      <p>
+        {% trans "You can invite people to join your organization by sending them this link:" %}
+      </p>
+
+      <div class="ui fluid action input">
+        <input type="text" readonly id="rtd-saml-login-url" value="{{ rtd_saml_login_url }}" />
+        <button class="ui teal right icon button" data-clipboard-target="#rtd-saml-login-url">
+          <i class="fas fa-copy icon"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="ui message">
+      <div class="header">
+        {% trans "Invite existing users into your organization" %}
+      </div>
+      <p>
+        {% trans "You can invite existing users to join your organization by sending them this link:" %}
+      </p>
+
+      <div class="ui fluid action input">
+        <input type="text" readonly id="rtd-saml-connect-url" value="{{ rtd_saml_connect_url }}" />
+        <button class="ui teal right icon button" data-clipboard-target="#rtd-saml-connect-url">
+          <i class="fas fa-copy icon"></i>
+        </button>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="ui padded">
     <h3>
-      {% trans "Organization SAML settings" %}
+      {% trans "Configure your SAML provider" %}
     </h3>
 
     <p>
@@ -55,27 +89,7 @@
   </div>
 
   {% if sso_integration %}
-    <div class="ui padded segment">
-      <h3>
-        {% trans "Read the Docs login URL" %}
-      </h3>
-
-      <div class="ui message">
-        <p>
-          {% blocktrans %}
-            Use this URL to log in to Read the Docs with your SAML credentials:
-          {% endblocktrans %}
-        </p>
-        <div class="ui fluid action input">
-          <input type="text" readonly id="rtd-saml-login-url" value="{{ rtd_saml_login_url }}" />
-          <button class="ui teal right icon button" data-clipboard-target="input#rtd-saml-login-url">
-            <i class="fas fa-copy icon"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="ui padded segment">
+    <div class="ui padded">
       <h3>
         {% trans "SAML integration details" %}
       </h3>
@@ -122,8 +136,7 @@
   {% elif not sso_saml_enabled %}
     {% include 'organizations/includes/feature_disabled.html' with organization=organization %}
   {% else %}
-
-    <div class="ui padded segment">
+    <div class="ui padded">
       <h3>
         {% trans "Create SAML integration" %}
       </h3>
