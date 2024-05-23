@@ -1,17 +1,20 @@
-{% extends "organizations/admin/base.html" %}
+{% extends "organizations/admin/sso_edit.html" %}
 
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% load organizations %}
 {% load corporate %}
 
-{% block title %}{{ organization.name }} - {% trans "SAML integration" %}{% endblock %}
+{% block organization_edit_content_subheader %}
+  {% trans "SAML integration" %}
+{% endblock organization_edit_content_subheader %}
 
-{% block organization_sso_active %}active{% endblock %}
-{% block organization_edit_content_header %}{% trans "SAML integration" %}{% endblock %}
+{% block organization_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/en/stable/guides/set-up-single-sign-on-saml.html" text=_("How to set up single sign-on with SAML") is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/en/stable/commercial/single-sign-on.html" text=_("Organization single sign-on") is_external=True class="item" %}
+{% endblock organization_edit_sidebar_help_topics %}
 
 {% block organization_edit_content %}
-
   {% if sso_integration %}
     <div class="ui message">
       <div class="header">
@@ -53,7 +56,7 @@
 
     <p>
       {% blocktrans %}
-        Use the following information to configure your SAML integration in your Identity Provider.
+        Use the following information to configure your SAML integration in your identity provider (IdP).
       {% endblocktrans %}
     </p>
 
