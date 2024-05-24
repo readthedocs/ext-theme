@@ -51,8 +51,6 @@
     {% block content-wrapper %}
       <div class="ui very padded container">
         {% block notifications %}
-          {% include "includes/utils/messages.html" %}
-
           {% if user.is_impersonate %}
             <div class="ui small center aligned warning message">
               <i class="fad fa-warning icon"></i>
@@ -65,6 +63,7 @@
             </div>
           {% endif %}
 
+          {% include "includes/utils/messages.html" %}
         {% endblock notifications %}
 
         {# TODO move admin-bar usage to content-header #}
