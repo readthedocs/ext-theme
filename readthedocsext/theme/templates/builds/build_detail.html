@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="ui basic segment padded" data-bind="using: BuildDetailView({}, '{% url "build-detail" build.id %}', '{% url "projects-builds-notifications-list" build.project.slug build.id %}')">
+  <div data-bind="using: BuildDetailView({}, '{% url "build-detail" build.id %}', '{% url "projects-builds-notifications-list" build.project.slug build.id %}')">
 
     {% block build_detail_metadata %}
       <div class="ui top attached segment">
@@ -112,7 +112,7 @@
       </div>
     {% endblock build_detail_metadata %}
 
-    <div class="ui attached menu">
+    <div class="ui attached stackable menu">
       <a class="active item">
         <i class="fa-duotone fa-terminal icon"></i>
         {% trans "Output" %}
