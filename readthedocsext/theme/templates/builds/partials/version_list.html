@@ -19,20 +19,25 @@
   {% if is_project_admin %}
     <a href="{% url "project_version_create" project.slug %}" class="ui primary button">
       <i class="fa-solid fa-plus icon"></i>
-      <span class="text">{% trans "Activate version" %}</span>
+      <span class="text">{% trans "Add version" %}</span>
     </a>
   {% endif %}
 {% endblock %}
 
 {% block list_placeholder_icon_class %}{% endblock %}
-{% block list_placeholder_header %}
-  {% trans "No versions found for this project or filter" %}
-{% endblock list_placeholder_header %}
-{% block list_placeholder_text %}
+{% block list_placeholder_header_filtered %}
+  {% trans "No matching versions found" %}
+{% endblock list_placeholder_header_filtered %}
+{% block list_placeholder_header_empty %}
+  {% trans "This project doesn't have any versions yet" %}
+{% endblock list_placeholder_header_empty %}
+{% block list_placeholder_text_empty %}
   {% if is_project_admin %}
-    <div class="ui primary button">{% trans "Activate a version" %}</div>
+    <a href="{% url "project_version_create" project.slug %}" class="ui primary button">
+      {% trans "Add version" %}
+    </a>
   {% endif %}
-{% endblock list_placeholder_text %}
+{% endblock list_placeholder_text_empty %}
 
 {% block list_item_start %}
   <tr class="middle aligned" data-bind="using: VersionListItemView({id: {{ object.pk }}, url: '{% url "projects-versions-detail" object.project.slug object.slug %}'})">
