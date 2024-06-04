@@ -6,17 +6,17 @@
 {% block create_button %}
 {% endblock %}
 
-{% block list_placeholder_header %}
-  {% blocktrans trimmed %}
-    No members found or no matches found for your filter criteria.
-  {% endblocktrans %}
-{% endblock list_placeholder_header %}
-{% block list_placeholder_text %}
+{% block list_placeholder_header_filtered %}
+  {% trans "No matching members found" %}
+{% endblock list_placeholder_header_filtered %}
+{# This is a mostly impossible scenario, as owners show in this list #}
+{% block list_placeholder_header_empty %}
+  {% trans "This organization has no members" %}
+{% endblock list_placeholder_header_empty %}
+{% block list_placeholder_text_empty %}
   {% if request.user|is_admin:organization %}
-    <p class="inline">
-      {% blocktrans trimmed %}
-        To add members to your organization, invite new members to an existing organization team.
-      {% endblocktrans %}
-    </p>
+    {% blocktrans trimmed %}
+      To add members to your organization, invite users to an existing organization team.
+    {% endblocktrans %}
   {% endif %}
-{% endblock list_placeholder_text %}
+{% endblock list_placeholder_text_empty %}
