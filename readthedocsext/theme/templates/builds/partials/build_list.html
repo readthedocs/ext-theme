@@ -16,12 +16,17 @@
 {% endblock %}
 
 {% block list_placeholder_icon_class %}{% endblock %}
-{% block list_placeholder_header %}
-  {% trans "This project doesn't have any builds yet." %}
-{% endblock list_placeholder_header %}
-{% block list_placeholder_text %}
-  <div class="ui primary button">{% trans "Learn how to get started" %}</div>
-{% endblock list_placeholder_text %}
+{% block list_placeholder_header_filtered %}
+  {% trans "No matching builds found" %}
+{% endblock list_placeholder_header_filtered %}
+{% block list_placeholder_header_empty %}
+  {% trans "This project doesn't have any builds yet" %}
+{% endblock list_placeholder_header_empty %}
+{% block list_placeholder_text_empty %}
+  {% if is_project_admin is not None and is_project_admin or request.user|is_admin:project %}
+    {% trans "Activate a version to start your first build." %}
+  {% endif %}
+{% endblock list_placeholder_text_empty %}
 
 {% block list_item_right_menu %}
   {# Note: for better performance, avoid multiple `is_admin` checks. Call this include with `is_project_admin` #}

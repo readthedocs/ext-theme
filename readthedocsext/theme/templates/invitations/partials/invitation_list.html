@@ -4,6 +4,7 @@
 {% load gravatar %}
 {% load humanize %}
 {% load privacy_tags %}
+{% load invitations %}
 
 {% comment %}
   For now, this include is used for secondary listings on maintainer and
@@ -25,8 +26,7 @@
 {% endblock list_placeholder %}
 
 {% block list_item_right_buttons %}
-  {# Invitation has a more direct method ``can_revoke_invitation`` but Django templates can't call methods with arguments #}
-  {% if request.user|is_admin:object.object %}
+  {% if request.user|can_revoke_invitation:object %}
     <a class="ui icon button"
        data-bind="click: $root.show_modal('invitation-{{ object.pk }}')"
        data-content="{% trans "Revoke invitation" %}">

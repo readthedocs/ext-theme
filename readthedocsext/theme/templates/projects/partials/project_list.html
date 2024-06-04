@@ -19,12 +19,17 @@
 {% endblock %}
 
 {% block list_placeholder_icon_class %}{% endblock %}
-{% block list_placeholder_header %}
-  {% trans "There are no projects configured yet, or no projects match your filter criteria" %}
-{% endblock list_placeholder_header %}
-{% block list_placeholder_text %}
-  <div class="ui primary button">{% trans "Add a project" %}</div>
-{% endblock list_placeholder_text %}
+{% block list_placeholder_header_filtered %}
+  {% trans "No matching projects found" %}
+{% endblock list_placeholder_header_filtered %}
+{% block list_placeholder_header_empty %}
+  {% trans "You don't have any projects configured yet" %}
+{% endblock list_placeholder_header_empty %}
+{% block list_placeholder_text_empty %}
+  <a href="https://docs.readthedocs.io/page/tutorial/" class="ui primary button">
+    {% trans "Learn how to get started" %}
+  </a>
+{% endblock list_placeholder_text_empty %}
 
 {% block list_item_start %}
   <tr data-bind="using: ProjectListItemView({id: {{ object.id }}, url: '{% url "project-detail" object.pk %}'})">

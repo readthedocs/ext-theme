@@ -38,16 +38,10 @@
 {% endblock %}
 
 {% block list_placeholder_icon_class %}fad fa-user-plus icon{% endblock %}
+{# This placeholder content should never be visible, there should always be one owner #}
 {% block list_placeholder_header %}
-  {% blocktrans trimmed %}
-    No organization owners found or no matches found for your filter criteria.
-  {% endblocktrans %}
+  {% trans "This organization has no owner users" %}
 {% endblock list_placeholder_header %}
-{% block list_placeholder_text %}
-  {% if request.user|is_admin:organization %}
-    <div class="ui primary button">{% trans "Invite an organization owner" %}</div>
-  {% endif %}
-{% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
   {% if request.user|is_admin:organization %}
