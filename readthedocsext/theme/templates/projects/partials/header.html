@@ -3,6 +3,7 @@
 {% load privacy_tags %}
 {% load core_tags %}
 {% load gravatar %}
+{% load ext_theme_tags %}
 
 {% comment %}
 
@@ -156,6 +157,34 @@ collapsed, to save visual space and can be expanded with the right label.
                 </a>
               {% endif %}
             {% endblock project_header_repository %}
+
+            {% comment %}
+              Show spam information on community instance.
+              Allows us to quickly understand what's the spam score,
+              and also know what rules are matching this project.
+            {% endcomment %}
+            {% if not ALLOW_PRIVATE_REPOS and user.is_staff %}
+              {% block project_header_spam %}
+                <div class="ui sub header">
+                  {% trans "Spam score" %}
+                </div>
+                <span>{{ project|get_spam_score }} </span>
+                {% if project.spam_rules.exists %}
+                  <div class="ui sub header">
+                    {% trans "Spam matching rules" %}
+                  </div>
+                  <div class="ui vertical list">
+                    {% for rule in project.spam_rules.all %}
+                      <div class="item">
+                        <a href="https://admin.ops.{{ PRODUCTION_DOMAIN }}:10000/admin/spamfighting/spamrule/{{ rule.pk }}/change/">
+                          {{ rule.spam_rule_type|cut:"readthedocsext.spamfighting.rules." }}
+                        </a>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              {% endblock project_header_spam %}
+            {% endif %}
 
           </div>
         {% endblock project_header_metadata_right %}
