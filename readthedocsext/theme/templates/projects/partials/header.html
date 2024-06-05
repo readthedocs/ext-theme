@@ -176,7 +176,11 @@ collapsed, to save visual space and can be expanded with the right label.
                   <div class="ui vertical list">
                     {% for rule in project.spam_rules.all %}
                       <div class="item">
-                        <a href="https://admin.ops.{{ PRODUCTION_DOMAIN }}:10000/admin/spamfighting/spamrule/{{ rule.pk }}/change/">
+                        <a href="https://admin.ops.{{ PRODUCTION_DOMAIN }}:10000/admin/spamfighting/spamrule/{{ rule.pk }}/change/"
+                           {% if rule.description %}
+                             data-content="{{ rule.description }}"
+                           {% endif %}
+                           target="_blank">
                           {{ rule.spam_rule_type|cut:"readthedocsext.spamfighting.rules." }}
                         </a>
                       </div>
