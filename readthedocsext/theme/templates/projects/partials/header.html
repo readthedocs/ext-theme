@@ -181,12 +181,12 @@ collapsed, to save visual space and can be expanded with the right label.
             <a class="item" data-bind="click: $root.show_modal('project-debug')">
               <i class="fa-duotone fa-microscope icon"></i>
               {% trans "Debug" %}
+            </a>
           {% endif %}
-        </a>
-        <a class="item {{ edit_active }}" href="{% url "projects_edit" project.slug %}">
-          <i class="fa-duotone fa-gears icon"></i>
-          {% trans "Settings" %}
-        </a>
+          <a class="item {{ edit_active }}" href="{% url "projects_edit" project.slug %}">
+            <i class="fa-duotone fa-gears icon"></i>
+            {% trans "Settings" %}
+          </a>
         </div>
       {% endif %}
     </div>
