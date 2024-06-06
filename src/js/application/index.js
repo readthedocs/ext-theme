@@ -1,6 +1,8 @@
 import jquery from "jquery";
 import ko from "knockout";
 import clipboard from "clipboard";
+import hljs from "highlight.js/lib/core";
+import yaml from "highlight.js/lib/languages/yaml";
 
 import { ApplicationView } from "./views";
 import * as plugins from "./plugins";
@@ -14,6 +16,9 @@ import * as gold_views from "../gold";
 import * as module_views from "../modules";
 import * as organization_views from "../organization";
 import * as project_views from "../project";
+
+// Then register the languages you need
+hljs.registerLanguage("yaml", yaml);
 
 /**
  * This is the main entry point for the front end code and is used to set up and
@@ -41,6 +46,7 @@ export class Application {
     this.configure_plugins();
     this.attach_view();
     this.add_jquery_plugins();
+    hljs.highlightAll();
   }
 
   /**
