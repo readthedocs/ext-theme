@@ -29,7 +29,18 @@ collapsed, to save visual space and can be expanded with the right label.
 
         {% block project_header_labels %}
           <div class="right aligned eight wide computer eight wide tablet sixteen wide left aligned mobile middle aligned column">
-            {% include "includes/components/config_label.html" with icon="fa-solid fa-language" text=project.language|upper popup=project.language|language_name_local %}
+              {% comment %}
+              Simple solution to not supported "zh" language code.
+
+              When `project.language="zh"` the Django `language_name_local` raises an exception and returns 500.
+              This simple solution checks for this unsupported language code and replace it by "zh-cn" (Simplified Chinese).
+              We need to decide what to do at the DB level still, but at least this approach solves the immediate issue.
+              {% endcomment %}
+            {% if project.language == "zh" %}
+              {% include "includes/components/config_label.html" with icon="fa-solid fa-language" text=project.language|upper popup="zh-cn"|language_name_local %}
+            {% else %}
+              {% include "includes/components/config_label.html" with icon="fa-solid fa-language" text=project.language|upper popup=project.language|language_name_local %}
+            {% endif %}
             {% for organization in project.organizations.all %}
               {% include "includes/components/config_label.html" with icon="fa-solid fa-building" text=organization.name url=organization.get_absolute_url %}
             {% endfor %}
