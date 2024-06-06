@@ -39,6 +39,7 @@
     "css-minimizer-webpack-plugin": "^5.0.1",
     "dayjs": "^1.8.29",
     "file-loader": "^6.2.0",
+    "highlight.js": "^11.9.0",
     "imports-loader": "^4.0.1",
     "jquery": "^3.4.1",
     "jquery-address": "^1.6.0",
@@ -101,8 +102,5 @@
         }
       }
     ]
-  },
-  "dependencies": {
-    "highlight.js": "^11.9.0"
   }
 }
