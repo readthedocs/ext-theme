@@ -191,10 +191,9 @@ class ProjectHighlightConfigView {
   static view_name = "ProjectHighlightConfigView";
 
   constructor() {
-    // document.adoptedStyleSheets.push(styleSheet);
-    // console.log("MANUEL");
     // Register YAML language
     hljs.registerLanguage("yaml", yaml);
+    // Highlight all elements in the page
     hljs.highlightAll();
   }
 }
