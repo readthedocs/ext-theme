@@ -157,39 +157,6 @@ collapsed, to save visual space and can be expanded with the right label.
                 </a>
               {% endif %}
             {% endblock project_header_repository %}
-
-            {% comment %}
-              Show spam information on community instance.
-              Allows us to quickly understand what's the spam score,
-              and also know what rules are matching this project.
-            {% endcomment %}
-            {% if not ALLOW_PRIVATE_REPOS and user.is_staff %}
-              {% block project_header_spam %}
-                <div class="ui sub header">
-                  {% trans "Spam score" %}
-                </div>
-                <span>{{ project|get_spam_score }} </span>
-                {% if project.spam_rules.exists %}
-                  <div class="ui sub header">
-                    {% trans "Spam matching rules" %}
-                  </div>
-                  <div class="ui vertical list">
-                    {% for rule in project.spam_rules.all %}
-                      <div class="item">
-                        <a href="https://admin.ops.{{ PRODUCTION_DOMAIN }}:10000/admin/spamfighting/spamrule/{{ rule.pk }}/change/"
-                           {% if rule.description %}
-                             data-content="{{ rule.description }}"
-                           {% endif %}
-                           target="_blank">
-                          {{ rule.spam_rule_type|cut:"readthedocsext.spamfighting.rules." }}
-                        </a>
-                      </div>
-                    {% endfor %}
-                  </div>
-                {% endif %}
-              {% endblock project_header_spam %}
-            {% endif %}
-
           </div>
         {% endblock project_header_metadata_right %}
 
@@ -210,12 +177,60 @@ collapsed, to save visual space and can be expanded with the right label.
       </a>
       {% if request.user|is_admin:project %}
         <div class="right menu">
-          <a class="item {{ edit_active }}" href="{% url "projects_edit" project.slug %}">
-            <i class="fa-duotone fa-gears icon"></i>
-            {% trans "Settings" %}
-          </a>
+          {% if user.is_staff %}
+            <a class="item" data-bind="click: $root.show_modal('project-debug')">
+              <i class="fa-duotone fa-microscope icon"></i>
+              {% trans "Debug" %}
+          {% endif %}
+        </a>
+        <a class="item {{ edit_active }}" href="{% url "projects_edit" project.slug %}">
+          <i class="fa-duotone fa-gears icon"></i>
+          {% trans "Settings" %}
+        </a>
         </div>
       {% endif %}
+    </div>
+
+
+    <div class="ui mini modal" data-modal-id="project-debug">
+      <div class="header">
+        {% trans "Debug information" %}
+      </div>
+      {% comment %}
+        Show spam information on community instance.
+        Allows us to quickly understand what's the spam score,
+        and also know what rules are matching this project.
+      {% endcomment %}
+      <div class="content">
+        {% if not ALLOW_PRIVATE_REPOS %}
+          <h3>Spam</h3>
+          <div class="ui sub header">
+            {% trans "Spam score" %}
+          </div>
+          <span>{{ project|get_spam_score }} </span>
+          {% if project.spam_rules.exists %}
+            <div class="ui sub header">
+              {% trans "Spam matching rules" %}
+            </div>
+            <div class="ui vertical list">
+              {% for rule in project.spam_rules.all %}
+                <div class="item">
+                  <a href="https://admin.ops.{{ PRODUCTION_DOMAIN }}:10000/admin/spamfighting/spamrule/{{ rule.pk }}/change/"
+                     {% if rule.description %}
+                       data-content="{{ rule.description }}"
+                     {% endif %}
+                     target="_blank">
+                    {{ rule.spam_rule_type|cut:"readthedocsext.spamfighting.rules." }}
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+      <div class="actions">
+        <a href="#" class="ui negative button">{% trans "Close" %}</a>
+      </div>
     </div>
   {% endblock project_header_navigation %}
 
