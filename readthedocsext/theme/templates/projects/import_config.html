@@ -7,6 +7,8 @@
 
 {% block project_add_content_classes %}ui fourteen wide tablet twelve wide computer column{% endblock %}
 
+{% block project_add_data_bind %}data-bind="using: ProjectHighlightConfigView()"{% endblock %}
+
 {% block project_add_content_form %}
   <div class="ui small info message">
     {% blocktrans trimmed %}
@@ -37,8 +39,8 @@
       <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-sphinx">
         <i class="fas fa-copy icon"></i>
       </a>
-      <code class="language-yaml highlight">
-              <pre id="project-create-sample-sphinx">
+      <pre>
+          <code  id="project-create-sample-sphinx" class="language-yaml highlight">
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
@@ -71,8 +73,8 @@ sphinx:
 #    install:
 #    - requirements: docs/requirements.txt
               </pre>
-      </code>
-    </div>
+    </code>
+  </div>
   </div>
 
   <div class="ui bottom attached tab segment" data-tab="mkdocs">
@@ -83,8 +85,8 @@ sphinx:
       <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-mkdocs">
         <i class="fas fa-copy icon"></i>
       </a>
-      <code class="highlight">
-              <pre id="project-create-sample-mkdocs">
+      <pre>
+          <code id="project-create-sample-mkdocs" class="language-yaml highlight">
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
@@ -111,8 +113,8 @@ mkdocs:
 # python:
 #    install:
 #    - requirements: docs/requirements.txt
-              </pre>
-      </code>
+          </code>
+      </pre>
     </div>
   </div>
 
@@ -124,8 +126,8 @@ mkdocs:
       <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-docusaurus">
         <i class="fas fa-copy icon"></i>
       </a>
-      <code class="highlight">
-              <pre id="project-create-sample-docusaurus">
+      <pre>
+          <code id="project-create-sample-docusaurus" class="language-yaml highlight">
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
@@ -150,8 +152,8 @@ build:
     # Copy generated files into Read the Docs directory
     - mkdir --parents $READTHEDOCS_OUTPUT/html/
     - cp --recursive docs/build/* $READTHEDOCS_OUTPUT/html/
-              </pre>
-      </code>
+          </code>
+      </pre>
     </div>
   </div>
 
@@ -163,8 +165,8 @@ build:
       <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-pelican">
         <i class="fas fa-copy icon"></i>
       </a>
-      <code class="highlight">
-              <pre id="project-create-sample-pelican">
+      <pre>
+          <code id="project-create-sample-pelican" class="language-yaml highlight">
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
@@ -186,8 +188,8 @@ build:
     - pip install "pelican[markdown]"
     # Build the site and save generated files into Read the Docs directory
     - pelican --settings docs/pelicanconf.py --output $READTHEDOCS_OUTPUT/html
-              </pre>
-      </code>
+          </code>
+      </pre>
     </div>
   </div>
 
@@ -199,7 +201,7 @@ build:
       <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-jekyll">
         <i class="fas fa-copy icon"></i>
       </a>
-      <code class="highlight">
+      <code class="language-yaml highlight">
               <pre id="project-create-sample-jekyll">
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
@@ -237,8 +239,8 @@ build:
       <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-others">
         <i class="fas fa-copy icon"></i>
       </a>
-      <code class="language-yaml highlight">
-              <pre id="project-create-sample-others">
+      <pre>
+          <code id="project-create-sample-others" class="language-yaml highlight">
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
@@ -264,8 +266,8 @@ build:
     #  - Install the dependencies of your project
     #  - Build the documentation
     #  - Save the generated files in $READTHEDOCS_OUTPUT/html
-              </pre>
-      </code>
+          </code>
+      </pre>
     </div>
   </div>
 

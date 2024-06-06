@@ -1,5 +1,7 @@
 import jquery from "jquery";
 import ko from "knockout";
+import hljs from "highlight.js/lib/core";
+import yaml from "highlight.js/lib/languages/yaml";
 
 import * as tasks from "../tasks";
 import * as utils from "../core/utils";
@@ -77,8 +79,12 @@ export class ProjectCreateView extends ResponsiveView {
       if (config !== undefined) {
         this.allow_private_repos(config.allow_private_repos);
         this.init_search();
+        this.highlight_code();
       }
     });
+
+    // Register YAML language
+    hljs.registerLanguage("yaml", yaml);
   }
 
   /**
@@ -180,3 +186,20 @@ export class ProjectCreateView extends ResponsiveView {
   }
 }
 Registry.add_view(ProjectCreateView);
+
+/**
+ * Highlight project YAML config.
+ *
+ */
+class ProjectHighlightConfigView {
+  static view_name = "ProjectHighlightConfigView";
+
+  constructor() {
+    // document.adoptedStyleSheets.push(styleSheet);
+    // console.log("MANUEL");
+    // Register YAML language
+    hljs.registerLanguage("yaml", yaml);
+    hljs.highlightAll();
+  }
+}
+Registry.add_view(ProjectHighlightConfigView);
