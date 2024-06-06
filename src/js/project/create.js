@@ -79,12 +79,8 @@ export class ProjectCreateView extends ResponsiveView {
       if (config !== undefined) {
         this.allow_private_repos(config.allow_private_repos);
         this.init_search();
-        this.highlight_code();
       }
     });
-
-    // Register YAML language
-    hljs.registerLanguage("yaml", yaml);
   }
 
   /**
