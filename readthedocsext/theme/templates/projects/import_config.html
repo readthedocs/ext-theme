@@ -1,9 +1,9 @@
 {% extends "projects/import_base.html" %}
 {% load i18n %}
 
-{% block project_add_content_subheader %}
+{% block project_add_subheader %}
   {% trans "Add a configuration file to your project" %}
-{% endblock project_add_content_subheader %}
+{% endblock project_add_subheader %}
 
 {% block project_add_content_classes %}ui fourteen wide tablet twelve wide computer column{% endblock %}
 
@@ -12,43 +12,33 @@
     {% blocktrans trimmed %}
       A <code>.readthedocs.yaml</code> configuration file is required at the root of your repository in order to build your documentation.
     {% endblocktrans %}
-
-    <a href="https://docs.readthedocs.io/page/config-file/index.html" target="_blank">
-      {% trans "Learn how to add a configuration file to your project." %}
-    </a>
   </div>
 
-  <div class="ui basic fitted right aligned segment">
-    <span>{% trans "Example configuration for:" %}</span>
-    <div class="ui inline dropdown" data-bind="semanticui: { dropdown: {}}">
-      <input type="hidden" name="tool" value="sphinx">
-      <span class="text">Sphinx</span>
-      <i class="dropdown icon"></i>
-      <div class="menu">
-        <div class="item" data-value="sphinx">Sphinx</div>
+  <p>
 
-        {% comment %}
-          Adding a second option here will require a bit of JS or FUI:
-          https://github.com/readthedocs/ext-theme/issues/184
-        {% endcomment %}
+    Here you have some simple examples for the most common documentation tools.
+    If you are using a different tool, you can read our documentation to
+    <a href="https://docs.readthedocs.io/page/config-file/index.html" target="_blank">learn how to write your own</a>.
+  </p>
 
-        {# The `actionable` class here prevents the select from selecting the text #}
-        <a class="actionable item" href="https://docs.readthedocs.io/page/config-file/index.html#getting-started-with-a-template" target="_blank">
-          {% trans "See more examples" %}
-        </a>
+  <div class="ui top attached tabular menu">
+    <div class="active item" data-tab="sphinx">Sphinx</div>
+    <div class="item" data-tab="mkdocs">MkDocs</div>
+    <div class="item" data-tab="pelican">Pelican</div>
+    <div class="item" data-tab="docusaurus">Docusaurus</div>
+    <div class="item" data-tab="jekyll">Jekyll</div>
+    <div class="item" data-tab="others">Others</div>
+  </div>
+  <div class="ui bottom attached active tab segment" data-tab="sphinx">
+    <div class="ui mini padded inverted scrolling segment">
+      <div class="ui top attached label">
+        <code>.readthedocs.yaml</code>
       </div>
-    </div>
-  </div>
-
-  <div class="ui mini padded inverted scrolling segment">
-    <div class="ui top attached label">
-      <code>.readthedocs.yaml</code>
-    </div>
-    <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-sphinx">
-      <i class="fas fa-copy icon"></i>
-    </a>
-    <code class="highlight">
-      <pre id="project-create-sample-sphinx">
+      <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-sphinx">
+        <i class="fas fa-copy icon"></i>
+      </a>
+      <code class="highlight">
+              <pre id="project-create-sample-sphinx">
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
@@ -59,7 +49,7 @@ version: 2
 build:
   os: ubuntu-22.04
   tools:
-    python: "3.11"
+    python: "3.12"
     # You can also specify other tool versions:
     # nodejs: "19"
     # rust: "1.64"
@@ -80,11 +70,206 @@ sphinx:
 # python:
 #    install:
 #    - requirements: docs/requirements.txt
-      </pre>
-    </code>
+              </pre>
+      </code>
+    </div>
   </div>
 
-  {# Show the base form #}
+  <div class="ui bottom attached tab segment" data-tab="mkdocs">
+    <div class="ui mini padded inverted scrolling segment">
+      <div class="ui top attached label">
+        <code>.readthedocs.yaml</code>
+      </div>
+      <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-mkdocs">
+        <i class="fas fa-copy icon"></i>
+      </a>
+      <code class="highlight">
+              <pre id="project-create-sample-mkdocs">
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+# Required
+version: 2
+
+# Set the OS, Python version, and other tools you might need
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.12"
+    # You can also specify other tool versions:
+    # nodejs: "19"
+    # rust: "1.64"
+    # golang: "1.19"
+
+# Build documentation with Mkdocs
+mkdocs:
+   configuration: mkdocs.yml
+
+# Optionally, but recommended,
+# declare the Python requirements required to build your documentation
+# See https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
+# python:
+#    install:
+#    - requirements: docs/requirements.txt
+              </pre>
+      </code>
+    </div>
+  </div>
+
+  <div class="ui bottom attached tab segment" data-tab="docusaurus">
+    <div class="ui mini padded inverted scrolling segment">
+      <div class="ui top attached label">
+        <code>.readthedocs.yaml</code>
+      </div>
+      <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-docusaurus">
+        <i class="fas fa-copy icon"></i>
+      </a>
+      <code class="highlight">
+              <pre id="project-create-sample-docusaurus">
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+# Required
+version: 2
+
+# Set the OS, Python version, and other tools you might need
+build:
+  os: ubuntu-22.04
+  tools:
+    nodejs: "19"
+    # You can also specify other tool versions:
+    # python: "3.12"
+    # rust: "1.64"
+    # golang: "1.19"
+
+  commands:
+    # Install Docusaurus dependencies
+    - cd docs/ && npm install
+    # Build the site
+    - cd docs/ && npm run build
+    # Copy generated files into Read the Docs directory
+    - mkdir --parents $READTHEDOCS_OUTPUT/html/
+    - cp --recursive docs/build/* $READTHEDOCS_OUTPUT/html/
+              </pre>
+      </code>
+    </div>
+  </div>
+
+  <div class="ui bottom attached tab segment" data-tab="pelican">
+    <div class="ui mini padded inverted scrolling segment">
+      <div class="ui top attached label">
+        <code>.readthedocs.yaml</code>
+      </div>
+      <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-pelican">
+        <i class="fas fa-copy icon"></i>
+      </a>
+      <code class="highlight">
+              <pre id="project-create-sample-pelican">
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+# Required
+version: 2
+
+# Set the OS, Python version, and other tools you might need
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.12"
+    # You can also specify other tool versions:
+    # nodejs: "19"
+    # rust: "1.64"
+    # golang: "1.19"
+
+  commands:
+    # Install Pelican and its dependencies
+    - pip install "pelican[markdown]"
+    # Build the site and save generated files into Read the Docs directory
+    - pelican --settings docs/pelicanconf.py --output $READTHEDOCS_OUTPUT/html
+              </pre>
+      </code>
+    </div>
+  </div>
+
+  <div class="ui bottom attached tab segment" data-tab="jekyll">
+    <div class="ui mini padded inverted scrolling segment">
+      <div class="ui top attached label">
+        <code>.readthedocs.yaml</code>
+      </div>
+      <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-jekyll">
+        <i class="fas fa-copy icon"></i>
+      </a>
+      <code class="highlight">
+              <pre id="project-create-sample-jekyll">
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+# Required
+version: 2
+
+# Set the OS, Python version, and other tools you might need
+build:
+  os: ubuntu-22.04
+  tools:
+    ruby: "3.3"
+    # You can also specify other tool versions:
+    # python: "3.12"
+    # nodejs: "19"
+    # rust: "1.64"
+    # golang: "1.19"
+
+  commands:
+    # Install dependencies
+    - gem install bundle
+    - bundle install
+    # Build the site and save generated files into Read the Docs directory
+    - jekyll build --destination $READTHEDOCS_OUTPUT/html
+              </pre>
+      </code>
+    </div>
+  </div>
+
+  <div class="ui bottom attached tab segment" data-tab="others">
+    <div class="ui mini padded inverted scrolling segment">
+      <div class="ui top attached label">
+        <code>.readthedocs.yaml</code>
+      </div>
+      <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-others">
+        <i class="fas fa-copy icon"></i>
+      </a>
+      <code class="highlight">
+              <pre id="project-create-sample-others">
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+# Required
+version: 2
+
+# Set the OS, Python version, and other tools you might need
+build:
+  os: ubuntu-22.04
+  tools:
+    # Specify the language and version your project requires,
+    # by uncommenting one of the following tools.
+    #
+    # python: "3.12"
+    # ruby: "3.3"
+    # nodejs: "19"
+    # rust: "1.64"
+    # golang: "1.19"
+
+  commands:
+    # Write down your commands here to:
+    #
+    #  - Install the dependencies of your project
+    #  - Build the documentation
+    #  - Save the generated files in $READTHEDOCS_OUTPUT/html
+              </pre>
+      </code>
+    </div>
+  </div>
+
+        {# Show the base form #}
   {{ block.super }}
 
 {% endblock project_add_content_form %}
