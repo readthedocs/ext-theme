@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: readthedocs-ext-theme\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-10 16:02-0500\n"
-"PO-Revision-Date: 2024-06-10 21:09\n"
+"PO-Revision-Date: 2024-06-10 22:21\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -217,7 +217,7 @@ msgstr ""
 
 #: templates/audit/partials/log_list.html:47
 msgid "User authenticated"
-msgstr ""
+msgstr "Usuario autenticado"
 
 #: templates/audit/partials/log_list.html:51
 msgid "User failed to authenticate"
@@ -286,7 +286,7 @@ msgstr ""
 #: templates/audit/partials/log_list.html:124
 #: templates/audit/partials/log_list.html:126
 msgid "Organization"
-msgstr ""
+msgstr "Organización"
 
 #: templates/audit/partials/log_list.html:123
 msgid "Team"
@@ -728,7 +728,7 @@ msgstr ""
 #: templates/errors/dashboard/404.html:11
 #: templates/errors/dashboard/404.html:16
 msgid "Page not found"
-msgstr ""
+msgstr "Página no encontrada"
 
 #: templates/errors/dashboard/410.html:6 templates/errors/dashboard/410.html:11
 msgid "Project unavailable"
