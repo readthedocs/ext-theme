@@ -25,7 +25,7 @@ repos:
       - id: check-yaml
       - id: destroyed-symlinks
       - id: end-of-file-fixer
-        exclude: "^readthedocsext/theme/static/.*$"
+        exclude: "^(readthedocsext/theme/static/.*|.*/LC_MESSAGES/.*\\.[mp]o)$"
   - repo: https://github.com/rtts/djhtml
     rev: "3.0.6"
     hooks:
