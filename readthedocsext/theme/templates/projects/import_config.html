@@ -14,22 +14,27 @@
     {% endblocktrans %}
   </div>
 
-  <p>
-
-    Here you have some simple examples for the most common documentation tools.
-    If you are using a different tool, you can read our documentation to
-    <a href="https://docs.readthedocs.io/page/config-file/index.html" target="_blank">learn how to write your own</a>.
-  </p>
-
-  <div class="ui top attached stackable tabular menu">
-    <div class="active item" data-tab="sphinx">Sphinx</div>
-    <div class="item" data-tab="mkdocs">MkDocs</div>
-    <div class="item" data-tab="pelican">Pelican</div>
-    <div class="item" data-tab="docusaurus">Docusaurus</div>
-    <div class="item" data-tab="jekyll">Jekyll</div>
-    <div class="item" data-tab="others">{% trans "Others" %}</div>
+  <div class="ui basic fitted right aligned segment">
+    <span>{% trans "Example configuration for:" %}</span>
+    <div class="ui inline dropdown" data-bind="semanticui: { dropdown: {}}">
+      <span class="text">Sphinx</span>
+      <i class="dropdown icon"></i>
+      <div class="menu" data-bind="semanticui: { tabmenu: {}}">
+        <div class="item" data-tab="sphinx">Sphinx</div>
+        <div class="item" data-tab="mkdocs">MkDocs</div>
+        <div class="item" data-tab="pelican">Pelican</div>
+        <div class="item" data-tab="docusaurus">Docusaurus</div>
+        <div class="item" data-tab="jekyll">Jekyll</div>
+        <div class="item" data-tab="others">{% trans "Others" %}</div>
+              {# The `actionable` class here prevents the select from selecting the text #}
+        <a class="actionable item" href="https://docs.readthedocs.io/page/config-file/index.html#getting-started-with-a-template" target="_blank">
+          {% trans "See more examples" %}
+        </a>
+      </div>
+    </div>
   </div>
-  <div class="ui bottom attached active tab segment" data-tab="sphinx">
+
+  <div class="ui bottom attached active tab" data-tab="sphinx">
     <div class="ui mini padded inverted scrolling segment">
       <div class="ui top attached label">
         <code>.readthedocs.yaml</code>
@@ -75,7 +80,7 @@ sphinx:
     </div>
   </div>
 
-  <div class="ui bottom attached tab segment" data-tab="mkdocs">
+  <div class="ui bottom attached tab" data-tab="mkdocs">
     <div class="ui mini padded inverted scrolling segment">
       <div class="ui top attached label">
         <code>.readthedocs.yaml</code>
@@ -116,7 +121,7 @@ mkdocs:
     </div>
   </div>
 
-  <div class="ui bottom attached tab segment" data-tab="docusaurus">
+  <div class="ui bottom attached tab" data-tab="docusaurus">
     <div class="ui mini padded inverted scrolling segment">
       <div class="ui top attached label">
         <code>.readthedocs.yaml</code>
@@ -155,7 +160,7 @@ build:
     </div>
   </div>
 
-  <div class="ui bottom attached tab segment" data-tab="pelican">
+  <div class="ui bottom attached tab" data-tab="pelican">
     <div class="ui mini padded inverted scrolling segment">
       <div class="ui top attached label">
         <code>.readthedocs.yaml</code>
@@ -191,7 +196,7 @@ build:
     </div>
   </div>
 
-  <div class="ui bottom attached tab segment" data-tab="jekyll">
+  <div class="ui bottom attached tab" data-tab="jekyll">
     <div class="ui mini padded inverted scrolling segment">
       <div class="ui top attached label">
         <code>.readthedocs.yaml</code>
@@ -229,7 +234,7 @@ build:
     </div>
   </div>
 
-  <div class="ui bottom attached tab segment" data-tab="others">
+  <div class="ui bottom attached tab" data-tab="others">
     <div class="ui mini padded inverted scrolling segment">
       <div class="ui top attached label">
         <code>.readthedocs.yaml</code>
