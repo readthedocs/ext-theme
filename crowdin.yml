@@ -1,0 +1,3 @@
+files:
+  - source: /readthedocsext/theme/locale/en/LC_MESSAGES/*.po
+    translation: /readthedocsext/theme/locale/%locale_with_underscore%/LC_MESSAGES/%file_name%.po

@@ -70,8 +70,8 @@
       {% endblocktrans %}
     {% else %}
       {% with versions=object.versions.all %}
-        {% blocktrans trimmed count version_count=versions|length with version_name=versions.0.verbose_name %}
-          Version {{ version_name }}
+        {% blocktrans trimmed count version_count=versions|length with single_version_name=versions.0.verbose_name %}
+          Version {{ single_version_name }}
         {% plural %}
           {{ version_count }} versions
         {% endblocktrans %}
