@@ -202,8 +202,8 @@ collapsed, to save visual space and can be expanded with the right label.
         and also know what rules are matching this project.
       {% endcomment %}
       <div class="content">
-        {% if not ALLOW_PRIVATE_REPOS %}
-          <h3>Spam</h3>
+        {% if not USE_ORGANIZATIONS %}
+          <h3>{% trans "Spam" %}</h3>
           <div class="ui sub header">
             {% trans "Spam score" %}
           </div>
@@ -215,7 +215,7 @@ collapsed, to save visual space and can be expanded with the right label.
             <div class="ui vertical list">
               {% for rule in project.spam_rules.all %}
                 <div class="item">
-                  <a href="https://admin.ops.{{ PRODUCTION_DOMAIN }}:10000/admin/spamfighting/spamrule/{{ rule.pk }}/change/"
+                  <a href="{{ ADMIN_URL }}/spamfighting/spamrule/{{ rule.pk }}/change/"
                      {% if rule.description %}
                        data-content="{{ rule.description }}"
                      {% endif %}
