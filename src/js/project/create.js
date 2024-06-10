@@ -1,5 +1,7 @@
 import jquery from "jquery";
 import ko from "knockout";
+import hljs from "highlight.js/lib/core";
+import yaml from "highlight.js/lib/languages/yaml";
 
 import * as tasks from "../tasks";
 import * as utils from "../core/utils";
@@ -180,3 +182,19 @@ export class ProjectCreateView extends ResponsiveView {
   }
 }
 Registry.add_view(ProjectCreateView);
+
+/**
+ * Highlight project YAML config.
+ *
+ */
+class ProjectHighlightConfigView {
+  static view_name = "ProjectHighlightConfigView";
+
+  constructor() {
+    // Register YAML language
+    hljs.registerLanguage("yaml", yaml);
+    // Highlight all elements in the page
+    hljs.highlightAll();
+  }
+}
+Registry.add_view(ProjectHighlightConfigView);
