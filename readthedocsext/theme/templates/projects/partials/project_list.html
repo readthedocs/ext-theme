@@ -59,7 +59,12 @@
           </a>
         </div>
       </button>
+    {% else %}
+      <button class="ui disabled dropdown button">
+        <i class="fa-solid fa-ellipsis icon"></i>
+      </button>
     {% endif %}
+
   </div>
 {% endblock list_item_right_menu %}
 

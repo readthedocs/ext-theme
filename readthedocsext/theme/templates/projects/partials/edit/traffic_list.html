@@ -18,6 +18,8 @@
 {% block top_menu %}
   {% if not enabled %}
     {% include "organizations/includes/feature_disabled.html" with project=project %}
+  {% else %}
+    {{ block.super }}
   {% endif %}
 {% endblock top_menu %}
 
@@ -25,7 +27,11 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-{% endblock %}
+  <a class="ui button" href="?download=true">
+    <i class="fa-duotone fa-download icon"></i>
+    {% trans "Download traffic data" %}
+  </a>
+{% endblock create_button %}
 
 {% block list_placeholder_icon_class %}fa-duotone fa-chart-mixed{% endblock %}
 {% block list_placeholder_header %}
@@ -48,13 +54,13 @@
 {% block list_item_right_menu %}
   <div class="ui right floated text menu">
     <div class="item">
-      {{ count.1 }}
+      {{ object.2 }}
     </div>
   </div>
 {% endblock list_item_right_menu %}
 
 {% block list_item_header %}
-  {{ object.0 }}
+  <a href="{{ object.1}}">{{ object.0 }}</a>
 {% endblock list_item_header %}
 
 {% block list_item_meta %}
