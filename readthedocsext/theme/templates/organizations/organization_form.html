@@ -103,20 +103,20 @@
 
         <div class="ui bottom attached tab" data-tab="not-sure">
           <p>
-            {% url 'support' as support_url %}
             {% blocktrans trimmed %}
               If you want to start the trial period of a paid subscription to try out Read the Docs in your company,
-              you should select the option "Create a new organization".
+              you should select the option <em>"Create a new organization"</em>.
             {% endblocktrans %}
           </p>
           <p>
             {% blocktrans trimmed %}
               Otherwise, if someone else has already created an organization and you want to join it,
-              select "Join an existing organization".
+              select <em>"Join an existing organization"</em>.
             {% endblocktrans %}
           </p>
 
           <p>
+            {% url 'support' as support_url %}
             {% blocktrans trimmed with support_url=support_url %}
               If you are not sure, contact us using the <a href="{{ support_url }}">support form</a> and we will help you
               with this process.
