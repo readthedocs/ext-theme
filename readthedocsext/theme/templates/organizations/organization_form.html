@@ -16,19 +16,19 @@
           {% trans "Create a new organization" %}
         </h2>
 
-        <div class="ui top attached segment">
+        <div class="ui segment">
           <div class="ui relaxed list">
 
             <div class="item">
               <i class="fad fa-building medium middle aligned icon"></i>
               <div class="content">
                 <div class="header">
-                  {% trans "My organization is already registered" %}
+                  {% trans "Join an existing organization" %}
                 </div>
 
                 <div class="description">
                   {% blocktrans trimmed %}
-                    Somebody else already created an organization on Read the Docs and told you to sign up.
+                    Someone else already created an organization on Read the Docs and invited you to join.
                   {% endblocktrans %}
                 </div>
               </div>
@@ -40,14 +40,14 @@
                 <div class="header">I want to create a new organization</div>
                 <div class="description">
                   {% blocktrans trimmed %}
-                    You want to create an organization to start a 30 day trial for your company.
+                    You want to create an organization for your company and start a 30 day trial.
                   {% endblocktrans %}
                 </div>
               </div>
             </div>
 
             <div class="item">
-              <i class="fad fa-pause medium middle aligned icon"></i>
+              <i class="fas fa-question medium middle aligned icon"></i>
               <div class="content">
                 <div class="header">I'm not sure</div>
                 <div class="description">
@@ -72,24 +72,23 @@
           </div>
         </div>
 
-        <div class="ui bottom attached active tab" data-tab="registered">
+        <div class="ui active tab" data-tab="registered">
           <p>
             {% blocktrans %}
-              We weren't able to find the organization attached to your email domain.
-              Make sure you have registered with your company's email and not your personal email.
-              Contact your organization's owner and tell them to invite you to the organization.
-              They will send you a link with the invitation
+              If you are having trouble joining an existing organization,
+              contact one of your organization's owners and request an invite.
+              They should email you a link that you can use to join.
             {% endblocktrans %}
           </p>
         </div>
 
-        <div class="ui bottom attached tab" data-tab="new">
+        <div class="ui tab" data-tab="new">
           <form class="ui form" action="" method="post">
             {% csrf_token %}
             {{ form|crispy }}
 
             <button class="ui primary button" type="submit">
-              {% trans "Get started" %}
+              {% trans "Create organization" %}
             </button>
           </form>
         </div>
