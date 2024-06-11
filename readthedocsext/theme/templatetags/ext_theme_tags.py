@@ -110,3 +110,13 @@ def get_account_username(socialaccount):
     provider = socialaccount.get_provider()
     extra_fields = provider.extract_common_fields(socialaccount.extra_data)
     return extra_fields.get("username") or extra_fields.get("email")
+
+
+@register.filter
+def get_spam_score(project):
+    try:
+        from readthedocsext.spamfighting.utils import spam_score
+    except ImportError:
+        return 0
+
+    return spam_score(project)
