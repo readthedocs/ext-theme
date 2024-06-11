@@ -2,7 +2,7 @@
 
 {% with "https://docs.readthedocs.io/page/analytics.html" as url %}
   <div data-bind="using: new ProjectAnnouncementView('traffic-analytics')">
-    <div class="ui card" data-bind="visible: !closed()">
+    <div class="ui card ko hidden" data-bind="css: { hidden: closed }">
       <div class="content">
         <i class="fa-solid fa-xmark right floated close icon"  data-bind="click: close_announcement"></i>
         <a class="header" target="_blank" href="{{ url }}">{% trans "Prioritize your most-read pages" %}</a>
