@@ -37,7 +37,7 @@
             <div class="item">
               <i class="fad fa-plus medium middle aligned icon"></i>
               <div class="content">
-                <div class="header">I want to create a new organization</div>
+                <div class="header">{% trans "I want to create a new organization" %}</div>
                 <div class="description">
                   {% blocktrans trimmed %}
                     You want to create an organization for your company and start a 30 day trial.
@@ -49,7 +49,7 @@
             <div class="item">
               <i class="fas fa-question medium middle aligned icon"></i>
               <div class="content">
-                <div class="header">I'm not sure</div>
+                <div class="header">{% trans "I'm not sure" %}</div>
                 <div class="description">
                   {% blocktrans trimmed %}
                     I'm not sure what I'm doing and I need some help.
@@ -63,11 +63,11 @@
 
         <div class="ui form basic fieldset segment">
           <div class="field menu">
-            <label class="required">Choose an option</label>
+            <label class="required">{% trans "Choose an option" %}</label>
             <select class="ui fluid dropdown" name="organization" data-bind="semanticui: { tabmenu: {}}">
-              <option class="item" data-tab="registered">My organization is already registered</option>
-              <option class="item" data-tab="new">I want to create a new organization</option>
-              <option class="item" data-tab="not-sure">I'm not sure</option>
+              <option class="item" data-tab="registered">{% trans "Join an existing organization" %}</option>
+              <option class="item" data-tab="new">{% trans "I want to create a new organization" %}</option>
+              <option class="item" data-tab="not-sure">{% trans "I'm not sure" %}</option>
             </select>
           </div>
         </div>
@@ -95,9 +95,15 @@
 
         <div class="ui bottom attached tab" data-tab="not-sure">
           <p>
-            {% blocktrans %}
-              Contact us at support@readthedocs.com and let us know what's the name of the organization
-              you want to join and we will help you with that.
+            {% url 'support' as support_url %}
+            {% blocktrans trimmed with support_url=support_url %}
+              If you want to start the trial period of a paid subscription to try out Read the Docs in your company,
+              you should select the option "I want to create a new organization".
+              Otherwise, if someone else has already created an organization and you want to join it,
+              select "Join an existing organization".
+
+              If you are not sure, contact us using the <a href="{{ support_url }}">support form</a> and we will help you
+              with this process.
             {% endblocktrans %}
           </p>
         </div>
