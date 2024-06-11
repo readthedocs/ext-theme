@@ -18,11 +18,12 @@
 
         <div class="ui segment">
           <div class="ui link list" data-bind="using: new OrganizationCreateView()">
-                {% comment %}
+            <a class="item" data-tab="empty">
+              {% comment %}
                 Show nothing when the user arrives at this page.
                 Force them to select an option.
-                {% endcomment %}
-            <a class="item" data-tab="empty"></a>
+              {% endcomment %}
+            </a>
 
             <a class="item" data-tab="registered">
               <i class="fad fa-building big icon"></i>
@@ -60,12 +61,10 @@
               <i class="fad fa-question big icon"></i>
               <div class="content">
                 <div class="header">
-
                   {% trans "I'm not sure" %}
                 </div>
                 <div class="description">
                   <p>
-
                     {% blocktrans trimmed %}
                       I'm not sure what I'm doing and I need some help.
                     {% endblocktrans %}
@@ -77,16 +76,14 @@
         </div>
 
         <div class="ui active tab" data-tab="empty">
-            {% comment %}
+          {% comment %}
             This tab is active and empty on purpose.
             The idea here is to show nothing when the user arrives at this page.
-            {% endcomment %}
+          {% endcomment %}
         </div>
 
         <div class="ui tab" data-tab="registered">
-
           {% blocktrans %}
-
             If you are having trouble joining an existing organization,
             contact one of your organization's owners and request an invite.
             They should email you a link that you can use to join.
@@ -126,9 +123,8 @@
             {% endblocktrans %}
           </p>
         </div>
-
-
       </div>
+
       <div class="five wide computer only middle aligned left aligned column">
         <div class="ui one cards">
 
