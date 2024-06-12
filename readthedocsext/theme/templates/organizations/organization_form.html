@@ -84,8 +84,8 @@
 
         <div class="ui tab" data-tab="registered">
           {% blocktrans %}
-            We weren't able to join you automatically to any organization.
-            Contact one of your organization's owners and request an invite.
+            To join an existing organization, you will need to
+            contact one of your organization's owners and request an invite.
             They should email you a link that you can use to join.
           {% endblocktrans %}
         </div>
@@ -105,7 +105,8 @@
           <p>
             {% url 'support' as support_url %}
             {% blocktrans trimmed with support_url=support_url %}
-              If you are not sure, contact us using the <a href="{{ support_url }}">support form</a> and we will help you
+              If you are not sure what you need or are having trouble getting started,
+              <a href="{{ support_url }}">contact us</a> and we will help you
               with this process.
             {% endblocktrans %}
           </p>
