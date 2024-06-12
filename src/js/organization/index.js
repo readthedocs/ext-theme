@@ -39,13 +39,3 @@ export class OrganizationSettingsAuthorizationView {
   }
 }
 Registry.add_view(OrganizationSettingsAuthorizationView);
-
-export class OrganizationCreateView {
-  static view_name = "OrganizationCreateView";
-
-  constructor() {
-    // Enabling tab switching on a list
-    $(".list .item").tab();
-  }
-}
-Registry.add_view(OrganizationCreateView);

@@ -17,7 +17,7 @@
         </h2>
 
         <div class="ui segment">
-          <div class="ui link list" data-bind="using: new OrganizationCreateView()">
+          <div class="ui link list" data-bind="semanticui: { tabmenu: {} }">
             <a class="item" data-tab="empty">
               {% comment %}
                 Show nothing when the user arrives at this page.
@@ -103,19 +103,6 @@
 
         <div class="ui bottom attached tab" data-tab="not-sure">
           <p>
-            {% blocktrans trimmed %}
-              If you want to start the trial period of a paid subscription to try out Read the Docs in your company,
-              you should select the option <em>"Create a new organization"</em>.
-            {% endblocktrans %}
-          </p>
-          <p>
-            {% blocktrans trimmed %}
-              Otherwise, if someone else has already created an organization and you want to join it,
-              select <em>"Join an existing organization"</em>.
-            {% endblocktrans %}
-          </p>
-
-          <p>
             {% url 'support' as support_url %}
             {% blocktrans trimmed with support_url=support_url %}
               If you are not sure, contact us using the <a href="{{ support_url }}">support form</a> and we will help you
@@ -125,7 +112,7 @@
         </div>
       </div>
 
-      <div class="five wide computer only middle aligned left aligned column">
+      <div class="five wide computer only top aligned left aligned column">
         <div class="ui one cards">
 
           <div class="basic card">
