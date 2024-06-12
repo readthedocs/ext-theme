@@ -237,3 +237,26 @@ export class VersionListItemView extends APIListItemView {
   }
 }
 Registry.add_view(VersionListItemView);
+
+export class ProjectAnnouncementView {
+  static view_name = "ProjectAnnouncementView";
+
+  constructor(cache_key) {
+    this.cache_key = cache_key;
+    this.prefix_key = "announcements";
+    this.storage_key = `${this.prefix_key}.${this.cache_key}`;
+    this.closed = ko.observable();
+    const cached_value = localStorage.getItem(this.storage_key);
+    if (cached_value) {
+      this.closed(true);
+    } else {
+      this.closed(false);
+    }
+  }
+
+  close_announcement() {
+    this.closed(true);
+    localStorage.setItem(this.storage_key, true);
+  }
+}
+Registry.add_view(ProjectAnnouncementView);
