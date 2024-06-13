@@ -28,25 +28,22 @@
   {% endif %}
 {% endblock list_placeholder_text_empty %}
 
-{% block list_item_right_menu %}
+{% block list_item_right_buttons %}
   {# Note: for better performance, avoid multiple `is_admin` checks. Call this include with `is_project_admin` #}
   {% if is_project_admin is not None and is_project_admin or request.user|is_admin:project %}
-    <form method="post" action="{% url "projects_detail" project.slug %}">
-      {% csrf_token %}
-      <input type="hidden" name="version_slug" value="{{ object.version.slug }}">
-      <div class="ui small icon buttons">
-
-        {% blocktrans with version=object.version.verbose_name trimmed asvar text_refresh %}
-          Retry build for version {{ version }}
-        {% endblocktrans %}
-        <button class="ui button" data-content="{{ text_refresh }}" aria-label="{{ text_fresh }}">
-          <i class="fa-solid fa-refresh icon"></i>
-        </button>
-
-      </div>
-    </form>
+    {% blocktrans trimmed asvar text_retry %}
+      Rebuild version
+    {% endblocktrans %}
+    <readthedocs-api-button
+      class="ui button"
+      url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
+      csrf-token="{{ csrf_token }}"
+      data-content="{{ text_retry }}"
+      aria-label="{{ text_retry }}">
+      <i class="fas fa-arrows-rotate icon"></i>
+    </readthedocs-api-button>
   {% endif %}
-{% endblock list_item_right_menu %}
+{% endblock list_item_right_buttons %}
 
 {% block list_item_icon %}
   {% include "builds/includes/status_icon.html" with build=object circular=True %}

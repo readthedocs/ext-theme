@@ -139,23 +139,15 @@
             {% trans "Cancel" %}
           </a>
 
-          {# Show rebuild button only if the version is external, active and it's the latest build for this version #}
-          {# see https://github.com/readthedocs/readthedocs.org/pull/6995#issuecomment-852918969 #}
-          {% if build.can_rebuild %}
-            <a
-              class="item ko hidden"
-              data-bind="click: $root.post_child_form, css: { hidden: !can_retry() }">
-              <form method="post" name="rebuild_commit" action="{% url "builds_project_list" project.slug %}">
-                {% csrf_token %}
-                <input type="hidden" name="version_slug" value="{{ build.get_version_slug }}">
-                <input type="hidden" name="build_pk" value="{{ build.pk }}">
-              </form>
-              <i class="fas fa-arrows-rotate icon"></i>
-              {# Translators: this refers to retrying a build #}
-              {% trans "Retry" %}
-            </a>
-          {% endif %}
-
+          <readthedocs-api-button
+            class="link item ko hidden"
+            data-bind="css: { hidden: !can_retry() }"
+            url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
+            csrf-token="{{ csrf_token }}">
+            <i class="fa-duotone fa-refresh icon"></i>
+            {# Translators: this refers to rebuilding a version build #}
+            {% trans "Rebuild" %}
+          </readthedocs-api-button>
         {% endif %}
 
         {% trans "View documentation for this build" as text_view_docs %}
