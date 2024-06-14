@@ -4,31 +4,32 @@ import { LitElement, css, html, nothing } from "lit";
 import { LightDOMElement } from "../application/elements";
 
 /**
- *  API event on click
+ *  API event wrapper
  *
- *  Generic button/link wrapper to POST to a URL on click, much like a form
- *  handling button. Handles error feedback via toast message and redirection on
- *  success.
+ *  Generic button/link wrapper to POST to a URL on an event like "click".
+ *  Handles error feedback via toast message and redirection on success.
+ *
+ * @param {string} csrfToken - CSRF token from Django, attribute ``csrf-token``
+ * @param {string} url - API URL for request
+ *
  **/
-export class APIWrapper extends LightDOMElement {
+export class APIEventWrapper extends LightDOMElement {
   static properties = {
     csrfToken: { type: String, attribute: "csrf-token" },
-    method: { type: String },
     url: { type: String },
-    urlSuccess: { type: String, attribute: "url-success" },
-    errorMessage: { type: String, attribute: "error-message" },
+
+    // For API response
+    data: { state: true },
   };
 
-  constructor() {
-    super();
-    this.method = "POST";
-    this.errorMessage = "There was a problem with your request";
-  }
+  static method = "POST";
+  static event = "click";
+  static errorMessage = "There was a problem with your request";
 
   // This is just a wrapper, so we rely on the inner HTML for all of the
   // display and instead just wrap the outer with a clickable element.
   render() {
-    this.addEventListener("click", () => {
+    this.addEventListener(this.constructor.event, () => {
       this.sendRequest();
     });
   }
@@ -38,7 +39,7 @@ export class APIWrapper extends LightDOMElement {
     classes.add("loading");
 
     const options = {
-      method: this.method,
+      method: this.constructor.method,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -55,28 +56,54 @@ export class APIWrapper extends LightDOMElement {
       })
       .then((data) => {
         console.debug("Received API reponse:", data);
-        this.processData(data);
-        if (this.urlSuccess) {
-          window.location.href = this.urlSuccess;
+        this.data = data;
+        const urlSuccess = this.getSuccessURL();
+        if (urlSuccess) {
+          window.location.href = urlSuccess;
         }
       })
       .catch((err) => {
-        jquery.toast({
-          class: "error",
-          message: this.errorMessage,
-        });
+        this.onError(err);
       })
       .finally(() => {
         classes.remove("loading");
       });
   }
 
-  processData(data) {
-    // TODO don't hard code this. I suppose we need multiple elements for each
-    // button/event type, so that we can hard code the success logic or redirect
-    // URL.
-    this.urlSuccess = data.build.urls.build;
+  /** Return URL to redirect to on success
+   *
+   * Can use ``this.data`` to get API return from ``_link`` and other fields.
+   *
+   * @returns {string} - URL
+   **/
+  getSuccessURL() {
+    return;
+  }
+
+  /** Display error toast message on request error
+   *
+   * @param {Error} err - Exception raised during request
+   **/
+  onError(err) {
+    jquery.toast({
+      class: "error",
+      message: this.constructor.errorMessage,
+    });
   }
 }
 
-customElements.define("readthedocs-api-button", APIWrapper);
+/** Menu item for rebuilding a version **/
+class MenuBuildRebuildElement extends APIEventWrapper {
+  // TODO translate this here or use a different pattern
+  static errorMessage =
+    "There was an error starting a new build for this version";
+
+  getSuccessURL() {
+    return this?.data?.build?.urls?.build;
+  }
+}
+
+customElements.define(
+  "readthedocs-menu-build-rebuild",
+  MenuBuildRebuildElement,
+);

@@ -34,14 +34,14 @@
     {% blocktrans trimmed asvar text_retry %}
       Rebuild version
     {% endblocktrans %}
-    <readthedocs-api-button
+    <readthedocs-menu-build-rebuild
       class="ui button"
       url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
       csrf-token="{{ csrf_token }}"
       data-content="{{ text_retry }}"
       aria-label="{{ text_retry }}">
       <i class="fas fa-arrows-rotate icon"></i>
-    </readthedocs-api-button>
+    </readthedocs-menu-build-rebuild>
   {% endif %}
 {% endblock list_item_right_buttons %}
 

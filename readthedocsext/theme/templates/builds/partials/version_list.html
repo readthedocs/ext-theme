@@ -93,13 +93,13 @@
         <i class="fa-solid fa-ellipsis icon"></i>
         <div class="menu">
           <div class="header">{% trans "Admin" %}</div>
-          <readthedocs-api-button
+          <readthedocs-menu-build-rebuild
             class="item"
             url="{% url "projects-versions-builds-list" object.project.slug object.slug %}"
             csrf-token="{{ csrf_token }}">
             <i class="fa-duotone fa-refresh icon"></i>
             {% trans "Rebuild version" %}
-          </readthedocs-api-button>
+          </readthedocs-menu-build-rebuild>
           <a
             class="item"
             href="{% url "project_version_detail" project.slug object.slug %}">
