@@ -13,19 +13,107 @@
       <div class="eight wide computer sixteen wide tablet left aligned column">
 
         <h2 class="ui medium heading">
-          {% trans "Create a new organization" %}
+          {% trans "Join or create an organization" %}
         </h2>
 
-        <form class="ui form" action="" method="post">
-          {% csrf_token %}
-          {{ form|crispy }}
+        <div class="ui segment">
+          <div class="ui link list" data-bind="semanticui: { tabmenu: {} }">
+            <a class="item" data-tab="empty">
+              {% comment %}
+                Show nothing when the user arrives at this page.
+                Force them to select an option.
+              {% endcomment %}
+            </a>
 
-          <button class="ui primary button" type="submit">
-            {% trans "Get started" %}
-          </button>
-        </form>
+            <a class="item" data-tab="registered">
+              <i class="fad fa-building big icon"></i>
+              <div class="content">
+                <div class="header">
+                  {% trans "Join an existing organization" %}
+                </div>
+                <div class="description">
+                  <p>
+                    {% blocktrans trimmed %}
+                      Someone else already created an organization on Read the Docs and invited you to join.
+                    {% endblocktrans %}
+                  </p>
+                </div>
+              </div>
+            </a>
+
+            <a class="item" data-tab="new">
+              <i class="fad fa-plus big icon"></i>
+              <div class="content">
+                <div class="header">
+                  {% trans "Create a new organization" %}
+                </div>
+                <div class="description">
+                  <p>
+                    {% blocktrans trimmed %}
+                      You want to create an organization for your company and start a 30 day trial.
+                    {% endblocktrans %}
+                  </p>
+                </div>
+              </div>
+            </a>
+
+            <a class="item" data-tab="not-sure">
+              <i class="fad fa-question big icon"></i>
+              <div class="content">
+                <div class="header">
+                  {% trans "I'm not sure" %}
+                </div>
+                <div class="description">
+                  <p>
+                    {% blocktrans trimmed %}
+                      I'm not sure what I'm doing and I need some help.
+                    {% endblocktrans %}
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="ui active tab" data-tab="empty">
+          {% comment %}
+            This tab is active and empty on purpose.
+            The idea here is to show nothing when the user arrives at this page.
+          {% endcomment %}
+        </div>
+
+        <div class="ui tab" data-tab="registered">
+          {% blocktrans %}
+            To join an existing organization, you will need to
+            contact one of your organization's owners and request an invite.
+            They should email you a link that you can use to join.
+          {% endblocktrans %}
+        </div>
+
+        <div class="ui tab" data-tab="new">
+          <form class="ui form" action="" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            <button class="ui primary button" type="submit">
+              {% trans "Create organization" %}
+            </button>
+          </form>
+        </div>
+
+        <div class="ui bottom attached tab" data-tab="not-sure">
+          <p>
+            {% url 'support' as support_url %}
+            {% blocktrans trimmed with support_url=support_url %}
+              If you are not sure what you need or are having trouble getting started,
+              <a href="{{ support_url }}">contact us</a> and we will help you
+              with this process.
+            {% endblocktrans %}
+          </p>
+        </div>
       </div>
-      <div class="five wide computer only middle aligned left aligned column">
+
+      <div class="five wide computer only top aligned left aligned column">
         <div class="ui one cards">
 
           <div class="basic card">

@@ -1,20 +1,22 @@
 {% load i18n %}
 
 {% with "https://docs.readthedocs.io/page/security-log.html" as url %}
-  <div class="ui card">
-    <div class="content">
-      <a class="header" target="_blank" href="{{ url }}">{% trans "Monitor your organization with security logs" %}</a>
-      <div class="description">
-        {% blocktrans %}
-          Security logs allow you to <em>audit activity</em> around logins and team changes within your organization.
-          We store the IP address and the browser on each event, so that you can confirm this access was from the right person.
-        {% endblocktrans %}
+  <div data-bind="using: new ProjectAnnouncementView('security-logs')">
+    <div class="ui card ko hidden" data-bind="css: { hidden: closed }">
+      <div class="content">
+        <i class="fa-solid fa-xmark right floated close icon"  data-bind="click: close_announcement"></i>
+        <a class="header" target="_blank" href="{{ url }}">{% trans "Monitor your organization with security logs" %}</a>
+        <div class="description">
+          {% blocktrans %}
+            Security logs allow you to <em>audit activity</em> around logins and team changes within your organization.
+            We store the IP address and the browser on each event, so that you can confirm this access was from the right person.
+          {% endblocktrans %}
+        </div>
+      </div>
+      <div class="ui extra content">
+        <a class="ui small primary fluid basic button" target="_blank" href="{{ url }}">
+          {% trans "Enable security logs" %}
+        </a>
       </div>
     </div>
-    <div class="ui extra content">
-      <a class="ui small primary fluid basic button" target="_blank" href="{{ url }}">
-        {% trans "Enable security logs" %}
-      </a>
-    </div>
-  </div>
 {% endwith %}
