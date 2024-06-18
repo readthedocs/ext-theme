@@ -156,10 +156,32 @@
             <i class="{% block list_placeholder_icon_class %}{% endblock %} icon"></i>
           {% endblock list_placeholder_icon %}
           {% block list_placeholder_header %}
-            There are no objects here.
+            {# The filter should always be bound, but data might be `{}` #}
+            {% if filter and filter.is_bound and filter.data %}
+              {% block list_placeholder_header_filtered %}
+                {# Filter is active and nothing was found #}
+                {% trans "No results found" %}
+              {% endblock list_placeholder_header_filtered %}
+            {% else %}
+              {% block list_placeholder_header_empty %}
+                {# Filter is active and nothing was found #}
+                {% trans "No objects created yet" %}
+              {% endblock list_placeholder_header_empty %}
+            {% endif %}
           {% endblock list_placeholder_header %}
         </div>
         {% block list_placeholder_text %}
+          <div class="inline">
+            {# The filter should always be bound, but data might be `{}` #}
+            {% if filter and filter.is_bound and filter.data %}
+              {% block list_placeholder_text_filtered %}
+                {% trans "Try changing or removing your filter criteria" %}
+              {% endblock list_placeholder_text_filtered %}
+            {% else %}
+              {% block list_placeholder_text_empty %}
+              {% endblock list_placeholder_text_empty %}
+            {% endif %}
+          </div>
         {% endblock list_placeholder_text %}
       {% endblock list_placeholder %}
     </div>

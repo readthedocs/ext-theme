@@ -19,16 +19,19 @@
 {% endblock %}
 
 {% block list_placeholder_icon_class %}fad fa-users icon{% endblock %}
-{% block list_placeholder_header %}
-  {% blocktrans trimmed %}
-    No teams match your filter criteria.
-  {% endblocktrans %}
-{% endblock list_placeholder_header %}
-{% block list_placeholder_text %}
+{% block list_placeholder_header_filtered %}
+  {% trans "No matching teams found" %}
+{% endblock list_placeholder_header_filtered %}
+{% block list_placeholder_header_empty %}
+  {% trans "No teams are configured for this organization yet" %}
+{% endblock list_placeholder_header_empty %}
+{% block list_placeholder_text_empty %}
   {% if request.user|is_admin:organization %}
-    <div class="ui primary button">{% trans "Create a new team" %}</div>
+    <a href="{% url "organization_team_add" organization.slug  %}" class="ui primary button">
+      {% trans "Add team" %}
+    </a>
   {% endif %}
-{% endblock list_placeholder_text %}
+{% endblock list_placeholder_text_empty %}
 
 {% block list_item_right_buttons %}
   {% if request.user|is_admin:organization %}

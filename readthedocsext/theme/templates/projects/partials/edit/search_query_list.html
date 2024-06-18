@@ -54,17 +54,17 @@
 {% block list_item_right_menu %}
   <div class="ui right floated text menu">
     <div class="item">
-      {% blocktrans trimmed count num=object.1 %}
-        {{ num }} result
-      {% plural %}
-        {{ num }} results
-      {% endblocktrans %}
+      {% blocktrans trimmed count num=object.1 %}{{ num }} query{% plural %}{{ num }} queries{% endblocktrans %}
     </div>
   </div>
 {% endblock list_item_right_menu %}
 
 {% block list_item_header %}
   {{ object.0 }}
+  <div class="sub header">
+    {% blocktrans trimmed count num=object.2 %}{{ num }} result{% plural %}{{ num }} results{% endblocktrans %}
+  </div>
+
 {% endblock list_item_header %}
 
 {% block list_item_meta %}

@@ -1,2 +1,2 @@
-graft readthedocsext/theme/static/
-graft readthedocsext/theme/templates/
+recursive-include readthedocsext/theme/static *
+recursive-include readthedocsext/theme/templates *

@@ -51,6 +51,18 @@
     {% block content-wrapper %}
       <div class="ui very padded container">
         {% block notifications %}
+          {% if user.is_impersonate %}
+            <div class="ui small center aligned warning message">
+              <i class="fad fa-warning icon"></i>
+              Be careful!
+              <strong>
+                You are impersonating
+              </strong>
+              the user "<em>{{ request.user.username }}</em>".
+              <a href="{% url 'impersonate-stop' %}">Stop impersonating</a> when you are finished.
+            </div>
+          {% endif %}
+
           {% include "includes/utils/messages.html" %}
         {% endblock notifications %}
 
