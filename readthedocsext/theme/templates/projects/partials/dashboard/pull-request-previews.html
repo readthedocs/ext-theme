@@ -1,20 +1,23 @@
 {% load i18n %}
 
 {% with "https://docs.readthedocs.io/page/pull-requests.html" as url %}
-  <div class="ui card">
-    <div class="content">
-      <a class="header" target="_blank" href="{{ url }}">{% trans "Preview changes before deploying!" %}</a>
-      <div class="description">
-        {% blocktrans %}
-          Automatically build, preview, and share documentation with every pull request
-          and easily catch issues before going live.
-        {% endblocktrans %}
+  <div data-bind="using: new ProjectAnnouncementView('pull-requests')">
+    <div class="ui card ko hidden" data-bind="css: { hidden: closed }">
+      <div class="content">
+        <i class="fa-solid fa-xmark right floated close icon"  data-bind="click: close_announcement"></i>
+        <a class="header" target="_blank" href="{{ url }}">{% trans "Preview changes before deploying!" %}</a>
+        <div class="description">
+          {% blocktrans %}
+            Automatically build, preview, and share documentation with every pull request
+            and easily catch issues before going live.
+          {% endblocktrans %}
+        </div>
       </div>
-    </div>
-    <div class="ui extra content">
-      <a class="ui small primary fluid basic button" target="_blank" href="{{ url }}">
-        {% trans "Enable pull request previews" %}
-      </a>
+      <div class="ui extra content">
+        <a class="ui small primary fluid basic button" target="_blank" href="{{ url }}">
+          {% trans "Enable pull request previews" %}
+        </a>
+      </div>
     </div>
   </div>
 {% endwith %}

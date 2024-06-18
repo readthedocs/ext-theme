@@ -73,7 +73,7 @@
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  <a class="" href="{% url "projects_manage" object.slug %}">
+  <a class="" href="{% url "projects_detail" object.slug %}">
     {{ object.name }}
   </a>
   <div class="sub header">
