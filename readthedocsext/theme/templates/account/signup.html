@@ -14,8 +14,8 @@
 {% block authentication_email_text %}{% trans "Sign up with email" %}{% endblock %}
 
 {% block authentication_vcs %}
-  {# Translators: this will read "Log in with GitHub", where "log in" is a verb #}
-  {% blocktrans asvar text_log_in %}Log in using{% endblocktrans %}
+  {# Translators: this will read "Sign up using GitHub", where "sign up" is a verb #}
+  {% blocktrans asvar text_log_in %}Sign up using{% endblocktrans %}
   {% include "socialaccount/snippets/provider_list.html" with process="login" verbiage=text_log_in %}
 {% endblock authentication_vcs %}
 
