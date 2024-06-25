@@ -117,7 +117,7 @@
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
-  <a href="{% url "builds_project_list" object.project.slug %}?version={{ object.slug }}">
+  <a href="{% url "builds_project_list" object.project.slug %}?version__slug={{ object.slug }}">
     {{ object.verbose_name }}
   </a>
 

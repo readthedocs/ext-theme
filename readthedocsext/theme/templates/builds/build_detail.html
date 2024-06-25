@@ -89,7 +89,7 @@
                       <a href="{{ build.version.vcs_url }}"><code>#{{ build.get_version_name }}</code></a>
                     {% else %}
                       <code>
-                        <a href="{% url "builds_project_list" build.project.slug %}?version={{ build.get_version_slug }}">
+                        <a href="{% url "builds_project_list" build.project.slug %}?version__slug={{ build.get_version_slug }}">
                           {{ build.get_version_name }}
                         </a>
                       </code>
