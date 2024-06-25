@@ -27,7 +27,12 @@
       {{ field.label|safe }}
 
       {% if field.help_text %}
-        <i class="ui small grey fa-duotone fa-circle-question icon" data-html="{{ field.help_text }}" data-bind="semanticui: {popup: {hoverable: true}}"></i>
+        {% comment %}
+        A help text usually contains HTML to be included as is, and it's marked as safe.
+        Here we are including it in a data attribute, so we need to escape it.
+        We use force_escape, since escape skips strings marked as safe.
+        {% endcomment %}
+        <i class="ui small grey fa-duotone fa-circle-question icon" data-html="{{ field.help_text|force_escape }}" data-bind="semanticui: {popup: {hoverable: true}}"></i>
       {% endif %}
     </label>
   {% endif %}

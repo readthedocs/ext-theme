@@ -8,7 +8,7 @@
 {% block organization_edit_content_header %}{% trans "Owners" %}{% endblock %}
 
 {% block organization_edit_content %}
-  {% include "organizations/partials/owners_list.html" with objects=owners %}
+  {% include "organizations/partials/owners_list.html" with objects=object_list %}
 
   {% comment %}
     TODO move owner/team member invitations to a dedicated view.
@@ -37,7 +37,7 @@
           {{ invitations.count }}
         </span>
       </h2>
-      {% include "organizations/partials/invitation_list.html" with objects=invitations skip_pagination=True %}
+      {% include "invitations/partials/invitation_list.html" with objects=invitations skip_pagination=True %}
     {% endif %}
   {% endblock team_invitations %}
 {% endblock organization_edit_content %}

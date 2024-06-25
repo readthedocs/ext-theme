@@ -8,7 +8,7 @@
 {% block title %}{{ organization.name }}{% endblock %}
 
 {% block content-header %}
-  {% include "organizations/partials/header.html" with organization=organization projects_active="active" is_collapsed=True %}
+  {% include "organizations/partials/header.html" with organization=organization projects_active="active" %}
 {% endblock %}
 
 {% block content %}

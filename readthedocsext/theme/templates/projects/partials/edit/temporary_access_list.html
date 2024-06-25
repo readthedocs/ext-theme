@@ -10,13 +10,9 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  <div class="item">
-    <a class="ui green icon button"
-       href="{% url "projects_temporary_access_create" project.slug %}">
-      <i class="fa-solid fa-plus icon"></i>
-      {% trans "Add share" %}
-    </a>
-  </div>
+  {% url "projects_temporary_access_create" project.slug as create_url %}
+  {% trans "Add share" as create_text %}
+  {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
 {% endblock %}
 
 {% block list_placeholder_icon_class %}fa-duotone fa-share-nodes{% endblock %}

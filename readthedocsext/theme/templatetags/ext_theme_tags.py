@@ -108,5 +108,19 @@ def get_account_username(socialaccount):
     name of the human attached to said account.
     """
     provider = socialaccount.get_provider()
+    # SAML doesn't store the username in extra_data,
+    # and extract_common_fields doesn't expect a dictionary, but an object.
+    if provider.id == "saml":
+        return socialaccount.user.email
     extra_fields = provider.extract_common_fields(socialaccount.extra_data)
     return extra_fields.get("username") or extra_fields.get("email")
+
+
+@register.filter
+def get_spam_score(project):
+    try:
+        from readthedocsext.spamfighting.utils import spam_score
+    except ImportError:
+        return 0
+
+    return spam_score(project)

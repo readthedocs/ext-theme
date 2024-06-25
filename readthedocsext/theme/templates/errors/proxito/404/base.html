@@ -1,0 +1,26 @@
+{% extends "errors/proxito/base.html" %}
+
+{% load static %}
+{% load core_tags %}
+{% load i18n %}
+
+{% block title %}{% trans "Page not found" %}{% endblock %}
+
+{% block error_status %}404{% endblock %}
+{% block error_title %}
+  {{ block.super }}
+  {% trans "Page not found" %}
+{% endblock error_title %}
+
+{% block error_icon_computer_name %}fa-radar{% endblock %}
+{% block error_icon_mobile_name %}fa-radar{% endblock %}
+{% block error_icon_computer_style %}--fa-primary-color: greenyellow;{% endblock %}
+{% block error_icon_mobile_style %}--fa-primary-color: greenyellow;{% endblock %}
+
+{% block error_content %}
+  <p>
+    {% blocktrans trimmed %}
+      The page you requested may no longer exist, may have been moved, or the project may have been deleted.
+    {% endblocktrans %}
+  </p>
+{% endblock error_content %}

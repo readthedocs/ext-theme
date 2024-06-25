@@ -10,19 +10,19 @@
 
 {% block project_edit_content %}
   {% if not project.supports_translations %}
-    {% url 'projects_advanced' project_slug=project.slug as advanced_settings_url %}
+    {% url 'projects_edit' project_slug=project.slug as project_settings_url %}
     <div class="ui icon message">
       <i class="fa-duotone fa-circle-exclamation icon"></i>
       <div class="content">
         <div class="header">
           {% trans "Translations are not supported" %}
         </div>
-      <p>
-      {% blocktrans trimmed with advanced_settings_url=advanced_settings_url %}
-      This project is <a href="{{ advanced_settings_url }}">configured</a> with a versioning scheme that doesn't support translations.
-      {% endblocktrans %}
-      </p>
-    </div>
+        <p>
+          {% blocktrans trimmed with project_settings_url=project_settings_url %}
+            This project is <a href="{{ project_settings_url }}">configured</a> with a versioning scheme that doesn't support translations.
+          {% endblocktrans %}
+        </p>
+      </div>
   {% elif project.main_language_project %}
     <div class="ui icon message">
       <i class="fa-duotone fa-diagram-nested icon"></i>
@@ -48,14 +48,6 @@
     </div>
   {% else %}
     {% include "projects/partials/edit/translation_list.html" with objects=lang_projects %}
-
-    {% trans "Add translation" as action_text %}
-    <h3 class="ui small heading">{{ action_text }}</h3>
-    <form class="ui form" method="post" action=".">
-      {% csrf_token %}
-      {{ form|crispy }}
-      <input class="ui primary button" type="submit" value="{{ action_text }}">
-    </form>
   {% endif %}
 {% endblock %}
 

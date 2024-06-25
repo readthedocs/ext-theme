@@ -200,24 +200,32 @@ class BuildCommand {
  *
  * .. code:: html
  *
- *     <div data-bind="using: BuildDetailView({id: {{ build.pk }}})"></div>
+ *     <div data-bind="using: BuildDetailView({id: {{ build.pk }}}, '{% url ... %}', '{% url ... %}')"></div>
  *
  * @param {Object} build - API data for a build.
  */
 export class BuildDetailView {
   static view_name = "BuildDetailView";
 
-  constructor(build = {}) {
-    /** The build pk/id to fetch.
-     * @type {number} */
+  constructor(build = {}, url_api_build, url_api_notifications) {
+    /** @type {number} The build pk/id to fetch */
     this.id = build.id;
-    // TODO make this configurable?
-    this.api_url = "/api/v2/build/";
+    /** @type {string} APIv2 build detail API URL */
+    this.url_api_build = url_api_build;
+    /** @type {string} APIv3 build notification API URL */
+    this.url_api_notifications = url_api_notifications;
 
     /** @observable {Boolean} Was for successful build or not */
     this.success = ko.observable(build.success);
     /** @observable {string} Build error message */
     this.error = ko.observable(build.error);
+    /** @observableArray {Object} List of notifications from API */
+    this.notifications = ko.observableArray();
+    /** @computed {Boolean} Has notifications? */
+    this.has_notifications = ko.computed(() => {
+      return (this.notifications().length > 0);
+    });
+
     /** @obsevable {string} Build state */
     this.state = ko.observable(build.state);
     /** @observable {string} Build state as a display string */
@@ -234,8 +242,6 @@ export class BuildDetailView {
     this.can_retry = ko.observable(false);
     /** @observable {Boolean} There was doc output in the build */
     this.can_view_docs = ko.observable(false);
-
-    this.poll_api_counts = 0;
 
     // Consolidate all of the observable updates that depend on build state
     this.state.subscribe((state) => {
@@ -393,16 +399,22 @@ export class BuildDetailView {
         this.set_selected_line_from_hash(this.selected_hash());
       }
     });
-    this.poll_api();
+
+    if (this.url_api_build) {
+      this.poll_api_build();
+    }
+    if (this.url_api_notifications) {
+      this.poll_api_notifications();
+    }
   }
 
   /**
-   * Continually poll our API for build object and update Build, BuildCommand,
+   * Continually poll our APIv2 for build object and update Build, BuildCommand,
    * and BuildCommandOutput states. When the API return indicates the build is
    * finished, we stop recursive polling.
    */
-  poll_api() {
-    jquery.getJSON(this.api_url + this.id + "/").then((data) => {
+  poll_api_build() {
+    jquery.getJSON(this.url_api_build).then((data) => {
       this.date(data.date);
       this.success(data.success);
       this.error(data.error);
@@ -414,9 +426,6 @@ export class BuildDetailView {
       this.config(data.config);
       this.state(data.state);
       this.state_display(data.state_display);
-
-      this.poll_api_counts = this.poll_api_counts + 1;
-
 
       // This is a mock command used to preview the command output.
       // TODO probably do this in the application instead
@@ -435,29 +444,41 @@ export class BuildDetailView {
       // We've completed a request to the API. From here, we are not loading
       // from the API, but we'll be polling until the build is finished.
       this.is_loading(false);
-    });
-
-    // Continually poll API while build is not finished. If it is in a finished
-    // state, this method will return without setting another timer. We do not
-    // updated :attr:`is_polling` by computed/subscription as we want to ensure
-    // this update happens at the very end of API updates instead.
-    if (this.is_finished()) {
-      this.is_polling(false);
-
-      // HACK: this is a small hack to avoid implementing the new notification system
-      // on ext-theme at this point. This will come in a future PR.
-      // The notifications are rendered properly via Django template in a static way.
-      // So, we refresh the page once the build has finished to make Django render the notifications.
-      // We use a check of 1 API poll for those builds that are already finished when opened.
-      // The new dashboard will implement the new notification system in a nicer way using APIv3.
-      if (this.poll_api_counts !== 1) {
-        location.reload();
+    }).then(() => {
+      // Continually poll API while build is not finished. If it is in a finished
+      // state, this method will return without setting another timer. We do not
+      // updated :attr:`is_polling` by computed/subscription as we want to ensure
+      // this update happens at the very end of API updates instead.
+      if (this.is_finished()) {
+        this.is_polling(false);
+      } else {
+        setTimeout(() => {
+          this.poll_api_build();
+          this.poll_api_notifications();
+        }, 2000);
       }
-    } else {
-      setTimeout(() => {
-        this.poll_api();
-      }, 2000);
-    }
+    });
+  }
+
+  /** Poll APIv3 build notification API directly
+    *
+    * We have to do this because we rely on the build APIv2 for everything else
+    * and the APIv3 build endpoints don't have the data required yet.
+    *
+    * TODO this should all happen under a single build API v3 poll instead, and
+    * this method should go away.
+    *
+   * @param {str} url - APIv3 build notification endpoint
+    */
+  poll_api_notifications() {
+    const params = {
+      state__in: "read,unread",
+    };
+    jquery.getJSON(this.url_api_notifications, params).then((data) => {
+      if (data.results) {
+        this.notifications(data.results);
+      }
+    });
   }
 
   /** Add a command to :attr:`commands` if it doesn't already exist

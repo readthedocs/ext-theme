@@ -3,6 +3,16 @@
 {% load i18n %}
 {% load core_tags %}
 
+{% block notifications %}
+  {# User notifications only #}
+  <readthedocs-notification-list
+    url="{% url "users-notifications-list" request.user.username %}"
+    csrf-token="{{ csrf_token }}">
+  </readthedocs-notification-list>
+
+  {{ block.super }}
+{% endblock notifications %}
+
 {% block content %}
   <div class="ui stackable grid">
     <div class="five wide computer five wide tablet sixteen wide mobile column">

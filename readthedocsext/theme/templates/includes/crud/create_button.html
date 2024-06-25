@@ -1,0 +1,30 @@
+{% comment "rst" %}
+  Create button
+  =============
+
+  Use in a list display to show a create button link. Mostly to keep the UIs consistent.
+
+  Template parameters
+  -------------------
+
+  .. describe:: text
+
+      Text for the create button
+
+  .. describe:: url
+
+      URL link for the create button
+
+  .. describe:: is_disabled
+
+      Show the button as disabled
+
+{% endcomment %}
+
+<div class="item">
+  <a class="ui {% if is_disabled %}disabled{% endif %} green button"
+     href="{{ url }}">
+    <i class="fas fa-plus icon"></i>
+    {{ text }}
+  </a>
+</div>

@@ -6,4 +6,5 @@ JavaScript API
 
     js/application
     js/plugins
+    js/webcomponents
     js/views

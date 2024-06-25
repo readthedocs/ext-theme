@@ -7,11 +7,28 @@
 {% block title %}{{ build.project.name }}{% endblock %}
 
 {% block content-header %}
+  {% block build_detail_beta %}
+    {% comment %}
+      Temporary notification to point to the beta dashboard.
+      url_switch_dashboard comes from the view
+    {% endcomment %}
+    {% if url_switch_dashboard %}
+      <div class="ui small basic fitted center aligned segment">
+        <i class="fad fa-sparkles violet icon"></i>
+        <strong>
+          You are using our new beta dashboard.
+        </strong>
+        <a href="{% url "support" %}">We would love to have your feedback</a>.
+        If you encounter problems,
+        <a href="{{ url_switch_dashboard }}">return to our normal dashboard</a>.
+      </div>
+    {% endif %}
+  {% endblock build_detail_beta %}
   {% include "projects/partials/header.html" with builds_active="active" %}
 {% endblock %}
 
 {% block content %}
-  <div class="ui basic segment padded" data-bind="using: BuildDetailView({id: {{ build.pk }}})">
+  <div data-bind="using: BuildDetailView({}, '{% url "build-detail" build.id %}', '{% url "projects-builds-notifications-list" build.project.slug build.id %}')">
 
     {% block build_detail_metadata %}
       <div class="ui top attached segment">
@@ -95,7 +112,7 @@
       </div>
     {% endblock build_detail_metadata %}
 
-    <div class="ui attached menu">
+    <div class="ui attached stackable menu">
       <a class="active item">
         <i class="fa-duotone fa-terminal icon"></i>
         {% trans "Output" %}
@@ -185,25 +202,40 @@
 
     {% else %}
 
-      {% comment %}
-        Error list
-      {% endcomment %}
-      {% if build.notifications.exists %}
-        {% for notification in build.notifications.all %}
-          {% if notification.get_message.type == "error" %}
-            <div class="ui attached inverted red segment">
-              <i class="fa-solid fa-exclamation circular icon"></i>
-              <span>{{ notification.get_message.get_rendered_body|safe }}</span>
-              <span>{% trans "For more information on this error, see our documentation." %}</span>
-            </div>
-          {% endif %}
-        {% endfor %}
-      {% else %}
-        <div class="ui attached inverted red segment" data-bind="visible: error" style="display: none;">
-          <span data-bind="text: error"></span>
-          <span>{% trans "For more information on this error, see our documentation." %}</span>
+      {% block build_detail_notifications %}
+        {% comment %}
+          Build notification and error list
+
+          This uses ``readthedocs-notification`` directly, so that the build
+          detail view can handle all of the API requests in one place.
+
+          We pass the entire API notification response object into the web
+          component, which handles the data the same way as the notification
+          list element.
+        {% endcomment %}
+        <div class="ko hidden ui attached fitted inverted basic segment" data-bind="css: { hidden: !has_notifications() }, foreach: notifications">
+          <readthedocs-notification
+            inverted=true
+            csrf-token="{{ csrf_token }}"
+            data-bind="webcomponent: {notification: $data}">
+          </readthedocs-notification>
         </div>
-      {% endif %}
+
+        {% comment %}
+          Support for old style build errors, without notifications. In these
+          builds, ``error`` is a string and there is no header, so we use a
+          generic header instead.
+        {% endcomment %}
+        <div class="ko hidden ui attached fitted inverted basic segment" data-bind="css: { hidden: !error() }">
+          <div class="ui inverted error notification message">
+            <div class="header">
+              <i class="fad fa-circle-exclamation icon"></i>
+              {% trans "There was an error with this build" %}
+            </div>
+            <p data-bind="text: error"></p>
+          </div>
+        </div>
+      {% endblock build_detail_notifications %}
 
       <div class="ui inverted bottom attached segment transition slide">
 
@@ -242,7 +274,7 @@
                 </a>
               </td>
               <td class="stdout">
-                <code data-bind="html: output"></code>
+                <code data-bind="text: output"></code>
               </td>
             </tr>
           </tbody>

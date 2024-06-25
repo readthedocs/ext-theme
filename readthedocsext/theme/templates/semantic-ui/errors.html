@@ -1,14 +1,34 @@
 {% load i18n %}
 
 {% if form.errors and form.non_field_errors %}
-  <div class="ui small negative message">
-    <div class="header">
-      {% trans "Error" %}
+  {% for error in form.non_field_errors %}
+    <div class="ui small {% firstof error.message_class 'negative' %} message">
+      <div class="header">
+        {% trans "Error" as default_header %}
+        {% firstof error.header default_header %}
+      </div>
+      {% if error.messages %}
+        {% comment %}
+          Some form errors are raised with multiple error messages, using the
+          `messages` attribute. This can either be a single message or multiple
+          messages.
+        {% endcomment %}
+        {% if error.messages|length == 1%}
+          {{ error.messages|first|safe }}
+        {% else %}
+          <ul class="list">
+            {% for message in error.messages %}
+              <li>{{ message|safe }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% else %}
+        {% comment %}
+          Some older form errors don't use attached messages at all, in which
+          case we can treat these as just unsafe strings.
+        {% endcomment %}
+        {{ error|safe }}
+      {% endif %}
     </div>
-    <ul class="list">
-      {% for error in form.non_field_errors %}
-        <li>{{ error|escape }}</li>
-      {% endfor %}
-    </ul>
-  </div>
+  {% endfor %}
 {% endif %}

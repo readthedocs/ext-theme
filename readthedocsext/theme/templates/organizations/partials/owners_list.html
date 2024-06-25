@@ -38,63 +38,40 @@
 {% endblock %}
 
 {% block list_placeholder_icon_class %}fad fa-user-plus icon{% endblock %}
+{# This placeholder content should never be visible, there should always be one owner #}
 {% block list_placeholder_header %}
-  {% blocktrans trimmed %}
-    No organization owners found or no matches found for your filter criteria.
-  {% endblocktrans %}
+  {% trans "This organization has no owner users" %}
 {% endblock list_placeholder_header %}
-{% block list_placeholder_text %}
-  {% if request.user|is_admin:organization %}
-    <div class="ui primary button">{% trans "Invite an organization owner" %}</div>
-  {% endif %}
-{% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
   {% if request.user|is_admin:organization %}
-    <a class="ui icon {% if is_last_user %} disabled {% endif %} button"
-       data-bind="click: $root.show_modal('owner-{{ object.username }}')"
-       data-content="{% trans "Remove owner" %}">
-      <i class="fa-duotone fa-trash icon"></i>
-
-      <div class="ui mini modal" data-modal-id="owner-{{ object.username }}">
-        <div class="header">
-          {% trans "Remove owner" %}
-        </div>
-        <div class="content">
-          {% blocktrans trimmed with username=object.username organization=organization.name %}
-            Remove user {{ object.username }} as an owner of the {{ organization }} organization?
-          {% endblocktrans %}
-        </div>
-        <div class="actions">
-          <form method="post" action="{% url "organization_owner_delete" slug=organization.slug owner=object.pk %}">
-            {% csrf_token %}
-            <input type="hidden" name="user" value="{{ object.username }}" />
-            <input class="ui negative button" type="submit" value="{% trans "Remove" %}">
-          </form>
-        </div>
-      </div>
-    </a>
+    {% url "organization_owner_delete" organization.slug object.pk as form_url %}
+    {% trans "Remove owner" as action_text %}
+    {% blocktrans trimmed asvar content_text with username=object.owner.username organization=organization.name %}
+      Remove user {{ username }} as an owner of the {{ organization }} organization?
+    {% endblocktrans %}
+    {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text is_disabled=is_last_user %}
   {% endif %}
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
-  <img class="ui rounded square image" src="{% gravatar_url object.email 64 %}">
+  <img class="ui rounded square image" src="{% gravatar_url object.owner.email 64 %}">
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  {% with full_name=object.get_full_name %}
-    <a href="{% url "profiles_profile_detail" object.username %}">
+  {% with full_name=object.owner.get_full_name %}
+    <a href="{% url "profiles_profile_detail" object.owner.username %}">
 
       {% if full_name %}
         {{ full_name }}
       {% else %}
-        {{ object.username }}
+        {{ object.owner.username }}
       {% endif %}
 
     </a>
     {% if full_name %}
       <div class="sub header">
-        {{ object.username }}
+        {{ object.owner.username }}
       </div>
     {% endif %}
   {% endwith %}

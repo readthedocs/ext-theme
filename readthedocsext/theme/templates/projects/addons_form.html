@@ -9,6 +9,7 @@
 {% block project_edit_content_header %}{% trans "Addons" %}{% endblock %}
 
 {% block project_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://about.readthedocs.com/blog/2024/04/enable-beta-addons/" text="Blog post: Empower your documentation with addons" is_external=True class="item" %}
   {% include "includes/elements/link.html" with url="https://blog.readthedocs.com/addons-flyout-menu-beta/" text="Blog post: Addons flyout menu beta" is_external=True class="item" %}
 {% endblock project_edit_sidebar_help_topics %}
 

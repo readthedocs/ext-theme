@@ -1,15 +1,10 @@
 version: 2.1
 
 orbs:
-  browser-tools: circleci/browser-tools@1.4.6
+  browser-tools: circleci/browser-tools@1.4.7
+  node: circleci/node@5.2.0
 
 commands:
-  run-lint:
-    description: "Run code linter"
-    steps:
-      - checkout
-      - run: npm ci
-      - run: npm run lint
   run-build:
     description: "Ensure built assets are up to date"
     steps:
@@ -37,9 +32,15 @@ commands:
 jobs:
   lint:
     docker:
-      - image: "cimg/node:16.14"
+      - image: "cimg/python:3.11.8"
     steps:
-      - run-lint: {}
+      - checkout
+      - node/install:
+          node-version: "20.12"
+      - run: npm ci
+      - run: npm run lint
+      - run: pip install pre-commit
+      - run: pre-commit run --from-ref origin/HEAD --to-ref HEAD
   build:
     docker:
       - image: "cimg/node:16.14"

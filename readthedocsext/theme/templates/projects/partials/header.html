@@ -3,57 +3,53 @@
 {% load privacy_tags %}
 {% load core_tags %}
 {% load gravatar %}
+{% load ext_theme_tags %}
 
 {% comment %}
 
 This template is the header at the top of project dashboard pages. There are
-two modes to this header, full and collapsed. Full is the default view on the
-project detail page, while the collapsed view is the default for the other
-project dashboard pages. It is possible to expand the menu with a dropdown.
-
-Arguments:
-
-is_collapsed (default: True)
-    The default view configuration, normally start this view off in a collapsed
-    state, except on the main detail page.
+two modes to this header, full and collapsed. The header always starts off as
+collapsed, to save visual space and can be expanded with the right label.
 
 {% endcomment %}
 
 {% block project_header %}
-  {# Render all the notifications attached to the project.#}
-  {% for notification in project.notifications.all %}
-    <div class="ui message">
-      <i class="{{ notification.get_message.get_display_icon_classes }} icon"></i>
-      <span>{{ notification.get_message.get_rendered_body|safe }}</span>
-    </div>
-  {% endfor %}
-
-  <div class="ui top attached segment" data-bind="using: CollapsingHeaderView({{ is_collapsed|default_if_none:True|yesno:"true,false" }})">
+  <div class="ui top attached segment" data-bind="using: CollapsingHeaderView(true)">
 
     {% block project_header_metadata %}
       <div class="ui stacking grid">
 
         {% block project_header_title %}
-          <div class="eight wide computer eight wide tablet sixteen wide mobile column">
-            <div class="ui medium monospace header">
-              <a href="{{ project.get_absolute_url }}">
-                {{ project.name | default:project.slug }}
-              </a>
-
-              {# The dropdown action button, to swap between expanded/collapsed #}
-              <span data-bind="click: toggle_collapsed">
-                <i class="fas grey small icon" data-bind="class: dropdown_class"></i>
-              </span>
-            </div>
+          <div class="eight wide computer eight wide tablet sixteen wide mobile middle aligned column">
+            {% include "projects/includes/project_image.html" with project=project classes="micro rounded right spaced inline" %}
+            <a class="ui medium text" href="{{ project.get_absolute_url }}">
+              {{ project.name | default:project.slug }}
+            </a>
           </div>
         {% endblock project_header_title %}
 
         {% block project_header_labels %}
-          <div class="right aligned eight wide computer eight wide tablet sixteen wide left aligned mobile column">
-            {% include "includes/components/config_label.html" with icon="fa-solid fa-language" text=project.language|upper popup=project.language|language_name_local %}
+          <div class="right aligned eight wide computer eight wide tablet sixteen wide left aligned mobile middle aligned column">
+              {% comment %}
+              Simple solution to not supported "zh" language code.
+
+              When `project.language="zh"` the Django `language_name_local` raises an exception and returns 500.
+              This simple solution checks for this unsupported language code and replace it by "zh-cn" (Simplified Chinese).
+              We need to decide what to do at the DB level still, but at least this approach solves the immediate issue.
+              {% endcomment %}
+            {% if project.language == "zh" %}
+              {% include "includes/components/config_label.html" with icon="fa-solid fa-language" text=project.language|upper popup="zh-cn"|language_name_local %}
+            {% else %}
+              {% include "includes/components/config_label.html" with icon="fa-solid fa-language" text=project.language|upper popup=project.language|language_name_local %}
+            {% endif %}
             {% for organization in project.organizations.all %}
               {% include "includes/components/config_label.html" with icon="fa-solid fa-building" text=organization.name url=organization.get_absolute_url %}
             {% endfor %}
+
+            {# The dropdown action button, to swap between expanded/collapsed #}
+            <a class="ui icon primary label" data-bind="click: toggle_collapsed" data-content="{% trans "More project information" %}">
+              <i class="fas fa-caret-down icon" data-bind="class: dropdown_class"></i>
+            </a>
           </div>
         {% endblock project_header_labels %}
 
@@ -69,13 +65,6 @@ is_collapsed (default: True)
             {% endblock %}
 
             {% block project_header_tags %}
-              {% for organization in project.organizations.all %}
-                <a class="ui label" href="{{ organization.get_absolute_url }}">
-                  <i class="fad fa-building icon"></i>
-                  {{ organization.name }}
-                </a>
-              {% endfor %}
-
               {# Manual tags #}
               {% for tag in project.tags.all %}
                 <a class="ui teal basic label" href="{% url "projects_tag_detail" tag.slug %}">{{ tag.name }}</a>
@@ -179,7 +168,6 @@ is_collapsed (default: True)
                 </a>
               {% endif %}
             {% endblock project_header_repository %}
-
           </div>
         {% endblock project_header_metadata_right %}
 
@@ -200,12 +188,57 @@ is_collapsed (default: True)
       </a>
       {% if request.user|is_admin:project %}
         <div class="right menu">
+          {% if user.is_staff %}
+            <a class="item" data-bind="click: $root.show_modal('project-debug')">
+              <i class="fa-duotone fa-microscope icon"></i>
+              {% trans "Debug" %}
+            </a>
+          {% endif %}
           <a class="item {{ edit_active }}" href="{% url "projects_edit" project.slug %}">
             <i class="fa-duotone fa-gears icon"></i>
             {% trans "Settings" %}
           </a>
         </div>
       {% endif %}
+    </div>
+
+
+    <div class="ui mini modal" data-modal-id="project-debug">
+      <div class="header">
+        {% trans "Debug information" %}
+      </div>
+      {% comment %}
+        Show spam information on community instance.
+        Allows us to quickly understand what's the spam score,
+        and also know what rules are matching this project.
+      {% endcomment %}
+      <div class="content">
+        {% if not USE_ORGANIZATIONS %}
+          <h3>{% trans "Spam" %}</h3>
+          <div class="ui sub header">
+            {% trans "Spam score" %}
+          </div>
+          <span>{{ project|get_spam_score }} </span>
+          {% if project.spam_rules.exists %}
+            <div class="ui sub header">
+              {% trans "Spam matching rules" %}
+            </div>
+            <div class="ui vertical list">
+              {% for rule in project.spam_rules.all %}
+                <div class="item">
+                  <a href="{{ ADMIN_URL }}/spamfighting/spamrule/{{ rule.pk }}/change/"
+                     target="_blank">
+                    {{ rule.spam_rule_type|cut:"readthedocsext.spamfighting.rules." }}
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+      <div class="actions">
+        <a href="#" class="ui negative button">{% trans "Close" %}</a>
+      </div>
     </div>
   {% endblock project_header_navigation %}
 

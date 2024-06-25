@@ -10,7 +10,7 @@
 {% block project_edit_content %}
   <div data-bind="using: ProjectTrafficAnalyticsView()">
 
-    {% include "projects/partials/edit/traffic_list.html" with objects=top_viewed_pages %}
+    {% include "projects/partials/edit/traffic_list.html" with objects=top_pages_200 %}
 
     <h3 class="ui small header">
       {% trans "Overview" %}
@@ -50,6 +50,15 @@
         }
       </script>
     </div>
+
+    <h3 class="ui small header">
+      {% trans "Not found pages (404)" %}
+      <div class="sub header">
+        {% trans "For the last month" %}
+      </div>
+    </h3>
+    {% include "projects/partials/edit/traffic_list.html" with objects=top_pages_404 %}
+
   </div>
 {% endblock %}
 

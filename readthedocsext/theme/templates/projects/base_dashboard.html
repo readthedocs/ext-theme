@@ -6,6 +6,16 @@
 
 {% block title %}{% trans "Projects" %}{% endblock %}
 
+{% block notifications %}
+  {# User notifications only #}
+  <readthedocs-notification-list
+    url="{% url "users-notifications-list" request.user.username %}"
+    csrf-token="{{ csrf_token }}">
+  </readthedocs-notification-list>
+
+  {{ block.super }}
+{% endblock notifications %}
+
 {% block content %}
   {% url "projects_import" as projects_import_url %}
   {% url "socialaccount_connections" as social_accounts %}
@@ -16,6 +26,15 @@
     </div>
     <div class="five wide computer only column">
       <div class="ui one cards">
+
+        {% comment %}
+          Include a feature promotion in the right bar.
+
+          The promotion HTML to include comes from the backend at `ProjectDashboard` view.
+        {% endcomment %}
+        {% if promotion %}
+          {% include promotion %}
+        {% endif %}
 
         <div class="basic card">
           <div class="content">

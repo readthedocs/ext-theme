@@ -7,47 +7,48 @@
 {% load organizations %}
 {% load privacy_tags %}
 
-{% block view_binding %}data-bind="with: OrganizationListView()"{% endblock view_binding %}
-
 {% block top_left_menu_items %}
-  {% include "includes/filters/form.html" with fields=filter.form %}
+  <div data-bind="using: FilterView()">
+    {% include "includes/filters/form.html" with fields=filter.form %}
+  </div>
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  {# See below for more background on why we conditionally show a create button here #}
+  {% comment %}
+    This view makes some attempt to gate on organization creation, as we  want
+    to avoid sending users through subscription creation accidentally.
+  {% endcomment %}
   {% if request.user and request.user.organizations.count == 0 %}
-    <a class="ui green button" href="{{ organization_create }}">
-      {% trans "Create organization" %}
-    </a>
+    {% trans "Add organization" as create_text %}
+    {% url "organization_create" as create_url %}
+    {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
   {% endif %}
 {% endblock %}
 
-{% comment %}
-  We are specific to check whether an organization exists here as we do not want
-  the user creating a new organization accidentally. This view can be used with
-  an active filter, so Organization.objects.count == 0 does not necessarily imply
-  that the user doesn't below to an organization. Instead this means the user
-  selected a filter that returns no organizations (typo, etc?)
-{% endcomment %}
 {% block list_placeholder_icon_class %}fad fa-building icon{% endblock %}
-{% block list_placeholder_header %}
-  {# TODO this should probably be application logic to consolidate DB queries #}
-  {% if request.user and request.user.organizations.count == 0 %}
-    {% blocktrans trimmed %}
-      You are not a member of an organization yet.
-      To start a free trial, create a new organization.
-    {% endblocktrans %}
-  {% else %}
-    {% blocktrans trimmed %}
-      No organizations match your filter criteria.
-    {% endblocktrans %}
-  {% endif %}
-{% endblock list_placeholder_header %}
-{% block list_placeholder_text %}
-  {% if request.user and request.user.organizations.count == 0 %}
-    <div class="ui primary button">{% trans "Create an organization" %}</div>
-  {% endif %}
-{% endblock list_placeholder_text %}
+{% block list_placeholder_header_filtered %}
+  {% trans "No matching organizations found" %}
+{% endblock list_placeholder_header_filtered %}
+{% block list_placeholder_header_empty %}
+  {% trans "You are not a member of an organization yet" %}
+{% endblock list_placeholder_header_empty %}
+{% block list_placeholder_text_empty %}
+  {% comment %}
+    This should be stronger onboarding on how to find an existing organization
+    and other steps besides recommending the user create a new organization.
+
+    See: https://github.com/readthedocs/readthedocs.org/issues/11356
+  {% endcomment %}
+  <div class="ui center aligned basic fitted segment">
+    <p>
+      {% blocktrans trimmed %}
+        If you already have an existing organization, you may need to ask to be
+        invited to your organization again, or you may have signed in with the
+        wrong email address.
+      {% endblocktrans %}
+    </p>
+  </div>
+{% endblock list_placeholder_text_empty %}
 
 {% block list_item_right_buttons %}
   {% if request.user|is_admin:object %}

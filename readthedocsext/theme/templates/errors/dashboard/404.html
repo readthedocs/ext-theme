@@ -1,0 +1,60 @@
+{% extends "errors/dashboard/base.html" %}
+
+{% comment %}
+  This is for the dashboard 404 error page, not the documentation 404 error
+  pages. This will only show from our application.
+{% endcomment %}
+
+{% load core_tags %}
+{% load i18n %}
+
+{% block title %}{% trans "Page not found" %}{% endblock %}
+
+{% block error_status %}404{% endblock %}
+{% block error_title %}
+  {{ block.super }}
+  {% trans "Page not found" %}
+{% endblock error_title %}
+
+{% block error_icon_computer_name %}fa-radar{% endblock %}
+{% block error_icon_mobile_name %}fa-radar{% endblock %}
+{% block error_icon_computer_style %}--fa-primary-color: greenyellow;{% endblock %}
+{% block error_icon_mobile_style %}--fa-primary-color: greenyellow;{% endblock %}
+
+{% block error_content %}
+  <p>
+    {% blocktrans trimmed %}
+      The resource you requested may no longer exist, may have been moved, or
+      you might not have permission to view this page.
+    {% endblocktrans %}
+  </p>
+{% endblock error_content %}
+
+{% comment %}
+  We support the following cases with this error page:
+
+  - The URL was just plain bad
+  - The user is not authenticated and the project/resource is not public. We don't want to indicate that the project/resource exists.
+  - The user is authenticated and doesn't have permissions. Again, we do not want to indicate that the resource exists.
+
+{% endcomment %}
+{% block error_content_help %}
+  {% if request.user.is_authenticated %}
+    {# User is authenticated, we might have given a 404 to hide a 403 response #}
+    <p>
+      {% blocktrans trimmed %}
+        Ensure you have the correct permissions and try again.
+      {% endblocktrans %}
+    </p>
+  {% else %}
+    {# User is not authenticated, we might have given a 404 to hide a 401 response #}
+    <p>
+      {% url "account_login" as url_login %}
+      {% blocktrans trimmed with url_login=url_login url_login_next=request.path %}
+        <a href="{{ url_login }}?next={{ url_login_next }}">Log in</a> and try loading this page again.
+      {% endblocktrans %}
+    </p>
+  {% endif %}
+
+  {{ block.super }}
+{% endblock error_content_help %}

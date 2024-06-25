@@ -27,12 +27,12 @@ export class Registry {
       console.error("View view_name is unspecified", view);
       return;
     }
-    this.views[view.view_name] = (params) => {
+    this.views[view.view_name] = (...params) => {
       console.debug("Loading view with parameters:", view.view_name, params);
       // ignoreDependencies is needed here or the context used by the subview
       // is incorrect
       return ko.ignoreDependencies(() => {
-        return new view(params);
+        return new view(...params);
       }, this);
     };
   }

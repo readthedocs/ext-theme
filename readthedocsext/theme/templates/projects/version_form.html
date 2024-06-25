@@ -44,19 +44,24 @@
         <div class="ui fluid card">
           <div class="content">
             <div class="header">
-              <i class="fa-duotone {% if version.type == "branch" %}fa-code-branch {% elif version.type == "tag" %}fa-tag {% endif %}icon"></i>
-              <code>{{ version.verbose_name }}</code>
+              {{ version.verbose_name }}
+              <i class="fas {% if version.type == "branch" %}fa-code-branch{% elif version.type == "tag" %}fa-tag{% endif %} small icon"></i>
             </div>
             <div class="meta">
               <span class="identifier">
-                <i class="fa-duotone fa-code-branch icon"></i>
                 <code>{{ version.identifier_friendly }}</code>
               </span>
             </div>
           </div>
 
           <div class="content">
-            <form class="ui inline form" method="post" action=".">
+            {% if version.active %}
+              <div class="ui warning message">
+                {% trans 'Deactivating a version will result in the deletion of its documentation.' %}
+              </div>
+            {% endif %}
+
+            <form class="ui form" method="post" action=".">
               {% csrf_token %}
 
               {% alter_field form.active classes="ui toggle checkbox" %}
@@ -72,7 +77,11 @@
 
           <div class="extra content">
             {% if version.built %}
-              {{ version.builds.count }} builds
+              {% blocktrans count build_count=version.builds.count %}
+                {{ build_count }} build
+              {% plural %}
+                {{ build_count }} builds
+              {% endblocktrans %}
             {% else %}
               No builds yet
             {% endif %}
@@ -93,7 +102,7 @@
               }
             </script>
 
-            <div class="ui fluid search" data-bind="semanticui: {search: search_config()}">
+            <div class="ui fluid very short scrolling search" data-bind="semanticui: {search: search_config()}">
               <div class="ui fluid icon large input">
                 <input class="ui text" type="text" placeholder="{% trans "Search versions" %}" tabindex="0">
                 <i class="fa-duotone fa-magnifying-glass icon"></i>
@@ -132,45 +141,14 @@
     <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
       <div class="ui basic segment">
         <h2 class="ui small header">{% trans "Help topics" %}</h2>
-        <div data-bind="using: EmbedTopicsView('versions')">
-          <div data-bind="template: { name: 'doc-topics' }"></div>
+        <div class="ui bulleted list">
+          {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/versions.html" text=_("Versions") is_external=True class="item" %}
+          {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/versions.html#version-states" text=_("Version states") is_external=True class="item" %}
+          {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/versions.html#privacy-levels" text=_("Privacy levels") is_external=True class="item" %}
+          {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/automation-rules.html" text=_("Version automation rules") is_external=True class="item" %}
+          {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/" text=_("Documentation index") is_external=True class="item" %}
         </div>
-      </div>
-      <div class="ui basic segment">
-        <a href="https://docs.readthedocs.io/en/stable/" target="_blank">
-          View our full docs
-        </a>
       </div>
     </div>
   </div>
-
-  {% include "includes/utils/embed_docs.html" %}
 {% endblock content %}
-
-{% block wtf %}
-  {% if is_project_admin %}
-    {% if not version.active and version.built %}
-      <form class="ui form" name="version_delete_html" method="post" action="{% url "project_version_delete_html" project.slug version.slug %}">
-        {% csrf_token %}
-      </form>
-      <p>
-          {# We are submitting the form using javascript because it breaks the UI design if we use buttons #}
-        {% blocktrans trimmed %}
-          This version is inactive but its documentation is still available online.
-          You can <a href="#" onclick="document.forms['version_delete_html'].submit();">delete this version's documentation</a> if you want to remove it completely.
-        {% endblocktrans %}
-      </p>
-    {% endif %}
-  {% endif %}
-
-
-  <form class="ui form" method="post" action=".">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <p>
-      <input class="ui button" style="display: inline;" type="submit" value="{% trans "Save" %}">
-      {% trans "or" %}
-      <a href="{% url "wipe_version" version.project.slug version.slug %}">{% trans "wipe "%}</a>
-    </p>
-  </form>
-{% endblock %}

@@ -1,4 +1,4 @@
-{% extends "account/base.html" %}
+{% extends "account/base_entrance.html" %}
 
 {% load account socialaccount %}
 {% load crispy_forms_tags %}
@@ -9,30 +9,45 @@
 {% block content %}
   <div class="ui stackable padded grid">
 
-    <div class="violet four wide computer only column"></div>
-
-    <div class="twelve wide computer sixteen wide tablet sixteen wide mobile column">
+    <div class="sixteen wide computer sixteen wide tablet sixteen wide mobile column">
       {% get_providers as socialaccount_providers %}
 
       <div class="ui medium header">
         {% block authentication_header %}
-          {% trans "Log in to continue" %}
+          {% if is_from_cas_login %}
+            {% trans "Log in to view this documentation" %}
+          {% else %}
+            {% trans "Log in to continue" %}
+          {% endif %}
         {% endblock authentication_header %}
       </div>
 
-      <div class="ui small stackable secondary two item menu" data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
+      <div
+        class="ui small stackable teal secondary menu"
+        data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
 
-        {# This is purposely minimal, as the verbiage for "Log in with connected account" is a mountful #}
+        <div class="header item">
+          {% block authentication_header_text %}{% trans "Log in using:" %}{% endblock %}
+        </div>
+
         <a class="item" data-tab="vcs">
-          <i class="fad fa-cloud icon"></i>
+          <i class="fas fa-cloud icon"></i>
           {% block authentication_vcs_text %}{% trans "Connected account" %}{% endblock %}
         </a>
 
-        <a class="item" data-tab="email">
-          <i class="fad fa-envelope icon"></i>
-          {% block authentication_email_text %}{% trans "Log in with email" %}{% endblock %}
+        {# If allowed providers is given, disable the email menu item #}
+        <a class="{% if allowed_providers %}disabled{% endif %} item"
+           data-tab="email">
+          <i class="fas fa-envelope icon"></i>
+          {% block authentication_email_text %}{% trans "Email" %}{% endblock %}
         </a>
 
+        {% if project_password_url %}
+          <a class="item" href="{{ project_password_url }}">
+            <i class="fas fa-lock icon"></i>
+            {% block authentication_password_text %}{% trans "Password" %}{% endblock %}
+          </a>
+        {% endif %}
       </div>
 
       <div class="ui basic center aligned tab segment" data-tab="vcs">
@@ -60,10 +75,16 @@
               <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
             {% endif %}
 
-            <a class="ui small text" href="{% url 'account_reset_password' %}">{% trans "Forgot your password?" %}</a>
-            <button class="ui primary right cleared floated button" type="submit">
-              {% trans "Log in" %}
-            </button>
+            <div class="ui stackable relaxed text menu">
+              <a class="item" href="{% url 'account_reset_password' %}">
+                {% trans "Forgot your password?" %}
+              </a>
+              <div class="right menu">
+                <button class="ui primary button" type="submit">
+                  {% trans "Log in" %}
+                </button>
+              </div>
+            </div>
 
           </form>
         {% endblock authentication_email %}

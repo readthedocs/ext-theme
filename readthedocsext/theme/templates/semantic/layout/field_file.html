@@ -1,0 +1,6 @@
+{% load crispy_forms_field %}
+
+<div class="{{ field_class }}">
+  {% include 'semantic-ui/layout/field_errors_block.html' %}
+  {% crispy_field field %}
+</div>

@@ -18,7 +18,8 @@
     <script type="application/json" id="site-config">
       {
         "debug": {% debug_enabled as is_debug_enabled %}{{ is_debug_enabled | yesno:"true,false" }},
-        "webpack_public_path": "{% get_webpack_static_prefix %}/readthedocsext/theme/"
+        "webpack_public_path": "{% get_webpack_static_prefix %}/readthedocsext/theme/",
+        "production_domain": "{{ PRODUCTION_DOMAIN }}"
       }
     </script>
 
@@ -49,9 +50,21 @@
 
     {% block content-wrapper %}
       <div class="ui very padded container">
-        {% block messages %}
+        {% block notifications %}
+          {% if user.is_impersonate %}
+            <div class="ui small center aligned warning message">
+              <i class="fad fa-warning icon"></i>
+              Be careful!
+              <strong>
+                You are impersonating
+              </strong>
+              the user "<em>{{ request.user.username }}</em>".
+              <a href="{% url 'impersonate-stop' %}">Stop impersonating</a> when you are finished.
+            </div>
+          {% endif %}
+
           {% include "includes/utils/messages.html" %}
-        {% endblock messages %}
+        {% endblock notifications %}
 
         {# TODO move admin-bar usage to content-header #}
         {% block admin-bar %}{% endblock %}
