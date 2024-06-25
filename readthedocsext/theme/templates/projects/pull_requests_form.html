@@ -16,7 +16,7 @@
     {% endblocktrans %}
   </p>
 
-  <form class="ui form" method="post" action="." {% if form.errors and form.is_disabled %}inert{% endif %}>
+  <form class="ui form" method="post" action=".">
     {% csrf_token %}
     {{ form | crispy }}
 
