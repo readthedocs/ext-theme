@@ -16,13 +16,11 @@
     {% endblocktrans %}
   </p>
 
-  <form class="ui form" method="post" action=".">
+  <form class="ui form" method="post" action="." {% if form.errors and  form.is_disabled %}inert{% endif %}>
     {% csrf_token %}
     {{ form | crispy }}
 
-    <p>
-      <input class="ui button primary" type="submit" value="{% trans "Update" %}">
-    </p>
+      <input class="ui {% if form.errors and form.is_disabled %}disabled{% endif %} primary button" type="submit" value="{% trans "Update" %}">
   </form>
 {% endblock %}
 
