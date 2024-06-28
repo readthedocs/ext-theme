@@ -13,13 +13,13 @@ collapsed, to save visual space and can be expanded with the right label.
 {% endcomment %}
 
 {% block organization_header %}
-  {# Render all the notifications attached to the organization.#}
-  {% for notification in organization.notifications.all %}
-    <div class="ui message">
-      <i class="{{ notification.get_message.get_display_icon_classes }} icon"></i>
-      <span>{{ notification.get_message.get_rendered_body|safe }}</span>
-    </div>
-  {% endfor %}
+  {# Organization specific notifications only #}
+  {% if organization %}
+    <readthedocs-notification-list
+      url="{% url "organizations-notifications-list" organization.slug %}"
+      csrf-token="{{ csrf_token }}">
+    </readthedocs-notification-list>
+  {% endif %}
 
   <div class="ui top attached segment" data-bind="using: CollapsingHeaderView(true)">
 
