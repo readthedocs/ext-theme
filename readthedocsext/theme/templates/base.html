@@ -3,13 +3,22 @@
 {% load ext_theme_tags %}
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>{% block title %}{% endblock %}{% block head_title %}{% endblock %} - Read the Docs</title>
+    <title>
+      {% block title %}
+      {% endblock title %}
+      {% block head_title %}
+      {% endblock head_title %}
+    - Read the Docs</title>
+    <meta name="description"
+          content="Read the Docs is a documentation publishing and hosting platform for technical documentation" />
+    <meta name="keywords" content="documentation hosting" />
 
     <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" />
     <link rel="stylesheet" type="text/css" media="all" href="{% webpack_static "readthedocsext/theme/css/site.css" %}" />
-    {% block extra_links %}{% endblock %}
+    {% block extra_links %}
+    {% endblock extra_links %}
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width" />
@@ -28,7 +37,8 @@
       versions of Font Awesome, and doesn't require spreading around a Font
       Awesome Pro key.
     {% endcomment %}
-    <script src="https://kit.fontawesome.com/66c8860b51.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/66c8860b51.js"
+            crossorigin="anonymous"></script>
 
     {% comment %}
       {# TODO remove these, from the existing theme #}
@@ -36,17 +46,19 @@
       <script type="text/javascript" src="{{ MEDIA_URL }}javascript/base.js"></script>
     {% endcomment %}
   </head>
-  <body class="{% block body_class %}{% endblock %}">
+  <body class="{% block body_class %}{% endblock body_class %}">
 
     {# TODO remove info_bar block, it isn't used #}
-    {% block info_bar %}{% endblock %}
+    {% block info_bar %}
+    {% endblock info_bar %}
 
     {% block header %}
       {% include "includes/header.html" %}
     {% endblock header %}
 
     {# TODO remove subnav-bar block, it isn't used #}
-    {% block subnav-bar %}{% endblock %}
+    {% block subnav-bar %}
+    {% endblock subnav-bar %}
 
     {% block content-wrapper %}
       <div class="ui very padded container">
@@ -55,9 +67,7 @@
             <div class="ui small center aligned warning message">
               <i class="fad fa-warning icon"></i>
               Be careful!
-              <strong>
-                You are impersonating
-              </strong>
+              <strong>You are impersonating</strong>
               the user "<em>{{ request.user.username }}</em>".
               <a href="{% url 'impersonate-stop' %}">Stop impersonating</a> when you are finished.
             </div>
@@ -67,17 +77,20 @@
         {% endblock notifications %}
 
         {# TODO move admin-bar usage to content-header #}
-        {% block admin-bar %}{% endblock %}
+        {% block admin-bar %}
+        {% endblock admin-bar %}
 
-        {% block content-header %}{% endblock %}
+        {% block content-header %}
+        {% endblock content-header %}
 
-        {% block content %}{% endblock %}
+        {% block content %}
+        {% endblock content %}
       </div>
-    {% endblock %}
+    {% endblock content-wrapper %}
 
     {% block footer %}
       {% include "includes/footer.html" %}
-    {% endblock %}
+    {% endblock footer %}
 
     <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/vendor.js" %}"></script>
     <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/site.js" %}"></script>
