@@ -23,6 +23,9 @@
         <a class="item {% block project_domains_active %}{% endblock %}" href="{% url "projects_domains" project.slug %}">
           {% trans "Domains" %}
         </a>
+        <a class="item {% block project_pull_requests_active %}{% endblock %}" href="{% url "projects_pull_requests" project.slug %}">
+          {% trans "Pull request builds" %}
+        </a>
         {% if not USE_ORGANIZATIONS %}
           <a class="item {% block project_users_active %}{% endblock %}" href="{% url "projects_users" project.slug %}">
             {% trans "Maintainers" %}
