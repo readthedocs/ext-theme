@@ -6,7 +6,7 @@
 {% block chip_view_params %}'{% if not version.is_external %}{% url "projects-versions-detail" version.project.slug version.slug %}{% endif %}'{% endblock %}
 
 {% block chip_url %}
-  {% url "projects_detail" version.project.slug %}?version={{ version.slug }}
+  {% url "projects_detail" version.project.slug %}?slug={{ version.slug }}
 {% endblock %}
 
 {% block chip_icon %}
@@ -77,7 +77,7 @@
       <div class="content">
         <div class="header">{% trans "Builds" %}</div>
         <div class="description">
-          <a class="item" href="{% url "builds_project_list" version.project.slug %}?version={{ version.slug }}">
+          <a class="item" href="{% url "builds_project_list" version.project.slug %}?version__slug={{ version.slug }}">
             {% blocktrans trimmed with version_name=version.verbose_name %}
               For version {{ version_name }}
             {% endblocktrans %}

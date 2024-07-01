@@ -41,7 +41,7 @@
   <span class="section">
       {# When used a a page title, link the sections independently #}
     {% if is_page_title %}
-      <a href="{% url "projects_detail" build.project.slug %}?version={{ build.get_version_slug }}">
+      <a href="{% url "projects_detail" build.project.slug %}?slug={{ build.get_version_slug }}">
     {% endif %}
 
     {% if build.is_external %}
@@ -62,7 +62,7 @@
     {# When used as a page title, show a section link for the filtered build list #}
     <span class="divider">/</span>
     {# Translators: this refers to a list of builds for a single project #}
-    <a class="section" href="{% url "builds_project_list" build.project.slug %}?version={{ build.get_version_slug }}">
+    <a class="section" href="{% url "builds_project_list" build.project.slug %}?version__slug={{ build.get_version_slug }}">
       {% trans "Builds" %}
     </a>
   {% endif %}
