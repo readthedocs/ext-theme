@@ -16,40 +16,42 @@
 
 {% block organization_edit_content %}
   {% if sso_integration %}
-    <div class="ui message">
-      <div class="header">
-        {% trans "Invite new users into your organization" %}
-      </div>
-      <p>
-        {% trans "You can invite people to join your organization by sending them this link:" %}
-      </p>
+    <div class="ui basic segment">
+      <div class="ui message">
+        <div class="header">
+          {% trans "Invite new users into your organization" %}
+        </div>
+        <p>
+          {% trans "You can invite people to join your organization by sending them this link:" %}
+        </p>
 
-      <div class="ui fluid action input">
-        <input type="text" readonly id="rtd-saml-login-url" value="{{ rtd_saml_login_url }}" />
-        <button class="ui teal right icon button" data-clipboard-target="#rtd-saml-login-url">
-          <i class="fas fa-copy icon"></i>
-        </button>
+        <div class="ui fluid action input">
+          <input type="text" readonly id="rtd-saml-login-url" value="{{ rtd_saml_login_url }}" />
+          <button class="ui teal right icon button" data-clipboard-target="#rtd-saml-login-url">
+            <i class="fas fa-copy icon"></i>
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div class="ui message">
-      <div class="header">
-        {% trans "Invite existing users into your organization" %}
-      </div>
-      <p>
-        {% trans "You can invite existing users to join your organization by sending them this link:" %}
-      </p>
+      <div class="ui message">
+        <div class="header">
+          {% trans "Invite existing users into your organization" %}
+        </div>
+        <p>
+          {% trans "You can invite existing users to join your organization by sending them this link:" %}
+        </p>
 
-      <div class="ui fluid action input">
-        <input type="text" readonly id="rtd-saml-connect-url" value="{{ rtd_saml_connect_url }}" />
-        <button class="ui teal right icon button" data-clipboard-target="#rtd-saml-connect-url">
-          <i class="fas fa-copy icon"></i>
-        </button>
+        <div class="ui fluid action input">
+          <input type="text" readonly id="rtd-saml-connect-url" value="{{ rtd_saml_connect_url }}" />
+          <button class="ui teal right icon button" data-clipboard-target="#rtd-saml-connect-url">
+            <i class="fas fa-copy icon"></i>
+          </button>
+        </div>
       </div>
     </div>
   {% endif %}
 
-  <div class="ui padded">
+  <div class="ui basic segment">
     <h3>
       {% trans "Configure your SAML provider" %}
     </h3>
@@ -92,46 +94,40 @@
   </div>
 
   {% if sso_integration %}
-    <div class="ui padded">
+    <div class="ui basic segment">
       <h3>
         {% trans "SAML integration details" %}
       </h3>
 
+      <form class="ui form" method="POST" action=".">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <input class="ui submit primary button" type="submit" name="submit" value="{% trans "Update" %}" />
+      </form>
+
       <div class="ui form">
-        <div class="field">
-          <label>{% trans "Domain" %}</label>
-          <div class="ui fluid input">
-            <input type="text" value="{{ domain }}" readonly>
-          </div>
-        </div>
-        <div class="field">
-          <label>{% trans "Metadata URL" %}</label>
-          <div class="ui fluid input">
-            <input type="text" value="{{ metadata_url }}" readonly>
-          </div>
-        </div>
         <div class="field">
           <label>{% trans "Entity ID" %}</label>
           <div class="ui fluid input">
-            <input type="text" value="{{ entity_id }}" readonly>
+            <input type="text" value="{{ saml_app_config.entity_id }}" readonly>
           </div>
         </div>
         <div class="field">
           <label>{% trans "Single sign-on URL" %}</label>
           <div class="ui fluid input">
-            <input type="text" value="{{ sso_url }}" readonly>
+            <input type="text" value="{{ saml_app_config.sso_url }}" readonly>
           </div>
         </div>
         <div class="field">
           <label>{% trans "Single logout URL" %}</label>
           <div class="ui fluid input">
-            <input type="text" value="{{ slo_url }}" readonly>
+            <input type="text" value="{{ saml_app_config.slo_url }}" readonly>
           </div>
         </div>
         <div class="field">
           <label>{% trans "Certificate" %}</label>
           <div class="ui fluid input">
-            <textarea readonly>{{ certificate }}</textarea>
+            <textarea readonly>{{ saml_app_config.x509cert }}</textarea>
           </div>
         </div>
       </div>
