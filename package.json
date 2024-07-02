@@ -52,6 +52,7 @@
     "mini-css-extract-plugin": "^2.7.6",
     "plausible-tracker": "^0.3.8",
     "prettier": "^3.0.3",
+    "pure-rand": "^6.1.0",
     "resolve-url-loader": "^5.0.0",
     "rollup-plugin-lit-css": "^4.0.1",
     "sanitize-html": "^2.11.0",
