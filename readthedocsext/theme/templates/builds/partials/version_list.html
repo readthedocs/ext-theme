@@ -93,13 +93,13 @@
         <i class="fa-solid fa-ellipsis icon"></i>
         <div class="menu">
           <div class="header">{% trans "Admin" %}</div>
-          <a
+          <readthedocs-menu-build-rebuild
             class="item"
-              {# Note, the syntax could be confusing here: trigger_build returns a closure #}
-            data-bind="click: trigger_build('{% url "projects-versions-builds-list" project.slug object.slug %}', '{{ csrf_token }}')">
+            url="{% url "projects-versions-builds-list" object.project.slug object.slug %}"
+            csrf-token="{{ csrf_token }}">
             <i class="fa-duotone fa-refresh icon"></i>
             {% trans "Rebuild version" %}
-          </a>
+          </readthedocs-menu-build-rebuild>
           <a
             class="item"
             href="{% url "project_version_detail" project.slug object.slug %}">
@@ -117,7 +117,7 @@
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
-  <a href="{% url "builds_project_list" object.project.slug %}?version={{ object.slug }}">
+  <a href="{% url "builds_project_list" object.project.slug %}?version__slug={{ object.slug }}">
     {{ object.verbose_name }}
   </a>
 
