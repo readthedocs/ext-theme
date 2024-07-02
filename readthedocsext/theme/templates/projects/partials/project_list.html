@@ -32,39 +32,34 @@
 {% endblock list_placeholder_text_empty %}
 
 {% block list_item_start %}
-  <tr data-bind="using: ProjectListItemView({id: {{ object.id }}, url: '{% url "project-detail" object.pk %}'})">
+  <tr data-bind="using: ProjectListItemView({id: {{ object.id }}, url: '{% url "projects-detail" object.slug %}'})">
 {% endblock list_item_start %}
 
 {% block list_item_right_menu %}
-  <div class="ui small icon buttons">
+  <div class="ui small icon buttons" data-bind="event: {mouseover: fetch, focusin: fetch}">
     {% blocktrans trimmed with project=object.name asvar label_link %}
       View documentation for project {{ project }}
     {% endblocktrans %}
     <a class="ui {% if not object.has_good_build %} disabled{% endif %} button"
        data-content="{{ label_link }}"
        aria-label="{{ label_link }}"
-       data-bind="event: {mouseover: fetch, focusin: fetch}, attr: {href: url_docs}"
+       data-bind="attr: {href: url_docs}"
        tabindex="{% if object.has_good_build %}0{% else %}-1{% endif %}">
       <i class="fa-duotone fa-book icon"></i>
     </a>
 
-    {% if request.user|is_admin:object %}
-      <button class="ui dropdown button">
-        <i class="fa-solid fa-ellipsis icon"></i>
-        <div class="menu">
-          <div class="header">{% trans "Admin" %}</div>
-          <a class="item" href="{% url "projects_edit" object.slug %}">
-            <i class="fa-duotone fa-wrench icon"></i>
-            {% trans "Configure project" %}
-          </a>
-        </div>
-      </button>
-    {% else %}
-      <button class="ui disabled dropdown button">
-        <i class="fa-solid fa-ellipsis icon"></i>
-      </button>
-    {% endif %}
-
+    <button class="ui dropdown button">
+      <i class="fa-solid fa-ellipsis icon"></i>
+      <div class="menu">
+        <div class="header">{% trans "Admin" %}</div>
+        <a class="disabled item"
+           href="{% url "projects_edit" object.slug %}"
+           data-bind="css: { disabled: !is_admin() }">
+          <i class="fa-duotone fa-wrench icon"></i>
+          {% trans "Configure project" %}
+        </a>
+      </div>
+    </button>
   </div>
 {% endblock list_item_right_menu %}
 
