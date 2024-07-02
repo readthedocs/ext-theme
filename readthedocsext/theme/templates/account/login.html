@@ -27,7 +27,7 @@
         data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
 
         <div class="header item">
-          {% trans "Log in using:" %}
+          {% block authentication_header_text %}{% trans "Log in using:" %}{% endblock %}
         </div>
 
         <a class="item" data-tab="vcs">
