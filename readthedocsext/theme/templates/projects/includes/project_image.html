@@ -5,12 +5,16 @@
   to the same image always.
 {% endcomment %}
 
-{# TODO use a single web component here? #}
+{% load i18n %}
+{% load static %}
+
 {% if project.remote_repository %}
-  <img class="ui {{ classes|default_if_none:"small rounded" }} image" src="{{ project.remote_repository.avatar_url }}" />
+  <img class="ui {{ classes|default_if_none:"small rounded" }} image"
+       src="{{ project.remote_repository.avatar_url }}"
+       alt="{% blocktrans with project_name=project.name %}{{ project_name }} project{% endblocktrans %}" />
 {% else %}
-  <readthedocs-avatar
-    class="ui {{ classes|default_if_none:"small rounded" }} image"
-    seed="{{ project.pk }}">
+  <readthedocs-avatar class="ui {{ classes|default_if_none:"small rounded" }} image"
+                      seed="{{ project.pk }}"
+                      url="{% static 'readthedocsext/theme/css/images/avatar-1.png' %}">
   </readthedocs-avatar>
 {% endif %}
