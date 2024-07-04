@@ -183,7 +183,7 @@
   {% with build=object.last_build %}
     {% if build %}
       <div class="item">
-        {% include "includes/elements/chips/build.html" with build=build text=object.project.name %}
+        {% include "includes/elements/chips/build.html" with build=build notext=True %}
       </div>
     {% endif %}
   {% endwith %}

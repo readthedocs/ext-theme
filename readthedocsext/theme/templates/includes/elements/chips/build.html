@@ -19,7 +19,9 @@
     instance was deleted at some point. The version name is stored on the build
     in this scenario.
   {% endcomment %}
-  {% firstof text build.get_version_name %}
+  {% if not notext %}
+    {% firstof text build.get_version_name %}
+  {% endif %}
 {% endblock chip_text %}
 
 {% block chip_detail_text %}
@@ -30,7 +32,7 @@
   {% comment %}
     This block is the same as the chip_text block above.
   {% endcomment %}
-  {% firstof text build.get_version_name %} #{{ build.id }}
+  Build <a href="{% url 'builds_detail' build.project.slug build.pk %}">#{{ build.id }}</a>
 {% endblock popupcard_header %}
 
 {% block popupcard_right %}
