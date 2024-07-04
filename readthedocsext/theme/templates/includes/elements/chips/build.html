@@ -55,7 +55,7 @@
   {% if build.commit %}
     <span>
       <i class="fad fa-code-commit icon"></i>
-      {{ build.commit|slice:"0:8" }}
+      <a href="{{ build.get_commit_url }}">{{ build.commit|slice:"0:8" }}</a>
     </span>
   {% endif %}
   <div class="right floated">
