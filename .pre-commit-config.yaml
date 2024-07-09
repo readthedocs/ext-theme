@@ -26,12 +26,11 @@ repos:
       - id: destroyed-symlinks
       - id: end-of-file-fixer
         exclude: "^readthedocsext/theme/static/.*$"
-  - repo: https://github.com/rtts/djhtml
-    rev: "3.0.6"
+  - repo: https://github.com/djlint/djLint
+    rev: v1.34.1
     hooks:
-      - id: djhtml
-        entry: djhtml --tabwidth 2
-        files: '^readthedocsext/theme/templates/.*\.html'
+      - id: djlint-django
+      - id: djlint-reformat-django
   - repo: local
     hooks:
       - id: check-build-assets
