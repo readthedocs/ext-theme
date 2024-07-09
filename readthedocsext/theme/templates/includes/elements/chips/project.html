@@ -8,7 +8,9 @@
   '{% url "projects-detail" project.slug %}'
 {% endblock chip_view_params %}
 
-{% block chip_url %}{{ project.get_absolute_url }}{% endblock %}
+{% block chip_url %}
+  {{ project.get_absolute_url }}
+{% endblock chip_url %}
 
 {% block chip_classes %}
   basic image
@@ -16,7 +18,7 @@
 
 {% block chip_icon %}
   {% if project.remote_repository %}
-    <img src="{{ project.remote_repository.avatar_url }}" />
+    <img alt="Project avatar" src="{{ project.remote_repository.avatar_url }}" />
   {% else %}
     {% comment %}
       For now, this is using Dicebear, which has a few random generators for
@@ -24,7 +26,8 @@
       similar to generate files on disk and use an md5 hash or similar to link
       to the same image always.
     {% endcomment %}
-    <img src="https://api.dicebear.com/5.x/shapes/svg?size=64&backgroundColor=b8abd4&shape1Color=8c74c1&shape2Color=7854c5&shape3Color=f0f0ff&seed={{ project.pk }}" />
+    <img alt="Project avatar"
+         src="https://api.dicebear.com/5.x/shapes/svg?size=64&backgroundColor=b8abd4&shape1Color=8c74c1&shape2Color=7854c5&shape3Color=f0f0ff&seed={{ project.pk }}" />
   {% endif %}
 {% endblock chip_icon %}
 
@@ -45,7 +48,8 @@
 
 {% block popupcard_right %}
   {% if project.remote_repository %}
-    <img class="ui mini right floated rounded image"
+    <img alt="Project avatar"
+         class="ui mini right floated rounded image"
          src="{{ project.remote_repository.avatar_url }}" />
   {% else %}
     {% comment %}
@@ -54,7 +58,8 @@
       similar to generate files on disk and use an md5 hash or similar to link
       to the same image always.
     {% endcomment %}
-    <img class="ui mini right floated rounded image"
+    <img alt="Project avatar"
+         class="ui mini right floated rounded image"
          src="https://api.dicebear.com/5.x/shapes/svg?size=64&backgroundColor=b8abd4&shape1Color=8c74c1&shape2Color=7854c5&shape3Color=f0f0ff&seed={{ project.pk }}" />
   {% endif %}
 {% endblock popupcard_right %}

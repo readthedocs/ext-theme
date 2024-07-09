@@ -85,20 +85,20 @@
           <div class="left aligned item">
             <i class="large fa-duotone fa-code-branch icon"></i>
             <div class="content">
-              <div class="header">{% trans 'Version' %}</div>
+              <div class="header">{% trans "Version" %}</div>
               <div class="description">
-                <a href="http://docs.readthedocs.io/page/changelog.html">{% readthedocs_version %}</a>
+                <a href="https://docs.readthedocs.io/page/changelog.html">{% readthedocs_version %}</a>
               </div>
             </div>
           </div>
           <div class="left aligned item">
             <i class="large fa-duotone fa-language icon"></i>
             <div class="content">
-              <div class="header">{% trans 'Language' %}</div>
+              <div class="header">{% trans "Language" %}</div>
               <div class="description">
                 {% block language_select_form %}
                   {% get_current_language as current_lang %}
-                  <form action="/i18n/setlang/" method="post">
+                  <form action="{% url 'set_language' %}" method="post">
                     <div class="field">
                       <input name="next" type="hidden" value="/" />
                     </div>
