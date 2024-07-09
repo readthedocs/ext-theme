@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load core_tags %}
 {% load static %}
+{% load ext_theme_tags %}
 
 <footer class="ui basic very padded inverted attached segment">
   <div class="ui container">
@@ -96,7 +97,7 @@
                     {% csrf_token %}
                     <div class="ui very wide search dropdown" data-bind="semanticui: { dropdown: {direction: 'upward', fullTextSearch: true, cache: false}}">
                       <input type="hidden" name="language" />
-                      <span class="default text">{{ current_lang | language_name_local }}</span>
+                      <span class="default text">{{ current_lang | readthedocs_language_name_local }}</span>
                       <i class="fa-solid fa-caret-down icon"></i>
                       <div class="menu">
                         <div class="ui icon search input">
@@ -105,9 +106,9 @@
                         </div>
                         <div class="divider"></div>
                         {% for lang in LANGUAGES %}
-                          <div class="vertical item {% if lang.0 == current_lang %}active{% endif %}" data-value="{{ lang.0 }}" data-text="{{ lang.0 | language_name_local }}">
-                            <div class="description">{{ lang.0 | language_name_translated }}</div>
-                            <div class="text">{{ lang.0 | language_name_local }}</div>
+                          <div class="vertical item {% if lang.0 == current_lang %}active{% endif %}" data-value="{{ lang.0 }}" data-text="{{ lang.0 | readthedocs_language_name_local }}">
+                            <div class="description">{{ lang.0 | readthedocs_language_name_translated }}</div>
+                            <div class="text">{{ lang.0 | readthedocs_language_name_local }}</div>
                           </div>
                         {% endfor %}
                       </div>
