@@ -14,7 +14,6 @@
        alt="{% blocktrans with project_name=project.name %}{{ project_name }} project{% endblocktrans %}" />
 {% else %}
   <readthedocs-avatar class="ui {{ classes|default_if_none:"small rounded" }} image"
-                      seed="{{ project.pk }}"
-                      url="{% static 'readthedocsext/theme/css/images/avatar-1.png' %}">
+                      seed="{{ project.pk }}">
   </readthedocs-avatar>
 {% endif %}
