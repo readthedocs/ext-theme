@@ -14,7 +14,8 @@ collapsed, to save visual space and can be expanded with the right label.
 {% endcomment %}
 
 {% block project_header %}
-  <div class="ui top attached segment" data-bind="using: CollapsingHeaderView(true)">
+  <div class="ui top attached segment"
+       data-bind="using: CollapsingHeaderView(true)">
 
     {% block project_header_metadata %}
       <div class="ui stacking grid">
@@ -22,9 +23,7 @@ collapsed, to save visual space and can be expanded with the right label.
         {% block project_header_title %}
           <div class="eight wide computer eight wide tablet sixteen wide mobile middle aligned column">
             {% include "projects/includes/project_image.html" with project=project classes="micro rounded right spaced inline" %}
-            <a class="ui medium text" href="{{ project.get_absolute_url }}">
-              {{ project.name | default:project.slug }}
-            </a>
+            <a class="ui medium text" href="{{ project.get_absolute_url }}">{{ project.name | default:project.slug }}</a>
           </div>
         {% endblock project_header_title %}
 
@@ -36,35 +35,34 @@ collapsed, to save visual space and can be expanded with the right label.
             {% endfor %}
 
             {# The dropdown action button, to swap between expanded/collapsed #}
-            <a class="ui icon primary label" data-bind="click: toggle_collapsed" data-content="{% trans "More project information" %}">
+            <a class="ui icon primary label"
+               data-bind="click: toggle_collapsed"
+               data-content="{% trans "More project information" %}">
               <i class="fas fa-caret-down icon" data-bind="class: dropdown_class"></i>
             </a>
           </div>
         {% endblock project_header_labels %}
 
         {% block project_header_metadata_left %}
-          <div class="eight wide computer eight wide tablet sixteen wide mobile column" data-bind="visible: !is_collapsed()" style="display: none;">
+          <div class="eight wide computer eight wide tablet sixteen wide mobile column"
+               data-bind="visible: !is_collapsed()"
+               style="display: none">
 
             {% block project_header_description %}
-              {% if project.description %}
-                <p>
-                  {{ project.description|truncatewords:15 }}
-                </p>
-              {% endif %}
+              {% if project.description %}<p>{{ project.description|truncatewords:15 }}</p>{% endif %}
             {% endblock %}
 
             {% block project_header_tags %}
               {# Manual tags #}
               {% for tag in project.tags.all %}
-                <a class="ui teal basic label" href="{% url "projects_tag_detail" tag.slug %}">{{ tag.name }}</a>
+                <a class="ui teal basic label"
+                   href="{% url "projects_tag_detail" tag.slug %}">{{ tag.name }}</a>
               {% endfor %}
             {% endblock project_header_tags %}
 
             {% block project_header_related_projects %}
               {% if project.superproject or project.subprojects.exists %}
-                <div class="ui sub header">
-                  {% trans "Related projects" %}
-                </div>
+                <div class="ui sub header">{% trans "Related projects" %}</div>
                 <div class="ui relaxed horizontal list">
                   {% if project.superproject %}
                     <div class="item">
@@ -84,9 +82,7 @@ collapsed, to save visual space and can be expanded with the right label.
             {% block project_header_translations %}
               {% with translations=project.main_language_project.translations|default:project.translations %}
                 {% if translations.exists %}
-                  <div class="ui sub header">
-                    {% trans "Translations" %}
-                  </div>
+                  <div class="ui sub header">{% trans "Translations" %}</div>
                   <div class="ui horizontal list">
                     {% with project_translation=project.main_language_project|default:project %}
                       {% if not project_translation == project %}
@@ -111,12 +107,12 @@ collapsed, to save visual space and can be expanded with the right label.
         {% endblock project_header_metadata_left %}
 
         {% block project_header_metadata_right %}
-          <div class="right aligned eight wide computer eight wide tablet sixteen wide mobile column" data-bind="visible: !is_collapsed()" style="display: none;">
+          <div class="right aligned eight wide computer eight wide tablet sixteen wide mobile column"
+               data-bind="visible: !is_collapsed()"
+               style="display: none">
 
             {% block project_header_maintainers %}
-              <div class="ui sub header">
-                {% trans "Maintainers" %}
-              </div>
+              <div class="ui sub header">{% trans "Maintainers" %}</div>
 
               {# TODO project teams and organization #}
 
@@ -129,9 +125,7 @@ collapsed, to save visual space and can be expanded with the right label.
 
                 {% with other_maintainers=project.users.all|slice:"8:"|length %}
                   {% if other_maintainers %}
-                    <span>
-                      {% trans "... and {other_maintainers} others" %}
-                    </span>
+                    <span>{% trans "... and {other_maintainers} others" %}</span>
                   {% endif %}
                 {% endwith %}
 
@@ -139,9 +133,7 @@ collapsed, to save visual space and can be expanded with the right label.
             {% endblock project_header_maintainers %}
 
             {% block project_header_repository %}
-              <div class="ui sub header">
-                {% trans "Repository" %}
-              </div>
+              <div class="ui sub header">{% trans "Repository" %}</div>
 
               {% if project.remote_repository %}
                 {% with repo=project.remote_repository %}
@@ -167,7 +159,8 @@ collapsed, to save visual space and can be expanded with the right label.
 
   {% block project_header_navigation %}
     <div class="ui bottom attached stackable menu">
-      <a class="item {{ overview_active }}" href="{{ project.get_absolute_url }}">
+      <a class="item {{ overview_active }}"
+         href="{{ project.get_absolute_url }}">
         {% trans "Versions" %}
         <span class="ui tiny teal circular label">{{ project.active_versions.count }}</span>
       </a>
@@ -183,7 +176,8 @@ collapsed, to save visual space and can be expanded with the right label.
               {% trans "Debug" %}
             </a>
           {% endif %}
-          <a class="item {{ edit_active }}" href="{% url "projects_edit" project.slug %}">
+          <a class="item {{ edit_active }}"
+             href="{% url "projects_edit" project.slug %}">
             <i class="fa-duotone fa-gears icon"></i>
             {% trans "Settings" %}
           </a>
@@ -193,9 +187,7 @@ collapsed, to save visual space and can be expanded with the right label.
 
 
     <div class="ui mini modal" data-modal-id="project-debug">
-      <div class="header">
-        {% trans "Debug information" %}
-      </div>
+      <div class="header">{% trans "Debug information" %}</div>
       {% comment %}
         Show spam information on community instance.
         Allows us to quickly understand what's the spam score,
@@ -204,21 +196,15 @@ collapsed, to save visual space and can be expanded with the right label.
       <div class="content">
         {% if not USE_ORGANIZATIONS %}
           <h3>{% trans "Spam" %}</h3>
-          <div class="ui sub header">
-            {% trans "Spam score" %}
-          </div>
-          <span>{{ project|get_spam_score }} </span>
+          <div class="ui sub header">{% trans "Spam score" %}</div>
+          <span>{{ project|get_spam_score }}</span>
           {% if project.spam_rules.exists %}
-            <div class="ui sub header">
-              {% trans "Spam matching rules" %}
-            </div>
+            <div class="ui sub header">{% trans "Spam matching rules" %}</div>
             <div class="ui vertical list">
               {% for rule in project.spam_rules.all %}
                 <div class="item">
                   <a href="{{ ADMIN_URL }}/spamfighting/spamrule/{{ rule.pk }}/change/"
-                     target="_blank">
-                    {{ rule.spam_rule_type|cut:"readthedocsext.spamfighting.rules." }}
-                  </a>
+                     target="_blank">{{ rule.spam_rule_type|cut:"readthedocsext.spamfighting.rules." }}</a>
                 </div>
               {% endfor %}
             </div>

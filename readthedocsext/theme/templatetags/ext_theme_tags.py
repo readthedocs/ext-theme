@@ -2,7 +2,11 @@ from urllib.parse import urljoin
 
 from django import template
 from django.conf import settings
-from django.templatetags.i18n import language_name_local, language_name, language_name_translated
+from django.templatetags.i18n import (
+    language_name_local,
+    language_name,
+    language_name_translated,
+)
 from django.templatetags.static import StaticNode, PrefixNode
 from django.forms import boundfield
 
@@ -138,11 +142,13 @@ def readthedocs_language_name(lang_code):
         return language_name("zh-cn")
     return language_name(lang_code)
 
+
 @register.filter
 def readthedocs_language_name_translated(lang_code):
     if lang_code == "zh":
         return language_name_translated("zh-cn")
     return language_name_translated(lang_code)
+
 
 @register.filter
 def readthedocs_language_name_local(lang_code):
