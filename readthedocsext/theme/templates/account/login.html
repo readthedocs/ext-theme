@@ -6,7 +6,7 @@
 
 {% block head_title %}
   {% trans "Log in" %}
-{% endblock %}
+{% endblock head_title %}
 
 {% block content %}
   <div class="ui stackable padded grid">
@@ -30,14 +30,14 @@
         <div class="header item">
           {% block authentication_header_text %}
             {% trans "Log in using:" %}
-          {% endblock %}
+          {% endblock authentication_header_text %}
         </div>
 
         <a class="item" data-tab="vcs">
           <i class="fas fa-cloud icon"></i>
           {% block authentication_vcs_text %}
             {% trans "Connected account" %}
-          {% endblock %}
+          {% endblock authentication_vcs_text %}
         </a>
 
         {# If allowed providers is given, disable the email menu item #}
@@ -46,7 +46,7 @@
           <i class="fas fa-envelope icon"></i>
           {% block authentication_email_text %}
             {% trans "Email" %}
-          {% endblock %}
+          {% endblock authentication_email_text %}
         </a>
 
         <a class="item"
@@ -60,7 +60,7 @@
             <i class="fas fa-lock icon"></i>
             {% block authentication_password_text %}
               {% trans "Password" %}
-            {% endblock %}
+            {% endblock authentication_password_text %}
           </a>
         {% endif %}
       </div>
@@ -105,7 +105,8 @@
         {% endblock authentication_email %}
       </div>
 
-      {% block authentication_extra %}{% endblock %}
+      {% block authentication_extra %}
+      {% endblock authentication_extra %}
 
     </div>
   </div>
