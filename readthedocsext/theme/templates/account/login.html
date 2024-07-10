@@ -42,6 +42,11 @@
           {% block authentication_email_text %}{% trans "Email" %}{% endblock %}
         </a>
 
+        <a class="item" href="{% url "saml_resolve_login" %}{% if redirect_field_value %}?{{ redirect_field_name }}={{ redirect_field_value }}{% endif %}">
+          <i class="fas fa-shield-alt icon"></i>
+          {% trans "SAML single sign-on" %}
+        </a>
+
         {% if project_password_url %}
           <a class="item" href="{{ project_password_url }}">
             <i class="fas fa-lock icon"></i>

@@ -1,0 +1,18 @@
+{% extends "socialaccount/base_entrance.html" %}
+
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block head_title %}
+  {% trans "Sign in with SAML" %}
+{% endblock %}
+
+{% block content %}
+  <h1>{% trans "Continue with SAML single sign-on" %}</h1>
+  <form class="ui form" method="post" action="{% url "saml_resolve_login" %}">
+    {% csrf_token %}
+    {{ form|crispy }}
+    {{ redirect_field }}
+    <button class="ui button" type="submit">{% trans "Continue" %}</button>
+  </form>
+{% endblock content %}
