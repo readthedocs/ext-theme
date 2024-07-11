@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load core_tags %}
 {% load static %}
+{% load ext_theme_tags %}
 
 <footer class="ui basic very padded inverted attached segment">
   <div class="ui container">
@@ -13,12 +14,19 @@
             {% block menu_news %}
               <h4 class="ui inverted sub header">Stay updated</h4>
               <a class="item" href="https://about.readthedocs.com/blog/">Blog</a>
-              <a class="item" href="https://landing.mailerlite.com/webforms/landing/t0a9l4">Newsletter</a>
+              <a class="item"
+                 href="https://landing.mailerlite.com/webforms/landing/t0a9l4">Newsletter</a>
               <a class="item" href="https://status.readthedocs.com/">Status</a>
               <div class="item">
-                <a href="https://github.com/readthedocs/" aria-label="Read the Docs on GitHub" rel="noopener noreferrer"><i class="icon large fab fa-github"></i></a>
-                <a href="https://twitter.com/readthedocs" aria-label="Read the Docs on Twitter" rel="noopener noreferrer"><i class="icon large fab fa-twitter"></i></a>
-                <a href="https://fosstodon.org/@readthedocs" aria-label="Read the Docs on Mastodon / Fediverse" rel="me"><i class="icon large fab fa-mastodon"></i></a>
+                <a href="https://github.com/readthedocs/"
+                   aria-label="Read the Docs on GitHub"
+                   rel="noopener noreferrer"><i class="icon large fab fa-github"></i></a>
+                <a href="https://twitter.com/readthedocs"
+                   aria-label="Read the Docs on Twitter"
+                   rel="noopener noreferrer"><i class="icon large fab fa-twitter"></i></a>
+                <a href="https://fosstodon.org/@readthedocs"
+                   aria-label="Read the Docs on Mastodon / Fediverse"
+                   rel="me"><i class="icon large fab fa-mastodon"></i></a>
               </div>
             {% endblock menu_news %}
           </div>
@@ -29,7 +37,8 @@
             {% block menu_learn %}
               <h4 class="ui inverted sub header">Learn more</h4>
               <a class="item" href="https://docs.readthedocs.io">Documentation</a>
-              <a class="item" href="https://docs.readthedocs.io/page/tutorial/index.html">Getting started guide</a>
+              <a class="item"
+                 href="https://docs.readthedocs.io/page/tutorial/index.html">Getting started guide</a>
               <a class="item" href="https://docs.readthedocs.io/page/config-file/">Configure your project</a>
             {% endblock menu_learn %}
           </div>
@@ -42,8 +51,10 @@
               <a class="item" href="https://about.readthedocs.com/pricing/">Pricing</a>
               <a class="item" href="https://about.readthedocs.com/features/">Features</a>
               <a class="item" href="https://www.ethicalads.io/advertisers/?ref=rtd">Advertise with Us</a>
-              <a class="item" href="https://docs.readthedocs.io/page/privacy-policy.html">Privacy Policy</a>
-              <a class="item" href="https://docs.readthedocs.io/page/terms-of-service.html">Terms of Service</a>
+              <a class="item"
+                 href="https://docs.readthedocs.io/page/privacy-policy.html">Privacy Policy</a>
+              <a class="item"
+                 href="https://docs.readthedocs.io/page/terms-of-service.html">Terms of Service</a>
             {% endblock menu_services %}
           </div>
         </div>
@@ -74,29 +85,28 @@
           <div class="left aligned item">
             <i class="large fa-duotone fa-code-branch icon"></i>
             <div class="content">
-              <div class="header">{% trans 'Version' %}</div>
+              <div class="header">{% trans "Version" %}</div>
               <div class="description">
-                <a href="http://docs.readthedocs.io/page/changelog.html">
-                  {% readthedocs_version %}
-                </a>
+                <a href="https://docs.readthedocs.io/page/changelog.html">{% readthedocs_version %}</a>
               </div>
             </div>
           </div>
           <div class="left aligned item">
             <i class="large fa-duotone fa-language icon"></i>
             <div class="content">
-              <div class="header">{% trans 'Language' %}</div>
+              <div class="header">{% trans "Language" %}</div>
               <div class="description">
                 {% block language_select_form %}
                   {% get_current_language as current_lang %}
-                  <form action="/i18n/setlang/" method="post">
+                  <form action="{% url 'set_language' %}" method="post">
                     <div class="field">
                       <input name="next" type="hidden" value="/" />
                     </div>
                     {% csrf_token %}
-                    <div class="ui very wide search dropdown" data-bind="semanticui: { dropdown: {direction: 'upward', fullTextSearch: true, cache: false}}">
+                    <div class="ui very wide search dropdown"
+                         data-bind="semanticui: { dropdown: {direction: 'upward', fullTextSearch: true, cache: false}}">
                       <input type="hidden" name="language" />
-                      <span class="default text">{{ current_lang | language_name_local }}</span>
+                      <span class="default text">{{ current_lang | readthedocs_language_name_local }}</span>
                       <i class="fa-solid fa-caret-down icon"></i>
                       <div class="menu">
                         <div class="ui icon search input">
@@ -105,17 +115,17 @@
                         </div>
                         <div class="divider"></div>
                         {% for lang in LANGUAGES %}
-                          <div class="vertical item {% if lang.0 == current_lang %}active{% endif %}" data-value="{{ lang.0 }}" data-text="{{ lang.0 | language_name_local }}">
-                            <div class="description">{{ lang.0 | language_name_translated }}</div>
-                            <div class="text">{{ lang.0 | language_name_local }}</div>
+                          <div class="vertical item {% if lang.0 == current_lang %}active{% endif %}"
+                               data-value="{{ lang.0 }}"
+                               data-text="{{ lang.0 | readthedocs_language_name_local }}">
+                            <div class="description">{{ lang.0 | readthedocs_language_name_translated }}</div>
+                            <div class="text">{{ lang.0 | readthedocs_language_name_local }}</div>
                           </div>
                         {% endfor %}
                       </div>
                     </div>
                     {# TODO this button would be better off as a onChange event #}
-                    <button class="ui tiny compact basic inverted button">
-                      {% trans "Update" %}
-                    </button>
+                    <button class="ui tiny compact basic inverted button">{% trans "Update" %}</button>
                   </form>
                 {% endblock language_select_form %}
               </div>
@@ -135,15 +145,15 @@
     {% block footer_sponsors %}
       {% if USE_PROMOS %}
 
-        <div class="ui inverted horizontal divider very padded">
-          Sponsored by
-        </div>
+        <div class="ui inverted horizontal divider very padded">Sponsored by</div>
 
         <div class="ui six column doubling grid container">
           <div class="column bottom aligned centered">
             <div class="ui tiny inverted header centered">
               <a href="https://aws.amazon.com" rel="noopener" target="_blank">
-                <img class="ui tiny centered image" src="{% static 'images/sponsors/aws.png' %}" alt="Amazon Web Services" />
+                <img class="ui tiny centered image"
+                     src="{% static 'images/sponsors/aws.png' %}"
+                     alt="Amazon Web Services" />
                 AWS
                 <div class="sub header">Cloud Computing</div>
               </a>
@@ -152,7 +162,9 @@
           <div class="column bottom aligned centered">
             <div class="ui tiny inverted header centered">
               <a href="https://cloudflare.com" rel="noopener" target="_blank">
-                <img class="ui tiny centered image" src="{% static 'images/sponsors/cloudflare.png' %}" alt="CloudFlare">
+                <img class="ui tiny centered image"
+                     src="{% static 'images/sponsors/cloudflare.png' %}"
+                     alt="CloudFlare">
                 Cloudflare
                 <div class="sub header">DNS &amp; SSL</div>
               </a>
@@ -161,7 +173,9 @@
           <div class="column bottom aligned centered">
             <div class="ui tiny inverted header centered">
               <a href="https://sentry.io/" rel="noopener" target="_blank">
-                <img class="ui tiny centered image" src="{% static 'images/sponsors/sentry.png' %}" alt="Sentry">
+                <img class="ui tiny centered image"
+                     src="{% static 'images/sponsors/sentry.png' %}"
+                     alt="Sentry">
                 Sentry
                 <div class="sub header">Monitoring</div>
               </a>
@@ -170,7 +184,9 @@
           <div class="column bottom aligned centered">
             <div class="ui tiny inverted header centered">
               <a href="https://www.elastic.co/" rel="noopener" target="_blank">
-                <img class="ui tiny centered image" src="{% static 'images/sponsors/elastic.png' %}" alt="Elastic">
+                <img class="ui tiny centered image"
+                     src="{% static 'images/sponsors/elastic.png' %}"
+                     alt="Elastic">
                 Elastic
                 <div class="sub header">Search</div>
               </a>
@@ -179,7 +195,9 @@
           <div class="column bottom aligned centered">
             <div class="ui tiny inverted header centered">
               <a href="https://newrelic.com/" rel="noopener" target="_blank">
-                <img class="ui tiny centered image" src="{% static 'images/sponsors/newrelic.png' %}" alt="New Relic">
+                <img class="ui tiny centered image"
+                     src="{% static 'images/sponsors/newrelic.png' %}"
+                     alt="New Relic">
                 New Relic
                 <div class="sub header">Performance</div>
               </a>
@@ -188,7 +206,9 @@
           <div class="column bottom aligned centered">
             <div class="ui tiny inverted header centered">
               <a href="https://www.pagerduty.com/" rel="noopener" target="_blank">
-                <img class="ui tiny centered image" src="{% static 'images/sponsors/pagerduty.png' %}" alt="PagerDuty">
+                <img class="ui tiny centered image"
+                     src="{% static 'images/sponsors/pagerduty.png' %}"
+                     alt="PagerDuty">
                 PagerDuty
                 <div class="sub header">Monitoring</div>
               </a>
