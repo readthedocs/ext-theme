@@ -18,7 +18,8 @@
 
 {% block chip_icon %}
   {% if project.remote_repository %}
-    <img alt="Project avatar" src="{{ project.remote_repository.avatar_url }}" />
+    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
+         src="{{ project.remote_repository.avatar_url }}" />
   {% else %}
     {% comment %}
       For now, this is using Dicebear, which has a few random generators for
@@ -26,7 +27,7 @@
       similar to generate files on disk and use an md5 hash or similar to link
       to the same image always.
     {% endcomment %}
-    <img alt="Project avatar"
+    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
          src="https://api.dicebear.com/5.x/shapes/svg?size=64&backgroundColor=b8abd4&shape1Color=8c74c1&shape2Color=7854c5&shape3Color=f0f0ff&seed={{ project.pk }}" />
   {% endif %}
 {% endblock chip_icon %}
@@ -48,7 +49,7 @@
 
 {% block popupcard_right %}
   {% if project.remote_repository %}
-    <img alt="Project avatar"
+    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
          class="ui mini right floated rounded image"
          src="{{ project.remote_repository.avatar_url }}" />
   {% else %}
@@ -58,7 +59,7 @@
       similar to generate files on disk and use an md5 hash or similar to link
       to the same image always.
     {% endcomment %}
-    <img alt="Project avatar"
+    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
          class="ui mini right floated rounded image"
          src="https://api.dicebear.com/5.x/shapes/svg?size=64&backgroundColor=b8abd4&shape1Color=8c74c1&shape2Color=7854c5&shape3Color=f0f0ff&seed={{ project.pk }}" />
   {% endif %}

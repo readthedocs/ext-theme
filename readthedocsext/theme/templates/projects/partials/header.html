@@ -119,7 +119,7 @@ collapsed, to save visual space and can be expanded with the right label.
               <div class="ui overlapping avatar images">
                 {% for user in project.users.all|slice:":8" %}
                   <a href="{% url "profiles_profile_detail" user.username %}">
-                    <img alt="User avatar"
+                    <img alt="{% blocktrans with usernamename=user.username %}User {{ username }} avatar{% endblocktrans %}"
                          class="ui image"
                          src="{% gravatar_url user.email 32 %}" />
                   </a>
@@ -140,7 +140,8 @@ collapsed, to save visual space and can be expanded with the right label.
               {% if project.remote_repository %}
                 {% with repo=project.remote_repository %}
                   <a href="{{ repo.html_url }}" class="ui basic image nowrap label">
-                    <img alt="Project avatar" src="{{ repo.avatar_url }}" />
+                    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
+                         src="{{ repo.avatar_url }}" />
                     <code>{{ repo.full_name }}</code>
                   </a>
                 {% endwith %}
