@@ -4,11 +4,11 @@
 {% load i18n %}
 
 {% block head_title %}
-  {% trans "Sign in with SAML" %}
+  {% trans "Log in with single sign-on" %}
 {% endblock head_title %}
 
 {% block content %}
-  <h1>{% trans "Continue with SAML single sign-on" %}</h1>
+  <h1 clas="ui medium header">{% trans "Continue with SAML single sign-on" %}</h1>
   <form class="ui form" method="post" action="{% url "saml_resolve_login" %}">
     {% csrf_token %}
     {{ form|crispy }}
