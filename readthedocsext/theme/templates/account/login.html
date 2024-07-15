@@ -51,11 +51,11 @@
 
 
         {% if USE_ORGANIZATIONS %}
-        <a class="item"
-           href="{% url "saml_resolve_login" %}{% if redirect_field_value %}?{{ redirect_field_name }}={{ redirect_field_value }}{% endif %}">
-          <i class="fas fa-shield-alt icon"></i>
-          {% trans "Single sign-on" %}
-        </a>
+          <a class="item"
+             href="{% url "saml_resolve_login" %}{% if redirect_field_value %}?{{ redirect_field_name }}={{ redirect_field_value }}{% endif %}">
+            <i class="fas fa-shield-alt icon"></i>
+            {% trans "Single sign-on" %}
+          </a>
         {% endif %}
 
         {% if project_password_url %}
