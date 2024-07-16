@@ -2,12 +2,15 @@
 
 {% load i18n %}
 {% load humanize %}
+{% load ext_theme_tags %}
 
-{% block chip_view_params %}'{% url "projects-detail" project.slug %}'{% endblock %}
+{% block chip_view_params %}
+  '{% url "projects-detail" project.slug %}'
+{% endblock chip_view_params %}
 
 {% block chip_url %}
   {{ project.get_absolute_url }}
-{% endblock %}
+{% endblock chip_url %}
 
 {% block chip_classes %}
   basic image
@@ -15,7 +18,8 @@
 
 {% block chip_icon %}
   {% if project.remote_repository %}
-    <img src="{{ project.remote_repository.avatar_url }}" />
+    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
+         src="{{ project.remote_repository.avatar_url }}" />
   {% else %}
     {% comment %}
       For now, this is using Dicebear, which has a few random generators for
@@ -23,7 +27,8 @@
       similar to generate files on disk and use an md5 hash or similar to link
       to the same image always.
     {% endcomment %}
-    <img src="https://api.dicebear.com/5.x/shapes/svg?size=64&backgroundColor=b8abd4&shape1Color=8c74c1&shape2Color=7854c5&shape3Color=f0f0ff&seed={{ project.pk }}" />
+    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
+         src="https://api.dicebear.com/5.x/shapes/svg?size=64&backgroundColor=b8abd4&shape1Color=8c74c1&shape2Color=7854c5&shape3Color=f0f0ff&seed={{ project.pk }}" />
   {% endif %}
 {% endblock chip_icon %}
 
@@ -44,7 +49,9 @@
 
 {% block popupcard_right %}
   {% if project.remote_repository %}
-    <img class="ui mini right floated rounded image" src="{{ project.remote_repository.avatar_url }}" />
+    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
+         class="ui mini right floated rounded image"
+         src="{{ project.remote_repository.avatar_url }}" />
   {% else %}
     {% comment %}
       For now, this is using Dicebear, which has a few random generators for
@@ -52,7 +59,9 @@
       similar to generate files on disk and use an md5 hash or similar to link
       to the same image always.
     {% endcomment %}
-    <img class="ui mini right floated rounded image" src="https://api.dicebear.com/5.x/shapes/svg?size=64&backgroundColor=b8abd4&shape1Color=8c74c1&shape2Color=7854c5&shape3Color=f0f0ff&seed={{ project.pk }}" />
+    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
+         class="ui mini right floated rounded image"
+         src="https://api.dicebear.com/5.x/shapes/svg?size=64&backgroundColor=b8abd4&shape1Color=8c74c1&shape2Color=7854c5&shape3Color=f0f0ff&seed={{ project.pk }}" />
   {% endif %}
 {% endblock popupcard_right %}
 
@@ -70,15 +79,9 @@
         <div class="header">{% trans "Repository" %}</div>
         <div class="description">
           {% if project.remote_repository %}
-            {% with repo=project.remote_repository %}
-              <a href="{{ repo.html_url }}">
-                {{ repo.full_name }}
-              </a>
-            {% endwith %}
+            {% with repo=project.remote_repository %}<a href="{{ repo.html_url }}">{{ repo.full_name }}</a>{% endwith %}
           {% else %}
-            <a href="{{ project.repo }}">
-              {{ project.repo }}
-            </a>
+            <a href="{{ project.repo }}">{{ project.repo }}</a>
           {% endif %}
         </div>
       </div>
@@ -106,6 +109,6 @@
   </div>
   <span>
     <i class="fa-solid fa-language icon"></i>
-    {{ project.language|language_name }}
+    {{ project.language|readthedocs_language_name }}
   </span>
 {% endblock popupcard_extra %}
