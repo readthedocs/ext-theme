@@ -4,7 +4,9 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 
-{% block head_title %}{% trans "Log in" %}{% endblock %}
+{% block head_title %}
+  {% trans "Log in" %}
+{% endblock head_title %}
 
 {% block content %}
   <div class="ui stackable padded grid">
@@ -22,30 +24,46 @@
         {% endblock authentication_header %}
       </div>
 
-      <div
-        class="ui small stackable teal secondary menu"
-        data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
+      <div class="ui small stackable teal secondary menu"
+           data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
 
         <div class="header item">
-          {% block authentication_header_text %}{% trans "Log in using:" %}{% endblock %}
+          {% block authentication_header_text %}
+            {% trans "Log in using:" %}
+          {% endblock authentication_header_text %}
         </div>
 
         <a class="item" data-tab="vcs">
           <i class="fas fa-cloud icon"></i>
-          {% block authentication_vcs_text %}{% trans "Connected account" %}{% endblock %}
+          {% block authentication_vcs_text %}
+            {% trans "Connected account" %}
+          {% endblock authentication_vcs_text %}
         </a>
 
         {# If allowed providers is given, disable the email menu item #}
         <a class="{% if allowed_providers %}disabled{% endif %} item"
            data-tab="email">
           <i class="fas fa-envelope icon"></i>
-          {% block authentication_email_text %}{% trans "Email" %}{% endblock %}
+          {% block authentication_email_text %}
+            {% trans "Email" %}
+          {% endblock authentication_email_text %}
         </a>
+
+
+        {% if USE_ORGANIZATIONS %}
+          <a class="item"
+             href="{% url "saml_resolve_login" %}{% if redirect_field_value %}?{{ redirect_field_name }}={{ redirect_field_value }}{% endif %}">
+            <i class="fas fa-shield-alt icon"></i>
+            {% trans "Single sign-on" %}
+          </a>
+        {% endif %}
 
         {% if project_password_url %}
           <a class="item" href="{{ project_password_url }}">
             <i class="fas fa-lock icon"></i>
-            {% block authentication_password_text %}{% trans "Password" %}{% endblock %}
+            {% block authentication_password_text %}
+              {% trans "Password" %}
+            {% endblock authentication_password_text %}
           </a>
         {% endif %}
       </div>
@@ -68,21 +86,21 @@
             {% endblocktrans %}
           </p>
 
-          <form class="ui form" method="post" action="{% url "account_login" %}#/email">
+          <form class="ui form"
+                method="post"
+                action="{% url "account_login" %}#/email">
             {% csrf_token %}
             {{ form|crispy }}
             {% if redirect_field_value %}
-              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+              <input type="hidden"
+                     name="{{ redirect_field_name }}"
+                     value="{{ redirect_field_value }}" />
             {% endif %}
 
             <div class="ui stackable relaxed text menu">
-              <a class="item" href="{% url 'account_reset_password' %}">
-                {% trans "Forgot your password?" %}
-              </a>
+              <a class="item" href="{% url 'account_reset_password' %}">{% trans "Forgot your password?" %}</a>
               <div class="right menu">
-                <button class="ui primary button" type="submit">
-                  {% trans "Log in" %}
-                </button>
+                <button class="ui primary button" type="submit">{% trans "Log in" %}</button>
               </div>
             </div>
 
@@ -90,7 +108,8 @@
         {% endblock authentication_email %}
       </div>
 
-      {% block authentication_extra %}{% endblock %}
+      {% block authentication_extra %}
+      {% endblock authentication_extra %}
 
     </div>
   </div>
