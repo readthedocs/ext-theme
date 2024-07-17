@@ -16,9 +16,10 @@
   {% url "projects_import" as create_url %}
   {% trans "Add project" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}{% endblock %}
+{% block list_placeholder_icon_class %}
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header_filtered %}
   {% trans "No matching projects found" %}
 {% endblock list_placeholder_header_filtered %}
@@ -26,21 +27,23 @@
   {% trans "You don't have any projects configured yet" %}
 {% endblock list_placeholder_header_empty %}
 {% block list_placeholder_text_empty %}
-  <a href="https://docs.readthedocs.io/page/tutorial/" class="ui primary button">
-    {% trans "Learn how to get started" %}
-  </a>
+  <a href="https://docs.readthedocs.io/page/tutorial/"
+     class="ui primary button">{% trans "Learn how to get started" %}</a>
 {% endblock list_placeholder_text_empty %}
 
 {% block list_item_start %}
+  {# djlint:off #}
   <tr data-bind="using: ProjectListItemView({id: {{ object.id }}, url: '{% url "projects-detail" object.slug %}'})">
+  {# djlint:on #}
 {% endblock list_item_start %}
 
 {% block list_item_right_menu %}
-  <div class="ui small icon buttons" data-bind="event: {mouseover: fetch, focusin: fetch}">
+  <div class="ui small icon buttons"
+       data-bind="event: {mouseover: fetch, focusin: fetch}">
     {% blocktrans trimmed with project=object.name asvar label_link %}
       View documentation for project {{ project }}
     {% endblocktrans %}
-    <a class="ui {% if not object.has_good_build %} disabled{% endif %} button"
+    <a class="ui {% if not object.has_good_build %}disabled{% endif %} button"
        data-content="{{ label_link }}"
        aria-label="{{ label_link }}"
        data-bind="attr: {href: url_docs}"
@@ -68,9 +71,7 @@
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  <a class="" href="{% url "projects_detail" object.slug %}">
-    {{ object.name }}
-  </a>
+  <a href="{% url "projects_detail" object.slug %}">{{ object.name }}</a>
   <div class="sub header">
     {% if object.has_good_build %}
       {% with build=object.get_latest_build %}
@@ -96,4 +97,4 @@
       {% include "includes/elements/chips/build.html" with build=build %}
     {% endwith %}
   {% endif %}
-{% endblock %}
+{% endblock list_item_extra_items %}
