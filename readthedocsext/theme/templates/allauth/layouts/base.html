@@ -6,7 +6,7 @@
     {# This is overriding the normal base.html content-wrapper, #}
     {# so we need to include notifications here so they're displayed. #}
     {% block notifications %}
-      {% include "includes/utils/messages.html" %}
+      {{ block.super }}
     {% endblock notifications %}
 
     <div class="ui centered grid">
