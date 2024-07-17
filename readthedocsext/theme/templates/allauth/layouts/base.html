@@ -2,6 +2,11 @@
 
 {% block content-wrapper %}
   <div class="ui very padded container">
+
+    {% block notifications %}
+      {% include "includes/utils/messages.html" %}
+    {% endblock notifications %}
+
     <div class="ui centered grid">
       <div class="nine wide computer twelve wide tablet sixteen wide mobile column">
         <div class="ui raised segment">
