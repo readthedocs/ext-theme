@@ -3,6 +3,8 @@
 {% block content-wrapper %}
   <div class="ui very padded container">
 
+    {# This is overriding the normal base.html content-wrapper,
+    so we need to include notifications here so they're displayed. #}
     {% block notifications %}
       {% include "includes/utils/messages.html" %}
     {% endblock notifications %}
