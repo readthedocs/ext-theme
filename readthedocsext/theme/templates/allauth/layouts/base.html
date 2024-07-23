@@ -2,6 +2,13 @@
 
 {% block content-wrapper %}
   <div class="ui very padded container">
+
+    {# This is overriding the normal base.html content-wrapper, #}
+    {# so we need to include notifications here so they're displayed. #}
+    {% block notifications %}
+      {{ block.super }}
+    {% endblock notifications %}
+
     <div class="ui centered grid">
       <div class="nine wide computer twelve wide tablet sixteen wide mobile column">
         <div class="ui raised segment">
