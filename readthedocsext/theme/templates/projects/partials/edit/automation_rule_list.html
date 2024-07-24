@@ -67,6 +67,12 @@
     </button>
   {% endif %}
 
+  <a class="ui button"
+     href="{% url 'projects_automation_rule_regex_edit' project_slug=project.slug automation_rule_pk=object.pk %}"
+     data-content="{% trans "Edit redirect" %}">
+    <i class="fas fa-wrench icon"></i>
+  </a>
+
   {% url 'projects_automation_rule_delete' object.project.slug object.pk as form_url %}
   {% trans "Remove rule" as action_text %}
   {% blocktrans trimmed asvar content_text with rule=object.get_description %}
