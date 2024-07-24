@@ -54,11 +54,11 @@
             {% with PUBLIC_API_URL|add:webhook_url as integration_url %}
               <div class="ui fluid action input">
                 <input type="text" readonly value="{{ integration_url }}" />
-                <span class="ui compact icon basic button"
-                      data-clipboard-text="{{ integration_url }}"
-                      data-content="{% trans "Copied!" %}">
+                <button class="ui teal right icon button"
+                        data-clipboard-text="{{ integration_url }}"
+                        data-content="{% trans "Copied!" %}">
                   <i class="fa-duotone fa-copy icon"></i>
-                </span>
+                </button>
               </div>
             {% endwith %}
           </div>
@@ -73,11 +73,11 @@
             <div class="description">
               <div class="ui fluid action input">
                 <input type="text" readonly value="{{ integration.token }}" />
-                <span class="ui compact icon basic button"
-                      data-clipboard-text="{{ integration.token }}"
-                      data-content="{% trans "Copied!" %}">
+                <button class="ui teal right icon button"
+                        data-clipboard-text="{{ integration.token }}"
+                        data-content="{% trans "Copied!" %}">
                   <i class="fa-duotone fa-copy icon"></i>
-                </span>
+                </button>
               </div>
             </div>
           </div>
