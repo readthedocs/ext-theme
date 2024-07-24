@@ -89,7 +89,7 @@
         <span>/</span><span class="ui violet text">$lang</span>
         <span>/</span><span class="ui violet text">$version</span>
       {% endif %}
-      <span>{{ object.from_url }}</span>
+      <a href="{% url 'projects_redirects_edit' project_slug=project.slug redirect_pk=object.pk %}">{{ object.from_url }}</a>
     {% else %}
       {% if object.redirect_type == "clean_url_to_html" %}
         <span>/**/</span><span class="ui violet text">$1</span><span>/</span>
