@@ -15,22 +15,21 @@
   {% url "projects_redirects_create" project_slug=project.slug as create_url %}
   {% trans "Add redirect" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-signs-post{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-signs-post
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No redirects exist yet
   {% endblocktrans %}
-  <div class="sub header">
-    {% trans "Redirects allow you to fix links to pages that have moved." %}
-  </div>
+  <div class="sub header">{% trans "Redirects allow you to fix links to pages that have moved." %}</div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/page/guides/redirects.html"
-     aria-label="{% trans "Learn more about custom redirects in our documentation" %}">
-    {% trans "Learn more" %}
-  </a>
+  <a class="ui button"
+     href="https://docs.readthedocs.io/page/guides/redirects.html"
+     aria-label="{% trans "Learn more about custom redirects in our documentation" %}">{% trans "Learn more" %}</a>
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
@@ -42,7 +41,8 @@
             data-content="{{ button_up_text }}"
             aria-label="{{ button_up_text }}"
             title="{{ button_up_text }}">
-      <form method="post" action="{% url 'projects_redirects_insert' project_slug=project.slug redirect_pk=object.pk position=object.position|add:"-1" %}">
+      <form method="post"
+            action="{% url 'projects_redirects_insert' project_slug=project.slug redirect_pk=object.pk position=object.position|add:"-1" %}">
         {% csrf_token %}
       </form>
       <i class="fa-solid fa-arrow-up icon"></i>
@@ -55,7 +55,8 @@
             data-content="{{ button_down_text }}"
             aria-label="{{ button_down_text }}"
             title="{{ button_down_text }}">
-      <form method="post" action="{% url 'projects_redirects_insert' project_slug=project.slug redirect_pk=object.pk position=object.position|add:"1" %}">
+      <form method="post"
+            action="{% url 'projects_redirects_insert' project_slug=project.slug redirect_pk=object.pk position=object.position|add:"1" %}">
         {% csrf_token %}
       </form>
       <i class="fa-solid fa-arrow-down icon"></i>
@@ -80,7 +81,9 @@
   <i class="fad fa-diamond-turn-right icon"></i>
 {% endblock list_item_image %}
 
-{% block list_item_header_classes %}{{ block.super }} all breaking{% endblock %}
+{% block list_item_header_classes %}
+  {{ block.super }} all breaking
+{% endblock list_item_header_classes %}
 
 {% block list_item_header %}
   {% spaceless %}
