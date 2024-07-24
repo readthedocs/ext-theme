@@ -56,10 +56,12 @@
           <div class="description">
             {% url 'api_webhook' project_slug=project.slug integration_pk=integration.pk as webhook_url %}
             {% with PUBLIC_API_URL|add:webhook_url as integration_url %}
-              <code>{{ integration_url }}</code>
-              <span class="ui compact icon basic button" data-clipboard-text="{{ integration_url }}" data-content="{% trans "Copied!" %}">
-                <i class="fa-duotone fa-copy icon"></i>
-              </span>
+              <div class="ui fluid action input">
+                  <input type="text" readonly value="{{ integration_url }}" />
+                  <span class="ui compact icon basic button" data-clipboard-text="{{ integration_url }}" data-content="{% trans "Copied!" %}">
+                      <i class="fa-duotone fa-copy icon"></i>
+                  </span>
+              </div>
             {% endwith %}
           </div>
         </div>
@@ -73,10 +75,12 @@
               {% trans "Secret" %}
             </div>
             <div class="description">
-              <code>{{ integration.token }}</code>
-              <span class="ui compact icon basic button" data-clipboard-text="{{ integration.token }}" data-content="{% trans "Copied!" %}">
-                <i class="fa-duotone fa-copy icon"></i>
-              </span>
+                <div class="ui fluid action input">
+                    <input type="text" readonly value="{{ integration.token }}" />
+                    <span class="ui compact icon basic button" data-clipboard-text="{{ integration.token }}" data-content="{% trans "Copied!" %}">
+                        <i class="fa-duotone fa-copy icon"></i>
+                    </span>
+                </div>
             </div>
           </div>
         </div>
