@@ -50,6 +50,16 @@
       {% endblock project_add_sidebar %}
 
       {% block project_add_content %}
+
+        {% comment %}
+        Mention what are the steps the user needs to follow before going to the next step:
+        1. Copy the YAML from the example
+        2. Create a `.readthedocs.yaml` file in their project
+        3. Open a PR
+        4. Come back to this wizard
+        5. Click "I've added the YAML file"
+        {% endcomment %}
+
         <div class="ui sixteen wide tablet eleven wide computer ten wide large screen column">
           {% block project_add_content_form %}
             <form class="ui form" action="{% url "projects_import_manual" %}" method="post">
@@ -80,7 +90,7 @@
                   {% if wizard.steps.next %}
                     <input class="ui button primary" type="submit" value="{% trans "Next" %}" />
                   {% else %}
-                    <input class="ui button primary" type="submit" value="{% trans "Finish" %}" />
+                    <input class="ui button primary" type="submit" value="{% trans "I've added the YAML already" %}" />
                   {% endif %}
                 </div>
               {% endblock wizard_actions %}
