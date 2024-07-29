@@ -19,9 +19,11 @@
 {% block create_button %}
   <div class="ui green button"
        data-bind="click: $root.show_modal('socialaccount-connections')">{% trans "Add new connection" %}</div>
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-user-unlock{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-user-unlock
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     Your account is not connected to any services.
@@ -45,7 +47,7 @@
     <input type="hidden" name="account" value="{{ object.id }}" />
     <div class="ui small icon buttons">
       <button class="ui button {% if not object|can_be_disconnected %}disabled{% endif %}"
-              data-content="{% trans 'Disconnect account' %}">
+              data-content="{% trans "Disconnect account" %}">
         <i class="fas fa-trash icon"></i>
       </button>
     </div>
@@ -56,6 +58,7 @@
   <img class="ui rounded image"
        src="{{ object.get_avatar_url }}"
        height="28"
+       alt="{% trans "Social account avatar" %}"
        width="28" />
 {% endblock list_item_image %}
 
