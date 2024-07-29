@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load gravatar %}
+{% load can_be_disconnected from readthedocs.socialaccounts %}
 
 {% load core_tags %}
 {% load privacy_tags %}
@@ -47,7 +48,7 @@
     {% csrf_token %}
     <input type="hidden" name="account" value="{{ object.id }}" />
     <div class="ui small icon buttons">
-      <button class="ui button" data-content="{% trans 'Disconnect account' %}">
+      <button class="ui button {% if not object|can_be_disconnected %}disabled{% endif %}" data-content="{% trans 'Disconnect account' %}">
         <i class="fas fa-trash icon"></i>
       </button>
     </div>
