@@ -87,19 +87,21 @@
 
 {% block list_item_header %}
   {% spaceless %}
-    {% if object.from_url %}
-      {% if object.redirect_type == "page" %}
-        <span>/</span><span class="ui violet text">$lang</span>
-        <span>/</span><span class="ui violet text">$version</span>
+    <a href="{% url 'projects_redirects_edit' project_slug=project.slug redirect_pk=object.pk %}">
+      {% if object.from_url %}
+        {% if object.redirect_type == "page" %}
+          <span>/</span><span class="ui violet text">$lang</span>
+          <span>/</span><span class="ui violet text">$version</span>
+        {% endif %}
+        <span>{{ object.from_url }}</span>
+      {% else %}
+        {% if object.redirect_type == "clean_url_to_html" %}
+          <span>/**/</span><span class="ui violet text">$1</span><span>/</span>
+        {% elif object.redirect_type == "html_to_clean_url" %}
+          <span>/**/</span><span class="ui violet text">$1</span><span>.html</span>
+        {% endif %}
       {% endif %}
-      <a href="{% url 'projects_redirects_edit' project_slug=project.slug redirect_pk=object.pk %}">{{ object.from_url }}</a>
-    {% else %}
-      {% if object.redirect_type == "clean_url_to_html" %}
-        <span>/**/</span><span class="ui violet text">$1</span><span>/</span>
-      {% elif object.redirect_type == "html_to_clean_url" %}
-        <span>/**/</span><span class="ui violet text">$1</span><span>.html</span>
-      {% endif %}
-    {% endif %}
+    </a>
   {% endspaceless %}
 
   <div class="sub header">
