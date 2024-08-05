@@ -98,16 +98,3 @@
     {% endif %}
   </div>
 {% endblock list_item_header %}
-
-{% block list_item_meta_items %}
-  <div class="item">
-    <div class="content">
-      <div class="header">
-        {{ object.get_version_type_display }} matching {{ object.get_predefined_match_arg_display|lower }}
-      </div>
-      <div class="description">
-        {% if object.match_arg %}<code class="ui tiny text">{{ object.match_arg|truncatechars:30 }}</code>{% endif %}
-      </div>
-    </div>
-  </div>
-{% endblock list_item_meta_items %}
