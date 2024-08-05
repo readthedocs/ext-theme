@@ -5,7 +5,9 @@
   {% trans "Add a configuration file to your project" %}
 {% endblock project_add_subheader %}
 
-{% block project_add_content_classes %}ui fourteen wide tablet twelve wide computer column{% endblock %}
+{% block project_add_content_classes %}
+  ui fourteen wide tablet twelve wide computer column
+{% endblock project_add_content_classes %}
 
 {% block project_add_content_form %}
   <div class="ui small info message">
@@ -29,9 +31,9 @@
         <div class="item" data-tab="jekyll">Jekyll</div>
         <div class="item" data-tab="others">{% trans "Others" %}</div>
         {# The `actionable` class here prevents the select from selecting the text #}
-        <a class="actionable item" href="https://docs.readthedocs.io/page/config-file/index.html#getting-started-with-a-template" target="_blank">
-          {% trans "See more examples" %}
-        </a>
+        <a class="actionable item"
+           href="https://docs.readthedocs.io/page/config-file/index.html#getting-started-with-a-template"
+           target="_blank">{% trans "See more examples" %}</a>
       </div>
     </div>
   </div>
@@ -41,7 +43,9 @@
       <div class="ui top attached label">
         <code>.readthedocs.yaml</code>
       </div>
-      <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-sphinx">
+      <a class="ui top right attached icon label"
+         href="#"
+         data-clipboard-target="#project-create-sample-sphinx">
         <i class="fas fa-copy icon"></i>
       </a>
       <code class="highlight">
@@ -78,7 +82,9 @@ sphinx:
       <div class="ui top attached label">
         <code>.readthedocs.yaml</code>
       </div>
-      <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-mkdocs">
+      <a class="ui top right attached icon label"
+         href="#"
+         data-clipboard-target="#project-create-sample-mkdocs">
         <i class="fas fa-copy icon"></i>
       </a>
       <code class="highlight">
@@ -115,7 +121,9 @@ mkdocs:
       <div class="ui top attached label">
         <code>.readthedocs.yaml</code>
       </div>
-      <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-docusaurus">
+      <a class="ui top right attached icon label"
+         href="#"
+         data-clipboard-target="#project-create-sample-docusaurus">
         <i class="fas fa-copy icon"></i>
       </a>
       <code class="highlight">
@@ -150,7 +158,9 @@ build:
       <div class="ui top attached label">
         <code>.readthedocs.yaml</code>
       </div>
-      <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-pelican">
+      <a class="ui top right attached icon label"
+         href="#"
+         data-clipboard-target="#project-create-sample-pelican">
         <i class="fas fa-copy icon"></i>
       </a>
       <code class="highlight">
@@ -182,7 +192,9 @@ build:
       <div class="ui top attached label">
         <code>.readthedocs.yaml</code>
       </div>
-      <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-jekyll">
+      <a class="ui top right attached icon label"
+         href="#"
+         data-clipboard-target="#project-create-sample-jekyll">
         <i class="fas fa-copy icon"></i>
       </a>
       <code class="highlight">
@@ -215,7 +227,9 @@ build:
       <div class="ui top attached label">
         <code>.readthedocs.yaml</code>
       </div>
-      <a class="ui top right attached icon label" href="#" data-clipboard-target="#project-create-sample-others">
+      <a class="ui top right attached icon label"
+         href="#"
+         data-clipboard-target="#project-create-sample-others">
         <i class="fas fa-copy icon"></i>
       </a>
       <code class="highlight">
