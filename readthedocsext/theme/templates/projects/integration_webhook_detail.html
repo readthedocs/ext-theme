@@ -4,11 +4,9 @@
 
 {% block project_edit_content_subheader %}
   <div class="ui breadcrumb">
-    <div class="active section">
-      {{ integration.get_integration_type_display }}
-    </div>
+    <div class="active section">{{ integration.get_integration_type_display }}</div>
   </div>
-{% endblock %}
+{% endblock project_edit_content_subheader %}
 
 {% block project_edit_content %}
   {% if integration.has_sync %}
@@ -50,16 +48,18 @@
     <div class="ui list">
       <div class="item">
         <div class="content">
-          <div class="header">
-            {% trans "Webhook URL" %}
-          </div>
+          <div class="header">{% trans "Webhook URL" %}</div>
           <div class="description">
             {% url 'api_webhook' project_slug=project.slug integration_pk=integration.pk as webhook_url %}
             {% with PUBLIC_API_URL|add:webhook_url as integration_url %}
-              <code>{{ integration_url }}</code>
-              <span class="ui compact icon basic button" data-clipboard-text="{{ integration_url }}" data-content="{% trans "Copied!" %}">
-                <i class="fa-duotone fa-copy icon"></i>
-              </span>
+              <div class="ui fluid action input">
+                <input type="text" readonly value="{{ integration_url }}" />
+                <button class="ui teal right icon button"
+                        data-clipboard-text="{{ integration_url }}"
+                        data-content="{% trans "Copied!" %}">
+                  <i class="fa-duotone fa-copy icon"></i>
+                </button>
+              </div>
             {% endwith %}
           </div>
         </div>
@@ -69,26 +69,28 @@
         {# For generic webhooks #}
         <div class="item">
           <div class="content">
-            <div class="header">
-              {% trans "Secret" %}
-            </div>
+            <div class="header">{% trans "Secret" %}</div>
             <div class="description">
-              <code>{{ integration.token }}</code>
-              <span class="ui compact icon basic button" data-clipboard-text="{{ integration.token }}" data-content="{% trans "Copied!" %}">
-                <i class="fa-duotone fa-copy icon"></i>
-              </span>
+              <div class="ui fluid action input">
+                <input type="text" readonly value="{{ integration.token }}" />
+                <button class="ui teal right icon button"
+                        data-clipboard-text="{{ integration.token }}"
+                        data-content="{% trans "Copied!" %}">
+                  <i class="fa-duotone fa-copy icon"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       {% elif integration.secret %}
         <div class="item">
           <div class="content">
-            <div class="header">
-              {% trans "Secret" %}
-            </div>
+            <div class="header">{% trans "Secret" %}</div>
             <div class="description">
               <code>{{ integration.secret }}</code>
-              <span class="ui compact icon basic button" data-clipboard-text="{{ integration.secret }}" data-content="{% trans "Copied!" %}">
+              <span class="ui compact icon basic button"
+                    data-clipboard-text="{{ integration.secret }}"
+                    data-content="{% trans "Copied!" %}">
                 <i class="fa-duotone fa-copy icon"></i>
               </span>
             </div>
@@ -113,15 +115,15 @@
     <p>
       {% blocktrans trimmed %}
         For more information on manually configuring a webhook, refer to
-        <a href="https://docs.readthedocs.io/page/webhooks.html">
-          our webhook documentation.
-        </a>
+        <a href="https://docs.readthedocs.io/page/webhooks.html">our webhook documentation.</a>
       {% endblocktrans %}
     </p>
   {% endif %}
 
   {% if integration.has_sync %}
-    <form class="ui form" method="post" action="{% url 'projects_integrations_webhooks_sync' project_slug=project.slug integration_pk=integration.pk %}">
+    <form class="ui form"
+          method="post"
+          action="{% url 'projects_integrations_webhooks_sync' project_slug=project.slug integration_pk=integration.pk %}">
       {% csrf_token %}
       <button class="ui button">
         <i class="fa-duotone fa-refresh icon"></i>
@@ -144,10 +146,8 @@
           </a>
         </div>
       {% empty %}
-        <div class="item">
-          {% trans 'There is no recent activity' %}
-        </div>
+        <div class="item">{% trans "There is no recent activity" %}</div>
       {% endfor %}
     </div>
   </div>
-{% endblock %}
+{% endblock project_edit_content %}
