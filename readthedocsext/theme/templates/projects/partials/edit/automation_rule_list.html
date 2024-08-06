@@ -15,9 +15,11 @@
   {% url "projects_automation_rule_regex_create" project_slug=project.slug as create_url %}
   {% trans "Add rule" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-swap-opacity fa-robot{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-swap-opacity fa-robot
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No automation rules have been configured yet
@@ -30,7 +32,8 @@
   </div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/page/automation-rules.html">{% trans "Learn more" %}</a>.
+  <a class="ui button"
+     href="https://docs.readthedocs.io/page/automation-rules.html">{% trans "Learn more" %}</a>.
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
@@ -42,7 +45,8 @@
             data-content="{{ button_up_text }}"
             aria-label="{{ button_up_text }}"
             title="{{ button_up_text }}">
-      <form method="post" action="{% url 'projects_automation_rule_move' project_slug=project.slug automation_rule_pk=object.pk steps=-1 %}">
+      <form method="post"
+            action="{% url 'projects_automation_rule_move' project_slug=project.slug automation_rule_pk=object.pk steps=-1 %}">
         {% csrf_token %}
       </form>
       <i class="fa-solid fa-arrow-up icon"></i>
@@ -55,12 +59,19 @@
             data-content="{{ button_down_text }}"
             aria-label="{{ button_down_text }}"
             title="{{ button_down_text }}">
-      <form method="post" action="{% url 'projects_automation_rule_move' project_slug=project.slug automation_rule_pk=object.pk steps=1 %}">
+      <form method="post"
+            action="{% url 'projects_automation_rule_move' project_slug=project.slug automation_rule_pk=object.pk steps=1 %}">
         {% csrf_token %}
       </form>
       <i class="fa-solid fa-arrow-down icon"></i>
     </button>
   {% endif %}
+
+  <a class="ui button"
+     href="{% url 'projects_automation_rule_regex_edit' project_slug=project.slug automation_rule_pk=object.pk %}"
+     data-content="{% trans "Edit rule" %}">
+    <i class="fas fa-wrench icon"></i>
+  </a>
 
   {% url 'projects_automation_rule_delete' object.project.slug object.pk as form_url %}
   {% trans "Remove rule" as action_text %}
@@ -70,35 +81,20 @@
   {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
 {% endblock list_item_right_buttons %}
 
-{% block list_item_image %}
-{% endblock list_item_image %}
+{% block list_item_icon %}
+  <i class="fa-duotone fa-robot icon"></i>
+{% endblock list_item_icon %}
 
 {% block list_item_header %}
-  <a href="{{ object.get_edit_url }}">
-    {{ object.get_description }}
-  </a>
+  <a href="{{ object.get_edit_url }}">{{ object.get_description }}</a>
   <div class="sub header">
     {# TODO the text is special cased here because the model text has an additional note currently #}
     {% if object.action == object.DELETE_VERSION_ACTION %}
       {% trans "Delete version" %}
-      <i class="fad fa-question-circle grey icon" data-content="{% trans "Version deletion is only supported on branch or tag deletion events" %}"></i>
+      <i class="fad fa-question-circle grey icon"
+         data-content="{% trans "Version deletion is only supported on branch or tag deletion events" %}"></i>
     {% else %}
       {{ object.get_action_display }}
     {% endif %}
   </div>
 {% endblock list_item_header %}
-
-{% block list_item_meta_items %}
-  <div class="item">
-    <div class="content">
-      <div class="header">
-        {{ object.get_version_type_display }} matching {{ object.get_predefined_match_arg_display|lower }}
-      </div>
-      <div class="description">
-        {% if object.match_arg %}
-          <code class="ui tiny text">{{ object.match_arg|truncatechars:30 }}</code>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-{% endblock list_item_meta_items %}
