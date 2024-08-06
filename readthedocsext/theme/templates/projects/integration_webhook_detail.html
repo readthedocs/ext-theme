@@ -87,12 +87,14 @@
           <div class="content">
             <div class="header">{% trans "Secret" %}</div>
             <div class="description">
-              <code>{{ integration.secret }}</code>
-              <span class="ui compact icon basic button"
-                    data-clipboard-text="{{ integration.secret }}"
-                    data-content="{% trans "Copied!" %}">
-                <i class="fas fa-copy icon"></i>
-              </span>
+              <div class="ui fluid action input">
+                <input type="text" readonly value="{{ integration.secret }}" />
+                <button class="ui right icon button"
+                        data-clipboard-text="{{ integration.secret }}"
+                        data-content="{% trans "Copied!" %}">
+                  <i class="fas fa-copy icon"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>

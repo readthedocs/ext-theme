@@ -7,10 +7,16 @@
 {% load ext_theme_tags %}
 {% load organizations %}
 
-{% block title %}{{ organization.name }} - {% trans "Authorization" %}{% endblock %}
+{% block title %}
+  {{ organization.name }} - {% trans "Authorization" %}
+{% endblock title %}
 
-{% block organization_sso_active %}active{% endblock %}
-{% block organization_edit_content_header %}{% trans "Authorization" %}{% endblock %}
+{% block organization_sso_active %}
+  active
+{% endblock organization_sso_active %}
+{% block organization_edit_content_header %}
+  {% trans "Authorization" %}
+{% endblock organization_edit_content_header %}
 
 {% block organization_edit_sidebar_help_topics %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/en/stable/commercial/single-sign-on.html" text=_("Organization single sign-on") is_external=True class="item" %}
@@ -25,16 +31,16 @@
 
   {% if organization.ssointegration %}
     <div class="ui message">
-      <div class="header">
-        {% trans "Invite users into your organization" %}
-      </div>
-      <p>
-        {% trans "You can invite people to join your organization by sending them this link:" %}
-      </p>
+      <div class="header">{% trans "Invite users into your organization" %}</div>
+      <p>{% trans "You can invite people to join your organization by sending them this link:" %}</p>
 
       <div class="ui fluid action input">
-        <input type="text" readonly="" id="organization-link" value="https://{{ PRODUCTION_DOMAIN }}{% url 'account_signup' %}?organization={{ organization.slug }}" />
-        <button class="ui right labeled icon button" data-clipboard-target="#organization-link">
+        <input type="text"
+               readonly=""
+               id="organization-link"
+               value="https://{{ PRODUCTION_DOMAIN }}{% url 'account_signup' %}?organization={{ organization.slug }}" />
+        <button class="ui right labeled icon button"
+                data-clipboard-target="#organization-link">
           <i class="fas fa-copy icon"></i>
           {% trans "Copy" %}
         </button>
@@ -43,7 +49,10 @@
   {% endif %}
 
   <div data-bind="using: new OrganizationSettingsAuthorizationView()">
-    <form class="ui form" method="POST" action="." data-bind="css: { warning: show_warning }">
+    <form class="ui form"
+          method="post"
+          action="."
+          data-bind="css: { warning: show_warning }">
       {% csrf_token %}
 
       <div class="ui top attached segment">
@@ -54,9 +63,7 @@
             <div class="content">
               <div class="header">
                 {{ form.PROVIDER_DEFAULT }}
-                <span class="ui horizontal label">
-                  {% trans "Default" %}
-                </span>
+                <span class="ui horizontal label">{% trans "Default" %}</span>
 
               </div>
               <div class="description">
@@ -85,9 +92,8 @@
             <div class="content">
               <div class="header">
                 {{ form.PROVIDER_EMAIL }}
-                <a class="ui secondary horizontal label" href="{% url 'subscription_detail' organization.slug %}">
-                  Pro plan
-                </a>
+                <a class="ui secondary horizontal label"
+                   href="{% url 'subscription_detail' organization.slug %}">Pro plan</a>
               </div>
               <div class="description">
                 {% blocktrans trimmed %}
@@ -106,11 +112,10 @@
         {% alter_field form.provider data_bind="valueInit: provider, value: provider" %}
         {{ form.provider | as_crispy_field }}
 
-        <div class="ko hidden" data-bind="css: { hidden: !use_domain() }">
-          {{ form.domain | as_crispy_field }}
-        </div>
+        <div class="ko hidden" data-bind="css: { hidden: !use_domain() }">{{ form.domain | as_crispy_field }}</div>
 
-        <div class="ui warning message ko hidden" data-bind="css: { hidden: !show_warning() }">
+        <div class="ui warning message ko hidden"
+             data-bind="css: { hidden: !show_warning() }">
           <i class="fad fa-circle-exclamation icon"></i>
           {% blocktrans trimmed %}
             When switching authentication providers, user permissions granted
@@ -120,7 +125,10 @@
         </div>
       </div>
 
-      <input class="ui primary button" type="submit" name="submit" value="{% trans "Save" %}" />
+      <input class="ui primary button"
+             type="submit"
+             name="submit"
+             value="{% trans "Save" %}" />
     </form>
   </div>
 {% endblock organization_edit_content %}
