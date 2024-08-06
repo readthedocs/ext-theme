@@ -34,7 +34,7 @@
 
       <div class="ui fluid action input">
         <input type="text" readonly="" id="organization-link" value="https://{{ PRODUCTION_DOMAIN }}{% url 'account_signup' %}?organization={{ organization.slug }}" />
-        <button class="ui primary right labeled icon button" data-clipboard-target="#organization-link">
+        <button class="ui right labeled icon button" data-clipboard-target="#organization-link">
           <i class="fas fa-copy icon"></i>
           {% trans "Copy" %}
         </button>
