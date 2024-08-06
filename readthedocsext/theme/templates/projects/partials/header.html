@@ -14,7 +14,8 @@ collapsed, to save visual space and can be expanded with the right label.
 {% endcomment %}
 
 {% block project_header %}
-  <div class="ui top attached segment" data-bind="using: CollapsingHeaderView(true)">
+  <div class="ui top attached segment"
+       data-bind="using: CollapsingHeaderView(true)">
 
     {% block project_header_metadata %}
       <div class="ui stacking grid">
@@ -22,60 +23,46 @@ collapsed, to save visual space and can be expanded with the right label.
         {% block project_header_title %}
           <div class="eight wide computer eight wide tablet sixteen wide mobile middle aligned column">
             {% include "projects/includes/project_image.html" with project=project classes="micro rounded right spaced inline" %}
-            <a class="ui medium text" href="{{ project.get_absolute_url }}">
-              {{ project.name | default:project.slug }}
-            </a>
+            <a class="ui medium text" href="{{ project.get_absolute_url }}">{{ project.name | default:project.slug }}</a>
           </div>
         {% endblock project_header_title %}
 
         {% block project_header_labels %}
           <div class="right aligned eight wide computer eight wide tablet sixteen wide left aligned mobile middle aligned column">
-              {% comment %}
-              Simple solution to not supported "zh" language code.
-
-              When `project.language="zh"` the Django `language_name_local` raises an exception and returns 500.
-              This simple solution checks for this unsupported language code and replace it by "zh-cn" (Simplified Chinese).
-              We need to decide what to do at the DB level still, but at least this approach solves the immediate issue.
-              {% endcomment %}
-            {% if project.language == "zh" %}
-              {% include "includes/components/config_label.html" with icon="fa-solid fa-language" text=project.language|upper popup="zh-cn"|language_name_local %}
-            {% else %}
-              {% include "includes/components/config_label.html" with icon="fa-solid fa-language" text=project.language|upper popup=project.language|language_name_local %}
-            {% endif %}
+            {% include "includes/components/config_label.html" with icon="fa-solid fa-language" text=project.language|upper popup=project.language|readthedocs_language_name_local %}
             {% for organization in project.organizations.all %}
               {% include "includes/components/config_label.html" with icon="fa-solid fa-building" text=organization.name url=organization.get_absolute_url %}
             {% endfor %}
 
             {# The dropdown action button, to swap between expanded/collapsed #}
-            <a class="ui icon primary label" data-bind="click: toggle_collapsed" data-content="{% trans "More project information" %}">
+            <a class="ui icon primary label"
+               data-bind="click: toggle_collapsed"
+               data-content="{% trans "More project information" %}">
               <i class="fas fa-caret-down icon" data-bind="class: dropdown_class"></i>
             </a>
           </div>
         {% endblock project_header_labels %}
 
         {% block project_header_metadata_left %}
-          <div class="eight wide computer eight wide tablet sixteen wide mobile column" data-bind="visible: !is_collapsed()" style="display: none;">
+          <div class="eight wide computer eight wide tablet sixteen wide mobile column"
+               data-bind="visible: !is_collapsed()"
+               style="display: none">
 
             {% block project_header_description %}
-              {% if project.description %}
-                <p>
-                  {{ project.description|truncatewords:15 }}
-                </p>
-              {% endif %}
-            {% endblock %}
+              {% if project.description %}<p>{{ project.description|truncatewords:15 }}</p>{% endif %}
+            {% endblock project_header_description %}
 
             {% block project_header_tags %}
               {# Manual tags #}
               {% for tag in project.tags.all %}
-                <a class="ui teal basic label" href="{% url "projects_tag_detail" tag.slug %}">{{ tag.name }}</a>
+                <a class="ui teal basic label"
+                   href="{% url "projects_tag_detail" tag.slug %}">{{ tag.name }}</a>
               {% endfor %}
             {% endblock project_header_tags %}
 
             {% block project_header_related_projects %}
               {% if project.superproject or project.subprojects.exists %}
-                <div class="ui sub header">
-                  {% trans "Related projects" %}
-                </div>
+                <div class="ui sub header">{% trans "Related projects" %}</div>
                 <div class="ui relaxed horizontal list">
                   {% if project.superproject %}
                     <div class="item">
@@ -95,21 +82,19 @@ collapsed, to save visual space and can be expanded with the right label.
             {% block project_header_translations %}
               {% with translations=project.main_language_project.translations|default:project.translations %}
                 {% if translations.exists %}
-                  <div class="ui sub header">
-                    {% trans "Translations" %}
-                  </div>
+                  <div class="ui sub header">{% trans "Translations" %}</div>
                   <div class="ui horizontal list">
                     {% with project_translation=project.main_language_project|default:project %}
                       {% if not project_translation == project %}
                         <div class="item">
-                          {% include "includes/elements/chips/project.html" with project=project_translation detail=project_translation.language|language_name %}
+                          {% include "includes/elements/chips/project.html" with project=project_translation detail=project_translation.language|readthedocs_language_name %}
                         </div>
                       {% endif %}
                     {% endwith %}
                     {% for project_translation in translations.all %}
                       {% if not project_translation == project %}
                         <div class="item">
-                          {% include "includes/elements/chips/project.html" with project=project_translation detail=project_translation.language|language_name %}
+                          {% include "includes/elements/chips/project.html" with project=project_translation detail=project_translation.language|readthedocs_language_name %}
                         </div>
                       {% endif %}
                     {% endfor %}
@@ -122,27 +107,27 @@ collapsed, to save visual space and can be expanded with the right label.
         {% endblock project_header_metadata_left %}
 
         {% block project_header_metadata_right %}
-          <div class="right aligned eight wide computer eight wide tablet sixteen wide mobile column" data-bind="visible: !is_collapsed()" style="display: none;">
+          <div class="right aligned eight wide computer eight wide tablet sixteen wide mobile column"
+               data-bind="visible: !is_collapsed()"
+               style="display: none">
 
             {% block project_header_maintainers %}
-              <div class="ui sub header">
-                {% trans "Maintainers" %}
-              </div>
+              <div class="ui sub header">{% trans "Maintainers" %}</div>
 
               {# TODO project teams and organization #}
 
               <div class="ui overlapping avatar images">
                 {% for user in project.users.all|slice:":8" %}
                   <a href="{% url "profiles_profile_detail" user.username %}">
-                    <img class="ui image" src="{% gravatar_url user.email 32 %}" />
+                    <img alt="{% blocktrans with usernamename=user.username %}User {{ username }} avatar{% endblocktrans %}"
+                         class="ui image"
+                         src="{% gravatar_url user.email 32 %}" />
                   </a>
                 {% endfor %}
 
                 {% with other_maintainers=project.users.all|slice:"8:"|length %}
                   {% if other_maintainers %}
-                    <span>
-                      {% trans "... and {other_maintainers} others" %}
-                    </span>
+                    <span>{% trans "... and {other_maintainers} others" %}</span>
                   {% endif %}
                 {% endwith %}
 
@@ -150,14 +135,13 @@ collapsed, to save visual space and can be expanded with the right label.
             {% endblock project_header_maintainers %}
 
             {% block project_header_repository %}
-              <div class="ui sub header">
-                {% trans "Repository" %}
-              </div>
+              <div class="ui sub header">{% trans "Repository" %}</div>
 
               {% if project.remote_repository %}
                 {% with repo=project.remote_repository %}
                   <a href="{{ repo.html_url }}" class="ui basic image nowrap label">
-                    <img src="{{ repo.avatar_url }}" />
+                    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
+                         src="{{ repo.avatar_url }}" />
                     <code>{{ repo.full_name }}</code>
                   </a>
                 {% endwith %}
@@ -178,7 +162,8 @@ collapsed, to save visual space and can be expanded with the right label.
 
   {% block project_header_navigation %}
     <div class="ui bottom attached stackable menu">
-      <a class="item {{ overview_active }}" href="{{ project.get_absolute_url }}">
+      <a class="item {{ overview_active }}"
+         href="{{ project.get_absolute_url }}">
         {% trans "Versions" %}
         <span class="ui tiny teal circular label">{{ project.active_versions.count }}</span>
       </a>
@@ -194,7 +179,8 @@ collapsed, to save visual space and can be expanded with the right label.
               {% trans "Debug" %}
             </a>
           {% endif %}
-          <a class="item {{ edit_active }}" href="{% url "projects_edit" project.slug %}">
+          <a class="item {{ edit_active }}"
+             href="{% url "projects_edit" project.slug %}">
             <i class="fa-duotone fa-gears icon"></i>
             {% trans "Settings" %}
           </a>
@@ -202,11 +188,8 @@ collapsed, to save visual space and can be expanded with the right label.
       {% endif %}
     </div>
 
-
     <div class="ui mini modal" data-modal-id="project-debug">
-      <div class="header">
-        {% trans "Debug information" %}
-      </div>
+      <div class="header">{% trans "Debug information" %}</div>
       {% comment %}
         Show spam information on community instance.
         Allows us to quickly understand what's the spam score,
@@ -215,21 +198,15 @@ collapsed, to save visual space and can be expanded with the right label.
       <div class="content">
         {% if not USE_ORGANIZATIONS %}
           <h3>{% trans "Spam" %}</h3>
-          <div class="ui sub header">
-            {% trans "Spam score" %}
-          </div>
-          <span>{{ project|get_spam_score }} </span>
+          <div class="ui sub header">{% trans "Spam score" %}</div>
+          <span>{{ project|get_spam_score }}</span>
           {% if project.spam_rules.exists %}
-            <div class="ui sub header">
-              {% trans "Spam matching rules" %}
-            </div>
+            <div class="ui sub header">{% trans "Spam matching rules" %}</div>
             <div class="ui vertical list">
               {% for rule in project.spam_rules.all %}
                 <div class="item">
                   <a href="{{ ADMIN_URL }}/spamfighting/spamrule/{{ rule.pk }}/change/"
-                     target="_blank">
-                    {{ rule.spam_rule_type|cut:"readthedocsext.spamfighting.rules." }}
-                  </a>
+                     target="_blank">{{ rule.spam_rule_type|cut:"readthedocsext.spamfighting.rules." }}</a>
                 </div>
               {% endfor %}
             </div>
