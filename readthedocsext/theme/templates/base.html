@@ -10,9 +10,11 @@
       {% block head_title %}
       {% endblock head_title %}
     - Read the Docs</title>
-    <meta name="description"
-          content="Read the Docs is a documentation publishing and hosting platform for technical documentation" />
-    <meta name="keywords" content="documentation hosting" />
+    {% block head_meta %}
+      <meta name="description"
+            content="Read the Docs is a documentation publishing and hosting platform for technical documentation" />
+      <meta name="keywords" content="documentation hosting" />
+    {% endblock head_meta %}
 
     {% block head_links %}
       <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" />
