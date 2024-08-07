@@ -31,9 +31,11 @@
     <i class="fa-duotone fa-download icon"></i>
     {% trans "Download search data" %}
   </a>
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-magnifying-glass{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-magnifying-glass
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No search queries are available yet
@@ -44,18 +46,22 @@
     {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
+
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/page/guides/search-analytics.html"
+  <a class="ui button"
+     href="https://docs.readthedocs.io/page/guides/search-analytics.html"
      aria-label="{% trans "Learn more about this feature in our documentation pages" %}"
-     target="_blank">
-    {% trans "Learn more" %}
-  </a>
+     target="_blank">{% trans "Learn more" %}</a>
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_menu %}
   <div class="ui right floated text menu">
     <div class="item">
-      {% blocktrans trimmed count num=object.1 %}{{ num }} query{% plural %}{{ num }} queries{% endblocktrans %}
+      {% blocktrans trimmed count num=object.1 %}
+        {{ num }} query
+      {% plural %}
+        {{ num }} queries
+      {% endblocktrans %}
     </div>
   </div>
 {% endblock list_item_right_menu %}
@@ -63,7 +69,11 @@
 {% block list_item_header %}
   {{ object.0 }}
   <div class="sub header">
-    {% blocktrans trimmed count num=object.2 %}{{ num }} result{% plural %}{{ num }} results{% endblocktrans %}
+    {% blocktrans trimmed count num=object.2 %}
+      {{ num }} result
+    {% plural %}
+      {{ num }} results
+    {% endblocktrans %}
   </div>
 
 {% endblock list_item_header %}

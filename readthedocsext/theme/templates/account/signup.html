@@ -4,15 +4,23 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 
-{% block head_title %}{% trans "Sign up" %}{% endblock %}
+{% block head_title %}
+  {% trans "Sign up" %}
+{% endblock %}
 
 {% block authentication_header %}
   {% trans "Sign up to continue" %}
 {% endblock authentication_header %}
 
-{% block authentication_vcs_text %}{% trans "Connect account" %}{% endblock %}
-{% block authentication_email_text %}{% trans "Sign up with email" %}{% endblock %}
-{% block authentication_header_text %}{% trans "Sing up using:" %}{% endblock %}
+{% block authentication_vcs_text %}
+  {% trans "Connect account" %}
+{% endblock authentication_vcs_text %}
+{% block authentication_email_text %}
+  {% trans "Sign up with email" %}
+{% endblock authentication_email_text %}
+{% block authentication_header_text %}
+  {% trans "Sing up using:" %}
+{% endblock authentication_header_text %}
 
 {% block authentication_vcs %}
   {# Translators: this will read "Sign up using GitHub", where "sign up" is a verb #}
@@ -27,25 +35,28 @@
     {% endblocktrans %}
   </p>
 
-  <form class="ui form" method="post" action="{% url 'account_signup' %}#/email">
+  <form class="ui form"
+        method="post"
+        action="{% url 'account_signup' %}#/email">
     {% csrf_token %}
     {{ form|crispy }}
     {% if redirect_field_value %}
-      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+      <input type="hidden"
+             name="{{ redirect_field_name }}"
+             value="{{ redirect_field_value }}" />
     {% endif %}
 
     <div class="ui right aligned fluid container">
-      <button class="ui primary button" type="submit">
-        {% trans "Sign up" %}
-      </button>
+      <button class="ui primary button" type="submit">{% trans "Sign up" %}</button>
     </div>
   </form>
-{% endblock %}
+{% endblock authentication_email %}
 
 {% block authentication_extra %}
   <p class="ui center aligned tiny basic vertically fitted basic cleared segment">
     {% blocktrans trimmed %}
-      By signing up for an account, you agree to our <a href="https://docs.readthedocs.io/page/terms-of-service.html" target="_blank">Terms of Service</a> and <a href="https://docs.readthedocs.io/page/privacy-policy.html">Privacy Policy</a>.
+      By signing up for an account, you agree to our <a href="https://docs.readthedocs.io/page/terms-of-service.html"
+    target="_blank">Terms of Service</a> and <a href="https://docs.readthedocs.io/page/privacy-policy.html">Privacy Policy</a>.
     {% endblocktrans %}
   </p>
 {% endblock authentication_extra %}

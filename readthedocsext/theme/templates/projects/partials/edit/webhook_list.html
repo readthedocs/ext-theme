@@ -10,9 +10,11 @@
   {% url "projects_webhooks_create" project.slug as create_url %}
   {% trans "Add webhook" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-webhook{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-webhook
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No webhooks have been configured yet
@@ -23,12 +25,12 @@
     {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
+
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/page/guides/build-notifications.html#build-status-webhooks"
+  <a class="ui button"
+     href="https://docs.readthedocs.io/page/guides/build-notifications.html#build-status-webhooks"
      aria-label="{% trans "Learn more about webhooks in our documentation" %}"
-     target="_blank">
-    {% trans "Learn more" %}
-  </a>
+     target="_blank">{% trans "Learn more" %}</a>
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
@@ -50,9 +52,7 @@
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
-  <a href="{% url 'projects_webhooks_edit' project.slug object.pk %}">
-    {{ object.url }}
-  </a>
+  <a href="{% url 'projects_webhooks_edit' project.slug object.pk %}">{{ object.url }}</a>
   <div class="sub header">
     {% trans "Subscribed events:" %}
     {{ object.events.all|join:", " }}

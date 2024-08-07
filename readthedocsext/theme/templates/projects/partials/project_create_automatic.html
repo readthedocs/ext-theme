@@ -27,20 +27,14 @@
 {% block project_add_automatic_search %}
   <div class="ui small error message"
        data-bind="visible: error"
-       style="display: none;">
-    {% trans "There was an error while syncing your remote repositories" %}
-  </div>
+       style="display: none">{% trans "There was an error while syncing your remote repositories" %}</div>
 
   {# Search prompt and dropdown #}
-  <label>
-    {% trans "Repository name:" %}
-  </label>
-  <div class="ui fluid disabled loading search" data-bind="semanticui: {search: search_config()}, css: {disabled: is_loading(), loading: is_loading()}">
+  <label>{% trans "Repository name:" %}</label>
+  <div class="ui fluid disabled loading search"
+       data-bind="semanticui: {search: search_config()}, css: {disabled: is_loading(), loading: is_loading()}">
     <div class="ui fluid icon large input">
-      <input
-        class="ui text"
-        type="text"
-        autofocus=true />
+      <input class="ui text" type="text" autofocus=true />
       <i class="fa-duotone fa-search icon"></i>
     </div>
     <div class="results"></div>
@@ -67,18 +61,9 @@
       <div class="title">
         <span class="text" data-bind="text: full_name"></span>
         {# Because of the search popup, a nested popup using data-content doesn't do anything here #}
-        <i class="fa-duotone fa-eye-slash small icon"
-           style="display: none"
-           data-bind="visible: private"
-           data-content="{% trans "Repository is private" %}"></i>
-        <i class="fa-duotone fa-magic small icon"
-           style="display: none"
-           data-bind="visible: admin"
-           data-content="{% trans "Repository can be automatically configured" %}"></i>
-        <i class="fa-duotone fa-download small icon"
-           style="display: none"
-           data-bind="visible: has_project"
-           data-content="{% trans "Repository is already configured" %}"></i>
+        <i class="fa-duotone fa-eye-slash small icon" style="display: none" data-bind="visible: private" data-content="{% trans "Repository is private" %}"></i>
+        <i class="fa-duotone fa-magic small icon" style="display: none" data-bind="visible: admin" data-content="{% trans "Repository can be automatically configured" %}"></i>
+        <i class="fa-duotone fa-download small icon" style="display: none" data-bind="visible: has_project" data-content="{% trans "Repository is already configured" %}"></i>
       </div>
       <div class="description">
         <span data-bind="text: clone_url"></span>
@@ -94,7 +79,8 @@
 {% endblock project_add_automatic_search %}
 
 {% block project_add_automatic_placeholder %}
-  <div class="ui basic horizontally fitted segment" data-bind="visible: !is_selected()">
+  <div class="ui basic horizontally fitted segment"
+       data-bind="visible: !is_selected()">
     <div class="ui top attached placeholder segment">
       <div class="ui icon header">
         {# Push user towards searching using input above #}
@@ -116,9 +102,8 @@
 
       {% trans "Can't find the repository you are searching for?" %}
 
-      <button
-        class="ui mini black basic compact right aligned button"
-        data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
+      <button class="ui mini black basic compact right aligned button"
+              data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
         <i class="fa-duotone fa-refresh icon"></i>
         {% trans "Refresh your repositories" %}
       </button>
@@ -138,9 +123,12 @@
     connected and why the repository can/cannot be used.
 
   {% endcomment %}
-  <div class="ui fluid card" data-bind="visible: is_selected, with: selected" style="display: none;">
+  <div class="ui fluid card"
+       data-bind="visible: is_selected, with: selected"
+       style="display: none">
     <div class="content">
-      <img class="ui right floated mini rounded image" data-bind="attr: { src: avatar_url }">
+      <img class="ui right floated mini rounded image"
+           data-bind="attr: { src: avatar_url }">
       <div class="header" data-bind="text: full_name"></div>
       <div class="meta" data-bind="text: clone_url"></div>
       <div class="description">
@@ -153,11 +141,10 @@
               <i class="fa-duotone fa-eye icon" data-bind="css: {'slash': private}"></i>
               <div class="content">
                 <div class="header">
-                  <span data-bind="visible: !private">
-                    {% trans "Repository is public" %}
-                  </span>
+                  <span data-bind="visible: !private">{% trans "Repository is public" %}</span>
 
-                  <span class="ui text" data-bind="visible: private, css: { red: !$parent.is_repository_supported($data) }">
+                  <span class="ui text"
+                        data-bind="visible: private, css: { red: !$parent.is_repository_supported($data) }">
                     {% trans "Repository is private" %}
                   </span>
                 </div>
@@ -168,12 +155,14 @@
                     {% endblocktrans %}
                   </span>
 
-                  <p class="ui red text" data-bind="visible: !$parent.is_repository_supported($data)">
+                  <p class="ui red text"
+                     data-bind="visible: !$parent.is_repository_supported($data)">
                     {% blocktrans trimmed %}
                       Private repositories are not supported
                     {% endblocktrans %}
                   </p>
-                  <p class="ui red text" data-bind="visible: !$parent.is_repository_supported($data)">
+                  <p class="ui red text"
+                     data-bind="visible: !$parent.is_repository_supported($data)">
                     <a class="ui red mini basic button">{% trans "Read more" %}</a>
                   </p>
                 </div>
@@ -186,13 +175,9 @@
               <i class="fa-duotone fa-magic icon" data-bind="css: {red: !admin}"></i>
               <div class="content">
                 <div class="header">
-                  <span data-bind="visible: admin">
-                    {% trans "Repository can be automatically configured" %}
-                  </span>
+                  <span data-bind="visible: admin">{% trans "Repository can be automatically configured" %}</span>
 
-                  <span class="ui red text" data-bind="visible: !admin">
-                    {% trans "Repository must be manually configured" %}
-                  </span>
+                  <span class="ui red text" data-bind="visible: !admin">{% trans "Repository must be manually configured" %}</span>
                 </div>
                 <div class="description">
                   <span data-bind="visible: admin">
@@ -210,9 +195,9 @@
                     {% endblocktrans %}
                   </p>
                   <p class="ui red text" data-bind="visible: !admin">
-                    <a class="ui red mini basic button" href="https://docs.readthedocs.io/page/intro/import-guide.html#manually-import-your-docs" target="_blank">
-                      {% trans "Learn how to manually configure this repository" %}
-                    </a>
+                    <a class="ui red mini basic button"
+                       href="https://docs.readthedocs.io/page/intro/import-guide.html#manually-import-your-docs"
+                       target="_blank">{% trans "Learn how to manually configure this repository" %}</a>
                   </p>
                 </div>
               </div>
@@ -222,9 +207,7 @@
             <div class="item" data-bind="if: has_project">
               <i class="fa-solid fa-plus icon"></i>
               <div class="content">
-                <div class="header">
-                  {% trans "Repository is already configured" %}
-                </div>
+                <div class="header">{% trans "Repository is already configured" %}</div>
                 <div class="description">
                   <p>
                     {% blocktrans trimmed %}
@@ -233,7 +216,9 @@
                   </p>
                   {# TODO this could be a proper project chip and popup card, but would need https://github.com/readthedocs/ext-theme/issues/196 #}
                   <div data-bind="foreach: projects">
-                    <a class="ui basic image label" data-bind="attr: {href: urls.home }" target="_blank">
+                    <a class="ui basic image label"
+                       data-bind="attr: {href: urls.home }"
+                       target="_blank">
                       <img data-bind="if: $parent.avatar_url, attr: {src: $parent.avatar_url}" />
                       <span data-bind="text: name"></span>
                     </a>
@@ -258,9 +243,7 @@
           <input type="hidden" name="remote_repository" data-bind="value: pk" />
           <input type="hidden" name="default_branch" data-bind="value: default_branch" />
 
-          <button class="ui primary button" data-bind="css: {disabled: !admin}">
-            {% trans "Continue" %}
-          </button>
+          <button class="ui primary button" data-bind="css: {disabled: !admin}">{% trans "Continue" %}</button>
         </form>
       </span>
     </div>

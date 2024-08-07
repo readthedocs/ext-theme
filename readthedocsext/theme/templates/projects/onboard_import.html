@@ -2,7 +2,11 @@
 
 <!-- BEGIN onboard import project -->
 <div>
-  <h2>{% trans "Ready to share your documentation" %}{% if request.user.first_name %}, {{ request.user.first_name }}{% endif %}?</h2>
+  <h2>
+    {% trans "Ready to share your documentation" %}
+    {% if request.user.first_name %}, {{ request.user.first_name }}{% endif %}
+    ?
+  </h2>
 
   {% with getting_started_url="https://docs.readthedocs.io/page/intro/getting-started-with-sphinx.html" %}
     <form class="ui form" method="get" action="{% url "projects_import" %}">
@@ -21,7 +25,9 @@
         {% endblocktrans %}
       </p>
 
-      <input class="ui button" type="submit" value="{% trans "Import a Project" %}"/>
+      <input class="ui button"
+             type="submit"
+             value="{% trans "Import a Project" %}" />
     </form>
   {% endwith %}
 </div>

@@ -28,7 +28,8 @@
   </div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/en/stable/guides/setup/git-repo-manual.html"
+  <a class="ui button"
+     href="https://docs.readthedocs.io/en/stable/guides/setup/git-repo-manual.html"
      target="_blank"
      aria-label="{% trans "Learn more about connecting your Git provider in our documentation" %}">
     {% trans "Learn more" %}
@@ -58,12 +59,11 @@
     {{ object.get_integration_type_display }}
   </a>
   {% if object.has_sync and object.can_sync %}
-    <i class="fa-duotone fa-wand-magic-sparkles icon" data-content="{% trans "Automatically managed" %}"></i>
+    <i class="fa-duotone fa-wand-magic-sparkles icon"
+       data-content="{% trans "Automatically managed" %}"></i>
   {% endif %}
 {% endblock list_item_header %}
 
 {% block list_item_meta %}
-  <div class="item">
-    {{ object.exchanges.count }} exchanges
-  </div>
+  <div class="item">{{ object.exchanges.count }} exchanges</div>
 {% endblock list_item_meta %}

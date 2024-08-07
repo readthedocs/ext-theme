@@ -45,11 +45,10 @@
   </div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/page/guides/custom-domains.html"
+  <a class="ui button"
+     href="https://docs.readthedocs.io/page/guides/custom-domains.html"
      target="_blank"
-     aria-label="{% trans "Learn more about custom domains in our documentation" %}">
-    {% trans "Learn more" %}
-  </a>
+     aria-label="{% trans "Learn more about custom domains in our documentation" %}">{% trans "Learn more" %}</a>
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
@@ -69,20 +68,18 @@
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  <a href="{% url 'projects_domains_edit' project.slug object.pk %}">
-    {{ object.domain }}
-  </a>
+  <a href="{% url 'projects_domains_edit' project.slug object.pk %}">{{ object.domain }}</a>
 {% endblock list_item_header %}
 
 {% block list_item_meta_items %}
   <div class="item">
-    {% if object.https  %}
+    {% if object.https %}
       <div class="ui basic label">
         <i class="fa-duotone fa-shield-check icon"></i>
         {% trans "HTTPS enabled" %}
       </div>
     {% endif %}
-    {% if object.domainssl  %}
+    {% if object.domainssl %}
       <div class="ui basic label">
         <i class="fa-duotone fa-tachometer icon"></i>
         {% trans "CDN enabled" %}

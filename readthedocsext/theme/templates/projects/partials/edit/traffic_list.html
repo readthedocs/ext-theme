@@ -33,7 +33,9 @@
   </a>
 {% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-chart-mixed{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-chart-mixed
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     Traffic data is not available yet
@@ -45,23 +47,20 @@
   </div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/en/stable/analytics.html"
+  <a class="ui button"
+     href="https://docs.readthedocs.io/en/stable/analytics.html"
      aria-label="{% trans "Learn more about traffic analytics in our documentation" %}"
-     target="_blank">
-    {% trans "Learn more" %}
-  </a>
+     target="_blank">{% trans "Learn more" %}</a>
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_menu %}
   <div class="ui right floated text menu">
-    <div class="item">
-      {{ object.2 }}
-    </div>
+    <div class="item">{{ object.2 }}</div>
   </div>
 {% endblock list_item_right_menu %}
 
 {% block list_item_header %}
-  <a href="{{ object.1}}">{{ object.0 }}</a>
+  <a href="{{ object.1 }}">{{ object.0 }}</a>
 {% endblock list_item_header %}
 
 {% block list_item_meta %}

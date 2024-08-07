@@ -15,9 +15,11 @@
   {% url "projects_translations_create" project.slug as create_url %}
   {% trans "Add translation" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-language{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-language
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No translations exist yet
@@ -30,19 +32,16 @@
   </div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/page/localization.html"
+  <a class="ui button"
+     href="https://docs.readthedocs.io/page/localization.html"
      aria-label="{% trans "Learn more about this feature in our documentation pages" %}"
-      target="_blank">
-    {% trans "Learn more" %}
-  </a>
+     target="_blank">{% trans "Learn more" %}</a>
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
   {% comment %}
     {# TODO there is no edit view for this model, only create and delete #}
-  <a class="ui button"
-     href="{% url 'projects_translations_edit' project_slug=project.slug translation_pk=object.pk %}"
-     data-content="{% trans "Edit translation" %}">
+  <a class="ui button" href="{% url 'projects_translations_edit' project_slug=project.slug translation_pk=object.pk %}" data-content="{% trans "Edit translation" %}">
     <i class="fas fa-wrench icon"></i>
   </a>
   {% endcomment %}
@@ -61,12 +60,8 @@
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  <a href="{{ object.get_absolute_url }}">
-    {{ object.name }}
-  </a>
-  <div class="sub header">
-    {{ object.get_language_display }}
-  </div>
+  <a href="{{ object.get_absolute_url }}">{{ object.name }}</a>
+  <div class="sub header">{{ object.get_language_display }}</div>
 {% endblock list_item_header %}
 
 {% block list_item_meta %}
