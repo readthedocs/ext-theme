@@ -54,10 +54,10 @@
             {% with PUBLIC_API_URL|add:webhook_url as integration_url %}
               <div class="ui fluid action input">
                 <input type="text" readonly value="{{ integration_url }}" />
-                <button class="ui teal right icon button"
+                <button class="ui right icon button"
                         data-clipboard-text="{{ integration_url }}"
                         data-content="{% trans "Copied!" %}">
-                  <i class="fa-duotone fa-copy icon"></i>
+                  <i class="fas fa-copy icon"></i>
                 </button>
               </div>
             {% endwith %}
@@ -73,10 +73,10 @@
             <div class="description">
               <div class="ui fluid action input">
                 <input type="text" readonly value="{{ integration.token }}" />
-                <button class="ui teal right icon button"
+                <button class="ui right icon button"
                         data-clipboard-text="{{ integration.token }}"
                         data-content="{% trans "Copied!" %}">
-                  <i class="fa-duotone fa-copy icon"></i>
+                  <i class="fas fa-copy icon"></i>
                 </button>
               </div>
             </div>
@@ -87,12 +87,14 @@
           <div class="content">
             <div class="header">{% trans "Secret" %}</div>
             <div class="description">
-              <code>{{ integration.secret }}</code>
-              <span class="ui compact icon basic button"
-                    data-clipboard-text="{{ integration.secret }}"
-                    data-content="{% trans "Copied!" %}">
-                <i class="fa-duotone fa-copy icon"></i>
-              </span>
+              <div class="ui fluid action input">
+                <input type="text" readonly value="{{ integration.secret }}" />
+                <button class="ui right icon button"
+                        data-clipboard-text="{{ integration.secret }}"
+                        data-content="{% trans "Copied!" %}">
+                  <i class="fas fa-copy icon"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
