@@ -29,8 +29,8 @@ repos:
   - repo: https://github.com/djlint/djLint
     rev: v1.34.1
     hooks:
-      - id: djlint-django
       - id: djlint-reformat-django
+      - id: djlint-django
   - repo: local
     hooks:
       - id: check-build-assets
