@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block head_meta %}
+{% endblock head_meta %}
+
+{% block head_links %}
+{% endblock head_links %}
+
+{% block head_scripts %}
+{% endblock head_scripts %}
+{% block body_scripts %}
+{% endblock body_scripts %}
+
+{% block header %}
+{% endblock header %}
+
+{% block footer %}
+{% endblock footer %}
+
+{% block content-wrapper %}
+  <div class="ui very padded container">
+    <section>
+      <div class="ui very padded text container">
+        <div class="ui fluid card">
+          <div class="content">
+            {% block content %}
+              {% block content_title %}
+                <h1 class="ui medium left aligned monospace header">
+                  {% block content_title_text %}
+                  {% endblock content_title_text %}
+                </h1>
+              {% endblock content_title %}
+
+              {% block content_text %}
+              {% endblock content_text %}
+
+            {% endblock content %}
+          </div>
+          {% block content_extra %}
+            <div class="extra content">
+              {% block content_extra_text %}
+              {% endblock content_extra_text %}
+            </div>
+          {% endblock content_extra %}
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock content-wrapper %}
