@@ -1,6 +1,5 @@
-{% load i18n %}
-{% load static %}
-{% load ext_theme_tags %}
+{% load static from static %}
+{% load webpack_static get_webpack_static debug_enabled from ext_theme_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,50 +14,41 @@
           content="Read the Docs is a documentation publishing and hosting platform for technical documentation" />
     <meta name="keywords" content="documentation hosting" />
 
-    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" />
-    <link rel="stylesheet" type="text/css" media="all" href="{% webpack_static "readthedocsext/theme/css/site.css" %}" />
+    {% block head_links %}
+      <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" />
+      <link rel="stylesheet" type="text/css" media="all" href="{% webpack_static "readthedocsext/theme/css/site.css" %}" />
+    {% endblock head_links %}
+    {# TODO deprecate extra_links #}
     {% block extra_links %}
     {% endblock extra_links %}
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width" />
 
-    {# This block is used to pass settings between our application and JS #}
-    <script type="application/json" id="site-config">
-      {
-        "debug": {% debug_enabled as is_debug_enabled %}{{ is_debug_enabled | yesno:"true,false" }},
-        "webpack_public_path": "{% get_webpack_static_prefix %}/readthedocsext/theme/",
-        "production_domain": "{{ PRODUCTION_DOMAIN }}"
-      }
-    </script>
+    {% block head_scripts %}
+      {# This block is used to pass settings between our application and JS #}
+      <script type="application/json" id="site-config">
+        {
+          "debug": {% debug_enabled as is_debug_enabled %}{{ is_debug_enabled | yesno:"true,false" }},
+          "webpack_public_path": "{% get_webpack_static_prefix %}/readthedocsext/theme/",
+          "production_domain": "{{ PRODUCTION_DOMAIN }}"
+        }
+      </script>
 
-    {% comment %}
-      This is our only external dependency. It's a fast way to get all the
-      versions of Font Awesome, and doesn't require spreading around a Font
-      Awesome Pro key.
-    {% endcomment %}
-    <script src="https://kit.fontawesome.com/66c8860b51.js"
-            crossorigin="anonymous"></script>
-
-    {% comment %}
-      {# TODO remove these, from the existing theme #}
-      <script type="text/javascript" src="{{ MEDIA_URL }}javascript/instantsearch.js"></script>
-      <script type="text/javascript" src="{{ MEDIA_URL }}javascript/base.js"></script>
-    {% endcomment %}
+      {% comment %}
+        This is our only external dependency. It's a fast way to get all the
+        versions of Font Awesome, and doesn't require spreading around a Font
+        Awesome Pro key.
+      {% endcomment %}
+      <script src="https://kit.fontawesome.com/66c8860b51.js"
+              crossorigin="anonymous"></script>
+    {% endblock head_scripts %}
   </head>
   <body class="{% block body_class %}{% endblock body_class %}">
-
-    {# TODO remove info_bar block, it isn't used #}
-    {% block info_bar %}
-    {% endblock info_bar %}
 
     {% block header %}
       {% include "includes/header.html" %}
     {% endblock header %}
-
-    {# TODO remove subnav-bar block, it isn't used #}
-    {% block subnav-bar %}
-    {% endblock subnav-bar %}
 
     {% block content-wrapper %}
       <div class="ui very padded container">
@@ -76,10 +66,6 @@
           {% include "includes/utils/messages.html" %}
         {% endblock notifications %}
 
-        {# TODO move admin-bar usage to content-header #}
-        {% block admin-bar %}
-        {% endblock admin-bar %}
-
         {% block content-header %}
         {% endblock content-header %}
 
@@ -92,7 +78,9 @@
       {% include "includes/footer.html" %}
     {% endblock footer %}
 
-    <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/vendor.js" %}"></script>
-    <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/site.js" %}"></script>
+    {% block body_scripts %}
+      <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/vendor.js" %}"></script>
+      <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/site.js" %}"></script>
+    {% endblock body_scripts %}
   </body>
 </html>
