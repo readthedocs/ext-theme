@@ -26,7 +26,7 @@
   {% trans "You don't have any projects configured yet" %}
 {% endblock list_placeholder_header_empty %}
 {% block list_placeholder_text_empty %}
-  <a href="https://docs.readthedocs.io/page/tutorial/" class="ui primary button">
+  <a href="https://docs.readthedocs.io/page/tutorial/" target="_blank" class="ui primary button">
     {% trans "Learn how to get started" %}
   </a>
 {% endblock list_placeholder_text_empty %}
@@ -44,6 +44,7 @@
        data-content="{{ label_link }}"
        aria-label="{{ label_link }}"
        data-bind="event: {mouseover: fetch, focusin: fetch}, attr: {href: url_docs}"
+       target="_blank"
        tabindex="{% if object.has_good_build %}0{% else %}-1{% endif %}">
       <i class="fa-duotone fa-book icon"></i>
     </a>
