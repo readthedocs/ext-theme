@@ -1,21 +1,27 @@
 {% extends "errors/dashboard/base.html" %}
 
-{% load core_tags %}
-{% load i18n %}
+{% load blocktrans trans from i18n %}
 
 {% comment %}
   Leaving this as a technically-not-accurate "bad request", as this works okay
   for being a fallback for missing error templates.
 {% endcomment %}
-{% block title %}{% trans "Bad request" %}{% endblock %}
+{% block title %}
+  {% trans "Bad request" %}
+{% endblock title %}
 
-{% block error_status %}{% endblock %}
+{% block error_status %}
+{% endblock error_status %}
 {% block error_title %}
   {% trans "Bad request" %}
 {% endblock error_title %}
 
-{% block error_icon_computer_name %}fa-cloud-exclamation{% endblock %}
-{% block error_icon_mobile_name %}fa-cloud-exclamation{% endblock %}
+{% block error_icon_computer_name %}
+  fa-cloud-exclamation
+{% endblock error_icon_computer_name %}
+{% block error_icon_mobile_name %}
+  fa-cloud-exclamation
+{% endblock error_icon_mobile_name %}
 
 {% block error_content %}
   <p>
