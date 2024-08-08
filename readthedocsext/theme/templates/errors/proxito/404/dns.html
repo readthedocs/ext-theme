@@ -1,0 +1,20 @@
+{% extends "errors/proxito/404/base.html" %}
+
+{% load blocktrans from i18n %}
+
+{% block error_content %}
+  <p>
+    {% blocktrans trimmed %}
+      This domain was is not recognized, it may not yet be configured.
+    {% endblocktrans %}
+  </p>
+{% endblock error_content %}
+
+{% block error_content_help %}
+  <p>
+    {% blocktrans trimmed %}
+      If you control this domain and believe this is in error,
+      ensure your custom domain is correctly configured for your project.
+    {% endblocktrans %}
+  </p>
+{% endblock error_content_help %}

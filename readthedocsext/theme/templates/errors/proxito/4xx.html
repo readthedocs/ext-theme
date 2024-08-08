@@ -18,7 +18,7 @@
 
 {% block error_content %}
   <p>
-    {% blocktrans trimmed with url_support=url_support %}
+    {% blocktrans trimmed %}
       Your request is either unsupported or we didn't understand it.
     {% endblocktrans %}
   </p>
@@ -26,10 +26,9 @@
 
 {% block error_content_help %}
   <p>
-    {% url 'support' as url_support %}
-    {% blocktrans trimmed with url_support=url_support %}
-      Try again later or <a href="{{ url_support }}">contact us</a>
-      if this problem persists.
+    {# On purpose there is no link to our support form here #}
+    {% blocktrans trimmed %}
+      Check that your request is valid or try again later.
     {% endblocktrans %}
   </p>
   {{ block.super }}
