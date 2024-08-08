@@ -2,14 +2,20 @@
 
 {% load i18n %}
 
-{% block title %}{{ project.name }} - {% trans "Environment variables" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "Environment variables" %}
+{% endblock title %}
 
-{% block project_environment_variables_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Environment variables" %}{% endblock %}
+{% block project_environment_variables_active %}
+  active
+{% endblock project_environment_variables_active %}
+{% block project_edit_content_header %}
+  {% trans "Environment variables" %}
+{% endblock project_edit_content_header %}
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/environment_variable_list.html" with objects=object_list %}
-{% endblock %}
+{% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/environment-variables.html" text="How to use custom environment variables" is_external=True class="item" %}
