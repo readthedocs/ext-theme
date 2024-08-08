@@ -1,9 +1,10 @@
 {% extends "errors/dashboard/base.html" %}
 
-{% load core_tags %}
-{% load i18n %}
+{% load blocktrans trans from i18n %}
 
-{% block title %}{% trans "Service unavailable" %}{% endblock %}
+{% block title %}
+  {% trans "Service unavailable" %}
+{% endblock title %}
 
 {% comment %}
   This is the error for both 504/504 responses from AWS ALB. When we emit this
@@ -11,14 +12,20 @@
   issue with our application code.
 {% endcomment %}
 
-{% block error_status %}504{% endblock %}
+{% block error_status %}
+  504
+{% endblock error_status %}
 {% block error_title %}
   {{ block.super }}
   {% trans "Service unavailable" %}
 {% endblock error_title %}
 
-{% block error_icon_computer_name %}fa-cloud-xmark{% endblock %}
-{% block error_icon_mobile_name %}fa-cloud-xmark{% endblock %}
+{% block error_icon_computer_name %}
+  fa-cloud-xmark
+{% endblock error_icon_computer_name %}
+{% block error_icon_mobile_name %}
+  fa-cloud-xmark
+{% endblock error_icon_mobile_name %}
 
 {% block error_content %}
   <p>

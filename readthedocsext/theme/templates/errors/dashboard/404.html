@@ -5,21 +5,32 @@
   pages. This will only show from our application.
 {% endcomment %}
 
-{% load core_tags %}
-{% load i18n %}
+{% load blocktrans trans from i18n %}
 
-{% block title %}{% trans "Page not found" %}{% endblock %}
+{% block title %}
+  {% trans "Page not found" %}
+{% endblock title %}
 
-{% block error_status %}404{% endblock %}
+{% block error_status %}
+  404
+{% endblock error_status %}
 {% block error_title %}
   {{ block.super }}
   {% trans "Page not found" %}
 {% endblock error_title %}
 
-{% block error_icon_computer_name %}fa-radar{% endblock %}
-{% block error_icon_mobile_name %}fa-radar{% endblock %}
-{% block error_icon_computer_style %}--fa-primary-color: greenyellow;{% endblock %}
-{% block error_icon_mobile_style %}--fa-primary-color: greenyellow;{% endblock %}
+{% block error_icon_computer_name %}
+  fa-radar
+{% endblock error_icon_computer_name %}
+{% block error_icon_mobile_name %}
+  fa-radar
+{% endblock error_icon_mobile_name %}
+{% block error_icon_computer_style %}
+  --fa-primary-color: greenyellow;
+{% endblock error_icon_computer_style %}
+{% block error_icon_mobile_style %}
+  --fa-primary-color: greenyellow;
+{% endblock error_icon_mobile_style %}
 
 {% block error_content %}
   <p>

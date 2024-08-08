@@ -3,21 +3,23 @@
 {% load blocktrans trans from i18n %}
 
 {% block title %}
-  {% trans "Unauthorized request" %}
+  {% trans "Access restricted" %}
 {% endblock title %}
 
 {% block error_status %}
-  401
+  403
 {% endblock error_status %}
 {% block error_title %}
   {{ block.super }}
-  {% trans "Unauthorized request" %}
+  {% trans "Access restricted" %}
 {% endblock error_title %}
+{% block error_subtitle_text %}
+{% endblock error_subtitle_text %}
 
 {% block error_content %}
   <p>
     {% blocktrans trimmed %}
-      You may not be logged in, or your account may not have the necessary permissions to view this page.
+      Your account may not have the necessary permissions to view this page.
     {% endblocktrans %}
   </p>
 {% endblock error_content %}
