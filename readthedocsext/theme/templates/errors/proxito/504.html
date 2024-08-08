@@ -1,16 +1,16 @@
 {% extends "errors/proxito/base.html" %}
 
-{% load blocktrans trans from i18n %}
-
-{% block title %}
-  {% trans "Service unavailable" %}
-{% endblock title %}
-
 {% comment %}
   This is the error for both 504/504 responses from AWS ALB. When we emit this
   status, there is a problem with our instances, our load, or a significant
   issue with our application code.
 {% endcomment %}
+
+{% load blocktrans trans from i18n %}
+
+{% block title %}
+  {% trans "Service unavailable" %}
+{% endblock title %}
 
 {% block error_status %}
   504
@@ -22,18 +22,20 @@
 
 {% block error_content %}
   <p>
+    {% comment %}
+      This refers to "this site" as reader users might not know what Read the
+      Docs is. On the application error page this mentions RTD.
+    {% endcomment %}
     {% blocktrans trimmed %}
-      We have encountered a problem and Read the Docs is currently unavailable.
+      We have encountered a problem and this site is currently unavailable.
     {% endblocktrans %}
   </p>
 {% endblock error_content %}
 
 {% block error_content_help %}
-  {% url 'support' as url_support %}
   <p>
-    {% blocktrans trimmed with url_support=url_support %}
-      Try back again shortly and <a href="{{ url_support }}">contact us</a> if
-      you continue to notice this error.
+    {% blocktrans trimmed %}
+      Try again shortly.
     {% endblocktrans %}
   </p>
   {{ block.super }}

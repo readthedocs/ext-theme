@@ -1,6 +1,9 @@
 {% extends "errors/proxito/base.html" %}
 
-{# The dashboard 5xx page, shows like it is part of the application #}
+{% comment %}
+  This is the application error for hosted documentation. We might show this
+  when proxito has a problem or the web servers are starting to be overloaded.
+{% endcomment %}
 
 {% load blocktrans trans from i18n %}
 
@@ -19,16 +22,15 @@
   <p>
     {% blocktrans trimmed %}
       There was an unexpected error while trying to view this page.
-      You may have encountered a bug or a temporary issue affecting our services.
+      You may have encountered a bug or a temporary issue affecting this site.
     {% endblocktrans %}
   </p>
 {% endblock error_content %}
 
 {% block error_content_help %}
   <p>
-    {% url 'support' as url_support %}
     {% blocktrans trimmed %}
-      <a href="{{ url_support }}">Contact us</a> if you continue to notice this error.
+      Try again shortly.
     {% endblocktrans %}
   </p>
   {{ block.super }}
