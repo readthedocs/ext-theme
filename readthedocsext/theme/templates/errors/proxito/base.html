@@ -1,28 +1,40 @@
-{% extends "errors/dashboard/base.html" %}
-{% load static %}
+{% extends "proxito/base.html" %}
 
-{% comment %}
-  This is for the 404 error page shown in documentation pages, not the dashboard.
-{% endcomment %}
+{% load static from static %}
+{% load trans from i18n %}
 
-{% load core_tags %}
-{% load i18n %}
-
-{% block header %}
-  <div class="ui basic fitted attached segment">
-    <div class="ui container">
-      <div class="ui middle aligned grid">
-        <div class="four wide computer five wide tablet eleven wide mobile left aligned column">
-          <div class="ui horizontally fitted basic segment">
-            <a href="//{{ PRODUCTION_DOMAIN }}/" aria-label="Read the Docs homepage">
-              <img class="ui image" src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}" width="220" alt="Read the Docs logo"/>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+{% block content_extra_text %}
+  <div class="left floated">
+    {# djlint: off D018 #}
+    <a class="item" href="/">{% trans "Home" %}</a>
+    {# djlint: on #}
   </div>
-{% endblock header %}
+  <div class="right floated">
+    {% trans "Hosted by" %}
+    {# djlint: off D018 #}
+    <a href="//{{ PRODUCTION_DOMAIN }}/" aria-label="Read the Docs homepage">
+      <img class="ui image"
+           src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}"
+           width="160"
+           alt="Read the Docs logo" />
+    </a>
+    {# djlint: on #}
+  </div>
+{% endblock content_extra_text %}
 
-{% block footer %}
-{% endblock footer %}
+{% block content_title_text %}
+  {% block error_title %}
+    <span class="ui grey text">
+      {% block error_status %}
+      {% endblock error_status %}
+    </span>
+  {% endblock error_title %}
+{% endblock content_title_text %}
+
+{% block content_text %}
+  {% block error_content %}
+  {% endblock error_content %}
+
+  {% block error_content_help %}
+  {% endblock error_content_help %}
+{% endblock content_text %}

@@ -1,0 +1,40 @@
+{% extends "errors/proxito/base.html" %}
+
+{% load blocktrans trans from i18n %}
+
+{% block title %}
+  {% trans "Service unavailable" %}
+{% endblock title %}
+
+{% comment %}
+  This is the error for both 504/504 responses from AWS ALB. When we emit this
+  status, there is a problem with our instances, our load, or a significant
+  issue with our application code.
+{% endcomment %}
+
+{% block error_status %}
+  504
+{% endblock error_status %}
+{% block error_title %}
+  {{ block.super }}
+  {% trans "Service unavailable" %}
+{% endblock error_title %}
+
+{% block error_content %}
+  <p>
+    {% blocktrans trimmed %}
+      We have encountered a problem and Read the Docs is currently unavailable.
+    {% endblocktrans %}
+  </p>
+{% endblock error_content %}
+
+{% block error_content_help %}
+  {% url 'support' as url_support %}
+  <p>
+    {% blocktrans trimmed with url_support=url_support %}
+      Try back again shortly and <a href="{{ url_support }}">contact us</a> if
+      you continue to notice this error.
+    {% endblocktrans %}
+  </p>
+  {{ block.super }}
+{% endblock error_content_help %}
