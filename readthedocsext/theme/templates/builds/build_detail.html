@@ -4,7 +4,9 @@
 {% load privacy_tags %}
 {% load static %}
 
-{% block title %}{{ build.project.name }}{% endblock %}
+{% block title %}
+  {{ build.project.name }}
+{% endblock title %}
 
 {% block content-header %}
   {% block build_detail_beta %}
@@ -23,7 +25,7 @@
     {% endif %}
   {% endblock build_detail_beta %}
   {% include "projects/partials/header.html" with builds_active="active" %}
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
   <div data-bind="using: BuildDetailView({}, '{% url "build-detail" build.id %}', '{% url "projects-builds-notifications-list" build.project.slug build.id %}')">
@@ -284,4 +286,4 @@
     {% endif %}
 
   </div>
-{% endblock %}
+{% endblock content %}

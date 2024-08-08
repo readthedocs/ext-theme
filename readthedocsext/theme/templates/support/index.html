@@ -3,10 +3,9 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-
 {% block title %}
   {% trans "Support request" %}
-{% endblock %}
+{% endblock title %}
 
 {% block content %}
   <h1 class="ui large heading">{% trans "Support request" %}</h1>
@@ -75,7 +74,7 @@
       </p>
 
       <form class="ui form"
-            method="POST"
+            method="post"
             name="support-request"
             action="{{ SUPPORT_FORM_ENDPOINT }}"
             enctype="multipart/form-data"
@@ -89,4 +88,4 @@
       </form>
     {% endif %}
   {% endblock support_form %}
-{% endblock %}
+{% endblock content %}

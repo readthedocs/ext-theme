@@ -5,11 +5,13 @@
 
 {% block title %}
   {% trans "Set advertising preferences" %}
-{% endblock %}
-{% block profile_admin_advertising %}active{% endblock %}
+{% endblock title %}
+{% block profile_admin_advertising %}
+  active
+{% endblock  profile_admin_advertising %}
 {% block edit_content_header %}
   {% trans "Set advertising preferences" %}
-{% endblock %}
+{% endblock edit_content_header %}
 
 {% block edit_content %}
   {% if request.user.gold.exists or request.user.goldonce.exists %}
@@ -42,7 +44,7 @@
     {% url "gold_detail" as gold_detail %}
     {% url "donate" as donate_url %}
     {% blocktrans trimmed %}
-      You can <strong>go ad-free</strong> by becoming a <a href="{{ gold_detail }}">Gold member</a> or <a href="{{ donate_url }}">Supporter</a> of Read the Docs</a>.
+      You can <strong>go ad-free</strong> by becoming a <a href="{{ gold_detail }}">Gold member</a> or <a href="{{ donate_url }}">Supporter of Read the Docs</a>.
     {% endblocktrans %}
   </p>
 
@@ -55,4 +57,4 @@
            value="{% trans "Update advertisement preference" %}"
            id="submit" />
   </form>
-{% endblock %}
+{% endblock edit_content %}

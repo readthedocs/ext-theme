@@ -30,9 +30,11 @@
   {% url "projects_domains_create" project.slug as create_url %}
   {% trans "Add domain" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-at{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-at
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No domains are currently configured.

@@ -13,9 +13,11 @@
   {% url "projects_integrations_create" project_slug=project.slug as create_url %}
   {% trans "Add integration" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-plug{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-plug
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No integrations have been configured yet

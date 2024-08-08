@@ -15,9 +15,11 @@
   {% url "projects_notifications_create" project.slug as create_url %}
   {% trans "Add notification" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-envelope-dot{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-envelope-dot
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No email notifications have been configured yet
