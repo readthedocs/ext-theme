@@ -1,33 +1,34 @@
 {% extends "errors/proxito/base.html" %}
 
+{# The dashboard 5xx page, shows like it is part of the application #}
+
 {% load blocktrans trans from i18n %}
 
 {% block title %}
-  {% trans "Unauthorized request" %}
+  {% trans "Server error" %}
 {% endblock title %}
 
 {% block error_status %}
-  401
+  500
 {% endblock error_status %}
 {% block error_title %}
-  {{ block.super }}
-  {% trans "Unauthorized request" %}
+  {% trans "Something went wrong" %}
 {% endblock error_title %}
 
 {% block error_content %}
   <p>
     {% blocktrans trimmed %}
-      You may not be logged in, or your account may not have the necessary permissions to view this page.
+      There was an unexpected error while trying to view this page.
+      You may have encountered a bug or a temporary issue affecting our services.
     {% endblocktrans %}
   </p>
 {% endblock error_content %}
 
 {% block error_content_help %}
   <p>
+    {% url 'support' as url_support %}
     {% blocktrans trimmed %}
-      Try logging in again or logging in with a different account. If this does
-      not help, verify that your account has the necessary permissions to view
-      this page.
+      <a href="{{ url_support }}">Contact us</a> if you continue to notice this error.
     {% endblocktrans %}
   </p>
   {{ block.super }}
