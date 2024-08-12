@@ -3,11 +3,15 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-{% block title %}{% trans "Add project" %}{% endblock %}
+{% block title %}
+  {% trans "Add project" %}
+{% endblock title %}
 
 {% block content %}
   {% block project_add_grid %}
-    <div class="ui very padded centered stackable grid" {% block project_add_data_bind %}{% endblock %}>
+    <div class="ui very padded centered stackable grid"
+         {% block project_add_data_bind %}
+         {% endblock project_add_data_bind %}>
 
       {% block project_add_header %}
         <div class="ui five wide computer four wide large screen computer only column">
@@ -50,9 +54,12 @@
       {% endblock project_add_sidebar %}
 
       {% block project_add_content %}
+
         <div class="ui sixteen wide tablet eleven wide computer ten wide large screen column">
           {% block project_add_content_form %}
-            <form class="ui form" action="{% url "projects_import_manual" %}" method="post">
+            <form class="ui form"
+                  action="{% url "projects_import_manual" %}"
+                  method="post">
 
               {% block wizard_form %}
                 {% if wizard.form.forms %}
@@ -72,15 +79,17 @@
               {% block wizard_actions %}
                 <div>
                   {% if wizard.steps.prev %}
-                    <button class="ui button" name="wizard_goto_step" value="{{ wizard.steps.prev }}">
-                      {% trans "Previous" %}
-                    </button>
+                    <button class="ui button"
+                            name="wizard_goto_step"
+                            value="{{ wizard.steps.prev }}">{% trans "Previous" %}</button>
                   {% endif %}
 
                   {% if wizard.steps.next %}
                     <input class="ui button primary" type="submit" value="{% trans "Next" %}" />
                   {% else %}
-                    <input class="ui button primary" type="submit" value="{% trans "Finish" %}" />
+                    <input class="ui button primary"
+                           type="submit"
+                           value="{% trans "This file exists" %}" />
                   {% endif %}
                 </div>
               {% endblock wizard_actions %}
@@ -91,4 +100,4 @@
       {% endblock project_add_content %}
     </div>
   {% endblock project_add_grid %}
-{% endblock %}
+{% endblock content %}
