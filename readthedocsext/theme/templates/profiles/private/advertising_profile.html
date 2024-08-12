@@ -48,7 +48,7 @@
     {% endblocktrans %}
   </p>
 
-  <form class="ui form" method="POST" action=".">
+  <form class="ui form" method="post" action=".">
     {% csrf_token %}
     {{ form|crispy }}
     <input class="ui button"
