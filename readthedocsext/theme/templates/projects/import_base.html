@@ -87,7 +87,9 @@
                   {% if wizard.steps.next %}
                     <input class="ui button primary" type="submit" value="{% trans "Next" %}" />
                   {% else %}
-                    <input class="ui button primary" type="submit" value="{% trans "I've added the file already" %}" />
+                    <input class="ui button primary"
+                           type="submit"
+                           value="{% trans "This file exists" %}" />
                   {% endif %}
                 </div>
               {% endblock wizard_actions %}
