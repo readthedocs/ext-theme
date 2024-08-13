@@ -5,3 +5,7 @@
 {% block project_add_subheader %}
   {% trans "Configure basic project settings" %}
 {% endblock project_add_subheader %}
+
+{% block project_add_data_bind %}
+  data-bind="using: ProjectOrganizationView()"
+{% endblock project_add_data_bind %}
