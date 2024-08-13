@@ -180,3 +180,48 @@ export class ProjectCreateView extends ResponsiveView {
   }
 }
 Registry.add_view(ProjectCreateView);
+
+export class ProjectOrganizationView extends ResponsiveView {
+  static view_name = "ProjectOrganizationView";
+
+  constructor() {
+    super();
+
+    this.removeAllTeamSelectors();
+
+    const organizationSelector = document.querySelector(
+      "#id_basics-organization",
+    );
+    organizationSelector.addEventListener("change", function () {
+      const value = organizationSelector.value;
+      const teamSelector = document.querySelector(
+        `#div_id_basics-team__${value}`,
+      );
+
+      // TODO: we can't call an upper function using `this` from a lambda function :/
+      //
+      // this.removeAllTeamSelectors();
+      const teamSelectors = document.querySelectorAll(
+        "[id^=div_id_basics-team",
+      );
+      for (let teamSelector of teamSelectors) {
+        teamSelector.classList.remove("required");
+        teamSelector.style.display = "none";
+      }
+
+      if (teamSelector !== null) {
+        teamSelector.style.display = "";
+        teamSelector.classList.add("required");
+      }
+    });
+  }
+
+  removeAllTeamSelectors() {
+    const teamSelectors = document.querySelectorAll("[id^=div_id_basics-team");
+    for (let teamSelector of teamSelectors) {
+      teamSelector.classList.remove("required");
+      teamSelector.style.display = "none";
+    }
+  }
+}
+Registry.add_view(ProjectOrganizationView);
