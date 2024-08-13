@@ -2,20 +2,28 @@
 
 {% load i18n %}
 
-{% block title %}{% trans "Security log" %}{% endblock %}
-{% block profile-admin-security-log %}active{% endblock %}
-{% block edit_content_header %} {% trans "Security log" %} {% endblock %}
+{% block title %}
+  {% trans "Security log" %}
+{% endblock title %}
+{% block profile-admin-security-log %}
+  active
+{% endblock profile-admin-security-log %}
+{% block edit_content_header %}
+  {% trans "Security log" %}
+{% endblock edit_content_header %}
 
 {% block edit_content %}
   {% include "audit/partials/log_list.html" with objects=object_list omit_user=True %}
-{% endblock %}
+{% endblock edit_content %}
 
 {% block edit_sidebar %}
   <div class="ui small info message">
     <i class="fas fa-question-circle icon"></i>
     {% blocktrans trimmed with days_limit=days_limit docs_url="https://docs.readthedocs.io/page/security-log.html#user-security-log" %}
-      The <a href="{{ docs_url }}" aria-label="Learn more about user security logs in our documentation">user security log</a> allows you to see what has happened recently in your account.
+      The <a href="{{ docs_url }}"
+    aria-label="Learn more about user security logs in our documentation"
+    target="_blank">user security log</a> allows you to see what has happened recently in your account.
       Logs are kept for the last {{ days_limit }} days.
     {% endblocktrans %}
   </div>
-{% endblock %}
+{% endblock edit_sidebar %}

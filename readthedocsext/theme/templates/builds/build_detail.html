@@ -4,7 +4,9 @@
 {% load privacy_tags %}
 {% load static %}
 
-{% block title %}{{ build.project.name }}{% endblock %}
+{% block title %}
+  {{ build.project.name }}
+{% endblock title %}
 
 {% block content-header %}
   {% block build_detail_beta %}
@@ -15,9 +17,7 @@
     {% if url_switch_dashboard %}
       <div class="ui small basic fitted center aligned segment">
         <i class="fad fa-sparkles violet icon"></i>
-        <strong>
-          You are using our new beta dashboard.
-        </strong>
+        <strong>You are using our new beta dashboard.</strong>
         <a href="{% url "support" %}">We would love to have your feedback</a>.
         If you encounter problems,
         <a href="{{ url_switch_dashboard }}">return to our normal dashboard</a>.
@@ -25,7 +25,7 @@
     {% endif %}
   {% endblock build_detail_beta %}
   {% include "projects/partials/header.html" with builds_active="active" %}
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
   <div data-bind="using: BuildDetailView({}, '{% url "build-detail" build.id %}', '{% url "projects-builds-notifications-list" build.project.slug build.id %}')">
@@ -53,9 +53,13 @@
                 {% include "builds/includes/build_name.html" with build=build is_page_title=True %}
               </div>
 
-              <div class="ui basic segment loading padded" data-bind="css: { loading: is_loading() }">
-                <div class="ui active progress" data-bind="semanticui: {progress: progress_config()}">
-                  <div class="bar"><div class="progress"></div></div>
+              <div class="ui basic segment loading padded"
+                   data-bind="css: { loading: is_loading() }">
+                <div class="ui active progress"
+                     data-bind="semanticui: {progress: progress_config()}">
+                  <div class="bar">
+                    <div class="progress"></div>
+                  </div>
                   <div class="label"></div>
                 </div>
               </div>
@@ -69,7 +73,8 @@
                 <div class="item">
                   <i class="grey fa-duotone fa-calendar icon"></i>
                   <div class="content" data-bind="if: !is_loading()">
-                    <div data-bind="attr: { 'data-tooltip': date_display() }, text: '{% trans "Build started" %} ' + date_display_since()"></div>
+                    <div data-bind="attr: { 'data-tooltip': date_display() }, text: '{% trans "Build started" %} ' + date_display_since()">
+                    </div>
                   </div>
                 </div>
 
@@ -121,17 +126,18 @@
         <i class="fa-duotone fa-memo-circle-info icon"></i>
         {% trans "Raw log" %}
       </a>
-      <a class="ui item" data-bind="click: toggle_debug, css: {active: show_debug()}">
+      <a class="ui item"
+         data-bind="click: toggle_debug, css: {active: show_debug()}">
         <i class="fa-duotone fa-microscope icon"></i>
         {% trans "Debug" %}
       </a>
       <div class="right menu">
 
         {% if request.user|is_admin:project %}
-          <a
-            class="item ko hidden"
-            data-bind="click: $root.post_child_form, css: { hidden: !can_cancel() }">
-            <form method="post" action="{% url "builds_detail" build.project.slug build.pk %}">
+          <a class="item ko hidden"
+             data-bind="click: $root.post_child_form, css: { hidden: !can_cancel() }">
+            <form method="post"
+                  action="{% url "builds_detail" build.project.slug build.pk %}">
               {% csrf_token %}
             </form>
             <i class="fas fa-xmark-large red icon"></i>
@@ -139,23 +145,19 @@
             {% trans "Cancel" %}
           </a>
 
-          <readthedocs-menu-build-rebuild
-            class="link item ko hidden"
-            data-bind="css: { hidden: !can_retry() }"
-            url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
-            csrf-token="{{ csrf_token }}">
-            <i class="fa-duotone fa-refresh icon"></i>
-            {# Translators: this refers to rebuilding a version build #}
-            {% trans "Rebuild" %}
+          <readthedocs-menu-build-rebuild class="link item ko hidden" data-bind="css: { hidden: !can_retry() }" url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}" csrf-token="{{ csrf_token }}">
+          <i class="fa-duotone fa-refresh icon"></i>
+          {# Translators: this refers to rebuilding a version build #}
+          {% trans "Rebuild" %}
           </readthedocs-menu-build-rebuild>
         {% endif %}
 
         {% trans "View documentation for this build" as text_view_docs %}
-        <a
-          class="disabled item"
-          data-bind="css: {disabled: !can_view_docs()}, attr: {href: docs_url}"
-          aria-label="{{ text_view_docs }}"
-          title="{{ text_view_docs }}">
+        <a class="disabled item"
+           data-bind="css: {disabled: !can_view_docs()}, attr: {href: docs_url}"
+           aria-label="{{ text_view_docs }}"
+           target="_blank"
+           title="{{ text_view_docs }}">
           <i class="fa-duotone fa-book icon"></i>
           {% trans "View docs" %}
         </a>
@@ -166,13 +168,10 @@
     {% if build.output %}
       {# If we have build output, this is an old build #}
       <p>
-        <button data-bind="visible: !legacy_output(), click: show_legacy_output">
-          {% trans "Show full build output" %}
-        </button>
+        <button data-bind="visible: !legacy_output(), click: show_legacy_output">{% trans "Show full build output" %}</button>
       </p>
 
-      <div data-bind="visible: legacy_output"
-           style="display: none;">
+      <div data-bind="visible: legacy_output" style="display: none;">
         <h3>{% trans "Build Output" %}</h3>
         <pre class="build-output"><span id="build-output">{{ build.output }}</span></pre>
 
@@ -205,11 +204,9 @@
           component, which handles the data the same way as the notification
           list element.
         {% endcomment %}
-        <div class="ko hidden ui attached fitted inverted basic segment" data-bind="css: { hidden: !has_notifications() }, foreach: notifications">
-          <readthedocs-notification
-            inverted=true
-            csrf-token="{{ csrf_token }}"
-            data-bind="webcomponent: {notification: $data}">
+        <div class="ko hidden ui attached fitted inverted basic segment"
+             data-bind="css: { hidden: !has_notifications() }, foreach: notifications">
+          <readthedocs-notification inverted=true csrf-token="{{ csrf_token }}" data-bind="webcomponent: {notification: $data}">
           </readthedocs-notification>
         </div>
 
@@ -218,7 +215,8 @@
           builds, ``error`` is a string and there is no header, so we use a
           generic header instead.
         {% endcomment %}
-        <div class="ko hidden ui attached fitted inverted basic segment" data-bind="css: { hidden: !error() }">
+        <div class="ko hidden ui attached fitted inverted basic segment"
+             data-bind="css: { hidden: !error() }">
           <div class="ui inverted error notification message">
             <div class="header">
               <i class="fad fa-circle-exclamation icon"></i>
@@ -238,30 +236,36 @@
         <div class="ui hidden active dimmer" data-bind="visible: is_loading()">
           <div class="ui text loader">Loading</div>
         </div>
-        <div class="ui basic segment very padded" data-bind="visible: is_loading()"></div>
+        <div class="ui basic segment very padded"
+             data-bind="visible: is_loading()"></div>
 
-        <table
-          class="ui small very basic compact inverted selectable command table"
-          data-bind="visible: commands, foreach: commands"
-          style="display: none;">
+        <table class="ui small very basic compact inverted selectable command table"
+               data-bind="visible: commands, foreach: commands"
+               style="display: none">
           <tbody>
-            <tr class="top aligned command" data-bind="visible: is_visible() || $parent.show_debug()">
+            <tr class="top aligned command"
+                data-bind="visible: is_visible() || $parent.show_debug()">
               <td class="collapsing">
                 <a class="ui icon left floated" data-bind="click: toggle_expanded">
-                  <i class="grey fa-solid fa-angle-right icon" data-bind="class: is_expanded() ? 'fa-angle-down' : 'fa-angle-right'"></i>
+                  <i class="grey fa-solid fa-angle-right icon"
+                     data-bind="class: is_expanded() ? 'fa-angle-down' : 'fa-angle-right'"></i>
                 </a>
               </td>
               <td>
-                <code class="ui text" data-bind="text: command, class: command_class, click: toggle_expanded"></code>
+                <code class="ui text"
+                      data-bind="text: command, class: command_class, click: toggle_expanded"></code>
                 <a class="ui mini inverted label" data-bind="text: run_time() + 's'"></a>
-                <a class="ui mini inverted label" data-bind="text: '{% trans "Exit" %}: ' + exit_code(), visible: exit_code() > 0"></a>
+                <a class="ui mini inverted label"
+                   data-bind="text: '{% trans "Exit" %}: ' + exit_code(), visible: exit_code() > 0"></a>
               </td>
             </tr>
           </tbody>
           <tbody data-bind="visible: is_expanded(), foreach: output_lines">
-            <tr data-bind="css: {'left olive marked': is_selected()}" class="top aligned">
+            <tr data-bind="css: {'left olive marked': is_selected()}"
+                class="top aligned">
               <td class="collapsing line number">
-                <a class="ui small grey left floated text" data-bind="attr: {href: '#' + anchor_id(), 'data-selected': is_selected()}, click: function() { $parents[1].set_selected_line($data) }">
+                <a class="ui small grey left floated text"
+                   data-bind="attr: {href: '#' + anchor_id(), 'data-selected': is_selected()}, click: function() { $parents[1].set_selected_line($data) }">
                   <code data-bind="text: line_number()"></code>
                 </a>
               </td>
@@ -272,12 +276,14 @@
           </tbody>
         </table>
 
-        <div data-bind="visible: is_polling() && !is_loading()" style="display: none;">
-          <div data-bind="visible: is_polling" class="ui active inverted mini centered inline text loader"></div>
+        <div data-bind="visible: is_polling() && !is_loading()"
+             style="display: none">
+          <div data-bind="visible: is_polling"
+               class="ui active inverted mini centered inline text loader"></div>
         </div>
 
       </div>
     {% endif %}
 
   </div>
-{% endblock %}
+{% endblock content %}

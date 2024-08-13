@@ -7,18 +7,17 @@
 {% load projects_tags %}
 
 {% block top_left_menu_items %}
-  <div data-bind="using: FilterView()">
-    {% include "includes/filters/form.html" with fields=filter.form %}
-  </div>
+  <div data-bind="using: FilterView()">{% include "includes/filters/form.html" with fields=filter.form %}</div>
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
   {% url "projects_import" as create_url %}
   {% trans "Add project" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}{% endblock %}
+{% block list_placeholder_icon_class %}
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header_filtered %}
   {% trans "No matching projects found" %}
 {% endblock list_placeholder_header_filtered %}
@@ -26,79 +25,78 @@
   {% trans "You don't have any projects configured yet" %}
 {% endblock list_placeholder_header_empty %}
 {% block list_placeholder_text_empty %}
-  <a href="https://docs.readthedocs.io/page/tutorial/" class="ui primary button">
-    {% trans "Learn how to get started" %}
-  </a>
+  <a href="https://docs.readthedocs.io/page/tutorial/"
+     target="_blank"
+     class="ui primary button">{% trans "Learn how to get started" %}</a>
 {% endblock list_placeholder_text_empty %}
 
 {% block list_item_start %}
   <tr data-bind="using: ProjectListItemView({id: {{ object.id }}, url: '{% url "project-detail" object.pk %}'})">
-{% endblock list_item_start %}
+  {% endblock list_item_start %}
 
-{% block list_item_right_menu %}
-  <div class="ui small icon buttons">
-    {% blocktrans trimmed with project=object.name asvar label_link %}
-      View documentation for project {{ project }}
-    {% endblocktrans %}
-    <a class="ui {% if not object.has_good_build %} disabled{% endif %} button"
-       data-content="{{ label_link }}"
-       aria-label="{{ label_link }}"
-       data-bind="event: {mouseover: fetch, focusin: fetch}, attr: {href: url_docs}"
-       tabindex="{% if object.has_good_build %}0{% else %}-1{% endif %}">
-      <i class="fa-duotone fa-book icon"></i>
-    </a>
+  {% block list_item_right_menu %}
+    <div class="ui small icon buttons">
+      {% blocktrans trimmed with project=object.name asvar label_link %}
+        View documentation for project {{ project }}
+      {% endblocktrans %}
+      <a class="ui {% if not object.has_good_build %}disabled{% endif %} button"
+         data-content="{{ label_link }}"
+         aria-label="{{ label_link }}"
+         data-bind="event: {mouseover: fetch, focusin: fetch}, attr: {href: url_docs}"
+         target="_blank"
+         tabindex="{% if object.has_good_build %}0{% else %}-1{% endif %}">
+        <i class="fa-duotone fa-book icon"></i>
+      </a>
 
-    {% if request.user|is_admin:object %}
-      <button class="ui dropdown button">
-        <i class="fa-solid fa-ellipsis icon"></i>
-        <div class="menu">
-          <div class="header">{% trans "Admin" %}</div>
-          <a class="item" href="{% url "projects_edit" object.slug %}">
-            <i class="fa-duotone fa-wrench icon"></i>
-            {% trans "Configure project" %}
-          </a>
-        </div>
-      </button>
-    {% else %}
-      <button class="ui disabled dropdown button">
-        <i class="fa-solid fa-ellipsis icon"></i>
-      </button>
-    {% endif %}
+      {% if request.user|is_admin:object %}
+        <button class="ui dropdown button">
+          <i class="fa-solid fa-ellipsis icon"></i>
+          <div class="menu">
+            <div class="header">{% trans "Admin" %}</div>
+            <a class="item" href="{% url "projects_edit" object.slug %}">
+              <i class="fa-duotone fa-wrench icon"></i>
+              {% trans "Configure project" %}
+            </a>
+          </div>
+        </button>
+      {% else %}
+        <button class="ui disabled dropdown button">
+          <i class="fa-solid fa-ellipsis icon"></i>
+        </button>
+      {% endif %}
 
-  </div>
-{% endblock list_item_right_menu %}
+    </div>
+  {% endblock list_item_right_menu %}
 
-{% block list_item_image %}
-  {% include "projects/includes/project_image.html" with project=object %}
-{% endblock list_item_image %}
+  {% block list_item_image %}
+    {% include "projects/includes/project_image.html" with project=object %}
+  {% endblock list_item_image %}
 
-{% block list_item_header %}
-  <a class="" href="{% url "projects_detail" object.slug %}">
-    {{ object.name }}
-  </a>
-  <div class="sub header">
+  {% block list_item_header %}
+    <a href="{% url "projects_detail" object.slug %}">{{ object.name }}</a>
+    <div class="sub header">
+      {% if object.has_good_build %}
+        {% with build=object.get_latest_build %}
+          <time data-content="{{ build.date }}">
+            {# Translators: this will read like "Last built 1 year, 5 months ago" #}
+            {% blocktrans with time_since=build.date|naturaltime trimmed %}
+              Last built {{ time_since }}
+            {% endblocktrans %}
+          </time>
+        {% endwith %}
+      {% else %}
+        {% trans "Not built yet" %}
+      {% endif %}
+    </div>
+  {% endblock list_item_header %}
+
+  {% block list_item_meta %}
+  {% endblock list_item_meta %}
+
+  {% block list_item_extra_items %}
     {% if object.has_good_build %}
       {% with build=object.get_latest_build %}
-        <time data-content="{{ build.date }}">
-          {# Translators: this will read like "Last built 1 year, 5 months ago" #}
-          {% blocktrans with time_since=build.date|naturaltime trimmed %}
-            Last built {{ time_since }}
-          {% endblocktrans %}
-        </time>
+        {% include "includes/elements/chips/build.html" with build=build %}
       {% endwith %}
-    {% else %}
-      {% trans "Not built yet" %}
     {% endif %}
-  </div>
-{% endblock list_item_header %}
-
-{% block list_item_meta %}
-{% endblock list_item_meta %}
-
-{% block list_item_extra_items %}
-  {% if object.has_good_build %}
-    {% with build=object.get_latest_build %}
-      {% include "includes/elements/chips/build.html" with build=build %}
-    {% endwith %}
-  {% endif %}
-{% endblock %}
+  {% endblock list_item_extra_items %}

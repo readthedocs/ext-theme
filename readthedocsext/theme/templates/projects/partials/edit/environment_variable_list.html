@@ -15,9 +15,11 @@
   {% url "projects_environmentvariables_create" project_slug=project.slug as create_url %}
   {% trans "Add variable" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-shield-keyhole{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-shield-keyhole
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No environment variables have been configured yet
@@ -31,17 +33,17 @@
   </div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/page/guides/environment-variables.html"
-     aria-label="{% trans "Learn more about user-defined environment variables in our documentation" %}">
-    {% trans "Learn more" %}
-  </a>
+  <a class="ui button"
+     href="https://docs.readthedocs.io/page/guides/environment-variables.html"
+     aria-label="{% trans "Learn more about user-defined environment variables in our documentation" %}"
+     target="_blank">{% trans "Learn more" %}</a>
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
   <div class="ui button"
-       data-clipboard-text="{{ object.name }}"
-       {# Translators: past tense as this shown after clicking #}
-       data-content="{% trans "Copied!" %}">
+    data-clipboard-text="{{ object.name }}"
+    {# Translators: past tense as this shown after clicking #}
+    data-content="{% trans "Copied!" %}">
     <i class="fa-solid fa-clipboard icon"></i>
   </div>
 
@@ -72,7 +74,8 @@
       {% else %}
         {% spaceless %}
           {# Avoid exposing short secrets #}
-          {% if object.value|length > 4 %}{{ object.value|slice:"0:4" }}{% endif %}****
+          {% if object.value|length > 4 %}{{ object.value|slice:"0:4" }}{% endif %}
+          ****
         {% endspaceless %}
       {% endif %}
     </code>
