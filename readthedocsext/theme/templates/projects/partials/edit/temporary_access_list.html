@@ -13,9 +13,11 @@
   {% url "projects_temporary_access_create" project.slug as create_url %}
   {% trans "Add share" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-share-nodes{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-share-nodes
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No active shares are configured yet
@@ -26,8 +28,11 @@
     {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
+
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/page/commercial/sharing.html">{% trans "Learn more" %}</a>.
+  <a class="ui button"
+     href="https://docs.readthedocs.io/page/commercial/sharing.html"
+     target="_blank">{% trans "Learn more" %}</a>.
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
@@ -51,11 +56,14 @@
 
 {% block list_item_icon %}
   {% if object.access_type == "password" %}
-    <i class="fa-duotone fa-pen-field icon" data-content="{{ object.get_access_type_display }}"></i>
+    <i class="fa-duotone fa-pen-field icon"
+       data-content="{{ object.get_access_type_display }}"></i>
   {% elif object.access_type == "token" %}
-    <i class="fa-duotone fa-link icon" data-content="{{ object.get_access_type_display }}"></i>
+    <i class="fa-duotone fa-link icon"
+       data-content="{{ object.get_access_type_display }}"></i>
   {% elif object.access_type == "http_header_token" %}
-    <i class="fa-duotone fa-code icon" data-content="{{ object.get_access_type_display }}"></i>
+    <i class="fa-duotone fa-code icon"
+       data-content="{{ object.get_access_type_display }}"></i>
   {% endif %}
 {% endblock list_item_icon %}
 
@@ -96,12 +104,8 @@
   {# There is no reason to show expired status here as these shares just disappear #}
   <div class="item">
     <div class="content">
-      <div class="header">
-        {% trans "Expires" %}
-      </div>
-      <div class="description">
-        {{ object.expires }}
-      </div>
+      <div class="header">{% trans "Expires" %}</div>
+      <div class="description">{{ object.expires }}</div>
     </div>
   </div>
-{% endblock %}
+{% endblock list_item_extra_items %}

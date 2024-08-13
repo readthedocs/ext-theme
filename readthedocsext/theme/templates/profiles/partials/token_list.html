@@ -16,13 +16,13 @@
   {% endcomment %}
   <form method="post" action="{% url "profiles_tokens_create" %}">
     {% csrf_token %}
-    <button class="ui green {% if objects %}disabled {% endif %}button">
-      {% trans "Generate API token" %}
-    </button>
+    <button class="ui green {% if objects %}disabled{% endif %}button">{% trans "Generate API token" %}</button>
   </form>
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}key{% endblock %}
+{% block list_placeholder_icon_class %}
+  key
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     You currently have no API tokens.
@@ -33,11 +33,12 @@
     {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
+
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/page/api/v3.html#token"
-     aria-label="{% trans "Learn more about API tokens in our documentation" %}">
-    {% trans "Learn more" %}
-  </a>
+  <a class="ui button"
+     href="https://docs.readthedocs.io/page/api/v3.html#token"
+     aria-label="{% trans "Learn more about API tokens in our documentation" %}"
+     target="_blank">{% trans "Learn more" %}</a>
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_menu %}

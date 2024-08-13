@@ -10,15 +10,22 @@
         content="{% trans "Read the Docs simplifies technical documentation by automating building, versioning, and hosting for you. Build up-to-date documentation for the web, print, and offline use on every version control push automatically." %}">
 {% endblock extra_metas %}
 
-{% block title %}{% trans "Home" %}{% endblock %}
+{% block title %}
+  {% trans "Home" %}
+{% endblock title %}
 
-{% block body_class %}home {% if not request.user.is_authenticated %}splash{% endif %}{% endblock %}
+{% block body_class %}
+  home
+  {% if not request.user.is_authenticated %}splash{% endif %}
+{% endblock body_class %}
 
-{% block nav-browse %}class="active"{% endblock %}
+{% block nav-browse %}
+  class="active"
+{% endblock nav-browse %}
 
 {% block header %}
   {% include "includes/header.html" %}
-{% endblock %}
+{% endblock header %}
 
 {% block content-wrapper %}
   <!-- Lead -->
@@ -106,22 +113,21 @@
   <div class="ui inverted segment basic center aligned very padded">
     <div class="ui container">
       <a href="https://docs.readthedocs.io/page/intro/getting-started-with-sphinx.html"
-         class="ui button primary">{% trans 'Getting started guide' %}</a>
+         target="_blank"
+         class="ui button primary">{% trans "Getting started guide" %}</a>
     </div>
   </div>
 
   <!-- Search -->
-  <div class="ui container very padded">
-    {# include "includes/widesearchbar.html" #}
-  </div>
+  <div class="ui container very padded">{# include "includes/widesearchbar.html" #}</div>
 
   {% if featured_list %}
-  {% comment %}
+    {% comment %}
   {% get_current_language as language %}
   {% cache 600 homepage_featured_list language #}
-  {% endcomment %}
+    {% endcomment %}
 
-  <!-- BEGIN projects list -->
+    <!-- BEGIN projects list -->
     <section class="ui container very padded">
       <h2 class="ui large centered header">
         <div class="content">{% trans "Featured Projects" %}</div>
@@ -150,19 +156,17 @@
           {% endfor %}
         {% endwith %}
       </div>
-          {# include "core/project_list_featured.html" #}
+      {# include "core/project_list_featured.html" #}
     </section>
 
-  <!-- END projects list -->
-  {% comment %}{# endcache #}{% endcomment %}
+    <!-- END projects list -->
+    {% comment %}{# endcache #}{% endcomment %}
   {% endif %}
 
   <!-- Funding and Contributing -->
   <section class="ui basic segment very padded">
     <div class="ui container">
-      <h2 class="ui header center aligned">
-        {% trans "Read the Docs is funded by the community" %}
-      </h2>
+      <h2 class="ui header center aligned">{% trans "Read the Docs is funded by the community" %}</h2>
       <p>
 
         {% url "advertising" as advertising_url %}
@@ -183,9 +187,10 @@
         {% blocktrans trimmed %}
           Read the Docs is <strong>community supported</strong>.
           It depends on users like you to contribute to development, support, and operations.
-          You can learn more about how to <a href="https://docs.readthedocs.io/page/contribute.html">contribute</a> in our
+          You can learn more about how to <a href="https://docs.readthedocs.io/page/contribute.html"
+    target="_blank">contribute</a> in our
           docs.
-          Thanks so much to our wonderful <a href="https://docs.readthedocs.io/page/team.html">community team</a> who helps us
+          Thanks so much to our wonderful <a href="https://docs.readthedocs.io/page/team.html" target="_blank">community team</a> who helps us
           run the site.
           Read the Docs wouldn't be possible without them.
         {% endblocktrans %}
@@ -193,9 +198,9 @@
 
       <p>
         {% blocktrans trimmed %}
-          Hosting for the project is graciously provided by <a href="https://azure.microsoft.com/">Microsoft Azure</a>.
+          Hosting for the project is graciously provided by <a href="https://aws.amazon.com/" target="_blank">AWS</a>.
         {% endblocktrans %}
       </p>
     </div>
   </section>
-{% endblock %}
+{% endblock content-wrapper %}

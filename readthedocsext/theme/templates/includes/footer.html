@@ -36,10 +36,13 @@
           <div class="ui vertical inverted text menu">
             {% block menu_learn %}
               <h4 class="ui inverted sub header">Learn more</h4>
-              <a class="item" href="https://docs.readthedocs.io">Documentation</a>
+              <a class="item" href="https://docs.readthedocs.io" target="_blank">Documentation</a>
               <a class="item"
-                 href="https://docs.readthedocs.io/page/tutorial/index.html">Getting started guide</a>
-              <a class="item" href="https://docs.readthedocs.io/page/config-file/">Configure your project</a>
+                 href="https://docs.readthedocs.io/page/tutorial/index.html"
+                 target="_blank">Getting started guide</a>
+              <a class="item"
+                 href="https://docs.readthedocs.io/page/config-file/"
+                 target="_blank">Configure your project</a>
             {% endblock menu_learn %}
           </div>
         </div>
@@ -48,13 +51,21 @@
           <div class="ui vertical inverted text menu">
             {% block menu_services %}
               <h4 class="ui inverted sub header">Services</h4>
-              <a class="item" href="https://about.readthedocs.com/pricing/">Pricing</a>
-              <a class="item" href="https://about.readthedocs.com/features/">Features</a>
-              <a class="item" href="https://www.ethicalads.io/advertisers/?ref=rtd">Advertise with Us</a>
               <a class="item"
-                 href="https://docs.readthedocs.io/page/privacy-policy.html">Privacy Policy</a>
+                 href="https://about.readthedocs.com/pricing/"
+                 target="_blank">Pricing</a>
               <a class="item"
-                 href="https://docs.readthedocs.io/page/terms-of-service.html">Terms of Service</a>
+                 href="https://about.readthedocs.com/features/"
+                 target="_blank">Features</a>
+              <a class="item"
+                 href="https://www.ethicalads.io/advertisers/?ref=rtd"
+                 target="_blank">Advertise with Us</a>
+              <a class="item"
+                 href="https://docs.readthedocs.io/page/privacy-policy.html"
+                 target="_blank">Privacy Policy</a>
+              <a class="item"
+                 href="https://docs.readthedocs.io/page/terms-of-service.html"
+                 target="_blank">Terms of Service</a>
             {% endblock menu_services %}
           </div>
         </div>
@@ -63,15 +74,27 @@
           <div class="ui vertical inverted text menu">
             {% block menu_about %}
               <h4 class="ui inverted sub header">About us</h4>
-              <a class="item" href="https://about.readthedocs.com/company/">Company</a>
-              <a class="item" href="https://docs.readthedocs.io/page/team.html">Team</a>
-              <a class="item" href="https://dev.readthedocs.io/page/contribute.html">Contributing</a>
+              <a class="item"
+                 href="https://about.readthedocs.com/company/"
+                 target="_blank">Company</a>
+              <a class="item"
+                 href="https://docs.readthedocs.io/page/team.html"
+                 target="_blank">Team</a>
+              <a class="item"
+                 href="https://dev.readthedocs.io/page/contribute.html"
+                 target="_blank">Contributing</a>
 
               {# TODO move this out of the footer and drop this menu from this block/column  #}
               <h4 class="ui inverted sub header">Tools</h4>
-              <a class="item" href="https://about.readthedocs.com/tools/sphinx/">Sphinx</a>
-              <a class="item" href="https://about.readthedocs.com/tools/mkdocs/">MkDocs</a>
-              <a class="item" href="https://about.readthedocs.com/tools/jupyter-book/">Jupyter Book</a>
+              <a class="item"
+                 href="https://about.readthedocs.com/tools/sphinx/"
+                 target="_blank">Sphinx</a>
+              <a class="item"
+                 href="https://about.readthedocs.com/tools/mkdocs/"
+                 target="_blank">MkDocs</a>
+              <a class="item"
+                 href="https://about.readthedocs.com/tools/jupyter-book/"
+                 target="_blank">Jupyter Book</a>
             {% endblock menu_about %}
           </div>
         </div>
@@ -87,7 +110,8 @@
             <div class="content">
               <div class="header">{% trans "Version" %}</div>
               <div class="description">
-                <a href="https://docs.readthedocs.io/page/changelog.html">{% readthedocs_version %}</a>
+                <a href="https://docs.readthedocs.io/page/changelog.html"
+                   target="_blank">{% readthedocs_version %}</a>
               </div>
             </div>
           </div>
