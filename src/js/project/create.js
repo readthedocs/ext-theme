@@ -221,7 +221,7 @@ export class ProjectOrganizationView extends ResponsiveView {
       type: "category",
       minCharacters: 1,
       source: content,
-      searchFields: ["title", "description"],
+      searchFields: ["title", "category"],
       fullTextSearch: false,
     });
   }
