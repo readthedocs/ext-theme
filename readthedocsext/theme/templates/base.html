@@ -45,6 +45,9 @@
       <script type="text/javascript" src="{{ MEDIA_URL }}javascript/instantsearch.js"></script>
       <script type="text/javascript" src="{{ MEDIA_URL }}javascript/base.js"></script>
     {% endcomment %}
+
+    {% block extra_head %}
+    {% endblock extra_head %}
   </head>
   <body class="{% block body_class %}{% endblock body_class %}">
 

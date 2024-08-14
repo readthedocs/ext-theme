@@ -187,41 +187,43 @@ export class ProjectOrganizationView extends ResponsiveView {
   constructor() {
     super();
 
-    this.removeAllTeamSelectors();
+    // searches across any array/object of searchable objects
+    // let content = [
+    //   {
+    //     category: "Read the Docs, Inc",
+    //     title: "Admin",
+    //   },
+    //   {
+    //     category: "Read the Docs, Inc",
+    //     title: "Read Only",
+    //   },
+    //   {
+    //     category: "My Organization",
+    //     title: "Admin",
+    //   },
+    //   {
+    //     category: "My Organization",
+    //     title: "Auto-join",
+    //   },
+    //   {
+    //     category: "My Organization",
+    //     title: "Read Only",
+    //   },
+    // ];
 
-    const organizationSelector = document.querySelector(
-      "#id_basics-organization",
+    let content = JSON.parse(
+      document
+        .querySelector("#organizations-teams")
+        .text.replace(/\\u0027/g, '"'),
     );
-    organizationSelector.addEventListener("change", function () {
-      const value = organizationSelector.value;
-      const teamSelector = document.querySelector(
-        `#div_id_basics-team__${value}`,
-      );
 
-      // TODO: we can't call an upper function using `this` from a lambda function :/
-      //
-      // this.removeAllTeamSelectors();
-      const teamSelectors = document.querySelectorAll(
-        "[id^=div_id_basics-team",
-      );
-      for (let teamSelector of teamSelectors) {
-        teamSelector.classList.remove("required");
-        teamSelector.style.display = "none";
-      }
-
-      if (teamSelector !== null) {
-        teamSelector.style.display = "";
-        teamSelector.classList.add("required");
-      }
+    jquery(".ui.search").search({
+      type: "category",
+      minCharacters: 1,
+      source: content,
+      searchFields: ["title", "description"],
+      fullTextSearch: false,
     });
-  }
-
-  removeAllTeamSelectors() {
-    const teamSelectors = document.querySelectorAll("[id^=div_id_basics-team");
-    for (let teamSelector of teamSelectors) {
-      teamSelector.classList.remove("required");
-      teamSelector.style.display = "none";
-    }
   }
 }
 Registry.add_view(ProjectOrganizationView);

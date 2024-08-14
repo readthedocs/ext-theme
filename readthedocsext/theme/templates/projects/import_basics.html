@@ -9,3 +9,17 @@
 {% block project_add_data_bind %}
   data-bind="using: ProjectOrganizationView()"
 {% endblock project_add_data_bind %}
+
+{% block extra_head %}
+  {{ block.super }}
+
+  {% comment %}
+This is just a way to pass some data from the backend to the frontend.
+We currently don't have an API endpoint to list all the teams for all the organizations.
+This list is generated in the backend and dumped into the HTML,
+then the JavaScript code loads it and use it for SearchUI
+  {% endcomment %}
+  <script id="organizations-teams" type="application/json">{{ searchUI|escapejs }}</script>
+
+
+{% endblock extra_head %}

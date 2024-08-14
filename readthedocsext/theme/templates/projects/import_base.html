@@ -71,6 +71,21 @@
                 {% else %}
                   {{ wizard.form|crispy }}
                 {% endif %}
+
+                {% comment %}
+                Temporal approach to render a new Search (category) field to select the Organization and Team
+                where the project is going to be added
+                {% endcomment %}
+                <div class="ui horizontal category search">
+                  <div class="ui icon input">
+                    <input class="prompt"
+                           type="text"
+                           placeholder="Search organization and team...">
+                    <i class="search icon"></i>
+                  </div>
+                  <div class="results"></div>
+                </div>
+
               {% endblock wizard_form %}
 
               {% csrf_token %}
@@ -81,7 +96,9 @@
                   {% if wizard.steps.prev %}
                     <button class="ui button"
                             name="wizard_goto_step"
-                            value="{{ wizard.steps.prev }}">{% trans "Previous" %}</button>
+                            value="{{ wizard.steps.prev }}">
+                      {% trans "Previous" %}
+                    </button>
                   {% endif %}
 
                   {% if wizard.steps.next %}
