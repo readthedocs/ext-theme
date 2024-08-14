@@ -1,5 +1,5 @@
-{% load socialaccount %}
-{% load i18n %}
+{% load get_providers provider_login_url from socialaccount %}
+{% load trans blocktrans from i18n %}
 
 {% get_providers as socialaccount_providers %}
 
@@ -11,9 +11,10 @@
   {% if provider.id != 'saml' %}
     {% if allowed_providers and provider.id in allowed_providers or not allowed_providers %}
       <li class="item">
+        {# Bitbucket doesn't allow more than one callback URL for their OAuth app, so we are redirecting users to the old dashboard for now. #}
         <form class="ui form"
-              method="post"
-              action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+              method="{% if provider.id == "bitbucket_oauth2" %}get{% else %}post{% endif %}"
+              action="{% if provider.id == "bitbucket_oauth2" %}https://{{ PUBLIC_DOMAIN|cut:"app." }}{% endif %}{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
           {% csrf_token %}
           <button class="ui button" type="submit" title="{{ provider.name }}">
             <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
