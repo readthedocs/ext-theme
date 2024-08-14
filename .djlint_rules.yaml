@@ -1,0 +1,6 @@
+- rule:
+    name: T901
+    message: Wildcard load, use load X from Y
+    flags: re.DOTALL
+    patterns:
+      - '{% load \w+(?! from \w+) %}'

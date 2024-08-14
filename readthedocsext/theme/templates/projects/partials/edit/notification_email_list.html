@@ -15,9 +15,11 @@
   {% url "projects_notifications_create" project.slug as create_url %}
   {% trans "Add notification" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-envelope-dot{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-envelope-dot
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No email notifications have been configured yet
@@ -31,10 +33,10 @@
   </div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/page/guides/build-notifications.html#email-notifications"
-     aria-label="{% trans "Learn more about email notifications in our documentation" %}">
-    {% trans "Learn more" %}
-  </a>
+  <a class="ui button"
+     href="https://docs.readthedocs.io/page/guides/build-notifications.html#email-notifications"
+     aria-label="{% trans "Learn more about email notifications in our documentation" %}"
+     target="_blank">{% trans "Learn more" %}</a>
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}

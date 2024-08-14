@@ -16,10 +16,14 @@
         {% endblocktrans %}
       </p>
 
-      <form class="ui form" method="post" action="{% url "projects_detail" project.slug %}">
+      <form class="ui form"
+            method="post"
+            action="{% url "projects_detail" project.slug %}">
         {% csrf_token %}
         <input type="hidden" name="version_slug" value="latest" />
-        <input class="ui button primary" type="submit" value="{% trans "Build latest version" %}" />
+        <input class="ui button primary"
+               type="submit"
+               value="{% trans "Build latest version" %}" />
       </form>
     {% else %}
 
@@ -34,34 +38,42 @@
                 Your documentation has been built.
                 Ensure your documentation is kept up to date with every commit to
                 your repository, by
-                <a href="http://docs.readthedocs.io/page/webhooks.html">setting up a webhook</a>.
+                <a href="https://docs.readthedocs.io/page/webhooks.html" target="_blank">setting up a webhook</a>.
               {% endblocktrans %}
             </p>
 
-            <input class="ui button primary" type="submit" value="{% trans "View your documentation" %}"/>
+            <input class="ui button primary"
+                   type="submit"
+                   value="{% trans "View your documentation" %}" />
           </form>
         {% else %}
           {% comment %}Last build failed{% endcomment %}
           <h2>{% trans "Your documentation failed to build" %}</h2>
 
-          <form class="ui form" method="get" action="{% url "builds_detail" project_slug=project.slug build_pk=onboard.build.pk %}">
+          <form class="ui form"
+                method="get"
+                action="{% url "builds_detail" project_slug=project.slug build_pk=onboard.build.pk %}">
             <p>
               {% blocktrans trimmed %}
                 There was a problem building your documentation,
                 you can see what went wrong in the build output.
                 If you need more help, check out some of the
-                <a href="http://docs.readthedocs.io/page/faq.html">problems frequently encountered</a>
+                <a href="https://docs.readthedocs.io/page/faq.html" target="_blank">problems frequently encountered</a>
                 during builds.
               {% endblocktrans %}
             </p>
 
-            <input class="ui button" type="submit" value="{% trans "View build output" %}"/>
+            <input class="ui button"
+                   type="submit"
+                   value="{% trans "View build output" %}" />
           </form>
         {% endif %}
       {% else %}
 
         {% url "builds_detail" project_slug=project.slug build_pk=onboard.build.pk as latest_build_url %}
-        <a href="{{ latest_build_url }}"><h2>{% trans "Your documentation is building" %}</h2></a>
+        <a href="{{ latest_build_url }}">
+          <h2>{% trans "Your documentation is building" %}</h2>
+        </a>
 
         <p>
           {% blocktrans trimmed %}

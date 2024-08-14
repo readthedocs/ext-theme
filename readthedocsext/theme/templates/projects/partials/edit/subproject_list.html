@@ -15,9 +15,11 @@
   {% url "projects_subprojects_create" project_slug=project.slug as create_url %}
   {% trans "Add subproject" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-sitemap{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-sitemap
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No subprojects exist yet
@@ -29,11 +31,12 @@
     {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
+
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/en/stable/guides/subprojects.html"
-     aria-label="{% trans "Learn more about this feature in our documentation pages" %}">
-    {% trans "Learn more" %}
-  </a>
+  <a class="ui button"
+     href="https://docs.readthedocs.io/en/stable/guides/subprojects.html"
+     aria-label="{% trans "Learn more about this feature in our documentation pages" %}"
+     target="_blank">{% trans "Learn more" %}</a>
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
@@ -55,12 +58,8 @@
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  <a href="{% url 'projects_manage' project_slug=object.child.slug %}">
-    {{ object.child.name }}
-  </a>
-  <a class="sub header" href="{{ object.get_absolute_url }}">
-    {{ object.get_absolute_url|truncatechars:60 }}
-  </a>
+  <a href="{% url 'projects_manage' project_slug=object.child.slug %}">{{ object.child.name }}</a>
+  <a class="sub header" href="{{ object.get_absolute_url }}">{{ object.get_absolute_url|truncatechars:60 }}</a>
 {% endblock list_item_header %}
 
 {% block list_item_meta_list %}

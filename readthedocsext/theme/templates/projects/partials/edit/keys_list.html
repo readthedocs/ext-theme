@@ -13,7 +13,8 @@
   Do not show an empty menu bar at the top. Once users can add SSH keys, we can
   remove this override and enable the ``create_button`` block
 {% endcomment %}
-{% block top_menu %}{% endblock %}
+{% block top_menu %}
+{% endblock top_menu %}
 {% block create_button %}
   {% comment %}
   {# TODO this is not supported currently, and is an admin only action #}
@@ -21,9 +22,11 @@
   {% trans "Add SSH key" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
   {% endcomment %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-lock-keyhole{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-lock-keyhole
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No SSH keys are configured for this project.
@@ -35,7 +38,9 @@
   </div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/page/guides/importing-private-repositories.html">{% trans "Learn more" %}</a>.
+  <a class="ui button"
+     href="https://docs.readthedocs.io/page/guides/importing-private-repositories.html"
+     target="_blank">{% trans "Learn more" %}</a>.
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
@@ -51,5 +56,7 @@
   </a>
 {% endblock list_item_header %}
 
-{% block list_item_meta %}{% endblock %}
-{% block list_item_extra %}{% endblock %}
+{% block list_item_meta %}
+{% endblock list_item_meta %}
+{% block list_item_extra %}
+{% endblock list_item_extra %}

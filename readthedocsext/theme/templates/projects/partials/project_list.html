@@ -1,10 +1,7 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-{% load humanize %}
-
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load blocktrans trans from i18n %}
+{% load naturaltime from humanize %}
 
 {% block top_left_menu_items %}
   <div data-bind="using: FilterView()">
@@ -28,6 +25,7 @@
 {% endblock list_placeholder_header_empty %}
 {% block list_placeholder_text_empty %}
   <a href="https://docs.readthedocs.io/page/tutorial/"
+     target="_blank"
      class="ui primary button">{% trans "Learn how to get started" %}</a>
 {% endblock list_placeholder_text_empty %}
 
@@ -47,6 +45,7 @@
        data-content="{{ label_link }}"
        aria-label="{{ label_link }}"
        data-bind="attr: {href: url_docs}"
+       target="_blank"
        tabindex="{% if object.has_good_build %}0{% else %}-1{% endif %}">
       <i class="fa-duotone fa-book icon"></i>
     </a>
@@ -63,6 +62,7 @@
         </a>
       </div>
     </button>
+
   </div>
 {% endblock list_item_right_menu %}
 
