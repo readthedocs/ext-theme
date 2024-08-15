@@ -26,14 +26,21 @@ export class ProjectListItemView extends APIListItemView {
   constructor(project) {
     super(project);
 
+    // Add expansion to API URL
+    this.url = this.url + "?expand=permissions";
+
     /** Asynchronously load documentation URL as rendering this URL for each
      * project slows the dashboard down considerably. Instead, this is only
      * fetched when it is needed.
      * @observable {string} Documentation URL for the project */
     this.url_docs = ko.observable();
+    /* @observable {Boolean} Does the user have admin permissions on this? */
+    this.is_admin = ko.observable(false);
+
     // Subscribe to the data loaded via :class:`APIListItemView`
     this.data.subscribe((data) => {
-      this.url_docs(data.canonical_url);
+      this.url_docs(data.urls.documentation);
+      this.is_admin(data.permissions.admin);
     });
   }
 }

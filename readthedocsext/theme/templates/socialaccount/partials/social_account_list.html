@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load gravatar %}
+{% load can_be_disconnected from readthedocs.socialaccounts %}
 
 {% load core_tags %}
 {% load privacy_tags %}
@@ -9,21 +10,20 @@
 {% load ext_theme_tags %}
 
 {% block top_menu %}
-  {% if form.non_field_errors %}
-    <div class="ui error message">{{ form.non_field_errors }}</div>
-  {% endif %}
+  {% if form.non_field_errors %}<div class="ui error message">{{ form.non_field_errors }}</div>{% endif %}
   {{ block.super }}
 {% endblock top_menu %}
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  <div class="ui green button" data-bind="click: $root.show_modal('socialaccount-connections')">
-    {% trans "Add new connection" %}
-  </div>
-{% endblock %}
+  <div class="ui green button"
+       data-bind="click: $root.show_modal('socialaccount-connections')">{% trans "Add new connection" %}</div>
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fa-duotone fa-user-unlock{% endblock %}
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-user-unlock
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     Your account is not connected to any services.
@@ -36,10 +36,10 @@
   </div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
-  <a class="ui button" href="https://docs.readthedocs.io/en/stable/guides/connecting-git-account.html"
-     aria-label="{% trans "Learn more about this feature in our documentation pages" %}">
-    {% trans "Learn more" %}
-  </a>
+  <a class="ui button"
+     href="https://docs.readthedocs.io/en/stable/guides/connecting-git-account.html"
+     aria-label="{% trans "Learn more about this feature in our documentation pages" %}"
+     target="_blank">{% trans "Learn more" %}</a>
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_menu %}
@@ -47,7 +47,8 @@
     {% csrf_token %}
     <input type="hidden" name="account" value="{{ object.id }}" />
     <div class="ui small icon buttons">
-      <button class="ui button" data-content="{% trans 'Disconnect account' %}">
+      <button class="ui button {% if not object|can_be_disconnected %}disabled{% endif %}"
+              data-content="{% trans "Disconnect account" %}">
         <i class="fas fa-trash icon"></i>
       </button>
     </div>
@@ -55,7 +56,11 @@
 {% endblock list_item_right_menu %}
 
 {% block list_item_image %}
-  <img class="ui rounded image" src="{{ object.get_avatar_url }}" height=28 width=28 />
+  <img class="ui rounded image"
+       src="{{ object.get_avatar_url }}"
+       height="28"
+       alt="{% trans "Social account avatar" %}"
+       width="28" />
 {% endblock list_item_image %}
 
 {% block list_item_header %}

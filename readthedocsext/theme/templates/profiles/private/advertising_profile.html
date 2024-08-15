@@ -1,18 +1,24 @@
 {% extends "profiles/base_edit.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load trans blocktrans from i18n %}
+{% load crispy from crispy_forms_tags %}
 
-{% block title %}{% trans "Set advertising preferences" %}{% endblock %}
-{% block profile_admin_advertising %}active{% endblock %}
-{% block edit_content_header %} {% trans "Set advertising preferences" %} {% endblock %}
+{% block title %}
+  {% trans "Set advertising preferences" %}
+{% endblock title %}
+{% block profile_admin_advertising %}
+  active
+{% endblock profile_admin_advertising %}
+{% block edit_content_header %}
+  {% trans "Set advertising preferences" %}
+{% endblock edit_content_header %}
 
 {% block edit_content %}
   {% if request.user.gold.exists or request.user.goldonce.exists %}
     <p>
       {% blocktrans trimmed %}
         Thank you for supporting Read the Docs!
-      {% endblocktrans%}
+      {% endblocktrans %}
     </p>
   {% endif %}
 
@@ -29,7 +35,8 @@
       For more details on advertising on Read the Docs
       including the privacy protections we have in place for users
       and community advertising we run on behalf of the open source community,
-      see <a href="https://docs.readthedocs.io/page/advertising/ethical-advertising.html">our documentation</a>.
+      see <a href="https://docs.readthedocs.io/page/advertising/ethical-advertising.html"
+    target="_blank">our documentation</a>.
     {% endblocktrans %}
   </p>
 
@@ -37,13 +44,17 @@
     {% url "gold_detail" as gold_detail %}
     {% url "donate" as donate_url %}
     {% blocktrans trimmed %}
-      You can <strong>go ad-free</strong> by becoming a <a href="{{ gold_detail }}">Gold member</a> or <a href="{{ donate_url }}">Supporter</a> of Read the Docs</a>.
+      You can <strong>go ad-free</strong> by becoming a <a href="{{ gold_detail }}">Gold member</a> or <a href="{{ donate_url }}">Supporter of Read the Docs</a>.
     {% endblocktrans %}
   </p>
 
-  <form class="ui form" method="POST" action=".">
+  <form class="ui form" method="post" action=".">
     {% csrf_token %}
     {{ form|crispy }}
-    <input class="ui button" type="submit" name="submit" value="{% trans "Update advertisement preference" %}" id="submit"/>
+    <input class="ui button"
+           type="submit"
+           name="submit"
+           value="{% trans "Update advertisement preference" %}"
+           id="submit" />
   </form>
-{% endblock %}
+{% endblock edit_content %}

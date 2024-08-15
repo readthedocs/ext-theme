@@ -3,23 +3,24 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-{% block title %}{{ project.name }} - {% trans "Addons" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "Addons" %}
+{% endblock title %}
 
-{% block project_addons_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Addons" %}{% endblock %}
+{% block project_addons_active %}
+  active
+{% endblock project_addons_active %}
+{% block project_edit_content_header %}
+  {% trans "Addons" %}
+{% endblock project_edit_content_header %}
 
 {% block project_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/addons.html" text="Addons documentation" is_external=True class="item" %}
   {% include "includes/elements/link.html" with url="https://about.readthedocs.com/blog/2024/04/enable-beta-addons/" text="Blog post: Empower your documentation with addons" is_external=True class="item" %}
   {% include "includes/elements/link.html" with url="https://blog.readthedocs.com/addons-flyout-menu-beta/" text="Blog post: Addons flyout menu beta" is_external=True class="item" %}
 {% endblock project_edit_sidebar_help_topics %}
 
 {% block project_edit_content %}
-  <div class="ui info message">
-    {% blocktrans trimmed %}
-      We are in beta! Give it a try now and share your feedback with us by <a href="https://github.com/readthedocs/addons" target="_blank">opening an issue</a>.
-    {% endblocktrans %}
-  </div>
-
   <form class="ui form"
         method="post"
         action="{% url 'projects_addons' project_slug=project.slug %}">
@@ -28,4 +29,4 @@
 
     <input class="ui primary button" type="submit" value="{% trans "Save" %}">
   </form>
-{% endblock %}
+{% endblock project_edit_content %}

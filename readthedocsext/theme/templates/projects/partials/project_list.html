@@ -1,10 +1,7 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-{% load humanize %}
-
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load blocktrans trans from i18n %}
+{% load naturaltime from humanize %}
 
 {% block top_left_menu_items %}
   <div data-bind="using: FilterView()">
@@ -16,9 +13,10 @@
   {% url "projects_import" as create_url %}
   {% trans "Add project" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}{% endblock %}
+{% block list_placeholder_icon_class %}
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header_filtered %}
   {% trans "No matching projects found" %}
 {% endblock list_placeholder_header_filtered %}
@@ -26,44 +24,44 @@
   {% trans "You don't have any projects configured yet" %}
 {% endblock list_placeholder_header_empty %}
 {% block list_placeholder_text_empty %}
-  <a href="https://docs.readthedocs.io/page/tutorial/" class="ui primary button">
-    {% trans "Learn how to get started" %}
-  </a>
+  <a href="https://docs.readthedocs.io/page/tutorial/"
+     target="_blank"
+     class="ui primary button">{% trans "Learn how to get started" %}</a>
 {% endblock list_placeholder_text_empty %}
 
 {% block list_item_start %}
-  <tr data-bind="using: ProjectListItemView({id: {{ object.id }}, url: '{% url "project-detail" object.pk %}'})">
+  {# djlint:off #}
+  <tr data-bind="using: ProjectListItemView({id: {{ object.id }}, url: '{% url "projects-detail" object.slug %}'})">
+  {# djlint:on #}
 {% endblock list_item_start %}
 
 {% block list_item_right_menu %}
-  <div class="ui small icon buttons">
+  <div class="ui small icon buttons"
+       data-bind="event: {mouseover: fetch, focusin: fetch}">
     {% blocktrans trimmed with project=object.name asvar label_link %}
       View documentation for project {{ project }}
     {% endblocktrans %}
-    <a class="ui {% if not object.has_good_build %} disabled{% endif %} button"
+    <a class="ui {% if not object.has_good_build %}disabled{% endif %} button"
        data-content="{{ label_link }}"
        aria-label="{{ label_link }}"
-       data-bind="event: {mouseover: fetch, focusin: fetch}, attr: {href: url_docs}"
+       data-bind="attr: {href: url_docs}"
+       target="_blank"
        tabindex="{% if object.has_good_build %}0{% else %}-1{% endif %}">
       <i class="fa-duotone fa-book icon"></i>
     </a>
 
-    {% if request.user|is_admin:object %}
-      <button class="ui dropdown button">
-        <i class="fa-solid fa-ellipsis icon"></i>
-        <div class="menu">
-          <div class="header">{% trans "Admin" %}</div>
-          <a class="item" href="{% url "projects_edit" object.slug %}">
-            <i class="fa-duotone fa-wrench icon"></i>
-            {% trans "Configure project" %}
-          </a>
-        </div>
-      </button>
-    {% else %}
-      <button class="ui disabled dropdown button">
-        <i class="fa-solid fa-ellipsis icon"></i>
-      </button>
-    {% endif %}
+    <button class="ui dropdown button">
+      <i class="fa-solid fa-ellipsis icon"></i>
+      <div class="menu">
+        <div class="header">{% trans "Admin" %}</div>
+        <a class="disabled item"
+           href="{% url "projects_edit" object.slug %}"
+           data-bind="css: { disabled: !is_admin() }">
+          <i class="fa-duotone fa-wrench icon"></i>
+          {% trans "Configure project" %}
+        </a>
+      </div>
+    </button>
 
   </div>
 {% endblock list_item_right_menu %}
@@ -73,9 +71,7 @@
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  <a class="" href="{% url "projects_detail" object.slug %}">
-    {{ object.name }}
-  </a>
+  <a href="{% url "projects_detail" object.slug %}">{{ object.name }}</a>
   <div class="sub header">
     {% if object.has_good_build %}
       {% with build=object.get_latest_build %}
@@ -101,4 +97,4 @@
       {% include "includes/elements/chips/build.html" with build=build %}
     {% endwith %}
   {% endif %}
-{% endblock %}
+{% endblock list_item_extra_items %}
