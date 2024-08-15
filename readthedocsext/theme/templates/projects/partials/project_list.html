@@ -1,13 +1,12 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-{% load humanize %}
-
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load blocktrans trans from i18n %}
+{% load naturaltime from humanize %}
 
 {% block top_left_menu_items %}
-  <div data-bind="using: FilterView()">{% include "includes/filters/form.html" with fields=filter.form %}</div>
+  <div data-bind="using: FilterView()">
+    {% include "includes/filters/form.html" with fields=filter.form %}
+  </div>
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
@@ -31,72 +30,71 @@
 {% endblock list_placeholder_text_empty %}
 
 {% block list_item_start %}
-  <tr data-bind="using: ProjectListItemView({id: {{ object.id }}, url: '{% url "project-detail" object.pk %}'})">
-  {% endblock list_item_start %}
+  {# djlint:off #}
+  <tr data-bind="using: ProjectListItemView({id: {{ object.id }}, url: '{% url "projects-detail" object.slug %}'})">
+  {# djlint:on #}
+{% endblock list_item_start %}
 
-  {% block list_item_right_menu %}
-    <div class="ui small icon buttons">
-      {% blocktrans trimmed with project=object.name asvar label_link %}
-        View documentation for project {{ project }}
-      {% endblocktrans %}
-      <a class="ui {% if not object.has_good_build %}disabled{% endif %} button"
-         data-content="{{ label_link }}"
-         aria-label="{{ label_link }}"
-         data-bind="event: {mouseover: fetch, focusin: fetch}, attr: {href: url_docs}"
-         target="_blank"
-         tabindex="{% if object.has_good_build %}0{% else %}-1{% endif %}">
-        <i class="fa-duotone fa-book icon"></i>
-      </a>
+{% block list_item_right_menu %}
+  <div class="ui small icon buttons"
+       data-bind="event: {mouseover: fetch, focusin: fetch}">
+    {% blocktrans trimmed with project=object.name asvar label_link %}
+      View documentation for project {{ project }}
+    {% endblocktrans %}
+    <a class="ui {% if not object.has_good_build %}disabled{% endif %} button"
+       data-content="{{ label_link }}"
+       aria-label="{{ label_link }}"
+       data-bind="attr: {href: url_docs}"
+       target="_blank"
+       tabindex="{% if object.has_good_build %}0{% else %}-1{% endif %}">
+      <i class="fa-duotone fa-book icon"></i>
+    </a>
 
-      {% if request.user|is_admin:object %}
-        <button class="ui dropdown button">
-          <i class="fa-solid fa-ellipsis icon"></i>
-          <div class="menu">
-            <div class="header">{% trans "Admin" %}</div>
-            <a class="item" href="{% url "projects_edit" object.slug %}">
-              <i class="fa-duotone fa-wrench icon"></i>
-              {% trans "Configure project" %}
-            </a>
-          </div>
-        </button>
-      {% else %}
-        <button class="ui disabled dropdown button">
-          <i class="fa-solid fa-ellipsis icon"></i>
-        </button>
-      {% endif %}
+    <button class="ui dropdown button">
+      <i class="fa-solid fa-ellipsis icon"></i>
+      <div class="menu">
+        <div class="header">{% trans "Admin" %}</div>
+        <a class="disabled item"
+           href="{% url "projects_edit" object.slug %}"
+           data-bind="css: { disabled: !is_admin() }">
+          <i class="fa-duotone fa-wrench icon"></i>
+          {% trans "Configure project" %}
+        </a>
+      </div>
+    </button>
 
-    </div>
-  {% endblock list_item_right_menu %}
+  </div>
+{% endblock list_item_right_menu %}
 
-  {% block list_item_image %}
-    {% include "projects/includes/project_image.html" with project=object %}
-  {% endblock list_item_image %}
+{% block list_item_image %}
+  {% include "projects/includes/project_image.html" with project=object %}
+{% endblock list_item_image %}
 
-  {% block list_item_header %}
-    <a href="{% url "projects_detail" object.slug %}">{{ object.name }}</a>
-    <div class="sub header">
-      {% if object.has_good_build %}
-        {% with build=object.get_latest_build %}
-          <time data-content="{{ build.date }}">
-            {# Translators: this will read like "Last built 1 year, 5 months ago" #}
-            {% blocktrans with time_since=build.date|naturaltime trimmed %}
-              Last built {{ time_since }}
-            {% endblocktrans %}
-          </time>
-        {% endwith %}
-      {% else %}
-        {% trans "Not built yet" %}
-      {% endif %}
-    </div>
-  {% endblock list_item_header %}
-
-  {% block list_item_meta %}
-  {% endblock list_item_meta %}
-
-  {% block list_item_extra_items %}
+{% block list_item_header %}
+  <a href="{% url "projects_detail" object.slug %}">{{ object.name }}</a>
+  <div class="sub header">
     {% if object.has_good_build %}
       {% with build=object.get_latest_build %}
-        {% include "includes/elements/chips/build.html" with build=build %}
+        <time data-content="{{ build.date }}">
+          {# Translators: this will read like "Last built 1 year, 5 months ago" #}
+          {% blocktrans with time_since=build.date|naturaltime trimmed %}
+            Last built {{ time_since }}
+          {% endblocktrans %}
+        </time>
       {% endwith %}
+    {% else %}
+      {% trans "Not built yet" %}
     {% endif %}
-  {% endblock list_item_extra_items %}
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_meta %}
+{% endblock list_item_meta %}
+
+{% block list_item_extra_items %}
+  {% if object.has_good_build %}
+    {% with build=object.get_latest_build %}
+      {% include "includes/elements/chips/build.html" with build=build %}
+    {% endwith %}
+  {% endif %}
+{% endblock list_item_extra_items %}
