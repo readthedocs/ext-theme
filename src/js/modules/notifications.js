@@ -27,7 +27,7 @@ export class NotificationElement extends LightDOMElement {
   };
 
   render() {
-    if (this.notification === undefined) {
+    if (this.notification === undefined || this.notification.message === null) {
       return nothing;
     }
 
