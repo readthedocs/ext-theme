@@ -1,8 +1,8 @@
 {% extends "account/base_entrance.html" %}
 
-{% load account socialaccount %}
-{% load crispy_forms_tags %}
-{% load i18n %}
+{% load get_providers from socialaccount %}
+{% load crispy from crispy_forms_tags %}
+{% load trans blocktrans from i18n %}
 
 {% block head_title %}
   {% trans "Log in" %}
@@ -49,10 +49,10 @@
           {% endblock authentication_email_text %}
         </a>
 
-
         {% if USE_ORGANIZATIONS %}
           <a class="item"
-             href="{% url "saml_resolve_login" %}{% if redirect_field_value %}?{{ redirect_field_name }}={{ redirect_field_value }}{% endif %}">
+            {# Link to the old dashboard, since the new dashboard doesn't work for granting access to docs pages yet #}
+            href="https://readthedocs.com{% url "saml_resolve_login" %}{% if redirect_field_value %}?{{ redirect_field_name }}={{ redirect_field_value }}{% endif %}">
             <i class="fas fa-shield-alt icon"></i>
             {% trans "Single sign-on" %}
           </a>
