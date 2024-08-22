@@ -29,19 +29,26 @@
 {% endblock list_placeholder_text_empty %}
 
 {% block list_item_right_buttons %}
-  {# Note: for better performance, avoid multiple `is_admin` checks. Call this include with `is_project_admin` #}
-  {% if is_project_admin is not None and is_project_admin or request.user|is_admin:project %}
-    {% blocktrans trimmed asvar text_retry %}
-      Rebuild version
-    {% endblocktrans %}
-    <readthedocs-menu-build-rebuild
-      class="ui button"
-      url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
-      csrf-token="{{ csrf_token }}"
-      data-content="{{ text_retry }}"
-      aria-label="{{ text_retry }}">
-      <i class="fas fa-arrows-rotate icon"></i>
-    </readthedocs-menu-build-rebuild>
+  {% comment %}
+    Check if the build is attached to a version to protect us against this.
+    This could happened because the version was deleted and we don't delete the build history.
+    Read more about this problem at https://github.com/readthedocs/ext-theme/issues/412
+  {% endcomment %}
+  {% if object.project and object.version %}
+    {# Note: for better performance, avoid multiple `is_admin` checks. Call this include with `is_project_admin` #}
+    {% if is_project_admin is not None and is_project_admin or request.user|is_admin:project %}
+      {% blocktrans trimmed asvar text_retry %}
+        Rebuild version
+      {% endblocktrans %}
+      <readthedocs-menu-build-rebuild
+                        class="ui button"
+                        url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
+                        csrf-token="{{ csrf_token }}"
+                        data-content="{{ text_retry }}"
+                        aria-label="{{ text_retry }}">
+        <i class="fas fa-arrows-rotate icon"></i>
+      </readthedocs-menu-build-rebuild>
+    {% endif %}
   {% endif %}
 {% endblock list_item_right_buttons %}
 
