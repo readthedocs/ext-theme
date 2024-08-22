@@ -13,9 +13,10 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}{% endblock %}
+{% block list_placeholder_icon_class %}
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header_filtered %}
   {% trans "No matching builds found" %}
 {% endblock list_placeholder_header_filtered %}
@@ -59,7 +60,8 @@
 {% block list_item_header %}
   {% include "builds/includes/build_name.html" with build=object %}
   <div class="sub header">
-    <div class="item" data-bind="semanticui: { popup: { content: '{{ object.date }}', position: 'top center', delay: { show: 500 }, variation: 'small'}}">
+    <div class="item"
+         data-bind="semanticui: { popup: { content: '{{ object.date }}', position: 'top center', delay: { show: 500 }, variation: 'small'}}">
       {# Translators: this will read like "Started 1 month, 3 days ago" #}
       {% blocktrans with object.date|naturaltime as date trimmed %}
         Started {{ date }}
@@ -70,7 +72,9 @@
 
 {% block list_item_meta_items %}
   {% if object.is_external %}
-    <a href="{{ object.version.vcs_url }}" class="item" aria-label="{{ object.external_version_name | lower | capfirst }} #{{ object.version.verbose_name }}">
+    <a href="{{ object.version.vcs_url }}"
+       class="item"
+       aria-label="{{ object.external_version_name | lower | capfirst }} #{{ object.version.verbose_name }}">
       <i class="fa-duotone fa-code-pull-request icon"></i>
       <code>#{{ object.version.verbose_name }}</code>
     </a>
@@ -79,7 +83,9 @@
       {% blocktrans with commit=commit trimmed asvar text_commit %}
         View commit {{ commit }}
       {% endblocktrans %}
-      <a href="{{ object.get_commit_url }}" class="item" aria-label="{{ text_commit }}">
+      <a href="{{ object.get_commit_url }}"
+         class="item"
+         aria-label="{{ text_commit }}">
         <i class="fa-duotone fa-code-commit icon"></i>
         <code>{{ commit }}</code>
       </a>
