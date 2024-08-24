@@ -20,16 +20,16 @@
 
 {% block content-wrapper %}
   <div class="ui very padded container">
-    <section>
-      <div class="ui very padded text container">
+    <div class="ui very tall centered grid">
+      <div class="left aligned middle aligned nine wide computer twelve wide tablet sixteen wide mobile column">
         <div class="ui fluid card">
           <div class="content">
             {% block content %}
               {% block content_title %}
-                <h1 class="ui medium left aligned monospace header">
+                <div class="header">
                   {% block content_title_text %}
                   {% endblock content_title_text %}
-                </h1>
+                </div>
               {% endblock content_title %}
 
               {% block content_text %}
@@ -45,6 +45,6 @@
           {% endblock content_extra %}
         </div>
       </div>
-    </section>
+    </div>
   </div>
 {% endblock content-wrapper %}

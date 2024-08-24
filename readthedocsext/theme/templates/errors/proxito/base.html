@@ -3,30 +3,6 @@
 {% load static from static %}
 {% load trans from i18n %}
 
-{% block content_extra_text %}
-  {% block content_extra_link %}
-    <div class="left floated">
-      {# djlint: off D018 #}
-      {# Translators: this refers to going to the home page of a doc site #}
-      <a href="/">{% trans "Home" %}</a>
-      {# djlint: on #}
-    </div>
-  {% endblock content_extra_link %}
-  {% block content_extra_logo %}
-    <div class="right floated">
-      {% trans "Hosted by" %}
-      {# djlint: off D018 #}
-      <a href="//{{ PRODUCTION_DOMAIN }}/" aria-label="Read the Docs homepage">
-        <img class="ui image"
-             src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}"
-             width="160"
-             alt="Read the Docs logo" />
-      </a>
-      {# djlint: on #}
-    </div>
-  {% endblock content_extra_logo %}
-{% endblock content_extra_text %}
-
 {% block content_title_text %}
   {% block error_title %}
     <span class="ui grey text">
@@ -37,9 +13,36 @@
 {% endblock content_title_text %}
 
 {% block content_text %}
-  {% block error_content %}
-  {% endblock error_content %}
+  <div class="meta">
+    {# djlint: off D018 #}
+    <a href="/">{{ request.get_host }}</a>
+    {# djlint: on #}
+  </div>
+  <div class="description">
+    {% block error_content %}
+    {% endblock error_content %}
 
-  {% block error_content_help %}
-  {% endblock error_content_help %}
+    {% block error_content_help %}
+    {% endblock error_content_help %}
+  </div>
 {% endblock content_text %}
+
+{% block content_extra_text %}
+  {% block content_extra_link %}
+  {% endblock content_extra_link %}
+  {% block content_extra_logo %}
+    <div class="right floated">
+      {# Translators: The image that follows this text is the Read the Docs logo and wordmark. Altogether it should read "Hosted by Read the Docs" #}
+      {% trans "Hosted by" %}
+      {# djlint: off D018 #}
+      <a href="//{{ PRODUCTION_DOMAIN }}/"
+         aria-label="{% trans "Read the Docs" %}">
+        <img class="ui middle aligned image"
+             src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}"
+             width="140"
+             alt="{% trans "Read the Docs logo" %}" />
+      </a>
+      {# djlint: on #}
+    </div>
+  {% endblock content_extra_logo %}
+{% endblock content_extra_text %}
