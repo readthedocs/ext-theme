@@ -21,11 +21,25 @@
   {% endif %}
 
   {% if domain.domainssl %}
-    <div class="ui info message">
-      {% blocktrans trimmed with cname_target=domain.domainssl.cname_target %}
-        To configure this domain add a CNAME record in your DNS pointing
-        your custom domain to <code>{{ cname_target }}</code>.
-      {% endblocktrans %}
+    <div class="ui segment">
+      <div class="ui list">
+        <div class="item">
+          <div class="content">
+            <div class="header">{% trans "CNAME target" %}</div>
+            <div class="description">
+              {% trans "To configure this domain add a CNAME record in your DNS pointing your custom domain to this target." %}
+              <div class="ui fluid action input">
+                <input type="text" readonly value="{{ domain.domainssl.cname_target }}" />
+                <button class="ui right icon button"
+                        data-clipboard-text="{{ domain.domainssl.cname_target }}"
+                        data-content="{% trans "Copied!" %}">
+                  <i class="fas fa-copy icon"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     {% if not domain.skip_validation and not domain.is_valid and domain.validation_process_expired %}
