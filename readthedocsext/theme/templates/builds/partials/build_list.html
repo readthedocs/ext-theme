@@ -1,10 +1,9 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-{% load humanize %}
+{% load trans blocktrans from i18n %}
+{% load naturaltime from humanize %}
 
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load is_admin from privacy_tags %}
 
 {% block top_left_menu_items %}
   <div data-bind="using: FilterView()">
