@@ -21,13 +21,16 @@
   {% endif %}
 
   {% if domain.domainssl %}
+    <p>
+      {% trans "To configure this domain add a CNAME record in your DNS pointing your custom domain to this target." %}
+    </p>
+
     <div class="ui segment">
       <div class="ui list">
         <div class="item">
           <div class="content">
             <div class="header">{% trans "CNAME target" %}</div>
             <div class="description">
-              {% trans "To configure this domain add a CNAME record in your DNS pointing your custom domain to this target." %}
               <div class="ui fluid action input">
                 <input type="text" readonly value="{{ domain.domainssl.cname_target }}" />
                 <button class="ui right icon button"
