@@ -1,10 +1,9 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-{% load humanize %}
+{% load trans blocktrans from i18n %}
+{% load naturaltime from humanize %}
 
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load is_admin from privacy_tags %}
 
 {% block top_left_menu_items %}
   <div data-bind="using: FilterView()">
@@ -13,9 +12,10 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}{% endblock %}
+{% block list_placeholder_icon_class %}
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header_filtered %}
   {% trans "No matching builds found" %}
 {% endblock list_placeholder_header_filtered %}
@@ -29,19 +29,30 @@
 {% endblock list_placeholder_text_empty %}
 
 {% block list_item_right_buttons %}
-  {# Note: for better performance, avoid multiple `is_admin` checks. Call this include with `is_project_admin` #}
-  {% if is_project_admin is not None and is_project_admin or request.user|is_admin:project %}
-    {% blocktrans trimmed asvar text_retry %}
-      Rebuild version
-    {% endblocktrans %}
-    <readthedocs-menu-build-rebuild
-      class="ui button"
-      url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
-      csrf-token="{{ csrf_token }}"
-      data-content="{{ text_retry }}"
-      aria-label="{{ text_retry }}">
-      <i class="fas fa-arrows-rotate icon"></i>
-    </readthedocs-menu-build-rebuild>
+  {% comment %}
+    Check if the build is attached to a version to protect us against this.
+    This could happened because the version was deleted and we don't delete the build history.
+    Read more about this problem at https://github.com/readthedocs/ext-theme/issues/412
+  {% endcomment %}
+  {% if object.project and object.version %}
+    {# Note: for better performance, avoid multiple `is_admin` checks. Call this include with `is_project_admin` #}
+    {% if is_project_admin is not None and is_project_admin or request.user|is_admin:project %}
+      {% blocktrans trimmed asvar text_retry %}
+        Rebuild version
+      {% endblocktrans %}
+
+      {# djlint:off #}
+      <readthedocs-menu-build-rebuild
+                       class="ui button"
+                       url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
+                       csrf-token="{{ csrf_token }}"
+                       data-content="{{ text_retry }}"
+                       aria-label="{{ text_retry }}">
+        <i class="fas fa-arrows-rotate icon"></i>
+      </readthedocs-menu-build-rebuild>
+      {# djlint:on #}
+
+    {% endif %}
   {% endif %}
 {% endblock list_item_right_buttons %}
 
@@ -52,7 +63,8 @@
 {% block list_item_header %}
   {% include "builds/includes/build_name.html" with build=object %}
   <div class="sub header">
-    <div class="item" data-bind="semanticui: { popup: { content: '{{ object.date }}', position: 'top center', delay: { show: 500 }, variation: 'small'}}">
+    <div class="item"
+         data-bind="semanticui: { popup: { content: '{{ object.date }}', position: 'top center', delay: { show: 500 }, variation: 'small'}}">
       {# Translators: this will read like "Started 1 month, 3 days ago" #}
       {% blocktrans with object.date|naturaltime as date trimmed %}
         Started {{ date }}
@@ -63,7 +75,9 @@
 
 {% block list_item_meta_items %}
   {% if object.is_external %}
-    <a href="{{ object.version.vcs_url }}" class="item" aria-label="{{ object.external_version_name | lower | capfirst }} #{{ object.version.verbose_name }}">
+    <a href="{{ object.version.vcs_url }}"
+       class="item"
+       aria-label="{{ object.external_version_name | lower | capfirst }} #{{ object.version.verbose_name }}">
       <i class="fa-duotone fa-code-pull-request icon"></i>
       <code>#{{ object.version.verbose_name }}</code>
     </a>
@@ -72,7 +86,9 @@
       {% blocktrans with commit=commit trimmed asvar text_commit %}
         View commit {{ commit }}
       {% endblocktrans %}
-      <a href="{{ object.get_commit_url }}" class="item" aria-label="{{ text_commit }}">
+      <a href="{{ object.get_commit_url }}"
+         class="item"
+         aria-label="{{ text_commit }}">
         <i class="fa-duotone fa-code-commit icon"></i>
         <code>{{ commit }}</code>
       </a>
