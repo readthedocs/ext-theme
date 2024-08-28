@@ -41,8 +41,12 @@
         Rebuild version
       {% endblocktrans %}
 
-      <readthedocs-menu-build-rebuild class="ui button" url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}" csrf-token="{{ csrf_token }}" data-content="{{ text_retry }}" aria-label="{{ text_retry }}">
-      <i class="fas fa-arrows-rotate icon"></i>
+      <readthedocs-menu-build-rebuild class="ui button"
+                                      url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
+                                      csrf-token="{{ csrf_token }}"
+                                      data-content="{{ text_retry }}"
+                                      aria-label="{{ text_retry }}">
+        <i class="fas fa-arrows-rotate icon"></i>
       </readthedocs-menu-build-rebuild>
 
     {% endif %}
