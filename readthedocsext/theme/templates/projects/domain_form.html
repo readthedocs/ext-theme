@@ -1,7 +1,7 @@
 {% extends "projects/domain_list.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load trans blocktrans from i18n %}
+{% load crispy from crispy_forms_tags %}
 
 {% block project_edit_content_subheader %}
   {% if domain %}
@@ -19,6 +19,42 @@
     {% url 'projects_domains_create' project.slug as action_url %}
     {% trans "Add domain" as button_text %}
   {% endif %}
+
+  {% if domain.domainssl %}
+    <p>
+      {% trans "To configure this domain add a CNAME record in your DNS pointing your custom domain to this target." %}
+    </p>
+
+    <div class="ui segment">
+      <div class="ui list">
+        <div class="item">
+          <div class="content">
+            <div class="header">{% trans "CNAME target" %}</div>
+            <div class="description">
+              <div class="ui fluid action input">
+                <input type="text" readonly value="{{ domain.domainssl.cname_target }}" />
+                <button class="ui right icon button"
+                        data-clipboard-text="{{ domain.domainssl.cname_target }}"
+                        data-content="{% trans "Copied!" %}">
+                  <i class="fas fa-copy icon"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if not domain.skip_validation and not domain.is_valid and domain.validation_process_expired %}
+      <div class="ui warning message">
+        {% blocktrans trimmed %}
+          The validation process period has ended.
+          Save the domain to restart the process.
+        {% endblocktrans %}
+      </div>
+    {% endif %}
+  {% endif %}
+
   <form class="ui form" method="post" action="{{ action_url }}">
     {% csrf_token %}
     {{ form|crispy }}
@@ -32,13 +68,12 @@
             <div>
               {{ domain.domainssl.status }}
               <div class="ui warning message">
-                {% trans 'Did you setup a CNAME record in DNS pointing at "readthedocs.io"?' %}
+                {% trans "Did you setup a CNAME record in DNS pointing at \"readthedocs.io\"?" %}
               </div>
             </div>
           </div>
 
-          {% if domain.domainssl.status == 'pending_validation' or True %}
-          {% endif %}
+          {% if domain.domainssl.status == 'pending_validation' or True %}{% endif %}
         </div>
       {% endif %}
     {% endblock domain_ssl %}
@@ -51,4 +86,4 @@
       </div>
     {% endif %}
   </form>
-{% endblock %}
+{% endblock project_edit_content %}
