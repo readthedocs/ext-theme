@@ -28,8 +28,7 @@
 {% block error_content %}
   <p>
     {% blocktrans trimmed with resource=not_found_subject|default:"Page"|lower %}
-      There was a problem with your request.
-      The {{ resource }} you requested may no longer exist or may have been removed.
+      The {{ resource }} you requested does not exist or may have been removed.
     {% endblocktrans %}
   </p>
 {% endblock error_content %}

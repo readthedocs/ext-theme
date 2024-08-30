@@ -12,7 +12,7 @@
 {% endblock title %}
 
 {% block error_status %}
-  500
+  {% firstof status_code view.status_code 500 %}
 {% endblock error_status %}
 {% block error_title %}
   {{ block.super }}

@@ -11,8 +11,10 @@
 {% endblock title %}
 
 {% block error_status %}
+  {% firstof status_code view.status_code 400 %}
 {% endblock error_status %}
 {% block error_title %}
+  {{ block.super }}
   {% trans "Bad request" %}
 {% endblock error_title %}
 
