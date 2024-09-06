@@ -145,11 +145,13 @@
             {% trans "Cancel" %}
           </a>
 
+          {% if object.project and object.version %}
           <readthedocs-menu-build-rebuild class="link item ko hidden" data-bind="css: { hidden: !can_retry() }" url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}" csrf-token="{{ csrf_token }}">
           <i class="fa-duotone fa-refresh icon"></i>
           {# Translators: this refers to rebuilding a version build #}
           {% trans "Rebuild" %}
           </readthedocs-menu-build-rebuild>
+          {% endif %}
         {% endif %}
 
         {% trans "View documentation for this build" as text_view_docs %}
