@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 
+{% comment %}
+  This template extends and overrides the base dashboard template, providing a
+  minimal base template for Proxito errors and authentication pages.
+
+  The blocks removed here are specific to the dashboard. Resources that are
+  only used by the dashboard do not need to be loaded in Proxito views, which
+  saves extra requests and avoids including unused JS/CSS.
+{% endcomment %}
+
 {% block head_meta %}
 {% endblock head_meta %}
 
