@@ -3,21 +3,21 @@
 {% load blocktrans trans from i18n %}
 
 {% block title %}
-  {% trans "Unauthorized request" %}
+  {% trans "Too many requests" %}
 {% endblock title %}
 
 {% block error_status %}
-  401
+  429
 {% endblock error_status %}
 {% block error_title %}
   {{ block.super }}
-  {% trans "Unauthorized request" %}
+  {% trans "Too many requests" %}
 {% endblock error_title %}
 
 {% block error_content %}
   <p>
     {% blocktrans trimmed %}
-      You may not be logged in, or your account may not have the necessary permissions to view this page.
+      You sent too many requests in a short period of time.
     {% endblocktrans %}
   </p>
 {% endblock error_content %}
@@ -25,10 +25,10 @@
 {% block error_content_help %}
   <p>
     {% blocktrans trimmed %}
-      Try logging in again or logging in with a different account. If this does
-      not help, verify that your account has the necessary permissions to view
-      this page.
+      Wait several minutes before trying your request again.
     {% endblocktrans %}
   </p>
-  {{ block.super }}
 {% endblock error_content_help %}
+
+{% block content_extra_link %}
+{% endblock content_extra_link %}

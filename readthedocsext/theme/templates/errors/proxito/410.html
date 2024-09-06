@@ -3,32 +3,33 @@
 {% load blocktrans trans from i18n %}
 
 {% block title %}
-  {% trans "Unauthorized request" %}
+  {% trans "Project unavailable" %}
 {% endblock title %}
 
 {% block error_status %}
-  401
+  410
 {% endblock error_status %}
 {% block error_title %}
   {{ block.super }}
-  {% trans "Unauthorized request" %}
+  {% trans "Project unavailable" %}
 {% endblock error_title %}
 
 {% block error_content %}
   <p>
     {% blocktrans trimmed %}
-      You may not be logged in, or your account may not have the necessary permissions to view this page.
+      This project was flagged as spam and is currently disabled.
     {% endblocktrans %}
   </p>
 {% endblock error_content %}
 
 {% block error_content_help %}
   <p>
-    {% blocktrans trimmed %}
-      Try logging in again or logging in with a different account. If this does
-      not help, verify that your account has the necessary permissions to view
-      this page.
+    {% url 'support' as url_support %}
+    {% blocktrans trimmed with url_support=url_support %}
+      Please <a href="{{ url_support }}">contact us</a> if you think this is a mistake.
     {% endblocktrans %}
   </p>
-  {{ block.super }}
 {% endblock error_content_help %}
+
+{% block content_extra_link %}
+{% endblock content_extra_link %}

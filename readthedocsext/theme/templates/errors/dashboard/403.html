@@ -1,11 +1,14 @@
 {% extends "errors/dashboard/base.html" %}
 
-{% load core_tags %}
-{% load i18n %}
+{% load blocktrans trans from i18n %}
 
-{% block title %}{% trans "Access restricted" %}{% endblock %}
+{% block title %}
+  {% trans "Access restricted" %}
+{% endblock title %}
 
-{% block error_status %}403{% endblock %}
+{% block error_status %}
+  403
+{% endblock error_status %}
 {% block error_title %}
   {{ block.super }}
   {% trans "Access restricted" %}
@@ -13,10 +16,18 @@
 {% block error_subtitle_text %}
 {% endblock error_subtitle_text %}
 
-{% block error_icon_computer_name %}fa-lock-keyhole{% endblock %}
-{% block error_icon_mobile_name %}fa-lock-keyhole{% endblock %}
-{% block error_icon_computer_style %}--fa-primary-color: orange;{% endblock %}
-{% block error_icon_mobile_style %}--fa-primary-color: orange;{% endblock %}
+{% block error_icon_computer_name %}
+  fa-lock-keyhole
+{% endblock error_icon_computer_name %}
+{% block error_icon_mobile_name %}
+  fa-lock-keyhole
+{% endblock error_icon_mobile_name %}
+{% block error_icon_computer_style %}
+  --fa-primary-color: orange;
+{% endblock error_icon_computer_style %}
+{% block error_icon_mobile_style %}
+  --fa-primary-color: orange;
+{% endblock error_icon_mobile_style %}
 
 {% block error_content %}
   <p>
