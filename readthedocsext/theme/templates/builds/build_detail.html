@@ -1,8 +1,7 @@
 {% extends "projects/base.html" %}
 
-{% load i18n %}
-{% load privacy_tags %}
-{% load static %}
+{% load trans from i18n %}
+{% load is_admin from privacy_tags %}
 
 {% block title %}
   {{ build.project.name }}
@@ -81,7 +80,8 @@
                 <div class="item">
                   <i class="grey fa-duotone fa-clock icon"></i>
                   <div class="content" data-bind="if: is_finished">
-                    <div data-bind="text: '{% trans "Build took %d" %}'.replace('%d', length_display())"></div>
+                    <div data-bind="text: '{% trans "Build took %d" %}'.replace('%d', length_display())">
+                    </div>
                   </div>
                 </div>
 
@@ -146,11 +146,14 @@
           </a>
 
           {% if object.project and object.version %}
-          <readthedocs-menu-build-rebuild class="link item ko hidden" data-bind="css: { hidden: !can_retry() }" url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}" csrf-token="{{ csrf_token }}">
-          <i class="fa-duotone fa-refresh icon"></i>
-          {# Translators: this refers to rebuilding a version build #}
-          {% trans "Rebuild" %}
-          </readthedocs-menu-build-rebuild>
+            <readthedocs-menu-build-rebuild class="link item ko hidden"
+                                            data-bind="css: { hidden: !can_retry() }"
+                                            url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
+                                            csrf-token="{{ csrf_token }}">
+              <i class="fa-duotone fa-refresh icon"></i>
+              {# Translators: this refers to rebuilding a version build #}
+              {% trans "Rebuild" %}
+            </readthedocs-menu-build-rebuild>
           {% endif %}
         {% endif %}
 
@@ -168,9 +171,12 @@
 
     {# TODO: remove this `build.output block completely #}
     {% if build.output %}
+      {# djlint: off H021 #}
       {# If we have build output, this is an old build #}
       <p>
-        <button data-bind="visible: !legacy_output(), click: show_legacy_output">{% trans "Show full build output" %}</button>
+        <button data-bind="visible: !legacy_output(), click: show_legacy_output">
+          {% trans "Show full build output" %}
+        </button>
       </p>
 
       <div data-bind="visible: legacy_output" style="display: none;">
@@ -193,6 +199,7 @@
         <pre class="ui negative message"><span id="build-error">{{ build.error }}</span></pre>
       {% endif %}
 
+      {# djlint: on H021 #}
     {% else %}
 
       {% block build_detail_notifications %}
@@ -208,7 +215,9 @@
         {% endcomment %}
         <div class="ko hidden ui attached fitted inverted basic segment"
              data-bind="css: { hidden: !has_notifications() }, foreach: notifications">
-          <readthedocs-notification inverted=true csrf-token="{{ csrf_token }}" data-bind="webcomponent: {notification: $data}">
+          <readthedocs-notification inverted="true"
+                                    csrf-token="{{ csrf_token }}"
+                                    data-bind="webcomponent: {notification: $data}">
           </readthedocs-notification>
         </div>
 
@@ -241,9 +250,8 @@
         <div class="ui basic segment very padded"
              data-bind="visible: is_loading()"></div>
 
-        <table class="ui small very basic compact inverted selectable command table"
-               data-bind="visible: commands, foreach: commands"
-               style="display: none">
+        <table class="ko hidden ui small very basic compact inverted selectable command table"
+               data-bind="css: { hidden: !commands() }, foreach: commands">
           <tbody>
             <tr class="top aligned command"
                 data-bind="visible: is_visible() || $parent.show_debug()">
@@ -278,11 +286,15 @@
           </tbody>
         </table>
 
+        {# djlint: off H021 #}
+        {# TODO replace with `class="ko hidden"` #}
         <div data-bind="visible: is_polling() && !is_loading()"
              style="display: none">
           <div data-bind="visible: is_polling"
-               class="ui active inverted mini centered inline text loader"></div>
+               class="ui active inverted mini centered inline text loader">
+          </div>
         </div>
+        {# djlint: on H021 #}
 
       </div>
     {% endif %}
