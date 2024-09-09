@@ -12,13 +12,15 @@
 {% block head_meta %}
 {% endblock head_meta %}
 
+{# Use our base CSS/JS, though we should remove unwanted files from user hosted content #}
 {% block head_links %}
   {{ block.super }}
 {% endblock head_links %}
-
 {% block head_scripts %}
+  {{ block.super }}
 {% endblock head_scripts %}
 {% block body_scripts %}
+  {{ block.super }}
 {% endblock body_scripts %}
 
 {% block header %}

@@ -3,6 +3,17 @@
 {% load static from static %}
 {% load trans from i18n %}
 
+{# We still use our CSS on user hosted content #}
+{% block head_links %}
+  {{ block.super }}
+{% endblock head_links %}
+
+{# Remove unwanted JS from user hosted content #}
+{% block head_scripts %}
+{% endblock head_scripts %}
+{% block body_scripts %}
+{% endblock body_scripts %}
+
 {% block content_title_text %}
   {% block error_title %}
     <span class="ui grey text">
