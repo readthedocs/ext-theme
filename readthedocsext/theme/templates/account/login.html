@@ -8,109 +8,108 @@
   {% trans "Log in" %}
 {% endblock head_title %}
 
-{% block content %}
-  <div class="ui stackable padded grid">
+{% block content_title_text %}
+  {% if is_from_cas_login %}
+    {% trans "Log in to view this documentation" %}
+  {% else %}
+    {% trans "Log in to continue" %}
+  {% endif %}
+{% endblock content_title_text %}
 
-    <div class="sixteen wide computer sixteen wide tablet sixteen wide mobile column">
-      {% get_providers as socialaccount_providers %}
+{% block content_text %}
+  {% get_providers as socialaccount_providers %}
 
-      <div class="ui medium header">
-        {% block authentication_header %}
-          {% if is_from_cas_login %}
-            {% trans "Log in to view this documentation" %}
-          {% else %}
-            {% trans "Log in to continue" %}
-          {% endif %}
-        {% endblock authentication_header %}
-      </div>
-
-      <div class="ui small stackable teal secondary menu"
-           data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
-
-        <div class="header item">
+  <div class="ui basic horizontally fitted segment">
+    <div class="ui form">
+      <div class="field">
+        <label>
           {% block authentication_header_text %}
             {% trans "Log in using:" %}
           {% endblock authentication_header_text %}
-        </div>
+        </label>
+      </div>
+    </div>
 
-        <a class="item" data-tab="vcs">
-          <i class="fas fa-cloud icon"></i>
-          {% block authentication_vcs_text %}
-            {% trans "Connected account" %}
-          {% endblock authentication_vcs_text %}
+    <div class="ui small stackable teal centered fluid wrapping menu"
+         data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
+
+      <a class="item" data-tab="vcs">
+        <i class="fas fa-cloud icon"></i>
+        {% block authentication_vcs_text %}
+          {% trans "Connected account" %}
+        {% endblock authentication_vcs_text %}
+      </a>
+
+      {# If allowed providers is given, disable the email menu item #}
+      <a class="{% if allowed_providers %}disabled{% endif %} item"
+         data-tab="email">
+        <i class="fas fa-envelope icon"></i>
+        {% block authentication_email_text %}
+          {% trans "Email" %}
+        {% endblock authentication_email_text %}
+      </a>
+
+      {% if USE_ORGANIZATIONS %}
+        <a class="item"
+          {# Link to the old dashboard, since the new dashboard doesn't work for granting access to docs pages yet #}
+          href="https://readthedocs.com{% url "saml_resolve_login" %}{% if redirect_field_value %}?{{ redirect_field_name }}={{ redirect_field_value }}{% endif %}">
+          <i class="fas fa-shield-alt icon"></i>
+          {% trans "Single sign-on" %}
         </a>
+      {% endif %}
 
-        {# If allowed providers is given, disable the email menu item #}
-        <a class="{% if allowed_providers %}disabled{% endif %} item"
-           data-tab="email">
-          <i class="fas fa-envelope icon"></i>
-          {% block authentication_email_text %}
-            {% trans "Email" %}
-          {% endblock authentication_email_text %}
+      {% if project_password_url %}
+        <a class="item" href="{{ project_password_url }}">
+          <i class="fas fa-lock icon"></i>
+          {% block authentication_password_text %}
+            {% trans "Password" %}
+          {% endblock authentication_password_text %}
         </a>
-
-        {% if USE_ORGANIZATIONS %}
-          <a class="item"
-            {# Link to the old dashboard, since the new dashboard doesn't work for granting access to docs pages yet #}
-            href="https://readthedocs.com{% url "saml_resolve_login" %}{% if redirect_field_value %}?{{ redirect_field_name }}={{ redirect_field_value }}{% endif %}">
-            <i class="fas fa-shield-alt icon"></i>
-            {% trans "Single sign-on" %}
-          </a>
-        {% endif %}
-
-        {% if project_password_url %}
-          <a class="item" href="{{ project_password_url }}">
-            <i class="fas fa-lock icon"></i>
-            {% block authentication_password_text %}
-              {% trans "Password" %}
-            {% endblock authentication_password_text %}
-          </a>
-        {% endif %}
-      </div>
-
-      <div class="ui basic center aligned tab segment" data-tab="vcs">
-        <div class="ui relaxed list">
-          {% block authentication_vcs %}
-            {# Translators: this will read "Log in with GitHub", where "log in" is a verb #}
-            {% blocktrans asvar text_log_in %}Log in using{% endblocktrans %}
-            {% include "socialaccount/snippets/provider_list.html" with process="login" verbiage=text_log_in %}
-          {% endblock authentication_vcs %}
-        </div>
-      </div>
-      <div class="ui basic vertically fitted tab segment" data-tab="email">
-        {% block authentication_email %}
-          <p class="ui center aligned vertically fitted small basic fluid segment">
-            {# The /email addition is to route to the tab page on the login/signup forms, using the tab module history setting #}
-            {% blocktrans trimmed %}
-              Need an account? <a href="{{ signup_url }}#/email">Sign up</a> first.
-            {% endblocktrans %}
-          </p>
-
-          <form class="ui form"
-                method="post"
-                action="{% url "account_login" %}#/email">
-            {% csrf_token %}
-            {{ form|crispy }}
-            {% if redirect_field_value %}
-              <input type="hidden"
-                     name="{{ redirect_field_name }}"
-                     value="{{ redirect_field_value }}" />
-            {% endif %}
-
-            <div class="ui stackable relaxed text menu">
-              <a class="item" href="{% url 'account_reset_password' %}">{% trans "Forgot your password?" %}</a>
-              <div class="right menu">
-                <button class="ui primary button" type="submit">{% trans "Log in" %}</button>
-              </div>
-            </div>
-
-          </form>
-        {% endblock authentication_email %}
-      </div>
-
-      {% block authentication_extra %}
-      {% endblock authentication_extra %}
-
+      {% endif %}
     </div>
   </div>
-{% endblock content %}
+
+  <div class="ui basic center aligned tab segment" data-tab="vcs">
+    <div class="ui relaxed list">
+      {% block authentication_vcs %}
+        {# Translators: this will read "Log in with GitHub", where "log in" is a verb #}
+        {% blocktrans asvar text_log_in %}Log in using{% endblocktrans %}
+        {% include "socialaccount/snippets/provider_list.html" with process="login" verbiage=text_log_in %}
+      {% endblock authentication_vcs %}
+    </div>
+  </div>
+  <div class="ui basic vertically fitted tab segment" data-tab="email">
+    {% block authentication_email %}
+      <p class="ui center aligned vertically fitted small basic fluid segment">
+        {# The /email addition is to route to the tab page on the login/signup forms, using the tab module history setting #}
+        {% blocktrans trimmed %}
+          Need an account? <a href="{{ signup_url }}#/email">Sign up</a> first.
+        {% endblocktrans %}
+      </p>
+
+      <form class="ui form"
+            method="post"
+            action="{% url "account_login" %}#/email">
+        {% csrf_token %}
+        {{ form|crispy }}
+        {% if redirect_field_value %}
+          <input type="hidden"
+                 name="{{ redirect_field_name }}"
+                 value="{{ redirect_field_value }}" />
+        {% endif %}
+
+        <div class="ui stackable relaxed text menu">
+          <a class="item" href="{% url 'account_reset_password' %}">{% trans "Forgot your password?" %}</a>
+          <div class="right menu">
+            <button class="ui primary button" type="submit">{% trans "Log in" %}</button>
+          </div>
+        </div>
+
+      </form>
+    {% endblock authentication_email %}
+  </div>
+
+  {% block authentication_extra %}
+  {% endblock authentication_extra %}
+
+{% endblock content_text %}
