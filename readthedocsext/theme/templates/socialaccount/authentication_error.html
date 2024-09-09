@@ -1,0 +1,20 @@
+{% extends "socialaccount/base_entrance.html" %}
+
+{% load blocktrans trans from i18n %}
+
+{% block head_title %}
+  {% trans "Connected account failure" %}
+{% endblock head_title %}
+
+{% block content %}
+  <div class="ui medium header">{% trans "Connected service failure" %}</div>
+
+  <p>
+    {% url "support" as url_support %}
+    {% blocktrans trimmed with url_support=url_support %}
+      There was a problem connecting this service to your account.
+      You can try connecting your account again,
+      or if the problem persists <a href="{{ url_support }}">contact us</a>.
+    {% endblocktrans %}
+  </p>
+{% endblock content %}

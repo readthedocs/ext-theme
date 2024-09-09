@@ -1,0 +1,38 @@
+{% extends "socialaccount/base_entrance.html" %}
+
+{% load blocktrans trans from i18n %}
+{% load crispy from crispy_forms_tags %}
+
+{% block head_title %}
+  {% trans "Sign up" %}
+{% endblock head_title %}
+
+{% block content %}
+  <div class="ui medium header">
+    <i class="fad fa-user-plus icon"></i>
+    {% trans "Sign up" %}
+  </div>
+
+  <p class="ui info message">
+    <i class="fas fa-info-circle icon"></i>
+    {% blocktrans with provider_name=account.get_provider.name %}
+      You are signing up for a new account using your {{provider_name}} account.
+    {% endblocktrans %}
+  </p>
+
+  <form class="ui form"
+        method="post"
+        action="{% url "socialaccount_signup" %}">
+    {% csrf_token %}
+    {{ form|crispy }}
+    {{ redirect_field }}
+
+    <div class="ui stackable relaxed text menu">
+      <a class="item" href="{% url "account_login" %}">Log in to my existing account</a>
+      <div class="right menu">
+        <button class="ui primary button" type="submit">{% trans "Sign up" %}</button>
+      </div>
+    </div>
+
+  </form>
+{% endblock content %}
