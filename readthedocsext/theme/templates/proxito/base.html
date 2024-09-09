@@ -43,8 +43,12 @@
                 </div>
               {% endblock content_title %}
 
-              {% block content_text %}
-              {% endblock content_text %}
+              {% block content_description %}
+                <div class="description">
+                  {% block content_body %}
+                  {% endblock content_body %}
+                </div>
+              {% endblock content_description %}
 
             {% endblock content %}
           </div>

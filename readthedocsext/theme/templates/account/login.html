@@ -16,7 +16,7 @@
   {% endif %}
 {% endblock content_title_text %}
 
-{% block content_text %}
+{% block content_body %}
   {% get_providers as socialaccount_providers %}
 
   <div class="ui basic horizontally fitted segment">
@@ -112,4 +112,4 @@
   {% block authentication_extra %}
   {% endblock authentication_extra %}
 
-{% endblock content_text %}
+{% endblock content_body %}
