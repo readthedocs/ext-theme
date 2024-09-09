@@ -1,17 +1,17 @@
 {% extends "account/base_entrance.html" %}
 
-{% load i18n %}
-{% load account %}
+{% load blocktrans trans from i18n %}
+{% load user_display from account %}
 
-{% block head_title %}{% trans "Verify email" %}{% endblock %}
+{% block head_title %}
+  {% trans "Verify email" %}
+{% endblock head_title %}
+{% block content_title_text %}
+  <i class="fad fa-envelope icon"></i>
+  {% trans "Verify email" %}
+{% endblock content_title_text %}
 
-{% block content %}
-
-  <h1 class="ui medium header">
-    <i class="fad fa-envelope icon"></i>
-    {% trans "Verify email" %}
-  </h1>
-
+{% block content_body %}
   {% if confirmation %}
 
     {% user_display confirmation.email_address.user as user_display %}
@@ -23,9 +23,12 @@
       {% endblocktrans %}
     </p>
 
-    <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+    <form method="post"
+          action="{% url 'account_confirm_email' confirmation.key %}">
       {% csrf_token %}
-      <button class="ui primary button" type="submit">{% trans 'Verify email' %}</button>
+      <button class="ui primary button" type="submit">
+        {% trans "Verify email" %}
+      </button>
     </form>
 
   {% else %}
@@ -40,4 +43,4 @@
     </p>
 
   {% endif %}
-{% endblock %}
+{% endblock content_body %}
