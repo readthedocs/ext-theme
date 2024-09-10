@@ -1,0 +1,30 @@
+{% extends "proxito/base.html" %}
+
+{% load static from static %}
+{% load trans from i18n %}
+
+{% block content-wrapper %}
+  {# This is overriding the normal base.html content-wrapper, #}
+  {# so we need to include notifications here so they're displayed. #}
+  {% block notifications %}
+    {{ block.super }}
+  {% endblock notifications %}
+
+  {{ block.super }}
+{% endblock content-wrapper %}
+
+{% block content_extra_text %}
+  {% block content_extra_logo %}
+    <div class="right floated">
+      {# djlint: off D018 #}
+      <a href="//{{ PRODUCTION_DOMAIN }}/"
+         aria-label="{% trans "Read the Docs" %}">
+        <img class="ui middle aligned image"
+             src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}"
+             width="140"
+             alt="{% trans "Read the Docs logo" %}" />
+      </a>
+      {# djlint: on #}
+    </div>
+  {% endblock content_extra_logo %}
+{% endblock content_extra_text %}

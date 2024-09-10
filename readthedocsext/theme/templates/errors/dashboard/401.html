@@ -1,20 +1,31 @@
 {% extends "errors/dashboard/base.html" %}
 
-{% load core_tags %}
-{% load i18n %}
+{% load blocktrans trans from i18n %}
 
-{% block title %}{% trans "Unauthorized request" %}{% endblock %}
+{% block title %}
+  {% trans "Unauthorized request" %}
+{% endblock title %}
 
-{% block error_status %}401{% endblock %}
+{% block error_status %}
+  401
+{% endblock error_status %}
 {% block error_title %}
   {{ block.super }}
   {% trans "Unauthorized request" %}
 {% endblock error_title %}
 
-{% block error_icon_computer_name %}fa-lock-keyhole{% endblock %}
-{% block error_icon_mobile_name %}fa-lock-keyhole{% endblock %}
-{% block error_icon_computer_style %}--fa-primary-color: orange;{% endblock %}
-{% block error_icon_mobile_style %}--fa-primary-color: orange;{% endblock %}
+{% block error_icon_computer_name %}
+  fa-lock-keyhole
+{% endblock error_icon_computer_name %}
+{% block error_icon_mobile_name %}
+  fa-lock-keyhole
+{% endblock error_icon_mobile_name %}
+{% block error_icon_computer_style %}
+  --fa-primary-color: orange;
+{% endblock error_icon_computer_style %}
+{% block error_icon_mobile_style %}
+  --fa-primary-color: orange;
+{% endblock error_icon_mobile_style %}
 
 {% block error_content %}
   <p>

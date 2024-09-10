@@ -94,7 +94,10 @@
 {% block list_item_extra_items %}
   {% if object.has_good_build %}
     {% with build=object.get_latest_build %}
-      {% include "includes/elements/chips/build.html" with build=build %}
+      {# Safety check, there seems to be some case where `has_good_build` and `get_latest_build` still return a null build #}
+      {% if build and build.project %}
+        {% include "includes/elements/chips/build.html" with build=build %}
+      {% endif %}
     {% endwith %}
   {% endif %}
 {% endblock list_item_extra_items %}

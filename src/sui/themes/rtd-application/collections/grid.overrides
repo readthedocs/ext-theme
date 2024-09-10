@@ -3,3 +3,13 @@
   margin-top: 2em;
   margin-bottom: 2em;
 }
+
+.ui.tall.grid {
+  min-height: 50vh;
+  max-height: 90vh;
+}
+
+.ui[class*="very tall"].grid {
+  min-height: 80vh;
+  max-height: 90vh;
+}

@@ -1,4 +1,4 @@
-{% extends "errors/dashboard/base.html" %}
+{% extends "errors/proxito/base.html" %}
 
 {% load blocktrans trans from i18n %}
 
@@ -11,17 +11,12 @@
 {% endblock title %}
 
 {% block error_status %}
+  {% firstof status_code view.status_code 400 %}
 {% endblock error_status %}
 {% block error_title %}
+  {{ block.super }}
   {% trans "Bad request" %}
 {% endblock error_title %}
-
-{% block error_icon_computer_name %}
-  fa-cloud-exclamation
-{% endblock error_icon_computer_name %}
-{% block error_icon_mobile_name %}
-  fa-cloud-exclamation
-{% endblock error_icon_mobile_name %}
 
 {% block error_content %}
   <p>
@@ -33,10 +28,9 @@
 
 {% block error_content_help %}
   <p>
-    {% url 'support' as url_support %}
-    {% blocktrans trimmed with url_support=url_support %}
-      Try again later or <a href="{{ url_support }}">contact us</a>
-      if this problem persists.
+    {# On purpose there is no link to our support form here #}
+    {% blocktrans trimmed %}
+      Check that your request is valid or try again later.
     {% endblocktrans %}
   </p>
   {{ block.super }}

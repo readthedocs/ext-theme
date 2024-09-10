@@ -1,23 +1,29 @@
 {% extends "errors/proxito/base.html" %}
 
+{% comment %}
+  This is the application error for hosted documentation. We might show this
+  when proxito has a problem or the web servers are starting to be overloaded.
+{% endcomment %}
+
 {% load blocktrans trans from i18n %}
 
 {% block title %}
-  {% trans "Unauthorized request" %}
+  {% trans "Server error" %}
 {% endblock title %}
 
 {% block error_status %}
-  401
+  {% firstof status_code view.status_code 500 %}
 {% endblock error_status %}
 {% block error_title %}
   {{ block.super }}
-  {% trans "Unauthorized request" %}
+  {% trans "Something went wrong" %}
 {% endblock error_title %}
 
 {% block error_content %}
   <p>
     {% blocktrans trimmed %}
-      You may not be logged in, or your account may not have the necessary permissions to view this page.
+      There was an unexpected error while trying to view this page.
+      You may have encountered a bug or a temporary issue affecting this site.
     {% endblocktrans %}
   </p>
 {% endblock error_content %}
@@ -25,9 +31,7 @@
 {% block error_content_help %}
   <p>
     {% blocktrans trimmed %}
-      Try logging in again or logging in with a different account. If this does
-      not help, verify that your account has the necessary permissions to view
-      this page.
+      Try again shortly.
     {% endblocktrans %}
   </p>
   {{ block.super }}

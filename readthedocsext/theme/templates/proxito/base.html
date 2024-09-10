@@ -1,29 +1,65 @@
 {% extends "base.html" %}
-{% load static from static %}
 
 {% comment %}
-This is for page shown in documentation pages, not the dashboard.
+  This template extends and overrides the base dashboard template, providing a
+  minimal base template for Proxito errors and authentication pages.
+
+  The blocks removed here are specific to the dashboard. Resources that are
+  only used by the dashboard do not need to be loaded in Proxito views, which
+  saves extra requests and avoids including unused JS/CSS.
 {% endcomment %}
 
+{% block head_meta %}
+{% endblock head_meta %}
+
+{# Use our base CSS/JS, though we should remove unwanted files from user hosted content #}
+{% block head_links %}
+  {{ block.super }}
+{% endblock head_links %}
+{% block head_scripts %}
+  {{ block.super }}
+{% endblock head_scripts %}
+{% block body_scripts %}
+  {{ block.super }}
+{% endblock body_scripts %}
+
 {% block header %}
-  <div class="ui basic fitted attached segment">
-    <div class="ui container">
-      <div class="ui middle aligned grid">
-        <div class="four wide computer five wide tablet eleven wide mobile left aligned column">
-          <div class="ui horizontally fitted basic segment">
-            <a href="https://{{ PRODUCTION_DOMAIN }}/"
-               aria-label="Read the Docs homepage">
-              <img class="ui image"
-                   src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}"
-                   width="220"
-                   alt="Read the Docs logo" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 {% endblock header %}
 
 {% block footer %}
 {% endblock footer %}
+
+{% block content-wrapper %}
+  <div class="ui very padded container">
+    <div class="ui very tall centered grid">
+      <div class="left aligned middle aligned nine wide computer twelve wide tablet sixteen wide mobile column">
+        <div class="ui fluid card">
+          <div class="content">
+            {% block content %}
+              {% block content_title %}
+                <div class="header">
+                  {% block content_title_text %}
+                  {% endblock content_title_text %}
+                </div>
+              {% endblock content_title %}
+
+              {% block content_description %}
+                <div class="description">
+                  {% block content_body %}
+                  {% endblock content_body %}
+                </div>
+              {% endblock content_description %}
+
+            {% endblock content %}
+          </div>
+          {% block content_extra %}
+            <div class="extra content">
+              {% block content_extra_text %}
+              {% endblock content_extra_text %}
+            </div>
+          {% endblock content_extra %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content-wrapper %}
