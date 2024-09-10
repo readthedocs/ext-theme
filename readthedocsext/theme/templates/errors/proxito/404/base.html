@@ -1,26 +1,34 @@
 {% extends "errors/proxito/base.html" %}
 
-{% load static %}
-{% load core_tags %}
-{% load i18n %}
+{% load blocktrans trans from i18n %}
 
-{% block title %}{% trans "Page not found" %}{% endblock %}
+{% comment %}
+  This view uses the contextual 404 view handlers currently, but mostly just to
+  get the name of the object that is missing so we can give a more specific
+  error message. Options here are "Project not found", "Version not found", and
+  "Page not found".
+{% endcomment %}
 
-{% block error_status %}404{% endblock %}
+{% block title %}
+  {% blocktrans trimmed with resource=not_found_subject|default:"Page"|capfirst %}
+    {{ resource }} not found
+  {% endblocktrans %}
+{% endblock title %}
+
+{% block error_status %}
+  404
+{% endblock error_status %}
 {% block error_title %}
   {{ block.super }}
-  {% trans "Page not found" %}
+  {% blocktrans trimmed with resource=not_found_subject|default:"Page"|capfirst %}
+    {{ resource }} not found
+  {% endblocktrans %}
 {% endblock error_title %}
-
-{% block error_icon_computer_name %}fa-radar{% endblock %}
-{% block error_icon_mobile_name %}fa-radar{% endblock %}
-{% block error_icon_computer_style %}--fa-primary-color: greenyellow;{% endblock %}
-{% block error_icon_mobile_style %}--fa-primary-color: greenyellow;{% endblock %}
 
 {% block error_content %}
   <p>
-    {% blocktrans trimmed %}
-      The page you requested may no longer exist, may have been moved, or the project may have been deleted.
+    {% blocktrans trimmed with resource=not_found_subject|default:"Page"|lower %}
+      The {{ resource }} you requested does not exist or may have been removed.
     {% endblocktrans %}
   </p>
 {% endblock error_content %}

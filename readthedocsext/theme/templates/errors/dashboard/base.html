@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load trans from i18n %}
 
 {% comment %}
   Errors extending from this base are _strictly_ dashboard errors. These errors
@@ -16,14 +16,16 @@
           {# TODO there is probably a way to combine the two columns below and not repeat icon definition #}
           <div class="ui computer only tablet only right aligned three wide computer three wide tablet column">
             {% block error_icon_computer %}
-              <i class="fad {% block error_icon_computer_name %}{% endblock %} big black inverted shadowed circular icon"
-                 style="{% block error_icon_computer_style %}--fa-secondary-opacity: .5;{% endblock %}"></i>
+              <i class="fad {% block error_icon_computer_name %}{% endblock error_icon_computer_name %} big black inverted shadowed circular icon"
+                 style="{% block error_icon_computer_style %}--fa-secondary-opacity: .5;
+                        {% endblock error_icon_computer_style %}"></i>
             {% endblock error_icon_computer %}
           </div>
           <div class="ui mobile only center aligned sixteen wide column">
             {% block error_icon_mobile %}
-              <i class="fad {% block error_icon_mobile_name %}{% endblock %} big black inverted shadowed circular icon"
-                 style="{% block error_icon_mobile_style %}--fa-secondary-opacity: .5;{% endblock %}"></i>
+              <i class="fad {% block error_icon_mobile_name %}{% endblock error_icon_mobile_name %} big black inverted shadowed circular icon"
+                 style="{% block error_icon_mobile_style %}--fa-secondary-opacity: .5;
+                        {% endblock error_icon_mobile_style %}"></i>
             {% endblock error_icon_mobile %}
           </div>
 
@@ -42,7 +44,9 @@
 
             {% block error_content_help %}
               <p>
-                <a class="ui button" href="javascript:history.back();">{% trans "Go back" %}</a>
+                <a class="ui button"
+                   href="#"
+                   data-bind="click: function() { history.back(); }">{% trans "Go back" %}</a>
               </p>
             {% endblock error_content_help %}
 

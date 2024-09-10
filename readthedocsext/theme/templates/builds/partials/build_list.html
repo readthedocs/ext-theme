@@ -71,7 +71,7 @@
 {% endblock list_item_header %}
 
 {% block list_item_meta_items %}
-  {% if object.is_external %}
+  {% if object.version and object.is_external %}
     <a href="{{ object.version.vcs_url }}"
        class="item"
        aria-label="{{ object.external_version_name | lower | capfirst }} #{{ object.version.verbose_name }}">
