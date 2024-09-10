@@ -3,6 +3,17 @@
 {% load static from static %}
 {% load trans from i18n %}
 
+{# We still use our CSS on user hosted content #}
+{% block head_links %}
+  {{ block.super }}
+{% endblock head_links %}
+
+{# Remove unwanted JS from user hosted content #}
+{% block head_scripts %}
+{% endblock head_scripts %}
+{% block body_scripts %}
+{% endblock body_scripts %}
+
 {% block content_title_text %}
   {% block error_title %}
     <span class="ui grey text">
@@ -12,7 +23,7 @@
   {% endblock error_title %}
 {% endblock content_title_text %}
 
-{% block content_text %}
+{% block content_description %}
   <div class="meta">
     {# djlint: off D018 #}
     <a href="/">{{ request.get_host }}</a>
@@ -25,7 +36,7 @@
     {% block error_content_help %}
     {% endblock error_content_help %}
   </div>
-{% endblock content_text %}
+{% endblock content_description %}
 
 {% block content_extra_text %}
   {% block content_extra_link %}
