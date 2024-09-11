@@ -107,3 +107,22 @@ customElements.define(
   "readthedocs-menu-build-rebuild",
   MenuBuildRebuildElement,
 );
+
+/** Menu item for resyncing all **/
+class MenuSyncAllVersionsElement extends APIEventWrapper {
+  // TODO translate this here or use a different pattern
+  static errorMessage = "There was an error syncing versions";
+
+  getSuccessURL() {
+    // Refresh the existing page to hopefully show new versions in 3 seconds, so they have time to sync.
+    // This is a bit of a hack, but it's better than nothing.
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000);
+  }
+}
+
+customElements.define(
+  "readthedocs-menu-sync-all-versions",
+  MenuSyncAllVersionsElement,
+);
