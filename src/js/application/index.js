@@ -1,6 +1,7 @@
 import jquery from "jquery";
 import ko from "knockout";
 import clipboard from "clipboard";
+import * as Sentry from "@sentry/browser";
 
 import { ApplicationView } from "./views";
 import * as plugins from "./plugins";
@@ -63,6 +64,10 @@ export class Application {
     // Null route debug logging, don't do output anything that was debug
     if (!this.config.debug) {
       console.debug = () => {};
+    }
+    // Load Sentry
+    if (this.config.sentryDsn) {
+      Sentry.init({ dsn: this.config.sentryDsn });
     }
 
     return this.config;

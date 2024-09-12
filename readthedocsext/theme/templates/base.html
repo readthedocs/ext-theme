@@ -33,7 +33,8 @@
         {
           "debug": {% debug_enabled as is_debug_enabled %}{{ is_debug_enabled | yesno:"true,false" }},
           "webpack_public_path": "{% get_webpack_static_prefix %}/readthedocsext/theme/",
-          "production_domain": "{{ PRODUCTION_DOMAIN }}"
+          "production_domain": "{{ PRODUCTION_DOMAIN }}",
+          "sentryDsn": ""
         }
       </script>
 
