@@ -1,0 +1,78 @@
+{% extends "mfa/recovery_codes/base.html" %}
+
+{% load blocktrans trans from i18n %}
+
+{% block head_title %}
+  {% trans "Recovery codes" %}
+{% endblock head_title %}
+{% block edit_content_subheader_section %}
+  <div class="active section">{% trans "Recovery codes" %}</div>
+{% endblock edit_content_subheader_section %}
+
+{% block edit_content %}
+
+  {% if unused_codes %}
+
+    <p class="ui info message">
+      <i class="fad fa-exclamation-triangle"></i>
+      {% blocktrans trimmed %}
+        Keep these codes stored in a secure place, such as a password manager.
+      {% endblocktrans %}
+    </p>
+
+    <div class="ui raised segment">
+      <div class="ui list">
+        {% for code in unused_codes %}
+          <div class="item">
+            <code>{{ code }}</code>
+          </div>
+        {% endfor %}
+      </div>
+
+      <input type="hidden"
+             id="mfa-recovery-codes"
+             value="{{ unused_codes|join:" " }}" />
+      <button class="ui button" data-clipboard-target="input#mfa-recovery-codes">
+        <i class="fa-solid fa-copy icon"></i>
+        {% trans "Copy codes" %}
+      </button>
+
+      {% url 'mfa_download_recovery_codes' as download_url %}
+      <a href="{{ download_url }}" class="ui button">{% trans "Download codes" %}</a>
+
+    </div>
+  {% endif %}
+
+  <div class="ui red segment">
+    <h3 class="ui small header">{% trans "Generate new codes" %}</h3>
+
+    <p>
+      {% blocktrans %}
+        You can generate new recovery codes if you lost or used all of your previous recovery codes.
+        This will invalidate and previously generated codes.
+      {% endblocktrans %}
+    </p>
+
+    <a class="ui button"
+       data-bind="click: $root.show_modal('mfa-generate-recovery-codes')">
+      <i class="fa-duotone fa-trash icon"></i>
+      {% trans "Generate new codes" %}
+    </a>
+    <div class="ui mini modal" data-modal-id="mfa-generate-recovery-codes">
+      <div class="header">{% trans "Generate new codes" %}</div>
+      <div class="content">
+        {% blocktrans trimmed %}
+          Are you sure you want to regenerate new recovery codes?
+        {% endblocktrans %}
+      </div>
+      <div class="actions">
+        <form method="post" action="{% url "mfa_generate_recovery_codes" %}">
+          {% csrf_token %}
+          <input class="ui negative button"
+                 type="submit"
+                 value="{% trans "Generate new codes" %}">
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock edit_content %}
