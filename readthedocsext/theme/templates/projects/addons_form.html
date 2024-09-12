@@ -1,7 +1,7 @@
 {% extends "projects/project_edit_base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load blocktrans trans from i18n %}
+{% load as_crispy_field crispy from crispy_forms_tags %}
 
 {% block title %}
   {{ project.name }} - {% trans "Addons" %}
@@ -21,12 +21,88 @@
 {% endblock project_edit_sidebar_help_topics %}
 
 {% block project_edit_content %}
+
   <form class="ui form"
         method="post"
         action="{% url 'projects_addons' project_slug=project.slug %}">
     {% csrf_token %}
-    {{ form|crispy }}
+
+    <div>
+      <p>
+        {# Translators: Addons is a proper noun and should be capitalized #}
+        {% blocktrans trimmed %}
+          Addons provide features on your project's hosted documentation,
+          such as our flyout navigation menu, search, analytics, and more.
+        {% endblocktrans %}
+      </p>
+
+      {{ form.enabled|as_crispy_field }}
+      {{ form.project|as_crispy_field }}
+    </div>
+
+    {% if form.enabled.value == True %}
+      <div class="ui top attached stackable wrapping menu"
+           data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
+        <a class="active item" data-tab="flyout">{% trans "Flyout menu" %}</a>
+        <a class="item" data-tab="search">{% trans "Search" %}</a>
+        <a class="item" data-tab="notifications">{% trans "Notifications" %}</a>
+        <a class="item" data-tab="analytics">{% trans "Analytics" %}</a>
+        <a class="item" data-tab="docdiff">{% trans "Visual diff" %}</a>
+        <a class="item" data-tab="hotkeys">{% trans "Hotkeys" %}</a>
+      </div>
+    {% endif %}
+
+    {% comment %}
+      Conditionally render this as a bottom attached segment if Addons are enabled.
+      Otherwise, this will render all of the fields in hidden tab divs, so submit
+      and form handling work.
+    {% endcomment %}
+    <div {% if form.enabled.value %}class="ui bottom attached segment"{% endif %}>
+
+      {% block addons_flyout %}
+        <div class="ui tab" data-tab="flyout">
+          {{ form.flyout_enabled | as_crispy_field }}
+          {{ form.flyout_sorting | as_crispy_field }}
+          {{ form.flyout_sorting_latest_stable_at_beginning | as_crispy_field }}
+          {{ form.flyout_sorting_custom_pattern | as_crispy_field }}
+        </div>
+      {% endblock addons_flyout %}
+
+      {% block addons_search %}
+        <div class="ui tab" data-tab="search">
+          {{ form.search_enabled | as_crispy_field }}
+        </div>
+      {% endblock addons_search %}
+
+      {% block addons_notifications %}
+        <div class="ui tab" data-tab="notifications">
+          {{ form.external_version_warning_enabled | as_crispy_field }}
+          {{ form.stable_latest_version_warning_enabled | as_crispy_field }}
+        </div>
+      {% endblock addons_notifications %}
+
+      {% block addons_analytics %}
+        <div class="ui tab" data-tab="analytics">
+          {{ form.analytics_enabled | as_crispy_field }}
+        </div>
+      {% endblock addons_analytics %}
+
+      {% block addons_docdiff %}
+        <div class="ui tab" data-tab="docdiff">
+          {{ form.doc_diff_enabled | as_crispy_field }}
+          {{ form.doc_diff_root_selector | as_crispy_field }}
+        </div>
+      {% endblock addons_docdiff %}
+
+      {% block addons_hotkeys %}
+        <div class="ui tab" data-tab="hotkeys">
+          {{ form.hotkeys_enabled | as_crispy_field }}
+        </div>
+      {% endblock addons_hotkeys %}
+
+    </div>
 
     <input class="ui primary button" type="submit" value="{% trans "Save" %}">
   </form>
+
 {% endblock project_edit_content %}
