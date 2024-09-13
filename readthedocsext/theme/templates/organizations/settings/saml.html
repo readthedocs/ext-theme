@@ -1,9 +1,7 @@
 {% extends "organizations/admin/sso_edit.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
-{% load organizations %}
-{% load corporate %}
+{% load blocktrans trans from i18n %}
+{% load crispy from crispy_forms_tags %}
 
 {% block organization_edit_content_subheader %}
   {% trans "SAML integration" %}
@@ -19,7 +17,9 @@
     <div class="ui basic segment">
       <div class="ui message">
         <div class="header">{% trans "Invite new users into your organization" %}</div>
-        <p>{% trans "You can invite people to join your organization by sending them this link:" %}</p>
+        <p>
+          {% trans "You can invite people to join your organization by sending them this link:" %}
+        </p>
 
         <div class="ui fluid action input">
           <input type="text"
@@ -34,8 +34,12 @@
       </div>
 
       <div class="ui message">
-        <div class="header">{% trans "Invite existing users into your organization" %}</div>
-        <p>{% trans "You can invite existing users to join your organization by sending them this link:" %}</p>
+        <div class="header">
+          {% trans "Invite existing users into your organization" %}
+        </div>
+        <p>
+          {% trans "You can invite existing users to join your organization by sending them this link:" %}
+        </p>
 
         <div class="ui fluid action input">
           <input type="text"
@@ -96,6 +100,19 @@
                  readonly="true">
           <button class="ui right icon button"
                   data-clipboard-target="input#saml-name-id-format">
+            <i class="fas fa-copy icon"></i>
+          </button>
+        </div>
+      </div>
+      <div class="field">
+        <label>{% trans "Application username" %}</label>
+        <div class="ui fluid action input">
+          <input type="text"
+                 value="Email"
+                 id="saml-application-username"
+                 readonly="true">
+          <button class="ui right icon button"
+                  data-clipboard-target="input#saml-application-username">
             <i class="fas fa-copy icon"></i>
           </button>
         </div>
