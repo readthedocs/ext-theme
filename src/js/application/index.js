@@ -66,8 +66,12 @@ export class Application {
       console.debug = () => {};
     }
     // Load Sentry
-    if (this.config.sentryDsn) {
-      Sentry.init({ dsn: this.config.sentryDsn });
+    if (this.config.sentry) {
+      Sentry.init({
+        dsn: this.config.sentry.dsn,
+        environment: this.config.sentry.environment,
+        integrations: [],
+      });
     }
 
     return this.config;

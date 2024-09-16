@@ -1,5 +1,5 @@
 {% load static from static %}
-{% load webpack_static get_webpack_static_prefix debug_enabled from ext_theme_tags %}
+{% load webpack_static settings_dashboard from ext_theme_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -28,15 +28,9 @@
     <meta name="viewport" content="width=device-width" />
 
     {% block head_scripts %}
-      {# This block is used to pass settings between our application and JS #}
-      <script type="application/json" id="site-config">
-        {
-          "debug": {% debug_enabled as is_debug_enabled %}{{ is_debug_enabled | yesno:"true,false" }},
-          "webpack_public_path": "{% get_webpack_static_prefix %}/readthedocsext/theme/",
-          "production_domain": "{{ PRODUCTION_DOMAIN }}",
-          "sentryDsn": ""
-        }
-      </script>
+      {# Pass settings between our application and JS #}
+      {% settings_dashboard as settings %}
+      {{ settings|json_script:"site-config" }}
 
       {% comment %}
         This is our only external dependency. It's a fast way to get all the
