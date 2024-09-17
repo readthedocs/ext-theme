@@ -1,6 +1,7 @@
 import jquery from "jquery";
 import ko from "knockout";
 import clipboard from "clipboard";
+import * as Sentry from "@sentry/browser";
 
 import { ApplicationView } from "./views";
 import * as plugins from "./plugins";
@@ -56,13 +57,21 @@ export class Application {
       const site_config_src = jquery("script#site-config").text() || "{}";
       this.config = JSON.parse(site_config_src);
     }
-    if (this.config.webpack_public_path) {
+    if (this.config?.webpack_public_path) {
       __webpack_public_path__ = this.config.webpack_public_path;
       globalThis.__webpack_public_path__ = this.config.webpack_public_path;
     }
     // Null route debug logging, don't do output anything that was debug
-    if (!this.config.debug) {
+    if (!this.config?.debug) {
       console.debug = () => {};
+    }
+    // Load Sentry
+    if (this.config?.sentry?.dsn) {
+      Sentry.init({
+        dsn: this.config.sentry.dsn,
+        environment: this.config.sentry?.environment,
+        integrations: [],
+      });
     }
 
     return this.config;
