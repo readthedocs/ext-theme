@@ -57,19 +57,19 @@ export class Application {
       const site_config_src = jquery("script#site-config").text() || "{}";
       this.config = JSON.parse(site_config_src);
     }
-    if (this.config.webpack_public_path) {
+    if (this.config?.webpack_public_path) {
       __webpack_public_path__ = this.config.webpack_public_path;
       globalThis.__webpack_public_path__ = this.config.webpack_public_path;
     }
     // Null route debug logging, don't do output anything that was debug
-    if (!this.config.debug) {
+    if (!this.config?.debug) {
       console.debug = () => {};
     }
     // Load Sentry
-    if (this.config.sentry) {
+    if (this.config?.sentry?.dsn) {
       Sentry.init({
         dsn: this.config.sentry.dsn,
-        environment: this.config.sentry.environment,
+        environment: this.config.sentry?.environment,
         integrations: [],
       });
     }
