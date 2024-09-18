@@ -17,26 +17,10 @@
 
 {% block create_button %}
   {% if is_project_admin %}
-    <div class="right aligned eight wide computer eight wide tablet sixteen wide left aligned mobile middle aligned column">
-      {% blocktrans trimmed asvar text_resync %}
-        Resync versions
-      {% endblocktrans %}
-      <readthedocs-menu-sync-all-versions
-                                 class="ui primary button"
-                                 url="{% url "projects-sync-versions" project.slug %}"
-                                 csrf-token="{{ csrf_token }}"
-                                 data-content="{{ text_resync }}"
-                                 aria-label="{{ text_resync }}">
-        <i class="fa-solid fa-arrows-rotate icon"></i>
-        <span class="text">{{ text_resync }}</span>
-      </readthedocs-menu-sync-all-versions>
-
-      <a href="{% url "project_version_create" project.slug %}"
-         class="ui primary button">
-        <i class="fa-solid fa-plus icon"></i>
-        <span class="text">{% trans "Add version" %}</span>
-      </a>
-    </div>
+    <a href="{% url "project_version_create" project.slug %}" class="ui primary button">
+      <i class="fa-solid fa-plus icon"></i>
+      <span class="text">{% trans "Add version" %}</span>
+    </a>
   {% endif %}
 {% endblock %}
 
