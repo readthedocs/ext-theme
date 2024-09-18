@@ -124,9 +124,19 @@
                       {% endblocktrans %}
                     </p>
 
-                    <a href="https://docs.readthedocs.io/en/stable/versions.html" class="ui primary button" target="_blank">
-                      {% trans "Learn more" %}
-                    </a>
+                    {% blocktrans trimmed asvar text_resync %}
+                      Resync versions
+                    {% endblocktrans %}
+                    <readthedocs-button-sync-all-versions
+                                              class="ui primary button"
+                                              url="{% url "projects-sync-versions" project.slug %}"
+                                              csrf-token="{{ csrf_token }}"
+                                              data-content="{{ text_resync }}"
+                                              aria-label="{{ text_resync }}">
+                      <i class="fa-solid fa-arrows-rotate icon"></i>
+                      <span class="text">{{ text_resync }}</span>
+                    </readthedocs-button-sync-all-versions>
+
                   </div>
                 </div>
               </div>
