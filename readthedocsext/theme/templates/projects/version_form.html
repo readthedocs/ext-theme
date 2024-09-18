@@ -32,9 +32,7 @@
           {% trans "Edit version" %}
         {% else %}
           {% trans "Activate a new version" %}
-          <span class="sub header">
-            {% trans "Select a version to activate" %}
-          </span>
+          <span class="sub header">{% trans "Select a version to activate" %}</span>
         {% endif %}
       </h2>
 
@@ -102,9 +100,13 @@
               }
             </script>
 
-            <div class="ui fluid very short scrolling search" data-bind="semanticui: {search: search_config()}">
+            <div class="ui fluid very short scrolling search"
+                 data-bind="semanticui: {search: search_config()}">
               <div class="ui fluid icon large input">
-                <input class="ui text" type="text" placeholder="{% trans "Search versions" %}" tabindex="0">
+                <input class="ui text"
+                       type="text"
+                       placeholder="{% trans "Search versions" %}"
+                       tabindex="0">
                 <i class="fa-duotone fa-magnifying-glass icon"></i>
               </div>
               <div class="results" tabindex="0"></div>
@@ -124,19 +126,9 @@
                       {% endblocktrans %}
                     </p>
 
-                    {% blocktrans trimmed asvar text_resync %}
-                      Resync versions
-                    {% endblocktrans %}
-                    <readthedocs-button-sync-all-versions
-                                              class="ui primary button"
-                                              url="{% url "projects-sync-versions" project.slug %}"
-                                              csrf-token="{{ csrf_token }}"
-                                              data-content="{{ text_resync }}"
-                                              aria-label="{{ text_resync }}">
-                      <i class="fa-solid fa-arrows-rotate icon"></i>
-                      <span class="text">{{ text_resync }}</span>
-                    </readthedocs-button-sync-all-versions>
-
+                    <a href="https://docs.readthedocs.io/en/stable/versions.html"
+                       class="ui primary button"
+                       target="_blank">{% trans "Learn more" %}</a>
                   </div>
                 </div>
               </div>

@@ -114,7 +114,7 @@ class ButtonSyncAllVersionsElement extends APIEventWrapper {
   static errorMessage = "There was an error syncing versions.";
 
   getSuccessURL() {
-    console.log("Successfully synced versions")
+    console.log("Successfully synced versions");
   }
 }
 
