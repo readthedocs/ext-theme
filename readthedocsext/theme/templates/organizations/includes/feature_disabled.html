@@ -4,10 +4,17 @@
 {% firstof organization.slug project.organizations.first.slug as organization_slug %}
 {% url "subscription_detail" organization_slug as subscription_url %}
 
-<div class="ui warning message">
-  <i class="fad fa-exclamation-circle"></i>
-  {% blocktrans trimmed with subscription_url=subscription_url %}
-    This feature is not available for your organization.
-    <a href="{{ subscription_url }}">Upgrade your subscription</a> to enable this feature.
-  {% endblocktrans %}
+<div class="ui notification info message">
+  <h5 class="header">
+    <i class="fad fa-circle-up icon"></i>
+    {% blocktrans trimmed with plan=plan|default:"Pro" %}
+      {{ plan }} plan feature
+    {% endblocktrans %}
+  </h5>
+  <p>
+    {% blocktrans trimmed with subscription_url=subscription_url %}
+      This feature is not available for your organization.
+      <a href="{{ subscription_url }}">Upgrade your subscription</a> to enable this feature.
+    {% endblocktrans %}
+  </p>
 </div>

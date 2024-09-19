@@ -21,7 +21,8 @@
   {# Note: this feature is enabled for most modern subscription, but disabled for old subscriptions #}
   {% if not enabled %}
     {% include "organizations/includes/feature_disabled.html" with organization=organization %}
-  {% else %}
-    {% include "organizations/partials/log_list.html" with objects=object_list omit_user=False %}
   {% endif %}
+  <div class="{% if not enabled %}ui basic fitted disabled segment{% endif %}">
+    {% include "organizations/partials/log_list.html" with objects=object_list omit_user=False %}
+  </div>
 {% endblock organization_edit_content %}
