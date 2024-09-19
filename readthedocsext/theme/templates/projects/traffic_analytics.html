@@ -1,11 +1,16 @@
 {% extends "projects/edit_base.html" %}
 
-{% load i18n %}
-{% load static %}
+{% load trans from i18n %}
 
-{% block title %}{% trans "Traffic Analytics" %}{% endblock %}
-{% block project_traffic_analytics_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Traffic Analytics" %}{% endblock %}
+{% block title %}
+  {% trans "Traffic Analytics" %}
+{% endblock title %}
+{% block project_traffic_analytics_active %}
+  active
+{% endblock project_traffic_analytics_active %}
+{% block project_edit_content_header %}
+  {% trans "Traffic Analytics" %}
+{% endblock project_edit_content_header %}
 
 {% block project_edit_content %}
   <div data-bind="using: ProjectTrafficAnalyticsView()">
@@ -14,9 +19,7 @@
 
     <h3 class="ui small header">
       {% trans "Overview" %}
-      <div class="sub header">
-        {% trans "For the last month" %}
-      </div>
+      <div class="sub header">{% trans "For the last month" %}</div>
     </h3>
 
     <div class="ui loading segment" data-bind="css: {loading: is_loading()}">
@@ -53,14 +56,12 @@
 
     <h3 class="ui small header">
       {% trans "Not found pages (404)" %}
-      <div class="sub header">
-        {% trans "For the last month" %}
-      </div>
+      <div class="sub header">{% trans "For the last month" %}</div>
     </h3>
     {% include "projects/partials/edit/traffic_list.html" with objects=top_pages_404 %}
 
   </div>
-{% endblock %}
+{% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/analytics.html" text="How to use traffic analytics" is_external=True class="item" %}

@@ -1,8 +1,8 @@
-{% load i18n %}
+{% load blocktrans from i18n %}
 
 {# We need to handle both cases, when an organization or a project are given. #}
 {% firstof organization.slug project.organizations.first.slug as organization_slug %}
-{% url 'subscription_detail' organization_slug  as subscription_url %}
+{% url "subscription_detail" organization_slug as subscription_url %}
 
 <div class="ui warning message">
   <i class="fad fa-exclamation-circle"></i>

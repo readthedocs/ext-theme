@@ -1,12 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-
-{% load gravatar %}
-
-{% load core_tags %}
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load blocktrans trans from i18n %}
 
 {% comment %}
   Conditionally show this block if feature is enabled for organization. The

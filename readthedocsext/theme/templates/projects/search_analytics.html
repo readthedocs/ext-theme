@@ -1,11 +1,16 @@
 {% extends "projects/project_edit_base.html" %}
 
-{% load i18n %}
-{% load static %}
+{% load trans from i18n %}
 
-{% block title %}{% trans "Search Analytics" %}{% endblock %}
-{% block project_search_analytics_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Search Analytics" %}{% endblock %}
+{% block title %}
+  {% trans "Search Analytics" %}
+{% endblock title %}
+{% block project_search_analytics_active %}
+  active
+{% endblock project_search_analytics_active %}
+{% block project_edit_content_header %}
+  {% trans "Search Analytics" %}
+{% endblock project_edit_content_header %}
 
 {% block project_edit_content %}
   <div data-bind="using: ProjectSearchAnalyticsView()">
@@ -14,9 +19,7 @@
 
     <h3 class="ui small header">
       {% trans "Overview" %}
-      <div class="sub header">
-        {% trans "For the last month" %}
-      </div>
+      <div class="sub header">{% trans "For the last month" %}</div>
     </h3>
     {% if query_count_of_1_month.labels and query_count_of_1_month.int_data %}
       <div class="ui loading segment" data-bind="css: {loading: is_loading}">
@@ -52,7 +55,7 @@
       </div>
     {% endif %}
   </div>
-{% endblock %}
+{% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/search-analytics.html" text="How to use search analytics" is_external=True class="item" %}
