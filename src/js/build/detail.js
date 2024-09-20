@@ -96,7 +96,7 @@ class BuildCommand {
         }
       },
       null,
-      { deferEvaluation: true }
+      { deferEvaluation: true },
     );
     /** @computed {string} Command text class */
     this.command_class = ko.computed(() => {
@@ -133,7 +133,7 @@ class BuildCommand {
         });
       },
       null,
-      { deferEvaluation: true }
+      { deferEvaluation: true },
     );
 
     this.output(build_command.output);
@@ -227,7 +227,7 @@ export class BuildDetailView {
     this.notifications = ko.observableArray();
     /** @computed {Boolean} Has notifications? */
     this.has_notifications = ko.computed(() => {
-      return (this.notifications().length > 0);
+      return this.notifications().length > 0;
     });
 
     /** @obsevable {string} Build state */
@@ -389,7 +389,7 @@ export class BuildDetailView {
         }
       },
       this,
-      "beforeChange"
+      "beforeChange",
     );
     // Update the new selected line
     this.selected_line.subscribe((selected_line) => {
@@ -424,66 +424,69 @@ export class BuildDetailView {
    * finished, we stop recursive polling.
    */
   poll_api_build() {
-    jquery.getJSON(this.url_api_build).then((data) => {
-      this.date(data.date);
-      this.success(data.success);
-      this.error(data.error);
-      this.length(data.length);
-      this.commit(data.commit);
-      this.docs_url(data.docs_url);
-      this.commit_url(data.commit_url);
-      this.builder(data.builder);
-      this.config(data.config);
-      this.state(data.state);
-      this.state_display(data.state_display);
+    jquery
+      .getJSON(this.url_api_build)
+      .then((data) => {
+        this.date(data.date);
+        this.success(data.success);
+        this.error(data.error);
+        this.length(data.length);
+        this.commit(data.commit);
+        this.docs_url(data.docs_url);
+        this.commit_url(data.commit_url);
+        this.builder(data.builder);
+        this.config(data.config);
+        this.state(data.state);
+        this.state_display(data.state_display);
 
-      // Always update date and length, as these should update as the build progresses
-      this.date.valueHasMutated();
-      this.length.valueHasMutated();
+        // Always update date and length, as these should update as the build progresses
+        this.date.valueHasMutated();
+        this.length.valueHasMutated();
 
-      // This is a mock command used to preview the command output.
-      // TODO probably do this in the application instead
-      this.add_command({
-        id: 0,
-        command: "readthedocs-build --show-config",
-        output: JSON.stringify(data.config, null, "  "),
-        exit_code: 0,
-        run_time: 0,
-        is_debug: true,
+        // This is a mock command used to preview the command output.
+        // TODO probably do this in the application instead
+        this.add_command({
+          id: 0,
+          command: "readthedocs-build --show-config",
+          output: JSON.stringify(data.config, null, "  "),
+          exit_code: 0,
+          run_time: 0,
+          is_debug: true,
+        });
+        for (const command of data.commands) {
+          this.add_command(command);
+        }
+
+        // We've completed a request to the API. From here, we are not loading
+        // from the API, but we'll be polling until the build is finished.
+        this.is_loading(false);
+      })
+      .then(() => {
+        // Continually poll API while build is not finished. If it is in a finished
+        // state, this method will return without setting another timer. We do not
+        // updated :attr:`is_polling` by computed/subscription as we want to ensure
+        // this update happens at the very end of API updates instead.
+        if (this.is_finished()) {
+          this.is_polling(false);
+        } else {
+          setTimeout(() => {
+            this.poll_api_build();
+            this.poll_api_notifications();
+          }, 2000);
+        }
       });
-      for (const command of data.commands) {
-        this.add_command(command);
-      }
-
-      // We've completed a request to the API. From here, we are not loading
-      // from the API, but we'll be polling until the build is finished.
-      this.is_loading(false);
-    }).then(() => {
-      // Continually poll API while build is not finished. If it is in a finished
-      // state, this method will return without setting another timer. We do not
-      // updated :attr:`is_polling` by computed/subscription as we want to ensure
-      // this update happens at the very end of API updates instead.
-      if (this.is_finished()) {
-        this.is_polling(false);
-      } else {
-        setTimeout(() => {
-          this.poll_api_build();
-          this.poll_api_notifications();
-        }, 2000);
-      }
-    });
   }
 
   /** Poll APIv3 build notification API directly
-    *
-    * We have to do this because we rely on the build APIv2 for everything else
-    * and the APIv3 build endpoints don't have the data required yet.
-    *
-    * TODO this should all happen under a single build API v3 poll instead, and
-    * this method should go away.
-    *
+   *
+   * We have to do this because we rely on the build APIv2 for everything else
+   * and the APIv3 build endpoints don't have the data required yet.
+   *
+   * TODO this should all happen under a single build API v3 poll instead, and
+   * this method should go away.
+   *
    * @param {str} url - APIv3 build notification endpoint
-    */
+   */
   poll_api_notifications() {
     const params = {
       state__in: "read,unread",
@@ -504,7 +507,7 @@ export class BuildDetailView {
       this.commands(),
       (command_search) => {
         return command_search.id() === command.id;
-      }
+      },
     );
     if (!command_found) {
       this.commands.push(new BuildCommand(command));
@@ -568,14 +571,14 @@ export class BuildDetailView {
         this.commands(),
         (command_search) => {
           return command_search.id() == found[1];
-        }
+        },
       );
       if (selected_command) {
         const selected_line = ko.utils.arrayFirst(
           selected_command.output_lines(),
           (output_line) => {
             return output_line.line_number() == found[2];
-          }
+          },
         );
 
         if (selected_line) {
