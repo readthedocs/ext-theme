@@ -337,7 +337,14 @@ export class BuildDetailView {
         const dateStart = dayjs(this.date());
         duration = dayjs.duration(dateNow.diff(dateStart));
       }
-      this.length_display(duration.format("m[m] s[s]"));
+      let formatParts = ["s[s]"];
+      if (duration.minutes()) {
+        formatParts.unshift("m[m]");
+      }
+      if (duration.hours()) {
+        formatParts.unshift("H[h]");
+      }
+      this.length_display(duration.format(formatParts.join(" ")));
     });
 
     /* Output */
