@@ -9,6 +9,10 @@ import LocalizedFormat from "dayjs/plugin/localizedFormat";
 
 import { Registry } from "../application/registry";
 
+dayjs.extend(RelativeTime);
+dayjs.extend(Duration);
+dayjs.extend(LocalizedFormat);
+
 /** Build command output subview, represented in :class:`BuildCommand` as an
  * array of output lines.
  *
@@ -318,16 +322,22 @@ export class BuildDetailView {
     /* @observable {string} Build length in a human readable format */
     this.length_display = ko.observable();
 
-    dayjs.extend(RelativeTime);
-    dayjs.extend(Duration);
-    dayjs.extend(LocalizedFormat);
     this.date.subscribe((date) => {
       const date_readable = dayjs(date);
       this.date_display(date_readable.format("llll"));
       this.date_display_since(date_readable.fromNow());
     });
     this.length.subscribe((length) => {
-      this.length_display(dayjs.duration(length, "seconds").humanize());
+      let duration;
+      if (length) {
+        duration = dayjs.duration(length, "seconds");
+      } else {
+        // Infer length from build start time
+        const dateNow = dayjs();
+        const dateStart = dayjs(this.date());
+        duration = dayjs.duration(dateNow.diff(dateStart));
+      }
+      this.length_display(duration.format("m[m] s[s]"));
     });
 
     /* Output */
@@ -426,6 +436,10 @@ export class BuildDetailView {
       this.config(data.config);
       this.state(data.state);
       this.state_display(data.state_display);
+
+      // Always update date and length, as these should update as the build progresses
+      this.date.valueHasMutated();
+      this.length.valueHasMutated();
 
       // This is a mock command used to preview the command output.
       // TODO probably do this in the application instead
