@@ -1,16 +1,15 @@
 {% extends "projects/base.html" %}
 
-{% load i18n %}
-{% load socialaccount %}
-{% load pagination_tags %}
+{% load trans from i18n %}
 
-{% block title %}{% trans "Projects" %}{% endblock %}
+{% block title %}
+  {% trans "Projects" %}
+{% endblock title %}
 
 {% block notifications %}
   {# User notifications only #}
-  <readthedocs-notification-list
-    url="{% url "users-notifications-list" request.user.username %}"
-    csrf-token="{{ csrf_token }}">
+  <readthedocs-notification-list url="{% url "users-notifications-list" request.user.username %}"
+                                 csrf-token="{{ csrf_token }}">
   </readthedocs-notification-list>
 
   {{ block.super }}
@@ -38,9 +37,7 @@
           {% endif %}
 
           <div class="ui basic segment">
-            <h2 class="ui small header">
-              {% trans "Help topics" %}
-            </h2>
+            <h2 class="ui small header">{% trans "Help topics" %}</h2>
             <div class="ui mini header">{% trans "Tutorials" %}</div>
             <div class="ui bulleted list">
               {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/tutorial/index.html" text="Getting started" is_external=True class="item" %}
