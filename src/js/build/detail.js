@@ -247,6 +247,9 @@ export class BuildDetailView {
     /** @observable {Boolean} There was doc output in the build */
     this.can_view_docs = ko.observable(false);
 
+    /** @observable {Boolean} Is the command output wrapped? */
+    this.is_wrapped = ko.observable(true);
+
     // Consolidate all of the observable updates that depend on build state
     this.state.subscribe((state) => {
       this.update_state(state);

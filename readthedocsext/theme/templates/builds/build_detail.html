@@ -133,6 +133,12 @@
         <i class="fa-duotone fa-microscope icon"></i>
         {% trans "Debug" %}
       </a>
+      <div class="item">
+        <div class="ui small checkbox">
+          <input type="checkbox" data-bind="checked: is_wrapped" />
+          <label>Wrap output</label>
+        </div>
+      </div>
       <div class="right menu">
 
         {% if request.user|is_admin:project %}
@@ -226,7 +232,7 @@
         </div>
       {% endblock build_detail_notifications %}
 
-      <div class="ui inverted bottom attached segment transition slide">
+      <div class="ui inverted bottom attached horizontally scrolling segment transition slide">
 
         {% comment %}
           This is a loading placeholder. The extra element is to fill out the
@@ -239,7 +245,7 @@
              data-bind="visible: is_loading()"></div>
 
         <table class="ko hidden ui small very basic compact inverted selectable command table"
-               data-bind="css: { hidden: !commands() }, foreach: commands">
+               data-bind="css: { hidden: !commands(), 'single line': !is_wrapped() }, foreach: commands">
           <tbody>
             <tr class="top aligned command"
                 data-bind="visible: is_visible() || $parent.show_debug()">
@@ -249,7 +255,7 @@
                      data-bind="class: is_expanded() ? 'fa-angle-down' : 'fa-angle-right'"></i>
                 </a>
               </td>
-              <td>
+              <td class="command">
                 <code class="ui text"
                       data-bind="text: command, class: command_class, click: toggle_expanded"></code>
                 <a class="ui mini inverted label" data-bind="text: run_time() + 's'"></a>
