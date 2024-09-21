@@ -244,7 +244,7 @@
         <div class="ui basic segment very padded"
              data-bind="visible: is_loading()"></div>
 
-        <table class="ko hidden ui small very basic compact inverted selectable command table"
+        <table class="ko hidden ui small very basic compact inverted selectable command unstackable table"
                data-bind="css: { hidden: !commands(), 'single line': !is_wrapped() }, foreach: commands">
           <tbody>
             <tr class="top aligned command"
