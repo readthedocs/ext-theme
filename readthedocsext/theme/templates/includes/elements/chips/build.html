@@ -2,10 +2,10 @@
 
 {% load i18n %}
 {% load humanize %}
-{% block chip_view_params %}'{% url "projects-builds-detail" build.project.slug build.pk %}'{% endblock %}
+{% block chip_view_params %}'{% url "projects-builds-detail" project.slug build.pk %}'{% endblock %}
 
 {% block chip_url %}
-  {% url "builds_detail" build.project.slug build.pk %}
+  {% url "builds_detail" project.slug build.pk %}
 {% endblock %}
 
 {% block chip_icon %}

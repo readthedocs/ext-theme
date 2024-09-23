@@ -113,7 +113,7 @@
 {% endblock list_item_right_menu %}
 
 {% block list_item_icon %}
-  {% include "builds/includes/status_icon.html" with build=object.builds.first circular=True %}
+  {% include "builds/includes/status_icon.html" with build=object.latest_build circular=True %}
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
@@ -122,7 +122,7 @@
   </a>
 
   <div class="sub header">
-    {% with build=object.last_build %}
+    {% with build=object.latest_build %}
       <time data-content="{{ build.date }}">
         {# Translators: this will read like "Last built 1 month, 3 days ago" #}
         {% blocktrans with build.date|naturaltime as date trimmed %}
@@ -155,8 +155,8 @@
     </div>
   {% endif %}
 
-  {% if request.user in project.users.all %}
-    {% if object.privacy_level == 'private' %}
+  {% if object.privacy_level == 'private' %}
+    {% if request.user in project.users.all %}
       {% trans "Private" context "Version is private" as text %}
       {% blocktrans trimmed with version=object.verbose_name asvar popup %}
         Version {{ version }} is private
@@ -180,10 +180,10 @@
 {% endblock list_item_meta_items %}
 
 {% block list_item_extra_items %}
-  {% with build=object.last_build %}
+  {% with build=object.latest_build %}
     {% if build %}
       <div class="item">
-        {% include "includes/elements/chips/build.html" with build=build text=object.project.name %}
+        {% include "includes/elements/chips/build.html" with project=project build=build text=project.name %}
       </div>
     {% endif %}
   {% endwith %}
