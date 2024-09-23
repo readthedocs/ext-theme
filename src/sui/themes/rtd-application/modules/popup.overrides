@@ -6,3 +6,7 @@
     border: none;
   }
 }
+
+.ui.popup > .ui.card > .content > .description {
+  white-space: normal;
+}
