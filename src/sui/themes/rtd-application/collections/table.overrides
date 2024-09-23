@@ -23,10 +23,13 @@
       padding-left: 0.5rem;
     }
 
-    &.stdout > code {
+    &.stdout > code,
+    &.command > code {
       white-space: pre-wrap;
-      word-wrap: break-word;
+      word-wrap: anywhere;
+    }
 
+    &.stdout > code {
       // ansi_up control character classes
       span.ansi-black-fg {
         color: @black;
@@ -78,6 +81,13 @@
         color: @white;
       }
     }
+  }
+
+  // Just for single line, unwrapped lines
+  &.single.line td.stdout > code,
+  &.single.line td.command > code {
+    white-space: pre;
+    word-wrap: break-word;
   }
 
   // This is required to make the labels a bit more muted than they would be
