@@ -119,6 +119,6 @@ class ButtonSyncAllVersionsElement extends APIEventWrapper {
 }
 
 customElements.define(
-  "readthedocs-button-sync-all-versions",
+  "readthedocs-button-sync-versions",
   ButtonSyncAllVersionsElement,
 );

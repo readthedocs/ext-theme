@@ -1,11 +1,9 @@
 {% extends "projects/base.html" %}
 
-{% load i18n %}
-{% load privacy_tags %}
-{% load crispy_forms_tags %}
-{% load crispy_forms_filters %}
+{% load crispy from crispy_forms_tags %}
+{% load trans blocktrans from i18n %}
 
-{% load ext_theme_tags %}
+{% load alter_field from ext_theme_tags %}
 
 {% block title %}
   {% if version %}
@@ -13,13 +11,13 @@
   {% else %}
     {% trans "Activate a new version" %}
   {% endif %}
-{% endblock %}
+{% endblock title %}
 
 {% block content-header %}
   {% with versions_active="active" %}
     {% include "projects/partials/header.html" %}
   {% endwith %}
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
   <div class="ui very padded centered grid stackable">
@@ -55,7 +53,7 @@
           <div class="content">
             {% if version.active %}
               <div class="ui warning message">
-                {% trans 'Deactivating a version will result in the deletion of its documentation.' %}
+                {% trans "Deactivating a version will result in the deletion of its documentation." %}
               </div>
             {% endif %}
 
@@ -131,6 +129,17 @@
                        target="_blank">{% trans "Learn more" %}</a>
                   </div>
                 </div>
+
+                <div class="ui small bottom attached center aligned message">
+                  {% trans "Are your versions out of date?" %}
+                  <readthedocs-button-sync-versions class="ui mini black basic compact right aligned button"
+                                                    url="{% url "projects-sync-versions" project.slug %}"
+                                                    csrf-token="{{ csrf_token }}">
+                    <i class="fa-solid fa-arrows-rotate icon"></i>
+                    {% trans "Resync versions" %}
+                  </readthedocs-button-sync-versions>
+                </div>
+
               </div>
             {% endblock version_create_placeholder %}
           </div>
