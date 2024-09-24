@@ -86,11 +86,7 @@ class BuildCommand {
     this.is_visible = ko.computed(
       () => {
         if (this.is_debug()) {
-          if (this.is_expanded()) {
-            return true;
-          } else {
-            return false;
-          }
+          return false;
         } else {
           return true;
         }
@@ -403,6 +399,9 @@ export class BuildDetailView {
     );
     // Update the new selected line
     this.selected_line.subscribe((selected_line) => {
+      if (selected_line.command.is_debug()) {
+        this.show_debug(true);
+      }
       selected_line.command.is_expanded(true);
       selected_line.is_selected(true);
       this.selected_hash(selected_line.anchor_id());
