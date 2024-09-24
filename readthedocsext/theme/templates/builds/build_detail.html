@@ -264,7 +264,7 @@
               </td>
             </tr>
           </tbody>
-          <tbody data-bind="visible: is_expanded(), foreach: output_lines">
+          <tbody data-bind="visible: (is_visible() || $parent.show_debug()) && is_expanded(), foreach: output_lines">
             <tr data-bind="css: {'left olive marked': is_selected()}"
                 class="top aligned">
               <td class="collapsing line number">
