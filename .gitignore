@@ -7,7 +7,7 @@ __pycache__/
 *.DS_Store
 docs/_build/
 docs/out/
-build/
+/build/
 .python-version
 .node-version
 .tool-versions

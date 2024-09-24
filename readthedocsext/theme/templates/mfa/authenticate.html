@@ -1,0 +1,33 @@
+{% extends "mfa/base_entrance.html" %}
+
+{% load blocktrans trans from i18n %}
+{% load crispy from crispy_forms_tags %}
+
+{% block head_title %}
+  {% trans "Verify sign in" %}
+{% endblock head_title %}
+{% block content_title_text %}
+  {% trans "Verify sign in" %}
+{% endblock content_title_text %}
+
+{% block content_body %}
+  <p>
+    {% blocktrans trimmed %}
+      Enter a two-factor authentication code to verify this sign in.
+    {% endblocktrans %}
+  </p>
+
+  {% url 'mfa_authenticate' as action_url %}
+  <form class="ui form" method="post" action="{{ action_url }}">
+    {% csrf_token %}
+    {{ form|crispy }}
+    {{ redirect_field }}
+
+    <div class="ui stackable relaxed text menu">
+      <a class="item" href="{% url "account_login" %}">{% trans "Cancel" %}</a>
+      <div class="right menu">
+        <button class="ui primary button" type="submit">{% trans "Verify" %}</button>
+      </div>
+    </div>
+  </form>
+{% endblock content_body %}

@@ -53,25 +53,26 @@ def do_webpack_static(parser, token):
     return WebpackStaticNode.handle_token(parser, token)
 
 
-@register.simple_tag(name="get_webpack_static_prefix")
-def do_get_webpack_static_prefix():
+@register.simple_tag(name="settings_dashboard")
+def settings_dashboard():
     """
-    Emulates what {% get_static_prefix %} does considering local dev server.
+    Configure dashboard from application settings.
 
-    If the local dev webpack server is being used, it return this prefix.
-    Otherwise, it fallbacks to regular STATIC_URL setting.
+    This uses application settings and passes a dictionary to templates, for use
+    in a `json_script` filter. The site JS loads this JSON configuration.
     """
+    # Prefix for static URLs, either from Webpack dev server or the standard
+    # static URL
     webpack_server = getattr(settings, "RTD_EXT_THEME_DEV_SERVER", None)
     static_url = getattr(settings, "STATIC_URL", None)
-    return (webpack_server or static_url).rstrip("/")
+    public_path_prefix = (webpack_server or static_url).rstrip("/")
 
-
-@register.simple_tag(name="debug_enabled")
-def debug_enabled():
-    """
-    Helper for testing for debug mode, minus INTERNAL_IPS.
-    """
-    return getattr(settings, "DEBUG", False)
+    return {
+        "debug": getattr(settings, "DEBUG", False),
+        "webpack_public_path": f"{{ public_path_prefix }}/readthedocsext/theme/",
+        "production_domain": settings.PRODUCTION_DOMAIN,
+        "sentry": getattr(settings, "SENTRY_BROWSER", {}),
+    }
 
 
 @register.simple_tag(name="alter_field", takes_context=True)

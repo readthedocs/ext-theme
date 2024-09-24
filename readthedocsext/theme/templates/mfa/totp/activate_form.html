@@ -1,0 +1,46 @@
+{% extends "mfa/totp/base.html" %}
+
+{% load blocktrans trans from i18n %}
+{% load crispy from crispy_forms_tags %}
+
+{% block head_title %}
+  {% trans "Activate authenticator app" %}
+{% endblock head_title %}
+{% block edit_content_subheader_section %}
+  <div class="active section">{% trans "Activate authenticator app" %}</div>
+{% endblock edit_content_subheader_section %}
+
+{% block edit_content %}
+  <p>
+    {% blocktrans trimmed %}
+      To protect your account with two-factor authentication,
+      set up your authenticator using the QR code or authenticator secret below
+      and input the generated verification code.
+    {% endblocktrans %}
+  </p>
+
+  <div class="ui form">
+    <div class="ui basic center aligned segment">
+      <img src="{{ totp_svg_data_uri }}" alt="{{ form.secret }}" />
+    </div>
+
+    <div class="ui raised segment">
+      <div class="field">
+        <label>{% trans "Authenticator secret" %}</label>
+        <div class="ui fluid action input">
+          <input type="text" value="{{ form.secret }}" id="mfa-secret" readonly="true">
+          <button class="ui right icon button" data-clipboard-target="input#mfa-secret">
+            <i class="fa-solid fa-copy icon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {% url 'mfa_activate_totp' as action_url %}
+    <form method="post" action="{{ action_url }}">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <button class="ui primary button" type="submit">{% trans "Activate" %}</button>
+    </form>
+  </div>
+{% endblock edit_content %}

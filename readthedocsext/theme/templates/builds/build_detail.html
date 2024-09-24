@@ -1,6 +1,6 @@
 {% extends "projects/base.html" %}
 
-{% load trans from i18n %}
+{% load blocktrans trans from i18n %}
 {% load is_admin from privacy_tags %}
 
 {% block title %}
@@ -68,44 +68,46 @@
           {# Build metadata on the right #}
           {% block build_detail_metadata_right %}
             <div class="ui five wide middle aligned column">
-              <div class="ui relaxed list">
+              <div class="ui relaxed list ko hidden"
+                   data-bind="css: { hidden: is_loading() }">
                 <div class="item">
                   <i class="grey fa-duotone fa-calendar icon"></i>
-                  <div class="content" data-bind="if: !is_loading()">
-                    <div data-bind="attr: { 'data-tooltip': date_display() }, text: '{% trans "Build started" %} ' + date_display_since()">
-                    </div>
+                  <div class="content">
+                    <span class="sub header">{% trans "Started" %}</span>
+                    <time data-bind="attr: { 'data-tooltip': date_display() }, text: date_display_since"></time>
                   </div>
                 </div>
 
                 <div class="item">
                   <i class="grey fa-duotone fa-clock icon"></i>
-                  <div class="content" data-bind="if: is_finished">
-                    <div data-bind="text: '{% trans "Build took %d" %}'.replace('%d', length_display())">
-                    </div>
+                  <div class="content">
+                    <span class="sub header">{% trans "Duration" %}</span>
+                    <span data-bind="text: length_display"></span>
                   </div>
                 </div>
 
-                {# Version type is static, so we can skip some KO code #}
+                {# Version type is static, and some of these attributes are not in the APIv2 response  #}
                 <div class="item">
-                  <i class="grey fa-duotone {{ build.is_external | yesno:"fa-code-pull-request,fa-tag" }} icon"></i>
-                  <div class="content" data-bind="if: !is_loading()">
+                  <i class="grey fa-duotone {{ build.is_external | yesno:"fa-code-pull-request,fa-code-branch" }} icon"></i>
+                  <div class="content">
                     {% if build.is_external %}
-                      {{ build.external_version_name | lower | capfirst }}
+                      <span class="sub header">
+                        {{ build.external_version_name | lower | capfirst }}
+                      </span>
                       <a href="{{ build.version.vcs_url }}"><code>#{{ build.get_version_name }}</code></a>
                     {% else %}
-                      <code>
-                        <a href="{% url "builds_project_list" build.project.slug %}?version__slug={{ build.get_version_slug }}">
-                          {{ build.get_version_name }}
-                        </a>
-                      </code>
+                      <span class="sub header">{{ build.get_version_type | lower | capfirst }}</span>
+                      {{ build.get_version_name }}
                     {% endif %}
-                  </div>
-                </div>
-
-                <div class="item" data-bind="visible: commit_short">
-                  <i class="grey fa-duotone fa-code-branch icon"></i>
-                  <div class="content" data-bind="if: !is_loading()">
-                    <a data-bind="attr: {href: commit_url}"><code data-bind="text: commit_short"></code></a>
+                    <code class="ko hidden" data-bind="css: { hidden: !commit() }">
+                      <a data-bind="attr: {href: commit_url}">
+                        {% spaceless %}
+                          <span>(</span>
+                          <span data-bind="text: commit_short">{{ build.commit }}</span>
+                          <span>)</span>
+                        {% endspaceless %}
+                      </a>
+                    </code>
                   </div>
                 </div>
 
@@ -131,6 +133,12 @@
         <i class="fa-duotone fa-microscope icon"></i>
         {% trans "Debug" %}
       </a>
+      <div class="item">
+        <div class="ui small checkbox">
+          <input type="checkbox" data-bind="checked: is_wrapped" />
+          <label>Wrap output</label>
+        </div>
+      </div>
       <div class="right menu">
 
         {% if request.user|is_admin:project %}
@@ -169,37 +177,23 @@
       </div>
     </div>
 
-    {# TODO: remove this `build.output block completely #}
     {% if build.output %}
-      {# djlint: off H021 #}
-      {# If we have build output, this is an old build #}
-      <p>
-        <button data-bind="visible: !legacy_output(), click: show_legacy_output">
-          {% trans "Show full build output" %}
-        </button>
-      </p>
-
-      <div data-bind="visible: legacy_output" style="display: none;">
-        <h3>{% trans "Build Output" %}</h3>
-        <pre class="build-output"><span id="build-output">{{ build.output }}</span></pre>
-
-        {% if build.setup %}
-          <h3>{% trans "Setup Output" %}</h3>
-          <pre class="build-output"><span id="build-setup">{{ build.setup }}</span></pre>
-        {% endif %}
-
-        {% if build.setup_error %}
-          <h3>{% trans "Environment Standard Error" %}</h3>
-          <pre class="ui negative message"><span id="build-setup_error">{{ build.setup_error }}</span></pre>
-        {% endif %}
+      {% comment %}
+        This is a very old build type, before we supported individual build
+        commands. It is very not supported anymore so we'll just throw an error
+        so we're not silently failing.
+      {% endcomment %}
+      <div class="ui inverted notification error message">
+        <div class="header">
+          <i class="fas fa-exclamation-circle icon"></i>
+          {% trans "Build output unavailable" %}
+        </div>
+        <p>
+          {% blocktrans %}
+            Due to the age of this build, the output of this build is no longer available.
+          {% endblocktrans %}
+        </p>
       </div>
-
-      {% if build.error %}
-        <h3>{% trans "Build Errors" %}</h3>
-        <pre class="ui negative message"><span id="build-error">{{ build.error }}</span></pre>
-      {% endif %}
-
-      {# djlint: on H021 #}
     {% else %}
 
       {% block build_detail_notifications %}
@@ -238,7 +232,7 @@
         </div>
       {% endblock build_detail_notifications %}
 
-      <div class="ui inverted bottom attached segment transition slide">
+      <div class="ui inverted bottom attached horizontally scrolling segment transition slide">
 
         {% comment %}
           This is a loading placeholder. The extra element is to fill out the
@@ -250,8 +244,8 @@
         <div class="ui basic segment very padded"
              data-bind="visible: is_loading()"></div>
 
-        <table class="ko hidden ui small very basic compact inverted selectable command table"
-               data-bind="css: { hidden: !commands() }, foreach: commands">
+        <table class="ko hidden ui small very basic compact inverted selectable command unstackable table"
+               data-bind="css: { hidden: !commands(), 'single line': !is_wrapped() }, foreach: commands">
           <tbody>
             <tr class="top aligned command"
                 data-bind="visible: is_visible() || $parent.show_debug()">
@@ -261,7 +255,7 @@
                      data-bind="class: is_expanded() ? 'fa-angle-down' : 'fa-angle-right'"></i>
                 </a>
               </td>
-              <td>
+              <td class="command">
                 <code class="ui text"
                       data-bind="text: command, class: command_class, click: toggle_expanded"></code>
                 <a class="ui mini inverted label" data-bind="text: run_time() + 's'"></a>
@@ -270,7 +264,7 @@
               </td>
             </tr>
           </tbody>
-          <tbody data-bind="visible: is_expanded(), foreach: output_lines">
+          <tbody data-bind="visible: (is_visible() || $parent.show_debug()) && is_expanded(), foreach: output_lines">
             <tr data-bind="css: {'left olive marked': is_selected()}"
                 class="top aligned">
               <td class="collapsing line number">
@@ -286,15 +280,12 @@
           </tbody>
         </table>
 
-        {# djlint: off H021 #}
-        {# TODO replace with `class="ko hidden"` #}
-        <div data-bind="visible: is_polling() && !is_loading()"
-             style="display: none">
+        <div class="ko hidden"
+             data-bind="css: { hidden: is_loading() || !is_polling() }">
           <div data-bind="visible: is_polling"
                class="ui active inverted mini centered inline text loader">
           </div>
         </div>
-        {# djlint: on H021 #}
 
       </div>
     {% endif %}

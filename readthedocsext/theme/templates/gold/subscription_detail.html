@@ -1,14 +1,17 @@
 {% extends "profiles/base_edit.html" %}
 
-{% load static %}
-{% load i18n %}
-{% load crispy_forms_filters %}
+{% load blocktrans trans from i18n %}
+{% load crispy from crispy_forms_filters %}
 
-{% load ext_theme_tags %}
+{% load alter_field from ext_theme_tags %}
 
-{% block profile_admin_gold_edit %}active{% endblock %}
+{% block profile_admin_gold_edit %}
+  active
+{% endblock profile_admin_gold_edit %}
 
-{% block title %}{% trans "Gold membership" %}{% endblock %}
+{% block title %}
+  {% trans "Gold membership" %}
+{% endblock title %}
 
 {% block edit_content_header %}
   {% trans "Gold membership" %}
@@ -44,8 +47,12 @@
     </p>
 
     <ul class="ui bulleted list">
-      <li class="item">{% trans 'For small businesses or personal projects, we ask for $5 per month to remove ads from a project.' %}</li>
-      <li class="item">{% trans 'For corporate supported open source projects, we ask for a $50 membership in order to cover our support and operations costs.' %}</li>
+      <li class="item">
+        {% trans "For small businesses or personal projects, we ask for $5 per month to remove ads from a project." %}
+      </li>
+      <li class="item">
+        {% trans "For corporate supported open source projects, we ask for a $50 membership in order to cover our support and operations costs." %}
+      </li>
     </ul>
 
     <p>
@@ -87,11 +94,13 @@
 
         <form action="{% url "gold_subscription_portal" %}" method="post">
           {% csrf_token %}
-          <input class="ui primary button" type="submit" value="{% trans "Manage subscription" %}" />
+          <input class="ui primary button"
+                 type="submit"
+                 value="{% trans "Manage subscription" %}" />
         </form>
 
         <h3>{% trans "Gold projects" %}</h3>
-        <p>{% trans 'Choose projects you would like to make ad-free.' %}</p>
+        <p>{% trans "Choose projects you would like to make ad-free." %}</p>
 
         <a class="ui primary button" href="{% url "gold_projects" %}">
           {% trans "Select projects" %}
@@ -112,11 +121,14 @@
           <div class="ui loading form" data-bind="css: { loading: stripeLoading }">
             {% alter_field form.level data_bind="valueInit: priceId" %}
             {{ form | crispy }}
-            <input class="ui primary button" type="submit" data-bind="click: createCheckoutSession" value="{% trans "Sign up" %}" />
+            <input class="ui primary button"
+                   type="submit"
+                   data-bind="click: createCheckoutSession"
+                   value="{% trans "Sign up" %}" />
           </div>
         </div>
 
       {% endblock gold_membership_inactive %}
     {% endif %}
   </div>
-{% endblock %}
+{% endblock edit_content %}
