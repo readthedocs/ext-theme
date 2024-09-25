@@ -1,15 +1,33 @@
 {% extends "projects/project_edit_base.html" %}
 
-{% load i18n %}
+{% load trans from i18n %}
 
-{% block title %}{{ project.name }} - {% trans "Domains" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "Domains" %}
+{% endblock title %}
 
-{% block project_domains_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Domains" %}{% endblock %}
+{% block project_domains_active %}
+  active
+{% endblock project_domains_active %}
+{% block project_edit_content_header %}
+  {% trans "Domains" %}
+{% endblock project_edit_content_header %}
 
 {% block project_edit_content %}
-  {% include "projects/partials/edit/domain_list.html" with objects=object_list %}
-{% endblock %}
+  {% comment %}
+    Conditionally show this block if feature is enabled for organization. The
+    ``enabled`` variable comes from the view.
+
+    If the feature is enabled the top menu child blocks below will show. Otherwise
+    overriding the ``top_menu`` block causes these blocks to not render.
+  {% endcomment %}
+  {% if not enabled %}
+    {% include "organizations/includes/feature_disabled.html" with project=project plan="Advanced" %}
+  {% endif %}
+  <div class="{% if not enabled %}ui basic fitted disabled segment{% endif %}">
+    {% include "projects/partials/edit/domain_list.html" with objects=object_list %}
+  </div>
+{% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/custom-domains.html" text="How to manage custom domains" is_external=True class="item" %}

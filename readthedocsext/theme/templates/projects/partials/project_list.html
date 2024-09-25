@@ -95,8 +95,8 @@
   {% if object.has_good_build %}
     {% with build=object.get_latest_build %}
       {# Safety check, there seems to be some case where `has_good_build` and `get_latest_build` still return a null build #}
-      {% if build and build.project %}
-        {% include "includes/elements/chips/build.html" with build=build %}
+      {% if build %}
+        {% include "includes/elements/chips/build.html" with project=object build=build %}
       {% endif %}
     {% endwith %}
   {% endif %}

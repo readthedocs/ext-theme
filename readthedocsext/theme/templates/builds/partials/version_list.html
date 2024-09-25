@@ -1,13 +1,7 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-{% load humanize %}
-
-{% load core_tags %}
-{% load privacy_tags %}
-{% load projects_tags %}
-
-{% load ext_theme_tags %}
+{% load blocktrans trans from i18n %}
+{% load naturaltime from humanize %}
 
 {% block top_left_menu_items %}
   <div data-bind="using: FilterView()">
@@ -17,14 +11,16 @@
 
 {% block create_button %}
   {% if is_project_admin %}
-    <a href="{% url "project_version_create" project.slug %}" class="ui primary button">
+    <a href="{% url "project_version_create" project.slug %}"
+       class="ui primary button">
       <i class="fa-solid fa-plus icon"></i>
       <span class="text">{% trans "Add version" %}</span>
     </a>
   {% endif %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}{% endblock %}
+{% block list_placeholder_icon_class %}
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header_filtered %}
   {% trans "No matching versions found" %}
 {% endblock list_placeholder_header_filtered %}
@@ -33,14 +29,17 @@
 {% endblock list_placeholder_header_empty %}
 {% block list_placeholder_text_empty %}
   {% if is_project_admin %}
-    <a href="{% url "project_version_create" project.slug %}" class="ui primary button">
-      {% trans "Add version" %}
-    </a>
+    <a href="{% url "project_version_create" project.slug %}"
+       class="ui primary button">{% trans "Add version" %}</a>
   {% endif %}
 {% endblock list_placeholder_text_empty %}
 
 {% block list_item_start %}
-  <tr class="middle aligned" data-bind="using: VersionListItemView({id: {{ object.pk }}, url: '{% url "projects-versions-detail" object.project.slug object.slug %}'})">
+  {# This confuses the formatter as it's just an opening element #}
+  {# djlint: off #}
+  <tr class="middle aligned"
+      data-bind="using: VersionListItemView({id: {{ object.pk }}, url: '{% url "projects-versions-detail" object.project.slug object.slug %}'})">
+  {# djlint: on #}
 {% endblock list_item_start %}
 
 {% block list_item_right_menu %}
@@ -49,7 +48,7 @@
     {% blocktrans trimmed with version=object.verbose_name asvar label_link %}
       View documentation for version {{ version }}
     {% endblocktrans %}
-    <a class="ui {% if not object.built %} disabled{% endif %} button"
+    <a class="ui {% if not object.built %}disabled{% endif %} button"
        data-bind="event: {mouseover: fetch, focusin: fetch}, attr: {href: url_docs}"
        target="_blank"
        data-content="{{ label_link }}"
@@ -61,24 +60,26 @@
     {% blocktrans trimmed with version=object.verbose_name asvar label_download %}
       Offline formats for version {{ version }}
     {% endblocktrans %}
-    <button
-      class="ui {% if not object.has_epub and not object.has_htmlzip and not object.has_pdf %} disabled{% endif %} dropdown button"
-      data-bind="event: {focusin: fetch, click: fetch}"
-      data-content="{{ label_download }}"
-      aria-label="{{ label_download }}"
-      tabindex="{% if object.has_epub or object.has_htmlzip or object.has_pdf %}0{% else %}-1{% endif %}">
+    <button class="ui {% if not object.has_epub and not object.has_htmlzip and not object.has_pdf %} disabled{% endif %} dropdown button"
+            data-bind="event: {focusin: fetch, click: fetch}"
+            data-content="{{ label_download }}"
+            aria-label="{{ label_download }}"
+            tabindex="{% if object.has_epub or object.has_htmlzip or object.has_pdf %}0{% else %}-1{% endif %}">
       <i class="fa-solid fa-download icon"></i>
       <div class="menu">
         <div class="header">{% trans "Offline formats" %}</div>
-        <a class="disabled item" data-bind="css: {disabled: !url_pdf()}, attr: {href: url_pdf()}">
+        <a class="disabled item"
+           data-bind="css: {disabled: !url_pdf()}, attr: {href: url_pdf()}">
           <i class="fa-duotone fa-file icon"></i>
           {% trans "PDF file" %}
         </a>
-        <a class="disabled item" data-bind="css: {disabled: !url_epub()}, attr: {href: url_epub()}">
+        <a class="disabled item"
+           data-bind="css: {disabled: !url_epub()}, attr: {href: url_epub()}">
           <i class="fa-duotone fa-file icon"></i>
           {% trans "ePUB file" %}
         </a>
-        <a class="disabled item" data-bind="css: {disabled: !url_html()}, attr: {href: url_html()}">
+        <a class="disabled item"
+           data-bind="css: {disabled: !url_html()}, attr: {href: url_html()}">
           <i class="fa-duotone fa-file-zipper icon"></i>
           {% trans "HTML archive" %}
         </a>
@@ -89,20 +90,20 @@
       Additional options for version {{ version }}
     {% endblocktrans %}
     {% if is_project_admin %}
-      <div class="ui dropdown button" data-content="{{ label_admin }}" aria-label="{{ label_admin }}">
+      <div class="ui dropdown button"
+           data-content="{{ label_admin }}"
+           aria-label="{{ label_admin }}">
         <i class="fa-solid fa-ellipsis icon"></i>
         <div class="menu">
           <div class="header">{% trans "Admin" %}</div>
-          <readthedocs-menu-build-rebuild
-            class="item"
-            url="{% url "projects-versions-builds-list" object.project.slug object.slug %}"
-            csrf-token="{{ csrf_token }}">
+          <readthedocs-menu-build-rebuild class="item"
+                                          url="{% url "projects-versions-builds-list" object.project.slug object.slug %}"
+                                          csrf-token="{{ csrf_token }}">
             <i class="fa-duotone fa-refresh icon"></i>
             {% trans "Rebuild version" %}
           </readthedocs-menu-build-rebuild>
-          <a
-            class="item"
-            href="{% url "project_version_detail" project.slug object.slug %}">
+          <a class="item"
+             href="{% url "project_version_detail" project.slug object.slug %}">
             <i class="fa-duotone fa-wrench icon"></i>
             {% trans "Configure version" %}
           </a>
@@ -113,7 +114,7 @@
 {% endblock list_item_right_menu %}
 
 {% block list_item_icon %}
-  {% include "builds/includes/status_icon.html" with build=object.builds.first circular=True %}
+  {% include "builds/includes/status_icon.html" with build=object.latest_build circular=True %}
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
@@ -122,7 +123,7 @@
   </a>
 
   <div class="sub header">
-    {% with build=object.last_build %}
+    {% with build=object.latest_build %}
       <time data-content="{{ build.date }}">
         {# Translators: this will read like "Last built 1 month, 3 days ago" #}
         {% blocktrans with build.date|naturaltime as date trimmed %}
@@ -155,8 +156,8 @@
     </div>
   {% endif %}
 
-  {% if request.user in project.users.all %}
-    {% if object.privacy_level == 'private' %}
+  {% if object.privacy_level == 'private' %}
+    {% if request.user in project.users.all %}
       {% trans "Private" context "Version is private" as text %}
       {% blocktrans trimmed with version=object.verbose_name asvar popup %}
         Version {{ version }} is private
@@ -180,10 +181,10 @@
 {% endblock list_item_meta_items %}
 
 {% block list_item_extra_items %}
-  {% with build=object.last_build %}
+  {% with build=object.latest_build %}
     {% if build %}
       <div class="item">
-        {% include "includes/elements/chips/build.html" with build=build text=object.project.name %}
+        {% include "includes/elements/chips/build.html" with project=project build=build text=project.name %}
       </div>
     {% endif %}
   {% endwith %}

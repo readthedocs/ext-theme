@@ -204,7 +204,7 @@ export class VersionListItemView extends APIListItemView {
     this.data.subscribe((data) => {
       this.url_pdf(data.downloads.pdf);
       this.url_epub(data.downloads.epub);
-      this.url_html(data.downloads.html);
+      this.url_html(data.downloads.htmlzip);
       this.url_docs(data.urls.documentation);
       this.is_built(data.built);
     });

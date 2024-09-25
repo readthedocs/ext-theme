@@ -1,12 +1,14 @@
 {% extends "includes/elements/chips/base.html" %}
 
-{% load i18n %}
-{% load humanize %}
-{% block chip_view_params %}'{% url "projects-builds-detail" build.project.slug build.pk %}'{% endblock %}
+{% load naturaltime from humanize %}
+
+{% block chip_view_params %}
+  '{% url "projects-builds-detail" project.slug build.pk %}'
+{% endblock chip_view_params %}
 
 {% block chip_url %}
-  {% url "builds_detail" build.project.slug build.pk %}
-{% endblock %}
+  {% url "builds_detail" project.slug build.pk %}
+{% endblock chip_url %}
 
 {% block chip_icon %}
   {% include "builds/includes/status_icon.html" with build=build size="" %}
@@ -42,11 +44,7 @@
 {% endblock popupcard_meta %}
 
 {% block popupcard_content %}
-  {% if build.error %}
-    <p style="white-space: normal;">
-      {{ build.error }}
-    </p>
-  {% endif %}
+  {% if build.error %}<p>{{ build.error }}</p>{% endif %}
 {% endblock popupcard_content %}
 
 {% block popupcard_extra %}

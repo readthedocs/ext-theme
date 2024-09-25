@@ -64,8 +64,8 @@
 
 {% endcomment %}
 
-{% load i18n %}
-{% load pagination_tags %}
+{% load trans blocktrans from i18n %}
+{% load autopaginate paginate from pagination_tags %}
 
 <div {% block view_binding %}{% endblock view_binding %}>
   {% block top_menu %}
@@ -81,7 +81,7 @@
                 {% comment %}
                   <button class="ui button">Add</button>
                 {% endcomment %}
-              {% endblock %}
+              {% endblock create_button %}
             </div>
           {% endblock top_right_menu_items %}
         </div>
@@ -149,11 +149,11 @@
           The descriptive text to use in the placeholder, below the header
 
     {% endcomment %}
-    <div class="{% block list_placeholder_class %}ui placeholder segment{% endblock %}">
+    <div class="{% block list_placeholder_class %}ui placeholder segment{% endblock list_placeholder_class %}">
       {% block list_placeholder %}
         <div class="ui icon header">
           {% block list_placeholder_icon %}
-            <i class="{% block list_placeholder_icon_class %}{% endblock %} icon"></i>
+            <i class="{% block list_placeholder_icon_class %}{% endblock list_placeholder_icon_class %} icon"></i>
           {% endblock list_placeholder_icon %}
           {% block list_placeholder_header %}
             {# The filter should always be bound, but data might be `{}` #}
@@ -239,7 +239,7 @@
 
       .. describe:: list_item_right_buttons
 
-          A list of ``<a class="ui icon button"/>`` elements. Can also contain
+          A list of ``<a class="ui icon button" />`` elements. Can also contain
           dropdown menus.
 
           .. seealso::
@@ -317,7 +317,7 @@
     {% endcomment %}
     {% block list %}
       <div class="ui vertically fitted segment">
-        <table class="{% block list_classes %}ui very basic stacking table{% endblock %}">
+        <table class="{% block list_classes %}ui very basic stacking table{% endblock list_classes %}">
 
           {% if not skip_pagination %}
             {% autopaginate objects 15 %}
@@ -325,82 +325,84 @@
 
           <tbody>
             {% for object in objects %}
-            {# Item view for each object in objects queryset #}
-              {% block list_item_start %}<tr class="middle aligned">{% endblock list_item_start %}
-              {% block list_item %}
+              {# Item view for each object in objects queryset #}
+              {% block list_item_start %}
+                <tr class="middle aligned">
+                {% endblock list_item_start %}
+                {% block list_item %}
 
-                {% block list_item_header_column %}
-                  <td class="{% block list_item_header_column_classes %}{% endblock %}">
-                    <div class="{% block list_item_header_classes %}ui tiny header{% endblock %}">
-                      {% block list_item_image %}
-                        {% comment %}
+                  {% block list_item_header_column %}
+                    <td class="{% block list_item_header_column_classes %}{% endblock list_item_header_column_classes %}">
+                      <div class="{% block list_item_header_classes %}ui tiny header{% endblock list_item_header_classes %}">
+                        {% block list_item_image %}
+                          {% comment %}
                           On the off chance you actually want an image here,
                           override this whole block. We use a fake image here to
                           avoid customizing CSS to avoid width/spacing issues.
-                        {% endcomment %}
-                        {# TODO consider making our own .ui.table .ui.icon.header styles #}
-                        <span class="ui center aligned image">
-                          {% block list_item_icon %}
-                            {% comment %}
+                          {% endcomment %}
+                          {# TODO consider making our own .ui.table .ui.icon.header styles #}
+                          <span class="ui center aligned image">
+                            {% block list_item_icon %}
+                              {% comment %}
                               <i class="fas fa-folder icon"></i>
-                            {% endcomment %}
-                          {% endblock list_item_icon %}
-                        </span>
-                      {% endblock list_item_image %}
-                      <div class="content">
-                        {% block list_item_header %}
-                          {{ object }}
-                        {% endblock list_item_header %}
+                              {% endcomment %}
+                            {% endblock list_item_icon %}
+                          </span>
+                        {% endblock list_item_image %}
+                        <div class="content">
+                          {% block list_item_header %}
+                            {{ object }}
+                          {% endblock list_item_header %}
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                {% endblock list_item_header_column %}
+                    </td>
+                  {% endblock list_item_header_column %}
 
-                {% block list_item_meta_column %}
-                  <td>
-                    {% block list_item_meta %}
-                      <div class="ui relaxed stackable small middle aligned horizontal list">
-                        {% block list_item_meta_items %}
-                          {% comment %}
+                  {% block list_item_meta_column %}
+                    <td>
+                      {% block list_item_meta %}
+                        <div class="ui relaxed stackable small middle aligned horizontal list">
+                          {% block list_item_meta_items %}
+                            {% comment %}
                             <div class="item">
                               <i class="fa-solid fa-code-branch icon"></i>
                               <code>{{ build.commit|truncatechars:8 }}</code>
                             </div>
-                          {% endcomment %}
-                        {% endblock list_item_meta_items %}
-                      </div>
-                    {% endblock list_item_meta %}
-                  </td>
-                {% endblock list_item_meta_column %}
-
-                {% block list_item_extra_column %}
-                  {% block list_item_extra %}
-                    <td class="collapsing">
-                      <div class="ui relaxed stackable small middle aligned horizontal list">
-                        {% block list_item_extra_items %}
-                        {% endblock list_item_extra_items %}
-                      </div>
+                            {% endcomment %}
+                          {% endblock list_item_meta_items %}
+                        </div>
+                      {% endblock list_item_meta %}
                     </td>
-                  {% endblock list_item_extra %}
-                {% endblock list_item_extra_column %}
+                  {% endblock list_item_meta_column %}
 
-                {% block list_item_right_column %}
-                  <td class="{% block list_item_right_column_classes %}right aligned collapsing{% endblock %}">
-                    {% block list_item_right_menu %}
-                      <div class="ui mini icon buttons">
-                        {% block list_item_right_buttons %}
-                          {% comment %}
+                  {% block list_item_extra_column %}
+                    {% block list_item_extra %}
+                      <td class="collapsing">
+                        <div class="ui relaxed stackable small middle aligned horizontal list">
+                          {% block list_item_extra_items %}
+                          {% endblock list_item_extra_items %}
+                        </div>
+                      </td>
+                    {% endblock list_item_extra %}
+                  {% endblock list_item_extra_column %}
+
+                  {% block list_item_right_column %}
+                    <td class="{% block list_item_right_column_classes %}right aligned collapsing{% endblock list_item_right_column_classes %}">
+                      {% block list_item_right_menu %}
+                        <div class="ui small icon buttons">
+                          {% block list_item_right_buttons %}
+                            {% comment %}
                             <a class="ui button">
                               <i class="fa-solid fa-refresh icon"></i>
                             </a>
-                          {% endcomment %}
-                        {% endblock list_item_right_buttons %}
-                      </div>
-                    {% endblock list_item_right_menu %}
-                  </td>
-                {% endblock list_item_right_column %}
+                            {% endcomment %}
+                          {% endblock list_item_right_buttons %}
+                        </div>
+                      {% endblock list_item_right_menu %}
+                    </td>
+                  {% endblock list_item_right_column %}
 
-              {% endblock list_item %}
+                {% endblock list_item %}
               </tr>
             {% endfor %}
 
