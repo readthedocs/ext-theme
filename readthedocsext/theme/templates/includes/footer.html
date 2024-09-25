@@ -1,7 +1,7 @@
-{% load i18n %}
-{% load core_tags %}
-{% load static %}
-{% load ext_theme_tags %}
+{% load trans get_current_language from i18n %}
+{% load readthedocs_version from core_tags %}
+{% load static from static %}
+{% load readthedocs_language_name_local readthedocs_language_name_translated from ext_theme_tags %}
 
 <footer class="ui basic very padded inverted attached segment">
   <div class="ui container">
@@ -142,14 +142,18 @@
                           <div class="vertical item {% if lang.0 == current_lang %}active{% endif %}"
                                data-value="{{ lang.0 }}"
                                data-text="{{ lang.0 | readthedocs_language_name_local }}">
-                            <div class="description">{{ lang.0 | readthedocs_language_name_translated }}</div>
+                            <div class="description">
+                              {{ lang.0 | readthedocs_language_name_translated }}
+                            </div>
                             <div class="text">{{ lang.0 | readthedocs_language_name_local }}</div>
                           </div>
                         {% endfor %}
                       </div>
                     </div>
                     {# TODO this button would be better off as a onChange event #}
-                    <button class="ui tiny compact basic inverted button">{% trans "Update" %}</button>
+                    <button class="ui tiny compact basic inverted button">
+                      {% trans "Update" %}
+                    </button>
                   </form>
                 {% endblock language_select_form %}
               </div>
