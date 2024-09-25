@@ -1,0 +1,87 @@
+{% extends "mfa/base_manage.html" %}
+
+{% load blocktrans trans from i18n %}
+{% load crispy from crispy_forms_tags %}
+
+{% block edit_content %}
+
+  {% block mfa_totp %}
+    {% if "totp" in MFA_SUPPORTED_TYPES %}
+      {% if not authenticators.totp %}
+
+        {# Placeholder section onboarding users to TOTP #}
+        <div class="ui placeholder segment">
+          <div class="ui icon header">
+            <i class="fad fa-key-skeleton-left-right icon"></i>
+            {% trans "Set up two-factor authentication" %}
+
+            <span class="sub header">
+              {% trans "Activate to use a two-factor authenticator app or browser extension to protect your account." %}
+            </span>
+          </div>
+          {% url 'mfa_activate_totp' as activate_url %}
+          <a class="ui primary button" href="{{ activate_url }}">
+            {% trans "Activate" %}
+          </a>
+        </div>
+
+      {% else %}
+
+        <div class="ui raised green segment">
+          <p>
+            <i class="fad fa-shield-keyhole green icon"></i>
+            {% blocktrans trimmed %}
+              Two-factor authentication using an authenticator app is enabled.
+            {% endblocktrans %}
+          </p>
+
+          <a class="ui button"
+             data-bind="click: $root.show_modal('mfa-deactivate')">
+            {% trans "Deactivate" %}
+          </a>
+          <div class="ui small modal" data-modal-id="mfa-deactivate">
+            <div class="header">{% trans "Deactivate two-factor authentication?" %}</div>
+            <div class="content">
+              {% blocktrans trimmed %}
+                Are you sure you want to deactivate two-factor authentication?
+              {% endblocktrans %}
+            </div>
+            <div class="actions">
+
+              <form method="post" action="{% url 'mfa_deactivate_totp' %}">
+                {% csrf_token %}
+                <input class="ui negative button"
+                       type="submit"
+                       value="{% trans "Deactivate" %}">
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+      {% endif %}
+    {% endif %}
+  {% endblock mfa_totp %}
+
+  {% block mfa_webauthn %}
+    {# TODO if we end up supporting this in the future, this section will need ported #}
+  {% endblock mfa_webauthn %}
+
+  {% block mfa_recovery %}
+    {# Skip placeholder segment, only show this section if recovery codes were previously generated #}
+    {% if "recovery_codes" in MFA_SUPPORTED_TYPES and authenticators.recovery_codes %}
+      <h3 class="ui small header">{% trans "Recovery codes" %}</h3>
+
+      <p>
+        {% blocktrans trimmed %}
+          Recovery codes are one-time use codes that can be used as backup two-factor authentication codes.
+        {% endblocktrans %}
+      </p>
+
+      {% url 'mfa_view_recovery_codes' as view_url %}
+      <a href="{{ view_url }}" class="ui button">
+        {% trans "Manage recovery codes" %}
+      </a>
+    {% endif %}
+  {% endblock mfa_recovery %}
+{% endblock edit_content %}

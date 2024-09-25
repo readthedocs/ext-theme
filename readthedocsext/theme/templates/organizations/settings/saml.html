@@ -1,9 +1,7 @@
 {% extends "organizations/admin/sso_edit.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
-{% load organizations %}
-{% load corporate %}
+{% load blocktrans trans from i18n %}
+{% load crispy from crispy_forms_tags %}
 
 {% block organization_edit_content_subheader %}
   {% trans "SAML integration" %}
@@ -15,11 +13,17 @@
 {% endblock organization_edit_sidebar_help_topics %}
 
 {% block organization_edit_content %}
+  {% if not sso_saml_enabled %}
+    {% include "organizations/includes/feature_disabled.html" with organization=organization plan="Pro" %}
+  {% endif %}
+
   {% if sso_integration %}
     <div class="ui basic segment">
       <div class="ui message">
         <div class="header">{% trans "Invite new users into your organization" %}</div>
-        <p>{% trans "You can invite people to join your organization by sending them this link:" %}</p>
+        <p>
+          {% trans "You can invite people to join your organization by sending them this link:" %}
+        </p>
 
         <div class="ui fluid action input">
           <input type="text"
@@ -34,8 +38,12 @@
       </div>
 
       <div class="ui message">
-        <div class="header">{% trans "Invite existing users into your organization" %}</div>
-        <p>{% trans "You can invite existing users to join your organization by sending them this link:" %}</p>
+        <div class="header">
+          {% trans "Invite existing users into your organization" %}
+        </div>
+        <p>
+          {% trans "You can invite existing users to join your organization by sending them this link:" %}
+        </p>
 
         <div class="ui fluid action input">
           <input type="text"
@@ -51,57 +59,72 @@
     </div>
   {% endif %}
 
-  <div class="ui basic segment">
-    <h3>{% trans "Configure your SAML provider" %}</h3>
+  {% if sso_saml_enabled %}
+    <div class="ui segment">
+      <h3>{% trans "Configure your SAML provider" %}</h3>
 
-    <p>
-      {% blocktrans %}
-        Use the following information to configure your SAML integration in your identity provider (IdP).
-      {% endblocktrans %}
-    </p>
+      <p>
+        {% blocktrans %}
+          Use the following information to configure your SAML integration in your identity provider (IdP).
+        {% endblocktrans %}
+      </p>
 
-    <div class="ui form">
-      <div class="field">
-        <label>{% trans "Single sign-on URL" %}</label>
-        <div class="ui fluid action input">
-          <input type="text"
-                 value="{{ rtd_saml_sso_url }}"
-                 id="saml-sso-url"
-                 readonly="true">
-          <button class="ui right icon button"
-                  data-clipboard-target="input#saml-sso-url">
-            <i class="fas fa-copy icon"></i>
-          </button>
+      <div class="ui form">
+        <div class="field">
+          <label>{% trans "Single sign-on URL" %}</label>
+          <div class="ui fluid action input">
+            <input type="text"
+                   value="{{ rtd_saml_sso_url }}"
+                   id="saml-sso-url"
+                   readonly="true">
+            <button class="ui right icon button"
+                    data-clipboard-target="input#saml-sso-url">
+              <i class="fas fa-copy icon"></i>
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="field">
-        <label>{% trans "Audience URI (SP entity ID)" %}</label>
-        <div class="ui fluid action input">
-          <input type="text"
-                 value="{{ rtd_saml_sp_url }}"
-                 id="saml-sp-url"
-                 readonly="true">
-          <button class="ui right icon button"
-                  data-clipboard-target="input#saml-sp-url">
-            <i class="fas fa-copy icon"></i>
-          </button>
+        <div class="field">
+          <label>{% trans "Audience URI (SP entity ID)" %}</label>
+          <div class="ui fluid action input">
+            <input type="text"
+                   value="{{ rtd_saml_sp_url }}"
+                   id="saml-sp-url"
+                   readonly="true">
+            <button class="ui right icon button"
+                    data-clipboard-target="input#saml-sp-url">
+              <i class="fas fa-copy icon"></i>
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="field">
-        <label>{% trans "Name ID format" %}</label>
-        <div class="ui fluid action input">
-          <input type="text"
-                 value="EmailAddress"
-                 id="saml-name-id-format"
-                 readonly="true">
-          <button class="ui right icon button"
-                  data-clipboard-target="input#saml-name-id-format">
-            <i class="fas fa-copy icon"></i>
-          </button>
+        <div class="field">
+          <label>{% trans "Name ID format" %}</label>
+          <div class="ui fluid action input">
+            <input type="text"
+                   value="EmailAddress"
+                   id="saml-name-id-format"
+                   readonly="true">
+            <button class="ui right icon button"
+                    data-clipboard-target="input#saml-name-id-format">
+              <i class="fas fa-copy icon"></i>
+            </button>
+          </div>
+        </div>
+        <div class="field">
+          <label>{% trans "Application username" %}</label>
+          <div class="ui fluid action input">
+            <input type="text"
+                   value="Email"
+                   id="saml-application-username"
+                   readonly="true">
+            <button class="ui right icon button"
+                    data-clipboard-target="input#saml-application-username">
+              <i class="fas fa-copy icon"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  {% endif %}
 
   {% if sso_integration %}
     <div class="ui basic segment">
@@ -143,10 +166,8 @@
         </div>
       </div>
     </div>
-  {% elif not sso_saml_enabled %}
-    {% include "organizations/includes/feature_disabled.html" with organization=organization %}
   {% else %}
-    <div class="ui padded">
+    <div class="ui basic fitted {% if not sso_saml_enabled %}disabled{% endif %} segment">
       <h3>{% trans "Create SAML integration" %}</h3>
 
       <form class="ui form" method="post" action=".">

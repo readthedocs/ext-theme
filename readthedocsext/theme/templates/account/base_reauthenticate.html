@@ -1,0 +1,26 @@
+{% extends "account/base_entrance.html" %}
+
+{% load blocktrans trans from i18n %}
+
+{% block head_title %}
+  {% trans "Confirm access" %}
+{% endblock head_title %}
+{% block content_title_text %}
+  {% trans "Confirm access" %}
+{% endblock content_title_text %}
+
+{% block content_body %}
+
+  {% block reauthenticate_content %}
+  {% endblock reauthenticate_content %}
+
+  {% if reauthentication_alternatives %}
+    <div class="ui small header">{% trans "Alternative options" %}</div>
+
+    <div class="ui list">
+      {% for alt in reauthentication_alternatives %}
+        <a href="{{ alt.url }}" class="item">{{ alt.description }}</a>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock content_body %}

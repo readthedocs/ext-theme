@@ -6,3 +6,8 @@
 .ui.ui.ui.short.placeholder.segment {
   min-height: 9rem;
 }
+
+.ui.horizontally.scrolling.segment {
+  max-height: fit-content;
+  overscroll-behavior: auto;
+}

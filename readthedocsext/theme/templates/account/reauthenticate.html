@@ -1,0 +1,20 @@
+{% extends "account/base_reauthenticate.html" %}
+
+{% load blocktrans trans from i18n %}
+{% load crispy from crispy_forms_tags %}
+
+{% block reauthenticate_content %}
+  <p>
+    {% blocktrans trimmed %}
+      Enter your account password to confirm access.
+    {% endblocktrans %}
+  </p>
+
+  {% url 'account_reauthenticate' as action_url %}
+  <form class="ui form" method="post" action="{{ action_url }}">
+    {% csrf_token %}
+    {{ form|crispy }}
+    {{ redirect_field }}
+    <button class="ui primary button" type="submit">{% trans "Confirm" %}</button>
+  </form>
+{% endblock reauthenticate_content %}
