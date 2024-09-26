@@ -8,7 +8,7 @@
 
 {% block content-header %}
   {% include "projects/partials/header.html" with overview_active="active" %}
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
   {% comment %}
@@ -21,4 +21,4 @@
   {% endcomment %}
 
   {% include "builds/partials/version_list.html" with objects=versions %}
-{% endblock %}
+{% endblock content %}

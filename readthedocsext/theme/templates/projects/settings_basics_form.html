@@ -1,10 +1,15 @@
 {% extends "projects/project_edit_base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags i18n %}
 
-{% block title %}{% trans "Edit Project" %}{% endblock %}
-{% block project_edit_content_header %}{% trans "Settings" %}{% endblock %}
+{% block title %}
+  {% trans "Edit Project" %}
+{% endblock %}
+
+{% block project_edit_content_header %}
+  {% trans "Settings" %}
+{% endblock %}
+
 {% block project_edit_active %}active{% endblock %}
 
 {% block project_edit_content %}
@@ -14,14 +19,10 @@
     <input class="ui primary button" type="submit" value="{% trans "Save" %}" />
   </form>
 
-  <div class="ui horizontal divider">
-    {% trans "More" %}
-  </div>
+  <div class="ui horizontal divider">{% trans "More" %}</div>
 
   <div class="ui red segment">
-    <h3 class="ui small header">
-      {% trans "Delete project" %}
-    </h3>
+    <h3 class="ui small header">{% trans "Delete project" %}</h3>
 
     <p>
       {% blocktrans trimmed %}
@@ -30,29 +31,30 @@
       {% endblocktrans %}
     </p>
 
-    <a class="ui button" data-bind="click: $root.show_modal('project-delete')">
+    <a class="ui button"
+       data-bind="click: $root.show_modal('project-delete')">
       <i class="fa-duotone fa-trash icon"></i>
       {% trans "Delete project" %}
     </a>
     <div class="ui mini modal" data-modal-id="project-delete">
-      <div class="header">
-        {% trans "Delete project" %}
-      </div>
+      <div class="header">{% trans "Delete project" %}</div>
       <div class="content">
         {% blocktrans trimmed with project=project.name %}
-          Are you sure you want to delete the project {{project}}? This action
+          Are you sure you want to delete the project {{ project }}? This action
           cannot be undone.
         {% endblocktrans %}
       </div>
       <div class="actions">
         <form method="post" action="{% url "projects_delete" project.slug %}">
           {% csrf_token %}
-          <input class="ui negative button" type="submit" value="{% trans "Delete project" %}">
+          <input class="ui negative button"
+                 type="submit"
+                 value="{% trans "Delete project" %}">
         </form>
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics_content %}
   <div class="ui mini header">{% trans "Tutorials" %}</div>

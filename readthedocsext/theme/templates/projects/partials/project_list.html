@@ -1,7 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load blocktrans trans from i18n %}
-{% load naturaltime from humanize %}
+{% load blocktrans from humanize i18n naturaltime trans %}
 
 {% block top_left_menu_items %}
   <div data-bind="using: FilterView()">
@@ -17,12 +16,15 @@
 
 {% block list_placeholder_icon_class %}
 {% endblock list_placeholder_icon_class %}
+
 {% block list_placeholder_header_filtered %}
   {% trans "No matching projects found" %}
 {% endblock list_placeholder_header_filtered %}
+
 {% block list_placeholder_header_empty %}
   {% trans "You don't have any projects configured yet" %}
 {% endblock list_placeholder_header_empty %}
+
 {% block list_placeholder_text_empty %}
   <a href="https://docs.readthedocs.io/page/tutorial/"
      target="_blank"

@@ -4,27 +4,32 @@
 
 {% block content-header %}
   {% include "organizations/partials/header.html" with edit_active="active" %}
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
   <div class="ui stackable grid">
     <div class="five wide computer five wide tablet sixteen wide mobile column">
 
       <div class="ui vertical pointing fluid menu">
-        <a class="item {% block organization_details_active %}{% endblock %}" href="{% url 'organization_edit' organization.slug %}">
+        <a class="item {% block organization_details_active %}{% endblock %}"
+           href="{% url 'organization_edit' organization.slug %}">
           {% trans "Details" %}
         </a>
-        <a class="item {% block organization_owners_active %}{% endblock %}" href="{% url 'organization_owners' organization.slug %}">
+        <a class="item {% block organization_owners_active %}{% endblock %}"
+           href="{% url 'organization_owners' organization.slug %}">
           {% trans "Owners" %}
         </a>
-        <a class="item {% block organization_security_log_active %}{% endblock %}" href="{% url 'organization_security_log' organization.slug %}">
+        <a class="item {% block organization_security_log_active %}{% endblock %}"
+           href="{% url 'organization_security_log' organization.slug %}">
           {% trans "Security log" %}
         </a>
         {% if USE_ORGANIZATIONS %}
-          <a class="item {% block organization_subscription_active %}{% endblock %}" href="{% url 'subscription_detail' organization.slug %}">
+          <a class="item {% block organization_subscription_active %}{% endblock %}"
+             href="{% url 'subscription_detail' organization.slug %}">
             {% trans "Subscription" %}
           </a>
-          <a class="item {% block organization_sso_active %}{% endblock %}" href="{% url 'organization_sso' organization.slug %}">
+          <a class="item {% block organization_sso_active %}{% endblock %}"
+             href="{% url 'organization_sso' organization.slug %}">
             {% trans "Authorization" %}
           </a>
         {% endif %}

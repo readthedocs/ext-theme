@@ -6,14 +6,14 @@
   {% blocktrans with query=query|default:"" %}
     Search: {{ query }}
   {% endblocktrans %}
-{% endblock %}
+{% endblock title %}
 
 {% block extra_links %}
   {{ super }}
   <style>
     .navigable > ul > li { border-bottom: 0; }
   </style>
-{% endblock %}
+{% endblock extra_links %}
 
 {% block content-header %}
   {% if project_obj %}
@@ -21,7 +21,7 @@
       {% include "projects/partials/header.html" %}
     {% endwith %}
   {% endif %}
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
 
@@ -39,9 +39,9 @@
         {% for name, count, selected in facets.index %}
           <div class="item {% if selected %}active{% endif %}">
             {% if index == name %}
-              <a href="?{% url_replace request 'index' ''  %}">{{ name }}
+              <a href="?{% url_replace request 'index' '' %}">{{ name }}
             {% else %}
-              <a href="?{% url_replace request 'index' name  %}">{{ name }}
+              <a href="?{% url_replace request 'index' name %}">{{ name }}
             {% endif %}
             ({{ count }})
           </a>
@@ -55,9 +55,9 @@
         {% for name, count, selected in facets.project %}
           <div class="item {% if selected %}active{% endif %}">
             {% if project == name %}
-              <a href="?{% url_replace request 'project' ''  %}">{{ name }}
+              <a href="?{% url_replace request 'project' '' %}">{{ name }}
             {% else %}
-              <a href="?{% url_replace request 'project' name  %}">{{ name }}
+              <a href="?{% url_replace request 'project' name %}">{{ name }}
             {% endif %}
             ({{ count }})
           </a>
@@ -71,9 +71,9 @@
         {% for name, count, selected in facets.version %}
           <div class="item {% if selected %}active{% endif %}">
             {% if version == name %}
-              <a href="?{% url_replace request 'version' ''  %}">{{ name }}
+              <a href="?{% url_replace request 'version' '' %}">{{ name }}
             {% else %}
-              <a href="?{% url_replace request 'version' name  %}">{{ name }}
+              <a href="?{% url_replace request 'version' name %}">{{ name }}
             {% endif %}
             ({{ count }})
           </a>
@@ -87,9 +87,9 @@
         {% for name, count, selected in facets.language %}
           <div class="item {% if selected %}active{% endif %}">
             {% if language == name %}
-              <a href="?{% url_replace request 'language' ''  %}">{{ name }}
+              <a href="?{% url_replace request 'language' '' %}">{{ name }}
             {% else %}
-              <a href="?{% url_replace request 'language' name  %}">{{ name }}
+              <a href="?{% url_replace request 'language' name %}">{{ name }}
             {% endif %}
             ({{ count }})
           </a>
@@ -104,9 +104,9 @@
         {% for name, count, selected in facets.role_name %}
           <div class="item {% if selected %}active{% endif %}">
             {% if role_name == name %}
-              <a href="?{% url_replace request 'role_name' ''  %}">{{ name }}
+              <a href="?{% url_replace request 'role_name' '' %}">{{ name }}
             {% else %}
-              <a href="?{% url_replace request 'role_name' name  %}">{{ name }}
+              <a href="?{% url_replace request 'role_name' name %}">{{ name }}
             {% endif %}
             ({{ count }})
           </a>
@@ -244,4 +244,4 @@
 <!-- END search results -->
     </div>
   </div>
-{% endblock %}
+{% endblock content %}

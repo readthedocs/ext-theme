@@ -1,7 +1,6 @@
 {% extends "proxito/base.html" %}
 
-{% load static from static %}
-{% load trans from i18n %}
+{% load from i18n static trans %}
 
 {# We still use our CSS on user hosted content #}
 {% block head_links %}
@@ -11,6 +10,7 @@
 {# Remove unwanted JS from user hosted content #}
 {% block head_scripts %}
 {% endblock head_scripts %}
+
 {% block body_scripts %}
 {% endblock body_scripts %}
 

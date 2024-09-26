@@ -1,9 +1,6 @@
 {% extends "profiles/base_edit.html" %}
 
-{% load blocktrans trans from i18n %}
-{% load crispy from crispy_forms_filters %}
-
-{% load alter_field from ext_theme_tags %}
+{% load alter_field blocktrans crispy crispy_forms_filters ext_theme_tags from i18n trans %}
 
 {% block profile_admin_gold_edit %}
   active
@@ -120,7 +117,7 @@
           {# Note: not an actual form as the JS handles the POST and Stripe Checkout redirect #}
           <div class="ui loading form" data-bind="css: { loading: stripeLoading }">
             {% alter_field form.level data_bind="valueInit: priceId" %}
-            {{ form | crispy }}
+            {{ form|crispy }}
             <input class="ui primary button"
                    type="submit"
                    data-bind="click: createCheckoutSession"

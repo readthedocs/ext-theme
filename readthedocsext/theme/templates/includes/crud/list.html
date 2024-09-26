@@ -64,10 +64,9 @@
 
 {% endcomment %}
 
-{% load i18n %}
-{% load pagination_tags %}
+{% load i18n pagination_tags %}
 
-<div {% block view_binding %}{% endblock view_binding %}>
+<div {% block view_binding %}{% endblock %}>
   {% block top_menu %}
     <div class="ui text menu">
       {% block top_left_menu_items %}
@@ -92,7 +91,7 @@
                 {% comment %}
                   <button class="ui button">Add</button>
                 {% endcomment %}
-              {% endblock %}
+              {% endblock create_button %}
             </div>
           {% endblock top_right_menu_items %}
         </div>
@@ -233,7 +232,7 @@
 
           {% for object in objects %}
             {# Item view for each object in objects queryset #}
-            {% block list_item_start %}<div class="item">{% endblock list_item_start %}
+            {% block list_item_start %}<div class="item">{% endblock %}
             {% block list_item %}
 
               {% block list_item_right_menu %}

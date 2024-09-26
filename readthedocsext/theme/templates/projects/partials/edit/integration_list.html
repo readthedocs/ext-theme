@@ -1,10 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-
-{% load core_tags %}
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load core_tags i18n privacy_tags projects_tags %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
@@ -18,6 +14,7 @@
 {% block list_placeholder_icon_class %}
   fa-duotone fa-plug
 {% endblock list_placeholder_icon_class %}
+
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No integrations have been configured yet
@@ -29,6 +26,7 @@
     {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
+
 {% block list_placeholder_text %}
   <a class="ui button"
      href="https://docs.readthedocs.io/en/stable/guides/setup/git-repo-manual.html"

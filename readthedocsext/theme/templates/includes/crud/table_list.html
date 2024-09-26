@@ -64,10 +64,9 @@
 
 {% endcomment %}
 
-{% load trans blocktrans from i18n %}
-{% load autopaginate paginate from pagination_tags %}
+{% load autopaginate blocktrans from i18n paginate pagination_tags trans %}
 
-<div {% block view_binding %}{% endblock view_binding %}>
+<div {% block view_binding %}{% endblock %}>
   {% block top_menu %}
     <div class="ui stackable text menu">
       {% block top_left_menu_items %}
@@ -149,11 +148,11 @@
           The descriptive text to use in the placeholder, below the header
 
     {% endcomment %}
-    <div class="{% block list_placeholder_class %}ui placeholder segment{% endblock list_placeholder_class %}">
+    <div class="{% block list_placeholder_class %}ui placeholder segment{% endblock %}">
       {% block list_placeholder %}
         <div class="ui icon header">
           {% block list_placeholder_icon %}
-            <i class="{% block list_placeholder_icon_class %}{% endblock list_placeholder_icon_class %} icon"></i>
+            <i class="{% block list_placeholder_icon_class %}{% endblock %} icon"></i>
           {% endblock list_placeholder_icon %}
           {% block list_placeholder_header %}
             {# The filter should always be bound, but data might be `{}` #}
@@ -317,7 +316,7 @@
     {% endcomment %}
     {% block list %}
       <div class="ui vertically fitted segment">
-        <table class="{% block list_classes %}ui very basic stacking table{% endblock list_classes %}">
+        <table class="{% block list_classes %}ui very basic stacking table{% endblock %}">
 
           {% if not skip_pagination %}
             {% autopaginate objects 15 %}
@@ -332,8 +331,8 @@
                 {% block list_item %}
 
                   {% block list_item_header_column %}
-                    <td class="{% block list_item_header_column_classes %}{% endblock list_item_header_column_classes %}">
-                      <div class="{% block list_item_header_classes %}ui tiny header{% endblock list_item_header_classes %}">
+                    <td class="{% block list_item_header_column_classes %}{% endblock %}">
+                      <div class="{% block list_item_header_classes %}ui tiny header{% endblock %}">
                         {% block list_item_image %}
                           {% comment %}
                           On the off chance you actually want an image here,
@@ -387,7 +386,7 @@
                   {% endblock list_item_extra_column %}
 
                   {% block list_item_right_column %}
-                    <td class="{% block list_item_right_column_classes %}right aligned collapsing{% endblock list_item_right_column_classes %}">
+                    <td class="{% block list_item_right_column_classes %}right aligned collapsing{% endblock %}">
                       {% block list_item_right_menu %}
                         <div class="ui small icon buttons">
                           {% block list_item_right_buttons %}

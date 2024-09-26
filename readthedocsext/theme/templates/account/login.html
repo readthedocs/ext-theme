@@ -1,8 +1,6 @@
 {% extends "account/base_entrance.html" %}
 
-{% load get_providers from socialaccount %}
-{% load crispy from crispy_forms_tags %}
-{% load trans blocktrans from i18n %}
+{% load blocktrans crispy crispy_forms_tags from get_providers i18n socialaccount trans %}
 
 {% block head_title %}
   {% trans "Log in" %}

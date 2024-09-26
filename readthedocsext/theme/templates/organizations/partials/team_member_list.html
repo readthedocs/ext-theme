@@ -5,9 +5,7 @@
   update the templates for project maintainers and owner lists
 {% endcomment %}
 
-{% load i18n %}
-{% load gravatar %}
-{% load privacy_tags %}
+{% load gravatar i18n privacy_tags %}
 
 {% block top_left_menu_items %}
   {% if filter %}
@@ -23,15 +21,18 @@
     {% trans "Invite member" as create_text %}
     {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
   {% endif %}
-{% endblock %}
+{% endblock create_button %}
 
 {% block list_placeholder_icon_class %}fad fa-user-plus icon{% endblock %}
+
 {% block list_placeholder_header_filtered %}
   {% trans "No matching team members found" %}
 {% endblock list_placeholder_header_filtered %}
+
 {% block list_placeholder_header_empty %}
   {% trans "Team has no members" %}
 {% endblock list_placeholder_header_empty %}
+
 {% block list_placeholder_text_empty %}
   {% if request.user|is_admin:organization %}
     {% url "organization_team_member_add" organization.slug team.slug as create_url %}
@@ -45,7 +46,8 @@
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
-  <img class="ui rounded square image" src="{% gravatar_url object.email 64 %}">
+  <img class="ui rounded square image"
+       src="{% gravatar_url object.email 64 %}">
 {% endblock list_item_image %}
 
 {% block list_item_header %}
@@ -67,9 +69,7 @@
       {% endcomment %}
     </a>
     {% if full_name %}
-      <div class="sub header">
-        {{ object.username }}
-      </div>
+      <div class="sub header">{{ object.username }}</div>
     {% endif %}
   {% endwith %}
 {% endblock list_item_header %}

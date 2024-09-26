@@ -1,10 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-
-{% load core_tags %}
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load core_tags i18n privacy_tags projects_tags %}
 
 {% block create_button %}
   {% url "projects_webhooks_create" project.slug as create_url %}
@@ -15,6 +11,7 @@
 {% block list_placeholder_icon_class %}
   fa-duotone fa-webhook
 {% endblock list_placeholder_icon_class %}
+
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No webhooks have been configured yet

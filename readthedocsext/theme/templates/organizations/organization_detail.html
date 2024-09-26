@@ -1,15 +1,12 @@
 {% extends "organizations/base.html" %}
 
-{% load i18n %}
-{% load gravatar %}
-
-{% load organizations %}
+{% load gravatar i18n organizations %}
 
 {% block title %}{{ organization.name }}{% endblock %}
 
 {% block content-header %}
   {% include "organizations/partials/header.html" with organization=organization projects_active="active" %}
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
   {% if organization|has_sso_enabled:"allauth" %}

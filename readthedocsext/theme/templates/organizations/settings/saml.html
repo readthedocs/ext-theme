@@ -1,7 +1,6 @@
 {% extends "organizations/admin/sso_edit.html" %}
 
-{% load blocktrans trans from i18n %}
-{% load crispy from crispy_forms_tags %}
+{% load blocktrans crispy crispy_forms_tags from i18n trans %}
 
 {% block organization_edit_content_subheader %}
   {% trans "SAML integration" %}
@@ -132,7 +131,7 @@
 
       <form class="ui form" method="post" action=".">
         {% csrf_token %}
-        {{ form | crispy }}
+        {{ form|crispy }}
         <input class="ui submit primary button"
                type="submit"
                name="submit"
@@ -172,7 +171,7 @@
 
       <form class="ui form" method="post" action=".">
         {% csrf_token %}
-        {{ form | crispy }}
+        {{ form|crispy }}
         <input class="ui submit primary button"
                type="submit"
                name="submit"

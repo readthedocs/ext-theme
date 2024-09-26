@@ -5,7 +5,7 @@
   when proxito has a problem or the web servers are starting to be overloaded.
 {% endcomment %}
 
-{% load blocktrans trans from i18n %}
+{% load blocktrans from i18n trans %}
 
 {% block title %}
   {% trans "Server error" %}
@@ -14,6 +14,7 @@
 {% block error_status %}
   {% firstof status_code view.status_code 500 %}
 {% endblock error_status %}
+
 {% block error_title %}
   {{ block.super }}
   {% trans "Something went wrong" %}

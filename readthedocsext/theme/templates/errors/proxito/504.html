@@ -6,7 +6,7 @@
   issue with our application code.
 {% endcomment %}
 
-{% load blocktrans trans from i18n %}
+{% load blocktrans from i18n trans %}
 
 {% block title %}
   {% trans "Service unavailable" %}
@@ -15,6 +15,7 @@
 {% block error_status %}
   504
 {% endblock error_status %}
+
 {% block error_title %}
   {{ block.super }}
   {% trans "Service unavailable" %}

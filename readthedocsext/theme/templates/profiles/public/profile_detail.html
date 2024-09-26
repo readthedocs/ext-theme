@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
-{% load i18n %}
-{% load privacy_tags %}
+{% load i18n privacy_tags %}
 
-{% block title %}{% blocktrans with profile.user as user %}{{ user }}'s profile{% endblocktrans %}{% endblock %}
+{% block title %}
+  {% blocktrans with profile.user as user %}{{ user }}'s profile{% endblocktrans %}
+{% endblock %}
 
 {% block content %}
   <div class="ui stackable computer reversed grid">
@@ -18,4 +19,4 @@
       {% include "profiles/partials/profile_project_list.html" with objects=project_list objects=public_projects %}
     </div>
   </div>
-{% endblock %}
+{% endblock content %}

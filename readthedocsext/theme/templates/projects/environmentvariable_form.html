@@ -1,11 +1,10 @@
 {% extends "projects/environmentvariable_list.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags i18n %}
 
 {% block project_edit_content_subheader %}
   {% trans "Add variable" %}
-{% endblock %}
+{% endblock project_edit_content_subheader %}
 
 {% block project_edit_content %}
   <div class="ui icon message">
@@ -25,6 +24,8 @@
     {% csrf_token %}
     {{ form|crispy }}
 
-    <input class="ui primary button" type="submit" value="{% trans "Add variable" %}">
+    <input class="ui primary button"
+           type="submit"
+           value="{% trans "Add variable" %}">
   </form>
-{% endblock %}
+{% endblock project_edit_content %}

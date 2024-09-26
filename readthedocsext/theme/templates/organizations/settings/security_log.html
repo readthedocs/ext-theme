@@ -1,6 +1,6 @@
 {% extends "organizations/settings/base.html" %}
 
-{% load trans from i18n %}
+{% load from i18n trans %}
 
 {% block title %}
   {{ organization.name }} - {% trans "Security log" %}
@@ -9,6 +9,7 @@
 {% block organization_security_log_active %}
   active
 {% endblock organization_security_log_active %}
+
 {% block organization_edit_content_header %}
   {% trans "Security log" %}
 {% endblock organization_edit_content_header %}

@@ -1,20 +1,19 @@
 {% extends "organizations/base.html" %}
 
-{% load i18n %}
-{% load gravatar %}
+{% load gravatar i18n organizations %}
 
-{% load organizations %}
-
-{% block title %}{{ organization.name }} - {% trans "Members" %}{% endblock %}
+{% block title %}
+  {{ organization.name }} - {% trans "Members" %}
+{% endblock %}
 
 {% block content-header %}
   {% include "organizations/partials/header.html" with organization=organization members_active="active" %}
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
   {% if organization|has_sso_enabled:"allauth" %}
     {# We still have owners listed in this UI, which are included in the members union queryset #}
-    {% include "organizations/partials/has_sso/members_list.html"  with objects=members %}
+    {% include "organizations/partials/has_sso/members_list.html" with objects=members %}
   {% else %}
     {% include "organizations/partials/members_list.html" with objects=members %}
   {% endif %}

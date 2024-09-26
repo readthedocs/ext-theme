@@ -1,11 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-{% load humanize %}
-{% load gravatar %}
-
-{% load organizations %}
-{% load privacy_tags %}
+{% load gravatar humanize i18n organizations privacy_tags %}
 
 {% block top_left_menu_items %}
   <div data-bind="using: FilterView()">
@@ -23,15 +18,18 @@
     {% url "organization_create" as create_url %}
     {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
   {% endif %}
-{% endblock %}
+{% endblock create_button %}
 
 {% block list_placeholder_icon_class %}fad fa-building icon{% endblock %}
+
 {% block list_placeholder_header_filtered %}
   {% trans "No matching organizations found" %}
 {% endblock list_placeholder_header_filtered %}
+
 {% block list_placeholder_header_empty %}
   {% trans "You are not a member of an organization yet" %}
 {% endblock list_placeholder_header_empty %}
+
 {% block list_placeholder_text_empty %}
   {% comment %}
     This should be stronger onboarding on how to find an existing organization
@@ -81,8 +79,7 @@
       {% include "includes/components/config_label.html" with icon="fad fa-user-check" text=text popup=popup %}
     {% endif %}
   </a>
-  <div class="sub header">
-  </div>
+  <div class="sub header"></div>
 {% endblock list_item_header %}
 
 {% block list_item_meta %}
@@ -95,7 +92,8 @@
     {% endblocktrans %}
   </a>
   {% if not object|has_sso_enabled:"allauth" %}
-    <a class="item" href="{% url "organization_team_list" slug=object.slug %}">
+    <a class="item"
+       href="{% url "organization_team_list" slug=object.slug %}">
       {% blocktrans trimmed with team_count=object.teams.count %}
         {{ team_count }} teams
       {% endblocktrans %}

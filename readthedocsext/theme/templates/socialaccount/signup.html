@@ -1,7 +1,6 @@
 {% extends "socialaccount/base_entrance.html" %}
 
-{% load blocktrans trans from i18n %}
-{% load crispy from crispy_forms_tags %}
+{% load blocktrans crispy crispy_forms_tags from i18n trans %}
 
 {% block head_title %}
   {% trans "Sign up" %}
@@ -16,7 +15,7 @@
   <p class="ui info message">
     <i class="fas fa-info-circle icon"></i>
     {% blocktrans with provider_name=account.get_provider.name %}
-      You are signing up for a new account using your {{provider_name}} account.
+      You are signing up for a new account using your {{ provider_name }} account.
     {% endblocktrans %}
   </p>
 

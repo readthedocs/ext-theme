@@ -2,8 +2,14 @@
 
 {% load i18n %}
 
-{% block title %}{% trans "Connected services" %}{% endblock %}
-{% block edit_content_header %}{% trans "Connected services" %}{% endblock %}
+{% block title %}
+  {% trans "Connected services" %}
+{% endblock %}
+
+{% block edit_content_header %}
+  {% trans "Connected services" %}
+{% endblock %}
+
 {% block profile_admin_social_accounts %}active{% endblock %}
 
 {% block edit_content %}
@@ -11,9 +17,7 @@
 
   <div class="ui tiny modal" data-modal-id="socialaccount-connections">
     <i class="fa-solid fa-close close icon"></i>
-    <div class="header">
-      {% trans "Add a connection" %}
-    </div>
+    <div class="header">{% trans "Add a connection" %}</div>
     <div class="content center aligned">
       <div class="ui basic center aligned segment">
         <p>
@@ -27,9 +31,7 @@
       </div>
     </div>
     <div class="actions">
-      <div class="ui cancel button">
-        {% trans "Cancel" %}
-      </div>
+      <div class="ui cancel button">{% trans "Cancel" %}</div>
     </div>
   </div>
-{% endblock %}
+{% endblock edit_content %}

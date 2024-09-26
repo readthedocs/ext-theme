@@ -1,8 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-{% load gravatar %}
-{% load privacy_tags %}
+{% load gravatar i18n privacy_tags %}
 
 {% block top_left_menu_items %}
   <div data-bind="using: FilterView()">
@@ -16,20 +14,22 @@
     {% trans "Add team" as create_text %}
     {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
   {% endif %}
-{% endblock %}
+{% endblock create_button %}
 
 {% block list_placeholder_icon_class %}fad fa-users icon{% endblock %}
+
 {% block list_placeholder_header_filtered %}
   {% trans "No matching teams found" %}
 {% endblock list_placeholder_header_filtered %}
+
 {% block list_placeholder_header_empty %}
   {% trans "No teams are configured for this organization yet" %}
 {% endblock list_placeholder_header_empty %}
+
 {% block list_placeholder_text_empty %}
   {% if request.user|is_admin:organization %}
-    <a href="{% url "organization_team_add" organization.slug  %}" class="ui primary button">
-      {% trans "Add team" %}
-    </a>
+    <a href="{% url "organization_team_add" organization.slug %}"
+       class="ui primary button">{% trans "Add team" %}</a>
   {% endif %}
 {% endblock list_placeholder_text_empty %}
 
@@ -71,23 +71,21 @@
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
-  <a href="{{ object.get_absolute_url }}">
-    {{ object.name }}
-  </a>
-  <div class="sub header">
-    {{ object.get_access_display }}
-  </div>
+  <a href="{{ object.get_absolute_url }}">{{ object.name }}</a>
+  <div class="sub header">{{ object.get_access_display }}</div>
 {% endblock list_item_header %}
 
 {% block list_item_meta_items %}
-  <a class="item" href="{% url "organization_members" organization.slug %}?teams__slug={{ object.slug }}">
+  <a class="item"
+     href="{% url "organization_members" organization.slug %}?teams__slug={{ object.slug }}">
     {% blocktrans trimmed count object.members.count as member_count %}
       {{ member_count }} member
     {% plural %}
       {{ member_count }} members
     {% endblocktrans %}
   </a>
-  <a class="item" href="{% url "organization_detail" organization.slug %}?teams__slug={{ object.slug }}">
+  <a class="item"
+     href="{% url "organization_detail" organization.slug %}?teams__slug={{ object.slug }}">
     {% blocktrans trimmed count object.projects.count as project_count %}
       {{ project_count }} project
     {% plural %}
@@ -97,4 +95,4 @@
 {% endblock list_item_meta_items %}
 
 {% block list_item_extra %}
-{% endblock %}
+{% endblock list_item_extra %}

@@ -2,11 +2,16 @@
 
 {% load i18n %}
 
-{% block title %}{{ project.name }} - {% trans "SSH keys" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "SSH keys" %}
+{% endblock %}
 
 {% block project_keys_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "SSH keys" %}{% endblock %}
+
+{% block project_edit_content_header %}
+  {% trans "SSH keys" %}
+{% endblock %}
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/keys_list.html" with objects=corporateprofile_list %}
-{% endblock %}
+{% endblock project_edit_content %}

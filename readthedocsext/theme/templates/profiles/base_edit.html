@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load trans from i18n %}
+{% load from i18n trans %}
 
 {% block notifications %}
   {# User notifications only #}
@@ -37,7 +37,7 @@
                href="{% url 'account_advertising' %}">{% trans "Advertising" %}</a>
           {% endif %}
           {# djlint: on T003 #}
-        {% endblock %}
+        {% endblock profile-admin-nav %}
       </div>
 
       {% block edit_sidebar %}
@@ -81,4 +81,4 @@
 
     {% include "includes/utils/embed_docs.html" %}
   </div>
-{% endblock %}
+{% endblock content %}

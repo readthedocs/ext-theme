@@ -1,9 +1,6 @@
 {% extends "organizations/partials/team_list.html" %}
 
-{% load i18n %}
-
-{% load organizations %}
-{% load privacy_tags %}
+{% load i18n organizations privacy_tags %}
 
 {# Don't show filters #}
 {% block top_left_menu_items %}
@@ -12,19 +9,19 @@
 {# Show create button as disabled #}
 {% block create_button %}
   <span data-content="{% trans "Teams are managed with your SSO provider" %}">
-    <span class="ui disabled button">
-      {% trans "Add team" %}
-    </span>
+    <span class="ui disabled button">{% trans "Add team" %}</span>
   </span>
-{% endblock %}
+{% endblock create_button %}
 
 {# Show more specific placeholder content #}
 {% block list_placeholder_icon_class %}fad fa-users icon{% endblock %}
+
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     Teams are disabled for this organization
   {% endblocktrans %}
 {% endblock list_placeholder_header %}
+
 {% block list_placeholder_text %}
   <div class="inline">
     {% blocktrans trimmed %}

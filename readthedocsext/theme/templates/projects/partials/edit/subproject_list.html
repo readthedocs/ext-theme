@@ -1,12 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-
-{% load gravatar %}
-
-{% load core_tags %}
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load core_tags gravatar i18n privacy_tags projects_tags %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
@@ -20,6 +14,7 @@
 {% block list_placeholder_icon_class %}
   fa-duotone fa-sitemap
 {% endblock list_placeholder_icon_class %}
+
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No subprojects exist yet
@@ -64,5 +59,6 @@
 
 {% block list_item_meta_list %}
 {% endblock list_item_meta_list %}
+
 {% block list_item_extra_list %}
 {% endblock list_item_extra_list %}

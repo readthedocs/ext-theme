@@ -2,9 +2,15 @@
 
 {% load i18n %}
 
-{% block title %}{% blocktrans with project.name as name %}Delete {{ name }}?{% endblocktrans %}{% endblock %}
+{% block title %}
+  {% blocktrans with project.name as name %}Delete {{ name }}?{% endblocktrans %}
+{% endblock %}
 
-{% block content-header %}<h1>{% blocktrans with project.name as name %}Delete {{ name }}?{% endblocktrans %}</h1>{% endblock %}
+{% block content-header %}
+  <h1>
+    {% blocktrans with project.name as name %}Delete {{ name }}?{% endblocktrans %}
+  </h1>
+{% endblock %}
 
 {% block content %}
 
@@ -21,7 +27,8 @@
 
   <p>{% trans "You sure?" %} O_o</p>
 
-  <form class="ui form" method="post" action=".">{% csrf_token %}
+  <form class="ui form" method="post" action=".">
+    {% csrf_token %}
     <input class="ui button" type="submit" value="{% trans "Delete forever" %}">
   </form>
-{% endblock %}
+{% endblock content %}

@@ -1,10 +1,11 @@
 {% extends "mfa/recovery_codes/base.html" %}
 
-{% load blocktrans trans from i18n %}
+{% load blocktrans from i18n trans %}
 
 {% block head_title %}
   {% trans "Recovery codes" %}
 {% endblock head_title %}
+
 {% block edit_content_subheader_section %}
   <div class="active section">{% trans "Recovery codes" %}</div>
 {% endblock edit_content_subheader_section %}

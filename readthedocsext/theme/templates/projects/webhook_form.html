@@ -1,14 +1,11 @@
 {% extends "projects/webhook_list.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags i18n %}
 
 {% block project_edit_content_subheader %}
   {% if webhook %}
     <div class="ui breadcrumb">
-      <div class="active section">
-        {{ webhook.url | truncatechars:50 }}
-      </div>
+      <div class="active section">{{ webhook.url|truncatechars:50 }}</div>
     </div>
   {% else %}
     {% trans "Add webhook" %}
@@ -43,11 +40,9 @@
           </a>
         </div>
       {% empty %}
-        <div class="item">
-          {% trans 'There is no recent activity' %}
-        </div>
+        <div class="item">{% trans 'There is no recent activity' %}</div>
       {% endfor %}
     </div>
   </div>
 
-{% endblock %}
+{% endblock project_edit_content %}

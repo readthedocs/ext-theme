@@ -2,19 +2,22 @@
 
 {% load i18n %}
 
-{% block title %}{{ project.name }} - {% trans "Subprojects" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "Subprojects" %}
+{% endblock %}
 
 {% block project_subprojects_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Subprojects" %}{% endblock %}
+
+{% block project_edit_content_header %}
+  {% trans "Subprojects" %}
+{% endblock %}
 
 {% block project_edit_content %}
   {% if superproject %}
     <div class="ui icon message">
       <i class="fa-duotone fa-circle-exclamation icon"></i>
       <div class="content">
-        <div class="header">
-          {% trans "Nested subprojects are not supported" %}
-        </div>
+        <div class="header">{% trans "Nested subprojects are not supported" %}</div>
         <p>
           {% blocktrans trimmed with project=superproject.name %}
             This project is already configured as a subproject of {{ project }}.
@@ -33,7 +36,7 @@
   {% else %}
     {% include "projects/partials/edit/subproject_list.html" with objects=object_list %}
   {% endif %}
-{% endblock %}
+{% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/subprojects.html" text="Subprojects: host multiple projects on a single domain" is_external=True class="item" %}

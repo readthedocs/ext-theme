@@ -1,12 +1,16 @@
 {% extends "projects/project_edit_base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags i18n %}
 
-{% block title %}{{ project.name }} - {% trans "Translations" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "Translations" %}
+{% endblock %}
 
 {% block project_translations_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Translations" %}{% endblock %}
+
+{% block project_edit_content_header %}
+  {% trans "Translations" %}
+{% endblock %}
 
 {% block project_edit_content %}
   {% if not project.supports_translations %}
@@ -14,44 +18,40 @@
     <div class="ui icon message">
       <i class="fa-duotone fa-circle-exclamation icon"></i>
       <div class="content">
-        <div class="header">
-          {% trans "Translations are not supported" %}
-        </div>
+        <div class="header">{% trans "Translations are not supported" %}</div>
         <p>
           {% blocktrans trimmed with project_settings_url=project_settings_url %}
             This project is <a href="{{ project_settings_url }}">configured</a> with a versioning scheme that doesn't support translations.
           {% endblocktrans %}
         </p>
       </div>
-  {% elif project.main_language_project %}
-    <div class="ui icon message">
-      <i class="fa-duotone fa-diagram-nested icon"></i>
-      <div class="content">
-        <div class="header">
-          {% trans "Nested translations are not supported" %}
-        </div>
-        <p>
-          {% blocktrans trimmed with language=project.get_language_display  main_project=project.main_language_project.name %}
-            This project is already configured as the {{ language }} translation of
-            "{{ main_project }}".
-          {% endblocktrans %}
-        </p>
-
-        <p>
-          <a href="{% url 'projects_translations' project_slug=project.main_language_project.slug %}">
-            {% blocktrans trimmed with main_project=project.main_language_project.name %}
-              View all translations of "{{ main_project }}".
+    {% elif project.main_language_project %}
+      <div class="ui icon message">
+        <i class="fa-duotone fa-diagram-nested icon"></i>
+        <div class="content">
+          <div class="header">{% trans "Nested translations are not supported" %}</div>
+          <p>
+            {% blocktrans trimmed with language=project.get_language_display main_project=project.main_language_project.name %}
+              This project is already configured as the {{ language }} translation of
+              "{{ main_project }}".
             {% endblocktrans %}
-          </a>
-        </p>
-      </div>
-    </div>
-  {% else %}
-    {% include "projects/partials/edit/translation_list.html" with objects=lang_projects %}
-  {% endif %}
-{% endblock %}
+          </p>
 
-{% block project_edit_sidebar_help_topics %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/localization.html" text="Localization of documentation" is_external=True class="item" %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/manage-translations-sphinx.html" text="How to manage translations for Sphinx projects" is_external=True class="item" %}
-{% endblock project_edit_sidebar_help_topics %}
+          <p>
+            <a href="{% url 'projects_translations' project_slug=project.main_language_project.slug %}">
+              {% blocktrans trimmed with main_project=project.main_language_project.name %}
+                View all translations of "{{ main_project }}".
+              {% endblocktrans %}
+            </a>
+          </p>
+        </div>
+      </div>
+    {% else %}
+      {% include "projects/partials/edit/translation_list.html" with objects=lang_projects %}
+    {% endif %}
+  {% endblock project_edit_content %}
+
+  {% block project_edit_sidebar_help_topics %}
+    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/localization.html" text="Localization of documentation" is_external=True class="item" %}
+    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/manage-translations-sphinx.html" text="How to manage translations for Sphinx projects" is_external=True class="item" %}
+  {% endblock project_edit_sidebar_help_topics %}

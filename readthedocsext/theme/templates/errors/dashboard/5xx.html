@@ -2,7 +2,7 @@
 
 {# The dashboard 5xx page, shows like it is part of the application #}
 
-{% load blocktrans trans from i18n %}
+{% load blocktrans from i18n trans %}
 
 {% block title %}
   {% trans "Server error" %}
@@ -11,6 +11,7 @@
 {% block error_status %}
   500
 {% endblock error_status %}
+
 {% block error_title %}
   {% trans "Something went wrong" %}
 {% endblock error_title %}
@@ -18,12 +19,15 @@
 {% block error_icon_computer_name %}
   fa-fire fa-swap-opacity
 {% endblock error_icon_computer_name %}
+
 {% block error_icon_mobile_name %}
   fa-fire fa-swap-opacity
 {% endblock error_icon_mobile_name %}
+
 {% block error_icon_computer_style %}
   --fa-primary-color: red; --fa-secondary-color: orangered;
 {% endblock error_icon_computer_style %}
+
 {% block error_icon_mobile_style %}
   --fa-primary-color: red; --fa-secondary-color: orangered;
 {% endblock error_icon_mobile_style %}

@@ -1,16 +1,20 @@
 {% extends "projects/project_edit_base.html" %}
 
-{% load i18n %}
-{% load ext_theme_tags %}
+{% load ext_theme_tags i18n %}
 
-{% block title %}{{ project.name }} - {% trans "Redirects" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "Redirects" %}
+{% endblock %}
 
 {% block project_redirects_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Redirects" %}{% endblock %}
+
+{% block project_edit_content_header %}
+  {% trans "Redirects" %}
+{% endblock %}
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/redirect_list.html" with objects=redirects %}
-{% endblock %}
+{% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/redirects.html" text="How to use custom URL redirects in documentation projects" is_external=True class="item" %}

@@ -5,8 +5,7 @@
   to the same image always.
 {% endcomment %}
 
-{% load blocktrans from i18n %}
-{% load static from static %}
+{% load blocktrans from i18n static %}
 
 {% if project.remote_repository %}
   <img class="ui {{ classes|default_if_none:"small rounded" }} image"

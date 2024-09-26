@@ -1,5 +1,4 @@
-{% load static from static %}
-{% load webpack_static settings_dashboard from ext_theme_tags %}
+{% load ext_theme_tags from settings_dashboard static webpack_static %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +40,7 @@
               crossorigin="anonymous"></script>
     {% endblock head_scripts %}
   </head>
-  <body class="{% block body_class %}{% endblock body_class %}">
+  <body class="{% block body_class %}{% endblock %}">
 
     {% block header %}
       {% include "includes/header.html" %}

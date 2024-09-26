@@ -1,9 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load trans blocktrans from i18n %}
-{% load naturaltime from humanize %}
-
-{% load is_admin from privacy_tags %}
+{% load blocktrans from humanize i18n is_admin naturaltime privacy_tags trans %}
 
 {% block top_left_menu_items %}
   <div data-bind="using: FilterView()">
@@ -16,12 +13,15 @@
 
 {% block list_placeholder_icon_class %}
 {% endblock list_placeholder_icon_class %}
+
 {% block list_placeholder_header_filtered %}
   {% trans "No matching builds found" %}
 {% endblock list_placeholder_header_filtered %}
+
 {% block list_placeholder_header_empty %}
   {% trans "This project doesn't have any builds yet" %}
 {% endblock list_placeholder_header_empty %}
+
 {% block list_placeholder_text_empty %}
   {% if is_project_admin is not None and is_project_admin or request.user|is_admin:project %}
     {% trans "Activate a version to start your first build." %}
@@ -74,7 +74,7 @@
   {% if object.version and object.is_external %}
     <a href="{{ object.version.vcs_url }}"
        class="item"
-       aria-label="{{ object.external_version_name | lower | capfirst }} #{{ object.version.verbose_name }}">
+       aria-label="{{ object.external_version_name|lower|capfirst }} #{{ object.version.verbose_name }}">
       <i class="fa-duotone fa-code-pull-request icon"></i>
       <code>#{{ object.version.verbose_name }}</code>
     </a>

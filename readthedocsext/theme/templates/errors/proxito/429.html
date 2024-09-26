@@ -1,6 +1,6 @@
 {% extends "errors/proxito/base.html" %}
 
-{% load blocktrans trans from i18n %}
+{% load blocktrans from i18n trans %}
 
 {% block title %}
   {% trans "Too many requests" %}
@@ -9,6 +9,7 @@
 {% block error_status %}
   429
 {% endblock error_status %}
+
 {% block error_title %}
   {{ block.super }}
   {% trans "Too many requests" %}

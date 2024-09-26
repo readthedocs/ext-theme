@@ -6,10 +6,7 @@
   user.
 {% endcomment %}
 
-{% load i18n %}
-{% load core_tags %}
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load core_tags i18n privacy_tags projects_tags %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
@@ -19,9 +16,12 @@
      href="?download=true&{{ request.GET.urlencode }}">
     {% trans "Export log" %}
   </a>
+{% endblock create_button %}
+
+{% block list_placeholder_icon_class %}
+  fad fa-clipboard-list-check
 {% endblock %}
 
-{% block list_placeholder_icon_class %}fad fa-clipboard-list-check{% endblock %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     The security log is currently empty.
@@ -32,6 +32,7 @@
     {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
+
 {% block list_placeholder_text %}
 {% endblock list_placeholder_text %}
 

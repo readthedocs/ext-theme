@@ -1,11 +1,6 @@
 {% extends "projects/base.html" %}
 
-{% load i18n %}
-{% load privacy_tags %}
-{% load crispy_forms_tags %}
-{% load crispy_forms_filters %}
-
-{% load ext_theme_tags %}
+{% load crispy_forms_filters crispy_forms_tags ext_theme_tags i18n privacy_tags %}
 
 {% block title %}
   {% if version %}
@@ -13,13 +8,13 @@
   {% else %}
     {% trans "Activate a new version" %}
   {% endif %}
-{% endblock %}
+{% endblock title %}
 
 {% block content-header %}
   {% with versions_active="active" %}
     {% include "projects/partials/header.html" %}
   {% endwith %}
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
   <div class="ui very padded centered grid stackable">
@@ -32,9 +27,7 @@
           {% trans "Edit version" %}
         {% else %}
           {% trans "Activate a new version" %}
-          <span class="sub header">
-            {% trans "Select a version to activate" %}
-          </span>
+          <span class="sub header">{% trans "Select a version to activate" %}</span>
         {% endif %}
       </h2>
 
@@ -67,7 +60,7 @@
               {% alter_field form.active classes="ui toggle checkbox" %}
               {% alter_field form.hidden classes="ui toggle checkbox" %}
 
-              {{ form | crispy }}
+              {{ form|crispy }}
 
               <div class="right floated">
                 <input class="ui primary button" type="submit" value="Update version">
@@ -102,9 +95,13 @@
               }
             </script>
 
-            <div class="ui fluid very short scrolling search" data-bind="semanticui: {search: search_config()}">
+            <div class="ui fluid very short scrolling search"
+                 data-bind="semanticui: {search: search_config()}">
               <div class="ui fluid icon large input">
-                <input class="ui text" type="text" placeholder="{% trans "Search versions" %}" tabindex="0">
+                <input class="ui text"
+                       type="text"
+                       placeholder="{% trans "Search versions" %}"
+                       tabindex="0">
                 <i class="fa-duotone fa-magnifying-glass icon"></i>
               </div>
               <div class="results" tabindex="0"></div>
@@ -124,9 +121,9 @@
                       {% endblocktrans %}
                     </p>
 
-                    <a href="https://docs.readthedocs.io/en/stable/versions.html" class="ui primary button" target="_blank">
-                      {% trans "Learn more" %}
-                    </a>
+                    <a href="https://docs.readthedocs.io/en/stable/versions.html"
+                       class="ui primary button"
+                       target="_blank">{% trans "Learn more" %}</a>
                   </div>
                 </div>
               </div>

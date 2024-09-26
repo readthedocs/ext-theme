@@ -1,11 +1,11 @@
 {% extends "mfa/totp/base.html" %}
 
-{% load blocktrans trans from i18n %}
-{% load crispy from crispy_forms_tags %}
+{% load blocktrans crispy crispy_forms_tags from i18n trans %}
 
 {% block head_title %}
   {% trans "Activate authenticator app" %}
 {% endblock head_title %}
+
 {% block edit_content_subheader_section %}
   <div class="active section">{% trans "Activate authenticator app" %}</div>
 {% endblock edit_content_subheader_section %}

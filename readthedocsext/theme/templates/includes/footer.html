@@ -1,7 +1,4 @@
-{% load trans get_current_language from i18n %}
-{% load readthedocs_version from core_tags %}
-{% load static from static %}
-{% load readthedocs_language_name_local readthedocs_language_name_translated from ext_theme_tags %}
+{% load core_tags ext_theme_tags from get_current_language i18n readthedocs_language_name_local readthedocs_language_name_translated readthedocs_version static trans %}
 
 <footer class="ui basic very padded inverted attached segment">
   <div class="ui container">
@@ -84,7 +81,7 @@
                  href="https://dev.readthedocs.io/page/contribute.html"
                  target="_blank">Contributing</a>
 
-              {# TODO move this out of the footer and drop this menu from this block/column  #}
+              {# TODO move this out of the footer and drop this menu from this block/column #}
               <h4 class="ui inverted sub header">Tools</h4>
               <a class="item"
                  href="https://about.readthedocs.com/tools/sphinx/"
@@ -130,7 +127,7 @@
                     <div class="ui very wide search dropdown"
                          data-bind="semanticui: { dropdown: {direction: 'upward', fullTextSearch: true, cache: false}}">
                       <input type="hidden" name="language" />
-                      <span class="default text">{{ current_lang | readthedocs_language_name_local }}</span>
+                      <span class="default text">{{ current_lang|readthedocs_language_name_local }}</span>
                       <i class="fa-solid fa-caret-down icon"></i>
                       <div class="menu">
                         <div class="ui icon search input">
@@ -141,11 +138,11 @@
                         {% for lang in LANGUAGES %}
                           <div class="vertical item {% if lang.0 == current_lang %}active{% endif %}"
                                data-value="{{ lang.0 }}"
-                               data-text="{{ lang.0 | readthedocs_language_name_local }}">
+                               data-text="{{ lang.0|readthedocs_language_name_local }}">
                             <div class="description">
-                              {{ lang.0 | readthedocs_language_name_translated }}
+                              {{ lang.0|readthedocs_language_name_translated }}
                             </div>
-                            <div class="text">{{ lang.0 | readthedocs_language_name_local }}</div>
+                            <div class="text">{{ lang.0|readthedocs_language_name_local }}</div>
                           </div>
                         {% endfor %}
                       </div>

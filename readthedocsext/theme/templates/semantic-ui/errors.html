@@ -13,13 +13,11 @@
           `messages` attribute. This can either be a single message or multiple
           messages.
         {% endcomment %}
-        {% if error.messages|length == 1%}
+        {% if error.messages|length == 1 %}
           {{ error.messages|first|safe }}
         {% else %}
           <ul class="list">
-            {% for message in error.messages %}
-              <li>{{ message|safe }}</li>
-            {% endfor %}
+            {% for message in error.messages %}<li>{{ message|safe }}</li>{% endfor %}
           </ul>
         {% endif %}
       {% else %}

@@ -1,44 +1,13 @@
-{% load humanize %}
-{% load i18n %}
-
-{% load gravatar %}
-
-{% load core_tags %}
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load core_tags gravatar humanize i18n privacy_tags projects_tags %}
 
 {% if matches %}
   <div class="ui basic segment">
-    <h2 class="ui small header">
-      {% trans "Recent activity" %}
-    </h2>
+    <h2 class="ui small header">{% trans "Recent activity" %}</h2>
     <div class="ui relaxed list">
 
       {% for match in matches|slice:'0:15' %}
         <div class="item">
-          <i class="fa-duotone middle aligned {% spaceless %}
-
-            {% comment %}
-              This probably isn't the best logic for a template, but also solidly
-              not backend logic.
-            {% endcomment %}
-                      {% if match.action == match.rule.ACTIVATE_VERSION_ACTION %}
-                        fa-toggle-on
-                      {% elif match.action == match.rule.HIDE_VERSION_ACTION %}
-                        fa-eye-slash
-                      {% elif match.action == match.rule.MAKE_VERSION_PUBLIC_ACTION %}
-                        fa-unlock
-                      {% elif match.action == match.rule.MAKE_VERSION_PRIVATE_ACTION %}
-                        fa-lock
-                      {% elif match.action == match.rule.SET_DEFAULT_VERSION_ACTION %}
-                        fa-asterisk
-                      {% elif match.action == match.rule.DELETE_VERSION_ACTION %}
-                        fa-trash
-                      {% else %}
-                        fa-circle-exclamation
-                      {% endif %}
-
-                    {% endspaceless %} icon"></i>
+          <i class="fa-duotone middle aligned {% spaceless %}  {% comment %} This probably isn't the best logic for a template, but also solidly not backend logic. {% endcomment %} {% if match.action == match.rule.ACTIVATE_VERSION_ACTION %} fa-toggle-on {% elif match.action == match.rule.HIDE_VERSION_ACTION %} fa-eye-slash {% elif match.action == match.rule.MAKE_VERSION_PUBLIC_ACTION %} fa-unlock {% elif match.action == match.rule.MAKE_VERSION_PRIVATE_ACTION %} fa-lock {% elif match.action == match.rule.SET_DEFAULT_VERSION_ACTION %} fa-asterisk {% elif match.action == match.rule.DELETE_VERSION_ACTION %} fa-trash {% else %} fa-circle-exclamation {% endif %}  {% endspaceless %} icon"></i>
           <div class="content">
             <div class="header">
               {# Translators: description is an arbitrary string, this will read like "Version activated by rule <a>Add new versions</a>" #}

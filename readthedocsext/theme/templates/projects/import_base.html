@@ -1,7 +1,6 @@
 {% extends "projects/base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags i18n %}
 
 {% block title %}
   {% trans "Add project" %}
@@ -81,7 +80,9 @@
                   {% if wizard.steps.prev %}
                     <button class="ui button"
                             name="wizard_goto_step"
-                            value="{{ wizard.steps.prev }}">{% trans "Previous" %}</button>
+                            value="{{ wizard.steps.prev }}">
+                      {% trans "Previous" %}
+                    </button>
                   {% endif %}
 
                   {% if wizard.steps.next %}

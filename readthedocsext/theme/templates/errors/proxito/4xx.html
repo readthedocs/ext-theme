@@ -1,6 +1,6 @@
 {% extends "errors/proxito/base.html" %}
 
-{% load blocktrans trans from i18n %}
+{% load blocktrans from i18n trans %}
 
 {% comment %}
   Leaving this as a technically-not-accurate "bad request", as this works okay
@@ -13,6 +13,7 @@
 {% block error_status %}
   {% firstof status_code view.status_code 400 %}
 {% endblock error_status %}
+
 {% block error_title %}
   {{ block.super }}
   {% trans "Bad request" %}

@@ -1,8 +1,6 @@
 {% extends "includes/elements/chips/base.html" %}
 
-{% load i18n %}
-{% load humanize %}
-{% load ext_theme_tags %}
+{% load ext_theme_tags humanize i18n %}
 
 {% block chip_view_params %}
   '{% url "projects-detail" project.slug %}'
@@ -79,7 +77,9 @@
         <div class="header">{% trans "Repository" %}</div>
         <div class="description">
           {% if project.remote_repository %}
-            {% with repo=project.remote_repository %}<a href="{{ repo.html_url }}">{{ repo.full_name }}</a>{% endwith %}
+            {% with repo=project.remote_repository %}
+              <a href="{{ repo.html_url }}">{{ repo.full_name }}</a>
+            {% endwith %}
           {% else %}
             <a href="{{ project.repo }}">{{ project.repo }}</a>
           {% endif %}

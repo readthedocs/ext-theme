@@ -3,57 +3,38 @@
 {% load i18n %}
 
 {# Conditionally provide URL if there is an API v3 URL to request from. In the case of pull request versions, API requests 404 #}
-{% block chip_view_params %}'{% if not version.is_external %}{% url "projects-versions-detail" version.project.slug version.slug %}{% endif %}'{% endblock %}
+{% block chip_view_params %}
+  '
+  {% if not version.is_external %}
+    {% url "projects-versions-detail" version.project.slug version.slug %}
+  {% endif %}
+  '
+{% endblock %}
 
 {% block chip_url %}
   {% url "projects_detail" version.project.slug %}?slug={{ version.slug }}
-{% endblock %}
+{% endblock chip_url %}
 
 {% block chip_icon %}
   {# fmt:off #}
-  <i class="fa-solid icon {% spaceless %}
-
-    {# Show the type of the version #}
-    {% if version.is_external %}
-      fa-code-pull-request
-    {% elif version.type == 'branch' %}
-      fa-code-branch
-    {% elif version.type == 'tag' %}
-      fa-tag
-    {% else %}
-      fa-code-commit
-    {% endif %}
-
-  {% endspaceless %}"></i>
+  <i class="fa-solid icon {% spaceless %}  {# Show the type of the version #} {% if version.is_external %} fa-code-pull-request {% elif version.type == 'branch' %} fa-code-branch {% elif version.type == 'tag' %} fa-tag {% else %} fa-code-commit {% endif %}  {% endspaceless %}"></i>
   {# fmt:off #}
 {% endblock chip_icon %}
 
 {% block chip_text %}
-  {% if version.is_external %}#{% endif %}{{ version.verbose_name }}
+  {% if version.is_external %}#{% endif %}
+  {{ version.verbose_name }}
 {% endblock chip_text %}
 
 {% block chip_detail %}
   <div class="detail">
-    <i class="fa-solid icon {% spaceless %}
-
-      {# Show some metadata on version status, almost always a check #}
-                {% if version.active %}
-                  {% if version.built %}
-                    fa-check
-                  {% else %}
-                    red fa-xmark
-                  {% endif %}
-                {% else %}
-                  light grey fa-question
-                {% endif %}
-
-              {% endspaceless %}"></i>
+    <i class="fa-solid icon {% spaceless %}  {# Show some metadata on version status, almost always a check #} {% if version.active %} {% if version.built %} fa-check {% else %} red fa-xmark {% endif %} {% else %} light grey fa-question {% endif %}  {% endspaceless %}"></i>
   </div>
 {% endblock chip_detail %}
 
 {% block popupcard_header %}
   {% if version.is_external %}
-    {{ version.external_version_name | lower | capfirst }}
+    {{ version.external_version_name|lower|capfirst }}
     {{ version.verbose_name }}
   {% else %}
     {# Translators: this renders with the version name, example "Version latest" #}
@@ -77,7 +58,8 @@
       <div class="content">
         <div class="header">{% trans "Builds" %}</div>
         <div class="description">
-          <a class="item" href="{% url "builds_project_list" version.project.slug %}?version__slug={{ version.slug }}">
+          <a class="item"
+             href="{% url "builds_project_list" version.project.slug %}?version__slug={{ version.slug }}">
             {% blocktrans trimmed with version_name=version.verbose_name %}
               For version {{ version_name }}
             {% endblocktrans %}
@@ -92,7 +74,8 @@
         <div class="header">{{ version.get_type_display|default:'Commit' }}</div>
         <div class="description">
           <a href="{{ version.vcs_url }}">
-            {% if version.is_external %}#{% endif %}{{ version.verbose_name }}
+            {% if version.is_external %}#{% endif %}
+            {{ version.verbose_name }}
           </a>
         </div>
       </div>

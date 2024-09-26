@@ -1,6 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load blocktrans trans from i18n %}
+{% load blocktrans from i18n trans %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
@@ -15,6 +15,7 @@
 {% block list_placeholder_icon_class %}
   fa-duotone fa-magnifying-glass
 {% endblock list_placeholder_icon_class %}
+
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No search queries are available yet

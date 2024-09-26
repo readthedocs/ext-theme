@@ -1,19 +1,9 @@
-{% load crispy_forms_filters %}
-{% load l10n %}
+{% load crispy_forms_filters l10n %}
 
-<select
-  multiple="true"
-  class="ui {% if field_class %} {{ field_class }}{% endif %} search dropdown"
-  name="{{ field.html_name }}"
-  id="id_{{ field.html_name }}"
-  {% if flat_attrs %}{{ flat_attrs|safe }}{% endif %}
-  data-bind="semanticui: {dropdown: {}}">
+<select multiple="true" class="ui {% if field_class %}{{ field_class }}{% endif %} search dropdown" name="{{ field.html_name }}" id="id_{{ field.html_name }}" {% if flat_attrs %}{{ flat_attrs|safe }}{% endif %} data-bind="semanticui: {dropdown: {}}">
 
   {% for choice in field.field.choices %}
-    <option
-      value="{{ choice.0|unlocalize }}"
-      {% if choice.0 in field.value or choice.0|stringformat:"s" in field.value or choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} selected {% endif %}
-      {{ field.field.widget.attrs|flatatt }}>
+    <option value="{{ choice.0|unlocalize }}" {% if choice.0 in field.value or choice.0|stringformat:"s" in field.value or choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} selected {% endif %} {{ field.field.widget.attrs|flatatt }}>
       {{ choice.1|unlocalize }}
     </option>
   {% endfor %}

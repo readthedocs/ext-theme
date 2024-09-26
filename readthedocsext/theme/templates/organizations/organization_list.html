@@ -4,7 +4,7 @@
 
 {% block title %}
   {% blocktrans %}Organizations{% endblocktrans %}
-{% endblock %}
+{% endblock title %}
 
 {% block content %}
   {% url "organization_create" as organization_create_url %}
@@ -18,9 +18,7 @@
 
         <div class="basic card">
           <div class="content">
-            <div class="header">
-              {% trans "Get started" %}
-            </div>
+            <div class="header">{% trans "Get started" %}</div>
             <div class="meta">{% trans "Create a new organization" %}</div>
             <div class="description">
               <p>

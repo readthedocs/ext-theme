@@ -39,12 +39,31 @@
 
     </style>
   </head>
-  <body offset="0" style="padding:0; margin:0; display:block; background:#ececec; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: #443;" bgcolor="#ececec">
-    <table id="content-wrapper" align="center" cellpadding="0" cellspacing="0" width="600">
-    <!-- BEGIN top spacing -->
+  <body offset="0"
+        style="padding:0;
+               margin:0;
+               display:block;
+               background:#ececec;
+               font-family: Helvetica, Arial, sans-serif;
+               font-size: 14px;
+               color: #443"
+        bgcolor="#ececec">
+    <table id="content-wrapper"
+           align="center"
+           cellpadding="0"
+           cellspacing="0"
+           width="600">
+      <!-- BEGIN top spacing -->
       <tr>
         <td>
-          <table align="center" width="100%" height="64" cellpadding="0" cellspacing="0" style="width: 100% !important; padding: 8px; color: #acacac;">
+          <table align="center"
+                 width="100%"
+                 height="64"
+                 cellpadding="0"
+                 cellspacing="0"
+                 style="width: 100% !important;
+                        padding: 8px;
+                        color: #acacac">
             <tr>
               <td width="100%" align="right" style="text-align: right;" valign="bottom">
                 {% block top-right %}{% endblock %}
@@ -53,21 +72,29 @@
           </table>
         </td>
       </tr>
-    <!-- END top spacing -->
+      <!-- END top spacing -->
 
-    <!-- BEGIN content -->
+      <!-- BEGIN content -->
       <tr>
         <td>
-          <table align="center" width="100%" cellpadding="0" cellspacing="0" style="background-color: #ffffff; margin-bottom: 64px;" bgcolor="#ffffff">
-          <!-- BEGIN header -->
+          <table align="center"
+                 width="100%"
+                 cellpadding="0"
+                 cellspacing="0"
+                 style="background-color: #ffffff;
+                        margin-bottom: 64px"
+                 bgcolor="#ffffff">
+            <!-- BEGIN header -->
             <tr>
               <td class="header">
                 {% block header %}
-                  <img src="https://assets.readthedocs.org/static/images/email-header.png" width="100%" height="150" />
-                {% endblock %}
+                  <img src="https://assets.readthedocs.org/static/images/email-header.png"
+                       width="100%"
+                       height="150" />
+                {% endblock header %}
               </td>
             </tr>
-          <!-- END header -->
+            <!-- END header -->
 
             <tr>
               <td style="padding: 8px; padding-top: 16px;">
@@ -76,47 +103,59 @@
                     <td style="font-weight: bold;">
                       {% block salutation %}
                         {% trans "Hello!" %}
-                      {% endblock %}
+                      {% endblock salutation %}
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding-top: 16px; padding-bottom: 16px; color: #443 !important;">
+                    <td style="padding-top: 16px;
+                               padding-bottom: 16px;
+                               color: #443 !important">
                       {% block content %}
-                      {% endblock %}
+                      {% endblock content %}
                     </td>
                   </tr>
                   <tr>
                     <td>
                       {% block signature %}
-                        {% trans "Keep documenting," %}<br />
+                        {% trans "Keep documenting," %}
+                        <br />
                         {% trans "Read the Docs" %}
-                      {% endblock %}
+                      {% endblock signature %}
                     </td>
                   </tr>
                 </table>
               </td>
             </tr>
 
-          <!-- BEGIN footer -->
+            <!-- BEGIN footer -->
             <tr>
               <td style="background: red;">
-                <table align="center" width="100%" height="64" cellpadding="0" cellspacing="0" style="width: 100% !important; background-color: #443; color: #aa9;">
+                <table align="center"
+                       width="100%"
+                       height="64"
+                       cellpadding="0"
+                       cellspacing="0"
+                       style="width: 100% !important;
+                              background-color: #443;
+                              color: #aa9">
                   <tr>
                     <td align="left" valign="top" style="padding: 8px;">
                       {% block footer %}
-                        Read&nbsp;the&nbsp;Docs<br/>
-                        <a href="https://readthedocs.org" style="color: #bba;">https://readthedocs.org</a><br/>
-                      {% endblock %}
+                        Read&nbsp;the&nbsp;Docs
+                        <br />
+                        <a href="https://readthedocs.org" style="color: #bba;">https://readthedocs.org</a>
+                        <br />
+                      {% endblock footer %}
                     </td>
                   </tr>
                 </table>
               </td>
             </tr>
-          <!-- END footer -->
+            <!-- END footer -->
           </table>
         </td>
       </tr>
-    <!-- END content -->
+      <!-- END content -->
     </table>
   </body>
 </html>

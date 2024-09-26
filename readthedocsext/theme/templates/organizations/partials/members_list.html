@@ -1,10 +1,9 @@
 {% extends "organizations/partials/team_member_list.html" %}
 
-{% load i18n %}
-{% load privacy_tags %}
+{% load i18n privacy_tags %}
 
 {% block create_button %}
-{% endblock %}
+{% endblock create_button %}
 
 {% block list_placeholder_header_filtered %}
   {% trans "No matching members found" %}
@@ -13,6 +12,7 @@
 {% block list_placeholder_header_empty %}
   {% trans "This organization has no members" %}
 {% endblock list_placeholder_header_empty %}
+
 {% block list_placeholder_text_empty %}
   {% if request.user|is_admin:organization %}
     {% blocktrans trimmed %}

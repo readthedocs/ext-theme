@@ -6,7 +6,9 @@
 {% endblock top_menu %}
 
 {% block list_placeholder_class %}ui short placeholder segment{% endblock %}
+
 {% block list_placeholder_icon %}{% endblock %}
+
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     Ad-free projects
@@ -18,6 +20,7 @@
     {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
+
 {% block list_placeholder_text %}
 {% endblock list_placeholder_text %}
 
@@ -34,9 +37,7 @@
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  <a href="{{ object.get_absolute_url }}">
-    {{ object }}
-  </a>
+  <a href="{{ object.get_absolute_url }}">{{ object }}</a>
 {% endblock list_item_header %}
 
 {% block list_item_extra %}

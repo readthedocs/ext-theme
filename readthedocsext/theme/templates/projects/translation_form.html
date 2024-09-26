@@ -1,8 +1,6 @@
 {% extends "projects/translation_list.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
-{% load ext_theme_tags %}
+{% load crispy_forms_tags ext_theme_tags i18n %}
 
 {% block project_edit_content_subheader %}
   {% if object %}
@@ -10,7 +8,7 @@
   {% else %}
     {% trans "Add translation" %}
   {% endif %}
-{% endblock %}
+{% endblock project_edit_content_subheader %}
 
 {% block project_edit_content %}
   <form class="ui form" method="post" action=".">

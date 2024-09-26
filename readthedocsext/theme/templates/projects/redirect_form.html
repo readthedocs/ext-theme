@@ -1,8 +1,6 @@
 {% extends "projects/redirect_list.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
-{% load ext_theme_tags %}
+{% load crispy_forms_tags ext_theme_tags i18n %}
 
 {% block project_edit_content_subheader %}
   {% if object %}
@@ -10,29 +8,29 @@
   {% else %}
     {% trans "Add redirect" %}
   {% endif %}
-{% endblock %}
+{% endblock project_edit_content_subheader %}
 
 {% block project_edit_content %}
-  <form class="ui form" method="post" action="." data-bind="using: ProjectRedirectView()">
+  <form class="ui form"
+        method="post"
+        action="."
+        data-bind="using: ProjectRedirectView()">
     {% csrf_token %}
     {% alter_field form.redirect_type data_bind="valueInit: redirect_type" %}
     {% alter_field form.from_url data_bind="valueInit: from_url, textInput: from_url, enable: is_from_url_visible" %}
     {% alter_field form.to_url data_bind="valueInit: to_url, textInput: to_url, enable: is_to_url_visible" %}
     {{ form|crispy }}
 
-    <div class="ui disabled segment" data-bind="css: {disabled: is_example_disabled}">
+    <div class="ui disabled segment"
+         data-bind="css: {disabled: is_example_disabled}">
       <div data-bind="visible: !is_example_disabled()" style="display: none;">
         <div class="ui list">
           <div class="item">
-            <div class="sub header">
-              {% trans "Redirect from" %}
-            </div>
+            <div class="sub header">{% trans "Redirect from" %}</div>
             <code data-bind="text: redirect_from"></code>
           </div>
           <div class="item">
-            <div class="sub header">
-              {% trans "Redirect to" %}
-            </div>
+            <div class="sub header">{% trans "Redirect to" %}</div>
             <code data-bind="text: redirect_to"></code>
           </div>
         </div>
@@ -41,4 +39,4 @@
 
     <input class="ui primary button" type="submit" value="{% trans "Save" %}">
   </form>
-{% endblock %}
+{% endblock project_edit_content %}

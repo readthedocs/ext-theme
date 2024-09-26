@@ -1,7 +1,6 @@
 {% extends "projects/domain_list.html" %}
 
-{% load trans blocktrans from i18n %}
-{% load crispy from crispy_forms_tags %}
+{% load blocktrans crispy crispy_forms_tags from i18n trans %}
 
 {% block project_edit_content_subheader %}
   {% if domain %}

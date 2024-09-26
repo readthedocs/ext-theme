@@ -1,13 +1,15 @@
 {% extends "organizations/teams/base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
-{% load organizations %}
+{% load crispy_forms_tags i18n organizations %}
 
-{% block subtitle %}{% trans "Projects" %}{% endblock %}
+{% block subtitle %}
+  {% trans "Projects" %}
+{% endblock %}
+
 {% block subview_content_header %}
   {% trans "Projects" %}
 {% endblock subview_content_header %}
+
 {% block team_sidebar_projects %}active{% endblock %}
 
 {% block subview_content %}

@@ -1,7 +1,6 @@
 {% extends "projects/project_edit_base.html" %}
 
-{% load blocktrans trans from i18n %}
-{% load as_crispy_field crispy from crispy_forms_tags %}
+{% load as_crispy_field blocktrans crispy crispy_forms_tags from i18n trans %}
 
 {% block title %}
   {{ project.name }} - {% trans "Addons" %}
@@ -10,6 +9,7 @@
 {% block project_addons_active %}
   active
 {% endblock project_addons_active %}
+
 {% block project_edit_content_header %}
   {% trans "Addons" %}
 {% endblock project_edit_content_header %}
@@ -61,42 +61,42 @@
 
       {% block addons_flyout %}
         <div class="ui tab" data-tab="flyout">
-          {{ form.flyout_enabled | as_crispy_field }}
-          {{ form.flyout_sorting | as_crispy_field }}
-          {{ form.flyout_sorting_latest_stable_at_beginning | as_crispy_field }}
-          {{ form.flyout_sorting_custom_pattern | as_crispy_field }}
+          {{ form.flyout_enabled|as_crispy_field }}
+          {{ form.flyout_sorting|as_crispy_field }}
+          {{ form.flyout_sorting_latest_stable_at_beginning|as_crispy_field }}
+          {{ form.flyout_sorting_custom_pattern|as_crispy_field }}
         </div>
       {% endblock addons_flyout %}
 
       {% block addons_search %}
         <div class="ui tab" data-tab="search">
-          {{ form.search_enabled | as_crispy_field }}
+          {{ form.search_enabled|as_crispy_field }}
         </div>
       {% endblock addons_search %}
 
       {% block addons_notifications %}
         <div class="ui tab" data-tab="notifications">
-          {{ form.external_version_warning_enabled | as_crispy_field }}
-          {{ form.stable_latest_version_warning_enabled | as_crispy_field }}
+          {{ form.external_version_warning_enabled|as_crispy_field }}
+          {{ form.stable_latest_version_warning_enabled|as_crispy_field }}
         </div>
       {% endblock addons_notifications %}
 
       {% block addons_analytics %}
         <div class="ui tab" data-tab="analytics">
-          {{ form.analytics_enabled | as_crispy_field }}
+          {{ form.analytics_enabled|as_crispy_field }}
         </div>
       {% endblock addons_analytics %}
 
       {% block addons_docdiff %}
         <div class="ui tab" data-tab="docdiff">
-          {{ form.doc_diff_enabled | as_crispy_field }}
-          {{ form.doc_diff_root_selector | as_crispy_field }}
+          {{ form.doc_diff_enabled|as_crispy_field }}
+          {{ form.doc_diff_root_selector|as_crispy_field }}
         </div>
       {% endblock addons_docdiff %}
 
       {% block addons_hotkeys %}
         <div class="ui tab" data-tab="hotkeys">
-          {{ form.hotkeys_enabled | as_crispy_field }}
+          {{ form.hotkeys_enabled|as_crispy_field }}
         </div>
       {% endblock addons_hotkeys %}
 

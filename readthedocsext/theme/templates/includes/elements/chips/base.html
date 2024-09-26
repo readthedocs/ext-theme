@@ -18,10 +18,10 @@
 
 {% endcomment %}
 {# This is probably used inside another KO `with` binding, so we need to reference the root ApplicationView #}
-<div data-bind="with: $root.PopupcardView({% spaceless %}{% block chip_view_params %}{% endblock chip_view_params %}{% endspaceless %})">
-  <a class="ui {% spaceless %}{% block chip_classes %}basic{% endblock chip_classes %}{% endspaceless %} label"
+<div data-bind="with: $root.PopupcardView({% spaceless %}{% block chip_view_params %}{% endblock %}{% endspaceless %})">
+  <a class="ui {% spaceless %}{% block chip_classes %}basic{% endblock %}{% endspaceless %} label"
      data-bind="semanticui: { popup: popup_config() }"
-     href="{% spaceless %}{% block chip_url %}{% endblock chip_url %}{% endspaceless %}">
+     href="{% spaceless %}{% block chip_url %}{% endblock %}{% endspaceless %}">
 
     {% comment "rst" %}
 

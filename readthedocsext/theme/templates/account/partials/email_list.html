@@ -1,20 +1,15 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-
-{% load gravatar %}
-
-{% load core_tags %}
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load core_tags gravatar i18n privacy_tags projects_tags %}
 
 {% block top_menu %}
 {% endblock top_menu %}
 
 {% block create_button %}
-{% endblock %}
+{% endblock create_button %}
 
 {% block list_placeholder_icon_class %}fa-duotone fa-envelope-dot{% endblock %}
+
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No email addresses have been configured yet
@@ -35,7 +30,10 @@
         <i class="fa-solid fa-star icon"></i>
         <form action="{{ form_url }}" method="post">
           {% csrf_token %}
-          <input type="hidden" name="email" {% if object.primary %}checked="checked"{% endif %} value="{{ object.email }}"/>
+          <input type="hidden"
+                 name="email"
+                 {% if object.primary %}checked="checked"{% endif %}
+                 value="{{ object.email }}" />
           <input type="hidden" name="action_primary" value="" />
         </form>
       </div>
@@ -45,7 +43,10 @@
         <i class="fa-solid fa-refresh icon"></i>
         <form action="{{ form_url }}" method="post">
           {% csrf_token %}
-          <input type="hidden" name="email" {% if object.primary %}checked="checked"{% endif %} value="{{ object.email }}"/>
+          <input type="hidden"
+                 name="email"
+                 {% if object.primary %}checked="checked"{% endif %}
+                 value="{{ object.email }}" />
           <input type="hidden" name="action_send" value="" />
         </form>
       </div>
@@ -64,9 +65,7 @@
 {% block list_item_header %}
   <div>
     {{ object.email }}
-    {% if object.primary %}
-      <i class="fa-solid fa-star icon"></i>
-    {% endif %}
+    {% if object.primary %}<i class="fa-solid fa-star icon"></i>{% endif %}
   </div>
   <div class="sub header">
     <div class="ui horizontal list">
@@ -82,9 +81,7 @@
         </span>
       {% endif %}
       {% if object.primary %}
-        <span class="item">
-          {% trans "Primary email" %}
-        </span>
+        <span class="item">{% trans "Primary email" %}</span>
       {% endif %}
     </div>
   </div>

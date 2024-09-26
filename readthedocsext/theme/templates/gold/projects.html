@@ -1,10 +1,10 @@
 {% extends "gold/subscription_detail.html" %}
 
-{% load static %}
-{% load i18n %}
-{% load crispy_forms_filters %}
+{% load crispy_forms_filters i18n static %}
 
-{% block title %}{% trans "Ad-free projects" %}{% endblock %}
+{% block title %}
+  {% trans "Ad-free projects" %}
+{% endblock %}
 
 {% block edit_content_subheader %}
   <div class="ui breadcrumb">
@@ -12,18 +12,14 @@
       {% trans "Manage your subscription" %}
     </a>
     <span class="divider">/</span>
-    <div class="active section">
-      {% trans "Ad-free projects" %}
-    </div>
+    <div class="active section">{% trans "Ad-free projects" %}</div>
   </div>
 {% endblock edit_content_subheader %}
 
 {% block edit_content %}
   {% include "gold/partials/projects_list.html" with objects=projects gold_user=gold_user %}
 
-  <h3 class="ui header">
-    {% trans "Add an ad-free project" %}
-  </h3>
+  <h3 class="ui header">{% trans "Add an ad-free project" %}</h3>
 
   <p>
     {% blocktrans trimmed %}
@@ -32,15 +28,21 @@
   </p>
 
   <div class="ui bulleted list">
-    <div class="item">{% trans 'A $5 subscription for small businesses or personal projects.' %}</div>
-    <div class="item">{% trans 'A $50 subscription for corporate supported open source projects.' %}</div>
+    <div class="item">
+      {% trans 'A $5 subscription for small businesses or personal projects.' %}
+    </div>
+    <div class="item">
+      {% trans 'A $50 subscription for corporate supported open source projects.' %}
+    </div>
   </div>
 
   {% if gold_user.num_supported_projects > projects|length %}
     <form class="ui form" method="post" action=".">
       {% csrf_token %}
-      {{ form | crispy }}
-      <input class="ui button" type="submit" value="{% trans "Add an ad-free project" %}">
+      {{ form|crispy }}
+      <input class="ui button"
+             type="submit"
+             value="{% trans "Add an ad-free project" %}">
     </form>
   {% else %}
     <div class="ui warning message">
@@ -51,4 +53,4 @@
     </div>
   {% endif %}
 
-{% endblock %}
+{% endblock edit_content %}

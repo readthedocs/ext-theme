@@ -2,14 +2,13 @@
 
 {% block header %}
   {% include "includes/header.html" with active_item="projects" %}
-{% endblock %}
+{% endblock header %}
 
 {% block notifications %}
   {# Project specific notifications only #}
   {% if project %}
-    <readthedocs-notification-list
-      url="{% url "projects-notifications-list" project.slug %}"
-      csrf-token="{{ csrf_token }}">
+    <readthedocs-notification-list url="{% url "projects-notifications-list" project.slug %}"
+                                   csrf-token="{{ csrf_token }}">
     </readthedocs-notification-list>
   {% endif %}
 

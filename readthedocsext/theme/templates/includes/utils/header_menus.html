@@ -1,6 +1,4 @@
-{% load i18n %}
-{% load gravatar %}
-{% load static %}
+{% load gravatar i18n static %}
 
 {% comment %}
 
@@ -16,7 +14,8 @@ Submenus of the user dropdown and the mobile viewport hamburger menus.
 </a>
 
 {% if USE_ORGANIZATIONS %}
-  <a class="{% if active_item == "organizations" %}active {% endif %} computer only item" href="{% url 'organization_list' %}">
+  <a class="{% if active_item == "organizations" %}active {% endif %} computer only item"
+     href="{% url 'organization_list' %}">
     <i class="fa-duotone fa-building icon"></i>
     {% trans "Organizations" %}
   </a>

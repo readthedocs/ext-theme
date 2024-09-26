@@ -1,6 +1,6 @@
 {% extends "errors/dashboard/base.html" %}
 
-{% load blocktrans trans from i18n %}
+{% load blocktrans from i18n trans %}
 
 {% block title %}
   {% trans "Project unavailable" %}
@@ -9,6 +9,7 @@
 {% block error_status %}
   410
 {% endblock error_status %}
+
 {% block error_title %}
   {{ block.super }}
   {% trans "Project unavailable" %}
@@ -17,12 +18,15 @@
 {% block error_icon_computer_name %}
   fa-cloud-slash
 {% endblock error_icon_computer_name %}
+
 {% block error_icon_mobile_name %}
   fa-cloud-slash
 {% endblock error_icon_mobile_name %}
+
 {% block error_icon_computer_style %}
   --fa-primary-color: orangered;
 {% endblock error_icon_computer_style %}
+
 {% block error_icon_mobile_style %}
   --fa-primary-color: orangered;
 {% endblock error_icon_mobile_style %}

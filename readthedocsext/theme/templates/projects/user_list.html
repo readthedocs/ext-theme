@@ -1,12 +1,16 @@
 {% extends "projects/project_edit_base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags i18n %}
 
-{% block title %}{{ project.name }} - {% trans "Maintainers" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "Maintainers" %}
+{% endblock %}
 
 {% block project_users_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Maintainers" %}{% endblock %}
+
+{% block project_edit_content_header %}
+  {% trans "Maintainers" %}
+{% endblock %}
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/user_list.html" with objects=users %}
@@ -33,14 +37,12 @@
     {% if invitations.exists %}
       <h2 class="ui small header">
         {% trans "Pending invitations" %}
-        <span class="ui circular small label">
-          {{ invitations.count }}
-        </span>
+        <span class="ui circular small label">{{ invitations.count }}</span>
       </h2>
       {% include "invitations/partials/invitation_list.html" with objects=invitations skip_pagination=True %}
     {% endif %}
   {% endblock maintainer_invitations %}
-{% endblock %}
+{% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/glossary.html#term-maintainer" text="What is a maintainer?" is_external=True class="item" %}

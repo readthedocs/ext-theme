@@ -1,8 +1,6 @@
 {% extends "account/login.html" %}
 
-{% load account socialaccount %}
-{% load crispy_forms_tags %}
-{% load i18n %}
+{% load account crispy_forms_tags i18n socialaccount %}
 
 {% block head_title %}
   {% trans "Sign up" %}
@@ -15,9 +13,11 @@
 {% block authentication_vcs_text %}
   {% trans "Connect account" %}
 {% endblock authentication_vcs_text %}
+
 {% block authentication_email_text %}
   {% trans "Sign up with email" %}
 {% endblock authentication_email_text %}
+
 {% block authentication_header_text %}
   {% trans "Sing up using:" %}
 {% endblock authentication_header_text %}

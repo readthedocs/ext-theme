@@ -1,7 +1,6 @@
 {% extends "projects/base.html" %}
 
-{% load blocktrans trans from i18n %}
-{% load is_admin from privacy_tags %}
+{% load blocktrans from i18n is_admin privacy_tags trans %}
 
 {% block title %}
   {{ build.project.name }}
@@ -86,17 +85,17 @@
                   </div>
                 </div>
 
-                {# Version type is static, and some of these attributes are not in the APIv2 response  #}
+                {# Version type is static, and some of these attributes are not in the APIv2 response #}
                 <div class="item">
-                  <i class="grey fa-duotone {{ build.is_external | yesno:"fa-code-pull-request,fa-code-branch" }} icon"></i>
+                  <i class="grey fa-duotone {{ build.is_external|yesno:"fa-code-pull-request,fa-code-branch" }} icon"></i>
                   <div class="content">
                     {% if build.is_external %}
                       <span class="sub header">
-                        {{ build.external_version_name | lower | capfirst }}
+                        {{ build.external_version_name|lower|capfirst }}
                       </span>
                       <a href="{{ build.version.vcs_url }}"><code>#{{ build.get_version_name }}</code></a>
                     {% else %}
-                      <span class="sub header">{{ build.get_version_type | lower | capfirst }}</span>
+                      <span class="sub header">{{ build.get_version_type|lower|capfirst }}</span>
                       {{ build.get_version_name }}
                     {% endif %}
                     <code class="ko hidden" data-bind="css: { hidden: !commit() }">

@@ -1,12 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-
-{% load gravatar %}
-
-{% load core_tags %}
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load core_tags gravatar i18n privacy_tags projects_tags %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
@@ -15,14 +9,16 @@
   {% url "projects_users_create" project.slug as create_url %}
   {% trans "Add maintainer" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
 {% block list_placeholder_icon %}{% endblock %}
+
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     This project currently has no maintainers.
   {% endblocktrans %}
 {% endblock list_placeholder_header %}
+
 {% block list_placeholder_text %}
 {% endblock list_placeholder_text %}
 
@@ -41,7 +37,8 @@
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
-  <img class="ui rounded square image" src="{% gravatar_url object.email 64 %}">
+  <img class="ui rounded square image"
+       src="{% gravatar_url object.email 64 %}">
 {% endblock list_item_image %}
 
 {% block list_item_header %}
@@ -56,9 +53,7 @@
 
     </a>
     {% if full_name %}
-      <div class="sub header">
-        {{ object.username }}
-      </div>
+      <div class="sub header">{{ object.username }}</div>
     {% endif %}
   {% endwith %}
 {% endblock list_item_header %}

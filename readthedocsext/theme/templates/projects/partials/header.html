@@ -1,9 +1,4 @@
-{% load i18n %}
-{% load core_tags %}
-{% load privacy_tags %}
-{% load core_tags %}
-{% load gravatar %}
-{% load ext_theme_tags %}
+{% load core_tags ext_theme_tags gravatar i18n privacy_tags %}
 
 {% comment %}
 
@@ -23,7 +18,7 @@ collapsed, to save visual space and can be expanded with the right label.
         {% block project_header_title %}
           <div class="eight wide computer eight wide tablet sixteen wide mobile middle aligned column">
             {% include "projects/includes/project_image.html" with project=project classes="micro rounded right spaced inline" %}
-            <a class="ui medium text" href="{{ project.get_absolute_url }}">{{ project.name | default:project.slug }}</a>
+            <a class="ui medium text" href="{{ project.get_absolute_url }}">{{ project.name|default:project.slug }}</a>
           </div>
         {% endblock project_header_title %}
 

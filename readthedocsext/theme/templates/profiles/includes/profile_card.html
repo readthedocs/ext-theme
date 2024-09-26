@@ -1,11 +1,10 @@
-{% load i18n %}
-
-{% load gravatar %}
-{% load ext_theme_tags %}
+{% load ext_theme_tags gravatar i18n %}
 
 <div class="ui centered card">
   {% if is_editable %}
-    <div class="image" data-tooltip="{% trans "Visit Gravatar to update your profile image" %}" data-position="bottom center">
+    <div class="image"
+         data-tooltip="{% trans "Visit Gravatar to update your profile image" %}"
+         data-position="bottom center">
       <a class="ui bottom right corner label">
         <i class="fa-duotone fa-edit icon"></i>
       </a>
@@ -18,16 +17,12 @@
 
     {% with full_name=profile.user.get_full_name %}
       {% if full_name %}
-        <div class="header">
-          {{ full_name }}
-        </div>
+        <div class="header">{{ full_name }}</div>
         <div class="meta">
           <code>{{ profile.user.username }}</code>
         </div>
       {% else %}
-        <div class="header">
-          {{ profile.user.username }}
-        </div>
+        <div class="header">{{ profile.user.username }}</div>
       {% endif %}
     {% endwith %}
 
@@ -64,9 +59,7 @@
 
       {% if is_editable %}
         <p>
-          <a href="{{ profile.get_absolute_url }}">
-            {% trans "View profile" %}
-          </a>
+          <a href="{{ profile.get_absolute_url }}">{% trans "View profile" %}</a>
         </p>
       {% endif %}
     </div>

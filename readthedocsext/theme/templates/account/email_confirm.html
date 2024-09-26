@@ -1,11 +1,11 @@
 {% extends "account/base_entrance.html" %}
 
-{% load blocktrans trans from i18n %}
-{% load user_display from account %}
+{% load account blocktrans from i18n trans user_display %}
 
 {% block head_title %}
   {% trans "Verify email" %}
 {% endblock head_title %}
+
 {% block content_title_text %}
   <i class="fad fa-envelope icon"></i>
   {% trans "Verify email" %}

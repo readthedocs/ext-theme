@@ -2,10 +2,15 @@
 
 {% load i18n %}
 
-{% block title %}{{ organization.name }} - {% trans "Owners" %}{% endblock %}
+{% block title %}
+  {{ organization.name }} - {% trans "Owners" %}
+{% endblock %}
 
 {% block organization_owners_active %}active{% endblock %}
-{% block organization_edit_content_header %}{% trans "Owners" %}{% endblock %}
+
+{% block organization_edit_content_header %}
+  {% trans "Owners" %}
+{% endblock %}
 
 {% block organization_edit_content %}
   {% include "organizations/partials/owners_list.html" with objects=object_list %}
@@ -33,9 +38,7 @@
     {% if invitations.exists %}
       <h2 class="ui small header">
         {% trans "Pending invitations" %}
-        <span class="ui circular small label">
-          {{ invitations.count }}
-        </span>
+        <span class="ui circular small label">{{ invitations.count }}</span>
       </h2>
       {% include "invitations/partials/invitation_list.html" with objects=invitations skip_pagination=True %}
     {% endif %}

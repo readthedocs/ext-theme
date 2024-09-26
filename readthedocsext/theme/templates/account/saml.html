@@ -1,11 +1,11 @@
 {% extends "socialaccount/base_entrance.html" %}
 
-{% load crispy from crispy_forms_tags %}
-{% load blocktrans trans from i18n %}
+{% load blocktrans crispy crispy_forms_tags from i18n trans %}
 
 {% block head_title %}
   {% trans "Log in with single sign-on" %}
 {% endblock head_title %}
+
 {% block content_title_text %}
   {% trans "Continue with SAML single sign-on" %}
 {% endblock content_title_text %}

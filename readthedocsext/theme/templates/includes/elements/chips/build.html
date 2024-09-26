@@ -1,6 +1,6 @@
 {% extends "includes/elements/chips/base.html" %}
 
-{% load naturaltime from humanize %}
+{% load from humanize naturaltime %}
 
 {% block chip_view_params %}
   '{% url "projects-builds-detail" project.slug build.pk %}'

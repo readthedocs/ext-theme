@@ -1,7 +1,5 @@
 {% if form.form_html %}
-  {% if include_media %}
-    {{ form.media }}
-  {%  endif %}
+  {% if include_media %}{{ form.media }}{% endif %}
   {% if form_show_errors %}
     {% include "semantic-ui/errors.html" %}
   {% endif %}

@@ -3,7 +3,7 @@
 
 {% block content-header %}
   <h1>{% trans "Read the Docs Archive" %}</h1>
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
   {% for project, versions in doc_index.items %}
@@ -16,4 +16,4 @@
       {% endfor %}
     </ul>
   {% endfor %}
-{% endblock %}
+{% endblock content %}

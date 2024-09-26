@@ -1,13 +1,21 @@
 {% extends "organizations/base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags i18n %}
 
-{% block title %}{% block subtitle %}{% if team %}{{ team.name }}{% else %}{% trans "New team" %}{% endif %}{% endblock %} - {{ organization.name }}{% endblock %}
+{% block title %}
+  {% block subtitle %}
+    {% if team %}
+      {{ team.name }}
+    {% else %}
+      {% trans "New team" %}
+    {% endif %}
+  {% endblock %}
+  - {{ organization.name }}
+{% endblock %}
 
 {% block content-header %}
   {% include "organizations/partials/header.html" with teams_active="active" %}
-{% endblock %}
+{% endblock content-header %}
 
 {# This UI uses the same structure from the project creation form views #}
 {% block content %}
@@ -19,16 +27,12 @@
             <a class="item {% block team_sidebar_members %}{% endblock %}"
                href="{% url "organization_team_detail" organization.slug team.slug %}">
               {% trans "Members" %}
-              <span class="ui label">
-                {{ team.members.count }}
-              </span>
+              <span class="ui label">{{ team.members.count }}</span>
             </a>
             <a class="item {% block team_sidebar_projects %}{% endblock %}"
                href="{% url "organization_team_project_edit" organization.slug team.slug %}">
               {% trans "Projects" %}
-              <span class="ui label">
-                {{ team.projects.count }}
-              </span>
+              <span class="ui label">{{ team.projects.count }}</span>
             </a>
             <a class="item {% block team_sidebar_settings %}{% endblock %}"
                href="{% url "organization_team_edit" slug=organization.slug team=team.slug %}">

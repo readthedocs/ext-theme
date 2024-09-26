@@ -1,10 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-
-{% load core_tags %}
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load core_tags i18n privacy_tags projects_tags %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
@@ -16,13 +12,16 @@
   {% endcomment %}
   <form method="post" action="{% url "profiles_tokens_create" %}">
     {% csrf_token %}
-    <button class="ui green {% if objects %}disabled{% endif %}button">{% trans "Generate API token" %}</button>
+    <button class="ui green {% if objects %}disabled{% endif %}button">
+      {% trans "Generate API token" %}
+    </button>
   </form>
 {% endblock create_button %}
 
 {% block list_placeholder_icon_class %}
   key
 {% endblock list_placeholder_icon_class %}
+
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     You currently have no API tokens.

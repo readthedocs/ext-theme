@@ -1,10 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-{% load gravatar %}
-{% load humanize %}
-{% load privacy_tags %}
-{% load invitations %}
+{% load gravatar humanize i18n invitations privacy_tags %}
 
 {% comment %}
   For now, this include is used for secondary listings on maintainer and
@@ -19,7 +15,7 @@
 {% endblock top_menu %}
 
 {% block create_button %}
-{% endblock %}
+{% endblock create_button %}
 
 {# Don't use placeholder content to avoid competing with the primary model listing view #}
 {% block list_placeholder %}
@@ -52,9 +48,12 @@
           {% endblock list_item_remove_modal_content %}
         </div>
         <div class="actions">
-          <form method="post" action="{% url "invitations_revoke" invitation_pk=object.pk %}">
+          <form method="post"
+                action="{% url "invitations_revoke" invitation_pk=object.pk %}">
             {% csrf_token %}
-            <input class="ui negative button" type="submit" value="{% trans "Revoke invitation" %}">
+            <input class="ui negative button"
+                   type="submit"
+                   value="{% trans "Revoke invitation" %}">
           </form>
         </div>
       </div>
@@ -64,9 +63,11 @@
 
 {% block list_item_image %}
   {% if object.to_user %}
-    <img class="ui rounded square image" src="{% gravatar_url object.to_user.email 64 %}">
+    <img class="ui rounded square image"
+         src="{% gravatar_url object.to_user.email 64 %}">
   {% else %}
-    <img class="ui rounded square image" src="{% gravatar_url object.to_email 64 %}">
+    <img class="ui rounded square image"
+         src="{% gravatar_url object.to_email 64 %}">
   {% endif %}
 {% endblock list_item_image %}
 
@@ -84,9 +85,7 @@
   {% endif %}
 
   <div class="sub header">
-    {% if object.to_user %}
-      {{ object.to_user.username }}
-    {% endif %}
+    {% if object.to_user %}{{ object.to_user.username }}{% endif %}
   </div>
 {% endblock list_item_header %}
 
@@ -100,4 +99,4 @@
 {% endblock list_item_meta_items %}
 
 {% block list_item_extra %}
-{% endblock %}
+{% endblock list_item_extra %}

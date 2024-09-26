@@ -29,9 +29,7 @@
         <div class="header">{{ error_title }}</div>
       {% endwith %}
       <ul class="list">
-        {% for error in form.non_field_errors %}
-          <li>error</li>
-        {% endfor %}
+        {% for error in form.non_field_errors %}<li>error</li>{% endfor %}
       </ul>
     </div>
   {% endif %}
@@ -42,9 +40,7 @@
       {{ field }}
       {% if field.errors %}
         <div class="ui pointing red basic label">
-          {% for error in field.errors %}
-            <div>{{ error }}</div>
-          {% endfor %}
+          {% for error in field.errors %}<div>{{ error }}</div>{% endfor %}
         </div>
       {% endif %}
       {% if field.help_text %}
@@ -54,6 +50,10 @@
   {% endfor %}
 
   {% trans "Save" as submit_text_default %}
-  <input class="ui submit primary button" type="submit" name="submit" value="{{ submit_text | default:submit_text_default }}" id="submit"/>
+  <input class="ui submit primary button"
+         type="submit"
+         name="submit"
+         value="{{ submit_text|default:submit_text_default }}"
+         id="submit" />
 
 </div>

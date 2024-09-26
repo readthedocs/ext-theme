@@ -1,6 +1,6 @@
 {% extends "errors/dashboard/base.html" %}
 
-{% load blocktrans trans from i18n %}
+{% load blocktrans from i18n trans %}
 
 {% block title %}
   {% trans "Service unavailable" %}
@@ -15,6 +15,7 @@
 {% block error_status %}
   504
 {% endblock error_status %}
+
 {% block error_title %}
   {{ block.super }}
   {% trans "Service unavailable" %}
@@ -23,6 +24,7 @@
 {% block error_icon_computer_name %}
   fa-cloud-xmark
 {% endblock error_icon_computer_name %}
+
 {% block error_icon_mobile_name %}
   fa-cloud-xmark
 {% endblock error_icon_mobile_name %}

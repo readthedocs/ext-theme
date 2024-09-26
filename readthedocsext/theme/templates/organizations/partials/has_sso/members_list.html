@@ -1,7 +1,6 @@
 {% extends "organizations/partials/members_list.html" %}
 
-{% load i18n %}
-{% load privacy_tags %}
+{% load i18n privacy_tags %}
 
 {# Don't show filters, they aren't usable #}
 {% block top_menu %}
@@ -17,9 +16,7 @@
 {% block top_left_menu_items %}
   <div class="item">
     <div class="content">
-      <div class="ui sub header">
-        Access
-      </div>
+      <div class="ui sub header">Access</div>
       Owners
     </div>
   </div>
@@ -30,6 +27,7 @@
     Teams and members are disabled for this organization
   {% endblocktrans %}
 {% endblock list_placeholder_header %}
+
 {% block list_placeholder_text %}
   <p class="inline">
     {% blocktrans trimmed %}

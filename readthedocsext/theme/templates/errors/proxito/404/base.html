@@ -1,6 +1,6 @@
 {% extends "errors/proxito/base.html" %}
 
-{% load blocktrans trans from i18n %}
+{% load blocktrans from i18n trans %}
 
 {% comment %}
   This view uses the contextual 404 view handlers currently, but mostly just to
@@ -18,6 +18,7 @@
 {% block error_status %}
   404
 {% endblock error_status %}
+
 {% block error_title %}
   {{ block.super }}
   {% blocktrans trimmed with resource=not_found_subject|default:"Page"|capfirst %}

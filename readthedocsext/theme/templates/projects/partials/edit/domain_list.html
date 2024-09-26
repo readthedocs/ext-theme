@@ -1,6 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load blocktrans trans from i18n %}
+{% load blocktrans from i18n trans %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
@@ -14,6 +14,7 @@
 {% block list_placeholder_icon_class %}
   fa-duotone fa-at
 {% endblock list_placeholder_icon_class %}
+
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     No domains are currently configured.
@@ -25,6 +26,7 @@
     {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
+
 {% block list_placeholder_text %}
   <a class="ui button"
      href="https://docs.readthedocs.io/page/guides/custom-domains.html"

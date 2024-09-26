@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n %}
-{% load humanize %}
-{% load pagination_tags %}
-{% load cache %}
+{% load cache humanize i18n pagination_tags %}
 
 {% block extra_metas %}
   <meta name="description"
@@ -119,7 +116,9 @@
   </div>
 
   <!-- Search -->
-  <div class="ui container very padded">{# include "includes/widesearchbar.html" #}</div>
+  <div class="ui container very padded">
+    {# include "includes/widesearchbar.html" #}
+  </div>
 
   {% if featured_list %}
     {% comment %}
@@ -166,7 +165,9 @@
   <!-- Funding and Contributing -->
   <section class="ui basic segment very padded">
     <div class="ui container">
-      <h2 class="ui header center aligned">{% trans "Read the Docs is funded by the community" %}</h2>
+      <h2 class="ui header center aligned">
+        {% trans "Read the Docs is funded by the community" %}
+      </h2>
       <p>
 
         {% url "advertising" as advertising_url %}

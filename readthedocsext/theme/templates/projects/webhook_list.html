@@ -1,16 +1,20 @@
 {% extends "projects/project_edit_base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags i18n %}
 
-{% block title %}{{ project.name }} - {% trans "Webhooks" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "Webhooks" %}
+{% endblock %}
 
 {% block project_webhooks_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Webhooks" %}{% endblock %}
+
+{% block project_edit_content_header %}
+  {% trans "Webhooks" %}
+{% endblock %}
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/webhook_list.html" with objects=object_list %}
-{% endblock %}
+{% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/build-notifications.html" text="How to setup build notifications and webhooks" is_external=True class="item" %}
