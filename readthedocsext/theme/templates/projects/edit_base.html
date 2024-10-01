@@ -1,6 +1,6 @@
 {% extends "projects/base.html" %}
 
-{% load i18n %}
+{% from i18n load trans %}
 
 {% block content-header %}
   {% include "projects/partials/header.html" with edit_active="active" %}
@@ -18,6 +18,10 @@
           {% trans "Addons" %}
           <div class="ui basic primary label">{% trans "New" %}</div>
         </a>
+        <a class="item {% block project_notifications_active %}{% endblock project_notifications_active %}"
+           href="{% url "projects_notifications" project.slug %}">{% trans "Email notifications" %}</a>
+        <a class="item {% block project_redirects_active %}{% endblock project_redirects_active %}"
+           href="{% url "projects_redirects" project.slug %}">{% trans "Redirects" %}</a>
         <a class="item {% block project_domains_active %}{% endblock project_domains_active %}"
            href="{% url "projects_domains" project.slug %}">{% trans "Domains" %}</a>
         <a class="item {% block project_pull_requests_active %}{% endblock project_pull_requests_active %}"
@@ -30,10 +34,10 @@
           <a class="item {% block project_access_tokens_active %}{% endblock project_access_tokens_active %}"
              href="{% url "projects_temporary_access_list" project.slug %}">{% trans "Sharing" %}</a>
         {% endif %}
-        <a class="item {% block project_translations_active %}{% endblock project_translations_active %}"
-           href="{% url "projects_translations" project.slug %}">{% trans "Translations" %}</a>
-        <a class="item {% block project_subprojects_active %}{% endblock project_subprojects_active %}"
-           href="{% url "projects_subprojects" project.slug %}">{% trans "Subprojects" %}</a>
+        <a class="item {% block project_search_analytics_active %}{% endblock project_search_analytics_active %}"
+           href="{% url "projects_search_analytics" project.slug %}">{% trans "Search analytics" %}</a>
+        <a class="item {% block project_traffic_analytics_active %}{% endblock project_traffic_analytics_active %}"
+           href="{% url "projects_traffic_analytics" project.slug %}">{% trans "Traffic analytics" %}</a>
         <a class="item {% block project_integrations_active %}{% endblock project_integrations_active %}"
            href="{% url "projects_integrations" project.slug %}">{% trans "Integrations" %}</a>
         {% if USE_ORGANIZATIONS %}
@@ -44,16 +48,12 @@
            href="{% url "projects_environmentvariables" project.slug %}">{% trans "Environment variables" %}</a>
         <a class="item {% block project_automation_rules_active %}{% endblock project_automation_rules_active %}"
            href="{% url "projects_automation_rule_list" project.slug %}">{% trans "Automation rules" %}</a>
-        <a class="item {% block project_notifications_active %}{% endblock project_notifications_active %}"
-           href="{% url "projects_notifications" project.slug %}">{% trans "Email notifications" %}</a>
+        <a class="item {% block project_translations_active %}{% endblock project_translations_active %}"
+           href="{% url "projects_translations" project.slug %}">{% trans "Translations" %}</a>
+        <a class="item {% block project_subprojects_active %}{% endblock project_subprojects_active %}"
+           href="{% url "projects_subprojects" project.slug %}">{% trans "Subprojects" %}</a>
         <a class="item {% block project_webhooks_active %}{% endblock project_webhooks_active %}"
            href="{% url "projects_webhooks" project.slug %}">{% trans "Webhooks" %}</a>
-        <a class="item {% block project_redirects_active %}{% endblock project_redirects_active %}"
-           href="{% url "projects_redirects" project.slug %}">{% trans "Redirects" %}</a>
-        <a class="item {% block project_search_analytics_active %}{% endblock project_search_analytics_active %}"
-           href="{% url "projects_search_analytics" project.slug %}">{% trans "Search analytics" %}</a>
-        <a class="item {% block project_traffic_analytics_active %}{% endblock project_traffic_analytics_active %}"
-           href="{% url "projects_traffic_analytics" project.slug %}">{% trans "Traffic analytics" %}</a>
         {% if USE_PROMOS %}
           <a class="item {% block project_ads_active %}{% endblock project_ads_active %}"
              href="{% url "projects_advertising" project.slug %}">{% trans "Advertising" %}</a>
