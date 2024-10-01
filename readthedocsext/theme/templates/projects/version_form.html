@@ -130,15 +130,17 @@
                   </div>
                 </div>
 
-                <div class="ui small bottom attached center aligned message">
-                  {% trans "Are your versions out of date?" %}
-                  <readthedocs-button-sync-versions class="ui mini black basic compact right aligned button"
-                                                    url="{% url "projects-sync-versions" project.slug %}"
-                                                    csrf-token="{{ csrf_token }}">
-                    <i class="fa-solid fa-arrows-rotate icon"></i>
-                    {% trans "Resync versions" %}
-                  </readthedocs-button-sync-versions>
-                </div>
+              </div>
+              <div class="ui small bottom attached center aligned message">
+
+                {% trans "Are your versions out of date?" %}
+
+                <readthedocs-button-sync-versions class="ui mini black basic compact right aligned button"
+                                                  url="{% url "projects-sync-versions" project.slug %}"
+                                                  csrf-token="{{ csrf_token }}">
+                  <i class="fa-solid fa-arrows-rotate icon"></i>
+                  {% trans "Resync versions" %}
+                </readthedocs-button-sync-versions>
 
               </div>
             {% endblock version_create_placeholder %}
