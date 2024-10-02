@@ -609,6 +609,11 @@ export class BuildDetailView {
     this.show_debug(!show_debug);
   }
 
+  toggle_wrapped() {
+    const is_wrapped = this.is_wrapped();
+    this.is_wrapped(!is_wrapped);
+  }
+
   /** Update all attributes and observables that depend on build state */
   update_state(state) {
     // Is build in one of the finished states?
