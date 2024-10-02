@@ -133,12 +133,11 @@
         <i class="fa-duotone fa-microscope icon"></i>
         {% trans "Debug" %}
       </a>
-      <div class="item">
-        <div class="ui small checkbox">
-          <input type="checkbox" data-bind="checked: is_wrapped" />
-          <label>Wrap output</label>
-        </div>
-      </div>
+      <a class="ui item"
+         data-bind="click: toggle_wrapped, css: {active: is_wrapped()}">
+        <i class="fa-duotone fa-arrows-left-right-to-line icon"></i>
+        {% trans "Wrap output" %}
+      </a>
       <div class="right menu">
 
         {% if request.user|is_admin:project %}
