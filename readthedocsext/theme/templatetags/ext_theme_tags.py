@@ -69,7 +69,7 @@ def settings_dashboard():
 
     return {
         "debug": getattr(settings, "DEBUG", False),
-        "webpack_public_path": f"{{ public_path_prefix }}/readthedocsext/theme/",
+        "webpack_public_path": f"{public_path_prefix}/readthedocsext/theme/",
         "production_domain": settings.PRODUCTION_DOMAIN,
         "sentry": getattr(settings, "SENTRY_BROWSER", {}),
     }
