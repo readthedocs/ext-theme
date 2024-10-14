@@ -56,12 +56,6 @@
         <div class="item">
           <div class="header">{% trans "Maintaining" %}</div>
           <div class="menu">
-            <a class="item {% block project_redirects_active %}{% endblock project_redirects_active %}"
-               href="{% url "projects_redirects" project.slug %}">{% trans "Redirects" %}</a>
-            <a class="item {% block project_traffic_analytics_active %}{% endblock project_traffic_analytics_active %}"
-               href="{% url "projects_traffic_analytics" project.slug %}">{% trans "Traffic analytics" %}</a>
-            <a class="item {% block project_search_analytics_active %}{% endblock project_search_analytics_active %}"
-               href="{% url "projects_search_analytics" project.slug %}">{% trans "Search analytics" %}</a>
             {% if not USE_ORGANIZATIONS %}
               <a class="item {% block project_users_active %}{% endblock project_users_active %}"
                  href="{% url "projects_users" project.slug %}">{% trans "Maintainers" %}</a>
@@ -70,6 +64,12 @@
               <a class="item {% block project_access_tokens_active %}{% endblock project_access_tokens_active %}"
                  href="{% url "projects_temporary_access_list" project.slug %}">{% trans "Sharing" %}</a>
             {% endif %}
+            <a class="item {% block project_redirects_active %}{% endblock project_redirects_active %}"
+               href="{% url "projects_redirects" project.slug %}">{% trans "Redirects" %}</a>
+            <a class="item {% block project_traffic_analytics_active %}{% endblock project_traffic_analytics_active %}"
+               href="{% url "projects_traffic_analytics" project.slug %}">{% trans "Traffic analytics" %}</a>
+            <a class="item {% block project_search_analytics_active %}{% endblock project_search_analytics_active %}"
+               href="{% url "projects_search_analytics" project.slug %}">{% trans "Search analytics" %}</a>
             {% if USE_ORGANIZATIONS %}
               <a class="item {% block project_keys_active %}{% endblock project_keys_active %}"
                  href="{% url "projects_keys" project.slug %}">{% trans "SSH keys" %}</a>
