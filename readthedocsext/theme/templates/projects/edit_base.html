@@ -22,6 +22,10 @@
               {% trans "Addons" %}
               <div class="ui basic primary label">{% trans "New" %}</div>
             </a>
+            {% if not USE_ORGANIZATIONS %}
+              <a class="item {% block project_users_active %}{% endblock project_users_active %}"
+                 href="{% url "projects_users" project.slug %}">{% trans "Maintainers" %}</a>
+            {% endif %}
             <a class="item {% block project_automation_rules_active %}{% endblock project_automation_rules_active %}"
                href="{% url "projects_automation_rule_list" project.slug %}">{% trans "Automation rules" %}</a>
           </div>
@@ -56,10 +60,6 @@
         <div class="item">
           <div class="header">{% trans "Maintaining" %}</div>
           <div class="menu">
-            {% if not USE_ORGANIZATIONS %}
-              <a class="item {% block project_users_active %}{% endblock project_users_active %}"
-                 href="{% url "projects_users" project.slug %}">{% trans "Maintainers" %}</a>
-            {% endif %}
             {% if USE_ORGANIZATIONS %}
               <a class="item {% block project_access_tokens_active %}{% endblock project_access_tokens_active %}"
                  href="{% url "projects_temporary_access_list" project.slug %}">{% trans "Sharing" %}</a>
