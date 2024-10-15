@@ -107,3 +107,18 @@ customElements.define(
   "readthedocs-menu-build-rebuild",
   MenuBuildRebuildElement,
 );
+
+/** Button for resyncing all versions **/
+class ButtonSyncAllVersionsElement extends APIEventWrapper {
+  // TODO translate this here or use a different pattern
+  static errorMessage = "There was an error syncing versions.";
+
+  getSuccessURL() {
+    console.log("Successfully synced versions");
+  }
+}
+
+customElements.define(
+  "readthedocs-button-sync-versions",
+  ButtonSyncAllVersionsElement,
+);
