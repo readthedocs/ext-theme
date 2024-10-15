@@ -49,7 +49,9 @@ collapsed, to save visual space and can be expanded with the right label.
                style="display: none">
 
             {% block project_header_description %}
-              {% if project.description %}<p>{{ project.description|truncatewords:15 }}</p>{% endif %}
+              {% if project.description %}
+                <p>{{ project.description|truncatewords:15 }}</p>
+              {% endif %}
             {% endblock project_header_description %}
 
             {% block project_header_tags %}
@@ -171,8 +173,8 @@ collapsed, to save visual space and can be expanded with the right label.
         {% trans "Builds" %}
         <span class="ui tiny teal circular label">{{ project.builds.count }}</span>
       </a>
-      {% if request.user|is_admin:project %}
-        <div class="right menu">
+      <div class="right menu">
+        {% if request.user|is_admin:project %}
           {% if user.is_staff %}
             <a class="item" data-bind="click: $root.show_modal('project-debug')">
               <i class="fa-duotone fa-microscope icon"></i>
@@ -184,8 +186,12 @@ collapsed, to save visual space and can be expanded with the right label.
             <i class="fa-duotone fa-gears icon"></i>
             {% trans "Settings" %}
           </a>
-        </div>
-      {% endif %}
+        {% endif %}
+        <a class="item" href="{{ project.get_docs_url }}">
+          <i class="fa-duotone fa-book icon"></i>
+          {% trans "Visit docs" %}
+        </a>
+      </div>
     </div>
 
     <div class="ui mini modal" data-modal-id="project-debug">
