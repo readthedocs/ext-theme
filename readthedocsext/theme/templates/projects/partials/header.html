@@ -187,8 +187,8 @@ collapsed, to save visual space and can be expanded with the right label.
             {% trans "Settings" %}
           </a>
         {% endif %}
-        {# Show top-level view docs button on non-build pages #}
-        {% if not build %}
+        {# Show top-level view docs button on non-build pages with a good build #}
+        {% if project.has_good_build and not build %}
           <a class="item" href="{{ project.get_docs_url }}">
             <i class="fa-duotone fa-book icon"></i>
             {% trans "View docs" %}
