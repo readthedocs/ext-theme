@@ -1,3 +1,4 @@
+import logging
 from urllib.parse import urljoin
 
 from django import template
@@ -11,6 +12,7 @@ from django.templatetags.static import StaticNode, PrefixNode
 from django.forms import boundfield
 
 
+log = logging.getLogger(__name__)
 register = template.Library()
 
 
