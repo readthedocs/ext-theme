@@ -145,7 +145,7 @@ def readthedocs_language_name(lang_code):
         return language_name(lang_code)
     except Exception:
         log.exception("Error getting language name")
-        return "Unknown"
+        return lang_code
 
 
 @register.filter
@@ -156,7 +156,7 @@ def readthedocs_language_name_translated(lang_code):
         return language_name_translated(lang_code)
     except Exception:
         log.exception("Error getting language name")
-        return "Unknown"
+        return lang_code
 
 
 @register.filter
@@ -167,4 +167,4 @@ def readthedocs_language_name_local(lang_code):
         return language_name_local(lang_code)
     except Exception:
         log.exception("Error getting language name")
-        return "Unknown"
+        return lang_code
