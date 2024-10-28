@@ -17,32 +17,40 @@
       <div class="ui vertical pointing fluid menu">
         {% block profile-admin-nav %}
           {# djlint: off T003 #}
-          <a class="item {% block profile_admin_details %}{% endblock %}"
-             href="{% url 'profiles_profile_edit' %}">{% trans "Account" %}</a>
-          <a class="item {% block profile_admin_change_email %}{% endblock %}"
-             href="{% url 'account_email' %}">{% trans "Email addresses" %}</a>
-
-          <div class="item {% block profile_admin_security %}{% endblock %}">
-            <div>{% trans "Security" %}</div>
+          <div class="item">
+            <div class="header">{% trans "Account" %}</div>
+            <div class="menu">
+              <a class="item {% block profile_admin_details %}{% endblock %}"
+                 href="{% url 'profiles_profile_edit' %}">{% trans "Account" %}</a>
+              <a class="item {% block profile_admin_change_email %}{% endblock %}"
+                 href="{% url 'account_email' %}">{% trans "Email addresses" %}</a>
+              <a class="item {% block profile_admin_social_accounts %}{% endblock %}"
+                 href="{% url 'socialaccount_connections' %}">{% trans "Connected services" %}</a>
+            </div>
+          </div>
+          <div class="item">
+            <div class="header">{% trans "Security" %}</div>
             <div class="menu">
               <a class="item {% block profile_admin_change_password %}{% endblock %}"
                  href="{% url 'account_change_password' %}">{% trans "Change password" %}</a>
               <a class="item {% block profile_admin_mfa %}{% endblock %}"
                  href="{% url 'mfa_index' %}">{% trans "Two-factor authentication" %}</a>
+              <a class="item {% block profile-admin-security-log %}{% endblock %}"
+                 href="{% url 'profiles_security_log' %}">{% trans "Security log" %}</a>
+              <a class="item {% block profile_admin_tokens %}{% endblock %}"
+                 href="{% url 'profiles_tokens' %}">{% trans "API tokens" %}</a>
             </div>
           </div>
-          <a class="item {% block profile_admin_social_accounts %}{% endblock %}"
-             href="{% url 'socialaccount_connections' %}">{% trans "Connected services" %}</a>
-          <a class="item {% block profile-admin-security-log %}{% endblock %}"
-             href="{% url 'profiles_security_log' %}">{% trans "Security log" %}</a>
-          <a class="item {% block profile_admin_tokens %}{% endblock %}"
-             href="{% url 'profiles_tokens' %}">{% trans "API tokens" %}</a>
-
           {% if USE_PROMOS %}
-            <a class="item {% block profile_admin_gold_edit %}{% endblock %}"
-               href="{% url 'gold_detail' %}">{% trans "Gold membership" %}</a>
-            <a class="item {% block profile_admin_advertising %}{% endblock %}"
-               href="{% url 'account_advertising' %}">{% trans "Advertising" %}</a>
+            <div class="item">
+              <div class="header">{% trans "Advertising" %}</div>
+              <div class="menu">
+                <a class="item {% block profile_admin_advertising %}{% endblock %}"
+                   href="{% url 'account_advertising' %}">{% trans "Advertising" %}</a>
+                <a class="item {% block profile_admin_gold_edit %}{% endblock %}"
+                   href="{% url 'gold_detail' %}">{% trans "Gold membership" %}</a>
+              </div>
+            </div>
           {% endif %}
           {# djlint: on T003 #}
         {% endblock %}

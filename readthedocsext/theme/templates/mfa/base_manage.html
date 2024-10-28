@@ -13,16 +13,13 @@
   active
 {% endblock profile_admin_mfa %}
 {% block edit_content_header %}
-  {% trans "Security" %}
+  {% trans "Two-factor authentication" %}
 {% endblock edit_content_header %}
 {% block edit_content_subheader %}
   <div class="ui breadcrumb">
-    <a href="{% url "mfa_index" %}" class="section">
-      {% trans "Two-factor authentication" %}
-    </a>
+    <a href="{% url "mfa_index" %}" class="section">{% trans "Manage" %}</a>
     <span class="divider">/</span>
     {% block edit_content_subheader_section %}
-      <div class="active section">{% trans "Manage" %}</div>
     {% endblock edit_content_subheader_section %}
   </div>
 {% endblock edit_content_subheader %}
