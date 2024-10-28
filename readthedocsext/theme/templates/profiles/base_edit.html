@@ -21,8 +21,16 @@
              href="{% url 'profiles_profile_edit' %}">{% trans "Account" %}</a>
           <a class="item {% block profile_admin_change_email %}{% endblock %}"
              href="{% url 'account_email' %}">{% trans "Email addresses" %}</a>
-          <a class="item {% block profile_admin_security %}{% endblock %}"
-             href="{% url 'account_change_password' %}">{% trans "Security" %}</a>
+
+          <div class="item {% block profile_admin_security %}{% endblock %}">
+            <div>{% trans "Security" %}</div>
+            <div class="menu">
+              <a class="item {% block profile_admin_change_password %}{% endblock %}"
+                 href="{% url 'account_change_password' %}">{% trans "Change password" %}</a>
+              <a class="item {% block profile_admin_mfa %}{% endblock %}"
+                 href="{% url 'mfa_index' %}">{% trans "Two-Factor Authentication" %}</a>
+            </div>
+          </div>
           <a class="item {% block profile_admin_social_accounts %}{% endblock %}"
              href="{% url 'socialaccount_connections' %}">{% trans "Connected services" %}</a>
           <a class="item {% block profile-admin-security-log %}{% endblock %}"
