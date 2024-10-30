@@ -127,7 +127,7 @@ export class ProjectCreateView extends ResponsiveView {
   init_search() {
     const config = this.config();
     const url =
-      config.urls.remoterepository_list + "?expand=projects&full_name={query}";
+      config.urls.remoterepository_list + "?full_name={query}";
 
     this.search_config({
       // We use a Knockout template here, embedded in the template as a script
