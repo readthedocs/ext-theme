@@ -3,6 +3,12 @@
 {% load blocktrans trans from i18n %}
 {% load crispy from crispy_forms_tags %}
 
+{% block edit_content_subheader %}
+  <div class="ui breadcrumb">
+    <div class="active section">{% trans "Manage" %}</div>
+  </div>
+{% endblock edit_content_subheader %}
+
 {% block edit_content %}
 
   {% block mfa_totp %}
