@@ -38,11 +38,15 @@
      data-content="{% trans "Edit" %}">
     <i class="fa-solid fa-wrench icon"></i>
   </a>
-  <a class="ui icon button"
-     href="{% url 'projects_domains_delete' project.slug object.pk %}"
-     data-content="{% trans "Delete" %}">
-    <i class="fa-duotone fa-trash icon"></i>
-  </a>
+
+  {% url "projects_domains_delete" project_slug=project.slug domain_pk=object.pk as delete_url %}
+  {% trans "Remove domain" as action_text %}
+  {% blocktrans trimmed asvar content_text with domain=object.domain %}
+    Remove domain {{ domain }}?
+    Make sure to also remove the DNS records for this domain.
+    Otherwise, another user may add the same domain to their project and serve that content from your domain (domain hijacking).
+  {% endblocktrans %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=delete_url action_text=action_text content_text=content_text %}
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
