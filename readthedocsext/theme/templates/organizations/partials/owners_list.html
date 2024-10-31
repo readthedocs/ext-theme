@@ -23,11 +23,11 @@
     </a>
 
     <div class="ui mini modal" data-modal-id="invite-owner">
-      <div class="header">
-        {% trans "Invite organization owner" %}
-      </div>
+      <div class="header">{% trans "Invite organization owner" %}</div>
       <div class="content">
-        <form class="ui form" method="post" action="{% url "organization_owner_add" organization.slug %}">
+        <form class="ui form"
+              method="post"
+              action="{% url "organization_owner_add" organization.slug %}">
           {% csrf_token %}
           {{ form|crispy }}
           <input class="ui button" type="submit" value="{% trans "Invite owner" %}">
@@ -55,7 +55,8 @@
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
-  <img class="ui rounded square image" src="{% gravatar_url object.owner.email 64 %}">
+  <img class="ui rounded square image"
+       src="{% gravatar_url object.owner.email 64 %}">
 {% endblock list_item_image %}
 
 {% block list_item_header %}
@@ -70,9 +71,7 @@
 
     </a>
     {% if full_name %}
-      <div class="sub header">
-        {{ object.owner.username }}
-      </div>
+      <div class="sub header">{{ object.owner.username }}</div>
     {% endif %}
   {% endwith %}
 {% endblock list_item_header %}
@@ -80,5 +79,4 @@
 {% block list_item_meta_items %}
 {% endblock list_item_meta_items %}
 
-{% block list_item_extra %}
-{% endblock %}
+{% block list_item_extra %}{% endblock %}

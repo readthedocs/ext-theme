@@ -34,9 +34,7 @@
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  <a href="{{ object.get_absolute_url }}">
-    {{ object }}
-  </a>
+  <a href="{{ object.get_absolute_url }}">{{ object }}</a>
 {% endblock list_item_header %}
 
 {% block list_item_extra %}

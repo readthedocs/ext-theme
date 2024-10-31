@@ -41,7 +41,8 @@
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
-  <img class="ui rounded square image" src="{% gravatar_url object.email 64 %}">
+  <img class="ui rounded square image"
+       src="{% gravatar_url object.email 64 %}">
 {% endblock list_item_image %}
 
 {% block list_item_header %}
@@ -56,9 +57,7 @@
 
     </a>
     {% if full_name %}
-      <div class="sub header">
-        {{ object.username }}
-      </div>
+      <div class="sub header">{{ object.username }}</div>
     {% endif %}
   {% endwith %}
 {% endblock list_item_header %}
