@@ -5,11 +5,10 @@
   update the templates for project maintainers and team member lists
 {% endcomment %}
 
-{% load i18n %}
-{% load gravatar %}
-{% load humanize %}
-{% load privacy_tags %}
-{% load crispy_forms_tags %}
+{% load trans blocktrans from i18n %}
+{% load gravatar_url from gravatar %}
+{% load is_admin from privacy_tags %}
+{% load crispy from crispy_forms_tags %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
