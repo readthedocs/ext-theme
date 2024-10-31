@@ -50,7 +50,7 @@
   {% blocktrans trimmed asvar content_text with name=object.child.name %}
     Remove subproject {{ name }}?
   {% endblocktrans %}
-  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text content_text=content_text %}
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
