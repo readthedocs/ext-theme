@@ -11,9 +11,9 @@
   {% url "projects_users_create" project.slug as create_url %}
   {% trans "Add maintainer" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon %}{% endblock %}
+{% block list_placeholder_icon %}{% endblock list_placeholder_icon %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
     This project currently has no maintainers.
@@ -38,6 +38,7 @@
 
 {% block list_item_image %}
   <img class="ui rounded square image"
+       alt={% trans "User avatar" %}
        src="{% gravatar_url object.email 64 %}">
 {% endblock list_item_image %}
 

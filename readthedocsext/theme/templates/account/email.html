@@ -5,11 +5,11 @@
 
 {% block title %}
   {% trans "Email addresses" %}
-{% endblock %}
-{% block profile_admin_change_email %}active{% endblock %}
+{% endblock title %}
+{% block profile_admin_change_email %}active{% endblock profile_admin_change_email %}
 {% block edit_content_header %}
   {% trans "Email addresses" %}
-{% endblock %}
+{% endblock edit_content_header %}
 
 {% block edit_content %}
   {% include "account/partials/email_list.html" with objects=user.emailaddress_set.all %}
@@ -23,4 +23,4 @@
       {% trans "Add email" %}
     </button>
   </form>
-{% endblock %}
+{% endblock edit_content %}

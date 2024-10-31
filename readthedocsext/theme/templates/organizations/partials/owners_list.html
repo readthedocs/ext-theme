@@ -34,9 +34,9 @@
       </div>
     </div>
   {% endif %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fad fa-user-plus icon{% endblock %}
+{% block list_placeholder_icon_class %}fad fa-user-plus icon{% endblock list_placeholder_icon_class %}
 {# This placeholder content should never be visible, there should always be one owner #}
 {% block list_placeholder_header %}
   {% trans "This organization has no owner users" %}
@@ -55,6 +55,7 @@
 
 {% block list_item_image %}
   <img class="ui rounded square image"
+       alt={% trans "User avatar" %}
        src="{% gravatar_url object.owner.email 64 %}">
 {% endblock list_item_image %}
 
@@ -78,4 +79,4 @@
 {% block list_item_meta_items %}
 {% endblock list_item_meta_items %}
 
-{% block list_item_extra %}{% endblock %}
+{% block list_item_extra %}{% endblock list_item_extra %}
