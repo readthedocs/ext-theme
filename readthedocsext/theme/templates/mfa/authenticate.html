@@ -32,7 +32,7 @@
     </div>
   </form>
 
-  <!-- We can't have nested forms, so we need to have a separate form for "Cancel" -->
+  {# We can't have nested forms, so we need to have a separate form for "Cancel" #}
   <form id="logout-from-stage"
         action="{% url 'account_logout' %}"
         method="post">
