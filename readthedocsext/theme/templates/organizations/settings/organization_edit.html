@@ -3,10 +3,14 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-{% block title %}{{ organization.name }} - {% trans "Details" %}{% endblock %}
+{% block title %}
+  {{ organization.name }} - {% trans "Details" %}
+{% endblock %}
 
 {% block organization_details_active %}active{% endblock %}
-{% block organization_edit_content_header %}{% trans "Details" %}{% endblock %}
+{% block organization_edit_content_header %}
+  {% trans "Details" %}
+{% endblock %}
 
 {% block organization_edit_content %}
   <form class="ui form" method="post" action=".">
@@ -15,14 +19,10 @@
     <input class="ui primary button" type="submit" value="{% trans "Save" %}" />
   </form>
 
-  <div class="ui horizontal divider">
-    {% trans "More" %}
-  </div>
+  <div class="ui horizontal divider">{% trans "More" %}</div>
 
   <div class="ui red segment">
-    <h3 class="ui small header">
-      {% trans "Delete organization" %}
-    </h3>
+    <h3 class="ui small header">{% trans "Delete organization" %}</h3>
 
     <p>
       {% blocktrans trimmed %}
@@ -32,25 +32,27 @@
       {% endblocktrans %}
     </p>
 
-    <a class="ui button" data-bind="click: $root.show_modal('organization-delete')">
+    <a class="ui button"
+       data-bind="click: $root.show_modal('organization-delete')">
       <i class="fa-duotone fa-trash icon"></i>
       {% trans "Delete organization" %}
     </a>
     <div class="ui mini modal" data-modal-id="organization-delete">
-      <div class="header">
-        {% trans "Delete organization" %}
-      </div>
+      <div class="header">{% trans "Delete organization" %}</div>
       <div class="content">
         {% blocktrans trimmed with organization=organization.name %}
-          Are you sure you want to delete the organization {{organization}}?
+          Are you sure you want to delete the organization {{ organization }}?
           This action cannot be undone.
         {% endblocktrans %}
       </div>
       <div class="actions">
-        <form method="post" action="{% url "organization_delete" organization.slug %}">
+        <form method="post"
+              action="{% url "organization_delete" organization.slug %}">
           {% csrf_token %}
           <div class="ui cancel button">{% trans "Cancel" %}</div>
-          <input class="ui negative button" type="submit" value="{% trans "Delete organization" %}">
+          <input class="ui negative button"
+                 type="submit"
+                 value="{% trans "Delete organization" %}">
         </form>
       </div>
     </div>

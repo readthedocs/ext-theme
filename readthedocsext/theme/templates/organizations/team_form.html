@@ -41,15 +41,11 @@
   {% endblock subview_content_form %}
 
   {% if team and request.user|is_admin:organization %}
-    <div class="ui horizontal divider">
-      {% trans "More" %}
-    </div>
+    <div class="ui horizontal divider">{% trans "More" %}</div>
 
     {% block team_delete %}
       <div class="ui red segment">
-        <h3 class="ui small header">
-          {% trans "Delete team" %}
-        </h3>
+        <h3 class="ui small header">{% trans "Delete team" %}</h3>
 
         <p>
           {% blocktrans trimmed %}
@@ -58,25 +54,27 @@
           {% endblocktrans %}
         </p>
 
-        <a class="ui basic button" data-bind="click: $root.show_modal('team-delete')">
+        <a class="ui basic button"
+           data-bind="click: $root.show_modal('team-delete')">
           <i class="fa-duotone fa-trash icon"></i>
           {% trans "Delete team" %}
         </a>
         <div class="ui mini modal" data-modal-id="team-delete">
-          <div class="header">
-            {% trans "Delete team" %}
-          </div>
+          <div class="header">{% trans "Delete team" %}</div>
           <div class="content">
             {% blocktrans trimmed with team=team.name %}
-              Are you sure you want to delete the team {{team}}? This action
+              Are you sure you want to delete the team {{ team }}? This action
               cannot be undone.
             {% endblocktrans %}
           </div>
           <div class="actions">
-            <form method="post" action="{% url "organization_team_delete" organization.slug team.slug %}">
+            <form method="post"
+                  action="{% url "organization_team_delete" organization.slug team.slug %}">
               {% csrf_token %}
               <div class="ui cancel button">{% trans "Cancel" %}</div>
-              <input class="ui negative button" type="submit" value="{% trans "Delete team" %}">
+              <input class="ui negative button"
+                     type="submit"
+                     value="{% trans "Delete team" %}">
             </form>
           </div>
         </div>
