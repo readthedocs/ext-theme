@@ -1,9 +1,8 @@
 {% extends "organizations/teams/base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
-{% load organizations %}
-{% load privacy_tags %}
+{% load trans blocktrans from i18n %}
+{% load crispy from crispy_forms_tags %}
+{% load is_admin from privacy_tags %}
 
 {% block subtitle %}
   {% if team %}
@@ -11,7 +10,7 @@
   {% else %}
     {% trans "Add team" %}
   {% endif %}
-{% endblock %}
+{% endblock subtitle %}
 {% block subview_content_header %}
   {% if team %}
     {% trans "Settings" %}
@@ -19,7 +18,9 @@
     {% trans "Add team" %}
   {% endif %}
 {% endblock subview_content_header %}
-{% block team_sidebar_settings %}active{% endblock %}
+{% block team_sidebar_settings %}
+  active
+{% endblock team_sidebar_settings %}
 
 {% block subview_content_subheader_breadcrumbs %}
   {% if team %}
