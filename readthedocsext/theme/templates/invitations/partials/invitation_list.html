@@ -54,6 +54,7 @@
           <form method="post"
                 action="{% url "invitations_revoke" invitation_pk=object.pk %}">
             {% csrf_token %}
+            <div class="ui cancel button">{% trans "Cancel" %}</div>
             <input class="ui negative button"
                    type="submit"
                    value="{% trans "Revoke invitation" %}">
