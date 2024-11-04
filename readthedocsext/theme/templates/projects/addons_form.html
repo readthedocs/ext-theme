@@ -76,8 +76,10 @@
 
       {% block addons_notifications %}
         <div class="ui tab" data-tab="notifications">
-          {{ form.external_version_warning_enabled | as_crispy_field }}
-          {{ form.stable_latest_version_warning_enabled | as_crispy_field }}
+          {{ form.notifications_enabled | as_crispy_field }}
+          {{ form.notifications_show_on_external | as_crispy_field }}
+          {{ form.notifications_show_on_latest | as_crispy_field }}
+          {{ form.notifications_show_on_non_stable | as_crispy_field }}
         </div>
       {% endblock addons_notifications %}
 
