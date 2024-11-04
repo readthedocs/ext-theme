@@ -75,6 +75,7 @@
           <div class="actions">
             <form method="post" action="{% url "organization_team_delete" organization.slug team.slug %}">
               {% csrf_token %}
+              <div class="ui cancel button">{% trans "Cancel" %}</div>
               <input class="ui negative button" type="submit" value="{% trans "Delete team" %}">
             </form>
           </div>
