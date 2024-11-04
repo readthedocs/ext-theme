@@ -37,7 +37,7 @@
       <i class="fa-duotone fa-trash icon"></i>
       {% trans "Delete project" %}
     </a>
-    <div class="ui mini modal" data-modal-id="project-delete">
+    <div class="ui tiny modal" data-modal-id="project-delete">
       <div class="header">{% trans "Delete project" %}</div>
       <div class="content">
         <p>
@@ -50,9 +50,8 @@
           <div class="ui warning message">
             {% url "projects_domains" project.slug as domain_list_url %}
             {% blocktrans trimmed with domain_list_url=domain_list_url %}
-              Your project has <a href="{{ domain_list_url }}">custom domains</a>,
-              make sure to also remove their DNS records.
-              Otherwise, another user may add the same domains to their project and serve that content from your domain (domain hijacking).
+              Your project has a <a href="{{ domain_list_url }}">custom domain</a> configured.
+              Make sure to also remove the DNS records for all custom domains or another project might be able to reuse the domain (also known as domain hijacking).
             {% endblocktrans %}
           </div>
         {% endif %}
@@ -60,6 +59,7 @@
       <div class="actions">
         <form method="post" action="{% url "projects_delete" project.slug %}">
           {% csrf_token %}
+          <div class="ui cancel button">{% trans "Cancel" %}</div>
           <input class="ui negative button"
                  type="submit"
                  value="{% trans "Delete project" %}">

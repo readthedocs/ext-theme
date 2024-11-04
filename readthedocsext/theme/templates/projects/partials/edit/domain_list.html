@@ -42,13 +42,13 @@
   {% url "projects_domains_delete" project_slug=project.slug domain_pk=object.pk as delete_url %}
   {% trans "Remove domain" as action_text %}
   {% blocktrans trimmed asvar content_text with domain=object.domain %}
-    <p>Remove domain {{ domain }}?</p>
-    <div class="ui warning message">
-      Make sure to also remove the DNS records for this domain.
-      Otherwise, another user may add the same domain to their project and serve that content from your domain (domain hijacking).
-    </div>
+    Remove domain {{ domain }}?
   {% endblocktrans %}
-  {% include "includes/crud/remove_button.html" with id=object.pk form_url=delete_url action_text=action_text content_text=content_text %}
+  {% blocktrans trimmed asvar warning_text %}
+    Make sure to also remove the DNS record for this domain,
+    or another project might be able to reuse this domain (also known as domain hijacking).
+  {% endblocktrans %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=delete_url action_text=action_text content_text=content_text warning_text=warning_text %}
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
