@@ -1,3 +1,4 @@
+{% load trans blocktrans from i18n %}
 {% comment "rst" %}
   Remove button
   =============
@@ -48,6 +49,10 @@
 
       Modal content text
 
+  .. describe:: warning_text
+
+     Optional warning text
+
   .. describe:: is_disabled
 
       Show the button as disabled
@@ -63,10 +68,14 @@
     This placement is important, as ``.ui.buttons`` uses :last-child, so we
     can't place this after the last ``.ui.button``
   {% endcomment %}
-  <div class="ui mini modal" data-modal-id="remove-{{ id }}">
+  <div class="ui {% if warning_text %}tiny{% else %}mini{% endif %} modal"
+       data-modal-id="remove-{{ id }}">
     <div class="header">{{ action_text }}</div>
     <div class="content">
-      {{ content_text }}
+      <p>{{ content_text }}</p>
+      {% if warning_text %}
+        <div class="ui warning message">{{ warning_text }}</div>
+      {% endif %}
     </div>
     <div class="actions">
       <form method="post" action="{{ form_url }}">
@@ -74,7 +83,11 @@
         {% if field_name and field_value %}
           <input type="hidden" name="{{ field_name }}" value="{{ field_value }}" />
         {% endif %}
-        <input class="ui button" type="submit" value="{{ action_text }}" name="{{ action_name }}">
+        <div class="ui cancel button">{% trans "Cancel" %}</div>
+        <input class="ui button negative"
+               type="submit"
+               value="{{ action_text }}"
+               name="{{ action_name }}">
       </form>
     </div>
   </div>
