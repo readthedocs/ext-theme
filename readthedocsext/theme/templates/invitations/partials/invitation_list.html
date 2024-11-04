@@ -1,10 +1,8 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-{% load gravatar %}
-{% load humanize %}
-{% load privacy_tags %}
-{% load invitations %}
+{% load trans blocktrans from i18n %}
+{% load gravatar_url from gravatar %}
+{% load can_revoke_invitation from invitations %}
 
 {% comment %}
   For now, this include is used for secondary listings on maintainer and
@@ -18,7 +16,8 @@
 {% block top_menu %}
 {% endblock top_menu %}
 
-{% block create_button %}{% endblock %}
+{% block create_button %}
+{% endblock create_button %}
 
 {# Don't use placeholder content to avoid competing with the primary model listing view #}
 {% block list_placeholder %}
@@ -68,9 +67,11 @@
 {% block list_item_image %}
   {% if object.to_user %}
     <img class="ui rounded square image"
+         alt="{% trans "User avatar" %}"
          src="{% gravatar_url object.to_user.email 64 %}">
   {% else %}
     <img class="ui rounded square image"
+         alt="{% trans "User avatar" %}"
          src="{% gravatar_url object.to_email 64 %}">
   {% endif %}
 {% endblock list_item_image %}
@@ -102,4 +103,5 @@
   </div>
 {% endblock list_item_meta_items %}
 
-{% block list_item_extra %}{% endblock %}
+{% block list_item_extra %}
+{% endblock list_item_extra %}

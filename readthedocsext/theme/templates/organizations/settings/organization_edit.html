@@ -1,16 +1,18 @@
 {% extends "organizations/settings/base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load trans blocktrans i18n %}
+{% load crispy from crispy_forms_tags %}
 
 {% block title %}
   {{ organization.name }} - {% trans "Details" %}
-{% endblock %}
+{% endblock title %}
 
-{% block organization_details_active %}active{% endblock %}
+{% block organization_details_active %}
+  active
+{% endblock organization_details_active %}
 {% block organization_edit_content_header %}
   {% trans "Details" %}
-{% endblock %}
+{% endblock organization_edit_content_header %}
 
 {% block organization_edit_content %}
   <form class="ui form" method="post" action=".">
@@ -57,4 +59,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock organization_edit_content %}
