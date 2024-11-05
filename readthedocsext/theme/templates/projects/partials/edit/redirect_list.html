@@ -1,12 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-
-{% load gravatar %}
-
-{% load core_tags %}
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load trans blocktrans from i18n %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
@@ -24,7 +18,9 @@
   {% blocktrans trimmed %}
     No redirects exist yet
   {% endblocktrans %}
-  <div class="sub header">{% trans "Redirects allow you to fix links to pages that have moved." %}</div>
+  <div class="sub header">
+    {% trans "Redirects allow you to fix links to pages that have moved." %}
+  </div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
   <a class="ui button"
@@ -75,7 +71,7 @@
   {% blocktrans trimmed asvar content_text with redirect=object %}
     Remove redirect {{ redirect }}?
   {% endblocktrans %}
-  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text content_text=content_text %}
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
