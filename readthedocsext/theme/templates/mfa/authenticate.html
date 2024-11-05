@@ -22,11 +22,11 @@
     {% csrf_token %}
     {{ form|crispy }}
     {{ redirect_field }}
-    <div class="ui right floated text menu">
-      <button class="ui button" type="submit" form="logout-from-stage">
-        {% trans "Cancel" %}
-      </button>
+    <div class="ui stackable relaxed text menu">
       <div class="right menu">
+        <button class="ui button" type="submit" form="logout-from-stage">
+          {% trans "Cancel" %}
+        </button>
         <button class="ui primary button" type="submit">{% trans "Verify" %}</button>
       </div>
     </div>
