@@ -5,11 +5,10 @@
   update the templates for project maintainers and team member lists
 {% endcomment %}
 
-{% load i18n %}
-{% load gravatar %}
-{% load humanize %}
-{% load privacy_tags %}
-{% load crispy_forms_tags %}
+{% load trans blocktrans from i18n %}
+{% load gravatar_url from gravatar %}
+{% load is_admin from privacy_tags %}
+{% load crispy from crispy_forms_tags %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
@@ -23,11 +22,11 @@
     </a>
 
     <div class="ui mini modal" data-modal-id="invite-owner">
-      <div class="header">
-        {% trans "Invite organization owner" %}
-      </div>
+      <div class="header">{% trans "Invite organization owner" %}</div>
       <div class="content">
-        <form class="ui form" method="post" action="{% url "organization_owner_add" organization.slug %}">
+        <form class="ui form"
+              method="post"
+              action="{% url "organization_owner_add" organization.slug %}">
           {% csrf_token %}
           {{ form|crispy }}
           <input class="ui button" type="submit" value="{% trans "Invite owner" %}">
@@ -35,9 +34,11 @@
       </div>
     </div>
   {% endif %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fad fa-user-plus icon{% endblock %}
+{% block list_placeholder_icon_class %}
+  fad fa-user-plus icon
+{% endblock list_placeholder_icon_class %}
 {# This placeholder content should never be visible, there should always be one owner #}
 {% block list_placeholder_header %}
   {% trans "This organization has no owner users" %}
@@ -50,12 +51,14 @@
     {% blocktrans trimmed asvar content_text with username=object.owner.username organization=organization.name %}
       Remove user {{ username }} as an owner of the {{ organization }} organization?
     {% endblocktrans %}
-    {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text context_text=context_text is_disabled=is_last_user %}
+    {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text content_text=content_text is_disabled=is_last_user %}
   {% endif %}
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
-  <img class="ui rounded square image" src="{% gravatar_url object.owner.email 64 %}">
+  <img class="ui rounded square image"
+       alt="{% trans "User avatar" %}"
+       src="{% gravatar_url object.owner.email 64 %}">
 {% endblock list_item_image %}
 
 {% block list_item_header %}
@@ -70,9 +73,7 @@
 
     </a>
     {% if full_name %}
-      <div class="sub header">
-        {{ object.owner.username }}
-      </div>
+      <div class="sub header">{{ object.owner.username }}</div>
     {% endif %}
   {% endwith %}
 {% endblock list_item_header %}
@@ -81,4 +82,4 @@
 {% endblock list_item_meta_items %}
 
 {% block list_item_extra %}
-{% endblock %}
+{% endblock list_item_extra %}
