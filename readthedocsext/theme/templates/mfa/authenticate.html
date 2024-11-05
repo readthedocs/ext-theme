@@ -22,12 +22,22 @@
     {% csrf_token %}
     {{ form|crispy }}
     {{ redirect_field }}
-
     <div class="ui stackable relaxed text menu">
-      <a class="item" href="{% url "account_login" %}">{% trans "Cancel" %}</a>
       <div class="right menu">
+        <button class="ui button" type="submit" form="logout-from-stage">
+          {% trans "Cancel" %}
+        </button>
         <button class="ui primary button" type="submit">{% trans "Verify" %}</button>
       </div>
     </div>
   </form>
+
+  {# We can't have nested forms, so we need to have a separate form for "Cancel" #}
+  <form id="logout-from-stage"
+        action="{% url 'account_logout' %}"
+        method="post">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{% url 'account_login' %}">
+  </form>
+
 {% endblock content_body %}
