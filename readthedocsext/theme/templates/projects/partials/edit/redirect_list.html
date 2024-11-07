@@ -119,6 +119,12 @@
       {% endif %}
     {% endspaceless %}
   </div>
+  {% if object.description %}
+    <div class="sub header">
+      <label>{% trans "Description:" %}</label>
+      <span>{{ object.description }}</span>
+    </div>
+  {% endif %}
 {% endblock list_item_header %}
 
 {% block list_item_meta_column %}
