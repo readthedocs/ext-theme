@@ -1,8 +1,6 @@
-{% load i18n %}
-{% load core_tags %}
-{% load privacy_tags %}
-{% load core_tags %}
-{% load gravatar %}
+{% load blocktrans trans from i18n %}
+{% load gravatar_url from gravatar %}
+{% load is_admin from privacy_tags %}
 
 {% comment %}
 
@@ -15,20 +13,22 @@ collapsed, to save visual space and can be expanded with the right label.
 {% block organization_header %}
   {# Organization specific notifications only #}
   {% if organization %}
-    <readthedocs-notification-list
-      url="{% url "organizations-notifications-list" organization.slug %}"
-      csrf-token="{{ csrf_token }}">
+    <readthedocs-notification-list url="{% url "organizations-notifications-list" organization.slug %}"
+                                   csrf-token="{{ csrf_token }}">
     </readthedocs-notification-list>
   {% endif %}
 
-  <div class="ui top attached segment" data-bind="using: CollapsingHeaderView(true)">
+  <div class="ui top attached segment"
+       data-bind="using: CollapsingHeaderView(true)">
 
     {% block organization_header_metadata %}
       <div class="ui stacking grid">
 
         {% block organization_header_title %}
           <div class="eight wide computer eight wide tablet sixteen wide mobile middle aligned column">
-            <img class="ui micro rounded right spaced inline image" src="{% gravatar_url organization.email 48 %}" />
+            <img class="ui micro rounded right spaced inline image"
+                 src="{% gravatar_url organization.email 48 %}"
+                 alt="{% blocktrans trimmed with organization_name=organization.name %}{{ organization_name }} organization{% endblocktrans %}" />
             <a class="ui medium text" href="{{ organization.get_absolute_url }}">
               {{ organization.name }}
             </a>
@@ -38,49 +38,45 @@ collapsed, to save visual space and can be expanded with the right label.
         {% block organization_header_labels %}
           <div class="right aligned eight wide computer eight wide tablet sixteen wide left aligned mobile column">
             {# The dropdown action button, to swap between expanded/collapsed #}
-            <a class="ui icon primary label" data-bind="click: toggle_collapsed" data-content="{% trans "More organization information" %}">
+            <a class="ui icon primary label"
+               data-bind="click: toggle_collapsed"
+               data-content="{% trans "More organization information" %}">
               <i class="fas fa-caret-down icon" data-bind="class: dropdown_class"></i>
             </a>
           </div>
         {% endblock organization_header_labels %}
 
         {% block organization_header_metadata_left %}
-          <div
-            class="eight wide computer eight wide tablet sixteen wide mobile column"
-            data-bind="visible: !is_collapsed()" style="display: none;">
+          <div class="ko hidden eight wide computer eight wide tablet sixteen wide mobile column"
+               data-bind="css: {hidden: is_collapsed()}">
 
             {% block organization_header_description %}
               {% if organization.description %}
-                <p>
-                  {{ organization.description|truncatewords:15 }}
-                </p>
+                <p>{{ organization.description|truncatewords:15 }}</p>
               {% endif %}
-            {% endblock %}
+            {% endblock organization_header_description %}
           </div>
         {% endblock organization_header_metadata_left %}
 
         {% block organization_header_metadata_right %}
-          <div
-            class="right aligned eight wide computer eight wide tablet sixteen wide mobile column"
-            data-bind="visible: !is_collapsed()" style="display: none;">
+          <div class="ko hidden right aligned eight wide computer eight wide tablet sixteen wide mobile column"
+               data-bind="css: {hidden: is_collapsed()}">
 
             {% block organization_header_owners %}
-              <div class="ui sub header">
-                {% trans "Owners" %}
-              </div>
+              <div class="ui sub header">{% trans "Owners" %}</div>
 
               <div class="ui overlapping avatar images">
                 {% for user in organization.owners.all|slice:":8" %}
                   <a href="{% url "profiles_profile_detail" user.username %}">
-                    <img class="ui image" src="{% gravatar_url user.email 32 %}" />
+                    <img class="ui image"
+                         src="{% gravatar_url user.email 32 %}"
+                         alt="{% blocktrans trimmed with username=user.username %}Profile for user {{ username }}{% endblocktrans %}" />
                   </a>
                 {% endfor %}
 
                 {% with more_owners=organization.owners.all|slice:"8:"|length %}
                   {% if more_owners %}
-                    <span>
-                      {% trans "... and {more_maintainers} others" %}
-                    </span>
+                    <span>{% trans "... and {more_maintainers} others" %}</span>
                   {% endif %}
                 {% endwith %}
               </div>
@@ -96,18 +92,20 @@ collapsed, to save visual space and can be expanded with the right label.
 
   {% block organization_header_navigation %}
     <div class="ui bottom attached stackable menu">
-      <a class="item {{ projects_active }}" href="{{ organization.get_absolute_url }}">
-        {% trans "Projects" %}
-      </a>
-      <a class="item {{ teams_active }}" href="{% url "organization_team_list" organization.slug %}">
+      <a class="item {{ projects_active }}"
+         href="{{ organization.get_absolute_url }}">{% trans "Projects" %}</a>
+      <a class="item {{ teams_active }}"
+         href="{% url "organization_team_list" organization.slug %}">
         {% trans "Teams" %}
       </a>
-      <a class="item {{ members_active }}" href="{% url "organization_members" organization.slug %}">
+      <a class="item {{ members_active }}"
+         href="{% url "organization_members" organization.slug %}">
         {% trans "Members" %}
       </a>
       {% if request.user|is_admin:organization %}
         <div class="right menu">
-          <a class="item {{ edit_active }}" href="{% url "organization_edit" organization.slug %}">
+          <a class="item {{ edit_active }}"
+             href="{% url "organization_edit" organization.slug %}">
             <i class="fa-duotone fa-gears icon"></i>
             {% trans "Settings" %}
           </a>
