@@ -14,7 +14,8 @@ collapsed, to save visual space and can be expanded with the right label.
   {# Organization specific notifications only #}
   {% if organization %}
     <readthedocs-notification-list url="{% url "organizations-notifications-list" organization.slug %}"
-                                   csrf-token="{{ csrf_token }}">
+                                   csrf-token="{{ csrf_token }}"
+                                   class="ui basic segment relaxed list">
     </readthedocs-notification-list>
   {% endif %}
 

@@ -8,7 +8,8 @@
   {# Project specific notifications only #}
   {% if project %}
     <readthedocs-notification-list url="{% url "projects-notifications-list" project.slug %}"
-                                   csrf-token="{{ csrf_token }}">
+                                   csrf-token="{{ csrf_token }}"
+                                   class="ui basic segment relaxed list">
     </readthedocs-notification-list>
   {% endif %}
 
