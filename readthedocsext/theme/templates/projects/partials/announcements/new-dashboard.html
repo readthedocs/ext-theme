@@ -1,6 +1,6 @@
 {% load blocktrans trans from i18n %}
 
-{% with "https://about.readthedocs.com/blog/updates-on-our-new-dashboard" as url_blog %}
+{% with "https://about.readthedocs.com/blog/2024/11/rollout-of-our-new-dashboard/" as url_blog %}
   <div data-bind="using: new ProjectAnnouncementView('new-dashboard')">
     <div class="ui fluid card ko hidden" data-bind="css: { hidden: closed }">
       <div class="content">
@@ -38,7 +38,7 @@
               <p>
                 {% blocktrans trimmed %}
                   Our legacy dashboard is still available,
-                  but will be retired on <time datetime="2025-03-01">March 1st, 2025</time>.
+                  but will be retired on <time datetime="2025-03-11">March 11th, 2025</time>.
                   Until then, you can access the dashboard here:
                 {% endblocktrans %}
               </p>
