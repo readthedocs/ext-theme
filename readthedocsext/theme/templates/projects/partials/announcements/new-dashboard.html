@@ -1,0 +1,57 @@
+{% load blocktrans trans from i18n %}
+
+{% with "https://about.readthedocs.com/blog/2024/11/rollout-of-our-new-dashboard/" as url_blog %}
+  <div data-bind="using: new ProjectAnnouncementView('new-dashboard')">
+    <div class="ui fluid card ko hidden" data-bind="css: { hidden: closed }">
+      <div class="content">
+        <i class="fa-solid fa-xmark right floated close icon"
+           data-bind="click: close_announcement"></i>
+        <div class="header">{% trans "About this dashboard" %}</div>
+        <div class="description">
+          <p>
+            {% blocktrans trimmed %}
+              Our new dashboard includes many new features that help make navigation, management, and finding what you need easier.
+              We recommend exploring your projects and builds to familiarize yourself with these changes and new features.
+            {% endblocktrans %}
+          </p>
+
+          <div class="ui relaxed list">
+            <div class="item">
+              <div class="header">{% trans "What is changing?" %}</div>
+              <p>
+                {% blocktrans trimmed %}
+                  We discuss what is changing and what to expect as we retire our legacy dashboard on our blog:
+                {% endblocktrans %}
+              </p>
+
+              <div class="ui list">
+                <div class="item">
+                  <i class="fad fa-newspaper icon"></i>
+                  <div class="content">
+                    <a class="header" href="{{ url_blog }}">{% trans "Updates on our new dashboard" %}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="header">{% trans "Can I use the old dashboard?" %}</div>
+              <p>
+                {% blocktrans trimmed %}
+                  Our legacy dashboard is still available,
+                  but will be retired on <time datetime="2025-03-11">March 11th, 2025</time>.
+                  Until then, you can access the dashboard here:
+                {% endblocktrans %}
+              </p>
+              {# djlint: off D018 #}
+              <a class="ui fluid basic button"
+                 href="//{{ SWITCH_PRODUCTION_DOMAIN }}{% url "account_login" %}">
+                {% trans "Open legacy dashboard" %}
+              </a>
+              {# djlint: on #}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endwith %}

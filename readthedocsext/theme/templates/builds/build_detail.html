@@ -8,21 +8,6 @@
 {% endblock title %}
 
 {% block content-header %}
-  {% block build_detail_beta %}
-    {% comment %}
-      Temporary notification to point to the beta dashboard.
-      url_switch_dashboard comes from the view
-    {% endcomment %}
-    {% if url_switch_dashboard %}
-      <div class="ui small basic fitted center aligned segment">
-        <i class="fad fa-sparkles violet icon"></i>
-        <strong>You are using our new beta dashboard.</strong>
-        <a href="{% url "support" %}">We would love to have your feedback</a>.
-        If you encounter problems,
-        <a href="{{ url_switch_dashboard }}">return to our normal dashboard</a>.
-      </div>
-    {% endif %}
-  {% endblock build_detail_beta %}
   {% include "projects/partials/header.html" with builds_active="active" %}
 {% endblock content-header %}
 
