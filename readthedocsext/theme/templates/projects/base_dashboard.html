@@ -9,7 +9,8 @@
 {% block notifications %}
   {# User notifications only #}
   <readthedocs-notification-list url="{% url "users-notifications-list" request.user.username %}"
-                                 csrf-token="{{ csrf_token }}">
+                                 csrf-token="{{ csrf_token }}"
+                                 class="ui basic segment relaxed list">
   </readthedocs-notification-list>
 
   {{ block.super }}
