@@ -48,7 +48,7 @@
         <a class="item" data-tab="notifications">{% trans "Notifications" %}</a>
         <a class="item" data-tab="analytics">{% trans "Analytics" %}</a>
         <a class="item" data-tab="docdiff">{% trans "Visual diff" %}</a>
-        <a class="item" data-tab="tooltips">{% trans "Tooltips" %}</a>
+        <a class="item" data-tab="link-previews">{% trans "Link previews" %}</a>
         <a class="item" data-tab="hotkeys">{% trans "Hotkeys" %}</a>
       </div>
     {% endif %}
@@ -97,14 +97,14 @@
         </div>
       {% endblock addons_docdiff %}
 
-      {% block addons_tooltips %}
-        <div class="ui tab" data-tab="tooltips">
-          {{ form.tooltips_enabled | as_crispy_field }}
-          {{ form.tooltips_root_selector | as_crispy_field }}
-          {{ form.tooltips_doctool_name | as_crispy_field }}
-          {{ form.tooltips_doctool_version | as_crispy_field }}
+      {% block addons_link_previews %}
+        <div class="ui tab" data-tab="link-previews">
+          {{ form.linkpreviews_enabled | as_crispy_field }}
+          {{ form.linkpreviews_root_selector | as_crispy_field }}
+          {{ form.linkpreviews_doctool_name | as_crispy_field }}
+          {{ form.linkpreviews_doctool_version | as_crispy_field }}
         </div>
-      {% endblock addons_tooltips %}
+      {% endblock addons_link_previews %}
 
       {% block addons_hotkeys %}
         <div class="ui tab" data-tab="hotkeys">
