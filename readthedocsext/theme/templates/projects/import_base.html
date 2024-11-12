@@ -92,19 +92,20 @@
 
                   {% if wizard.steps.current == "config" %}
                     <div class="ui small modal" data-modal-id="i-need-help">
-                      <div class="header">Add configuration file to your project</div>
+                      <div class="header">{% trans "Add configuration file to your project" %}</div>
                       <div class="content">
-                        <p>These are the steps you need to follow:</p>
+                        <p>{% trans "These are the steps you need to follow:" %}</p>
                         <ol>
                           <li>
-                            Create a <code>.readthedocs.yaml</code> in your project.
+                            {% trans "Create a <code>.readthedocs.yaml</code> file in your repository." %}
                           </li>
-                          <li>Copy and paste the content of the example.</li>
-                          <li>Open a pull request with these changes.</li>
-                          <li>Merge the pull request in your project.</li>
+                          <li>
+                            {% trans "Copy the contents of one of our examples to your project's <code>.readthedocs.yaml</code>." %}
+                          </li>
+                          <li>{% trans "Merge this change to your project's repository." %}.</li>
                         </ol>
                         <p>
-                          Once that's done Read the Docs will be able to build the documentation for your project.
+                          {% trans "Once that's done Read the Docs will be able to build your project's documentation." %}
                         </p>
                       </div>
                       <div class="actions">
