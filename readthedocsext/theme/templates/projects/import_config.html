@@ -1,5 +1,5 @@
 {% extends "projects/import_base.html" %}
-{% load i18n %}
+{% load blocktrans trans from i18n %}
 
 {% block project_add_subheader %}
   {% trans "Add a configuration file to your project" %}
@@ -58,9 +58,9 @@ version: 2
 
 # Set the OS, Python version, and other tools you might need
 build:
-  os: ubuntu-22.04
+  os: ubuntu-24.04
   tools:
-    python: "3.12"
+    python: "3.13"
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
@@ -97,9 +97,9 @@ version: 2
 
 # Set the OS, Python version, and other tools you might need
 build:
-  os: ubuntu-22.04
+  os: ubuntu-24.04
   tools:
-    python: "3.12"
+    python: "3.13"
 
 # Build documentation with Mkdocs
 mkdocs:
@@ -136,9 +136,9 @@ version: 2
 
 # Set the OS, Python version, and other tools you might need
 build:
-  os: ubuntu-22.04
+  os: ubuntu-24.04
   tools:
-    nodejs: "19"
+    nodejs: "22"
 
   commands:
     # Install Docusaurus dependencies
@@ -173,9 +173,9 @@ version: 2
 
 # Set the OS, Python version, and other tools you might need
 build:
-  os: ubuntu-22.04
+  os: ubuntu-24.04
   tools:
-    python: "3.12"
+    python: "3.13"
 
   commands:
     # Install Pelican and its dependencies
@@ -207,7 +207,7 @@ version: 2
 
 # Set the OS, Python version, and other tools you might need
 build:
-  os: ubuntu-22.04
+  os: ubuntu-24.04
   tools:
     ruby: "3.3"
 
@@ -242,16 +242,16 @@ version: 2
 
 # Set the OS, Python version, and other tools you might need
 build:
-  os: ubuntu-22.04
+  os: ubuntu-24.04
   tools:
     # Specify the language and version your project requires,
     # by uncommenting one of the following tools.
     #
-    # python: "3.12"
+    # python: "3.13"
     # ruby: "3.3"
-    # nodejs: "19"
-    # rust: "1.64"
-    # golang: "1.19"
+    # nodejs: "22"
+    # rust: "1.82"
+    # golang: "1.23"
 
   commands:
     # Write down your commands here to:
