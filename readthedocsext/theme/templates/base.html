@@ -21,6 +21,10 @@
         <link rel="icon"
               type="image/png"
               href="{% static 'images/favicon-dev.png' %}" />
+      {% else if "readthedocs.com" in PRODUCTION_DOMAIN %}
+        <link rel="icon"
+              type="image/png"
+              href="{% static 'corporate/img/favicon.png' %}" />
       {% else %}
         <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" />
       {% endif %}
