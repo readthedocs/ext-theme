@@ -17,7 +17,13 @@
     {% endblock head_meta %}
 
     {% block head_links %}
-      <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" />
+      {% if "devthedocs" in PRODUCTION_DOMAIN %}
+        <link rel="icon"
+              type="image/png"
+              href="{% static 'images/favicon-dev.png' %}" />
+      {% else %}
+        <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" />
+      {% endif %}
       <link rel="stylesheet" type="text/css" media="all" href="{% webpack_static "readthedocsext/theme/css/site.css" %}" />
     {% endblock head_links %}
     {# TODO deprecate extra_links #}
