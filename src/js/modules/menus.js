@@ -305,3 +305,108 @@ export class APIConsumerElement extends LightDOMElement {
     }
   }
 }
+
+// Menu items
+export class ItemDocsElement extends APIConsumerElement {
+  render() {
+    let label = this.label || msg(`View documentation`);
+    return html`
+      <a
+        class="ui button ${classMap({
+          disabled: this.disabled,
+          loading: !this.disabled && this.state === States.LOADING,
+        })}"
+        href=${this.data?.urls?.documentation || `#`}
+        @click=${this.queueEvent}
+        data-content="${label}"
+        aria-label="${label}"
+        target="_blank"
+        tabindex="${when(
+          !this.disabled,
+          () => html`0`,
+          () => html`-1`,
+        )}"
+      >
+        <i class="fa-duotone fa-book icon"></i>
+      </a>
+    `;
+  }
+}
+customElements.define("readthedocs-item-docs", ItemDocsElement);
+
+export class ItemDownloadsElement extends APIConsumerElement {
+  render() {
+    let label = this.label || msg(`Offline formats`);
+    return html`
+      <button
+        class="ui ${classMap({ disabled: this.disabled })} dropdown button"
+        data-content="${label}"
+        aria-label="${label}"
+        tabindex="${when(
+          this.disabled,
+          () => html`0`,
+          () => html`-1`,
+        )}"
+      >
+        <i class="fa-solid fa-download icon"></i>
+        <div class="menu">
+          <div class="header">${msg(`Offline formats`)}</div>
+          <a
+            href="${this.data?.downloads?.pdf}"
+            class="${classMap({ disabled: !this.data?.downloads?.pdf })} item"
+          >
+            <i class="fa-duotone fa-file icon"></i>
+            ${msg(`PDF file`)}
+          </a>
+          <a
+            href="${this.data?.downloads?.epub}"
+            class="${classMap({ disabled: !this.data?.downloads?.epub })} item"
+          >
+            <i class="fa-duotone fa-file icon"></i>
+            ${msg(`ePUB file`)}
+          </a>
+          <a
+            href="${this.data?.downloads?.htmlzip}"
+            class="${classMap({
+              disabled: !this.data?.downloads?.htmlzip,
+            })} item"
+          >
+            <i class="fa-duotone fa-file-zipper icon"></i>
+            ${msg(`HTML archive`)}
+          </a>
+        </div>
+      </button>
+    `;
+  }
+}
+customElements.define("readthedocs-item-downloads", ItemDownloadsElement);
+
+class MenuProjectAdminElement extends APIConsumerElement {
+  static get properties() {
+    // TODO `settings` should be part of APIv3 response
+    let _properties = APIConsumerElement.properties;
+    _properties["settings"] = { type: String };
+    return _properties;
+  }
+
+  render() {
+    const isAdmin = this.data?.permissions?.admin;
+    // This preemptively supports a settings URL, which can be passed in as an
+    // attribute in the meantime. The `settings` property can go away with this.
+    const urlSettings = this.data?.urls?.settings || this.settings;
+    return html`
+      <div class="header">${msg(`Admin`)}</div>
+      <a
+        class="${classMap({ disabled: !isAdmin })} item"
+        href="${this.settings}"
+      >
+        <i class="fa-duotone fa-wrench icon"></i>
+        ${msg(`Configure project`)}
+      </a>
+    `;
+  }
+}
+customElements.define(
+  "readthedocs-menu-project-admin",
+  MenuProjectAdminElement,
+);
