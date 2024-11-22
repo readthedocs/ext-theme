@@ -1,0 +1,48 @@
+{% extends "errors/dashboard/base.html" %}
+
+{% load blocktrans trans from i18n %}
+
+{% block title %}
+  {% trans "Access restricted" %}
+{% endblock title %}
+
+{% block error_status %}
+  403
+{% endblock error_status %}
+{% block error_title %}
+  {{ block.super }}
+  {% trans "Access restricted" %}
+{% endblock error_title %}
+{% block error_subtitle_text %}
+{% endblock error_subtitle_text %}
+
+{% block error_icon_computer_name %}
+  fa-lock-keyhole
+{% endblock error_icon_computer_name %}
+{% block error_icon_mobile_name %}
+  fa-lock-keyhole
+{% endblock error_icon_mobile_name %}
+{% block error_icon_computer_style %}
+  --fa-primary-color: orange;
+{% endblock error_icon_computer_style %}
+{% block error_icon_mobile_style %}
+  --fa-primary-color: orange;
+{% endblock error_icon_mobile_style %}
+
+{% block error_content %}
+  <p>
+    {% blocktrans trimmed %}
+      CSRF verification failed.
+    {% endblocktrans %}
+  </p>
+{% endblock error_content %}
+
+{% block error_content_help %}
+  <p>
+    {% blocktrans trimmed %}
+      This may be because your session has expired, or there was a problem with the form submission.
+      Please try logging in again.
+    {% endblocktrans %}
+  </p>
+  {{ block.super }}
+{% endblock error_content_help %}
