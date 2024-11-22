@@ -4,14 +4,15 @@ import { LitElement, css, html, nothing } from "lit";
 import { LightDOMElement } from "../application/elements";
 
 /**
- *  API event wrapper
+ * API event wrapper
  *
- *  Generic button/link wrapper to POST to a URL on an event like "click".
- *  Handles error feedback via toast message and redirection on success.
+ * Generic button/link wrapper to POST to a URL on an event like "click".
+ * Handles error feedback via toast message and redirection on success.
  *
  * @param {string} csrfToken - CSRF token from Django, attribute ``csrf-token``
  * @param {string} url - API URL for request
  *
+ * TODO Deprecate this in favor of APIProviderElement
  **/
 export class APIEventWrapper extends LightDOMElement {
   static properties = {
@@ -28,26 +29,45 @@ export class APIEventWrapper extends LightDOMElement {
 
   // This is just a wrapper, so we rely on the inner HTML for all of the
   // display and instead just wrap the outer with a clickable element.
-  render() {
+  constructor() {
+    super();
     this.addEventListener(this.constructor.event, () => {
-      this.sendRequest();
+      this.onEvent();
     });
   }
 
-  sendRequest() {
-    const classes = this.classList;
-    classes.add("loading");
+  getHeaders() {
+    let headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    if (this.csrfToken) {
+      headers["X-CSRFToken"] = this.csrfToken;
+    }
+    return headers;
+  }
 
+  getUrl() {
+    return this.url;
+  }
+
+  onEvent() {
+    if (this.request == undefined) {
+      const classes = this.classList;
+      classes.add("loading");
+      this.sendRequest().finally(() => {
+        classes.remove("loading");
+      });
+    }
+  }
+
+  sendRequest() {
     const options = {
       method: this.constructor.method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-CSRFToken": this.csrfToken,
-      },
+      headers: this.getHeaders(),
     };
 
-    this.request = fetch(`${this.url}`, options)
+    this.request = fetch(this.getUrl(), options)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Request failed");
@@ -56,18 +76,21 @@ export class APIEventWrapper extends LightDOMElement {
       })
       .then((data) => {
         console.debug("Received API reponse:", data);
-        this.data = data;
-        const urlSuccess = this.getSuccessURL();
-        if (urlSuccess) {
-          window.location.href = urlSuccess;
-        }
+        return this.onResponse(data);
       })
       .catch((err) => {
         this.onError(err);
-      })
-      .finally(() => {
-        classes.remove("loading");
       });
+
+    return this.request;
+  }
+
+  onResponse(data) {
+    this.data = data;
+    const urlSuccess = this.getSuccessURL();
+    if (urlSuccess) {
+      window.location.href = urlSuccess;
+    }
   }
 
   /** Return URL to redirect to on success
