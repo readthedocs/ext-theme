@@ -37,6 +37,7 @@
       </p>
 
       {{ form.enabled|as_crispy_field }}
+      {{ form.options_root_selector|as_crispy_field }}
       {{ form.project|as_crispy_field }}
     </div>
 
@@ -99,14 +100,6 @@
       {% block addons_link_previews %}
         <div class="ui tab" data-tab="link-previews">
           {{ form.linkpreviews_enabled | as_crispy_field }}
-          {{ form.linkpreviews_root_selector | as_crispy_field }}
-          {{ form.linkpreviews_doctool_name | as_crispy_field }}
-
-          {% comment %}
-          We don't want to expose the doctool version yet.
-          {{ form.linkpreviews_doctool_version | as_crispy_field }}
-          {% endcomment %}
-
         </div>
       {% endblock addons_link_previews %}
 
