@@ -1,0 +1,21 @@
+{% extends "errors/dashboard/403.html" %}
+
+{% load blocktrans trans from i18n %}
+
+{% block error_content %}
+  <p>
+    {% blocktrans trimmed %}
+      CSRF verification failed.
+    {% endblocktrans %}
+  </p>
+{% endblock error_content %}
+
+{% block error_content_help %}
+  <p>
+    {% blocktrans trimmed %}
+      This may be because your session has expired, or there was a problem with the form submission.
+      Please try logging in again.
+    {% endblocktrans %}
+  </p>
+  {{ block.super }}
+{% endblock error_content_help %}
