@@ -37,7 +37,6 @@
       </p>
 
       {{ form.enabled|as_crispy_field }}
-      {{ form.options_root_selector|as_crispy_field }}
       {{ form.project|as_crispy_field }}
     </div>
 
@@ -51,6 +50,7 @@
         <a class="item" data-tab="docdiff">{% trans "Visual diff" %}</a>
         <a class="item" data-tab="link-previews">{% trans "Link previews" %}</a>
         <a class="item" data-tab="hotkeys">{% trans "Hotkeys" %}</a>
+        <a class="item" data-tab="advanced">{% trans "Advanced" %}</a>
       </div>
     {% endif %}
 
@@ -109,6 +109,11 @@
         </div>
       {% endblock addons_hotkeys %}
 
+      {% block addons_advanced %}
+        <div class="ui tab" data-tab="advanced">
+          {{ form.options_root_selector|as_crispy_field }}
+        </div>
+      {% endblock addons_advanced %}
     </div>
 
     <input class="ui primary button" type="submit" value="{% trans "Save" %}">
