@@ -1,7 +1,7 @@
 {% extends "projects/base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load blocktrans trans from i18n %}
+{% load crispy from crispy_forms_tags %}
 
 {% block title %}
   {% trans "Add project" %}
@@ -81,12 +81,44 @@
                   {% if wizard.steps.prev %}
                     <button class="ui button"
                             name="wizard_goto_step"
-                            value="{{ wizard.steps.prev }}">{% trans "Previous" %}</button>
+                            value="{{ wizard.steps.prev }}">
+                      {% trans "Previous" %}
+                    </button>
                   {% endif %}
 
                   {% if wizard.steps.next %}
                     <input class="ui button primary" type="submit" value="{% trans "Next" %}" />
-                  {% else %}
+                  {% endif %}
+
+                  {% if wizard.steps.current == "config" %}
+                    <div class="ui small modal" data-modal-id="i-need-help">
+                      <div class="header">{% trans "Add configuration file to your project" %}</div>
+                      <div class="content">
+                        <p>{% trans "These are the steps you need to follow:" %}</p>
+                        <ol>
+                          <li>
+                            {% trans "Create a <code>.readthedocs.yaml</code> file in your repository." %}
+                          </li>
+                          <li>
+                            {% trans "Copy the contents of one of our examples to your project's <code>.readthedocs.yaml</code>." %}
+                          </li>
+                          <li>{% trans "Merge this change to your project's repository." %}.</li>
+                        </ol>
+                        <p>
+                          {% trans "Once that's done Read the Docs will be able to build your project's documentation." %}
+                        </p>
+                      </div>
+                      <div class="actions">
+                        <div class="ui cancel button">{% trans "Close" %}</div>
+                      </div>
+                    </div>
+
+                    <button data-bind="click: $root.show_modal('i-need-help')"
+                            data-contet="{% trans "I need help" %}"
+                            class="ui button">
+                      {% trans "I need help" %}
+                    </button>
+
                     <input class="ui button primary"
                            type="submit"
                            value="{% trans "This file exists" %}" />
