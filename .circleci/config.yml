@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   browser-tools: circleci/browser-tools@1.4.7
-  node: circleci/node@5.2.0
+  node: circleci/node@6.3.0
 
 commands:
   run-build:
@@ -36,19 +36,19 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: "20.12"
+          node-version: "22.11"
       - run: npm ci
       - run: npm run lint
       - run: pip install pre-commit
       - run: pre-commit run --from-ref origin/HEAD --to-ref HEAD
   build:
     docker:
-      - image: "cimg/node:16.14"
+      - image: "cimg/node:22.11"
     steps:
       - run-build: {}
   test:
     docker:
-      - image: "cimg/node:16.14"
+      - image: "cimg/node:22.11"
     steps:
       - run-test: {}
 
