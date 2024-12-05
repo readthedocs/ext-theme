@@ -34,83 +34,43 @@
   {% endif %}
 {% endblock list_placeholder_text_empty %}
 
-{% block list_item_start %}
-  {# This confuses the formatter as it's just an opening element #}
-  {# djlint: off #}
-  <tr class="middle aligned"
-      data-bind="using: VersionListItemView({id: {{ object.pk }}, url: '{% url "projects-versions-detail" object.project.slug object.slug %}'})">
-  {# djlint: on #}
-{% endblock list_item_start %}
-
 {% block list_item_right_menu %}
-  <div class="ui small icon buttons">
+  <readthedocs-api csrf-token="{{ csrf_token }}"
+                   url="{% url "projects-versions-detail" object.project.slug object.slug %}">
+    <div class="ui small icon buttons">
+      <readthedocs-item-docs {% if not object.built %}disabled{% endif %}
+                             label="{% blocktrans with name=object.verbose_name %}View documentation for version {{ name }}{% endblocktrans %}">
+      </readthedocs-item-docs>
+      <readthedocs-item-downloads {% if not object.has_pdf and not object.has_epub and not object.has_htmlzip %}disabled{% endif %}
+                                  label="{% blocktrans with name=object.verbose_name %}Offline formats for version {{ name }}{% endblocktrans %}">
+      </readthedocs-item-downloads>
 
-    {% blocktrans trimmed with version=object.verbose_name asvar label_link %}
-      View documentation for version {{ version }}
-    {% endblocktrans %}
-    <a class="ui {% if not object.built %}disabled{% endif %} button"
-       data-bind="event: {mouseover: fetch, focusin: fetch}, attr: {href: url_docs}"
-       target="_blank"
-       data-content="{{ label_link }}"
-       aria-label="{{ label_link }}"
-       tabindex="{% if object.built %}0{% else %}-1{% endif %}">
-      <i class="fa-solid fa-book icon"></i>
-    </a>
-
-    {% blocktrans trimmed with version=object.verbose_name asvar label_download %}
-      Offline formats for version {{ version }}
-    {% endblocktrans %}
-    <button class="ui {% if not object.has_epub and not object.has_htmlzip and not object.has_pdf %} disabled{% endif %} dropdown button"
-            data-bind="event: {focusin: fetch, click: fetch}"
-            data-content="{{ label_download }}"
-            aria-label="{{ label_download }}"
-            tabindex="{% if object.has_epub or object.has_htmlzip or object.has_pdf %}0{% else %}-1{% endif %}">
-      <i class="fa-solid fa-download icon"></i>
-      <div class="menu">
-        <div class="header">{% trans "Offline formats" %}</div>
-        <a class="disabled item"
-           data-bind="css: {disabled: !url_pdf()}, attr: {href: url_pdf()}">
-          <i class="fa-duotone fa-file icon"></i>
-          {% trans "PDF file" %}
-        </a>
-        <a class="disabled item"
-           data-bind="css: {disabled: !url_epub()}, attr: {href: url_epub()}">
-          <i class="fa-duotone fa-file icon"></i>
-          {% trans "ePUB file" %}
-        </a>
-        <a class="disabled item"
-           data-bind="css: {disabled: !url_html()}, attr: {href: url_html()}">
-          <i class="fa-duotone fa-file-zipper icon"></i>
-          {% trans "HTML archive" %}
-        </a>
-      </div>
-    </button>
-
-    {% blocktrans trimmed with version=object.verbose_name asvar label_admin %}
-      Additional options for version {{ version }}
-    {% endblocktrans %}
-    {% if is_project_admin %}
-      <div class="ui dropdown button"
-           data-content="{{ label_admin }}"
-           aria-label="{{ label_admin }}">
-        <i class="fa-solid fa-ellipsis icon"></i>
-        <div class="menu">
-          <div class="header">{% trans "Admin" %}</div>
-          <readthedocs-menu-build-rebuild class="item"
-                                          url="{% url "projects-versions-builds-list" object.project.slug object.slug %}"
-                                          csrf-token="{{ csrf_token }}">
-            <i class="fa-duotone fa-refresh icon"></i>
-            {% trans "Rebuild version" %}
-          </readthedocs-menu-build-rebuild>
-          <a class="item"
-             href="{% url "project_version_detail" project.slug object.slug %}">
-            <i class="fa-duotone fa-wrench icon"></i>
-            {% trans "Configure version" %}
-          </a>
+      {% blocktrans trimmed with name=object.verbose_name asvar label_admin %}
+        Additional options for version {{ name }}
+      {% endblocktrans %}
+      {% if is_project_admin %}
+        <div class="ui dropdown button"
+             data-content="{{ label_admin }}"
+             aria-label="{{ label_admin }}">
+          <i class="fa-solid fa-ellipsis icon"></i>
+          <div class="menu">
+            <div class="header">{% trans "Admin" %}</div>
+            <readthedocs-menu-build-rebuild class="item"
+                                            url="{% url "projects-versions-builds-list" object.project.slug object.slug %}"
+                                            csrf-token="{{ csrf_token }}">
+              <i class="fa-duotone fa-refresh icon"></i>
+              {% trans "Rebuild version" %}
+            </readthedocs-menu-build-rebuild>
+            <a class="item"
+               href="{% url "project_version_detail" project.slug object.slug %}">
+              <i class="fa-duotone fa-wrench icon"></i>
+              {% trans "Configure version" %}
+            </a>
+          </div>
         </div>
-      </div>
-    {% endif %}
-  </div>
+      {% endif %}
+    </div>
+  </readthedocs-api>
 {% endblock list_item_right_menu %}
 
 {% block list_item_icon %}

@@ -1,0 +1,49 @@
+<!-- djlint:off H005,H016,H030,H031 -->
+<html>
+  <body>
+
+    <readthedocs-api url="#">
+      <readthedocs-item-docs>
+      </readthedocs-item-docs>
+    </readthedocs-api>
+
+    <script type="module">
+      import { expect, elementUpdated } from "@open-wc/testing";
+      import { runTests } from "@web/test-runner-mocha";
+
+      import { ItemDocsElement, APIProviderElement } from "../../modules/menus";
+
+      runTests(async () => {
+        describe("API menu", () => {
+          it("passes data from provider to consumer", async () => {
+            const provider = document.querySelector("readthedocs-api");
+            const consumer = document.querySelector("readthedocs-item-docs");
+
+            const value = Symbol("test");
+            provider._providerData.setValue(value);
+            await elementUpdated(consumer);
+
+            expect(consumer._consumerData.value).to.equal(value);
+          });
+
+          it("consumer uses data", async () => {
+            const provider = document.querySelector("readthedocs-api");
+            const consumer = document.querySelector("readthedocs-item-docs");
+
+            const value = {
+              urls: {
+                documentation: "https://example.com/#test",
+              },
+            };
+            provider._providerData.setValue(value);
+            await elementUpdated(consumer);
+            const element = consumer.querySelector("a");
+
+            expect(consumer).dom.to.be.not.null;
+            expect(element.href).to.equal("https://example.com/#test");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

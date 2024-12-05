@@ -10,3 +10,20 @@
 
   border-left: 0rem;
 }
+// Non-direct children of .ui.buttons don't get the correct rounded corners
+.ui.buttons > * > .ui.button {
+  border-top-left-radius: 0rem;
+  border-bottom-left-radius: 0rem;
+  border-top-right-radius: 0rem;
+  border-bottom-right-radius: 0rem;
+}
+
+.ui.buttons > *:first-child > .ui.button {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.ui.buttons > *:last-child > .ui.button {
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
