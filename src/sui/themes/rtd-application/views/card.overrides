@@ -1,0 +1,4 @@
+// Close icon on announcements
+.ui.card > div.content:first-child > i.close {
+  cursor: pointer;
+}
