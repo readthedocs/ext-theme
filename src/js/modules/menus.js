@@ -163,7 +163,7 @@ const contextData = createContext(Symbol("data"));
 const contextState = createContext(Symbol("state"));
 
 /**
- * API resopnse states enum
+ * API response states enum
  *
  * These are used by API response provider/consumer
  **/
@@ -383,23 +383,20 @@ customElements.define("readthedocs-item-downloads", ItemDownloadsElement);
 
 class MenuProjectAdminElement extends APIConsumerElement {
   static get properties() {
-    // TODO `settings` should be part of APIv3 response
+    // TODO `urlSettings` should be part of APIv3 response
     let _properties = APIConsumerElement.properties;
-    _properties["settings"] = { type: String };
+    _properties["urlSettings"] = { type: String, attribute: "url-settings" };
     return _properties;
   }
 
   render() {
     const isAdmin = this.data?.permissions?.admin;
     // This preemptively supports a settings URL, which can be passed in as an
-    // attribute in the meantime. The `settings` property can go away with this.
-    const urlSettings = this.data?.urls?.settings || this.settings;
+    // attribute in the meantime. The `urlSettings` property can go away with this.
+    const urlSettings = this.data?.urls?.settings || this.urlSettings;
     return html`
       <div class="header">${msg(`Admin`)}</div>
-      <a
-        class="${classMap({ disabled: !isAdmin })} item"
-        href="${this.settings}"
-      >
+      <a class="${classMap({ disabled: !isAdmin })} item" href="${urlSettings}">
         <i class="fa-duotone fa-wrench icon"></i>
         ${msg(`Configure project`)}
       </a>
