@@ -41,14 +41,16 @@
     </div>
 
     {% if form.enabled.value == True %}
-      <div class="ui top attached stackable wrapping menu"
+      <div class="ui top attached stackable centered fluid wrapping menu"
            data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
         <a class="active item" data-tab="flyout">{% trans "Flyout menu" %}</a>
         <a class="item" data-tab="search">{% trans "Search" %}</a>
         <a class="item" data-tab="notifications">{% trans "Notifications" %}</a>
         <a class="item" data-tab="analytics">{% trans "Analytics" %}</a>
         <a class="item" data-tab="docdiff">{% trans "Visual diff" %}</a>
+        <a class="item" data-tab="link-previews">{% trans "Link previews" %}</a>
         <a class="item" data-tab="hotkeys">{% trans "Hotkeys" %}</a>
+        <a class="item" data-tab="advanced">{% trans "Advanced" %}</a>
       </div>
     {% endif %}
 
@@ -95,12 +97,23 @@
         </div>
       {% endblock addons_docdiff %}
 
+      {% block addons_link_previews %}
+        <div class="ui tab" data-tab="link-previews">
+          {{ form.linkpreviews_enabled | as_crispy_field }}
+        </div>
+      {% endblock addons_link_previews %}
+
       {% block addons_hotkeys %}
         <div class="ui tab" data-tab="hotkeys">
           {{ form.hotkeys_enabled | as_crispy_field }}
         </div>
       {% endblock addons_hotkeys %}
 
+      {% block addons_advanced %}
+        <div class="ui tab" data-tab="advanced">
+          {{ form.options_root_selector|as_crispy_field }}
+        </div>
+      {% endblock addons_advanced %}
     </div>
 
     <input class="ui primary button" type="submit" value="{% trans "Save" %}">
