@@ -45,7 +45,7 @@
              data-bind="click: $root.show_modal('mfa-deactivate')">
             {% trans "Deactivate" %}
           </a>
-          <div class="ui small modal" data-modal-id="mfa-deactivate">
+          <div class="ui mini modal" data-modal-id="mfa-deactivate">
             <div class="header">{% trans "Deactivate two-factor authentication?" %}</div>
             <div class="content">
               {% blocktrans trimmed %}
@@ -56,6 +56,7 @@
 
               <form method="post" action="{% url 'mfa_deactivate_totp' %}">
                 {% csrf_token %}
+                <div class="ui cancel button">{% trans "Cancel" %}</div>
                 <input class="ui negative button"
                        type="submit"
                        value="{% trans "Deactivate" %}">

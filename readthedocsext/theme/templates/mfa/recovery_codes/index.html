@@ -68,6 +68,7 @@
       <div class="actions">
         <form method="post" action="{% url "mfa_generate_recovery_codes" %}">
           {% csrf_token %}
+          <div class="ui cancel button">{% trans "Cancel" %}</div>
           <input class="ui negative button"
                  type="submit"
                  value="{% trans "Generate new codes" %}">
