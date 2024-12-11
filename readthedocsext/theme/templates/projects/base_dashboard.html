@@ -2,9 +2,9 @@
 
 {% load trans from i18n %}
 
-{% block title %}
-  {% trans "Projects" %}
-{% endblock title %}
+{# djlint:off #}
+{% block title %}{% trans "Projects" %}{% endblock title %}
+{# djlint:on #}
 
 {% block notifications %}
   {# User notifications only #}

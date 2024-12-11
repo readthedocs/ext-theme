@@ -4,12 +4,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>
-      {% block title %}
-      {% endblock title %}
-      {% block head_title %}
-      {% endblock head_title %}
-    - Read the Docs</title>
+
+    {# Hide weird spaces in title #}
+    {# djlint:off #}
+    <title>{% block title %}{% endblock title %}{% block head_title %}{% endblock head_title %} - Read the Docs</title>
+    {# djlint:on #}
+
     {% block head_meta %}
       <meta name="description"
             content="Read the Docs is a documentation publishing and hosting platform for technical documentation" />
