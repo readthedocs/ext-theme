@@ -68,9 +68,9 @@
     {% endblock chip_detail %}
   </a>
   <div class="ui flowing popup"
-       data-bind="using: data, css: { loading: is_loading() }">
+       data-bind="using: data">
     <div class="ui small basic horizontal card"
-         data-bind="if: $parent.is_loaded()">
+         data-bind="css: { loading: $parent.is_loading() }">
 
       {% comment "rst" %}
 
@@ -83,7 +83,7 @@
       {% block popupcard_image %}
       {% endblock popupcard_image %}
 
-      <div class="content">
+      <div class="content" data-bind="if: $parent.is_loaded()">
 
         {% comment "rst" %}
 
@@ -136,7 +136,7 @@
         </div>
       </div>
 
-      <div class="extra content">
+      <div class="extra content" data-bind="if: $parent.is_loaded()">
         {% comment "rst" %}
 
             .. describe:: popupcard_extra
