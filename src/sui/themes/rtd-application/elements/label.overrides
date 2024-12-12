@@ -14,7 +14,8 @@
 
 .ui.image.label > readthedocs-avatar {
   width: auto;
-  margin: (-1 * @verticalPadding) @imageLabelTextDistance (-1 * @verticalPadding) (-1 * @verticalPadding);
+  margin: (-1 * @verticalPadding) @imageLabelTextDistance
+    (-1 * @verticalPadding) (-1 * @verticalPadding);
   border-radius: @imageLabelBorderRadius 0 0 @imageLabelBorderRadius;
   overflow: hidden;
   vertical-align: top;
