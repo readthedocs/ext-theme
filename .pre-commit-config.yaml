@@ -4,7 +4,8 @@ repos:
     hooks:
       - id: prettier
         args: ["--write", "."]
-        types_or: [css, javascript, json]
+        # Prettier should already do this for us, see `.prettierignore`.
+        #types_or: [css, javascript, json]
 
   - repo: https://github.com/ambv/black
     rev: "23.9.1"

@@ -1,8 +1,7 @@
 {% extends "includes/elements/chips/base.html" %}
 
-{% load i18n %}
-{% load humanize %}
-{% load ext_theme_tags %}
+{% load trans from i18n %}
+{% load readthedocs_language_name from ext_theme_tags %}
 
 {% block chip_view_params %}
   '{% url "projects-detail" project.slug %}'
@@ -17,19 +16,7 @@
 {% endblock chip_classes %}
 
 {% block chip_icon %}
-  {% if project.remote_repository %}
-    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
-         src="{{ project.remote_repository.avatar_url }}" />
-  {% else %}
-    {% comment %}
-      For now, this is using Dicebear, which has a few random generators for
-      user/project icons. We don't need to use Dicebear, but could use this or
-      similar to generate files on disk and use an md5 hash or similar to link
-      to the same image always.
-    {% endcomment %}
-    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
-         src="https://api.dicebear.com/5.x/shapes/svg?size=64&backgroundColor=b8abd4&shape1Color=8c74c1&shape2Color=7854c5&shape3Color=f0f0ff&seed={{ project.pk }}" />
-  {% endif %}
+  {% include "projects/includes/project_image.html" with project=project classes="micro rounded" %}
 {% endblock chip_icon %}
 
 {% block chip_text %}
@@ -48,21 +35,7 @@
 {% endblock popupcard_header %}
 
 {% block popupcard_right %}
-  {% if project.remote_repository %}
-    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
-         class="ui mini right floated rounded image"
-         src="{{ project.remote_repository.avatar_url }}" />
-  {% else %}
-    {% comment %}
-      For now, this is using Dicebear, which has a few random generators for
-      user/project icons. We don't need to use Dicebear, but could use this or
-      similar to generate files on disk and use an md5 hash or similar to link
-      to the same image always.
-    {% endcomment %}
-    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
-         class="ui mini right floated rounded image"
-         src="https://api.dicebear.com/5.x/shapes/svg?size=64&backgroundColor=b8abd4&shape1Color=8c74c1&shape2Color=7854c5&shape3Color=f0f0ff&seed={{ project.pk }}" />
-  {% endif %}
+  {% include "projects/includes/project_image.html" with project=project classes="mini right floated rounded" %}
 {% endblock popupcard_right %}
 
 {% block popupcard_meta %}
@@ -79,7 +52,9 @@
         <div class="header">{% trans "Repository" %}</div>
         <div class="description">
           {% if project.remote_repository %}
-            {% with repo=project.remote_repository %}<a href="{{ repo.html_url }}">{{ repo.full_name }}</a>{% endwith %}
+            {% with repo=project.remote_repository %}
+              <a href="{{ repo.html_url }}">{{ repo.full_name }}</a>
+            {% endwith %}
           {% else %}
             <a href="{{ project.repo }}">{{ project.repo }}</a>
           {% endif %}
