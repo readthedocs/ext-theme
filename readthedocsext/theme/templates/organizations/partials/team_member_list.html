@@ -25,9 +25,11 @@
     {% trans "Invite member" as create_text %}
     {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
   {% endif %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fad fa-user-plus icon{% endblock %}
+{% block list_placeholder_icon_class %}
+  fad fa-user-plus icon
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header_filtered %}
   {% trans "No matching team members found" %}
 {% endblock list_placeholder_header_filtered %}
@@ -57,37 +59,37 @@
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
-  <img class="ui rounded square image" src="{% gravatar_url object.email 64 %}">
-{% endblock list_item_image %}
+  <img class="ui rounded square image"
+    src="{% gravatar_url object.email 64 %}"
+    alt="{% blocktrans trimmed with username=object.username %}Profile image for user {{ username }}{% endblocktrans %}" %}">
+  {% endblock list_item_image %}
 
-{% block list_item_header %}
-  {% with full_name=object.member.get_full_name %}
-    <a href="{% url "profiles_profile_detail" object.username %}">
+  {% block list_item_header %}
+    {% with full_name=object.member.get_full_name %}
+      <a href="{% url "profiles_profile_detail" object.username %}">
 
-      {% if full_name %}
-        {{ full_name }}
-      {% else %}
-        {{ object.member.username }}
-      {% endif %}
+        {% if full_name %}
+          {{ full_name }}
+        {% else %}
+          {{ object.member.username }}
+        {% endif %}
 
-      {% comment %}
+        {% comment %}
         This would be a great place to use labels to explain the user's access
         level. We'd need a property on the User model to get the highest level
         of access through one of the available teams/organization owners. Use a
         label element to show the labels, similar to the version listing and
         other listing views.
-      {% endcomment %}
-    </a>
-    {% if full_name %}
-      <div class="sub header">
-        {{ object.username }}
-      </div>
-    {% endif %}
-  {% endwith %}
-{% endblock list_item_header %}
+        {% endcomment %}
+      </a>
+      {% if full_name %}
+        <div class="sub header">{{ object.username }}</div>
+      {% endif %}
+    {% endwith %}
+  {% endblock list_item_header %}
 
-{% block list_item_meta_items %}
-{% endblock list_item_meta_items %}
+  {% block list_item_meta_items %}
+  {% endblock list_item_meta_items %}
 
-{% block list_item_extra %}
-{% endblock list_item_extra %}
+  {% block list_item_extra %}
+  {% endblock list_item_extra %}

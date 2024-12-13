@@ -4,7 +4,9 @@
 {% load org_owner from organizations %}
 {% load is_admin from privacy_tags %}
 
-{% block team_sidebar_members %}active{% endblock %}
+{% block team_sidebar_members %}
+  active
+{% endblock team_sidebar_members %}
 
 {% block subview_content_header %}
   {% trans "Members" %}
@@ -38,9 +40,7 @@
     {% if invitations.exists %}
       <h2 class="ui small header">
         {% trans "Pending invitations" %}
-        <span class="ui circular small label">
-          {{ invitations.count }}
-        </span>
+        <span class="ui circular small label">{{ invitations.count }}</span>
       </h2>
 
       {% include "invitations/partials/invitation_list.html" with objects=invitations skip_pagination=True %}
