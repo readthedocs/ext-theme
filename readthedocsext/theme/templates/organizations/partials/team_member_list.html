@@ -51,7 +51,8 @@
   {% if is_team_admin is not None and is_team_admin or request.user|org_owner:team %}
     {% url "organization_team_member_delete" organization.slug team.slug object.pk as form_url %}
     {% trans "Remove member" as action_text %}
-    {% blocktrans trimmed asvar content_text with username=object.member.get_full_name|default:object.member.username team=team.name %}
+    {# Attributes on `object` are proxy methods on TeamMember, this is not a User #}
+    {% blocktrans trimmed asvar content_text with username=object.full_name|default:object.username team=team.name %}
       Remove user {{ username }} from the team {{ team }}?
     {% endblocktrans %}
     {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text content_text=content_text is_disabled=is_last_user %}
@@ -65,13 +66,14 @@
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  {% with full_name=object.member.get_full_name %}
+  {# Attributes on `object` are proxy methods on TeamMember, this is not a User #}
+  {% with full_name=object.full_name %}
     <a href="{% url "profiles_profile_detail" object.username %}">
 
       {% if full_name %}
         {{ full_name }}
       {% else %}
-        {{ object.member.username }}
+        {{ object.username }}
       {% endif %}
 
       {% comment %}
