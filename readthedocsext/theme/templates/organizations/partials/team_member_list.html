@@ -5,9 +5,10 @@
   update the templates for project maintainers and owner lists
 {% endcomment %}
 
-{% load i18n %}
-{% load gravatar %}
-{% load privacy_tags %}
+{% load blocktrans trans from i18n %}
+{% load gravatar_url from gravatar %}
+{% load org_owner from organizations %}
+{% load is_admin from privacy_tags %}
 
 {% block top_left_menu_items %}
   {% if filter %}
@@ -18,14 +19,17 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  {% if request.user|is_admin:organization %}
+  {# Note: for better performance, avoid multiple admin checks. Call this include with `is_org_admin` #}
+  {% if is_org_admin is not None and is_org_admin or request.user|is_admin:organization %}
     {% url "organization_team_member_add" organization.slug team.slug as create_url %}
     {% trans "Invite member" as create_text %}
     {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
   {% endif %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fad fa-user-plus icon{% endblock %}
+{% block list_placeholder_icon_class %}
+  fad fa-user-plus icon
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header_filtered %}
   {% trans "No matching team members found" %}
 {% endblock list_placeholder_header_filtered %}
@@ -33,7 +37,8 @@
   {% trans "Team has no members" %}
 {% endblock list_placeholder_header_empty %}
 {% block list_placeholder_text_empty %}
-  {% if request.user|is_admin:organization %}
+  {# Note: for better performance, avoid multiple admin checks. Call this include with `is_org_admin` #}
+  {% if is_org_admin is not None and is_org_admin or request.user|is_admin:organization %}
     {% url "organization_team_member_add" organization.slug team.slug as create_url %}
     <a href="{{ create_url }}" class="ui primary button">
       {% trans "Invite member" %}
@@ -42,14 +47,27 @@
 {% endblock list_placeholder_text_empty %}
 
 {% block list_item_right_buttons %}
+  {# Note: for better performance, avoid multiple admin checks. Call this include with `is_team_admin` #}
+  {% if is_team_admin is not None and is_team_admin or request.user|org_owner:team %}
+    {% url "organization_team_member_delete" organization.slug team.slug object.pk as form_url %}
+    {% trans "Remove member" as action_text %}
+    {# Attributes on `object` are proxy methods on TeamMember, this is not a User #}
+    {% blocktrans trimmed asvar content_text with username=object.full_name|default:object.username team=team.name %}
+      Remove user {{ username }} from the team {{ team }}?
+    {% endblocktrans %}
+    {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text content_text=content_text is_disabled=is_last_user %}
+  {% endif %}
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
-  <img class="ui rounded square image" src="{% gravatar_url object.email 64 %}">
+  <img class="ui rounded square image"
+       src="{% gravatar_url object.email 64 %}"
+       alt="{% blocktrans trimmed with username=object.username %}Profile image for user {{ username }}{% endblocktrans %}" />
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  {% with full_name=object.get_full_name %}
+  {# Attributes on `object` are proxy methods on TeamMember, this is not a User #}
+  {% with full_name=object.full_name %}
     <a href="{% url "profiles_profile_detail" object.username %}">
 
       {% if full_name %}
@@ -67,9 +85,7 @@
       {% endcomment %}
     </a>
     {% if full_name %}
-      <div class="sub header">
-        {{ object.username }}
-      </div>
+      <div class="sub header">{{ object.username }}</div>
     {% endif %}
   {% endwith %}
 {% endblock list_item_header %}
