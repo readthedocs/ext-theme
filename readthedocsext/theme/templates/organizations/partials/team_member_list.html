@@ -51,23 +51,26 @@
   {% if is_team_admin is not None and is_team_admin or request.user|org_owner:team %}
     {% url "organization_team_member_delete" organization.slug team.slug object.pk as form_url %}
     {% trans "Remove member" as action_text %}
-    {# Attributes on `object` are proxy methods on TeamMember, this is not a User #}
-    {% blocktrans trimmed asvar content_text with username=object.full_name|default:object.username team=team.name %}
-      Remove user {{ username }} from the team {{ team }}?
+    {# ``object`` is sometimes a :py:class:`TeamMember` and sometimes a :py:class:`User`, but these attributes match on both #}
+    {% firstof object.get_full_name object.username as user_display %}
+    {% blocktrans trimmed asvar content_text with user=user_display team=team.name %}
+      Remove user {{ user }} from the team {{ team }}?
     {% endblocktrans %}
     {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text content_text=content_text is_disabled=is_last_user %}
   {% endif %}
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
+  {# ``object`` is sometimes a :py:class:`TeamMember` and sometimes a :py:class:`User`, but these attributes match on both #}
+  {% firstof object.get_full_name object.username as user_display %}
   <img class="ui rounded square image"
        src="{% gravatar_url object.email 64 %}"
-       alt="{% blocktrans trimmed with username=object.username %}Profile image for user {{ username }}{% endblocktrans %}" />
+       alt="{% blocktrans trimmed with user=user_display %}Profile image for user {{ user }}{% endblocktrans %}" />
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  {# Attributes on `object` are proxy methods on TeamMember, this is not a User #}
-  {% with full_name=object.full_name %}
+  {# ``object`` is sometimes a :py:class:`TeamMember` and sometimes a :py:class:`User`, but these attributes match on both #}
+  {% with full_name=object.get_full_name %}
     <a href="{% url "profiles_profile_detail" object.username %}">
 
       {% if full_name %}
