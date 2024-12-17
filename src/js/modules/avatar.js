@@ -34,10 +34,6 @@ export class AvatarElement extends LitElement {
       width: calc(var(--avatar-scale) * -4);
       height: calc(var(--avatar-scale) * -4);
     }
-
-    :host(.micro.image) > div {
-      --avatar-scale: -6px;
-    }
   `;
 
   render() {

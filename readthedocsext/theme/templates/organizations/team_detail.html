@@ -1,15 +1,21 @@
 {% extends "organizations/teams/base.html" %}
 
-{% load i18n %}
+{% load trans from i18n %}
+{% load org_owner from organizations %}
+{% load is_admin from privacy_tags %}
 
-{% block team_sidebar_members %}active{% endblock %}
+{% block team_sidebar_members %}
+  active
+{% endblock team_sidebar_members %}
 
 {% block subview_content_header %}
   {% trans "Members" %}
 {% endblock subview_content_header %}
 
 {% block subview_content %}
-  {% include "organizations/partials/team_member_list.html" with objects=team_members %}
+  {% with is_team_admin=request.user|org_owner:team is_org_admin=request.user|is_admin:organization %}
+    {% include "organizations/partials/team_member_list.html" with objects=team_members is_team_admin=is_team_admin is_org_admin=is_org_admin %}
+  {% endwith %}
 
   {% comment %}
     TODO move owner/team member invitations to a dedicated view.
@@ -34,9 +40,7 @@
     {% if invitations.exists %}
       <h2 class="ui small header">
         {% trans "Pending invitations" %}
-        <span class="ui circular small label">
-          {{ invitations.count }}
-        </span>
+        <span class="ui circular small label">{{ invitations.count }}</span>
       </h2>
 
       {% include "invitations/partials/invitation_list.html" with objects=invitations skip_pagination=True %}

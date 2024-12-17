@@ -1,10 +1,10 @@
 {% extends "organizations/partials/team_member_list.html" %}
 
-{% load i18n %}
-{% load privacy_tags %}
+{% load trans blocktrans from i18n %}
+{% load is_admin from privacy_tags %}
 
 {% block create_button %}
-{% endblock %}
+{% endblock create_button %}
 
 {% block list_placeholder_header_filtered %}
   {% trans "No matching members found" %}
@@ -20,3 +20,7 @@
     {% endblocktrans %}
   {% endif %}
 {% endblock list_placeholder_text_empty %}
+
+{# Don't show delete button on the member list yet #}
+{% block list_item_right_buttons %}
+{% endblock list_item_right_buttons %}
