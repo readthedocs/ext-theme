@@ -1,10 +1,9 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-{% load gravatar %}
-{% load humanize %}
-{% load privacy_tags %}
-{% load invitations %}
+{% load blocktrans trans from i18n %}
+{% load gravatar_url from gravatar %}
+{% load naturaltime from humanize %}
+{% load can_revoke_invitation from invitations %}
 
 {% comment %}
   For now, this include is used for secondary listings on maintainer and
@@ -19,7 +18,7 @@
 {% endblock top_menu %}
 
 {% block create_button %}
-{% endblock %}
+{% endblock create_button %}
 
 {# Don't use placeholder content to avoid competing with the primary model listing view #}
 {% block list_placeholder %}
@@ -52,9 +51,12 @@
           {% endblock list_item_remove_modal_content %}
         </div>
         <div class="actions">
-          <form method="post" action="{% url "invitations_revoke" invitation_pk=object.pk %}">
+          <form method="post"
+                action="{% url "invitations_revoke" invitation_pk=object.pk %}">
             {% csrf_token %}
-            <input class="ui negative button" type="submit" value="{% trans "Revoke invitation" %}">
+            <input class="ui negative button"
+                   type="submit"
+                   value="{% trans "Revoke invitation" %}">
           </form>
         </div>
       </div>
@@ -63,11 +65,11 @@
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
-  {% if object.to_user %}
-    <img class="ui rounded square image" src="{% gravatar_url object.to_user.email 64 %}">
-  {% else %}
-    <img class="ui rounded square image" src="{% gravatar_url object.to_email 64 %}">
-  {% endif %}
+  {% firstof object.to_user.email object.to_email as email %}
+  {% firstof object.to_user.username object.to_email as user_display %}
+  <img class="ui rounded square image"
+       src="{% gravatar_url email 64 %}"
+       alt="{% blocktrans with user=user_display %}Avatar image for {{ user }}{% endblocktrans %}" />
 {% endblock list_item_image %}
 
 {% block list_item_header %}
@@ -84,20 +86,26 @@
   {% endif %}
 
   <div class="sub header">
-    {% if object.to_user %}
-      {{ object.to_user.username }}
-    {% endif %}
+    {% if object.to_user %}{{ object.to_user.username }}{% endif %}
   </div>
 {% endblock list_item_header %}
 
 {% block list_item_meta_items %}
   <div class="item">
-    {# Translators: this will read "Expires 2 weeks from now" #}
-    {% blocktrans trimmed with until_expiration=object.expiration_date|naturaltime %}
-      Expires {{ until_expiration }}
-    {% endblocktrans %}
+    {% if object.expired %}
+      {# Translators: this will read "Expired 2 weeks ago" #}
+      {% blocktrans trimmed with expiration_delta=object.expiration_date|naturaltime %}
+        Expired {{ expiration_delta }}
+      {% endblocktrans %}
+      <i class="fad fa-circle-exclamation icon"></i>
+    {% else %}
+      {# Translators: this will read "Expires 2 weeks from now" #}
+      {% blocktrans trimmed with expiration_delta=object.expiration_date|naturaltime %}
+        Expires {{ expiration_delta }}
+      {% endblocktrans %}
+    {% endif %}
   </div>
 {% endblock list_item_meta_items %}
 
 {% block list_item_extra %}
-{% endblock %}
+{% endblock list_item_extra %}
