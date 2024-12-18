@@ -54,9 +54,3 @@ Builds
 
 .. js:autoclass:: BuildCommandOutput
     :members:
-
-Docs
-~~~~
-
-.. js:autoclass:: EmbedTopicsView
-    :members:
