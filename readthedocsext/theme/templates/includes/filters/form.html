@@ -37,7 +37,7 @@
                   </div>
                 {% endif %}
                 {% for value, label in field.field.widget.choices %}
-                  <a class="item" data-value="{{ value }}">{{ label|safe }}</a>
+                  <a class="item" data-value="{{ value }}" data-analytics-events="filter-activated" data-analytics-property-filter="{{ label|safe }}">{{ label|safe }}</a>
                 {% endfor %}
               </div>
             </div>

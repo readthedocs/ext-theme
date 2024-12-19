@@ -152,7 +152,7 @@ export class Application {
     });
 
     // Plausible
-    jquery("[data-analytics]").plausible(
+    jquery("[data-analytics], [data-analytics-events]").plausible(
       this.config.production_domain,
       this.config.debug,
     );
