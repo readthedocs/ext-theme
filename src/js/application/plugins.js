@@ -42,7 +42,7 @@ export function configure_jquery_plugins() {
   jquery.fn.tabs = jquery_tabmenu;
   // ``tabmenu`` was ported from our website, but ``tabs`` is nicer
   jquery.fn.tabmenu = jquery_tabmenu;
-  jquery.fn.plausible = jquery_plausible;
+  jquery.fn.plausible = jqueryPlausible;
 }
 
 /**
@@ -384,63 +384,92 @@ export const semanticui = {
  * Plausible tracking module
  *
  * This reuses jQuery to provide explicit tracking of events at Plausible. To
- * use events, add the ``data-analytics`` attribute to an element. In most
+ * use events, add the ``data-analytics-events`` attribute to an element. In most
  * cases, this should be a link element, however in the case of other UI
- * components, it may be a ``<div>`` or ``<button>``:
+ * components, it may be a ``<div>`` or ``<button>``
  *
- *     <button class="ui button" data-analytics="some-event-id">Something</button>
+ * You may also define custom event properties with
+ * ``data-analytics-property-*`` attributes, the attribute value is passed to
+ * Plausible.
  *
- * In the case of a link with a ``href`` attribute, the link will continue
- * redirecting after the callback from Plausible fires off.
+ *     <button class="ui button"
+ *            data-analytics-events="some-event-id,another-id"
+ *            data-analytics-property-foo="bar">
+ *       Something
+ *     </button>
+ *
+ * In the case of a link with a ``href`` attribute, the link click event will
+ * continue after all events have been tracked at Plausible, or after a 1s
+ * timeout passes.
  */
-function jquery_plausible(domain, debug = false) {
-  let plausible_settings = { domain: domain };
+function jqueryPlausible(domain, debug = false) {
+  let plausibleSettings = { domain: domain };
   if (debug === true) {
-    plausible_settings.trackLocalhost = true;
+    plausibleSettings.trackLocalhost = true;
   }
-  const { trackEvent } = Plausible(plausible_settings);
-  const { trackPageview } = Plausible(plausible_settings);
+  const { trackEvent } = Plausible(plausibleSettings);
+  const { trackPageview } = Plausible(plausibleSettings);
 
   // Track pageview for all pages
   trackPageview();
 
   return this.each((index, elem) => {
-    elem.addEventListener("click", on_click_event);
-    elem.addEventListener("auxclick", on_click_event);
+    // ``data-analytics`` is used on the website, but we added some more
+    // functionality here so ``data-analytics-event`` is preferred.
+    const data = jquery(elem).data();
+    const eventNames =
+      data.analyticsEvents?.split(/,/) || data.analytics?.split(/,/) || [];
+    const eventProperties = {};
 
-    function on_click_event(event) {
-      const event_names = elem.getAttribute("data-analytics").split(/,(.+)/);
-      const is_link =
+    // ``data-analytics-property-*`` attributes are used to populate properties.
+    Object.keys(data).forEach((key) => {
+      const match = key.match(/analyticsProperty(.*)/);
+      if (match) {
+        const [_, property] = match;
+        eventProperties[property.toLowerCase()] = data[key];
+      }
+    });
+
+    function handleAnalyticsEvent(event) {
+      const isLink =
         elem.tagName != undefined && elem.tagName.toLowerCase() == "a";
-      const is_middle_click = event.type == "auxclick" && event.which == 2;
-      const is_click = event.type == "click";
-      const is_link_click =
-        is_link &&
-        is_click &&
+      const isMiddleClick = event.type == "auxclick" && event.which == 2;
+      const isClick = event.type == "click";
+      const isLinkClick =
+        isLink &&
+        isClick &&
         !elem.target &&
         !(event.ctrlKey || event.metaKey || event.shiftKey);
 
-      if (is_middle_click || is_click) {
-        function redirect_link() {
-          if (is_link_click && elem.href && elem.href != "#") {
-            console.debug("Plausible: resuming redirect to", elem.href);
-            location.href = elem.href;
-          }
-        }
-        for (const event_name of event_names) {
-          trackEvent(event_name, {
-            callback: () => {
-              console.debug("Plausible: tracked event", event_name);
-              redirect_link();
-            },
-          });
-          setTimeout(() => {
+      if (isMiddleClick || isClick) {
+        Promise.all(
+          eventNames.map((eventName) => {
+            return new Promise((resolve, reject) => {
+              const options = { callback: resolve, props: eventProperties };
+              trackEvent(eventName, options);
+              // Fallback timeout
+              setTimeout(() => {
+                reject();
+              }, 1000);
+            });
+          }),
+        )
+          .catch((e) => {
             console.debug(
-              "Plausible: didn't receive response, continuing anyways",
+              "Plausible didn't receive a response for one or more event",
             );
-            redirect_link();
-          }, 150);
-        }
+          })
+          .finally(() => {
+            console.debug(
+              "Plausible tracked events:",
+              eventNames,
+              eventProperties,
+            );
+            if (isLinkClick && elem.href && elem.href != "#") {
+              console.debug("Plausible replaying click event", elem.href);
+              window.location = elem.href;
+            }
+          });
       }
 
       // If this is a normal click of an anchor element, prevent the default
@@ -448,10 +477,15 @@ function jquery_plausible(domain, debug = false) {
       // returns/expires to redirect the current page URL. If the user held
       // control/shift/meta while clicking, we're assuming the browser is doing
       // something special instead and will not block the default event.
-      if (is_link_click) {
+      if (isLinkClick) {
         event.preventDefault();
+        return false;
       }
     }
+
+    // TODO support other methods than click
+    elem.addEventListener("click", handleAnalyticsEvent);
+    elem.addEventListener("auxclick", handleAnalyticsEvent);
   });
 }
 
