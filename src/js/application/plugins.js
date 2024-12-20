@@ -415,7 +415,7 @@ function jqueryPlausible(domain, debug = false) {
 
   return this.each((index, elem) => {
     // ``data-analytics`` is used on the website, but we added some more
-    // functionality here so ``data-analytics-event`` is preferred.
+    // functionality here so ``data-analytics-events`` is preferred.
     const data = jquery(elem).data();
     const eventNames =
       data.analyticsEvents?.split(/,/) || data.analytics?.split(/,/) || [];
