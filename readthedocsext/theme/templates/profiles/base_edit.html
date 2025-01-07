@@ -58,21 +58,6 @@
       </div>
 
       {% block edit_sidebar %}
-        {% comment %}
-        <div class="ui basic segment">
-          <h2 class="ui small header">{% trans "Help topics" %}</h2>
-          {% block edit_sidebar_help_topics %}
-            <div data-embed-doc-view="{% block edit_sidebar_embed_doc %}{% endblock %}" data-bind="template: { name: 'doc-topics' }">
-            </div>
-          {% endblock edit_sidebar_help_topics %}
-        </div>
-        <div class="ui basic segment">
-          <a href="https://docs.readthedocs.io/en/stable/" target="_blank">
-            View our full docs
-          </a>
-        </div>
-        {% endcomment %}
-
         {% block edit_sidebar_extra %}
         {% endblock edit_sidebar_extra %}
       {% endblock edit_sidebar %}
@@ -95,7 +80,5 @@
       </div>
 
     </div>
-
-    {% include "includes/utils/embed_docs.html" %}
   </div>
 {% endblock %}

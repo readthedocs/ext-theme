@@ -1,0 +1,57 @@
+{% extends "organizations/base.html" %}
+
+{% load blocktrans trans from i18n %}
+{% load gravatar_url from gravatar %}
+
+{% block title %}
+  {% trans "Choose an organization" %}
+{% endblock title %}
+
+{% block content %}
+  <div class="ui very padded text container">
+    <div class="ui fluid card">
+      <div class="content">
+
+        <div class="header">{% trans "Choose an organization" %}</div>
+
+        <div class="description">
+
+          {% if organization_list %}
+            {% block organization_choose_content %}
+              <p>
+                {% blocktrans trimmed %}
+                  You are a member of several organizations,
+                  select an organization to continue:
+                {% endblocktrans %}
+              </p>
+            {% endblock organization_choose_content %}
+
+            {% block organization_choose_list %}
+              <div class="ui middle aligned selection list">
+                {% for org in organization_list %}
+                  <a class="item"
+                     href="{% url next_name slug=org.slug %}{% if next_querystring %}?{{ next_querystring }}{% endif %}">
+                    <img class="ui avatar image"
+                         src="{% gravatar_url org.email 48 %}"
+                         alt="{% blocktrans with organization=org.name %}Avatar for organization {{organization}}{% endblocktrans %}" />
+                    <span class="content">
+                      <span class="header">{{ org.name }}</span>
+                    </span>
+                  </a>
+                {% endfor %}
+              </div>
+            {% endblock organization_choose_list %}
+          {% else %}
+            <p class="ui error message">
+              {% blocktrans trimmed %}
+                Your user is not a member of an organization yet.
+                You should ask an organization owner or an admin user to invite you into your organization.
+              {% endblocktrans %}
+            </p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock content %}
