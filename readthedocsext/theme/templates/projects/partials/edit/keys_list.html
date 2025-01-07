@@ -1,28 +1,27 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-
-{% load core_tags %}
-{% load privacy_tags %}
-{% load projects_tags %}
+{% load trans blocktrans from i18n %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
 
-{% comment %}
-  Do not show an empty menu bar at the top. Once users can add SSH keys, we can
-  remove this override and enable the ``create_button`` block
-{% endcomment %}
 {% block top_menu %}
+  <div class="ui stackable text menu">
+    <div class="right menu">
+      <div class="item">
+        <form class="ui form"
+              method="post"
+              action="{% url "projects_keys_reattach" project_slug=project.slug %}">
+          {% csrf_token %}
+          <button class="ui button">
+            <i class="fa-duotone fa-refresh icon"></i>
+            {% trans "Reattach to Git provider" %}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
 {% endblock top_menu %}
-{% block create_button %}
-  {% comment %}
-  {# TODO this is not supported currently, and is an admin only action #}
-  {% url "..." project.slug as create_url %}
-  {% trans "Add SSH key" as create_text %}
-  {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-  {% endcomment %}
-{% endblock create_button %}
 
 {% block list_placeholder_icon_class %}
   fa-duotone fa-lock-keyhole
