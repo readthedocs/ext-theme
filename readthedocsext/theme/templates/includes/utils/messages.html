@@ -21,7 +21,13 @@
            data-bind="
 semanticui: {
   toast: {
-    message: '{{ message|escapejs }}',
+    {% comment %}
+      SECURITY: We need to HTML escape the message before escaping it for JS,
+      since the content will be inserted via JS (decoded), not from a template.
+      If the message was intenationally marked as safe, it won't be escaped
+      (the escape filter handles this).
+    {% endcomment %}
+    message: '{{ message|escape|escapejs }}',
     showProgress: 'bottom',
     classProgress: 'primary',
     class: '{{ message.tags }}',
