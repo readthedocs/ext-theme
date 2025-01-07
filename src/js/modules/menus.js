@@ -143,6 +143,19 @@ class ButtonSyncAllVersionsElement extends APIEventWrapper {
   getSuccessURL() {
     console.log("Successfully synced versions");
   }
+
+  // Override the base class to delay the loading state removal
+  onEvent() {
+    if (this.request == undefined) {
+      const classes = this.classList;
+      classes.add("loading");
+      this.sendRequest().finally(() => {
+        setTimeout(() => {
+          classes.remove("loading");
+        }, 2000);
+      });
+    }
+  }
 }
 
 customElements.define(
