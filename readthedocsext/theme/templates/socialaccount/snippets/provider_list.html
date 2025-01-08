@@ -11,7 +11,9 @@
   {% if provider.id != 'saml' %}
     {% if allowed_providers and provider.id in allowed_providers or not allowed_providers %}
       <li class="item">
-        <form class="ui form" method="post" action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+        <form class="ui form"
+              method="post"
+              action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
           {% csrf_token %}
           <button class="ui button" type="submit" title="{{ provider.name }}">
             <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
