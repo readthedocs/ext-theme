@@ -10,7 +10,6 @@ import { Registry } from "./registry";
 // Application views
 import * as build_views from "../build";
 import * as core_views from "../core";
-import * as docs_views from "../docs";
 import * as gold_views from "../gold";
 import * as module_views from "../modules";
 import * as organization_views from "../organization";
@@ -153,7 +152,7 @@ export class Application {
     });
 
     // Plausible
-    jquery("[data-analytics]").plausible(
+    jquery("[data-analytics], [data-analytics-events]").plausible(
       this.config.production_domain,
       this.config.debug,
     );

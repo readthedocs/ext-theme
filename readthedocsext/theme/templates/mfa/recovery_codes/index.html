@@ -49,7 +49,7 @@
     <p>
       {% blocktrans %}
         You can generate new recovery codes if you lost or used all of your previous recovery codes.
-        This will invalidate and previously generated codes.
+        This will invalidate the previously generated codes.
       {% endblocktrans %}
     </p>
 
@@ -68,6 +68,7 @@
       <div class="actions">
         <form method="post" action="{% url "mfa_generate_recovery_codes" %}">
           {% csrf_token %}
+          <div class="ui cancel button">{% trans "Cancel" %}</div>
           <input class="ui negative button"
                  type="submit"
                  value="{% trans "Generate new codes" %}">
