@@ -13,7 +13,8 @@
               method="post"
               action="{% url "projects_keys_reattach" project_slug=project.slug %}">
           {% csrf_token %}
-          <button class="ui button">
+          <button class="ui button"
+                  {% if not can_reattach_key_automatically %}disabled{% endif %}>
             <i class="fa-duotone fa-refresh icon"></i>
             {% trans "Reattach to Git provider" %}
           </button>
@@ -21,6 +22,35 @@
       </div>
     </div>
   </div>
+
+  {% if not can_reattach_key_automatically %}
+    <div class="ui warning message">
+      <div class="header">
+        {% blocktrans trimmed %}
+          SSH key can't be automatically reattached to Git provider
+        {% endblocktrans %}
+      </div>
+      <p>
+        {% if not project.remote_repository %}
+          {% url "projects_edit" project_slug=project.slug as project_edit_url %}
+          {% blocktrans trimmed with project_edit_url=project_edit_url %}
+            You need to <a href="{{ project_edit_url }}">connect this project to a Git repository</a> first.
+          {% endblocktrans %}
+        </p>
+      {% else %}
+        {% url "socialaccount_connections" as socialaccount_connections_url %}
+        {% blocktrans trimmed with socialaccount_connections_url=socialaccount_connections_url %}
+          You need to <a href="{{ socialaccount_connections_url }}">connect your account to a Git provider associated with this project</a> first.
+        {% endblocktrans %}
+        <p>
+        {% endif %}
+        {% blocktrans trimmed %}
+          Alternatively, you can
+          <a href="https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html#copy-your-project-s-public-key">manually add the SSH key to your Git provider</a>.
+        {% endblocktrans %}
+      </p>
+    </div>
+  {% endif %}
 {% endblock top_menu %}
 
 {% block list_placeholder_icon_class %}
