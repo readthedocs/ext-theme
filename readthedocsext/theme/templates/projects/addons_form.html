@@ -48,6 +48,10 @@
         <a class="item" data-tab="notifications">{% trans "Notifications" %}</a>
         <a class="item" data-tab="analytics">{% trans "Analytics" %}</a>
         <a class="item" data-tab="docdiff">{% trans "Visual diff" %}</a>
+        {# Only show File Tree Diff if it was previously enabled from Django Admin #}
+        {% if form.filetreediff_enabled %}
+          <a class="item" data-tab="filetreediff">{% trans "File tree diff" %}</a>
+        {% endif %}
         <a class="item" data-tab="link-previews">{% trans "Link previews" %}</a>
         <a class="item" data-tab="hotkeys">{% trans "Hotkeys" %}</a>
         <a class="item" data-tab="advanced">{% trans "Advanced" %}</a>
@@ -97,6 +101,15 @@
           {{ form.doc_diff_enabled | as_crispy_field }}
         </div>
       {% endblock addons_docdiff %}
+
+      {% block addons_filetreediff %}
+        {% if form.filetreediff_enabled %}
+          <div class="ui tab" data-tab="filetreediff">
+            {{ form.filetreediff_enabled | as_crispy_field }}
+            {{ form.filetreediff_ignored_files | as_crispy_field }}
+          </div>
+        {% endif %}
+      {% endblock addons_filetreediff %}
 
       {% block addons_link_previews %}
         <div class="ui tab" data-tab="link-previews">
