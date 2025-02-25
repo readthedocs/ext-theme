@@ -1,0 +1,179 @@
+{% extends "projects/project_edit_base.html" %}
+
+{% load trans blocktrans from i18n %}
+
+{% block title %}
+  {% trans "Project Overview" %}
+{% endblock title %}
+
+{% block project_edit_content_header %}
+  {% trans "Project Overview" %}
+{% endblock project_edit_content_header %}
+
+{% block project_edit_content %}
+  <div class="ui grid">
+    {# Key Metrics #}
+    <div class="sixteen wide column">
+      <div class="ui four column stackable grid">
+        <div class="column">
+          <div class="ui fluid card">
+            <div class="content center aligned">
+              <div class="ui tiny statistic">
+                <div class="value">{{ total_pageviews|default:"0" }}</div>
+                <div class="label">{% trans "Page Views" %}</div>
+              </div>
+              <div class="meta">
+                <div class="ui mini label">{% trans "Last 30 Days" %}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui fluid card">
+            <div class="content center aligned">
+              <div class="ui tiny statistic">
+                <div class="value">{{ total_searches|default:"0" }}</div>
+                <div class="label">{% trans "Searches" %}</div>
+              </div>
+              <div class="meta">
+                <div class="ui mini label">{% trans "Last 30 Days" %}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui fluid card">
+            <div class="content center aligned">
+              <div class="ui tiny statistic">
+                <div class="value">{{ successful_builds }}</div>
+                <div class="label">{% trans "Builds" %}</div>
+              </div>
+              <div class="meta">
+                <div class="ui mini label">{% trans "Last 30 Days" %}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui fluid card">
+            <div class="content center aligned">
+              <div class="ui tiny statistic">
+                <div class="value">{{ monthly_build_time|default:"0" }}</div>
+                <div class="label">{% trans "Build Minutes" %}</div>
+              </div>
+              <div class="meta">
+                <div class="ui mini label">{% trans "Last 30 Days" %}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {# Documentation Setup #}
+    <div class="sixteen wide column">
+      <div class="ui fluid card">
+        <div class="content">
+          <h4 class="ui header">
+            <i class="settings icon"></i>
+            <div class="content">{% trans "Documentation Setup" %}</div>
+          </h4>
+          <div class="ui three column stackable grid">
+            <div class="column center aligned">
+              <div class="ui tiny statistic">
+                <div class="value">{{ active_versions_count }}</div>
+                <div class="label">{% trans "Active Versions" %}</div>
+              </div>
+              <div class="ui hidden divider"></div>
+              <a href="{% url 'project_version_list' project.slug %}"
+                 class="ui basic button">{% trans "Manage Versions" %}</a>
+            </div>
+            <div class="column center aligned">
+              <div class="ui tiny statistic">
+                <div class="value">{{ domains_count }}</div>
+                <div class="label">{% trans "Custom Domains" %}</div>
+              </div>
+              <div class="ui hidden divider"></div>
+              <a href="{% url 'projects_domains' project.slug %}"
+                 class="ui basic button">{% trans "Configure Domains" %}</a>
+            </div>
+            <div class="column center aligned">
+              <div class="ui tiny statistic">
+                <div class="value">{{ integrations_count }}</div>
+                <div class="label">{% trans "Git Integrations" %}</div>
+              </div>
+              <div class="ui hidden divider"></div>
+              <a href="{% url 'projects_integrations' project.slug %}"
+                 class="ui basic button">{% trans "Setup Integrations" %}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {# Project Maintenance #}
+    <div class="sixteen wide column">
+      <div class="ui fluid card">
+        <div class="content">
+          <h4 class="ui header">
+            <i class="tools icon"></i>
+            <div class="content">{% trans "Project Maintenance" %}</div>
+          </h4>
+          <div class="ui three column stackable grid">
+            <div class="column center aligned">
+              <div class="ui tiny statistic">
+                <div class="value">{{ redirect_count }}</div>
+                <div class="label">{% trans "Redirects" %}</div>
+              </div>
+              <div class="ui hidden divider"></div>
+              <a href="{% url 'projects_redirects' project.slug %}"
+                 class="ui basic button">{% trans "Manage Redirects" %}</a>
+            </div>
+            <div class="column center aligned">
+              <div class="ui tiny statistic">
+                <div class="value">{{ webhook_count }}</div>
+                <div class="label">{% trans "Webhooks" %}</div>
+              </div>
+              <div class="ui hidden divider"></div>
+              <a href="{% url 'projects_webhooks' project.slug %}"
+                 class="ui basic button">{% trans "Configure Webhooks" %}</a>
+            </div>
+            <div class="column center aligned">
+              <div class="ui tiny statistic">
+                <div class="value">{{ maintainers_count }}</div>
+                <div class="label">{% trans "Maintainers" %}</div>
+              </div>
+              <div class="ui hidden divider"></div>
+              <a href="{% url 'projects_users' project.slug %}"
+                 class="ui basic button">{% trans "Manage Access" %}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {# Analytics Links #}
+    <div class="sixteen wide column">
+      <div class="ui fluid card">
+        <div class="content">
+          <div class="ui two column stackable grid">
+            <div class="column">
+              <a href="{% url 'projects_traffic_analytics' project.slug %}"
+                 class="ui fluid basic button">
+                <i class="chart line icon"></i>
+                {% trans "View Traffic Analytics" %}
+              </a>
+            </div>
+            <div class="column">
+              <a href="{% url 'projects_search_analytics' project.slug %}"
+                 class="ui fluid basic button">
+                <i class="search icon"></i>
+                {% trans "View Search Analytics" %}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock body %}
