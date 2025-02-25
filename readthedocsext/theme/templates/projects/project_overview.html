@@ -11,169 +11,226 @@
 {% endblock project_edit_content_header %}
 
 {% block project_edit_content %}
-  <div class="ui grid">
-    {# Key Metrics #}
-    <div class="sixteen wide column">
-      <div class="ui four column stackable grid">
-        <div class="column">
-          <div class="ui fluid card">
-            <div class="content center aligned">
-              <div class="ui tiny statistic">
-                <div class="value">{{ total_pageviews|default:"0" }}</div>
-                <div class="label">{% trans "Page Views" %}</div>
-              </div>
-              <div class="meta">
-                <div class="ui mini label">{% trans "Last 30 Days" %}</div>
-              </div>
-            </div>
+  {# Project Information #}
+  <div class="ui form">
+    <div class="ui segment">
+      <div class="field">
+        <label>{% trans "Project URL" %}</label>
+        <div class="ui fluid action input">
+          <input id="project-url"
+                 type="text"
+                 value="{{ project.get_docs_url }}"
+                 readonly>
+          <button class="ui icon button" data-clipboard-target="#project-url">
+            <i class="fa-regular fa-copy"></i>
+          </button>
+        </div>
+        {% if not project.domains.exists %}
+          <div class="ui tiny message">
+            <i class="fa-solid fa-circle-info"></i>
+            {% url "projects_domains" project.slug as domains_url %}
+            {% blocktrans trimmed %}
+              Want to serve docs from your own domain? <a href="{{ domains_url }}">Configure a custom domain</a>.
+            {% endblocktrans %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="three fields">
+        <div class="field">
+          <label>{% trans "Project Slug" %}</label>
+          <div class="ui fluid action input">
+            <input id="project-slug" type="text" value="{{ project.slug }}" readonly>
+            <button class="ui icon button" data-clipboard-target="#project-slug">
+              <i class="fa-regular fa-copy"></i>
+            </button>
           </div>
         </div>
-        <div class="column">
-          <div class="ui fluid card">
-            <div class="content center aligned">
-              <div class="ui tiny statistic">
-                <div class="value">{{ total_searches|default:"0" }}</div>
-                <div class="label">{% trans "Searches" %}</div>
-              </div>
-              <div class="meta">
-                <div class="ui mini label">{% trans "Last 30 Days" %}</div>
-              </div>
-            </div>
+        <div class="field">
+          <label>{% trans "Repository" %}</label>
+          <div class="ui fluid action input">
+            <input id="project-repo" type="text" value="{{ project.repo }}" readonly>
+            <button class="ui icon button" data-clipboard-target="#project-repo">
+              <i class="fa-regular fa-copy"></i>
+            </button>
           </div>
         </div>
-        <div class="column">
-          <div class="ui fluid card">
-            <div class="content center aligned">
-              <div class="ui tiny statistic">
-                <div class="value">{{ successful_builds }}</div>
-                <div class="label">{% trans "Builds" %}</div>
-              </div>
-              <div class="meta">
-                <div class="ui mini label">{% trans "Last 30 Days" %}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="ui fluid card">
-            <div class="content center aligned">
-              <div class="ui tiny statistic">
-                <div class="value">{{ monthly_build_time|default:"0" }}</div>
-                <div class="label">{% trans "Build Minutes" %}</div>
-              </div>
-              <div class="meta">
-                <div class="ui mini label">{% trans "Last 30 Days" %}</div>
-              </div>
-            </div>
+        <div class="field">
+          <label>{% trans "Default Branch" %}</label>
+          <div class="ui fluid action input">
+            <input id="project-branch"
+                   type="text"
+                   value="{{ project.get_default_branch }}"
+                   readonly>
+            <button class="ui icon button" data-clipboard-target="#project-branch">
+              <i class="fa-regular fa-copy"></i>
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    {# Documentation Setup #}
-    <div class="sixteen wide column">
-      <div class="ui fluid card">
-        <div class="content">
-          <h4 class="ui header">
-            <i class="settings icon"></i>
-            <div class="content">{% trans "Documentation Setup" %}</div>
-          </h4>
-          <div class="ui three column stackable grid">
-            <div class="column center aligned">
-              <div class="ui tiny statistic">
-                <div class="value">{{ active_versions_count }}</div>
-                <div class="label">{% trans "Active Versions" %}</div>
-              </div>
-              <div class="ui hidden divider"></div>
-              <a href="{% url 'project_version_list' project.slug %}"
-                 class="ui basic button">{% trans "Manage Versions" %}</a>
-            </div>
-            <div class="column center aligned">
-              <div class="ui tiny statistic">
-                <div class="value">{{ domains_count }}</div>
-                <div class="label">{% trans "Custom Domains" %}</div>
-              </div>
-              <div class="ui hidden divider"></div>
-              <a href="{% url 'projects_domains' project.slug %}"
-                 class="ui basic button">{% trans "Configure Domains" %}</a>
-            </div>
-            <div class="column center aligned">
-              <div class="ui tiny statistic">
-                <div class="value">{{ integrations_count }}</div>
-                <div class="label">{% trans "Git Integrations" %}</div>
-              </div>
-              <div class="ui hidden divider"></div>
-              <a href="{% url 'projects_integrations' project.slug %}"
-                 class="ui basic button">{% trans "Setup Integrations" %}</a>
-            </div>
+    {# Build Activity #}
+    <div class="ui segment">
+      <h3 class="ui dividing header">{% trans "Build Activity" %}</h3>
+      <div class="four fields">
+        <div class="field">
+          <label>{% trans "Builds Last Month" %}</label>
+          <div class="ui fluid input">
+            <input type="text" value="{{ successful_builds }}" readonly>
           </div>
         </div>
+        <div class="field">
+          <label>{% trans "Build Minutes" %}</label>
+          <div class="ui fluid input">
+            <input type="text" value="{{ monthly_build_time|default:'0' }}" readonly>
+          </div>
+        </div>
+        <div class="field">
+          <label>{% trans "Concurrent Builds" %}</label>
+          <div class="ui fluid {% if concurrent_builds.limit_reached %}negative{% endif %} input">
+            <input type="text"
+                   value="{{ concurrent_builds.current }}/{{ concurrent_builds.max }}"
+                   readonly>
+          </div>
+        </div>
+        <div class="field">
+          <label>{% trans "Last Activity" %}</label>
+          <div class="ui fluid input">
+            <input type="text"
+                   value="{% if project.has_valid_webhook %}{% trans "Webhook active" %}{% else %}{% trans "No recent activity" %}{% endif %}"
+                   readonly>
+          </div>
+        </div>
+      </div>
+      <div class="ui small message">
+        <i class="fa-solid fa-circle-info"></i>
+        <a href="{% url 'builds_project_list' project.slug %}">
+          {% trans "View all builds" %}
+        </a>
       </div>
     </div>
 
-    {# Project Maintenance #}
-    <div class="sixteen wide column">
-      <div class="ui fluid card">
-        <div class="content">
-          <h4 class="ui header">
-            <i class="tools icon"></i>
-            <div class="content">{% trans "Project Maintenance" %}</div>
-          </h4>
-          <div class="ui three column stackable grid">
-            <div class="column center aligned">
-              <div class="ui tiny statistic">
-                <div class="value">{{ redirect_count }}</div>
-                <div class="label">{% trans "Redirects" %}</div>
-              </div>
-              <div class="ui hidden divider"></div>
-              <a href="{% url 'projects_redirects' project.slug %}"
-                 class="ui basic button">{% trans "Manage Redirects" %}</a>
-            </div>
-            <div class="column center aligned">
-              <div class="ui tiny statistic">
-                <div class="value">{{ webhook_count }}</div>
-                <div class="label">{% trans "Webhooks" %}</div>
-              </div>
-              <div class="ui hidden divider"></div>
-              <a href="{% url 'projects_webhooks' project.slug %}"
-                 class="ui basic button">{% trans "Configure Webhooks" %}</a>
-            </div>
-            <div class="column center aligned">
-              <div class="ui tiny statistic">
-                <div class="value">{{ maintainers_count }}</div>
-                <div class="label">{% trans "Maintainers" %}</div>
-              </div>
-              <div class="ui hidden divider"></div>
-              <a href="{% url 'projects_users' project.slug %}"
-                 class="ui basic button">{% trans "Manage Access" %}</a>
-            </div>
+    {# Version Overview #}
+    <div class="ui segment">
+      <h3 class="ui dividing header">{% trans "Version Overview" %}</h3>
+      <div class="three fields">
+        <div class="field">
+          <label>{% trans "Active Versions" %}</label>
+          <div class="ui fluid input">
+            <input type="text" value="{{ active_versions_count }}" readonly>
+          </div>
+        </div>
+        <div class="field">
+          <label>{% trans "Default Version" %}</label>
+          <div class="ui fluid input">
+            <input type="text" value="{{ project.get_default_version }}" readonly>
+          </div>
+        </div>
+        <div class="field">
+          <label>{% trans "Privacy Level" %}</label>
+          <div class="ui fluid input">
+            <input type="text" value="{{ project.privacy_level }}" readonly>
           </div>
         </div>
       </div>
-    </div>
 
-    {# Analytics Links #}
-    <div class="sixteen wide column">
-      <div class="ui fluid card">
-        <div class="content">
-          <div class="ui two column stackable grid">
-            <div class="column">
-              <a href="{% url 'projects_traffic_analytics' project.slug %}"
-                 class="ui fluid basic button">
-                <i class="chart line icon"></i>
-                {% trans "View Traffic Analytics" %}
-              </a>
-            </div>
-            <div class="column">
-              <a href="{% url 'projects_search_analytics' project.slug %}"
-                 class="ui fluid basic button">
-                <i class="search icon"></i>
-                {% trans "View Search Analytics" %}
-              </a>
-            </div>
-          </div>
+      {% if project.versions.exists %}
+        <div class="ui small message">
+          <i class="fa-solid fa-circle-info"></i>
+          <a href="{% url 'project_version_list' project.slug %}">
+            {% trans "Manage versions" %}
+          </a>
         </div>
-      </div>
+      {% endif %}
     </div>
   </div>
-{% endblock body %}
+
+  {# Pull Request Builds #}
+  {% if not project.external_builds_enabled %}
+    <div class="ui info message">
+      <div class="header">{% trans "Enable Pull Request Previews" %}</div>
+      <p>
+        {% blocktrans trimmed %}
+          Pull request builds let you preview documentation changes before merging.
+          Get feedback on documentation changes alongside code review.
+        {% endblocktrans %}
+      </p>
+      <a href="{% url 'projects_pull_requests' project.slug %}"
+         class="ui basic button">
+        <i class="fa-solid fa-code-branch"></i>
+        {% trans "Enable Pull Request Builds" %}
+      </a>
+    </div>
+  {% endif %}
+
+  {# Private Versions #}
+  {% if project.has_private_versions %}
+    <div class="ui info message">
+      <div class="header">{% trans "Private Documentation" %}</div>
+      <p>
+        {% blocktrans trimmed %}
+          Your project has private versions. You can share access using Single Sign-On (SSO),
+          or generate sharing tokens to give specific users access.
+        {% endblocktrans %}
+      </p>
+      <a href="{% url 'projects_sharing' project.slug %}"
+         class="ui basic button">
+        <i class="fa-solid fa-shield-halved"></i>
+        {% trans "Manage Documentation Access" %}
+      </a>
+    </div>
+  {% endif %}
+
+  {# Addons section #}
+  {% if project.addons.enabled %}
+    <div class="ui positive message">
+      <div class="header">{% trans "Documentation Addons Enabled" %}</div>
+      <p>
+        {% blocktrans trimmed %}
+          Your project has addons enabled. You can configure them to enhance your documentation experience.
+        {% endblocktrans %}
+      </p>
+      <a href="{% url 'projects_addons' project.slug %}"
+         class="ui basic button">
+        <i class="fa-solid fa-puzzle-piece"></i>
+        {% trans "Configure Addons" %}
+      </a>
+    </div>
+  {% else %}
+    <div class="ui info message">
+      <div class="header">{% trans "Documentation Addons" %}</div>
+      <p>
+        {% blocktrans trimmed %}
+          Configure addons like search, version navigation menu, analytics and more.
+          <a href="https://docs.readthedocs.io/page/addons.html">Learn more about addons</a>.
+        {% endblocktrans %}
+      </p>
+      <a href="{% url 'projects_addons' project.slug %}"
+         class="ui basic button">
+        <i class="fa-solid fa-puzzle-piece"></i>
+        {% trans "Configure Addons" %}
+      </a>
+    </div>
+  {% endif %}
+
+  {# Danger Zone #}
+  <h3 class="ui dividing red header">{% trans "Danger Zone" %}</h3>
+  <div class="ui segment">
+    <form method="post" action="{% url 'projects_delete' project.slug %}">
+      {% csrf_token %}
+      <p>
+        {% trans "Permanently delete this project and all its associated data." %}
+      </p>
+      <button type="submit" class="ui red button">
+        <i class="trash icon"></i>
+        {% trans "Delete Project" %}
+      </button>
+    </form>
+  </div>
+{% endblock project_edit_content %}
+
+{% block body_scripts %}
+  {{ block.super }}
+  <script>// Remove custom clipboard logic</script>
+{% endblock body_scripts %}
