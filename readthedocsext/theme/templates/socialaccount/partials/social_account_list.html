@@ -10,15 +10,26 @@
 {% load ext_theme_tags %}
 
 {% block top_menu %}
-  {% if form.non_field_errors %}<div class="ui error message">{{ form.non_field_errors }}</div>{% endif %}
+  {% if form.non_field_errors %}
+    <div class="ui error message">{{ form.non_field_errors }}</div>
+  {% endif %}
   {{ block.super }}
 {% endblock top_menu %}
 {% block top_left_menu_items %}
+  <div class="item">
+    <div class="ui black basic button {% if not objects.exists %}disabled{% endif %}"
+         data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
+      <i class="fa-duotone fa-refresh icon"></i>
+      {% trans "Refresh your repositories" %}
+    </div>
+  </div>
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
   <div class="ui green button"
-       data-bind="click: $root.show_modal('socialaccount-connections')">{% trans "Add new connection" %}</div>
+       data-bind="click: $root.show_modal('socialaccount-connections')">
+    {% trans "Add new connection" %}
+  </div>
 {% endblock create_button %}
 
 {% block list_placeholder_icon_class %}
