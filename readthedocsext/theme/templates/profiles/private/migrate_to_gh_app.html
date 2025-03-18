@@ -1,0 +1,366 @@
+{% extends "base.html" %}
+
+{% load provider_login_url from socialaccount %}
+{% load trans blocktrans from i18n %}
+
+{% block title %}
+  {% trans "Migrate account to GitHub App" %}
+{% endblock title %}
+
+{% block content %}
+
+  <div class="eleven wide computer eleven wide tablet sixteen wide mobile column">
+    <h2 class="ui medium dividing header">
+      {% trans "Migrate account to GitHub App" %}
+    </h2>
+
+    <div id="edit-content">
+      <div class="ui two column grid">
+        <div class="five wide computer five wide table sixteen wide mobile column">
+          <div class="ui vertical steps">
+            <a class="step {% if step == "overview" %}active{% endif %}"
+               href="{% url 'migrate_to_github_app' %}?step=overview">
+              <div class="content">
+                <div class="title">Overview</div>
+                <div class="description">Read before starting the migration process</div>
+              </div>
+            </a>
+            <a class="step {% if step == "connect" %}active{% endif %} {% if step_connect_completed %}completed{% endif %}"
+               href="{% url 'migrate_to_github_app' %}?step=connect">
+              <div class="content">
+                <div class="title">Connect account</div>
+                <div class="description">Connect your account to our new GitHub App</div>
+              </div>
+            </a>
+            <a class="step {% if step == "install" %}active{% endif %} {% if not step_connect_completed %}disabled{% endif %}"
+               href="{% url 'migrate_to_github_app' %}?step=install">
+              <div class="content">
+                <div class="title">Install GitHub App</div>
+                <div class="description">
+                  Install the GitHub App in all your repositories connected to a project
+                </div>
+              </div>
+            </a>
+            <a class="step {% if step == "migrate" %}active{% endif %} {% if not step_connect_completed %}disabled{% endif %}"
+               href="{% url 'migrate_to_github_app' %}?step=migrate">
+              <div class="content">
+                <div class="title">Migrate projects</div>
+                <div class="description">Migrate your projects to the GitHub App</div>
+              </div>
+            </a>
+            <a class="step {% if step == "revoke" %}active{% endif %} {% if not step_connect_completed %}disabled{% endif %}"
+               href="{% url 'migrate_to_github_app' %}?step=revoke">
+              <div class="content">
+                <div class="title">Revoke access to old integration</div>
+                <div class="description">
+                  Revoke access to the old GitHub OAuth app from your GitHub account
+                </div>
+              </div>
+            </a>
+            <a class="step {% if step == "disconnect" %}active{% endif %} {% if step_disconnect_completed %}completed{% endif %} {% if not step_connect_completed or not step_revoke_completed %}disabled{% endif %}"
+               href="{% url 'migrate_to_github_app' %}?step=disconnect">
+              <div class="content">
+                <div class="title">Disconnect old integration</div>
+                <div class="description">
+                  Disconnect the old GitHub OAuth app from your Read the Docs account
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui basic segment">
+            {% if step == "overview" %}
+              <p>
+                We’re introducing a new GitHub App to replace the old GitHub OAuth app.
+                This new app offers more granular permissions and better GitHub integration.
+                Learn more in our <a href="#">blog post</a>.
+              </p>
+
+              <p>
+                This guide will help you migrate your account to the new GitHub App.
+                Some things you should know:
+              </p>
+
+              <p>
+                <ul>
+                  <li>
+                    Migrating all projects is optional,
+                    you can skip the &quot;Install GitHub App&quot; and &quot;Migrate Projects&quot; steps.
+                  </li>
+                  <li>
+                    Connecting your account to the new GitHub App and revoking the old GitHub OAuth app is required,
+                    as the old app is deprecated and will be removed.
+                  </li>
+                  <li>
+                    Some steps require you to do changes on GitHub,
+                    refresh the page after making the changes to see updates.
+                  </li>
+                  <li>
+                    New projects imported after connecting your account to the new GitHub App don't need migration,
+                    as they will be automatically connected to the new GitHub App.
+                  </li>
+                  <li>
+                    After revoking the old GitHub OAuth app, you won't be able to auto-migrate projects.
+                    <a href="#">Manual migration</a> is always an option.
+                  </li>
+                  <li>
+                    Projects not linked to a GitHub repository can be linked after connecting your account. These don't need migration.
+                  </li>
+                </ul>
+              </p>
+              <div class="ui divider"></div>
+              <a href="?step=connect" class="ui button">Start</a>
+            {% elif step == "connect" %}
+              <p>
+                Connect your account to the new GitHub app by clicking the button below.
+                As this is a new app, you will need to grant access to your account again.
+              </p>
+              <form class="ui form"
+                    method="post"
+                    action="{% provider_login_url "githubapp" process="connect" next=request.get_full_path %}">
+                {% csrf_token %}
+                <button class="ui button"
+                        type="submit"
+                        {% if step_connect_completed %}disabled{% endif %}>
+                  <i class="fa-brands fa-github icon"></i>
+                  {% if step_connect_completed %}
+                    {% trans "Connected" %}
+                  {% else %}
+                    {% trans "Connect" %}
+                  {% endif %}
+                </button>
+              </form>
+
+              <div class="ui divider"></div>
+              <a class="ui button {% if not step_connect_completed %}disabled{% endif %}"
+                 href="?step=install">Next</a>
+            {% elif step == "install" %}
+              <p>
+                Click on &quot;Install&quot; to install the GitHub App on each account,
+                all the repositories connected to a project will be pre-selected.
+              </p>
+
+              <div class="ui middle aligned relaxed divided list">
+                {% for installation_target_group in installation_target_groups %}
+                  <div class="item">
+                    <div class="right floated content">
+                      <a href="{{ installation_target_group.link }}"
+                         target="_blank"
+                         class="ui small button {% if installation_target_group.installed %}disabled{% endif %}">
+                        {% if installation_target_group.installed %}
+                          Installed
+                        {% else %}
+                          Install
+                        {% endif %}
+                      </a>
+                    </div>
+                    <div class="content">
+                      <i class="fa-brands fa-github icon"></i>
+                      <a href="https://github.com/{{ installation_target_group.target_name }}"
+                         target="_blank">
+                        {{ installation_target_group.target_name }}
+                      </a>
+                    </div>
+                  </div>
+                {% empty %}
+                  <div class="item">
+                    <div class="content">
+                      <div class="ui message info">
+                        You don't have projects to migrate, you can <a href="?step=revoke">skip this step</a>.
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+
+              <p>
+                Alternatively, you can <a href="https://github.com/apps/{{ gh_app_name }}/installations/new/"
+    target="_blank">manually install the GitHub App</a>
+                on each repository you want to migrate, or do it one by one on the next step.
+              </p>
+
+              <div class="ui message info">
+                <i class="fad fa-info-circle icon"></i>
+                If you see this step as incomplete after installing the GitHub App,
+                you may need to <a href="{{ request.get_full_path }}">refresh this page</a>, or if you don't want to install the GitHub App on all selected repositories,
+                you can <a href="?step=migrate">skip this step</a>.
+              </div>
+
+              <div class="ui divider"></div>
+
+              <a class="ui button" href="?step=migrate">Next</a>
+            {% elif step == "migrate" %}
+              <p>
+                In order to migrate a project to the new GitHub App,
+                the GitHub App needs to be installed on the repository connected to the project,
+                and you need to have admin access to the repository.
+              </p>
+
+              <div class="ui medium header">Projects to migrate</div>
+
+              <div class="ui middle aligned relaxed divided list">
+                {% for migration_target in migration_targets %}
+                  <div class="item">
+                    <div class="right floated content">
+                      {% if not migration_target.has_installation %}
+                        <a class="ui button small"
+                           href="{{ migration_target.installation_link }}"
+                           target="_blank">Install</a>
+                      {% else %}
+                        <form method="post" action="." class="ui form">
+                          {% csrf_token %}
+                          <input type="hidden"
+                                 name="project"
+                                 value="{{ migration_target.project.slug }}">
+                          <button class="ui button small"
+                                  type="submit"
+                                  {% if not migration_target.is_admin %}disabled{% endif %}>
+                            Migrate
+                          </button>
+                        </form>
+                      {% endif %}
+                    </div>
+                    <div class="right floated content">
+                      {% if not migration_target.has_installation or not migration_target.is_admin %}
+                        <a class="ui orange label"
+                           data-content="{% if not migration_target.has_installation %}Install the GitHub App in the repository by clicking on the &quot;Install&quot; button{% elif not migration_target.is_admin %}You need to have admin access to the repository in order to migrate the project{% endif %}">
+                          <i class="fad fa-info-circle icon"></i>
+                          Project can't be migrated
+                        </a>
+                      {% endif %}
+                    </div>
+                    <div class="content">
+                      <a class="header"
+                         href="{% url 'projects_detail' migration_target.project.slug %}">
+                        {{ migration_target.project.name }}
+                      </a>
+                      <div class="description">
+                        <i class="fa-brands fa-github icon"></i>
+                        <a href="{{ migration_target.project.remote_repository.html_url }}"
+                           target="_blank">
+                          {{ migration_target.project.remote_repository.full_name }}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                {% empty %}
+                  <div class="item">
+                    <div class="content">
+                      <div class="ui message info">
+                        You don't have projects to migrate, you can <a href="?step=revoke">skip this step</a>.
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+              {% if migration_targets %}
+                <p>
+                  If you want to migrate all projects at once, click on the button below.
+                  Note that projects with warnings will not be migrated.
+                </p>
+
+                <form class="ui form" method="post" action=".">
+                  {% csrf_token %}
+                  <button class="ui button" type="submit">Migrate all</button>
+                </form>
+
+                <div class="ui message info">
+                  <i class="fad fa-info-circle icon"></i>
+                  If you don't see the &quot;Migrate&quot; button and you already installed the GitHub App on the repository,
+                  and have admin access to it,
+                  you may need to <a href="{{ request.get_full_path }}">refresh this page</a>.
+                </div>
+
+              {% endif %}
+
+              <div class="ui medium header">Projects connected to the GitHub App</div>
+
+              <div class="ui middle aligned relaxed divided list">
+                {% for project in migrated_projects %}
+                  <div class="item">
+                    <div class="content">
+                      <a class="header" href="{% url 'projects_detail' project.slug %}">
+                        {{ project.name }}
+                      </a>
+                      <div class="description">
+                        <i class="fa-brands fa-github icon"></i>
+                        <a href="{{ project.remote_repository.html_url }}" target="_blank">
+                          {{ project.remote_repository.full_name }}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                {% empty %}
+                  <div class="item">
+                    <div class="content">
+                      <div class="ui message info">
+                        You don't have projects connected to the GitHub App yet.
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+
+              <div class="ui divider"></div>
+
+              <a class="ui button" href="?step=revoke">Next</a>
+            {% elif step == "revoke" %}
+              <p>
+                Click on the button below to revoke access.
+                You will be redirected to GitHub, where you need to click on "Revoke access".
+              </p>
+
+              {% if migration_targets %}
+                <div class="ui small warning message">
+                  <i class="fad fa-warning icon"></i>
+                  You have projects that need to be <a href="?step=migrate">migrated</a>.
+                  If you revoke access now, you'll need to <a href="#">manually migrate</a> them.
+                </div>
+              {% endif %}
+
+              <a href="{{ old_application_link }}"
+                 target="_blank"
+                 class="ui button {% if step_revoke_completed %}disabled{% endif %}">
+                <i class="fa-brands fa-github icon"></i>
+                {% if step_revoke_completed %}
+                  Revoked
+                {% else %}
+                  Revoke
+                {% endif %}
+              </a>
+
+              <div class="ui message info">
+                <i class="fad fa-info-circle icon"></i>
+                If you see this step as incomplete after revoking access,
+                you may need to <a href="{{ request.get_full_path }}">refresh this page</a>.
+              </div>
+
+              <div class="ui divider"></div>
+              <a class="ui button {% if not step_revoke_completed %}disabled{% endif %}"
+                 href="?step=disconnect">Next</a>
+            {% elif step == "disconnect" %}
+              <p>
+                Disconnect the old GitHub OAuth app from your Read the Docs account by clicking the button below.
+              </p>
+
+              <div class="ui message info">
+                <i class="fad fa-info-circle icon"></i>
+                After disconnecting the old GitHub OAuth app, you won't be able to see this page again.
+                If you have projects that need to be migrated, you'll need to <a href="#">manually migrate</a> them.
+              </div>
+
+              <form class="ui form"
+                    method="post"
+                    action="{% url 'socialaccount_connections' %}">
+                {% csrf_token %}
+                <input type="hidden" name="account" value="{{ old_github_account.id }}" />
+                <button class="ui button" type="submit">{% trans "Finish migration" %}</button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
