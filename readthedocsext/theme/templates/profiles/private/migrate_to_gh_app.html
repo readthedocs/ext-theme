@@ -418,3 +418,39 @@
     </div>
   </div>
 {% endblock content %}
+
+{% block body_scripts %}
+  {{ block.super }}
+  <script type="text/javascript">
+    // Store references to opened windows.
+    // NOTE: this variable will reset when the page is reloaded.
+    let openedWindows = [];
+
+    // Keep track of all GitHub links opened in the page,
+    // so we can reload the page when a window is closed.
+    document.addEventListener("click", function (event) {
+      const link = event.target;
+      if (link.tagName === "A" && link.href && link.href.startsWith("https://github.com/")) {
+        event.preventDefault();
+        let newWindow = window.open(link.href, "_blank");
+        if (newWindow) {
+            openedWindows.push(newWindow);
+        }
+      }
+    });
+
+    // Check periodically if a opened windows is closed,
+    // if so, reload the current page.
+    const checkWindowsClosed = setInterval(() => {
+      let originalLength = openedWindows.length;
+      openedWindows = openedWindows.filter(win => !win.closed);
+      if (openedWindows.length < originalLength) {
+        // Wait some seconds before reloading the page,
+        // so our app has time to update the status.
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      }
+    }, 250);
+  </script>
+{% endblock body_scripts %}
