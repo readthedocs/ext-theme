@@ -8,8 +8,7 @@
 {% endblock title %}
 
 {% block content %}
-
-  <div class="eleven wide computer eleven wide tablet sixteen wide mobile column">
+  <div class="eleven wide computer eleven wide tablet sixteen wide mobile column" data-bind="with: TrackOpenedLinksView()">
     <h2 class="ui medium dividing header">
       {% trans "Migrate account to GitHub App" %}
     </h2>
@@ -154,21 +153,22 @@
                 As this is a new app, you will need to grant access to your account again.
                 {% endblocktrans %}
               </p>
+              {% if step_connect_completed %}
+              <span class="ui green text">
+                <i class="fas fa-circle-check icon"></i>
+                {% trans "Connected" %}
+              </span>
+              {% else %}
               <form class="ui form"
                     method="post"
                     action="{% provider_login_url "githubapp" process="connect" next=request.get_full_path %}">
                 {% csrf_token %}
-                <button class="ui button"
-                        type="submit"
-                        {% if step_connect_completed %}disabled{% endif %}>
+                <button class="ui button" type="submit">
                   <i class="fa-brands fa-github icon"></i>
-                  {% if step_connect_completed %}
-                    {% trans "Connected" %}
-                  {% else %}
                     {% trans "Connect" %}
-                  {% endif %}
                 </button>
               </form>
+              {% endif %}
 
               <div class="ui divider"></div>
               <a class="ui button {% if not step_connect_completed %}disabled{% endif %}"
@@ -185,15 +185,16 @@
                 {% for installation_target_group in installation_target_groups %}
                   <div class="item">
                     <div class="right floated content">
-                      <a href="{{ installation_target_group.link }}"
-                         target="_blank"
-                         class="ui small button {% if installation_target_group.installed %}disabled{% endif %}">
-                        {% if installation_target_group.installed %}
+                      {% if installation_target_group.installed %}
+                        <div class="ui green label">
+                          <i class="fa-solid fa-circle-check icon"></i>
                           {% trans "Installed" %}
-                        {% else %}
+                        </div>
+                      {% else %}
+                      <a href="{{ installation_target_group.link }}" target="_blank" class="ui small button" data-bind="click: trackLinkClick">
                           {% trans "Install" %}
-                        {% endif %}
                       </a>
+                      {% endif %}
                     </div>
                     <div class="content">
                       <i class="fa-brands fa-github icon"></i>
@@ -219,7 +220,7 @@
               <p>
                 {% blocktrans trimmed with gh_app_name=gh_app_name %}
                   Alternatively, you can
-                  <a href="https://github.com/apps/{{ gh_app_name }}/installations/new/"
+                  <a href="https://github.com/apps/{{ gh_app_name }}/installations/new/" data-bind="click: trackLinkClick"
                      target="_blank">manually install the GitHub App</a>
                   on each repository you want to migrate, or do it one by one on the next step.
                 {% endblocktrans %}
@@ -255,6 +256,7 @@
                       {% if not migration_target.has_installation %}
                         <a class="ui button small"
                            href="{{ migration_target.installation_link }}"
+                           data-bind="click: trackLinkClick"
                            target="_blank">{% trans "Install" %}</a>
                       {% else %}
                         <form method="post" action="." class="ui form">
@@ -286,11 +288,13 @@
                         {{ migration_target.project.name }}
                       </a>
                       <div class="description">
-                        <i class="fa-brands fa-github icon"></i>
-                        <a href="{{ migration_target.project.remote_repository.html_url }}"
-                           target="_blank">
-                          {{ migration_target.project.remote_repository.full_name }}
+                        {% with repo=migration_target.project.remote_repository %}
+                        <a href="{{ repo.html_url }}" class="ui basic image nowrap label">
+                          <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
+                              src="{{ repo.avatar_url }}" />
+                          <code>{{ repo.full_name }}</code>
                         </a>
+                        {% endwith %}
                       </div>
                     </div>
                   </div>
@@ -371,7 +375,7 @@
                 {% endblocktrans %}
               </p>
 
-              {% if migration_targets %}
+              {% if migration_targets and not step_revoke_completed %}
                 <div class="ui small warning message">
                   <i class="fad fa-warning icon"></i>
                   {% blocktrans trimmed with migrate_step="?step=migrate" manual_migration_docs="#" %}
@@ -381,16 +385,20 @@
                 </div>
               {% endif %}
 
+              {% if step_revoke_completed %}
+              <span class="ui green text">
+                <i class="fas fa-circle-check icon"></i>
+                {% trans "Revoked" %}
+              </span>
+              {% else %}
               <a href="{{ old_application_link }}"
                  target="_blank"
-                 class="ui button {% if step_revoke_completed %}disabled{% endif %}">
+                 class="ui button"
+                 data-bind="click: trackLinkClick">
                 <i class="fa-brands fa-github icon"></i>
-                {% if step_revoke_completed %}
-                  {% trans "Revoked" %}
-                {% else %}
                   {% trans "Revoke" %}
-                {% endif %}
               </a>
+              {% endif %}
 
               <div class="ui message info">
                 <i class="fad fa-info-circle icon"></i>
@@ -432,39 +440,3 @@
     </div>
   </div>
 {% endblock content %}
-
-{% block body_scripts %}
-  {{ block.super }}
-  <script type="text/javascript">
-    // Store references to opened windows.
-    // NOTE: this variable will reset when the page is reloaded.
-    let openedWindows = [];
-
-    // Keep track of all GitHub links opened in the page,
-    // so we can reload the page when a window is closed.
-    document.addEventListener("click", function (event) {
-      const link = event.target;
-      if (link.tagName === "A" && link.href && link.href.startsWith("https://github.com/")) {
-        event.preventDefault();
-        let newWindow = window.open(link.href, "_blank");
-        if (newWindow) {
-            openedWindows.push(newWindow);
-        }
-      }
-    });
-
-    // Check periodically if a opened windows is closed,
-    // if so, reload the current page.
-    const checkWindowsClosed = setInterval(() => {
-      let originalLength = openedWindows.length;
-      openedWindows = openedWindows.filter(win => !win.closed);
-      if (openedWindows.length < originalLength) {
-        // Wait some seconds before reloading the page,
-        // so our app has time to update the status.
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }
-    }, 250);
-  </script>
-{% endblock body_scripts %}
