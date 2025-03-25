@@ -218,9 +218,9 @@
               </div>
 
               <p>
-                {% blocktrans trimmed with gh_app_name=gh_app_name %}
+                {% blocktrans trimmed with github_app_name=github_app_name %}
                   Alternatively, you can
-                  <a href="https://github.com/apps/{{ gh_app_name }}/installations/new/" data-bind="click: trackLinkClick"
+                  <a href="https://github.com/apps/{{ github_app_name }}/installations/new/" data-bind="click: trackLinkClick"
                      target="_blank">manually install the GitHub App</a>
                   on each repository you want to migrate, or do it one by one on the next step.
                 {% endblocktrans %}
