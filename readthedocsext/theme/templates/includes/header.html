@@ -1,6 +1,6 @@
-{% load i18n %}
-{% load gravatar %}
-{% load static %}
+{% load trans blocktrans from i18n %}
+{% load gravatar_url from gravatar %}
+{% load static from static %}
 
 {% comment %}
 
@@ -50,7 +50,10 @@ active_item
         <div class="five wide mobile only right aligned column">
           <div class="ui wide dropdown"
                data-bind="semanticui: {dropdown: {action: 'select'}}">
+            {# Ignore "aboid inline styles" rule #}
+            {# djlint:off H021 #}
             <i class="fad fa-bars large icon" style="--fa-secondary-opacity: 0.8;"></i>
+            {# djlint:on #}
             <div class="menu">{% include "includes/utils/header_menus.html" %}</div>
           </div>
         </div>
@@ -114,7 +117,7 @@ active_item
                       <div>
                         <a class="ui circular basic icon button"
                            href="{% url 'support' %}"
-                           aria-label="{% trans 'Get support' %}"
+                           aria-label="{% trans "Get support" %}"
                            data-content="{% trans "Get support" %}">
                           <i class="fa-solid fa-message-question icon"></i>
                         </a>
@@ -129,6 +132,7 @@ active_item
                       <div class="ui top right pointing wide dropdown"
                            data-bind="semanticui: {dropdown: {action: 'select', displayType: 'block'}}">
                         <img class="ui avatar image"
+                             alt="{% trans "User avatar" %}"
                              src="{% gravatar_url request.user.email 64 %}" />
                         <i class="fa-solid fa-caret-down icon"></i>
                         <div class="wide menu">{% include "includes/utils/header_menus.html" %}</div>
