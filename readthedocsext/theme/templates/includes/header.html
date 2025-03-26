@@ -1,6 +1,6 @@
-{% load i18n %}
-{% load gravatar %}
-{% load static %}
+{% load trans blocktrans from i18n %}
+{% load gravatar_url from gravatar %}
+{% load static from static %}
 
 {% comment %}
 
@@ -17,7 +17,8 @@ active_item
 
 {% endcomment %}
 
-<div class="ui basic fitted attached segment" data-bind="using: HeaderView()">
+<div class="ui basic fitted attached segment"
+     data-bind="using: HeaderView()">
 
   {# Pass Django template tag specific configuration into ``HeaderView`` #}
   <script type="application/json" data-bind="jsonInit: config">
@@ -33,7 +34,10 @@ active_item
         <div class="four wide computer five wide tablet eleven wide mobile left aligned column">
           <div class="ui horizontally fitted basic segment">
             <a href="{{ SITEURL }}/" aria-label="Read the Docs homepage">
-              <img class="ui image" src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}" width="220" alt="Read the Docs logo"/>
+              <img class="ui image"
+                   src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}"
+                   width="220"
+                   alt="Read the Docs logo" />
             </a>
           </div>
         </div>
@@ -44,11 +48,13 @@ active_item
       {% endcomment %}
       {% block header_mobile_menu %}
         <div class="five wide mobile only right aligned column">
-          <div class="ui wide dropdown" data-bind="semanticui: {dropdown: {action: 'select'}}">
+          <div class="ui wide dropdown"
+               data-bind="semanticui: {dropdown: {action: 'select'}}">
+            {# Ignore "aboid inline styles" rule #}
+            {# djlint:off H021 #}
             <i class="fad fa-bars large icon" style="--fa-secondary-opacity: 0.8;"></i>
-            <div class="menu">
-              {% include "includes/utils/header_menus.html" %}
-            </div>
+            {# djlint:on #}
+            <div class="menu">{% include "includes/utils/header_menus.html" %}</div>
           </div>
         </div>
       {% endblock header_mobile_menu %}
@@ -62,11 +68,13 @@ active_item
 
             {% block header_left_menu %}
               {% if request.user.is_authenticated %}
-                <a class="{% if active_item == "projects" %}active {% endif %} computer only item" href="{% url 'projects_dashboard' %}">
+                <a class="{% if active_item == "projects" %}active {% endif %} computer only item"
+                   href="{% url 'projects_dashboard' %}">
                   {% trans "Projects" %}
                 </a>
                 {% if USE_ORGANIZATIONS %}
-                  <a class="{% if active_item == "organizations" %}active {% endif %} computer only item" href="{% url 'organization_list' %}">
+                  <a class="{% if active_item == "organizations" %}active {% endif %} computer only item"
+                     href="{% url 'organization_list' %}">
                     {% trans "Organizations" %}
                   </a>
                 {% endif %}
@@ -79,7 +87,8 @@ active_item
                 {% block header_menu_search %}
                   {% if request.user.is_authenticated %}
                     <div class="item">
-                      <div class="ui category search" data-bind="semanticui: {search: search_project_config()}">
+                      <div class="ui category search"
+                           data-bind="semanticui: {search: search_project_config()}">
                         <div class="ui icon input">
                           <input class="prompt" type="text">
                           <i class="fa-duotone fa-search icon"></i>
@@ -95,18 +104,21 @@ active_item
                     <div class="item">
                       {# Extra divs for spacing #}
                       <div>
-                        <div class="ui disabled wide dropdown circular basic icon button" data-bind="semanticui: {dropdown: {action: 'select', displayType: 'block'}}">
+                        <div class="ui disabled wide dropdown circular basic icon button"
+                             data-bind="semanticui: {dropdown: {action: 'select', displayType: 'block'}}">
                           <i class="fa-solid fa-bell icon"></i>
                           {# TODO This feature doesn't do anything yet, see https://github.com/readthedocs/ext-theme/issues/16 #}
                           {% if False %}
                             <span class="ui floating circular red label">{{ messages|length }}</span>
                           {% endif %}
-                          <div class="menu">
-                          </div>
+                          <div class="menu"></div>
                         </div>
                       </div>
                       <div>
-                        <a class="ui circular basic icon button" href="{% url 'support' %}" aria-label="{% trans 'Get support' %}">
+                        <a class="ui circular basic icon button"
+                           href="{% url 'support' %}"
+                           aria-label="{% trans "Get support" %}"
+                           data-content="{% trans "Get support" %}">
                           <i class="fa-solid fa-message-question icon"></i>
                         </a>
                       </div>
@@ -117,24 +129,21 @@ active_item
                 {% block header_menu_user %}
                   {% if request.user.is_authenticated %}
                     <div class="item">
-                      <div class="ui top right pointing wide dropdown" data-bind="semanticui: {dropdown: {action: 'select', displayType: 'block'}}">
-                        <img class="ui avatar image" src="{% gravatar_url request.user.email 64 %}" />
+                      <div class="ui top right pointing wide dropdown"
+                           data-bind="semanticui: {dropdown: {action: 'select', displayType: 'block'}}">
+                        <img class="ui avatar image"
+                             alt="{% trans "User avatar" %}"
+                             src="{% gravatar_url request.user.email 64 %}" />
                         <i class="fa-solid fa-caret-down icon"></i>
-                        <div class="wide menu">
-                          {% include "includes/utils/header_menus.html" %}
-                        </div>
+                        <div class="wide menu">{% include "includes/utils/header_menus.html" %}</div>
                       </div>
                     </div>
                   {% else %}
                     <div class="item">
-                      <a href="{% url 'account_signup' %}">
-                        {% trans "Sign up" %}
-                      </a>
+                      <a href="{% url 'account_signup' %}">{% trans "Sign up" %}</a>
                     </div>
                     <div class="item">
-                      <a class="ui button" href="{% url 'account_login' %}">
-                        {% trans "Log in" %}
-                      </a>
+                      <a class="ui button" href="{% url 'account_login' %}">{% trans "Log in" %}</a>
                     </div>
                   {% endif %}
                 {% endblock header_menu_user %}
