@@ -213,7 +213,7 @@ build:
 
   commands:
     # Install dependencies
-    - gem install bundle
+    - gem install bundler
     - bundle install
     # Build the site and save generated files into Read the Docs directory
     - jekyll build --destination $READTHEDOCS_OUTPUT/html
