@@ -84,20 +84,6 @@
                 {% endblocktrans %}
               </p>
 
-              {% if has_multiple_github_accounts %}
-                <div class="ui message warning">
-                  <i class="fad fa-warning icon"></i>
-                  {% url 'socialaccount_connections' as socialaccount_connections %}
-                  {% blocktrans trimmed with socialaccount_connections=socialaccount_connections github_account=old_github_account.extra_data.login %}
-                    You have <a href="{{ socialaccount_connections }}">multiple GitHub accounts</a> linked,
-                    <strong>you'll need to repeat the migration for each account</strong>.
-
-                    The current account to migrate is <a href="https://github.com/{{ github_account }}" target="_blank">{{ github_account }}</a>;
-                    you can skip repositories this account doesn't have access to.
-                  {% endblocktrans %}
-                </div>
-              {% endif %}
-
               <p>
                 {% blocktrans %}
                 This guide will help you migrate your account to the new GitHub App.
@@ -149,26 +135,12 @@
             {% elif step == "connect" %}
               <p>
                 {% blocktrans %}
-                Connect your account to the new GitHub app by clicking the button below.
-                As this is a new app, you will need to grant access to your account again.
+                  First, start by connecting your Read the Docs account to our GitHub App for all of your GitHub accounts.
+                  You'll be prompted to grant access to the app for each GitHub user you connect.
                 {% endblocktrans %}
               </p>
-              {% if step_connect_completed %}
-              <span class="ui green text">
-                <i class="fas fa-circle-check icon"></i>
-                {% trans "Connected" %}
-              </span>
-              {% else %}
-              <form class="ui form"
-                    method="post"
-                    action="{% provider_login_url "githubapp" process="connect" next=request.get_full_path %}">
-                {% csrf_token %}
-                <button class="ui button" type="submit">
-                  <i class="fa-brands fa-github icon"></i>
-                    {% trans "Connect" %}
-                </button>
-              </form>
-              {% endif %}
+              
+              {% include "profiles/partials/github_oauth_list.html" with objects=github_oauth_accounts %}
 
               <div class="ui divider"></div>
               <a class="ui button {% if not step_connect_completed %}disabled{% endif %}"
