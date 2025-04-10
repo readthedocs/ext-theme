@@ -8,15 +8,15 @@
 {% endblock title %}
 
 {% block content %}
-  <div class="eleven wide computer eleven wide tablet sixteen wide mobile column" data-bind="with: TrackOpenedLinksView()">
+  <div class="ui container" data-bind="with: MigrateGitHubAppView()">
     <h2 class="ui medium dividing header">
       {% trans "Migrate account to GitHub App" %}
     </h2>
 
-    <div id="edit-content">
-      <div class="ui two column grid">
+    <div>
+      <div class="ui two column centered grid">
         <div class="five wide computer five wide table sixteen wide mobile column">
-          <div class="ui vertical steps">
+          <div class="ui fluid vertical steps">
             <a class="step {% if step == "overview" %}active{% endif %}"
                href="{% url 'migrate_to_github_app' %}?step=overview">
               <div class="content">
@@ -73,7 +73,7 @@
             </a>
           </div>
         </div>
-        <div class="column">
+        <div class="eleven wide computer eleven wide tablet sixteen wide mobile column">
           <div class="ui basic segment">
             {% if step == "overview" %}
               <p>

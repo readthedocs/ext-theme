@@ -7,8 +7,8 @@ import { Registry } from "../application/registry";
  * but we don't want to have users manually reload the page,
  * or constantly poll the server.
  */
-export class TrackOpenedLinksView {
-  static view_name = "TrackOpenedLinksView";
+export class MigrateGitHubAppView {
+  static view_name = "MigrateGitHubAppView";
   constructor() {
     this.openedWindows = [];
     this.trackClosedWindows();
@@ -17,7 +17,7 @@ export class TrackOpenedLinksView {
   trackClosedWindows() {
     setInterval(() => {
       let originalLength = this.openedWindows.length;
-      this.openedWindows = this.openedWindows.filter(win => !win.closed);
+      this.openedWindows = this.openedWindows.filter((win) => !win.closed);
       if (this.openedWindows.length < originalLength) {
         // Wait some seconds before reloading the page,
         // so our app has time to update the status.
@@ -40,4 +40,4 @@ export class TrackOpenedLinksView {
   }
 }
 
-Registry.add_view(TrackOpenedLinksView);
+Registry.add_view(MigrateGitHubAppView);
