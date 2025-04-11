@@ -175,69 +175,27 @@
                  href="?step=install">{% trans "Next" %}</a>
             {% elif step == "install" %}
               <p>
-                {% blocktrans %}
-                Click on &quot;Install&quot; to install the GitHub App on each account,
-                all the repositories connected to a project will be pre-selected.
+                {% blocktrans trimmed %}
+                  Next, you will install our GitHub App on each organization and account that has attached repositories.
+                  While approving access you will be able to select and deselect individual repositories.
                 {% endblocktrans %}
               </p>
 
-              <div class="ui middle aligned relaxed divided list">
-                {% for installation_target_group in installation_target_groups %}
-                  <div class="item">
-                    <div class="right floated content">
-                      {% if installation_target_group.installed %}
-                        <div class="ui green label">
-                          <i class="fa-solid fa-circle-check icon"></i>
-                          {% trans "Installed" %}
-                        </div>
-                      {% else %}
-                      <a href="{{ installation_target_group.link }}" target="_blank" class="ui small button" data-bind="click: trackLinkClick">
-                          {% trans "Install" %}
-                      </a>
-                      {% endif %}
-                    </div>
-                    <div class="content">
-                      <i class="fa-brands fa-github icon"></i>
-                      <a href="https://github.com/{{ installation_target_group.target_name }}"
-                         target="_blank">
-                        {{ installation_target_group.target_name }}
-                      </a>
-                    </div>
-                  </div>
-                {% empty %}
-                  <div class="item">
-                    <div class="content">
-                      <div class="ui message info">
-                        {% blocktrans trimmed with revoke_step="?step=revoke" %}
-                          You don't have projects to migrate, you can <a href="{{ revoke_step }}">skip this step</a>.
-                        {% endblocktrans %}
-                      </div>
-                    </div>
-                  </div>
-                {% endfor %}
-              </div>
+              {% include "profiles/partials/github_app_target_list.html" with objects=installation_target_groups %}
 
-              <p>
-                {% blocktrans trimmed with gh_app_name=gh_app_name %}
-                  Alternatively, you can
-                  <a href="https://github.com/apps/{{ gh_app_name }}/installations/new/" data-bind="click: trackLinkClick"
-                     target="_blank">manually install the GitHub App</a>
-                  on each repository you want to migrate, or do it one by one on the next step.
-                {% endblocktrans %}
-              </p>
-
-              <div class="ui message info">
-                <i class="fad fa-info-circle icon"></i>
-                {% blocktrans trimmed with current_page=request.get_full_path migrate_step="?step=migrate" %}
-                  If you see this step as incomplete after installing the GitHub App,
-                  you may need to <a href="{{ current_page }}">refresh this page</a>, or if you don't want to install the GitHub App on all selected repositories,
-                  you can <a href="{{ migrate_step }}">skip this step</a>.
-                {% endblocktrans %}
-              </div>
+              {% if installation_target_groups %}
+                <div class="ui message info">
+                  <i class="fad fa-info-circle icon"></i>
+                  {% blocktrans trimmed %}
+                    If you skip installation during migration, you will need to manually migrate your project to use an account connected through our GitHub App later.
+                  {% endblocktrans %}
+                </div>
+              {% endif %}
 
               <div class="ui divider"></div>
 
               <a class="ui button" href="?step=migrate">{% trans "Next" %}</a>
+              <a class="ui basic button" href="?step=migrate">{% trans "Skip installation and continue" %}</a>
             {% elif step == "migrate" %}
               <p>
                 {% blocktrans %}
