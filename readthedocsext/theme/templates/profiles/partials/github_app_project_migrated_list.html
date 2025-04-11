@@ -1,0 +1,35 @@
+{% extends "profiles/partials/github_app_project_list.html" %}
+
+{% load trans blocktrans from i18n %}
+
+{% comment rst %}
+  This template is used by the GHA migration template to list projects that have been migrated already.
+{% endcomment %}
+
+{% block list_placeholder_icon %}
+{% endblock list_placeholder_icon %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No projects have been migrated yet
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      Install our GitHub App and migrate your projects above before proceeding.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+{% endblock list_placeholder_text %}
+
+{% block top_menu %}
+{% endblock top_menu %}
+
+{% block list_item_image %}
+{% endblock list_item_image %}
+
+{% block list_item_right_menu %}
+  <div class="ui green text">
+    <i class="fas fa-circle-check icon"></i>
+    {% trans "Migrated" %}
+  </div>
+{% endblock list_item_right_menu %}
