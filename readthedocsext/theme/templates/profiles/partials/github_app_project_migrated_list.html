@@ -1,10 +1,14 @@
-{% extends "profiles/partials/github_app_project_list.html" %}
+{% extends "includes/crud/table_list.html" %}
 
 {% load trans blocktrans from i18n %}
 
 {% comment rst %}
   This template is used by the GHA migration template to list projects that have been migrated already.
 {% endcomment %}
+
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-octagon-xmark
+{% endblock list_placeholder_icon_class %}
 
 {% block list_placeholder_icon %}
 {% endblock list_placeholder_icon %}
@@ -27,9 +31,25 @@
 {% block list_item_image %}
 {% endblock list_item_image %}
 
+{% block list_item_header %}
+  <a href="{% url 'projects_detail' object.slug %}" target="_blank">{{ object.name }}</a>
+{% endblock list_item_header %}
+
 {% block list_item_right_menu %}
   <div class="ui green text">
     <i class="fas fa-circle-check icon"></i>
     {% trans "Migrated" %}
   </div>
 {% endblock list_item_right_menu %}
+
+{% block list_item_meta_items %}
+  <div class="item">
+    {% with repo=object.remote_repository %}
+      <a href="{{ repo.html_url }}" class="ui small basic image nowrap label">
+        <img alt="{% blocktrans with name=object.name %}Project {{ name }} avatar{% endblocktrans %}"
+             src="{{ repo.avatar_url }}" />
+        <code>{{ repo.full_name }}</code>
+      </a>
+    {% endwith %}
+  </div>
+{% endblock list_item_meta_items %}
