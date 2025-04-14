@@ -238,18 +238,18 @@
               {% endif %}
 
               {% if step_revoke_completed %}
-              <span class="ui green text">
-                <i class="fas fa-circle-check icon"></i>
-                {% trans "Revoked" %}
-              </span>
+                <span class="ui green text">
+                  <i class="fas fa-circle-check icon"></i>
+                  {% trans "Revoked" %}
+                </span>
               {% else %}
-              <a href="{{ old_application_link }}"
-                 target="_blank"
-                 class="ui button"
-                 data-bind="click: trackLinkClick">
-                <i class="fa-brands fa-github icon"></i>
+                <a href="{{ old_application_link }}"
+                   target="_blank"
+                   class="ui button"
+                   data-bind="click: trackLinkClick">
+                  <i class="fa-brands fa-github icon"></i>
                   {% trans "Revoke" %}
-              </a>
+                </a>
               {% endif %}
 
               <div class="ui message info">
