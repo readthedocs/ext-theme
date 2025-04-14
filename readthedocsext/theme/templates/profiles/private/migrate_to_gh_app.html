@@ -149,26 +149,12 @@
             {% elif step == "connect" %}
               <p>
                 {% blocktrans %}
-                Connect your account to the new GitHub app by clicking the button below.
-                As this is a new app, you will need to grant access to your account again.
+                First, start by connecting your Read the Docs account to our GitHub App.
+                You'll be prompted to grant access to the app.
                 {% endblocktrans %}
               </p>
-              {% if step_connect_completed %}
-              <span class="ui green text">
-                <i class="fas fa-circle-check icon"></i>
-                {% trans "Connected" %}
-              </span>
-              {% else %}
-              <form class="ui form"
-                    method="post"
-                    action="{% provider_login_url "githubapp" process="connect" next=request.get_full_path %}">
-                {% csrf_token %}
-                <button class="ui button" type="submit">
-                  <i class="fa-brands fa-github icon"></i>
-                    {% trans "Connect" %}
-                </button>
-              </form>
-              {% endif %}
+
+              {% include "profiles/partials/github_oauth_list.html" with objects=old_github_accounts %}
 
               <div class="ui divider"></div>
               <a class="ui button {% if not step_connect_completed %}disabled{% endif %}"
@@ -181,7 +167,7 @@
                 {% endblocktrans %}
               </p>
 
-              {% include "profiles/partials/github_app_target_list.html" with objects=installation_target_groups %}
+              {% include "profiles/partials/github_app_target_list.html" with objects=installation_target_groups skip_pagination=True %}
 
               {% if installation_target_groups %}
                 <div class="ui message info">
@@ -205,7 +191,7 @@
                 {% endblocktrans %}
               </p>
 
-              {% include "profiles/partials/github_app_project_list.html" with objects=migration_targets %}
+              {% include "profiles/partials/github_app_project_list.html" with objects=migration_targets skip_pagination=True %}
 
               {% if migration_targets %}
                 <div class="ui segment">
@@ -228,7 +214,7 @@
 
               <div class="ui medium header">{% trans "Projects already migrated" %}</div>
 
-              {% include "profiles/partials/github_app_project_migrated_list.html" with objects=migrated_projects %}
+              {% include "profiles/partials/github_app_project_migrated_list.html" with objects=migrated_projects skip_pagination=True %}
 
               <div class="ui divider"></div>
 

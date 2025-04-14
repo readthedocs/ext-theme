@@ -15,14 +15,14 @@
   {% endblocktrans %}
   <div class="sub header">
     {% blocktrans trimmed %}
-      You don't have any projects to migrate, or you don't have the permissions necessary to migrate your projects to use our GitHub App.
+      You don't have any projects to migrate.
     {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
   <a class="ui button"
      href="?step=revoke"
-     aria-label="{% trans "Skip this step step" %}"
+     aria-label="{% trans "Skip this step" %}"
      target="_blank">{% trans "Skip this step" %}</a>
 {% endblock list_placeholder_text %}
 
@@ -54,27 +54,17 @@
 {% endblock list_item_header %}
 
 {% block list_item_right_menu %}
-  {# XXX is this the correct state check required here? #}
-  {% if not object.has_installation and not object.is_admin %}
-    <div data-content="{% trans "You don't have the permissions to install our GitHub App" %}">
-      <button class="ui small disabled negative button">
-        <i class="fas fa-triangle-exclamation icon"></i> {% trans "Install" %}
-      </button>
-    </div>
-  {% elif not object.has_installation %}
+  {% if not object.has_installation %}
     <a class="ui button small"
        href="{{ object.installation_link }}"
        data-bind="click: trackLinkClick"
-       target="_blank">{% trans "Install" %}</a>
-  {% elif not object.can_be_migrated %}
-    {# djlint: off H025 #}
-    {% if not object.is_admin %}
- 
-      <div data-content="{% trans "Your GitHub user must have admin access to the repository in order to migrate this project" %}">
-      {% else %}
-        {# XXX Why? #} <div data-content="{% trans "This project can't be migrated." %}">
-      {% endif %}
-      {# djlint: on #}
+       target="_blank"
+       data-content="{% trans "You need to install our GitHub app on this repository in order to migrate this project" %}">
+      <i class="fas fa-triangle-exclamation icon"></i>
+      {% trans "Install" %}
+    </a>
+  {% elif not object.is_admin %}
+    <div data-content="{% trans "Your GitHub user must have admin access to the repository in order to migrate this project" %}">
       <button class="ui small disabled negative button">
         <i class="fas fa-triangle-exclamation icon"></i>
         {% trans "Migrate" %}

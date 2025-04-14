@@ -14,20 +14,19 @@
   fa-duotone fa-code-commit
 {% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
-  {# XXX Why wouldn't the user have organizations or user accounts to install the GHA on here? #}
   {% blocktrans trimmed %}
     No installation targets found
   {% endblocktrans %}
   <div class="sub header">
     {% blocktrans trimmed %}
-      You don't have permissions to install our GitHub App on any organizations or user accounts.
+      You don't have any project connected to a GitHub repository.
     {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
   <a class="ui button"
      href="?step=revoke"
-     aria-label="{% trans "Skip this step step" %}"
+     aria-label="{% trans "Skip this step" %}"
      target="_blank">{% trans "Skip this step" %}</a>
 {% endblock list_placeholder_text %}
 
