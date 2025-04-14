@@ -172,8 +172,8 @@
               {% if installation_target_groups %}
                 <div class="ui message info">
                   <i class="fad fa-info-circle icon"></i>
-                  {% blocktrans trimmed %}
-                    If you skip installation during migration, you will need to manually migrate your project to use an account connected through our GitHub App later.
+                  {% blocktrans trimmed with manual_migration_docs="#" %}
+                  If you skip installation during migration, you will need to <a href="{{ manual_migration_docs }}">manually migrate</a> your project to keep it working.
                   {% endblocktrans %}
                 </div>
               {% endif %}
