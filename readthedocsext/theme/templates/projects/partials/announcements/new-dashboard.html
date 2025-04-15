@@ -17,10 +17,10 @@
 
           <div class="ui relaxed list">
             <div class="item">
-              <div class="header">{% trans "What is changing?" %}</div>
+              <div class="header">{% trans "What has changed?" %}</div>
               <p>
                 {% blocktrans trimmed %}
-                  We discuss what is changing and what to expect as we retire our legacy dashboard on our blog:
+                  We discuss what has changed on our dashboard in more detail on our blog:
                 {% endblocktrans %}
               </p>
 
@@ -32,22 +32,6 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="item">
-              <div class="header">{% trans "Can I use the old dashboard?" %}</div>
-              <p>
-                {% blocktrans trimmed %}
-                  Our legacy dashboard is still available,
-                  but will be retired on <time datetime="2025-03-11">March 11th, 2025</time>.
-                  Until then, you can access the dashboard here:
-                {% endblocktrans %}
-              </p>
-              {# djlint: off D018 #}
-              <a class="ui fluid basic button"
-                 href="//{{ SWITCH_PRODUCTION_DOMAIN }}{% url "account_login" %}">
-                {% trans "Open legacy dashboard" %}
-              </a>
-              {# djlint: on #}
             </div>
           </div>
         </div>
