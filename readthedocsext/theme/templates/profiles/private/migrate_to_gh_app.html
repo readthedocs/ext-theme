@@ -252,6 +252,7 @@
                 </a>
               {% endif %}
 
+              {% if not step_revoke_completed %}
               <div class="ui message info">
                 <i class="fad fa-info-circle icon"></i>
                 {% blocktrans trimmed with current_page=request.get_full_path %}
@@ -259,6 +260,7 @@
                   you may need to <a href="{{ current_page }}">refresh this page</a>.
                 {% endblocktrans %}
               </div>
+              {% endif %}
 
               <div class="ui divider"></div>
               <a class="ui button {% if not step_revoke_completed %}disabled{% endif %}"
