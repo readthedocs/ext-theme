@@ -142,10 +142,17 @@
                     Projects not linked to a GitHub repository can be linked after connecting your account. These don't need migration.
                     {% endblocktrans %}
                   </li>
+                  <li>
+                    {% blocktrans %}
+                    You can go back to this page page at any time to see the status of your migration,
+                    or to complete the migration later.
+                    {% endblocktrans %}
+                  </li>
                 </ul>
               </p>
               <div class="ui divider"></div>
               <a href="?step=connect" class="ui button">{% trans "Start" %}</a>
+              <a href="{% url "homepage" %}" class="ui basic button">{% trans "Remind me on next log in" %}</a>
             {% elif step == "connect" %}
               <p>
                 {% blocktrans %}
