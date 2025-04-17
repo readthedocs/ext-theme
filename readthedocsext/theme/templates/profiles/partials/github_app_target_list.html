@@ -19,7 +19,7 @@
   {% endblocktrans %}
   <div class="sub header">
     {% blocktrans trimmed %}
-      You don't have any project connected to a GitHub repository.
+      You don't have any projects connected to GitHub repositories.
     {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
@@ -53,17 +53,15 @@
 {% endblock list_item_meta_items %}
 
 {% block list_item_image %}
-  {# XXXX use user/org avatar here #}
-  {% comment %}
   <img class="ui rounded image" src="{{ object.target_avatar_url }}" height="28" alt="{% trans "Account avatar" %}" width="28" />
-  {% endcomment %}
 {% endblock list_item_image %}
 
 {% block list_item_header %}
   {{ object.target_name }}
   <div class="sub header">
-    {# XXX URL? Something else that is helpful? This is just a placeholder, don't actually do this #}
-    https://github.com/{{ object.target_name }}
+    <a href="{{ object.target_html_url }}" target="_blank">
+      {{ object.target_html_url }}
+    </a>
   </div>
 {% endblock list_item_header %}
 

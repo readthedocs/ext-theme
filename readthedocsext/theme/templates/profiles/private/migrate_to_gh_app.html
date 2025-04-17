@@ -58,7 +58,7 @@
               <div class="content">
                 <div class="title">{% trans "Revoke access to old integration" %}</div>
                 <div class="description">
-                  {% trans "Revoke access to the old GitHub OAuth app from your GitHub account" %}
+                  {% trans "Revoke access to our old GitHub OAuth app from your GitHub account" %}
                 </div>
               </div>
             </a>
@@ -67,7 +67,7 @@
               <div class="content">
                 <div class="title">{% trans "Disconnect old integration" %}</div>
                 <div class="description">
-                  {% trans "Disconnect the old GitHub OAuth app from your Read the Docs account" %}
+                  {% trans "Disconnect our old GitHub OAuth app from your Read the Docs account" %}
                 </div>
               </div>
             </a>
@@ -78,7 +78,7 @@
             {% if step == "overview" %}
               <p>
                 {% blocktrans trimmed with blog_post="#" %}
-                  We’re introducing a new GitHub App to replace the old GitHub OAuth app.
+                  We’re introducing a new GitHub App to replace our old GitHub OAuth app.
                   This new app offers more granular permissions and better GitHub integration.
                   Learn more in our <a href="{{ blog_post }}">blog post</a>.
                 {% endblocktrans %}
@@ -99,7 +99,7 @@
               {% endif %}
 
               <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                 This guide will help you migrate your account to the new GitHub App.
                 Some things you should know:
                 {% endblocktrans %}
@@ -108,42 +108,36 @@
               <p>
                 <ul>
                   <li>
-                    {% blocktrans %}
+                    {% blocktrans trimmed %}
                     Migrating all projects is optional,
                     you can skip the &quot;Install GitHub App&quot; and &quot;Migrate Projects&quot; steps.
                     {% endblocktrans %}
                   </li>
                   <li>
-                    {% blocktrans %}
-                    Connecting your account to the new GitHub App and revoking the old GitHub OAuth app is required,
+                    {% blocktrans trimmed %}
+                    Connecting your account to our new GitHub App and revoking access to our old GitHub OAuth app is required,
                     as the old app is deprecated and will be removed.
                     {% endblocktrans %}
                   </li>
                   <li>
-                    {% blocktrans %}
-                    Some steps require you to do changes on GitHub,
-                    refresh the page after making the changes to see updates.
+                    {% blocktrans trimmed %}
+                    Some steps require you to make changes on GitHub.
+                    Refresh the page after making the changes to see updates.
                     {% endblocktrans %}
                   </li>
                   <li>
-                    {% blocktrans %}
-                    New projects imported after connecting your account to the new GitHub App don't need migration,
+                    {% blocktrans trimmed %}
+                    New projects created after connecting your account to the new GitHub App don't need migration,
                     as they will be automatically connected to the new GitHub App.
                     {% endblocktrans %}
                   </li>
                   <li>
-                    {% blocktrans trimmed with manual_migration_docs="#" %}
-                      After revoking the old GitHub OAuth app, you won't be able to auto-migrate projects.
-                      <a href="{{ manual_migration_docs }}">Manual migration</a> is always an option.
-                    {% endblocktrans %}
-                  </li>
-                  <li>
-                    {% blocktrans %}
+                    {% blocktrans trimmed %}
                     Projects not linked to a GitHub repository can be linked after connecting your account. These don't need migration.
                     {% endblocktrans %}
                   </li>
                   <li>
-                    {% blocktrans %}
+                    {% blocktrans trimmed %}
                     You can go back to this page page at any time to see the status of your migration,
                     or to complete the migration later.
                     {% endblocktrans %}
@@ -155,7 +149,7 @@
               <a href="{% url "homepage" %}" class="ui basic button">{% trans "Remind me on next log in" %}</a>
             {% elif step == "connect" %}
               <p>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                 First, start by connecting your Read the Docs account to our GitHub App.
                 You'll be prompted to grant access to the app.
                 {% endblocktrans %}
@@ -228,9 +222,9 @@
               <a class="ui button" href="?step=revoke">{% trans "Next" %}</a>
             {% elif step == "revoke" %}
               <p>
-                {% blocktrans %}
-                Click on the button below to revoke access.
-                You will be redirected to GitHub, where you need to click on "Revoke access".
+                {% blocktrans trimmed %}
+                Revoke access to our old GitHub OAuth app.
+                You'll be redirected to GitHub, where you need to click on "Revoke access".
                 {% endblocktrans %}
               </p>
 
@@ -244,38 +238,15 @@
                 </div>
               {% endif %}
 
-              {% if step_revoke_completed %}
-                <span class="ui green text">
-                  <i class="fas fa-circle-check icon"></i>
-                  {% trans "Revoked" %}
-                </span>
-              {% else %}
-                <a href="{{ old_application_link }}"
-                   target="_blank"
-                   class="ui button"
-                   data-bind="click: trackLinkClick">
-                  <i class="fa-brands fa-github icon"></i>
-                  {% trans "Revoke" %}
-                </a>
-              {% endif %}
-
-              {% if not step_revoke_completed %}
-              <div class="ui message info">
-                <i class="fad fa-info-circle icon"></i>
-                {% blocktrans trimmed with current_page=request.get_full_path %}
-                  If you see this step as incomplete after revoking access,
-                  you may need to <a href="{{ current_page }}">refresh this page</a>.
-                {% endblocktrans %}
-              </div>
-              {% endif %}
+              {% include "profiles/partials/github_oauth_revoke_list.html" with objects=old_github_accounts current_page=request.get_full_path %}
 
               <div class="ui divider"></div>
               <a class="ui button {% if not step_revoke_completed %}disabled{% endif %}"
                  href="?step=disconnect">{% trans "Next" %}</a>
             {% elif step == "disconnect" %}
               <p>
-                {% blocktrans %}
-                Disconnect the old GitHub OAuth app from your Read the Docs account by clicking the button below.
+                {% blocktrans trimmed %}
+                Disconnect the old GitHub OAuth app from your Read the Docs account.
                 {% endblocktrans %}
               </p>
 
@@ -287,13 +258,7 @@
                 {% endblocktrans %}
               </div>
 
-              <form class="ui form"
-                    method="post"
-                    action="{% url 'socialaccount_connections' %}">
-                {% csrf_token %}
-                <input type="hidden" name="account" value="{{ old_github_account.id }}" />
-                <button class="ui button" type="submit">{% trans "Finish migration" %}</button>
-              </form>
+              {% include "profiles/partials/github_oauth_disconnect_list.html" with objects=old_github_accounts %}
             {% endif %}
           </div>
         </div>
