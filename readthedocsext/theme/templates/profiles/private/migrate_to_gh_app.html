@@ -97,8 +97,8 @@
 
               <p>
                 {% blocktrans trimmed %}
-                This guide will help you migrate your account to the new GitHub App.
-                Some things you should know:
+                  This guide will help you migrate your account to the new GitHub App.
+                  Some things you should know:
                 {% endblocktrans %}
               </p>
 
@@ -106,37 +106,37 @@
                 <ul>
                   <li>
                     {% blocktrans trimmed %}
-                    Migrating all projects is optional,
-                    you can skip the &quot;Install GitHub App&quot; and &quot;Migrate Projects&quot; steps.
+                      Migrating all projects is optional,
+                      you can skip the &quot;Install GitHub App&quot; and &quot;Migrate Projects&quot; steps.
                     {% endblocktrans %}
                   </li>
                   <li>
                     {% blocktrans trimmed %}
-                    Connecting your account to our new GitHub App and revoking access to our old GitHub OAuth app is required,
-                    as the old app is deprecated and will be removed.
+                      Connecting your account to our new GitHub App and revoking access to our old GitHub OAuth app is required,
+                      as the old app is deprecated and will be removed.
                     {% endblocktrans %}
                   </li>
                   <li>
                     {% blocktrans trimmed %}
-                    Some steps require you to make changes on GitHub.
-                    Refresh the page after making the changes to see updates.
+                      Some steps require you to make changes on GitHub.
+                      Refresh the page after making the changes to see updates.
                     {% endblocktrans %}
                   </li>
                   <li>
                     {% blocktrans trimmed %}
-                    New projects created after connecting your account to the new GitHub App don't need migration,
-                    as they will be automatically connected to the new GitHub App.
+                      New projects created after connecting your account to the new GitHub App don't need migration,
+                      as they will be automatically connected to the new GitHub App.
                     {% endblocktrans %}
                   </li>
                   <li>
                     {% blocktrans trimmed %}
-                    Projects not linked to a GitHub repository can be linked after connecting your account. These don't need migration.
+                      Projects not linked to a GitHub repository can be linked after connecting your account. These don't need migration.
                     {% endblocktrans %}
                   </li>
                   <li>
                     {% blocktrans trimmed %}
-                    You can go back to this page page at any time to see the status of your migration,
-                    or to complete the migration later.
+                      You can go back to this page page at any time to see the status of your migration,
+                      or to complete the migration later.
                     {% endblocktrans %}
                   </li>
                 </ul>
@@ -147,8 +147,8 @@
             {% elif step == "connect" %}
               <p>
                 {% blocktrans trimmed %}
-                First, start by connecting your Read the Docs account to our GitHub App.
-                You'll be prompted to grant access to the app.
+                  First, start by connecting your Read the Docs account to our GitHub App.
+                  You'll be prompted to grant access to the app.
                 {% endblocktrans %}
               </p>
 
@@ -171,7 +171,7 @@
                 <div class="ui message info">
                   <i class="fad fa-info-circle icon"></i>
                   {% blocktrans trimmed with manual_migration_docs="#" %}
-                  If you skip installation during migration, you will need to <a href="{{ manual_migration_docs }}">manually migrate</a> your project to keep it working.
+                    If you skip installation during migration, you will need to <a href="{{ manual_migration_docs }}">manually migrate</a> your project to keep it working.
                   {% endblocktrans %}
                 </div>
               {% endif %}
@@ -220,8 +220,8 @@
             {% elif step == "revoke" %}
               <p>
                 {% blocktrans trimmed %}
-                Revoke access to our old GitHub OAuth app.
-                You'll be redirected to GitHub, where you need to click on "Revoke access".
+                  Revoke access to our old GitHub OAuth app.
+                  You'll be redirected to GitHub, where you need to click on "Revoke access".
                 {% endblocktrans %}
               </p>
 
@@ -243,7 +243,7 @@
             {% elif step == "disconnect" %}
               <p>
                 {% blocktrans trimmed %}
-                Disconnect the old GitHub OAuth app from your Read the Docs account.
+                  Disconnect the old GitHub OAuth app from your Read the Docs account.
                 {% endblocktrans %}
               </p>
 

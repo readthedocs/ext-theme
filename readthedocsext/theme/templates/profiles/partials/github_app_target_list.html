@@ -53,7 +53,11 @@
 {% endblock list_item_meta_items %}
 
 {% block list_item_image %}
-  <img class="ui rounded image" src="{{ object.target_avatar_url }}" height="28" alt="{% trans "Account avatar" %}" width="28" />
+  <img class="ui rounded image"
+       src="{{ object.target_avatar_url }}"
+       height="28"
+       alt="{% trans "Account avatar" %}"
+       width="28" />
 {% endblock list_item_image %}
 
 {% block list_item_header %}

@@ -18,14 +18,14 @@
 {% endblock list_item_meta_items %}
 
 {% block list_item_right_menu %}
-<form class="ui form"
-      method="post"
-      action="{% url 'socialaccount_connections' %}">
-  {% csrf_token %}
-  <input type="hidden" name="account" value="{{ object.id }}" />
-  <button class="ui button" type="submit">
-    <i class="fa-brands fa-github icon"></i>
-    {% trans "Disconnect" %}
-  </button>
-</form>
+  <form class="ui form"
+        method="post"
+        action="{% url 'socialaccount_connections' %}">
+    {% csrf_token %}
+    <input type="hidden" name="account" value="{{ object.id }}" />
+    <button class="ui button" type="submit">
+      <i class="fa-brands fa-github icon"></i>
+      {% trans "Disconnect" %}
+    </button>
+  </form>
 {% endblock list_item_right_menu %}
