@@ -88,12 +88,9 @@
                 <div class="ui message warning">
                   <i class="fad fa-warning icon"></i>
                   {% url 'socialaccount_connections' as socialaccount_connections %}
-                  {% blocktrans trimmed with socialaccount_connections=socialaccount_connections github_account=old_github_account.extra_data.login %}
+                  {% blocktrans trimmed with socialaccount_connections=socialaccount_connections %}
                     You have <a href="{{ socialaccount_connections }}">multiple GitHub accounts</a> linked,
                     <strong>you'll need to repeat the migration for each account</strong>.
-
-                    The current account to migrate is <a href="https://github.com/{{ github_account }}" target="_blank">{{ github_account }}</a>;
-                    you can skip repositories this account doesn't have access to.
                   {% endblocktrans %}
                 </div>
               {% endif %}
