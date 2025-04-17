@@ -1,0 +1,91 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% load trans blocktrans from i18n %}
+
+{% comment rst %}
+  This template is used by the GHA migration template to list projects to migrate
+{% endcomment %}
+
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-octagon-xmark
+{% endblock list_placeholder_icon_class %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No projects can be migrated
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      You don't have any projects to migrate.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button"
+     href="?step=revoke"
+     aria-label="{% trans "Skip this step" %}"
+     target="_blank">{% trans "Skip this step" %}</a>
+{% endblock list_placeholder_text %}
+
+{% block top_right_menu_items %}
+  {% if objects %}
+    <div class="item">
+      <em>
+        {% blocktrans trimmed %}
+          You may need to manually refresh after installation or migration
+        {% endblocktrans %}
+      </em>
+    </div>
+  {% endif %}
+  <div class="item">
+    <a class="ui small compact primary {% if not objects %}disabled{% endif %} button"
+       href="{{ current_page }}">
+      <i class="fas fa-refresh icon"></i>
+      {% trans "Refresh" %}
+    </a>
+  </div>
+{% endblock top_right_menu_items %}
+
+{% block list_item_image %}
+{% endblock list_item_image %}
+
+{% block list_item_header %}
+  <a href="{% url 'projects_detail' object.project.slug %}"
+     target="_blank">{{ object.project.name }}</a>
+{% endblock list_item_header %}
+
+{% block list_item_right_menu %}
+  {% if not object.has_installation %}
+    <a class="ui button small"
+       href="{{ object.installation_link }}"
+       data-bind="click: trackLinkClick"
+       target="_blank"
+       data-content="{% trans "You need to install our GitHub app on this repository in order to migrate this project" %}">
+      {% trans "Install" %}
+    </a>
+  {% elif not object.is_admin %}
+    <div data-content="{% trans "Your GitHub user must have admin access to the repository in order to migrate this project" %}">
+      <button class="ui small disabled negative button">
+        <i class="fas fa-triangle-exclamation icon"></i>
+        {% trans "Migrate" %}
+      </button>
+    </div>
+  {% else %}
+    <form method="post" action="." class="ui form">
+      {% csrf_token %}
+      <input type="hidden" name="project" value="{{ object.project.slug }}">
+      <button class="ui button small" type="submit">{% trans "Migrate" %}</button>
+    </form>
+  {% endif %}
+{% endblock list_item_right_menu %}
+
+{% block list_item_meta_items %}
+  <div class="item">
+    {% with repo=object.project.remote_repository %}
+      <a href="{{ repo.html_url }}" class="ui small basic image nowrap label">
+        <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
+             src="{{ repo.avatar_url }}" />
+        <code>{{ repo.full_name }}</code>
+      </a>
+    {% endwith %}
+  </div>
+{% endblock list_item_meta_items %}
