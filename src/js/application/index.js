@@ -14,6 +14,7 @@ import * as gold_views from "../gold";
 import * as module_views from "../modules";
 import * as organization_views from "../organization";
 import * as project_views from "../project";
+import * as profile_views from "../profile";
 
 /**
  * This is the main entry point for the front end code and is used to set up and
