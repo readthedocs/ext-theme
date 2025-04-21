@@ -84,13 +84,13 @@
                 {% endblocktrans %}
               </p>
 
-              {% if has_multiple_github_accounts %}
+              {% if old_github_accounts.count > 1 %}
                 <div class="ui message warning">
                   <i class="fad fa-warning icon"></i>
                   {% url 'socialaccount_connections' as socialaccount_connections %}
                   {% blocktrans trimmed with socialaccount_connections=socialaccount_connections %}
                     You have <a href="{{ socialaccount_connections }}">multiple GitHub accounts</a> linked,
-                    <strong>you'll need to repeat the migration for each account</strong>.
+                    <strong>make sure you complete the steps while logged in to the correct GitHub account</strong>.
                   {% endblocktrans %}
                 </div>
               {% endif %}

@@ -54,17 +54,17 @@
 
 {% block list_item_image %}
   <img class="ui rounded image"
-       src="{{ object.target_avatar_url }}"
+       src="{{ object.target.avatar_url }}"
        height="28"
        alt="{% trans "Account avatar" %}"
        width="28" />
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  {{ object.target_name }}
+  {{ object.target.login }}
   <div class="sub header">
-    <a href="{{ object.target_html_url }}" target="_blank">
-      {{ object.target_html_url }}
+    <a href="{{ object.target.profile_url }}" target="_blank">
+      {{ object.target.profile_url }}
     </a>
   </div>
 {% endblock list_item_header %}

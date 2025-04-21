@@ -1,4 +1,5 @@
 {% extends "socialaccount/partials/social_account_list.html" %}
+{% load is_access_revoked from readthedocs.socialaccounts %}
 
 {% comment %}
   This template is used by the GHA migration template to list _just_ GitHub
@@ -34,7 +35,7 @@
 {% endblock list_item_meta_items %}
 
 {% block list_item_right_menu %}
-  {% if step_revoke_completed %}
+  {% if object|is_access_revoked %}
     <span class="ui green text">
       <i class="fas fa-circle-check icon"></i>
       {% trans "Revoked" %}

@@ -1,4 +1,5 @@
 {% extends "socialaccount/partials/social_account_list.html" %}
+{% load has_github_app_account from readthedocs.socialaccounts %}
 
 {% comment %}
   This template is used by the GHA migration template to list _just_ GitHub
@@ -18,7 +19,7 @@
 {% endblock list_item_meta_items %}
 
 {% block list_item_right_menu %}
-  {% if step_connect_completed %}
+  {% if object|has_github_app_account %}
     <span class="ui green text">
       <i class="fas fa-circle-check icon"></i>
       {% trans "Connected" %}
