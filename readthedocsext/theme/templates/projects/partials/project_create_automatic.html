@@ -242,7 +242,7 @@
           <input type="hidden" name="remote_repository" data-bind="value: pk" />
           <input type="hidden" name="default_branch" data-bind="value: default_branch" />
 
-          <button class="ui primary button" data-bind="css: {disabled: !admin}">{% trans "Continue" %}</button>
+          <button class="ui primary button" data-bind="css: {disabled: (!admin || !$parent.is_repository_supported($data))}">{% trans "Continue" %}</button>
         </form>
       </span>
     </div>
