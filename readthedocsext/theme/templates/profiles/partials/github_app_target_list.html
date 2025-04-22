@@ -1,0 +1,84 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% load trans blocktrans from i18n %}
+
+{% comment rst %}
+  This template is used by the GHA migration template to list GHA
+  installation targets like organization and user accounts.
+
+  :param objects: List of installation target organizations and user accounts
+  :type objects: InstallationTargetGroup
+{% endcomment %}
+
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-code-commit
+{% endblock list_placeholder_icon_class %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No installation targets found
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      You don't have any projects connected to GitHub repositories.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button"
+     href="?step=revoke"
+     aria-label="{% trans "Skip this step" %}"
+     target="_blank">{% trans "Skip this step" %}</a>
+{% endblock list_placeholder_text %}
+
+{% block top_right_menu_items %}
+  {% if objects %}
+    <div class="item">
+      <em>
+        {% blocktrans trimmed %}
+          You may need to refresh after installation to continue
+        {% endblocktrans %}
+      </em>
+    </div>
+  {% endif %}
+  <div class="item">
+    <a class="ui small compact primary {% if not objects %}disabled{% endif %} button"
+       href="{{ current_page }}">
+      <i class="fas fa-refresh icon"></i>
+      {% trans "Refresh" %}
+    </a>
+  </div>
+{% endblock top_right_menu_items %}
+
+{% block list_item_meta_items %}
+{% endblock list_item_meta_items %}
+
+{% block list_item_image %}
+  <img class="ui rounded image"
+       src="{{ object.target.avatar_url }}"
+       height="28"
+       alt="{% trans "Account avatar" %}"
+       width="28" />
+{% endblock list_item_image %}
+
+{% block list_item_header %}
+  {{ object.target.login }}
+  <div class="sub header">
+    <a href="{{ object.target.profile_url }}" target="_blank">
+      {{ object.target.profile_url }}
+    </a>
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_right_menu %}
+  {% if object.installed %}
+    <div class="ui green text">
+      <i class="fa-solid fa-circle-check icon"></i>
+      {% trans "Installed" %}
+    </div>
+  {% else %}
+    <a href="{{ object.link }}"
+       target="_blank"
+       class="ui small button"
+       data-bind="click: trackLinkClick">{% trans "Install" %}</a>
+  {% endif %}
+{% endblock list_item_right_menu %}

@@ -1,0 +1,52 @@
+{% extends "socialaccount/partials/social_account_list.html" %}
+{% load is_access_revoked from readthedocs.socialaccounts %}
+
+{% comment %}
+  This template is used by the GHA migration template to list _just_ GitHub
+  OAuth accounts that need to be revoked.
+{% endcomment %}
+
+{% load trans blocktrans from i18n %}
+{% load provider_login_url from socialaccount %}
+
+{% block list_placeholder %}
+{% endblock list_placeholder %}
+
+{% block top_right_menu_items %}
+  {% if not step_revoke_completed %}
+    <div class="item">
+      <em>
+        {% blocktrans trimmed %}
+          You may need to manually refresh after revoking access
+        {% endblocktrans %}
+      </em>
+    </div>
+  {% endif %}
+  <div class="item">
+    <a class="ui small compact primary {% if step_revoke_completed %}disabled{% endif %} button"
+       href="{{ current_page }}">
+      <i class="fas fa-refresh icon"></i>
+      {% trans "Refresh" %}
+    </a>
+  </div>
+{% endblock top_right_menu_items %}
+
+{% block list_item_meta_items %}
+{% endblock list_item_meta_items %}
+
+{% block list_item_right_menu %}
+  {% if object|is_access_revoked %}
+    <span class="ui green text">
+      <i class="fas fa-circle-check icon"></i>
+      {% trans "Revoked" %}
+    </span>
+  {% else %}
+    <a href="{{ old_application_link }}"
+       target="_blank"
+       class="ui button"
+       data-bind="click: trackLinkClick">
+      <i class="fa-brands fa-github icon"></i>
+      {% trans "Revoke" %}
+    </a>
+  {% endif %}
+{% endblock list_item_right_menu %}
