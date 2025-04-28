@@ -24,9 +24,12 @@
 {% endblock project_add_configuration %}
 
 {% block project_add_automatic_search %}
+  {# Ignore "avoid inline styles" rule #}
+  {# djlint:off H021 #}
   <div class="ui small error message"
        data-bind="visible: error"
        style="display: none">
+    {# djlint:on #}
     {% trans "There was an error while syncing your remote repositories" %}
   </div>
 
@@ -124,12 +127,16 @@
     connected and why the repository can/cannot be used.
 
   {% endcomment %}
+  {# Ignore "avoid inline styles" rule #}
+  {# djlint:off H021 #}
   <div class="ui fluid card"
        data-bind="visible: is_selected, with: selected"
        style="display: none">
+    {# djlint:on #}
     <div class="content">
       <img class="ui right floated mini rounded image"
-           data-bind="attr: { src: avatar_url }">
+           data-bind="attr: { src: avatar_url }"
+           alt="{% trans "Repository logo" %}" />
       <div class="header" data-bind="text: full_name"></div>
       <div class="meta" data-bind="text: clone_url"></div>
       <div class="description">
@@ -219,7 +226,8 @@
                     <a class="ui basic image label"
                        data-bind="attr: {href: urls.home }"
                        target="_blank">
-                      <img data-bind="if: $parent.avatar_url, attr: {src: $parent.avatar_url}" />
+                      <img data-bind="if: $parent.avatar_url, attr: {src: $parent.avatar_url}"
+                           alt="{% trans "Repository logo" %}" />
                       <span data-bind="text: name"></span>
                     </a>
                   </div>
