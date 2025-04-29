@@ -18,6 +18,7 @@ Read the Docs -- Application theme
 
    api/templates
    api/javascript
+   api/stylesheets
 
 .. include:: ../README.rst
    :start-line: 3
