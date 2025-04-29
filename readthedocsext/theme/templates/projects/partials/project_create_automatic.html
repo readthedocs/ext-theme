@@ -1,5 +1,4 @@
-{% load static %}
-{% load i18n %}
+{% load trans blocktrans from i18n %}
 
 {% comment rst %}
   Project automatic configuration view
@@ -25,9 +24,14 @@
 {% endblock project_add_configuration %}
 
 {% block project_add_automatic_search %}
+  {# Ignore "avoid inline styles" rule #}
+  {# djlint:off H021 #}
   <div class="ui small error message"
        data-bind="visible: error"
-       style="display: none">{% trans "There was an error while syncing your remote repositories" %}</div>
+       style="display: none">
+    {# djlint:on #}
+    {% trans "There was an error while syncing your remote repositories" %}
+  </div>
 
   {# Search prompt and dropdown #}
   <label>{% trans "Repository name:" %}</label>
@@ -123,12 +127,16 @@
     connected and why the repository can/cannot be used.
 
   {% endcomment %}
+  {# Ignore "avoid inline styles" rule #}
+  {# djlint:off H021 #}
   <div class="ui fluid card"
        data-bind="visible: is_selected, with: selected"
        style="display: none">
+    {# djlint:on #}
     <div class="content">
       <img class="ui right floated mini rounded image"
-           data-bind="attr: { src: avatar_url }">
+           data-bind="attr: { src: avatar_url }"
+           alt="{% trans "Repository logo" %}" />
       <div class="header" data-bind="text: full_name"></div>
       <div class="meta" data-bind="text: clone_url"></div>
       <div class="description">
@@ -218,7 +226,8 @@
                     <a class="ui basic image label"
                        data-bind="attr: {href: urls.home }"
                        target="_blank">
-                      <img data-bind="if: $parent.avatar_url, attr: {src: $parent.avatar_url}" />
+                      <img data-bind="if: $parent.avatar_url, attr: {src: $parent.avatar_url}"
+                           alt="{% trans "Repository logo" %}" />
                       <span data-bind="text: name"></span>
                     </a>
                   </div>
@@ -242,7 +251,10 @@
           <input type="hidden" name="remote_repository" data-bind="value: pk" />
           <input type="hidden" name="default_branch" data-bind="value: default_branch" />
 
-          <button class="ui primary button" data-bind="css: {disabled: !admin}">{% trans "Continue" %}</button>
+          <button class="ui primary button"
+                  data-bind="css: {disabled: (!admin || !$parent.is_repository_supported($data))}">
+            {% trans "Continue" %}
+          </button>
         </form>
       </span>
     </div>
