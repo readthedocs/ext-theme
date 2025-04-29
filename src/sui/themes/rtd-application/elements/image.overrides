@@ -1,3 +1,15 @@
+/*
+ * Avatar overlapping variant
+ * ==========================
+ *
+ * Used to create stacking avatar bubbles for maintainer and team member lists.
+ *
+ * .. code:: html
+ *
+ *     <div class="ui overlapping avatar images">
+ *       <img class="ui image" src="..." />
+ *     </div>
+ */
 .ui.overlapping.avatar.images {
   margin-left: 0.25rem;
   > .ui.image,
