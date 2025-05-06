@@ -2,6 +2,7 @@
 readthedocsext-theme doc extensions
 """
 
+import re
 import os
 import subprocess
 from pathlib import Path
@@ -12,14 +13,7 @@ from sphinxcontrib.autoanysrc import analyzers
 logger = logging.getLogger(__name__)
 
 
-class DjangoTemplateAnalyzer(analyzers.BaseCommentAnalyzer):
-
-    """There are a few errors with this docstring
-    but black will not reformat any of this"""
-
-    comment_starts_with = '{% comment "rst" %}'
-    comment_ends_with = "{% endcomment %}"
-
+class CommonAnalyzer(analyzers.BaseCommentAnalyzer):
     def process(self, content):
         first_indent = None
 
@@ -40,7 +34,26 @@ class DjangoTemplateAnalyzer(analyzers.BaseCommentAnalyzer):
                     f"Try indenting the block inner text once."
                 )
 
-            yield (line[first_indent:], lineno)
+            line_content = line[first_indent:]
+
+            # Conditionally left strip comment lines out
+            if hasattr(self, "strip_comment"):
+                line_content = self.strip_comment(line_content)
+
+            yield (line_content, lineno)
+
+
+class DjangoTemplateAnalyzer(CommonAnalyzer):
+    comment_starts_with = '{% comment "rst" %}'
+    comment_ends_with = "{% endcomment %}"
+
+
+class CSSAnalyzer(CommonAnalyzer):
+    comment_starts_with = "/*"
+    comment_ends_with = "*/"
+
+    def strip_comment(self, line):
+        return re.sub(r"^\s?\*\s?", "", line)
 
 
 def build_init(app):
