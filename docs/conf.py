@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath("."))
 import docext  # noqa
 
 project = "readthedocsext-theme"
-copyright = "2022, Read the Docs, Inc"
+copyright = "2025, Read the Docs, Inc"
 author = "Read the Docs, Inc"
 
 release = "1.0rc1"
@@ -14,6 +14,7 @@ version = release
 
 extensions = [
     "docext",
+    "sphinx.ext.autodoc",
     "sphinxcontrib.autoanysrc",
     "sphinx_js",
 ]
@@ -25,6 +26,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 autoanysrc_analyzers = {
     "html": "docext.DjangoTemplateAnalyzer",
+    "css": "docext.CSSAnalyzer",
 }
 
 js_source_path = "../src/js"

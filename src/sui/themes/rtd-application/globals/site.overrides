@@ -4,14 +4,32 @@
 // chaining more selectors. This rule will override most 3 and 4 selector rules
 // due to the artificially increased specificity in this rule.
 .ko.ko.ko.ko.ko {
-  // There is the Knockout ``visible`` data binding, but this injects a hard
-  // coded style="display: none;" when the binding is false. This makes default
-  // styling on initial load hard with CSS and tends to flash the element to the
-  // user, before the JS loads.
-  //
-  // Instead, something like this is preferable:
-  //
-  //     <div class="ko hidden" data-bind="css: { hidden: !is_showing() }"></div>
+  /*
+   * Knockout ``visible`` binding
+   * ============================
+   *
+   * In standard Knockout there is a ``visible`` data binding, but this
+   * injects a hard coded ``style="display: none;"`` when the binding is false.
+   * This makes default styling on initial load hard with CSS and tends to
+   * flash the element to the user, before the JS loads.
+   *
+   * In standard Knockout, this would look like:
+   *
+   * .. code:: html
+   *
+   *     <div data-bind="visible: is_showing" style="display: none;"></div>
+   *
+   * Using this ``.ko.hidden`` class and the ``css`` binding, this example would instead be:
+   *
+   * .. code:: html
+   *
+   *     <div class="ko hidden" data-bind="css: { hidden: !is_showing() }"></div>
+   *
+   * .. note::
+   *     When used as an observable name, executing the observable as a function
+   *     is not required. In the second example, due to nesting and value negation, we
+   *     have to call the observable as a function, ``is_showing()``.
+   */
   &.hidden {
     display: none;
   }

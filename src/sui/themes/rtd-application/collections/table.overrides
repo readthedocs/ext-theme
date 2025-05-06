@@ -1,5 +1,27 @@
-// Build detail page command output table
+/*
+ * Command table variant
+ * =====================
+ *
+ * This is a special table, used solely on the build detail page to list
+ * commands and steps executed. There is some unique CSS rules here to support
+ * command highlighting and ANSI sequences.
+ *
+ * .. code:: html
+ *
+ *     <div class="ui command table">
+ *       ...
+ *     </div>
+ */
 .ui.ui.ui.command.table {
+  /*
+   * Each command is made of up two rows:
+   *
+   * - The first row has two columns, a dropdown expander icon and the
+   *   command executed.
+   * - The second row is normally hidden until collapsed open, it contains
+   *   two columns: the line number and line contents for each line of output in
+   *   STDOUT.
+   */
   tr {
     border-bottom: 0px;
     cursor: unset;
@@ -29,6 +51,16 @@
       word-wrap: anywhere;
     }
 
+    /*
+     * The STDOUT styling supports ANSI color codes through special classes
+     that should be added by the backend exectuion through Docker:
+     *
+     * .. code:: html
+     *
+     *     <span class="ansi-black-fg">...</span>
+     *
+     * .. note:: ANSI sequences are not yet supported by the build backend.
+     */
     &.stdout > code {
       // ansi_up control character classes
       span.ansi-black-fg {
