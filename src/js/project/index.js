@@ -86,7 +86,7 @@ export class ProjectVersionCreateView {
    * @param {object} config - configuration for search element
    */
   init_search(config) {
-    const maxResults = 30;
+    const maxResults = 100;
     // String interpolation over URLSearchParams here as FUI uses basic string
     // replacement for `{query}`, but this is encoded for URLSearchParams.
     const url = config.api_url + `?limit=${maxResults}&verbose_name={query}`;
