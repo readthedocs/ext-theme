@@ -1,10 +1,7 @@
 {% extends "organizations/settings/base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
-
-{% load ext_theme_tags %}
-{% load organizations %}
+{% load trans blocktrans from i18n %}
+{% load as_crispy_field from crispy_forms_tags %}
 
 {% block title %}
   {{ organization.name }} - {% trans "Authorization" %}
