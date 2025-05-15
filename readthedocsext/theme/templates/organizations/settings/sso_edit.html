@@ -31,7 +31,9 @@
   {% if organization.ssointegration %}
     <div class="ui message">
       <div class="header">{% trans "Invite users into your organization" %}</div>
-      <p>{% trans "You can invite people to join your organization by sending them this link:" %}</p>
+      <p>
+        {% trans "You can invite people to join your organization by sending them this link:" %}
+      </p>
 
       <div class="ui fluid action input">
         <input type="text"
@@ -111,7 +113,9 @@
         {% alter_field form.provider data_bind="valueInit: provider, value: provider" %}
         {{ form.provider | as_crispy_field }}
 
-        <div class="ko hidden" data-bind="css: { hidden: !use_domain() }">{{ form.domain | as_crispy_field }}</div>
+        <div class="ko hidden" data-bind="css: { hidden: !use_domain() }">
+          {{ form.domain | as_crispy_field }}
+        </div>
 
         <div class="ui warning message ko hidden"
              data-bind="css: { hidden: !show_warning() }">
