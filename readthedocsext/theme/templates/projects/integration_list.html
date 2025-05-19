@@ -1,15 +1,35 @@
 {% extends "projects/project_edit_base.html" %}
 
-{% load i18n %}
+{% load trans blocktrans i18n %}
 
-{% block title %}{{ project.name }} - {% trans "Integrations" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "Integrations" %}
+{% endblock title %}
 
-{% block project_integrations_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Integrations" %}{% endblock %}
+{% block project_integrations_active %}
+  active
+{% endblock project_integrations_active %}
+{% block project_edit_content_header %}
+  {% trans "Integrations" %}
+{% endblock project_edit_content_header %}
 
 {% block project_edit_content %}
+  {% if project.is_github_app_project %}
+    <div class="ui message icon">
+      <i class="fa-duotone fa-info-circle icon"></i>
+      <div class="content">
+        <div class="header">{% trans "No further configuration needed" %}</div>
+        <p>
+          {% blocktrans trimmed %}
+            This project is already configured to use the <a href="https://readthedocs-landing--12114.org.readthedocs.build/platform/12114/reference/git-integration.html#github-app">GitHub App integration</a>.
+            You don't need to configure any other integrations.
+          {% endblocktrans %}
+        </p>
+      </div>
+    </div>
+  {% endif %}
   {% include "projects/partials/edit/integration_list.html" with objects=object_list %}
-{% endblock %}
+{% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/connecting-git-account.html" text="How to connect your Read the Docs account to your Git provider" is_external=True class="item" %}
