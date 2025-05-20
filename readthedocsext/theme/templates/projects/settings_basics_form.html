@@ -1,11 +1,17 @@
 {% extends "projects/project_edit_base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load trans blocktrans from i18n %}
+{% load crispy from crispy_forms_tags %}
 
-{% block title %}{% trans "Edit Project" %}{% endblock %}
-{% block project_edit_content_header %}{% trans "Settings" %}{% endblock %}
-{% block project_edit_active %}active{% endblock %}
+{% block title %}
+  {% trans "Edit Project" %}
+{% endblock title %}
+{% block project_edit_content_header %}
+  {% trans "Settings" %}
+{% endblock project_edit_content_header %}
+{% block project_edit_active %}
+  active
+{% endblock project_edit_active %}
 
 {% block project_edit_content %}
   <form class="ui form" method="post" action=".">
@@ -14,14 +20,10 @@
     <input class="ui primary button" type="submit" value="{% trans "Save" %}" />
   </form>
 
-  <div class="ui horizontal divider">
-    {% trans "More" %}
-  </div>
+  <div class="ui horizontal divider">{% trans "More" %}</div>
 
   <div class="ui red segment">
-    <h3 class="ui small header">
-      {% trans "Delete project" %}
-    </h3>
+    <h3 class="ui small header">{% trans "Delete project" %}</h3>
 
     <p>
       {% blocktrans trimmed %}
@@ -30,37 +32,49 @@
       {% endblocktrans %}
     </p>
 
-    <a class="ui button" data-bind="click: $root.show_modal('project-delete')">
+    <a class="ui button"
+       data-bind="click: $root.show_modal('project-delete')">
       <i class="fa-duotone fa-trash icon"></i>
       {% trans "Delete project" %}
     </a>
-    <div class="ui mini modal" data-modal-id="project-delete">
-      <div class="header">
-        {% trans "Delete project" %}
-      </div>
+    <div class="ui tiny modal" data-modal-id="project-delete">
+      <div class="header">{% trans "Delete project" %}</div>
       <div class="content">
-        {% blocktrans trimmed with project=project.name %}
-          Are you sure you want to delete the project {{project}}? This action
-          cannot be undone.
-        {% endblocktrans %}
+        <p>
+          {% blocktrans trimmed with project=project.name %}
+            Are you sure you want to delete the project {{ project }}? This action
+            cannot be undone.
+          {% endblocktrans %}
+        </p>
+        {% if project.domains.exists %}
+          <div class="ui warning message">
+            {% url "projects_domains" project.slug as domain_list_url %}
+            {% blocktrans trimmed with domain_list_url=domain_list_url %}
+              Your project has a <a href="{{ domain_list_url }}">custom domain</a> configured.
+              Make sure to also remove the DNS records for all custom domains or another project might be able to reuse the domain (also known as domain hijacking).
+            {% endblocktrans %}
+          </div>
+        {% endif %}
       </div>
       <div class="actions">
         <form method="post" action="{% url "projects_delete" project.slug %}">
           {% csrf_token %}
-          <input class="ui negative button" type="submit" value="{% trans "Delete project" %}">
+          <div class="ui cancel button">{% trans "Cancel" %}</div>
+          <input class="ui negative button"
+                 type="submit"
+                 value="{% trans "Delete project" %}">
         </form>
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics_content %}
   <div class="ui mini header">{% trans "Tutorials" %}</div>
   <div class="ui bulleted list">
     {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/tutorial/index.html" text="Getting started" is_external=True class="item" %}
-    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/intro/getting-started-with-sphinx.html" text="Getting started with Sphinx" is_external=True class="item" %}
-    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/intro/getting-started-with-mkdocs.html" text="Getting started with MkDocs" is_external=True class="item" %}
     {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/intro/import-guide.html" text="Importing your documentation" is_external=True class="item" %}
+    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/intro/doctools.html" text="Quickstart with popular tools" is_external=True class="item" %}
   </div>
   <div class="ui mini header">{% trans "Resources" %}</div>
   <div class="ui bulleted list">

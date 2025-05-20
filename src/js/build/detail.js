@@ -150,31 +150,16 @@ class BuildCommand {
   color_output(output) {
     // Dynamically load expensive chunks. These will be kept out of the normal
     // vendor bundle.
-    return Promise.all([
-      import(
-        /* webpackChunkName: 'ansi_up' */
-        "ansi_up"
-      ).then(({ default: AnsiUp }) => {
-        return AnsiUp;
-      }),
-      import(
-        /* webpackChunkName: 'sanitize-html' */
-        "sanitize-html"
-      ).then(({ default: sanitize_html }) => {
-        return sanitize_html;
-      }),
-    ]).then((imports) => {
-      let AnsiUp, sanitize_html;
-      [AnsiUp, sanitize_html] = imports;
-
+    return import(
+      /* webpackChunkName: 'ansi_up' */
+      "ansi_up"
+    ).then(({ default: AnsiUp }) => {
       // Build output lines
       let ansi_up = new AnsiUp();
       ansi_up.use_classes = true;
       output = ansi_up.ansi_to_html(output);
-      output = sanitize_html(output, {
-        allowedTags: ["span"],
-        allowedAttributes: { span: ["class"] },
-      });
+      // TODO use dompurify here
+      //output = DOMPurify.sanitize_html(output);
       return output;
     });
   }

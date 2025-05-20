@@ -2,14 +2,15 @@
 
 {% load trans from i18n %}
 
-{% block title %}
-  {% trans "Projects" %}
-{% endblock title %}
+{# djlint:off #}
+{% block title %}{% trans "Projects" %}{% endblock title %}
+{# djlint:on #}
 
 {% block notifications %}
   {# User notifications only #}
   <readthedocs-notification-list url="{% url "users-notifications-list" request.user.username %}"
-                                 csrf-token="{{ csrf_token }}">
+                                 csrf-token="{{ csrf_token }}"
+                                 class="ui basic segment relaxed list">
   </readthedocs-notification-list>
 
   {{ block.super }}
@@ -39,9 +40,8 @@
         <div class="ui mini header">{% trans "Tutorials" %}</div>
         <div class="ui bulleted list">
           {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/tutorial/index.html" text="Getting started" is_external=True class="item" %}
-          {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/intro/getting-started-with-sphinx.html" text="Getting started with Sphinx" is_external=True class="item" %}
-          {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/intro/getting-started-with-mkdocs.html" text="Getting started with MkDocs" is_external=True class="item" %}
           {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/intro/import-guide.html" text="Creating a project" is_external=True class="item" %}
+          {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/intro/doctools.html" text="Quickstart with popular tools" is_external=True class="item" %}
         </div>
 
         <div class="ui mini header">{% trans "Reference" %}</div>

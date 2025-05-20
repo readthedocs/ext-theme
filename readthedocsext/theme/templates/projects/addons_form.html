@@ -41,14 +41,17 @@
     </div>
 
     {% if form.enabled.value == True %}
-      <div class="ui top attached stackable wrapping menu"
+      <div class="ui top attached stackable centered fluid wrapping menu"
            data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
         <a class="active item" data-tab="flyout">{% trans "Flyout menu" %}</a>
         <a class="item" data-tab="search">{% trans "Search" %}</a>
         <a class="item" data-tab="notifications">{% trans "Notifications" %}</a>
         <a class="item" data-tab="analytics">{% trans "Analytics" %}</a>
         <a class="item" data-tab="docdiff">{% trans "Visual diff" %}</a>
+        <a class="item" data-tab="filetreediff">{% trans "File tree diff" %}</a>
+        <a class="item" data-tab="link-previews">{% trans "Link previews" %}</a>
         <a class="item" data-tab="hotkeys">{% trans "Hotkeys" %}</a>
+        <a class="item" data-tab="advanced">{% trans "Advanced" %}</a>
       </div>
     {% endif %}
 
@@ -65,6 +68,7 @@
           {{ form.flyout_sorting | as_crispy_field }}
           {{ form.flyout_sorting_latest_stable_at_beginning | as_crispy_field }}
           {{ form.flyout_sorting_custom_pattern | as_crispy_field }}
+          {{ form.flyout_position | as_crispy_field }}
         </div>
       {% endblock addons_flyout %}
 
@@ -76,8 +80,10 @@
 
       {% block addons_notifications %}
         <div class="ui tab" data-tab="notifications">
-          {{ form.external_version_warning_enabled | as_crispy_field }}
-          {{ form.stable_latest_version_warning_enabled | as_crispy_field }}
+          {{ form.notifications_enabled | as_crispy_field }}
+          {{ form.notifications_show_on_external | as_crispy_field }}
+          {{ form.notifications_show_on_latest | as_crispy_field }}
+          {{ form.notifications_show_on_non_stable | as_crispy_field }}
         </div>
       {% endblock addons_notifications %}
 
@@ -90,9 +96,21 @@
       {% block addons_docdiff %}
         <div class="ui tab" data-tab="docdiff">
           {{ form.doc_diff_enabled | as_crispy_field }}
-          {{ form.doc_diff_root_selector | as_crispy_field }}
         </div>
       {% endblock addons_docdiff %}
+
+      {% block addons_filetreediff %}
+        <div class="ui tab" data-tab="filetreediff">
+          {{ form.filetreediff_enabled | as_crispy_field }}
+          {{ form.filetreediff_ignored_files | as_crispy_field }}
+        </div>
+      {% endblock addons_filetreediff %}
+
+      {% block addons_link_previews %}
+        <div class="ui tab" data-tab="link-previews">
+          {{ form.linkpreviews_enabled | as_crispy_field }}
+        </div>
+      {% endblock addons_link_previews %}
 
       {% block addons_hotkeys %}
         <div class="ui tab" data-tab="hotkeys">
@@ -100,6 +118,11 @@
         </div>
       {% endblock addons_hotkeys %}
 
+      {% block addons_advanced %}
+        <div class="ui tab" data-tab="advanced">
+          {{ form.options_root_selector|as_crispy_field }}
+        </div>
+      {% endblock addons_advanced %}
     </div>
 
     <input class="ui primary button" type="submit" value="{% trans "Save" %}">

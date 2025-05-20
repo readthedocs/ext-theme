@@ -1,3 +1,4 @@
+import logging
 from urllib.parse import urljoin
 
 from django import template
@@ -11,6 +12,7 @@ from django.templatetags.static import StaticNode, PrefixNode
 from django.forms import boundfield
 
 
+log = logging.getLogger(__name__)
 register = template.Library()
 
 
@@ -139,20 +141,32 @@ def get_spam_score(project):
 # We need to decide what to do at the DB level still, but at least this approach solves the immediate issue.
 @register.filter
 def readthedocs_language_name(lang_code):
-    if lang_code == "zh":
-        return language_name("zh-cn")
-    return language_name(lang_code)
+    try:
+        if lang_code == "zh":
+            return language_name("zh-cn")
+        return language_name(lang_code)
+    except Exception:
+        log.exception("Error getting language name")
+        return lang_code
 
 
 @register.filter
 def readthedocs_language_name_translated(lang_code):
-    if lang_code == "zh":
-        return language_name_translated("zh-cn")
-    return language_name_translated(lang_code)
+    try:
+        if lang_code == "zh":
+            return language_name_translated("zh-cn")
+        return language_name_translated(lang_code)
+    except Exception:
+        log.exception("Error getting language name")
+        return lang_code
 
 
 @register.filter
 def readthedocs_language_name_local(lang_code):
-    if lang_code == "zh":
-        return language_name_local("zh-cn")
-    return language_name_local(lang_code)
+    try:
+        if lang_code == "zh":
+            return language_name_local("zh-cn")
+        return language_name_local(lang_code)
+    except Exception:
+        log.exception("Error getting language name")
+        return lang_code

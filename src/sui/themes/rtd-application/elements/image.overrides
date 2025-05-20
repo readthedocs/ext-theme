@@ -1,3 +1,15 @@
+/*
+ * Avatar overlapping variant
+ * ==========================
+ *
+ * Used to create stacking avatar bubbles for maintainer and team member lists.
+ *
+ * .. code:: html
+ *
+ *     <div class="ui overlapping avatar images">
+ *       <img class="ui image" src="..." />
+ *     </div>
+ */
 .ui.overlapping.avatar.images {
   margin-left: 0.25rem;
   > .ui.image,
@@ -13,4 +25,47 @@
 .ui.micro.image {
   width: @microWidth;
   height: auto;
+}
+
+// Support web component for avatar
+.avatarWidth(@size) {
+  width: @size;
+  // This adjusts the variable that determines the width the avatar sprite is render at
+  --avatar-scale: @size / -4;
+}
+
+readthedocs-avatar.ui.image {
+  display: inline-block;
+  height: auto;
+  &.rounded {
+    overflow: hidden;
+  }
+
+  &.micro {
+    .avatarWidth(@microWidth);
+  }
+  &.mini {
+    .avatarWidth(@miniWidth);
+  }
+  &.tiny {
+    .avatarWidth(@tinyWidth);
+  }
+  &.small {
+    .avatarWidth(@smallWidth);
+  }
+  &.medium {
+    .avatarWidth(@mediumWidth);
+  }
+  &.large {
+    .avatarWidth(@largeWidth);
+  }
+  &.big {
+    .avatarWidth(@bigWidth);
+  }
+  &.huge {
+    .avatarWidth(@hugeWidth);
+  }
+  &.massive {
+    .avatarWidth(@massiveWidth);
+  }
 }

@@ -4,6 +4,7 @@ import { repeat } from "lit/directives/repeat.js";
 import { when } from "lit/directives/when.js";
 import { classMap } from "lit/directives/class-map.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import DOMPurify from "dompurify";
 
 import { LightDOMElement } from "../application/elements";
 
@@ -143,7 +144,15 @@ export class NotificationListElement extends LightDOMElement {
       })
       .then((notifications) => {
         if (notifications) {
-          this.notifications = notifications;
+          this.notifications = notifications.map((notification) => {
+            notification.message.header = DOMPurify.sanitize(
+              notification.message.header,
+            );
+            notification.message.body = DOMPurify.sanitize(
+              notification.message.body,
+            );
+            return notification;
+          });
         }
       })
       .catch((err) => {
