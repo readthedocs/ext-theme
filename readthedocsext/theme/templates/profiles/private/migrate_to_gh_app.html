@@ -224,7 +224,7 @@
                 {% endblocktrans %}
               </p>
 
-              {% if migration_targets and not step_revoke_completed %}
+              {% if has_projects_pending_migration and not step_revoke_completed %}
                 <div class="ui small warning message">
                   <i class="fad fa-warning icon"></i>
                   {% blocktrans trimmed with migrate_step="?step=migrate" manual_migration_docs="#" %}
