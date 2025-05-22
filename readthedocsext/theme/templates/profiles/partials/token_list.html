@@ -12,7 +12,7 @@
   {% endcomment %}
   <form method="post" action="{% url "profiles_tokens_create" %}">
     {% csrf_token %}
-    <button class="ui green button {% if objects %}disabled{% endif %}button">
+    <button class="ui green {% if objects %}disabled{% endif %} button">
       {% trans "Generate API token" %}
     </button>
   </form>
