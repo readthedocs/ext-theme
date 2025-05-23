@@ -7,7 +7,7 @@
 
     {# Hide weird spaces in title #}
     {# djlint:off #}
-    <title>{% block title %}{% endblock title %}{% block head_title %}{% endblock head_title %} - Read the Docs{% if PRODUCTION_DOMAIN == "readthedocs.org" }} Community {% elif PRODUCTION_DOMAIN == "readthedocs.com" %} Business {% endif%}</title>
+    <title>{% block title %}{% endblock title %}{% block head_title %}{% endblock head_title %} - Read the Docs{% if "readthedocs.org" in PRODUCTION_DOMAIN %} Community {% elif "readthedocs.com" in PRODUCTION_DOMAIN %} Business {% elif "devthedocs" in PRODUCTION_DOMAIN %} Dev {% endif%}</title>
     {# djlint:on #}
 
     {% block head_meta %}
