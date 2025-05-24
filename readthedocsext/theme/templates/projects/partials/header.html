@@ -1,9 +1,7 @@
-{% load i18n %}
-{% load core_tags %}
-{% load privacy_tags %}
-{% load core_tags %}
-{% load gravatar %}
-{% load ext_theme_tags %}
+{% load blocktrans trans from i18n %}
+{% load is_admin from privacy_tags %}
+{% load gravatar_url from gravatar %}
+{% load get_spam_score readthedocs_language_name readthedocs_language_name_local from ext_theme_tags %}
 
 {% comment %}
 
@@ -44,9 +42,8 @@ collapsed, to save visual space and can be expanded with the right label.
         {% endblock project_header_labels %}
 
         {% block project_header_metadata_left %}
-          <div class="eight wide computer eight wide tablet sixteen wide mobile column"
-               data-bind="visible: !is_collapsed()"
-               style="display: none">
+          <div class="eight wide computer eight wide tablet sixteen wide mobile column ko hidden"
+               data-bind="css: { hidden: is_collapsed() }">
 
             {% block project_header_description %}
               {% if project.description %}
@@ -109,9 +106,8 @@ collapsed, to save visual space and can be expanded with the right label.
         {% endblock project_header_metadata_left %}
 
         {% block project_header_metadata_right %}
-          <div class="right aligned eight wide computer eight wide tablet sixteen wide mobile column"
-               data-bind="visible: !is_collapsed()"
-               style="display: none">
+          <div class="right aligned eight wide computer eight wide tablet sixteen wide mobile column ko hidden"
+               data-bind="css: { hidden: is_collapsed() }">
 
             {% block project_header_maintainers %}
               <div class="ui sub header">{% trans "Maintainers" %}</div>
@@ -174,6 +170,13 @@ collapsed, to save visual space and can be expanded with the right label.
         <span class="ui tiny teal circular label">{{ project.builds.count }}</span>
       </a>
       <div class="right menu">
+        {# Show top-level view docs button on non-build pages with a good build #}
+        {% if project.has_good_build and not build %}
+          <a class="item" href="{{ project.get_docs_url }}">
+            <i class="fa-duotone fa-book icon"></i>
+            {% trans "View docs" %}
+          </a>
+        {% endif %}
         {% if request.user|is_admin:project %}
           {% if user.is_staff %}
             <a class="item" data-bind="click: $root.show_modal('project-debug')">
@@ -185,13 +188,6 @@ collapsed, to save visual space and can be expanded with the right label.
              href="{% url "projects_edit" project.slug %}">
             <i class="fa-duotone fa-gears icon"></i>
             {% trans "Settings" %}
-          </a>
-        {% endif %}
-        {# Show top-level view docs button on non-build pages with a good build #}
-        {% if project.has_good_build and not build %}
-          <a class="item" href="{{ project.get_docs_url }}">
-            <i class="fa-duotone fa-book icon"></i>
-            {% trans "View docs" %}
           </a>
         {% endif %}
       </div>
