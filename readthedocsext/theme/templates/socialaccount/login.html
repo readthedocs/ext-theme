@@ -1,22 +1,24 @@
 {% extends "socialaccount/base_entrance.html" %}
 
-{% load i18n %}
+{% load trans blocktrans from i18n %}
 
-{% block head_title %}{% trans "Sign in" %}{% endblock %}
+{% block head_title %}
+  {% trans "Sign in" %}
+{% endblock head_title %}
 
 {% block content %}
   {% if process == "connect" %}
     {% if provider.id == "saml" %}
       <h1>
         {% blocktrans trimmed with organization_name=provider.organization.name %}
-        Switch account to SAML for {{ organization_name }}
+          Switch account to SAML for {{ organization_name }}
         {% endblocktrans %}
       </h1>
 
       <p>
         {% blocktrans trimmed with organization_name=provider.organization.name %}
-        You are about to switch your account to use SAML to sign in to {{ organization_name }}.
-        After this, you will need to sign in using the "Single sign-on" option on the login page.
+          You are about to switch your account to use SAML to sign in to {{ organization_name }}.
+          After this, you will need to sign in using the "Single sign-on" option on the login page.
         {% endblocktrans %}
       </p>
     {% else %}
