@@ -6,17 +6,32 @@
 
 {% block content %}
   {% if process == "connect" %}
-    <h1>
-      {% blocktrans with provider.name as provider trimmed %}
-        Connect {{ provider }}
-      {% endblocktrans %}
-    </h1>
+    {% if provider.id == "saml" %}
+      <h1>
+        {% blocktrans trimmed with organization_name=provider.organization.name %}
+        Switch account to SAML for {{ organization_name }}
+        {% endblocktrans %}
+      </h1>
 
-    <p>
-      {% blocktrans with provider.name as provider trimmed %}
-        You are about to connect a new third party account from {{ provider }}.
-      {% endblocktrans %}
-    </p>
+      <p>
+        {% blocktrans trimmed with organization_name=provider.organization.name %}
+        You are about to switch your account to use SAML to sign in to {{ organization_name }}.
+        After this, you will need to sign in using the "Single sign-on" option on the login page.
+        {% endblocktrans %}
+      </p>
+    {% else %}
+      <h1>
+        {% blocktrans with provider.name as provider trimmed %}
+          Connect {{ provider }}
+        {% endblocktrans %}
+      </h1>
+
+      <p>
+        {% blocktrans with provider.name as provider trimmed %}
+          You are about to connect a new third party account from {{ provider }}.
+        {% endblocktrans %}
+      </p>
+    {% endif %}
   {% else %}
     <h1>
       {% blocktrans with provider.name as provider trimmed %}
