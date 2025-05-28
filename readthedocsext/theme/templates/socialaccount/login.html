@@ -1,20 +1,33 @@
 {% extends "socialaccount/base_entrance.html" %}
 
 {% load trans blocktrans from i18n %}
+{% load crispy from crispy_forms_tags %}
 
 {% block head_title %}
   {% trans "Sign in" %}
 {% endblock head_title %}
 
-{% block content %}
+{% block content_title_text %}
   {% if process == "connect" %}
     {% if provider.id == "saml" %}
-      <h1>
-        {% blocktrans trimmed with organization_name=provider.organization.name %}
-          Switch account to SAML for {{ organization_name }}
-        {% endblocktrans %}
-      </h1>
+      {% blocktrans trimmed with organization_name=provider.organization.name %}
+        Switch account to SAML for {{ organization_name }}
+      {% endblocktrans %}
+    {% else %}
+      {% blocktrans with provider.name as provider trimmed %}
+        Connect {{ provider }}
+      {% endblocktrans %}
+    {% endif %}
+  {% else %}
+    {% blocktrans with provider.name as provider trimmed %}
+      Sign in via {{ provider }}
+    {% endblocktrans %}
+  {% endif %}
+{% endblock content_title_text %}
 
+{% block content_body %}
+  {% if process == "connect" %}
+    {% if provider.id == "saml" %}
       <p>
         {% blocktrans trimmed with organization_name=provider.organization.name %}
           You are about to switch your account to use SAML to sign in to {{ organization_name }}.
@@ -22,12 +35,6 @@
         {% endblocktrans %}
       </p>
     {% else %}
-      <h1>
-        {% blocktrans with provider.name as provider trimmed %}
-          Connect {{ provider }}
-        {% endblocktrans %}
-      </h1>
-
       <p>
         {% blocktrans with provider.name as provider trimmed %}
           You are about to connect a new third party account from {{ provider }}.
@@ -35,12 +42,6 @@
       </p>
     {% endif %}
   {% else %}
-    <h1>
-      {% blocktrans with provider.name as provider trimmed %}
-        Sign in via {{ provider }}
-      {% endblocktrans %}
-    </h1>
-
     <p>
       {% blocktrans with provider.name as provider trimmed %}
         You are about to sign in using a third party account from {{ provider }}.
@@ -50,6 +51,6 @@
 
   <form method="post" class="ui form">
     {% csrf_token %}
-    <button class="ui button" type="submit">{% trans "Continue" %}</button>
+    <button class="ui primary button" type="submit">{% trans "Continue" %}</button>
   </form>
-{% endblock content %}
+{% endblock content_body %}
