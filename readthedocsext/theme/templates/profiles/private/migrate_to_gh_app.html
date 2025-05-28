@@ -217,6 +217,13 @@
 
               <a class="ui button" href="?step=revoke">{% trans "Next" %}</a>
             {% elif step == "revoke" %}
+              <div class="ui small warning message">
+                <i class="fad fa-warning icon"></i>
+                {% blocktrans trimmed %}
+                  During the beta period, we don't recommend revoking access to our old GitHub OAuth app.
+                  You will be reminded to complete this step after the beta period ends.
+                {% endblocktrans %}
+              </div>
               <p>
                 {% blocktrans trimmed %}
                   Revoke access to our old GitHub OAuth app.
@@ -240,6 +247,13 @@
               <a class="ui button {% if not step_revoke_completed %}disabled{% endif %}"
                  href="?step=disconnect">{% trans "Next" %}</a>
             {% elif step == "disconnect" %}
+              <div class="ui small warning message">
+                <i class="fad fa-warning icon"></i>
+                {% blocktrans trimmed %}
+                  During the beta period, we don't recommend disconnecting your account from our old GitHub OAuth app.
+                  You will be reminded to complete this step after the beta period ends.
+                {% endblocktrans %}
+              </div>
               <p>
                 {% blocktrans trimmed %}
                   Disconnect the old GitHub OAuth app from your Read the Docs account.
