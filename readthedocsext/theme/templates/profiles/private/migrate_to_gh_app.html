@@ -224,24 +224,26 @@
                   You will be reminded to complete this step after the beta period ends.
                 {% endblocktrans %}
               </div>
-              <p>
-                {% blocktrans trimmed %}
-                  Revoke access to our old GitHub OAuth app.
-                  You'll be redirected to GitHub, where you need to click on "Revoke access".
-                {% endblocktrans %}
-              </p>
-
-              {% if has_projects_pending_migration and not step_revoke_completed %}
-                <div class="ui small warning message">
-                  <i class="fad fa-warning icon"></i>
-                  {% blocktrans trimmed with migrate_step="?step=migrate" manual_migration_docs="#" %}
-                    You have projects that need to be <a href="{{ migrate_step }}">migrated</a>.
-                    If you revoke access now, you'll need to <a href="{{ manual_migration_docs }}">manually migrate</a> them.
+              <div class="ui disabled basic segment">
+                <p>
+                  {% blocktrans trimmed %}
+                    Revoke access to our old GitHub OAuth app.
+                    You'll be redirected to GitHub, where you need to click on "Revoke access".
                   {% endblocktrans %}
-                </div>
-              {% endif %}
+                </p>
 
-              {% include "profiles/partials/github_oauth_revoke_list.html" with objects=old_github_accounts current_page=request.get_full_path %}
+                {% if has_projects_pending_migration and not step_revoke_completed %}
+                  <div class="ui small warning message">
+                    <i class="fad fa-warning icon"></i>
+                    {% blocktrans trimmed with migrate_step="?step=migrate" manual_migration_docs="#" %}
+                      You have projects that need to be <a href="{{ migrate_step }}">migrated</a>.
+                      If you revoke access now, you'll need to <a href="{{ manual_migration_docs }}">manually migrate</a> them.
+                    {% endblocktrans %}
+                  </div>
+                {% endif %}
+
+                {% include "profiles/partials/github_oauth_revoke_list.html" with objects=old_github_accounts current_page=request.get_full_path %}
+              </div>
 
               <div class="ui divider"></div>
               <a class="ui button {% if not step_revoke_completed %}disabled{% endif %}"
@@ -254,21 +256,23 @@
                   You will be reminded to complete this step after the beta period ends.
                 {% endblocktrans %}
               </div>
-              <p>
-                {% blocktrans trimmed %}
-                  Disconnect the old GitHub OAuth app from your Read the Docs account.
-                {% endblocktrans %}
-              </p>
+              <div class="ui disabled basic segment">
+                <p>
+                  {% blocktrans trimmed %}
+                    Disconnect the old GitHub OAuth app from your Read the Docs account.
+                  {% endblocktrans %}
+                </p>
 
-              <div class="ui message info">
-                <i class="fad fa-info-circle icon"></i>
-                {% blocktrans trimmed with manual_migration_docs="#" %}
-                  After disconnecting the old GitHub OAuth app, you won't be able to see this page again.
-                  If you have projects that need to be migrated, you'll need to <a href="{{ manual_migration_docs }}">manually migrate</a> them.
-                {% endblocktrans %}
+                <div class="ui message info">
+                  <i class="fad fa-info-circle icon"></i>
+                  {% blocktrans trimmed with manual_migration_docs="#" %}
+                    After disconnecting the old GitHub OAuth app, you won't be able to see this page again.
+                    If you have projects that need to be migrated, you'll need to <a href="{{ manual_migration_docs }}">manually migrate</a> them.
+                  {% endblocktrans %}
+                </div>
+
+                {% include "profiles/partials/github_oauth_disconnect_list.html" with objects=old_github_accounts %}
               </div>
-
-              {% include "profiles/partials/github_oauth_disconnect_list.html" with objects=old_github_accounts %}
             {% endif %}
           </div>
         </div>
