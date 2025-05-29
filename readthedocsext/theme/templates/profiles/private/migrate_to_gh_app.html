@@ -188,8 +188,6 @@
                 {% endblocktrans %}
               </p>
 
-              {% include "profiles/partials/github_app_project_list.html" with objects=migration_targets skip_pagination=True %}
-
               {% if migration_targets %}
                 <div class="ui segment">
                   <h3 class="ui small header">{% trans "Migrate all projects" %}</h3>
@@ -208,6 +206,8 @@
                   </form>
                 </div>
               {% endif %}
+
+              {% include "profiles/partials/github_app_project_list.html" with objects=migration_targets skip_pagination=True %}
 
               <div class="ui medium header">{% trans "Projects already migrated" %}</div>
 
