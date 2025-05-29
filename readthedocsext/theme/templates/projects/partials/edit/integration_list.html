@@ -8,7 +8,7 @@
 {% block create_button %}
   {% url "projects_integrations_create" project_slug=project.slug as create_url %}
   {% trans "Add integration" as create_text %}
-  {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
+  {% include "includes/crud/create_button.html" with url=create_url text=create_text is_disabled=project.is_github_app_project %}
 {% endblock create_button %}
 
 {% block list_placeholder_icon_class %}
