@@ -23,7 +23,7 @@
         action="{% url 'socialaccount_connections' %}">
     {% csrf_token %}
     <input type="hidden" name="account" value="{{ object.id }}" />
-    <button class="ui button" type="submit" disabled>
+    <button class="ui disabled button" type="submit">
       <i class="fa-brands fa-github icon"></i>
       {% trans "Disconnect" %}
     </button>
