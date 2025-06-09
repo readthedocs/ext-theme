@@ -37,8 +37,8 @@
           Read the Docs now supports two methods for connecting your GitHub account:
         {% endblocktrans %}
       </p>
-      <div class="ui basic center aligned vertically fitted segment">
-        <div class="ui relaxed list">
+      <div class="ui segment">
+        <div class="ui small divided items">
           {% for provider in providers_github %}
             <div class="item">
               <div class="content">
@@ -68,7 +68,7 @@
                   </p>
                 </div>
                 <div class="extra">
-                  {% with button_classes=forloop.first|yesno:"primary,basic" %}
+                  {% with button_classes=forloop.first|yesno:"right floated primary,right floated basic" %}
                     {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider button_classes=button_classes %}
                   {% endwith %}
                 </div>
