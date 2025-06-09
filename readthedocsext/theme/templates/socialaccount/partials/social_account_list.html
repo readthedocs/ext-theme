@@ -56,11 +56,19 @@
 {% endblock list_item_right_menu %}
 
 {% block list_item_image %}
-  <img class="ui rounded image"
-       src="{{ object.get_avatar_url }}"
-       height="28"
-       alt="{% trans "Social account avatar" %}"
-       width="28" />
+  {% with avatar_url=object.get_avatar_url %}
+    {% if avatar_url %}
+      <img class="ui rounded image"
+           src="{{ avatar_url }}"
+           height="28"
+           alt="{% trans "Social account avatar" %}"
+           width="28" />
+    {% else %}
+      <div class="ui center aligned image">
+        <i class="fad fa-user icon"></i>
+      </div>
+    {% endif %}
+  {% endwith %}
 {% endblock list_item_image %}
 
 {% block list_item_header %}
@@ -73,11 +81,19 @@
 {% endblock list_item_header %}
 
 {% block list_item_meta_items %}
-  {% with object.get_provider as provider %}
-    <span class="ui label">
-      <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
-      {{ provider.app.name|default:provider.name }}
-    </span>
+  {% with provider=object.get_provider %}
+    {% if provider.app.pk and provider.id == "saml" %}
+      <span class="ui label">
+        <i class="fas fa-users icon"></i>
+        {% trans "SAML" %}
+      </span>
+    {% else %}
+      {# Provider is not a database provider #}
+      <span class="ui label">
+        <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
+        {{ provider.app.name|default:provider.name }}
+      </span>
+    {% endif %}
   {% endwith %}
 {% endblock list_item_meta_items %}
 
