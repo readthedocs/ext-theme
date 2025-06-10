@@ -45,11 +45,12 @@
                 <div class="header">
                   {% if provider.id == "github" %}
                     {% blocktrans trimmed %}
-                      Our legacy GitHub OAuth app
+                      Our GitHub OAuth app
                     {% endblocktrans %}
+                    <span class="ui compact small basic label">Default</span>
                   {% elif provider.id == "githubapp" %}
                     {% blocktrans trimmed %}
-                      Our new GitHub App
+                      Our GitHub App
                     {% endblocktrans %}
                     <span class="ui violet compact small basic label">Beta</span>
                   {% endif %}
