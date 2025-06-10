@@ -80,6 +80,12 @@ class BuildCommand {
     });
     /** @observable {number} Command run time in seconds */
     this.run_time = ko.observable(build_command.run_time);
+    /** @observable {number} Command end time in seconds */
+    this.end_time = ko.observable(build_command.end_time);
+    /** @computed {Boolean} Command is finished running? */
+    this.finished = ko.computed(() => {
+      return this.end_time() !== null;
+    });
     /** @computed {Boolean} This command is a debug class command */
     this.is_debug = ko.observable(is_debug);
     /** @computed {Boolean} Hide debug commands until debug mode is enabled */
@@ -503,7 +509,12 @@ export class BuildDetailView {
         return command_search.id() === command.id;
       },
     );
-    if (!command_found) {
+    if (command_found) {
+      command_found.output(command.output);
+      command_found.exit_code(command.exit_code || 0);
+      command_found.run_time(command.run_time);
+      command_found.end_time(command.end_time);
+    } else {
       this.commands.push(new BuildCommand(command));
     }
   }
