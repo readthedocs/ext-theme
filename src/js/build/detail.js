@@ -84,7 +84,7 @@ class BuildCommand {
     this.end_time = ko.observable(build_command.end_time);
     /** @computed {Boolean} Command is finished running? */
     this.finished = ko.computed(() => {
-      return this.end_time() !== null
+      return this.end_time() !== null;
     });
     /** @computed {Boolean} This command is a debug class command */
     this.is_debug = ko.observable(is_debug);
