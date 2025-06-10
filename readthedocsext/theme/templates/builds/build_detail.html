@@ -243,9 +243,10 @@
               <td class="command">
                 <code class="ui text"
                       data-bind="text: command, class: command_class, click: toggle_expanded"></code>
-                <a class="ui mini inverted label" data-bind="text: run_time() + 's'"></a>
+                <a class="ui mini inverted label" data-bind="text: '{% trans "Running" %}', visible: !finished()"></a>
+                <a class="ui mini inverted label" data-bind="text: run_time() + 's', visible: finished()"></a>
                 <a class="ui mini inverted label"
-                   data-bind="text: '{% trans "Exit" %}: ' + exit_code(), visible: exit_code() > 0"></a>
+                   data-bind="text: '{% trans "Exit" %}: ' + exit_code(), visible: finished() && exit_code() > 0"></a>
               </td>
             </tr>
           </tbody>
