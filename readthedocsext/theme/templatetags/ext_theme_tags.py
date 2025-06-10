@@ -152,12 +152,16 @@ def get_providers(context, process="login"):
 
     ``priority``
         Priority order value for list of providers, higher values are lower in priority on the list.
+
+    Additionally, filter out providers from the database -- applications that
+    have a ``pk`` -- these are per-user applications like SAML.
     """
     # The base Allauth ``get_providers`` tag filters out providers marked as hidden in our settings file.
     providers = [
         provider
         for provider in base_get_providers(context)
         if not provider.app.settings.get(f"hidden_on_{process}", False)
+        and not provider.app.pk
     ]
     return sorted(
         providers, key=lambda provider: provider.app.settings.get("priority", 100)
