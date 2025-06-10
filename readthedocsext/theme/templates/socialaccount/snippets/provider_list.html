@@ -57,15 +57,48 @@
                 </div>
                 <div class="description">
                   <p>
-                    {% if provider.id == "github" %}
-                      {% blocktrans trimmed %}
-                        For users that connected their GitHub accounts before June 15, 2025.
-                      {% endblocktrans %}
-                    {% elif provider.id == "githubapp" %}
-                      {% blocktrans trimmed %}
-                        For users that have switched their connected GitHub accounts already.
-                      {% endblocktrans %}
-                    {% endif %}
+                    {# As we progress in a beta test period, the connect text should be tuned to make GHA sound like less of a beta feature. #}
+                    {% with is_early_beta=False %}
+                      {% if provider.id == "github" %}
+                        {% if process == "connect" and is_early_beta %}
+                          {% blocktrans trimmed %}
+                            For new users and users reconnecting a previously connected GitHub account.
+                          {% endblocktrans %}
+                        {% elif process == "connect" and not is_early_beta %}
+                          {% blocktrans trimmed %}
+                            For users reconnecting a previously connected GitHub account and users unable to switch to our new app.
+                          {% endblocktrans %}
+                          <i>
+                            {% blocktrans trimmed %}
+                              We recommend new users connect their account using our GitHub App.
+                            {% endblocktrans %}
+                          </i>
+                        {% else %}
+                          {% blocktrans trimmed %}
+                            For users that connected their GitHub accounts before June 15, 2025.
+                          {% endblocktrans %}
+                        {% endif %}
+                      {% elif provider.id == "githubapp" %}
+                        {% if process == "connect" and is_early_beta %}
+                          {% blocktrans trimmed %}
+                            For users that would like early access to our new app and would like to test new features.
+                          {% endblocktrans %}
+                          <i>
+                            {% blocktrans trimmed %}
+                              We recommend only advanced users use this method.
+                            {% endblocktrans %}
+                          </i>
+                        {% elif process == "connect" and not is_early_beta %}
+                          {% blocktrans trimmed %}
+                            For users that want granular control of permissions to repositories.
+                          {% endblocktrans %}
+                        {% else %}
+                          {% blocktrans trimmed %}
+                            For users that have switched their connected GitHub accounts already.
+                          {% endblocktrans %}
+                        {% endif %}
+                      {% endif %}
+                    {% endwith %}
                   </p>
                 </div>
                 <div class="extra">
