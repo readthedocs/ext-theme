@@ -10,7 +10,9 @@ from django.templatetags.i18n import (
 )
 from django.templatetags.static import StaticNode, PrefixNode
 from django.forms import boundfield
-
+from allauth.socialaccount.templatetags.socialaccount import (
+    get_providers as base_get_providers,
+)
 
 log = logging.getLogger(__name__)
 register = template.Library()
@@ -132,6 +134,45 @@ def get_spam_score(project):
         return 0
 
     return spam_score(project)
+
+
+@register.simple_tag(takes_context=True)
+def get_providers(context, process="login"):
+    """
+    Adds additional app setting support and sorting to the Allauth provider list tag.
+
+    There are multiple app settings checked to determine if we show the
+    provider to the user and which order:
+
+    ``hidden`` (bool)
+        This comes from the base Allauth tag
+
+    ``hidden_on_login``/``hidden_on_connect``/``hidden_on_{process}`` (bool)
+        Hide the provider from the Allauth process view
+
+    ``priority``
+        Priority order value for list of providers, higher values are lower in priority on the list.
+
+    Additionally, filter out providers from the database -- applications that
+    have a ``pk`` -- these are per-user applications like SAML.
+    """
+    # The base Allauth ``get_providers`` tag filters out providers marked as hidden in our settings file.
+    providers = [
+        provider
+        for provider in base_get_providers(context)
+        if not provider.app.settings.get(f"hidden_on_{process}", False)
+        and not provider.app.pk
+    ]
+    return sorted(
+        providers, key=lambda provider: provider.app.settings.get("priority", 100)
+    )
+
+
+# TODO remove this after we don't need to separate the providers with a modal
+@register.simple_tag(takes_context=True)
+def get_github_providers(context, process="login"):
+    providers = get_providers(context, process)
+    return list(filter(lambda provider: "github" in provider.id, providers))
 
 
 # Simple solution to not supported "zh" language code.
