@@ -193,57 +193,59 @@ collapsed, to save visual space and can be expanded with the right label.
       </div>
     </div>
 
-    <div class="ui mini modal" data-modal-id="project-debug">
-      <div class="header">{% trans "Debug information" %}</div>
-      {% comment %}
+    {% if user.is_staff %}
+      <div class="ui mini modal" data-modal-id="project-debug">
+        <div class="header">{% trans "Debug information" %}</div>
+        {% comment %}
         Show spam information on community instance.
         Allows us to quickly understand what's the spam score,
         and also know what rules are matching this project.
-      {% endcomment %}
-      <div class="content">
-        <h3>{% trans "Impersonate" %}</h3>
-        <div class="ui sub header">{% trans "Project maintainer" %}</div>
-        <div class="ui vertical list">
-          {% for user in project|admins %}
-            <div class="item">
-              <a href="{{ ADMIN_URL|cut:"/admin" }}/impersonate/{{ user.pk }}/" target="_blank">{{ user.username }}</a>
-            </div>
-          {% endfor %}
-
-        </div>
-
-        {% if USE_ORGANIZATIONS %}
-          <div class="ui sub header">{% trans "Organization owner" %}</div>
+        {% endcomment %}
+        <div class="content">
+          <h3>{% trans "Impersonate" %}</h3>
+          <div class="ui sub header">{% trans "Project maintainer" %}</div>
           <div class="ui vertical list">
-            {% for owner in organization|admins %}
+            {% for user in project|admins %}
               <div class="item">
-                <a href="{{ ADMIN_URL|cut:"/admin" }}/impersonate/{{ owner.pk }}/" target="_blank">{{ owner.username }}</a>
+                <a href="{{ ADMIN_URL|cut:"/admin" }}/impersonate/{{ user.pk }}/" target="_blank">{{ user.username }}</a>
               </div>
             {% endfor %}
-          </div>
-        {% endif %}
 
-        {% if not USE_ORGANIZATIONS %}
-          <h3>{% trans "Spam" %}</h3>
-          <div class="ui sub header">{% trans "Spam score" %}</div>
-          <span>{{ project|get_spam_score }}</span>
-          {% if project.spam_rules.exists %}
-            <div class="ui sub header">{% trans "Spam matching rules" %}</div>
+          </div>
+
+          {% if USE_ORGANIZATIONS %}
+            <div class="ui sub header">{% trans "Organization owner" %}</div>
             <div class="ui vertical list">
-              {% for rule in project.spam_rules.all %}
+              {% for owner in organization|admins %}
                 <div class="item">
-                  <a href="{{ ADMIN_URL }}/spamfighting/spamrule/{{ rule.pk }}/change/"
-                     target="_blank">{{ rule.spam_rule_type|cut:"readthedocsext.spamfighting.rules." }}</a>
+                  <a href="{{ ADMIN_URL|cut:"/admin" }}/impersonate/{{ owner.pk }}/" target="_blank">{{ owner.username }}</a>
                 </div>
               {% endfor %}
             </div>
           {% endif %}
-        {% endif %}
+
+          {% if not USE_ORGANIZATIONS %}
+            <h3>{% trans "Spam" %}</h3>
+            <div class="ui sub header">{% trans "Spam score" %}</div>
+            <span>{{ project|get_spam_score }}</span>
+            {% if project.spam_rules.exists %}
+              <div class="ui sub header">{% trans "Spam matching rules" %}</div>
+              <div class="ui vertical list">
+                {% for rule in project.spam_rules.all %}
+                  <div class="item">
+                    <a href="{{ ADMIN_URL }}/spamfighting/spamrule/{{ rule.pk }}/change/"
+                       target="_blank">{{ rule.spam_rule_type|cut:"readthedocsext.spamfighting.rules." }}</a>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endif %}
+        </div>
+        <div class="actions">
+          <a href="#" class="ui negative button">{% trans "Close" %}</a>
+        </div>
       </div>
-      <div class="actions">
-        <a href="#" class="ui negative button">{% trans "Close" %}</a>
-      </div>
-    </div>
+    {% endif %}
   {% endblock project_header_navigation %}
 
 {% endblock project_header %}
