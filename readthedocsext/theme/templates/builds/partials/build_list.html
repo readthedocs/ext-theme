@@ -64,7 +64,7 @@
          data-bind="semanticui: { popup: { content: '{{ object.date }}', position: 'top center', delay: { show: 500 }, variation: 'small'}}">
       {# Translators: this will read like "Started 1 month, 3 days ago" #}
       {% blocktrans with object.date|naturaltime as date trimmed %}
-        Started {{ date }}
+        {{ date }}
       {% endblocktrans %}
     </div>
   </div>
