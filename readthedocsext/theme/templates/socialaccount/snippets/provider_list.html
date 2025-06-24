@@ -1,29 +1,142 @@
-{% load get_providers provider_login_url from socialaccount %}
 {% load trans blocktrans from i18n %}
+{% load get_github_providers get_providers from ext_theme_tags %}
 
-{% get_providers as socialaccount_providers %}
+{% comment %}
+  ``get_providers`` filters out providers marked as hidden in our settings file.
+  ``get_github_providers`` is just used for the modal and can be removed eventually.
+{% endcomment %}
+{% get_providers process=process as providers %}
+{% get_github_providers process=process as providers_github %}
 
-{% for provider in socialaccount_providers %}
-  {% comment %}
-    - OpenID is not implemented.
-    - SAML is handled in another view, we don't want to list all SAML integrations here.
-    - GitHub App is not exposed to users yet.
-  {% endcomment %}
-  {% if provider.id != 'saml' and provider.id != 'githubapp' %}
-    {% if allowed_providers and provider.id in allowed_providers or not allowed_providers %}
-      <li class="item">
-        <form class="ui form"
-              method="post"
-              action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
-          {% csrf_token %}
-          <button class="ui button" type="submit" title="{{ provider.name }}">
-            <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
-            {% blocktrans trimmed with provider_name=provider.name verbiage=verbiage|default:'Connect to' %}
-              {{ verbiage }} {{ provider_name }}
-            {% endblocktrans %}
-          </button>
-        </form>
-      </li>
-    {% endif %}
+{% comment %}
+  If both GitHub providers are configured, and they are not ``hidden=True`` or
+  ``hidden_on_{process}=True`` in settings, we'll show these providers in a modal.
+{% endcomment %}
+{% get_providers process=process as providers %}
+{% if providers_github|length == 2 %}
+  {% trans "GitHub" as provider_name %}
+  <li class="item">
+    <a class="ui button"
+       data-bind="click: $root.show_modal('github-select')"
+       title="{{ provider_name }}">
+      <i class="fa-brands fa-github icon"></i>
+      {% blocktrans trimmed with provider_name=provider_name verbiage=verbiage|default:'Connect to' %}
+        {{ verbiage }} {{ provider_name }}
+      {% endblocktrans %}
+    </a>
+  </li>
+  <div class="ui tiny modal" data-modal-id="github-select">
+    <div class="header">
+      {% blocktrans trimmed with verbiage=verbiage|default:'Connect to' provider_name=provider_name %}
+        {{ verbiage }} {{ provider_name }}
+      {% endblocktrans %}
+    </div>
+    <div class="content">
+      <p>
+        {% blocktrans trimmed %}
+          Read the Docs now supports two methods for connecting your GitHub account:
+        {% endblocktrans %}
+      </p>
+      <div class="ui segment">
+        <div class="ui small divided items">
+          {% for provider in providers_github %}
+            <div class="item">
+              <div class="content">
+                <div class="header">
+                  {% if provider.id == "github" %}
+                    {% blocktrans trimmed %}
+                      Our GitHub OAuth app
+                    {% endblocktrans %}
+                    <span class="ui compact small basic label">Default</span>
+                  {% elif provider.id == "githubapp" %}
+                    {% blocktrans trimmed %}
+                      Our GitHub App
+                    {% endblocktrans %}
+                    <span class="ui violet compact small basic label">Beta</span>
+                  {% endif %}
+                </div>
+                <div class="description">
+                  <p>
+                    {# As we progress in a beta test period, the connect text should be tuned to make GHA sound like less of a beta feature. #}
+                    {% with is_early_beta=False %}
+                      {% if provider.id == "github" %}
+                        {% if process == "connect" and is_early_beta %}
+                          {% blocktrans trimmed %}
+                            For new users and users reconnecting a previously connected GitHub account.
+                          {% endblocktrans %}
+                        {% elif process == "connect" and not is_early_beta %}
+                          {% blocktrans trimmed %}
+                            For users reconnecting a previously connected GitHub account and users unable to switch to our new app.
+                          {% endblocktrans %}
+                          <i>
+                            {% blocktrans trimmed %}
+                              We recommend new users connect their account using our GitHub App.
+                            {% endblocktrans %}
+                          </i>
+                        {% else %}
+                          {% blocktrans trimmed %}
+                            For users that connected their GitHub accounts before June 24, 2025.
+                          {% endblocktrans %}
+                        {% endif %}
+                      {% elif provider.id == "githubapp" %}
+                        {% if process == "connect" and is_early_beta %}
+                          {% blocktrans trimmed %}
+                            For users that would like early access to our new app and would like to test new features.
+                          {% endblocktrans %}
+                          <i>
+                            {% blocktrans trimmed %}
+                              We recommend only advanced users use this method.
+                            {% endblocktrans %}
+                          </i>
+                        {% elif process == "connect" and not is_early_beta %}
+                          {% blocktrans trimmed %}
+                            For users that want granular control of permissions to repositories.
+                          {% endblocktrans %}
+                        {% else %}
+                          {% blocktrans trimmed %}
+                            For users that have switched their connected GitHub accounts already.
+                          {% endblocktrans %}
+                        {% endif %}
+                      {% endif %}
+                    {% endwith %}
+                  </p>
+                </div>
+                <div class="extra">
+                  {% with button_classes=forloop.first|yesno:"right floated primary,right floated basic" %}
+                    {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider button_classes=button_classes %}
+                  {% endwith %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="ui info message">
+        <i class="fas fa-info-circle icon"></i>
+        To learn more about our new GitHub App integration,
+        <a href="https://about.readthedocs.com/blog/2025/06/announcing-our-github-app-beta/">read our beta announcement</a>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui cancel button">{% trans "Cancel" %}</div>
+    </div>
+  </div>
+{% endif %}
+
+{# This is the basic list but with sorting now. If there is a modal above, we skip the GitHub providers here #}
+{% for provider in providers %}
+  {% if providers_github|length == 2 and "github" in provider.id %}
+    {% comment %}
+      TODO remove this after we are mostly using GHA and don't need a modal
+
+      Skip any provider that is in the modal above if the modal is in use. This
+      adjusts for when one provider is shown on connect but the modal is used
+      on login.
+    {% endcomment %}
+  {% else %}
+    <li class="item">
+      {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider %}
+    </li>
   {% endif %}
 {% endfor %}
