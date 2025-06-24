@@ -75,7 +75,7 @@
                           </i>
                         {% else %}
                           {% blocktrans trimmed %}
-                            For users that connected their GitHub accounts before June 15, 2025.
+                            For users that connected their GitHub accounts before June 24, 2025.
                           {% endblocktrans %}
                         {% endif %}
                       {% elif provider.id == "githubapp" %}
@@ -110,6 +110,12 @@
             </div>
           {% endfor %}
         </div>
+      </div>
+
+      <div class="ui info message">
+        <i class="fas fa-info-circle icon"></i>
+        To learn more about our new GitHub App integration,
+        <a href="https://about.readthedocs.com/blog/2025/06/announcing-our-github-app-beta/">read our beta announcement</a>
       </div>
     </div>
     <div class="actions">
