@@ -21,12 +21,23 @@
     </p>
 
     <div class="ui raised segment">
-      <p>
-        <details>
-          <summary>{% trans "View recovery codes" %}</summary>
-          {% for code in unused_codes %}<code>{{ code }} </code>{% endfor %}
-        </details>
-      </p>
+      <div class="ui basic fitted segment">
+        <div class="ui accordion">
+          <div class="title">
+            <i class="dropdown icon"></i>
+            {% trans "View recovery codes" %}
+          </div>
+          <div class="content">
+            <div class="ui list">
+              {% for code in unused_codes %}
+                <div class="item">
+                  <code>{{ code }}</code>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
 
       <input type="hidden"
              id="mfa-recovery-codes"
