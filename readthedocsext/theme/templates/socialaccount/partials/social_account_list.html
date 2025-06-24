@@ -1,16 +1,14 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-{% load gravatar %}
+{% load blocktrans trans from i18n %}
 {% load can_be_disconnected from readthedocs.socialaccounts %}
 
-{% load core_tags %}
-{% load privacy_tags %}
-{% load projects_tags %}
-{% load ext_theme_tags %}
+{% load get_account_username from ext_theme_tags %}
 
 {% block top_menu %}
-  {% if form.non_field_errors %}<div class="ui error message">{{ form.non_field_errors }}</div>{% endif %}
+  {% if form.non_field_errors %}
+    <div class="ui error message">{{ form.non_field_errors }}</div>
+  {% endif %}
   {{ block.super }}
 {% endblock top_menu %}
 {% block top_left_menu_items %}
@@ -18,7 +16,9 @@
 
 {% block create_button %}
   <div class="ui green button"
-       data-bind="click: $root.show_modal('socialaccount-connections')">{% trans "Add new connection" %}</div>
+       data-bind="click: $root.show_modal('socialaccount-connections')">
+    {% trans "Add new connection" %}
+  </div>
 {% endblock create_button %}
 
 {% block list_placeholder_icon_class %}
@@ -56,11 +56,19 @@
 {% endblock list_item_right_menu %}
 
 {% block list_item_image %}
-  <img class="ui rounded image"
-       src="{{ object.get_avatar_url }}"
-       height="28"
-       alt="{% trans "Social account avatar" %}"
-       width="28" />
+  {% with avatar_url=object.get_avatar_url %}
+    {% if avatar_url %}
+      <img class="ui rounded image"
+           src="{{ avatar_url }}"
+           height="28"
+           alt="{% trans "Social account avatar" %}"
+           width="28" />
+    {% else %}
+      <div class="ui center aligned image">
+        <i class="fad fa-user icon"></i>
+      </div>
+    {% endif %}
+  {% endwith %}
 {% endblock list_item_image %}
 
 {% block list_item_header %}
@@ -73,12 +81,19 @@
 {% endblock list_item_header %}
 
 {% block list_item_meta_items %}
-  {% with object.get_provider_account as provider %}
-    <span class="ui label">
-      {# get_brand.name|lower here because we can't use `id`, `Bitbucket2Provider.id == 'bitbucket_oauth2'` #}
-      <i class="fa-brands fa-{{ provider.get_brand.name|lower }} icon"></i>
-      {{ provider.get_brand.name }}
-    </span>
+  {% with provider=object.get_provider %}
+    {% if provider.app.pk and provider.id == "saml" %}
+      <span class="ui label">
+        <i class="fas fa-users icon"></i>
+        {% trans "SAML" %}
+      </span>
+    {% else %}
+      {# Provider is not a database provider #}
+      <span class="ui label">
+        <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
+        {{ provider.app.name|default:provider.name }}
+      </span>
+    {% endif %}
   {% endwith %}
 {% endblock list_item_meta_items %}
 
