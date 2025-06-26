@@ -35,7 +35,7 @@
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
-  {# This URL is to the detail page for the integration or for GHA the GitHub GHA page #}
+  {# This URL is to the detail page for the integration or for the GitHub App page #}
   <a class="ui icon button"
      href="{{ object.get_absolute_url }}"
      {% if object.is_remote_only %}target="_blank"{% endif %}>
@@ -55,7 +55,7 @@
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
-  {# This URL is to the detail page for the integration or for GHA the GitHub GHA page #}
+  {# This URL is to the detail page for the integration or for the GitHub App page #}
   <a href="{{ object.get_absolute_url }}"
      {% if object.is_remote_only %}target="_blank"{% endif %}>
     {{ object.get_integration_type_display }}
