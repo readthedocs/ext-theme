@@ -36,11 +36,13 @@
 
 {% block list_item_right_buttons %}
   {# This URL is to the detail page for the integration or for the GitHub App page #}
-  <a class="ui icon button"
-     href="{{ object.get_absolute_url }}"
-     {% if object.is_remote_only %}target="_blank"{% endif %}>
-    <i class="fa-duotone fa-wrench icon"></i>
-  </a>
+  {% with url=object.get_absolute_url %}
+    <a class="ui {% if not url %}disabled{% endif %} icon button"
+       href="{% firstof url '#' %}"
+       {% if object.is_remote_only %}target="_blank"{% endif %}>
+      <i class="fa-duotone fa-wrench icon"></i>
+    </a>
+  {% endwith %}
 
   {% url 'projects_integrations_delete' project_slug=project.slug integration_pk=object.pk as form_url %}
   {% trans "Remove integration" as action_text %}
@@ -56,10 +58,17 @@
 
 {% block list_item_header %}
   {# This URL is to the detail page for the integration or for the GitHub App page #}
-  <a href="{{ object.get_absolute_url }}"
-     {% if object.is_remote_only %}target="_blank"{% endif %}>
-    {{ object.get_integration_type_display }}
-  </a>
+  {% with url=object.get_absolute_url %}
+    {% if url %}
+      <a href="{{ url }}"
+         {% if object.is_remote_only %}target="_blank"{% endif %}>
+        {{ object.get_integration_type_display }}
+      </a>
+    {% else %}
+      {# Mostly for GHA integrations that are disconnected. We have nothing to link to #}
+      {{ object.get_integration_type_display }}
+    {% endif %}
+  {% endwith %}
 
   {% if object.is_remote_only %}
     {% blocktrans trimmed asvar popup %}
