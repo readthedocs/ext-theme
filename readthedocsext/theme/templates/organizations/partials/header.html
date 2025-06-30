@@ -29,8 +29,6 @@ collapsed, to save visual space and can be expanded with the right label.
           <div class="eight wide computer eight wide tablet sixteen wide mobile middle aligned column">
             <img class="ui micro rounded right spaced inline image"
                  src="{{ organization.get_avatar_url }}"
-                 height="48"
-                 width="48"
                  alt="{% blocktrans trimmed with organization_name=organization.name %}{{ organization_name }} organization{% endblocktrans %}" />
             <a class="ui medium text" href="{{ organization.get_absolute_url }}">
               {{ organization.name }}

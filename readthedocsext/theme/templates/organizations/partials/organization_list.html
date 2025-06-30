@@ -67,8 +67,6 @@
 {% block list_item_image %}
   <img class="ui image"
        src="{{ object.get_avatar_url }}"
-       height="48"
-       width="48"
        alt="{% blocktrans trimmed with organization_name=object.name %}{{ organization_name }} organization{% endblocktrans %}" />
 {% endblock list_item_image %}
 
