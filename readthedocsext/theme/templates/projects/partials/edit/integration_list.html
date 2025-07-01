@@ -1,6 +1,7 @@
 {% extends "includes/crud/table_list.html" %}
 
 {% load trans blocktrans from i18n %}
+{% load naturaltime from humanize %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
@@ -84,7 +85,7 @@
 {% endblock list_item_header %}
 
 {% block list_item_meta_items %}
-  {% if not object.is_active %}
+  {% if object.is_remote_only and not object.is_active %}
     {% trans "Disconnected" context "The integration is in a disconnected state" as text %}
     {% blocktrans trimmed with version=object.verbose_name asvar popup %}
       This integration is disconnected, check with your provider
@@ -92,7 +93,20 @@
     <div class="item">
       {% include "includes/components/config_label.html" with classes="red" icon="fa-solid fa-circle-exclamation" text=text popup=popup %}
     </div>
+  {% elif object.is_remote_only and object.is_active %}
+    {# `is_active` ensures there is a connected remote repository #}
+    <div class="item">
+      {# Translators: this is time since connecting this integraiton and will read "Connected 1 year, 5 months ago" #}
+      {% blocktrans with time_since=object.project.remote_repository.modified|naturaltime trimmed %}
+        Connected {{ time_since }}
+      {% endblocktrans %}
+    </div>
   {% elif not object.is_remote_only %}
-    <div class="item">{{ object.exchanges.count }} exchanges</div>
+    <div class="item">
+      {# Translators: this is the number of HTTP request/response exchanges for this integration, as in "10 exchanges" #}
+      {% blocktrans with count=object.exchanges.count trimmed %}
+        {{ count }} exchanges
+      {% endblocktrans %}
+    </div>
   {% endif %}
 {% endblock list_item_meta_items %}
