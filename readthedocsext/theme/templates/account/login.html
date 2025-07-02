@@ -47,6 +47,9 @@
         {% block authentication_email_text %}
           {% trans "Email" %}
         {% endblock authentication_email_text %}
+        {% if last_login_method == "email" %}
+          <div class="ui teal label">Last used</div>
+        {% endif %}
       </a>
 
       {% if USE_ORGANIZATIONS %}
