@@ -97,7 +97,7 @@
     {# `is_active` ensures there is a connected remote repository #}
     <div class="item">
       {# Translators: this is time since connecting this integraiton and will read "Connected 1 year, 5 months ago" #}
-      {% blocktrans with time_since=object.project.remote_repository.modified|naturaltime trimmed %}
+      {% blocktrans with time_since=object.created|naturaltime trimmed %}
         Connected {{ time_since }}
       {% endblocktrans %}
     </div>
