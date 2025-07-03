@@ -65,7 +65,7 @@ export class OrganizationCreateView {
     };
 
     nameInput.addEventListener("keyup", (e) => {
-      slugInput.setAttribute("value", slugify(nameInput.value));
+      slugInput.value = slugify(nameInput.value);
     });
   }
 }
