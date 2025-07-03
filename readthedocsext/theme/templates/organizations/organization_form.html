@@ -16,7 +16,9 @@
          return val.toString()
                    .toLowerCase()
                    .trim()
-                   // replace spaces, non-word chars, underscores and dashes with a single '-'
+                   // Replace spaces, non-word chars, underscores and dashes with a single '-'
+                   // Copied from Django, which is what we are using under the hood
+                   // https://github.com/django/django/blob/1e9db35/django/utils/text.py#L469-L470
                    .replace(/[^\w\s-_]+/g, '-')
                    .replace(/[-\s]+/g, '-')
      };
