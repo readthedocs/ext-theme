@@ -9,7 +9,7 @@
   <script>
  // TODO: where this code should live?
  document.addEventListener("DOMContentLoaded", (event) => {
-     const titleInput = document.querySelector('input[name=name');
+     const nameInput = document.querySelector('input[name=name');
      const slugInput = document.querySelector('input[name=slug]');
 
      const slugify = (val) => {
@@ -23,8 +23,8 @@
                    .replace(/[-\s]+/g, '-')
      };
 
-     titleInput.addEventListener('keyup', (e) => {
-         slugInput.setAttribute('value', slugify(titleInput.value));
+     nameInput.addEventListener('keyup', (e) => {
+         slugInput.setAttribute('value', slugify(nameInput.value));
      });
  });
 
