@@ -3,6 +3,32 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 
+{% block head_scripts %}
+{{ block.super }}
+
+<script>
+ // TODO: where this code should live?
+ document.addEventListener("DOMContentLoaded", (event) => {
+     const titleInput = document.querySelector('input[name=name');
+     const slugInput = document.querySelector('input[name=slug]');
+
+     const slugify = (val) => {
+         return val.toString()
+                   .toLowerCase()
+                   .trim()
+                   // replace spaces, non-word chars, underscores and dashes with a single '-'
+                   .replace(/[^\w\s-_]+/g, '-')
+                   .replace(/[-\s]+/g, '-')
+     };
+
+     titleInput.addEventListener('keyup', (e) => {
+         slugInput.setAttribute('value', slugify(titleInput.value));
+     });
+ });
+
+</script>
+{% endblock head_scripts %}
+
 {% block title %}
   {% blocktrans %}Create a new organization{% endblocktrans %}
 {% endblock %}
