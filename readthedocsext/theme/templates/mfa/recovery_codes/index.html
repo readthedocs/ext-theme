@@ -21,12 +21,22 @@
     </p>
 
     <div class="ui raised segment">
-      <div class="ui list">
-        {% for code in unused_codes %}
-          <div class="item">
-            <code>{{ code }}</code>
+      <div class="ui basic fitted segment">
+        <div class="ui accordion">
+          <div class="title">
+            <i class="dropdown icon"></i>
+            {% trans "View recovery codes" %}
           </div>
-        {% endfor %}
+          <div class="content">
+            <div class="ui list">
+              {% for code in unused_codes %}
+                <div class="item">
+                  <code>{{ code }}</code>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
       </div>
 
       <input type="hidden"

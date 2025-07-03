@@ -1,0 +1,24 @@
+{% load blocktrans trans from i18n %}
+
+{% with "https://about.readthedocs.com/blog/2025/06/announcing-our-github-app-beta/" as url_blog %}
+  <div data-bind="using: new ProjectAnnouncementView('github-app')">
+    <div class="ui fluid card ko hidden" data-bind="css: { hidden: closed }">
+      <div class="content">
+        <i class="fa-solid fa-xmark right floated close icon"
+           data-bind="click: close_announcement"></i>
+        <div class="header">{% trans "Announcing our GitHub App beta" %}</div>
+        <div class="description">
+          {% blocktrans trimmed %}
+            We're excited to announce our GitHub App -- allowing more granular permissions and additional functionality around pull request builds.
+            You can start using the new GitHub App today on our Community site in beta. We plan to start testing with our Business users soon.
+          {% endblocktrans %}
+          <div class="ui extra content">
+            <a class="ui small primary fluid basic button"
+               target="_blank"
+               href="{{ url_blog }}">{% trans "Read more about our GitHub App" %}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endwith %}

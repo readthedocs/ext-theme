@@ -52,18 +52,25 @@
 {% block list_item_header %}
   <a href="{% url "projects_detail" object.slug %}">{{ object.name }}</a>
   <div class="sub header">
-    {% if object.has_good_build %}
-      {% with build=object.get_latest_build %}
+    {% with build=object.get_latest_build %}
+      {% if build %}
         <time data-content="{{ build.date }}">
-          {# Translators: this will read like "Last built 1 year, 5 months ago" #}
-          {% blocktrans with time_since=build.date|naturaltime trimmed %}
-            Last built {{ time_since }}
-          {% endblocktrans %}
+          {% if build.finished %}
+            {# Translators: this will read like "Last built 1 year, 5 months ago" #}
+            {% blocktrans with time_since=build.date|naturaltime trimmed %}
+              Last built {{ time_since }}
+            {% endblocktrans %}
+          {% else %}
+            {# Translators: this will read like "Build started 5 minutes ago" #}
+            {% blocktrans with time_since=build.date|naturaltime trimmed %}
+              Build started {{ time_since }}
+            {% endblocktrans %}
+          {% endif %}
         </time>
-      {% endwith %}
-    {% else %}
-      {% trans "Not built yet" %}
-    {% endif %}
+      {% else %}
+        {% trans "Not built yet" %}
+      {% endif %}
+    {% endwith %}
   </div>
 {% endblock list_item_header %}
 
@@ -71,12 +78,9 @@
 {% endblock list_item_meta %}
 
 {% block list_item_extra_items %}
-  {% if object.has_good_build %}
-    {% with build=object.get_latest_build %}
-      {# Safety check, there seems to be some case where `has_good_build` and `get_latest_build` still return a null build #}
-      {% if build %}
-        {% include "includes/elements/chips/build.html" with project=object build=build %}
-      {% endif %}
-    {% endwith %}
-  {% endif %}
+  {% with build=object.get_latest_build %}
+    {% if build %}
+      {% include "includes/elements/chips/build.html" with project=object build=build %}
+    {% endif %}
+  {% endwith %}
 {% endblock list_item_extra_items %}
