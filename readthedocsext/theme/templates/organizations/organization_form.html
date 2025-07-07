@@ -2,6 +2,7 @@
 
 {% load trans blocktrans from i18n %}
 {% load crispy from crispy_forms_tags %}
+{% load alter_field from ext_theme_tags %}
 
 {% block title %}
   {% blocktrans %}Create a new organization{% endblocktrans %}
@@ -87,7 +88,22 @@
              data-bind="using: new OrganizationCreateView()">
           <form class="ui form" action="" method="post">
             {% csrf_token %}
+            {% alter_field form.name data_bind="valueInit: name, textInput: name" %}
+            {% alter_field form.slug data_bind="valueInit:slug, text: slug, textInput: slug" %}
             {{ form|crispy }}
+
+            {# djlint: off H021 #}
+            <div class="ui segment"
+                 data-bind="visible: example()"
+                 style="display: none">
+              <div class="ui list">
+                <div class="item">
+                  <div class="sub header">{% trans "Example URL for a project" %}</div>
+                  <code data-bind="text: example"></code>
+                </div>
+              </div>
+            </div>
+            {# djlint: on H021 #}
 
             <button class="ui primary button" type="submit">
               {% trans "Create organization" %}
