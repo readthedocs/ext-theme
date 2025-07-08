@@ -1,5 +1,4 @@
 {% load trans blocktrans from i18n %}
-{% load user_has_github_app_account from readthedocs.socialaccounts %}
 
 {% comment rst %}
   Project automatic configuration view
@@ -100,26 +99,15 @@
 
     </div>
     <div class="ui small bottom attached center aligned message">
-      <p>{% trans "Can't find the repository you are searching for?" %}</p>
 
-      <p>
-        {% if user|user_has_github_app_account %}
-          <a class="ui mini black basic compact button"
-             href="https://github.com/apps/{{ GITHUB_APP_NAME }}/installations/new/"
-             target="_blank">
-            <i class="fa-brands fa-github icon"></i>
-            {% trans "Update GitHub App permissions" %}
-          </a>
+      {% trans "Can't find the repository you are searching for?" %}
 
-          {% trans "or" %}
-        {% endif %}
+      <button class="ui mini black basic compact right aligned button"
+              data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
+        <i class="fa-duotone fa-refresh icon"></i>
+        {% trans "Refresh your repositories" %}
+      </button>
 
-        <button class="ui mini black basic compact button"
-                data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
-          <i class="fa-duotone fa-refresh icon"></i>
-          {% trans "Refresh your repositories" %}
-        </button>
-      </p>
     </div>
   </div>
 {% endblock project_add_automatic_placeholder %}
