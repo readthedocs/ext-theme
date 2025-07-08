@@ -54,12 +54,8 @@ export class OrganizationCreateView {
       this.slug(slugified);
     });
     this.example = ko.computed(() => {
-      const slug = this.slug();
-      if (!slug) {
-        return "";
-      }
-      const example =
-        "https://" + slug + "-example-project.readthedocs-hosted.com";
+      const slug = this.slug() || "organization";
+      const example = "https://" + slug + "-project.readthedocs-hosted.com";
       return example;
     });
   }
