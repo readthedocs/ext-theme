@@ -39,3 +39,40 @@ export class OrganizationSettingsAuthorizationView {
   }
 }
 Registry.add_view(OrganizationSettingsAuthorizationView);
+
+/**
+ * Organization creation
+ */
+export class OrganizationCreateView {
+  static view_name = "OrganizationCreateView";
+
+  constructor() {
+    this.name = ko.observable();
+    this.slug = ko.observable();
+    this.name.subscribe((name) => {
+      const slugified = this.slugify(name);
+      this.slug(slugified);
+    });
+    this.example = ko.computed(() => {
+      const slug = this.slug() || "organization";
+      const example = "https://" + slug + "-project.readthedocs-hosted.com";
+      return example;
+    });
+  }
+
+  slugify(val) {
+    if (!val) return "";
+    return (
+      val
+        .toString()
+        .toLowerCase()
+        .trim()
+        // Replace spaces, non-word chars, underscores and dashes with a single '-'
+        // Copied from Django, which is what we are using under the hood
+        // https://github.com/django/django/blob/1e9db35/django/utils/text.py#L469-L470
+        .replace(/[^\w\s-_]+/g, "-")
+        .replace(/[-\s]+/g, "-")
+    );
+  }
+}
+Registry.add_view(OrganizationCreateView);

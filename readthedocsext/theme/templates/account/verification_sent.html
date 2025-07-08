@@ -1,0 +1,20 @@
+{% extends "account/base_entrance.html" %}
+
+{% load blocktrans trans from i18n %}
+{% load user_display from account %}
+
+{% block head_title %}
+  {% trans "Verify your email address" %}
+{% endblock head_title %}
+{% block content_title_text %}
+  <i class="fad fa-envelope icon"></i>
+  {% trans "Verify your email address" %}
+{% endblock content_title_text %}
+
+{% block content_body %}
+  <p>
+    {% blocktrans trimmed %}
+      We have sent an email to you for verification. Follow the link provided to finalize the signup process. If you do not see the verification email in your main inbox, check your spam folder. Please contact us if you do not receive the verification email within a few minutes.
+    {% endblocktrans %}
+  </p>
+{% endblock content_body %}
