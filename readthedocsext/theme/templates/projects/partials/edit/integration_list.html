@@ -1,6 +1,7 @@
 {% extends "includes/crud/table_list.html" %}
 
 {% load trans blocktrans from i18n %}
+{% load naturaltime from humanize %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
@@ -35,17 +36,21 @@
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
-  <a class="ui icon button"
-     href="{% url 'projects_integrations_detail' project_slug=project.slug integration_pk=object.pk %}">
-    <i class="fa-duotone fa-wrench icon"></i>
-  </a>
+  {# This URL is to the detail page for the integration or for the GitHub App page #}
+  {% with url=object.get_absolute_url %}
+    <a class="ui {% if not url %}disabled{% endif %} icon button"
+       href="{% firstof url '#' %}"
+       {% if object.is_remote_only %}target="_blank"{% endif %}>
+      <i class="fa-duotone fa-wrench icon"></i>
+    </a>
+  {% endwith %}
 
   {% url 'projects_integrations_delete' project_slug=project.slug integration_pk=object.pk as form_url %}
   {% trans "Remove integration" as action_text %}
   {% blocktrans trimmed asvar content_text with description=object.get_integration_type_display %}
     Remove integration {{ description }}?
   {% endblocktrans %}
-  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text content_text=content_text %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text content_text=content_text is_disabled=object.is_remote_only %}
 {% endblock list_item_right_buttons %}
 
 {% block list_item_icon %}
@@ -53,15 +58,55 @@
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
-  <a href="{% url 'projects_integrations_detail' project_slug=project.slug integration_pk=object.pk %}">
-    {{ object.get_integration_type_display }}
-  </a>
-  {% if object.has_sync and object.can_sync %}
-    <i class="fa-duotone fa-wand-magic-sparkles icon"
-       data-content="{% trans "Automatically managed" %}"></i>
+  {# This URL is to the detail page for the integration or for the GitHub App page #}
+  {% with url=object.get_absolute_url %}
+    {% if url %}
+      <a href="{{ url }}"
+         {% if object.is_remote_only %}target="_blank"{% endif %}>
+        {{ object.get_integration_type_display }}
+      </a>
+    {% else %}
+      {# Mostly for GHA integrations that are disconnected. We have nothing to link to #}
+      {{ object.get_integration_type_display }}
+    {% endif %}
+  {% endwith %}
+
+  {% if object.is_remote_only %}
+    {% blocktrans trimmed asvar popup %}
+      This integration is managed by the provider and cannot be removed
+    {% endblocktrans %}
+    {% include "includes/components/config_label.html" with icon="fa-duotone fa-lock" popup=popup %}
+  {% elif not object.has_sync and not object.can_sync %}
+    {% blocktrans trimmed asvar popup %}
+      This integration is not automatically managed and will require manual setup
+    {% endblocktrans %}
+    {% include "includes/components/config_label.html" with icon="fa-duotone fa-user-gear" popup=popup %}
   {% endif %}
 {% endblock list_item_header %}
 
-{% block list_item_meta %}
-  <div class="item">{{ object.exchanges.count }} exchanges</div>
-{% endblock list_item_meta %}
+{% block list_item_meta_items %}
+  {% if object.is_remote_only and not object.is_active %}
+    {% trans "Disconnected" context "The integration is in a disconnected state" as text %}
+    {% blocktrans trimmed with version=object.verbose_name asvar popup %}
+      This integration is disconnected, check with your provider
+    {% endblocktrans %}
+    <div class="item">
+      {% include "includes/components/config_label.html" with classes="red" icon="fa-solid fa-circle-exclamation" text=text popup=popup %}
+    </div>
+  {% elif object.is_remote_only and object.is_active %}
+    {# `is_active` ensures there is a connected remote repository #}
+    <div class="item">
+      {# Translators: this is time since connecting this integraiton and will read "Connected 1 year, 5 months ago" #}
+      {% blocktrans with time_since=object.created|naturaltime trimmed %}
+        Connected {{ time_since }}
+      {% endblocktrans %}
+    </div>
+  {% elif not object.is_remote_only %}
+    <div class="item">
+      {# Translators: this is the number of HTTP request/response exchanges for this integration, as in "10 exchanges" #}
+      {% blocktrans with count=object.exchanges.count trimmed %}
+        {{ count }} exchanges
+      {% endblocktrans %}
+    </div>
+  {% endif %}
+{% endblock list_item_meta_items %}
