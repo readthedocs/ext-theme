@@ -16,6 +16,18 @@
   {% endif %}
 {% endblock content_title_text %}
 
+{% block head_scripts %}
+  {{ block.super }}
+
+  <script type="text/javascript">
+  // TODO: where should we put this code?
+  const last_login_method = "{{ last_login_method }}";
+  if (window.location.pathname == "/accounts/login/" && last_login_method == "email") {
+    history.pushState({}, "", "#/email/");
+  }
+  </script>
+{% endblock head_scripts %}
+
 {% block content_body %}
   {% get_providers as socialaccount_providers %}
 
