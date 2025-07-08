@@ -72,6 +72,11 @@ export class OrganizationCreateView {
         // https://github.com/django/django/blob/1e9db35/django/utils/text.py#L469-L470
         .replace(/[^\w\s-_]+/g, "-")
         .replace(/[-\s]+/g, "-")
+        // And then also replicate our dns_safe slugging from
+        // :py:method:`readthedocs.core.utils.sluggify`
+        .replace(/[\-\_]+/g, "-")
+        .replace(/^\-+/, "")
+        .replace(/\-+$/, "")
     );
   }
 }

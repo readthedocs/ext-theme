@@ -16,7 +16,8 @@
         <h2 class="ui medium heading">{% trans "Join or create an organization" %}</h2>
 
         <div class="ui segment">
-          <div class="ui link list" data-bind="semanticui: { tabmenu: {} }">
+          <div class="ui link list"
+               data-bind="semanticui: { tabs: {history: true, autoTabActivation: true} }">
             <a class="item" data-tab="empty">
               {% comment %}
                 Show nothing when the user arrives at this page.
@@ -86,7 +87,7 @@
         <div class="ui tab"
              data-tab="new"
              data-bind="using: new OrganizationCreateView()">
-          <form class="ui form" action="" method="post">
+          <form class="ui form" action="#/new" method="post">
             {% csrf_token %}
             {% alter_field form.name data_bind="valueInit: name, textInput: name" %}
             {% alter_field form.slug data_bind="valueInit:slug, text: slug, textInput: slug" %}
