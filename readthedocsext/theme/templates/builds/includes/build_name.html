@@ -39,22 +39,24 @@
 {% if not is_page_title %}<a href="{{ build.get_absolute_url }}">{% endif %}
   <span class="ui {% if is_page_title %}large{% endif %} breadcrumb">
     <span class="section">
-      <span class="ui">
-        {# When used a a page title, link the sections independently #}
-        {# Translators: this renders with the version name, example "Version latest" #}
+      {# When used a a page title, link the sections independently #}
+      {# Translators: this renders with the version name, example "Version latest" #}
+      {% if is_page_title %}
+        <a href="{% url "projects_detail" build.project.slug %}">
+        {% endif %}
         {% blocktrans trimmed %}
           Versions
         {% endblocktrans %}
-      </span>
+        {% if is_page_title %}</a>{% endif %}
     </span>
 
     {% if build.is_external %}
       <span class="section">
         <span class="divider">/</span>
-        <span class="ui">
+        <a href="{% url "projects_detail" build.project.slug %}?slug={{ build.get_version_slug }}">
           {{ build.external_version_name | lower | capfirst }}
           {{ build.get_version_name }}
-        </span>
+        </a>
       </span>
     {% endif %}
 
