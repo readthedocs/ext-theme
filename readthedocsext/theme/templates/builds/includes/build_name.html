@@ -53,14 +53,14 @@
     {% if build.is_external %}
       <span class="section">
         <span class="divider">/</span>
-        <a href="{% url "projects_detail" build.project.slug %}?slug={{ build.get_version_slug }}">
+        {% if is_page_title %}
+          <a href="{% url "projects_detail" build.project.slug %}?slug={{ build.get_version_slug }}">
+          {% endif %}
           {{ build.external_version_name | lower | capfirst }}
           {{ build.get_version_name }}
-        </a>
+          {% if is_page_title %}</a>{% endif %}
       </span>
-    {% endif %}
-
-    {% if not build.is_external %}
+    {% else %}
       <span class="section">
         <span class="divider">/</span>
         {% if is_page_title %}
