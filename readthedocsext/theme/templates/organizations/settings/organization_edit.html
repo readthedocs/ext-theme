@@ -15,7 +15,10 @@
 {% endblock organization_edit_content_header %}
 
 {% block organization_edit_content %}
-  <form class="ui form" method="post" action=".">
+  <form class="ui form"
+        method="post"
+        enctype="multipart/form-data"
+        action=".">
     {% csrf_token %}
     {{ form|crispy }}
     <input class="ui primary button" type="submit" value="{% trans "Save" %}" />
