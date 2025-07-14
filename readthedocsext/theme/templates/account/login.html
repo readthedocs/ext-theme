@@ -54,14 +54,12 @@
 
       {# If allowed providers is given, disable the email menu item #}
       <a class="{% if allowed_providers %}disabled{% endif %} item"
+         {% if last_login_method == "email" %} data-tooltip="Last used" data-variation="teal visible" data-position="top center" {% endif %}
          data-tab="email">
         <i class="fas fa-envelope icon"></i>
         {% block authentication_email_text %}
           {% trans "Email" %}
         {% endblock authentication_email_text %}
-        {% if last_login_method == "email" %}
-          <div class="ui teal label">Last used</div>
-        {% endif %}
       </a>
 
       {% if USE_ORGANIZATIONS %}
