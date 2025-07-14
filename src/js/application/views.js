@@ -65,6 +65,11 @@ export class ApplicationView {
       if (found_modal.length === 0) {
         console.debug("Modal not found:", selector);
       }
+
+      // Remove "visible" variation property to remove "Last used" tooltip
+      const variation = event.target.dataset.variation.split(" ");
+      variation.pop("visible");
+      event.target.dataset.variation = variation.join(" ");
     };
   }
 

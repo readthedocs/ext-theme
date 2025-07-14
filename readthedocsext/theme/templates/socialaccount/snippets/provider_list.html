@@ -17,6 +17,7 @@
   {% trans "GitHub" as provider_name %}
   <li class="item">
     <a class="ui button"
+       {% if last_login_method == "github" or last_login_method == "githubapp" %} data-tooltip="Last used" data-variation="teal visible" data-position="right center" {% endif %}
        data-bind="click: $root.show_modal('github-select')"
        title="{{ provider_name }}">
       <i class="fa-brands fa-github icon"></i>
@@ -24,9 +25,6 @@
         {{ verbiage }} {{ provider_name }}
       {% endblocktrans %}
     </a>
-    {% if last_login_method == "github" %}
-      <span class="ui compact small teal basic label">Last used</span>
-    {% endif %}
   </li>
   <div class="ui tiny modal" data-modal-id="github-select">
     <div class="header">
@@ -51,16 +49,10 @@
                       Our GitHub OAuth app
                     {% endblocktrans %}
                     <span class="ui compact small basic label">Default</span>
-                    {% if last_login_method == "github" %}
-                      <span class="ui compact small teal basic label">Last used</span>
-                    {% endif %}
                   {% elif provider.id == "githubapp" %}
                     {% blocktrans trimmed %}
                       Our GitHub App
                     {% endblocktrans %}
-                    {% if last_login_method == "githubapp" %}
-                      <span class="ui compact small teal basic label">Last used</span>
-                    {% endif %}
                   {% endif %}
                 </div>
                 <div class="description">
