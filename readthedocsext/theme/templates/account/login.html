@@ -101,7 +101,10 @@
         <div class="ui stackable relaxed text menu">
           <a class="item" href="{% url 'account_reset_password' %}">{% trans "Forgot your password?" %}</a>
           <div class="right menu">
-            <button class="ui primary button" type="submit">{% trans "Log in" %}</button>
+            <button class="ui primary button"
+                    data-bind="click: $root.save_login_method"
+                    data-provider="email"
+                    type="submit">{% trans "Log in" %}</button>
           </div>
         </div>
 
@@ -114,6 +117,8 @@
       <a href="{% url "saml_resolve_login" %}{% if redirect_field_value %}?{{ redirect_field_name }}={{ redirect_field_value }}{% endif %}">
 
         <button class="ui button"
+                data-bind="click: $root.save_login_method"
+                data-provider="sso"
                 type="submit"
                 {% if last_login_method == "sso" %} data-tooltip="Last used" data-variation="teal visible" data-position="right center" {% endif %}
                 title="Single sign-on">

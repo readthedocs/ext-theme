@@ -8,6 +8,8 @@
     {% csrf_token %}
 
     <button class="ui {{ button_classes }} button"
+            data-bind="click: $root.save_login_method"
+            data-provider="{{ provider.id }}"
             type="submit"
             {% if last_login_method == provider.id|lower %} data-tooltip="Last used" data-variation="teal visible" data-position="{% if last_login_method == "github" %}left{% else %}right{% endif %}
             center
