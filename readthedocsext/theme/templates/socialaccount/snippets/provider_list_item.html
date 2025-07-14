@@ -9,7 +9,10 @@
 
     <button class="ui {{ button_classes }} button"
             type="submit"
-            {% if last_login_method == provider.id|lower %} data-tooltip="Last used" data-variation="teal visible" data-position="left center" {% endif %}
+            {% if last_login_method == provider.id|lower %} data-tooltip="Last used" data-variation="teal visible" data-position="{% if last_login_method == "github" %}left{% else %}right{% endif %}
+            center
+            "
+            {% endif %}
             title="{{ provider.name }}">
       <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
       {% blocktrans trimmed with provider_name=provider.app.name|default:provider.name verbiage=verbiage|default:'Connect to' %}
