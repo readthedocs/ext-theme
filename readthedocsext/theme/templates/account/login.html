@@ -31,7 +31,7 @@
     </div>
 
     <div class="ui small stackable teal centered fluid wrapping menu" data-bind="semanticui: {tabs: {
-      {% if login_tab %}autoTabActivation: '{{ login_tab }}'{% endif %}
+      {% if last_login_tab %}autoTabActivation: '{{ last_login_tab }}'{% endif %}
       }}">
 
       <a class="item" data-tab="vcs">
@@ -43,7 +43,7 @@
 
       {# If allowed providers is given, disable the email menu item #}
       <a class="{% if allowed_providers %}disabled{% endif %} item"
-         {% if login_tab == "email" %} data-tooltip="Last used" data-variation="teal visible" data-position="top center" {% endif %}
+         {% if last_login_tab == "email" %} data-tooltip="Last used" data-variation="teal visible" data-position="top center" {% endif %}
          data-tab="email">
         <i class="fas fa-envelope icon"></i>
         {% block authentication_email_text %}
