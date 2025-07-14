@@ -56,7 +56,7 @@
                 {% url "projects_redirects_create" project_slug=project.slug as url_redirects %}
                 {% blocktrans trimmed with url=url_redirects %}
                   Deactivating a version or changing its slug will result in the deletion of its documentation.
-                  Make sure to <a href="{{ url }}" target="_blank">create a redirect</a> to avoid not found pages.
+                  Make sure to <a href="{{ url }}" target="_blank">create a redirect</a> for these URLs to ensure old links continue working.
                 {% endblocktrans %}
               </div>
             {% endif %}
