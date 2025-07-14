@@ -67,9 +67,14 @@ export class ApplicationView {
       }
 
       // Remove "visible" variation property to remove "Last used" tooltip
-      const variation = event.target.dataset.variation.split(" ");
-      variation.pop("visible");
-      event.target.dataset.variation = variation.join(" ");
+      const buttons = document.querySelectorAll("button.ui");
+      for (const button of buttons) {
+        if (button.dataset.variation) {
+          const variation = button.dataset.variation.split(" ");
+          variation.pop("visible");
+          button.dataset.variation = variation.join(" ");
+        }
+      }
     };
   }
 
