@@ -16,7 +16,7 @@
             {% if last_login_method == provider.id|lower %}
             data-tooltip="Last used"
             data-variation="teal visible"
-            data-position="{% if last_login_method == "github" %}left{% else %}right{% endif %} center"
+            data-position="right center"
             {% endif %}
 
       title="{{ provider.name }}">
