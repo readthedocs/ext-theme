@@ -63,6 +63,8 @@ export class ProjectRedirectView {
         return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>/';
       } else if (redirect_type === "clean_url_without_trailing_slash_to_html") {
         return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>';
+      } else if (redirect_type === "html_to_clean_url") {
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>.html';
       }
       return "";
     });
@@ -82,6 +84,8 @@ export class ProjectRedirectView {
         return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>.html';
       } else if (redirect_type === "clean_url_without_trailing_slash_to_html") {
         return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>.html';
+      } else if (redirect_type === "html_to_clean_url") {
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>/';
       }
       return "";
     });
@@ -101,6 +105,7 @@ export class ProjectRedirectView {
         [
           "clean_url_to_html",
           "clean_url_without_trailing_slash_to_html",
+          "html_to_clean_url",
         ].includes(redirect_type)
       ) {
         this.is_example_disabled(false);
