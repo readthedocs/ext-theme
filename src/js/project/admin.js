@@ -53,13 +53,16 @@ export class ProjectRedirectView {
       if (redirect_type === "prefix") {
         return from_url + "faq.html";
       } else if (redirect_type === "page") {
-        return "/$lang/$version/" + from_url.replace(/^\/+/, "");
+        return (
+          '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/' +
+          from_url.replace(/^\/+/, "")
+        );
       } else if (redirect_type === "exact") {
         return from_url;
       } else if (redirect_type === "clean_url_to_html") {
-        return "/$lang/$version/$file/";
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>/';
       } else if (redirect_type === "clean_url_without_trailing_slash_to_html") {
-        return "/$lang/$version/$file";
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>';
       }
       return "";
     });
@@ -67,15 +70,18 @@ export class ProjectRedirectView {
       const to_url = this.to_url();
       const redirect_type = this.redirect_type();
       if (redirect_type === "prefix") {
-        return "/$lang/$version/faq.html";
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/faq.html';
       } else if (redirect_type === "page") {
-        return "/$lang/$version/" + to_url.replace(/^\/+/, "");
+        return (
+          '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/' +
+          to_url.replace(/^\/+/, "")
+        );
       } else if (redirect_type === "exact") {
         return to_url;
       } else if (redirect_type === "clean_url_to_html") {
-        return "/$lang/$version/$file.html";
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>.html';
       } else if (redirect_type === "clean_url_without_trailing_slash_to_html") {
-        return "/$lang/$version/$file.html";
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>.html';
       }
       return "";
     });
