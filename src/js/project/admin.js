@@ -56,6 +56,10 @@ export class ProjectRedirectView {
         return "/$lang/$version/" + from_url.replace(/^\/+/, "");
       } else if (redirect_type === "exact") {
         return from_url;
+      } else if (redirect_type === "clean_url_to_html") {
+        return "/$lang/$version/$file/";
+      } else if (redirect_type === "clean_url_without_trailing_slash_to_html") {
+        return "/$lang/$version/$file";
       }
       return "";
     });
@@ -68,6 +72,10 @@ export class ProjectRedirectView {
         return "/$lang/$version/" + to_url.replace(/^\/+/, "");
       } else if (redirect_type === "exact") {
         return to_url;
+      } else if (redirect_type === "clean_url_to_html") {
+        return "/$lang/$version/$file.html";
+      } else if (redirect_type === "clean_url_without_trailing_slash_to_html") {
+        return "/$lang/$version/$file.html";
       }
       return "";
     });
@@ -83,6 +91,15 @@ export class ProjectRedirectView {
         }
         this.is_from_url_visible(true);
         this.is_to_url_visible(is_to_url_visible);
+      } else if (
+        [
+          "clean_url_to_html",
+          "clean_url_without_trailing_slash_to_html",
+        ].includes(redirect_type)
+      ) {
+        this.is_example_disabled(false);
+        this.is_from_url_visible(false);
+        this.is_to_url_visible(false);
       } else {
         this.is_example_disabled(true);
         this.is_from_url_visible(false);
