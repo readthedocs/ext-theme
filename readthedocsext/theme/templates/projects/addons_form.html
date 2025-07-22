@@ -109,6 +109,7 @@
       {% block addons_link_previews %}
         <div class="ui tab" data-tab="link-previews">
           {{ form.linkpreviews_enabled | as_crispy_field }}
+          {{ form.linkpreviews_selector | as_crispy_field }}
         </div>
       {% endblock addons_link_previews %}
 
