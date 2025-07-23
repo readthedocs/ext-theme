@@ -1,5 +1,6 @@
 import jquery from "jquery";
 import ko from "knockout";
+import DOMPurify from "dompurify";
 
 import { Registry } from "../application/registry";
 
@@ -48,7 +49,7 @@ export class ProjectRedirectView {
     this.is_to_url_visible = ko.observable();
 
     this.redirect_from = ko.computed(() => {
-      var from_url = this.from_url();
+      var from_url = DOMPurify.sanitize(this.from_url());
       var redirect_type = this.redirect_type();
       if (redirect_type === "prefix") {
         return from_url + "faq.html";
@@ -67,7 +68,7 @@ export class ProjectRedirectView {
       return "";
     });
     this.redirect_to = ko.computed(() => {
-      const to_url = this.to_url();
+      const to_url = DOMPurify.sanitize(this.to_url());
       const redirect_type = this.redirect_type();
       if (redirect_type === "prefix") {
         return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/faq.html';
