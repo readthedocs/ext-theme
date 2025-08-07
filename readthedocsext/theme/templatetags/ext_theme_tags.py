@@ -1,6 +1,8 @@
 import logging
 from urllib.parse import urljoin
 
+from django.db.models.query import QuerySet
+
 from django import template
 from django.conf import settings
 from django.templatetags.i18n import (
@@ -211,3 +213,15 @@ def readthedocs_language_name_local(lang_code):
     except Exception:
         log.exception("Error getting language name")
         return lang_code
+
+
+@register.filter
+def is_empty(value):
+    """
+    Check if an iterable or queryset is empty.
+
+    This avoids using `not value` on a queryset, so the queryset is not evaluated.
+    """
+    if isinstance(value, QuerySet):
+        return not value.exists()
+    return not value

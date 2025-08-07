@@ -1,3 +1,4 @@
+{% load is_empty from ext_theme_tags %}
 {% comment "rst" %}
   Shared list base
   ================
@@ -92,21 +93,16 @@
   {% comment %}
     We usually pass in a queryset here, but some views emit arrays of objects
     instead, so we support these as well. Therefore, the check here needs to be
-    for an empty array or an empty queryset. Because Django templates aim to
-    be as difficult as possible to use, this conditional looks pretty silly.
+    for an empty array or an empty queryset.
 
-    This cannot be a simple `if not objects` as this executes the query, which
-    can cause the view to timeout when the query is very large. See ``bool``
-    evaluation in:
+    We avoid using a simple `if not objects` check, as that would evaluate
+    the queryset, which can cause a timeout if the queryset is very large,
+    instead we use a custom template tag that call ``exists`` if the value is
+    a queryset, or ``not value`` otherwise. See ``bool`` evaluation in:
 
     https://docs.djangoproject.com/en/4.2/ref/models/querysets/
-
-    Order on the conditional matters here, `and` has higher precedence. Django
-    templates don't support parenthesis in conditionals.
-
-    https://docs.djangoproject.com/en/5.0/ref/templates/builtins/#boolean-operators
   {% endcomment %}
-  {% if objects.exists is None and objects|length == 0 or objects.exists == False %}
+  {% if objects|is_empty %}
     {% comment "rst" %}
 
       .. _api-template-list-placeholder:
