@@ -25,15 +25,19 @@
 
     <div class="ui disabled segment"
          data-bind="css: {disabled: is_example_disabled}">
-      <div data-bind="visible: !is_example_disabled()" style="display: none;">
+      <div class="ko hidden" data-bind="css: {hidden: is_example_disabled()}">
         <div class="ui list">
           <div class="item">
             <div class="sub header">{% trans "Redirect from" %}</div>
-            <code data-bind="html: redirect_from"></code>
+            <code>
+              <span data-bind="html: redirect_from_prefix"></span><span data-bind="text: redirect_from"></span>
+            </code>
           </div>
           <div class="item">
             <div class="sub header">{% trans "Redirect to" %}</div>
-            <code data-bind="html: redirect_to"></code>
+            <code>
+              <span data-bind="html: redirect_to_prefix"></span><span data-bind="text: redirect_to"></span>
+            </code>
           </div>
         </div>
       </div>
