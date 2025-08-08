@@ -47,35 +47,57 @@ export class ProjectRedirectView {
     this.is_from_url_visible = ko.observable();
     this.is_to_url_visible = ko.observable();
 
-    this.redirect_from = ko.computed(() => {
-      var from_url = this.from_url();
-      var redirect_type = this.redirect_type();
-      if (redirect_type === "prefix") {
-        return from_url + "faq.html";
-      } else if (redirect_type === "page") {
-        return "/$lang/$version/" + from_url.replace(/^\/+/, "");
-      } else if (redirect_type === "exact") {
-        return from_url;
+    // HTML prefix content for from field, don't use user input here
+    this.redirect_from_prefix = ko.computed(() => {
+      const redirect_type = this.redirect_type();
+      if (redirect_type === "page") {
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/';
       } else if (redirect_type === "clean_url_to_html") {
-        return "/$lang/$version/$file/";
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>/';
       } else if (redirect_type === "clean_url_without_trailing_slash_to_html") {
-        return "/$lang/$version/$file";
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>';
+      } else if (redirect_type === "html_to_clean_url") {
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>.html';
       }
       return "";
     });
+    // User input for from field as text, no HTML allowed
+    this.redirect_from = ko.computed(() => {
+      const from_url = this.from_url();
+      const redirect_type = this.redirect_type();
+      if (redirect_type === "prefix") {
+        return from_url + "faq.html";
+      } else if (redirect_type === "page") {
+        return from_url.replace(/^\/+/, "");
+      } else if (redirect_type === "exact") {
+        return from_url;
+      }
+      return "";
+    });
+    // HTML prefix content for to field, don't use user input here.
+    this.redirect_to_prefix = ko.computed(() => {
+      const redirect_type = this.redirect_type();
+      if (redirect_type === "prefix") {
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/faq.html';
+      } else if (redirect_type === "page") {
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/';
+      } else if (redirect_type === "clean_url_to_html") {
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>.html';
+      } else if (redirect_type === "clean_url_without_trailing_slash_to_html") {
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>.html';
+      } else if (redirect_type === "html_to_clean_url") {
+        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>/';
+      }
+      return "";
+    });
+    // User input for to field as text, no HTML allowed
     this.redirect_to = ko.computed(() => {
       const to_url = this.to_url();
       const redirect_type = this.redirect_type();
-      if (redirect_type === "prefix") {
-        return "/$lang/$version/faq.html";
-      } else if (redirect_type === "page") {
-        return "/$lang/$version/" + to_url.replace(/^\/+/, "");
+      if (redirect_type === "page") {
+        return to_url.replace(/^\/+/, "");
       } else if (redirect_type === "exact") {
         return to_url;
-      } else if (redirect_type === "clean_url_to_html") {
-        return "/$lang/$version/$file.html";
-      } else if (redirect_type === "clean_url_without_trailing_slash_to_html") {
-        return "/$lang/$version/$file.html";
       }
       return "";
     });
@@ -95,6 +117,7 @@ export class ProjectRedirectView {
         [
           "clean_url_to_html",
           "clean_url_without_trailing_slash_to_html",
+          "html_to_clean_url",
         ].includes(redirect_type)
       ) {
         this.is_example_disabled(false);
