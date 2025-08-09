@@ -94,6 +94,8 @@
       {% else %}
         {% if object.redirect_type == "clean_url_to_html" %}
           <span>/**/</span><span class="ui violet text">$1</span><span>/</span>
+        {% elif object.redirect_type == "clean_url_without_trailing_slash_to_html" %}
+          <span>/**/</span><span class="ui violet text">$1</span>
         {% elif object.redirect_type == "html_to_clean_url" %}
           <span>/**/</span><span class="ui violet text">$1</span><span>.html</span>
         {% endif %}
@@ -112,6 +114,8 @@
         <span>{{ object.to_url }}</span>
       {% else %}
         {% if object.redirect_type == "clean_url_to_html" %}
+          <span>/**/</span><span class="ui violet text">$1</span><span>.html</span>
+        {% elif object.redirect_type == "clean_url_without_trailing_slash_to_html" %}
           <span>/**/</span><span class="ui violet text">$1</span><span>.html</span>
         {% elif object.redirect_type == "html_to_clean_url" %}
           <span>/**/</span><span class="ui violet text">$1</span><span>/</span>
