@@ -50,14 +50,17 @@ export class ProjectRedirectView {
     // HTML prefix content for from field, don't use user input here
     this.redirect_from_prefix = ko.computed(() => {
       const redirect_type = this.redirect_type();
+      const lang_part = `/<span class="ui violet text">$lang</span>`;
+      const version_part = `/<span class="ui violet text">$version</span>`;
+
       if (redirect_type === "page") {
-        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/';
+        return `${lang_part}${version_part}/`;
       } else if (redirect_type === "clean_url_to_html") {
-        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>/';
+        return `${lang_part}${version_part}/<span class="ui violet text">$file</span>/`;
       } else if (redirect_type === "clean_url_without_trailing_slash_to_html") {
-        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>';
+        return `${lang_part}${version_part}/<span class="ui violet text">$file</span>`;
       } else if (redirect_type === "html_to_clean_url") {
-        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>.html';
+        return `${lang_part}${version_part}/<span class="ui violet text">$file</span>.html`;
       }
       return "";
     });
@@ -77,16 +80,19 @@ export class ProjectRedirectView {
     // HTML prefix content for to field, don't use user input here.
     this.redirect_to_prefix = ko.computed(() => {
       const redirect_type = this.redirect_type();
+      const lang_part = `/<span class="ui violet text">$lang</span>`;
+      const version_part = `/<span class="ui violet text">$version</span>`;
+
       if (redirect_type === "prefix") {
-        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/faq.html';
+        return `${lang_part}${version_part}/faq.html`;
       } else if (redirect_type === "page") {
-        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/';
+        return `${lang_part}${version_part}/`;
       } else if (redirect_type === "clean_url_to_html") {
-        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>.html';
+        return `${lang_part}${version_part}/<span class="ui violet text">$file</span>.html`;
       } else if (redirect_type === "clean_url_without_trailing_slash_to_html") {
-        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>.html';
+        return `${lang_part}${version_part}/<span class="ui violet text">$file</span>.html`;
       } else if (redirect_type === "html_to_clean_url") {
-        return '/<span class="ui violet text">$lang</span>/<span class="ui violet text">$version</span>/<span class="ui violet text">$file</span>/';
+        return `${lang_part}${version_part}/<span class="ui violet text">$file</span>/`;
       }
       return "";
     });
