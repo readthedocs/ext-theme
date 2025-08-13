@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load trans blocktrans from i18n %}
 
 {% for project in project_list %}
   <li class="item">
@@ -41,8 +41,6 @@
         {% endif %}
       </li>
     </ul>
-
-
   </li>
 {% empty %}
   <li class="item">{% trans "No projects found" %}</li>
