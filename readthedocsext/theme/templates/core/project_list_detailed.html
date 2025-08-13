@@ -23,7 +23,7 @@
     {% endwith %}
 
     {% if project.has_good_build %}
-      <span>{% blocktrans with date=project.get_latest_build.date|timesince %}{{ date }} ago{% endblocktrans %}</span>
+      <span>{% blocktrans with date=project.latest_internal_build.date|timesince %}{{ date }} ago{% endblocktrans %}</span>
     {% else %}
       <span>{% trans "No builds" %}</span>
     {% endif %}
