@@ -320,7 +320,7 @@
         <table class="{% block list_classes %}ui very basic stacking table{% endblock list_classes %}">
 
           {% if not skip_pagination %}
-            {% autopaginate objects 15 %}
+            {% autopaginate objects 5 %}
           {% endif %}
 
           <tbody>
