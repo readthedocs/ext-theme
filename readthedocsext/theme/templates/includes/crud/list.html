@@ -228,7 +228,7 @@
         <div class="{% block list_classes %}ui middle aligned very relaxed divided list{% endblock %}">
 
           {% if not skip_pagination %}
-            {% autopaginate objects 15 %}
+            {% autopaginate objects 5 %}
           {% endif %}
 
           {% for object in objects %}
