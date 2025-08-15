@@ -30,8 +30,9 @@
       </div>
     </div>
 
-    <div class="ui small stackable teal centered fluid wrapping menu"
-         data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
+    <div class="ui small stackable teal centered fluid wrapping menu" data-bind="semanticui: {tabs: {
+      {% if last_login_tab %}autoTabActivation: '{{ last_login_tab }}'{% endif %}
+      }}">
 
       <a class="item" data-tab="vcs">
         <i class="fas fa-cloud icon"></i>
@@ -42,6 +43,7 @@
 
       {# If allowed providers is given, disable the email menu item #}
       <a class="{% if allowed_providers %}disabled{% endif %} item"
+         {% if last_login_tab == "email" %} data-tooltip="Last used" data-variation="teal visible" data-position="top center" {% endif %}
          data-tab="email">
         <i class="fas fa-envelope icon"></i>
         {% block authentication_email_text %}
@@ -50,8 +52,7 @@
       </a>
 
       {% if USE_ORGANIZATIONS %}
-        <a class="item"
-           href="{% url "saml_resolve_login" %}{% if redirect_field_value %}?{{ redirect_field_name }}={{ redirect_field_value }}{% endif %}">
+        <a class="item" data-tab="sso">
           <i class="fas fa-shield-alt icon"></i>
           {% trans "Single sign-on" %}
         </a>
@@ -100,13 +101,33 @@
         <div class="ui stackable relaxed text menu">
           <a class="item" href="{% url 'account_reset_password' %}">{% trans "Forgot your password?" %}</a>
           <div class="right menu">
-            <button class="ui primary button" type="submit">{% trans "Log in" %}</button>
+            <button class="ui primary button"
+                    data-bind="click: $root.save_login_method"
+                    data-provider="email"
+                    type="submit">{% trans "Log in" %}</button>
           </div>
         </div>
 
       </form>
     {% endblock authentication_email %}
   </div>
+
+  {% if USE_ORGANIZATIONS %}
+    <div class="ui basic center aligned tab segment" data-tab="sso">
+      <a href="{% url "saml_resolve_login" %}{% if redirect_field_value %}?{{ redirect_field_name }}={{ redirect_field_value }}{% endif %}">
+
+        <button class="ui button"
+                data-bind="click: $root.save_login_method"
+                data-provider="sso"
+                type="submit"
+                {% if last_login_method == "sso" %} data-tooltip="Last used" data-variation="teal visible" data-position="right center" {% endif %}
+                title="Single sign-on">
+          <i class="fas fa-shield-alt icon" aria-hidden="true"></i>
+          {% trans "Log in using single sign-on" %}
+        </button>
+      </a>
+    </div>
+  {% endif %}
 
   {% block authentication_extra %}
   {% endblock authentication_extra %}

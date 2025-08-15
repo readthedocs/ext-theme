@@ -17,6 +17,7 @@
   {% trans "GitHub" as provider_name %}
   <li class="item">
     <a class="ui button"
+       {% if last_login_method == "github" or last_login_method == "githubapp" %} data-tooltip="Last used" data-variation="teal visible" data-position="right center" {% endif %}
        data-bind="click: $root.show_modal('github-select')"
        title="{{ provider_name }}">
       <i class="fa-brands fa-github icon"></i>
