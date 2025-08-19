@@ -1,11 +1,8 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load i18n %}
-{% load humanize %}
-{% load gravatar %}
-
-{% load organizations %}
-{% load privacy_tags %}
+{% load trans blocktrans from i18n %}
+{% load has_sso_enabled from organizations %}
+{% load is_admin from privacy_tags %}
 
 {% block top_left_menu_items %}
   <div data-bind="using: FilterView()">
@@ -23,9 +20,11 @@
     {% url "organization_create" as create_url %}
     {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
   {% endif %}
-{% endblock %}
+{% endblock create_button %}
 
-{% block list_placeholder_icon_class %}fad fa-building icon{% endblock %}
+{% block list_placeholder_icon_class %}
+  fad fa-building icon
+{% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header_filtered %}
   {% trans "No matching organizations found" %}
 {% endblock list_placeholder_header_filtered %}
@@ -66,7 +65,9 @@
 {% endblock list_item_right_buttons %}
 
 {% block list_item_image %}
-  <img class="ui image" src="{% gravatar_url object.email 48 %}" />
+  <img class="ui image"
+       src="{{ object.get_avatar_url }}"
+       alt="{% blocktrans trimmed with organization_name=object.name %}{{ organization_name }} organization{% endblocktrans %}" />
 {% endblock list_item_image %}
 
 {% block list_item_header %}
@@ -81,8 +82,7 @@
       {% include "includes/components/config_label.html" with icon="fad fa-user-check" text=text popup=popup %}
     {% endif %}
   </a>
-  <div class="sub header">
-  </div>
+  <div class="sub header"></div>
 {% endblock list_item_header %}
 
 {% block list_item_meta %}
@@ -95,7 +95,8 @@
     {% endblocktrans %}
   </a>
   {% if not object|has_sso_enabled:"allauth" %}
-    <a class="item" href="{% url "organization_team_list" slug=object.slug %}">
+    <a class="item"
+       href="{% url "organization_team_list" slug=object.slug %}">
       {% blocktrans trimmed with team_count=object.teams.count %}
         {{ team_count }} teams
       {% endblocktrans %}
