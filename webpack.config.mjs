@@ -55,6 +55,13 @@ export default (env, argv) => {
         },
       },
     },
+
+    // Use filesystem for cache instead memory (default) to be re-use the cache
+    // between Docker container starts/stops. This speeds up boot time a lot.
+    cache: {
+      type: is_production ? "memory" : "filesystem",
+    },
+
     module: {
       rules: [
         {
