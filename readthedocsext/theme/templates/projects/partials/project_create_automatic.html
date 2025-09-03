@@ -32,8 +32,8 @@
 
   {# Search prompt and dropdown #}
   <label>{% trans "Repository name:" %}</label>
-  <div class="ui fluid disabled loading search"
-       data-bind="semanticui: {search: search_config()}, css: {disabled: is_loading(), loading: is_loading()}">
+  <div class="ui fluid disabled loading scrolling search"
+       data-bind="semanticui: {search: search_config(), popup: search_popup_config()}, css: {disabled: is_loading(), loading: is_loading()}">
     <div class="ui fluid icon large input">
       <input class="ui text" type="text" autofocus=true />
       <i class="fa-duotone fa-search icon"></i>
@@ -53,7 +53,7 @@
       {% endcomment %}
       <script type="text/html" id="remote-repo-results">
 {# fmt:off #}
-<div data-bind="foreach: remote_repos" class="results">
+<div data-bind="foreach: remote_repos">
   <a class="result">
     <div class="image">
       <img data-bind="attr: {src: avatar_url}">
@@ -77,6 +77,106 @@
     {% endblock project_add_automatic_search_result %}
 
   </div>
+
+  {% comment %}
+    Popup to trigger help modal
+
+    This is triggered manually from the ``search_popup_config()`` observable
+    and is set up using the ``semanticui.popup`` binding on the sibling
+    element above.
+  {% endcomment %}
+  <div class="ui small wide primary popup">
+    <div class="header">{% trans "Not finding a repository?" %}</div>
+    <div class="description">
+      <p>
+        This list might be out of date or reconfiguration might be necessary to update repositories.
+      </p>
+      <a class="ui small compact right floated inverted button"
+         data-bind="click: show_modal">{% trans "Repair" %}</a>
+    </div>
+  </div>
+
+  {% comment %}
+    Modal for resyncing and repair repository/organization permissions
+
+    This content is moved to a modal so that we have more UI to explain what is
+    happening to the user, especially in the case that the user is connected
+    via GHA and needs to reconfigure the application permissions.
+  {% endcomment %}
+  <div class="ui tiny modal"
+       data-bind="semanticui: { modal: search_modal_config() }">
+    <div class="header">
+      {% blocktrans trimmed %}
+        Repair repository listing
+      {% endblocktrans %}
+    </div>
+    <div class="content">
+      <div class="ui segment">
+        <div class="ui small divided items">
+
+          {% if user|user_has_github_app_account %}
+            <div class="item">
+              <div class="content">
+                <div class="description">
+                  {% blocktrans trimmed %}
+                    Accounts connected through our GitHub App might require more frequent permission management.
+                    If you apply permissions to individual repositories, you must update the GitHub App permissions each time you create a new project.
+                  {% endblocktrans %}
+                </div>
+                <div class="extra">
+                  <a class="ui right floated button"
+                     href="https://github.com/apps/{{ GITHUB_APP_NAME }}/installations/new/"
+                     target="_blank">
+                    <i class="fa-brands fa-github icon"></i>
+                    {% trans "Update GitHub App permissions" %}
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="item">
+            <div class="content">
+              <div class="description">
+                {% blocktrans trimmed %}
+                  Your connected service account might be out of sync and a manual refresh might be needed.
+                {% endblocktrans %}
+              </div>
+              <div class="extra">
+                <button class="ui right floated button"
+                        data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing(), positive: is_synced()}">
+                  <i class="fa-duotone fa-refresh icon"
+                     data-bind="css: {'fa-refresh': !is_synced(), 'fa-check': is_synced()}"></i>
+                  {% trans "Refresh your repositories" %}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {# TODO conditional just for GitHub accounts, or generalize for all providers #}
+          <div class="item">
+            <div class="content">
+              <div class="description">
+                {% blocktrans trimmed %}
+                  The repository you're trying to add is in a GitHub organization that has not approved our GitHub application yet.
+                {% endblocktrans %}
+              </div>
+              <div class="extra">
+                <button class="ui right floated button">
+                  <i class="fa-duotone fa-refresh icon"></i>
+                  {% trans "Read more" %}
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui cancel button">{% trans "Go back" %}</div>
+    </div>
+  </div>
 {% endblock project_add_automatic_search %}
 
 {% block project_add_automatic_placeholder %}
@@ -98,28 +198,6 @@
         </div>
       </div>
 
-    </div>
-    <div class="ui small bottom attached center aligned message">
-      <p>{% trans "Can't find the repository you are searching for?" %}</p>
-
-      <p>
-        {% if user|user_has_github_app_account %}
-          <a class="ui mini black basic compact button"
-             href="https://github.com/apps/{{ GITHUB_APP_NAME }}/installations/new/"
-             target="_blank">
-            <i class="fa-brands fa-github icon"></i>
-            {% trans "Update GitHub App permissions" %}
-          </a>
-
-          {% trans "or" %}
-        {% endif %}
-
-        <button class="ui mini black basic compact button"
-                data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
-          <i class="fa-duotone fa-refresh icon"></i>
-          {% trans "Refresh your repositories" %}
-        </button>
-      </p>
     </div>
   </div>
 {% endblock project_add_automatic_placeholder %}

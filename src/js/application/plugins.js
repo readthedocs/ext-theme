@@ -340,13 +340,6 @@ export const semanticui = {
     const binding_value = ko.unwrap(value_accessor());
     const jq_element = jquery(element);
     for (const [key, value] of Object.entries(binding_value)) {
-      if (key === "modal") {
-        // modal is not supported here because the jQuery ``modal()`` plugin
-        // replaces ``<body>`` and this causes an error from Knockout, because
-        // the binding was applied to ``<body>`` more than once.
-        console.error("SemanticUI modal instantiation is not supported.");
-        return;
-      }
       if (value !== undefined) {
         if (typeof value === "function") {
           const callback = (behavior, ...args) => {
@@ -361,6 +354,26 @@ export const semanticui = {
           };
           value(callback);
         } else {
+          if (key === "modal") {
+            // We do something a fun here and move the element into ``body``
+            // before the SUI initialization. The reason for this is that SUI
+            // will move the element automatically already, however when it
+            // does the KO bindings are all re-evaluated. This will cause
+            // exceptions to be thrown around duplicate binding definitions. To
+            // make the ``modal`` module play with KO nicely, we mark the modal
+            // as _not detachable_, meaning SUI won't move the element when
+            // initializing, and move the element manually so that the
+            // positioning is relative to ``body`` instead of being relative to
+            // the modal element's parent element. If detachable is manually
+            // configured, throw an error.
+            if (value.detachable == true) {
+              throw new Error(
+                "Setting a modal as detachable is not supported by the semanticui binding.",
+              );
+            }
+            value.detachable = false;
+            document.body.prepend(element);
+          }
           // The value is probably an object, and is almost certainly a module
           // configuration for initializing the module
           console.debug(

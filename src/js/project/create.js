@@ -57,12 +57,18 @@ export class ProjectCreateView extends ResponsiveView {
     /** Configuration passed in via :func:`~application.plugins.jsonInit`
      * @observable {Object} Search configuration */
     this.search_config = ko.observable();
+    /** @observable {Object} Search popup module configuration */
+    this.search_popup_config = ko.observable();
+    /** @observable {Object} Search modal module configuration */
+    this.search_modal_config = ko.observable(undefined);
     /** @observable {Object} The selected repository */
     this.selected = ko.observable();
     /** @observable {Boolean} Is UI loading from the API currently? */
     this.is_loading = ko.observable(false);
     /** @observable {Boolean} Are remote repositories current resyncing? */
     this.is_syncing = ko.observable(false);
+    /** @observable {Boolean} Are remote repositories done resyncing? */
+    this.is_synced = ko.observable(false);
     /** @computed {Boolean} Is there a selected repository? */
     this.is_selected = ko.computed(() => {
       return this.selected() !== undefined;
@@ -94,6 +100,7 @@ export class ProjectCreateView extends ResponsiveView {
       token: config.csrf_token,
     };
 
+    this.is_synced(false);
     this.is_syncing(true);
     this.is_loading(true);
 
@@ -106,6 +113,7 @@ export class ProjectCreateView extends ResponsiveView {
       .always(() => {
         this.is_syncing(false);
         this.is_loading(false);
+        this.is_synced(true);
       });
 
     return promise;
@@ -127,6 +135,28 @@ export class ProjectCreateView extends ResponsiveView {
   init_search() {
     const config = this.config();
     const url = config.urls.remoterepository_list + "?full_name={query}";
+
+    // Configuration for the trigger of the popup element. We manually show the
+    // popup in the case that the user has tried searching multiple times
+    // unsuccessfully, or has a query with no results.
+    let attemptsRemaining = 3;
+    let canPopupShow = true;
+    this.search_popup_config({
+      on: "manual",
+      position: "top right",
+      hoverable: true,
+      closable: false,
+      preserve: true,
+      onHidden: () => {
+        // If the user did something to hide the popup, like click outside the
+        // popup, don't try to show it again.
+        canPopupShow = false;
+      },
+    });
+
+    this.search_modal_config({
+      centered: false,
+    });
 
     this.search_config({
       // We use a Knockout template here, embedded in the template as a script
@@ -153,6 +183,9 @@ export class ProjectCreateView extends ResponsiveView {
           return output;
         },
       },
+      error: {
+        noResultsHeader: "No matching repositories found",
+      },
       apiSettings: {
         url: url,
       },
@@ -167,6 +200,23 @@ export class ProjectCreateView extends ResponsiveView {
       onSelect: (result, response) => {
         this.selected(new RemoteRepository(result));
       },
+      // Listen for results and decide to show the resync popup based on what
+      // the user's interaction with search results.
+      onResults: (response, fromCache) => {
+        if (!canPopupShow) {
+          // Popup was dismissed by the user, don't show it again.
+          return;
+        } else if (
+          (response && response.count == 0) ||
+          attemptsRemaining <= 0
+        ) {
+          // Search results are empty or user tried searching multiple times
+          // unsuccessfully so far. Calls with the behavior style call supported by
+          // :js:func:`application.plugins.semanticui`.
+          this.search_popup_config((popup) => popup("show"));
+        }
+        attemptsRemaining--;
+      },
     });
   }
 
@@ -176,6 +226,12 @@ export class ProjectCreateView extends ResponsiveView {
       return this.allow_private_repos();
     }
     return true;
+  }
+
+  /** Show search modal */
+  show_modal() {
+    this.search_popup_config((popup) => popup("hide"));
+    this.search_modal_config((modal) => modal("show"));
   }
 }
 Registry.add_view(ProjectCreateView);
