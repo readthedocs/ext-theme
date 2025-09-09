@@ -75,6 +75,12 @@
       <i class="fa-solid fa-circle-check icon"></i>
       {% trans "Installed" %}
     </div>
+  {% elif object.target.has_installation %}
+    <a href="{{ object.link }}"
+       target="_blank"
+       class="ui small button"
+       data-content="{% blocktrans count count=object.repository_ids|length %}One repository requires installation{% plural %}{{ count }} repositories require installation{% endblocktrans %}"
+       data-bind="click: trackLinkClick">{% trans "Update" %}</a>
   {% else %}
     <a href="{{ object.link }}"
        target="_blank"
