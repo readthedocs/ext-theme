@@ -189,7 +189,7 @@ def readthedocs_language_name(lang_code):
             return language_name("zh-cn")
         return language_name(lang_code)
     except Exception:
-        log.debug(f"Unknown language code.", lang_code=lang_code)
+        log.debug(f"Unknown language code.")
         return lang_code
 
 
