@@ -129,8 +129,8 @@
                     {% endblocktrans %}
                   </li>
                   <li>
-                    {% blocktrans trimmed %}
-                      Projects not linked to a GitHub repository can be linked after connecting your account. These don't need migration.
+                    {% blocktrans trimmed with connect_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#connect-a-repository-to-an-existing-project" %}
+                      Projects not linked to a GitHub repository can be <a href="{{ connect_docs }}">linked</a> after connecting your account. These don't need migration.
                     {% endblocktrans %}
                   </li>
                   <li>
@@ -181,10 +181,11 @@
               <a class="ui basic button" href="?step=migrate">{% trans "Skip installation and continue" %}</a>
             {% elif step == "migrate" %}
               <p>
-                {% blocktrans trimmed %}
+                {% blocktrans trimmed with manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" connect_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#connect-a-repository-to-an-existing-project" %}
                   After installing our GitHub App on each of your repositories,
                   you will need to migrate your Read the Docs projects to use
                   the new connection.
+                  If your project isn't listed, you may need to <a href="{{ manual_migration_docs }}">manually migrate it</a> or <a href="{{ connect_docs }}">connect it to a GitHub repository</a>.
                 {% endblocktrans %}
               </p>
 
