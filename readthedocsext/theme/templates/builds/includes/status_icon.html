@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load trans from i18n %}
 
 {% comment "rst" %}
 
@@ -113,5 +113,19 @@
     'loading grey fa-spinner-third': state.code !== 'finished' && state.code !== 'triggered' && state.code !== 'cancelled',
   }
 
-{% endspaceless %}"{% endif %}></i>
+{% endspaceless %}"{% endif %}
+title="{% if build.state == 'finished' %}
+         {% if build.success %}
+           {% trans "Build finished successfully" %}
+         {% else %}
+           {% trans "Build finished with errors" %}
+         {% endif %}
+       {% elif build.state == 'cancelled' %}
+         {% trans "Build cancelled" %}
+       {% elif build.is_stale %}
+         {% trans "Build queued" %}
+       {% else %}
+         {% trans "Build in progress" %}
+       {% endif %}">
+</i>
 {# fmt:on #}
