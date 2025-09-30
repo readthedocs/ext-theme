@@ -116,9 +116,9 @@
 {% endspaceless %}"{% endif %}
 title="{% if build.state == 'finished' %}
          {% if build.success %}
-           {% trans "Build finished successfully" %}
+           {% trans "Build succeeded" %}
          {% else %}
-           {% trans "Build finished with errors" %}
+           {% trans "Build failed" %}
          {% endif %}
        {% elif build.state == 'cancelled' %}
          {% trans "Build cancelled" %}
