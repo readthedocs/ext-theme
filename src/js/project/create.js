@@ -154,7 +154,11 @@ export class ProjectCreateView extends ResponsiveView {
       },
     });
 
+    // Show repair modal immediately on view load if the URL contains `#repair` hash.
+    // Use this for linking users in support directly to this modal.
+    const show_modal = jquery(location).attr("hash") == "#repair";
     this.search_modal_config({
+      autoShow: show_modal,
       centered: false,
     });
 

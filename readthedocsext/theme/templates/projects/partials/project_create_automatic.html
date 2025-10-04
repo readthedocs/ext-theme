@@ -1,5 +1,4 @@
 {% load trans blocktrans from i18n %}
-{% load user_has_github_app_account from readthedocs.socialaccounts %}
 
 {% comment rst %}
   Project automatic configuration view
@@ -103,24 +102,32 @@
     happening to the user, especially in the case that the user is connected
     via GHA and needs to reconfigure the application permissions.
   {% endcomment %}
-  <div class="ui tiny modal"
+  <div class="ui small modal"
        data-bind="semanticui: { modal: search_modal_config() }">
     <div class="header">
       {% blocktrans trimmed %}
-        Repair repository listing
+        Repairing repository listing
       {% endblocktrans %}
     </div>
     <div class="content">
       <div class="ui segment">
         <div class="ui small divided items">
 
-          {% if user|user_has_github_app_account %}
+          {% if "githubapp" in social_account_providers %}
             <div class="item">
               <div class="content">
                 <div class="description">
+                  {% comment %}
+                    This terminology comes from the documentation for GitHub App management.
+                    Our GHA is "installed" for users or organizations and GitHub users
+                    "grant access to repositories" (or on the GHA installation page
+                    "install GHA _for repositories_").
+                  {% endcomment %}
+                  {# TODO detect if users have only installed on individual repositories so we can be more definite with this guidance #}
                   {% blocktrans trimmed %}
-                    Accounts connected through our GitHub App might require more frequent permission management.
-                    If you apply permissions to individual repositories, you must update the GitHub App permissions each time you create a new project.
+                    If our GitHub App was only granted access to select repositories,
+                    repositories without access will not display in your repository list.
+                    You will need to grant access to additional repositories each time you create a project.
                   {% endblocktrans %}
                 </div>
                 <div class="extra">
@@ -128,47 +135,54 @@
                      href="https://github.com/apps/{{ GITHUB_APP_NAME }}/installations/new/"
                      target="_blank">
                     <i class="fa-brands fa-github icon"></i>
-                    {% trans "Update GitHub App permissions" %}
+                    {% trans "Update GitHub App installation" %}
                   </a>
                 </div>
               </div>
             </div>
           {% endif %}
 
+          {# This should show for all providers and manually connected repositories #}
           <div class="item">
             <div class="content">
               <div class="description">
                 {% blocktrans trimmed %}
-                  Your connected service account might be out of sync and a manual refresh might be needed.
+                  Your connected service account might be out of sync
+                  and a manual refresh may be required to update your list of repositories.
                 {% endblocktrans %}
               </div>
               <div class="extra">
-                <button class="ui right floated button"
-                        data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing(), positive: is_synced()}">
+                <a class="ui right floated button"
+                   data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing(), positive: is_synced()}">
                   <i class="fa-duotone fa-refresh icon"
                      data-bind="css: {'fa-refresh': !is_synced(), 'fa-check': is_synced()}"></i>
                   {% trans "Refresh your repositories" %}
-                </button>
+                </a>
               </div>
             </div>
           </div>
 
-          {# TODO conditional just for GitHub accounts, or generalize for all providers #}
-          <div class="item">
-            <div class="content">
-              <div class="description">
-                {% blocktrans trimmed %}
-                  The repository you're trying to add is in a GitHub organization that has not approved our GitHub application yet.
-                {% endblocktrans %}
-              </div>
-              <div class="extra">
-                <button class="ui right floated button">
-                  <i class="fa-duotone fa-refresh icon"></i>
-                  {% trans "Read more" %}
-                </button>
+          {% if "github" in social_account_providers %}
+            {# This doesn't cover GitHub App providers, the fix for GHA is different #}
+            <div class="item">
+              <div class="content">
+                <div class="description">
+                  {% blocktrans trimmed %}
+                    If any of your GitHub organizations have not yet approved our GitHub application,
+                    repositories from the organization won't be in your repository list.
+                    In this case, you may need to request approval of our GitHub application from the organization.
+                  {% endblocktrans %}
+                </div>
+                <div class="extra">
+                  <a class="ui right floated button"
+                     href="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#github-permission-troubleshooting">
+                    <i class="fa-duotone fa-circle-check icon"></i>
+                    {% trans "Learn how to request approval" %}
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
+          {% endif %}
 
         </div>
       </div>
