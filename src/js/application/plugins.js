@@ -355,7 +355,7 @@ export const semanticui = {
           value(callback);
         } else {
           if (key === "modal") {
-            // We do something a fun here and move the element into ``body``
+            // We do something fun here and move the element into ``body``
             // before the SUI initialization. The reason for this is that SUI
             // will move the element automatically already, however when it
             // does the KO bindings are all re-evaluated. This will cause
