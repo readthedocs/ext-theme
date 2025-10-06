@@ -88,7 +88,9 @@
     <div class="header">{% trans "Not finding a repository?" %}</div>
     <div class="description">
       <p>
-        This list might be out of date or reconfiguration might be necessary to update repositories.
+        {% blocktrans trimmed %}
+          This list might be out of date or reconfiguration might be necessary to update repositories.
+        {% endblocktrans %}
       </p>
       <a class="ui small compact right floated inverted button"
          data-bind="click: show_modal">{% trans "Repair" %}</a>
