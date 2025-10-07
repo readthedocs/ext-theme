@@ -151,6 +151,10 @@ export class ProjectCreateView extends ResponsiveView {
         // popup, reset the attempts so that the popup can show again.
         attemptsRemaining = 3;
       },
+      // Add a long delay so that hover doesn't accidentally dismiss the popup
+      delay: {
+        hide: 5000,
+      },
     });
 
     // Show repair modal immediately on view load if the URL contains `#repair` hash.
