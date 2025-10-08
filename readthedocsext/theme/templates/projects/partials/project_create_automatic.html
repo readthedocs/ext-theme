@@ -1,5 +1,4 @@
 {% load trans blocktrans from i18n %}
-{% load user_has_github_app_account from readthedocs.socialaccounts %}
 
 {% comment rst %}
   Project automatic configuration view
@@ -32,8 +31,8 @@
 
   {# Search prompt and dropdown #}
   <label>{% trans "Repository name:" %}</label>
-  <div class="ui fluid disabled loading search"
-       data-bind="semanticui: {search: search_config()}, css: {disabled: is_loading(), loading: is_loading()}">
+  <div class="ui fluid disabled loading scrolling search"
+       data-bind="semanticui: {search: search_config(), popup: search_popup_config()}, css: {disabled: is_loading(), loading: is_loading()}">
     <div class="ui fluid icon large input">
       <input class="ui text" type="text" autofocus=true />
       <i class="fa-duotone fa-search icon"></i>
@@ -53,7 +52,7 @@
       {% endcomment %}
       <script type="text/html" id="remote-repo-results">
 {# fmt:off #}
-<div data-bind="foreach: remote_repos" class="results">
+<div data-bind="foreach: remote_repos">
   <a class="result">
     <div class="image">
       <img data-bind="attr: {src: avatar_url}">
@@ -77,6 +76,123 @@
     {% endblock project_add_automatic_search_result %}
 
   </div>
+
+  {% comment %}
+    Popup to trigger help modal
+
+    This is triggered manually from the ``search_popup_config()`` observable
+    and is set up using the ``semanticui.popup`` binding on the sibling
+    element above.
+  {% endcomment %}
+  <div class="ui small wide primary popup">
+    <div class="header">{% trans "Not finding a repository?" %}</div>
+    <div class="description">
+      <p>
+        {% blocktrans trimmed %}
+          This list might be out of date or reconfiguration might be necessary to update repositories.
+        {% endblocktrans %}
+      </p>
+      <a class="ui small compact right floated inverted button"
+         data-bind="click: show_modal">{% trans "Repair" %}</a>
+    </div>
+  </div>
+
+  {% comment %}
+    Modal for resyncing and repair repository/organization permissions
+
+    This content is moved to a modal so that we have more UI to explain what is
+    happening to the user, especially in the case that the user is connected
+    via GHA and needs to reconfigure the application permissions.
+  {% endcomment %}
+  <div class="ui small modal"
+       data-bind="semanticui: { modal: search_modal_config() }">
+    <div class="header">
+      {% blocktrans trimmed %}
+        Repairing repository listing
+      {% endblocktrans %}
+    </div>
+    <div class="content">
+      <div class="ui segment">
+        <div class="ui small divided items">
+
+          {% if "githubapp" in socialaccount_providers %}
+            <div class="item">
+              <div class="content">
+                <div class="description">
+                  {% comment %}
+                    This terminology comes from the documentation for GitHub App management.
+                    Our GHA is "installed" for users or organizations and GitHub users
+                    "grant access to repositories" (or on the GHA installation page
+                    "install GHA _for repositories_").
+                  {% endcomment %}
+                  {# TODO detect if users have only installed on individual repositories so we can be more definite with this guidance #}
+                  {% blocktrans trimmed %}
+                    If our GitHub App was only granted access to select repositories,
+                    repositories without access will not display in your repository list.
+                    You will need to grant access to additional repositories each time you create a project.
+                  {% endblocktrans %}
+                </div>
+                <div class="extra">
+                  <a class="ui right floated button"
+                     href="https://github.com/apps/{{ GITHUB_APP_NAME }}/installations/new/"
+                     target="_blank">
+                    <i class="fa-brands fa-github icon"></i>
+                    {% trans "Update GitHub App installation" %}
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          {# This should show for all providers and manually connected repositories #}
+          <div class="item">
+            <div class="content">
+              <div class="description">
+                {% blocktrans trimmed %}
+                  Your connected service account might be out of sync
+                  and a manual refresh may be required to update your list of repositories.
+                {% endblocktrans %}
+              </div>
+              <div class="extra">
+                <a class="ui right floated button"
+                   data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing(), positive: is_synced()}">
+                  <i class="fa-duotone fa-refresh icon"
+                     data-bind="css: {'fa-refresh': !is_synced(), 'fa-check': is_synced()}"></i>
+                  {% trans "Refresh your repositories" %}
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {% if "github" in socialaccount_providers %}
+            {# This doesn't cover GitHub App providers, the fix for GHA is different #}
+            <div class="item">
+              <div class="content">
+                <div class="description">
+                  {% blocktrans trimmed %}
+                    If your repository list does not include repositories from one of your GitHub organizations,
+                    our GitHub application may not be approved by the organization yet.
+                    In this case, you should try requesting approval of our GitHub application from the organization.
+                  {% endblocktrans %}
+                </div>
+                <div class="extra">
+                  <a class="ui right floated button"
+                     href="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#github-permission-troubleshooting">
+                    <i class="fa-duotone fa-circle-check icon"></i>
+                    {% trans "Learn how to request approval" %}
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui cancel button">{% trans "Go back" %}</div>
+    </div>
+  </div>
 {% endblock project_add_automatic_search %}
 
 {% block project_add_automatic_placeholder %}
@@ -98,28 +214,6 @@
         </div>
       </div>
 
-    </div>
-    <div class="ui small bottom attached center aligned message">
-      <p>{% trans "Can't find the repository you are searching for?" %}</p>
-
-      <p>
-        {% if user|user_has_github_app_account %}
-          <a class="ui mini black basic compact button"
-             href="https://github.com/apps/{{ GITHUB_APP_NAME }}/installations/new/"
-             target="_blank">
-            <i class="fa-brands fa-github icon"></i>
-            {% trans "Update GitHub App permissions" %}
-          </a>
-
-          {% trans "or" %}
-        {% endif %}
-
-        <button class="ui mini black basic compact button"
-                data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
-          <i class="fa-duotone fa-refresh icon"></i>
-          {% trans "Refresh your repositories" %}
-        </button>
-      </p>
     </div>
   </div>
 {% endblock project_add_automatic_placeholder %}
