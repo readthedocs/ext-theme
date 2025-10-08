@@ -5,3 +5,23 @@
 {% block project_add_subheader %}
   {% trans "Choose organization and team" %}
 {% endblock project_add_subheader %}
+
+{% block wizard_form %}
+  <script type="text/javascript">
+ var content = [
+     { category: 'Read the Docs', title: 'Admins' },
+     { category: 'Read the Docs', title: 'Read Only' },
+     { category: 'Admin', title: 'Admin' },
+     { category: 'Admin', title: 'Read Only' },
+ ];
+  </script>
+
+  <div class="ui category search"
+       data-bind="semanticui: { search: { type: 'category', source: content, searchFields: ['title', 'name', 'description'], fullTextSearch: true } }">
+    <div class="ui icon input">
+      <input class="prompt" type="text" placeholder="Search...">
+      <i class="search icon"></i>
+    </div>
+    <div class="results"></div>
+  </div>
+{% endblock wizard_form %}
