@@ -1,7 +1,21 @@
-{% load crispy_forms_field %}
+{% load crispy_field is_checkbox is_select is_checkboxselectmultiple is_radioselect is_file from crispy_forms_field %}
+{% load whitespaceless from ext_theme_tags %}
 
 {% block field-outer %}
-  <{% if tag %}{{ tag }}{% else %}div{% endif %} id="div_{{ field.auto_id }}" class="{% if not field|is_checkbox %}{% if field.field.required %}required{% endif %}{% if field.errors %} error{% endif %}{% if 'form-horizontal' in form_class %} inline{% endif %} field{% endif %}{% if wrapper_class %} {{ wrapper_class }}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+
+  {% whitespaceless as all_field_classes %}
+    {% if not field|is_checkbox %}
+      {% if field.field.required %}required{% endif %}
+      {% if field.errors %}error{% endif %}
+      {% if 'form-horizontal' in form_class %}inline{% endif %}
+      field
+    {% endif %}
+    {% if wrapper_class %}{{ wrapper_class }}{% endif %}
+    {% if field.css_classes %}{{ field.css_classes }}{% endif %}
+  {% endwhitespaceless %}
+
+  <{{ tag|default:"div" }} id="div_{{ field.auto_id }}" class="{{ all_field_classes }}">
+
   {% block field-label %}
     {% if field.label and form_show_labels %}
       {% comment %}
@@ -9,7 +23,9 @@
       Here we are including it in a data attribute, so we need to escape it.
       We use force_escape, since escape skips strings marked as safe.
       {% endcomment %}
-      <label for="{{ field.id_for_label }}" class="ui {{ label_class }}"{% if field.help_text %} data-html="{{ field.help_text|force_escape }}" data-bind="semanticui: {popup: {hoverable: true}}"{% endif %}>
+      <label for="{{ field.id_for_label }}"
+             class="ui {{ label_class }}"
+             {% if field.help_text %} data-html="{{ field.help_text|force_escape }}" data-bind="semanticui: {popup: {hoverable: true}}"{% endif %}>
         {{ field.label|safe }}
         {% if field.help_text %}
           <i class="ui grey fa-duotone fa-circle-question icon"></i>
@@ -20,32 +36,24 @@
 
   {% block field-input %}
     {% if field|is_select %}
-      {% include 'semantic-ui/layout/dropdown.html' %}
-      {% include 'semantic-ui/layout/field_errors_block.html' %}
-    {% endif %}
-
-    {% if field|is_checkboxselectmultiple %}
-      {% include 'semantic-ui/layout/checkboxselectmultiple.html' %}
-      {% include 'semantic-ui/layout/field_errors_block.html' %}
-    {% endif %}
-
-    {% if field|is_radioselect %}
-      {% include 'semantic-ui/layout/radioselect.html' %}
-      {% include 'semantic-ui/layout/field_errors_block.html' %}
-    {% endif %}
-
-    {% if not field|is_select and not field|is_checkboxselectmultiple and not field|is_radioselect %}
-      {% if field|is_file %}
-        {% include 'semantic/layout/field_file.html' %}
-        {% include 'semantic-ui/layout/field_errors_block.html' %}
-      {% else %}
-        <div class="{{ field_class }}">
-          {% crispy_field field %}
-          {% include 'semantic-ui/layout/field_errors_block.html' %}
-        </div>
-      {% endif %}
+      {% include "semantic-ui/layout/dropdown.html" %}
+      {% include "semantic-ui/layout/field_errors_block.html" %}
+    {% elif field|is_checkboxselectmultiple %}
+      {% include "semantic-ui/layout/checkboxselectmultiple.html" %}
+      {% include "semantic-ui/layout/field_errors_block.html" %}
+    {% elif field|is_radioselect %}
+      {% include "semantic-ui/layout/radioselect.html" %}
+      {% include "semantic-ui/layout/field_errors_block.html" %}
+    {% elif field|is_file %}
+      {% include "semantic-ui/layout/field_file.html" %}
+      {% include "semantic-ui/layout/field_errors_block.html" %}
+    {% else %}
+      <div class="{{ field_class }}">
+        {% crispy_field field %}
+        {% include "semantic-ui/layout/field_errors_block.html" %}
+      </div>
     {% endif %}
   {% endblock field-input %}
 
-  </{% if tag %}{{ tag }}{% else %}div{% endif %}>
+  </{{ tag|default:"div" }}>
 {% endblock field-outer %}
