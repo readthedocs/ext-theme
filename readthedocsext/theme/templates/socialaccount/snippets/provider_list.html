@@ -11,9 +11,12 @@
 {% comment %}
   If both GitHub providers are configured, and they are not ``hidden=True`` or
   ``hidden_on_{process}=True`` in settings, we'll show these providers in a modal.
+
+  If ``allowed_providers`` is set, we skip the modal and just show the allowed
+  providers in the list below.
 {% endcomment %}
 {% get_providers process=process as providers %}
-{% if providers_github|length == 2 %}
+{% if providers_github|length == 2 and not allowed_providers %}
   {% trans "GitHub" as provider_name %}
   <li class="item">
     <a class="ui button"
@@ -75,7 +78,7 @@
                           </i>
                         {% else %}
                           {% blocktrans trimmed %}
-                            For users that connected their GitHub accounts before June 24, 2025.
+                            For users that haven't switched their connected GitHub accounts to our new GitHub App.
                           {% endblocktrans %}
                         {% endif %}
                       {% elif provider.id == "githubapp" %}
@@ -126,7 +129,7 @@
 
 {# This is the basic list but with sorting now. If there is a modal above, we skip the GitHub providers here #}
 {% for provider in providers %}
-  {% if providers_github|length == 2 and "github" in provider.id %}
+  {% if providers_github|length == 2 and "github" in provider.id and not allowed_providers %}
     {% comment %}
       TODO remove this after we are mostly using GHA and don't need a modal
 
