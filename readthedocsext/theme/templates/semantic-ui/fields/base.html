@@ -1,4 +1,5 @@
 {% load crispy_field is_checkbox is_select is_checkboxselectmultiple is_radioselect is_file from crispy_forms_field %}
+{% load is_rich_select from core_tags %}
 {% load whitespaceless from ext_theme_tags %}
 
 {% block field-outer %}
@@ -35,7 +36,10 @@
   {% endblock field-label %}
 
   {% block field-input %}
-    {% if field|is_select %}
+    {% if field|is_rich_select %}
+      {% include "semantic-ui/layout/rich_select.html" %}
+      {% include "semantic-ui/layout/field_errors_block.html" %}
+    {% elif field|is_select %}
       {% include "semantic-ui/layout/dropdown.html" %}
       {% include "semantic-ui/layout/field_errors_block.html" %}
     {% elif field|is_checkboxselectmultiple %}
