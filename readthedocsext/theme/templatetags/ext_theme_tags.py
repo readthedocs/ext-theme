@@ -1,4 +1,5 @@
 import logging
+import re
 from urllib.parse import urljoin
 
 from django.db.models.query import QuerySet
@@ -225,3 +226,8 @@ def is_empty(value):
     if isinstance(value, QuerySet):
         return not value.exists()
     return not value
+
+
+@register.simple_block_tag
+def whitespaceless(content):
+    return re.sub(r"\s+", " ", content).lstrip().rstrip()
