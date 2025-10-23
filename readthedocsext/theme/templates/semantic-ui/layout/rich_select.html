@@ -49,7 +49,7 @@
                src="{{ choice.image_url }}"
                {% if choice.image_alt %}alt="{{ choice.image_alt }}"{% endif %} />
         {% endif %}
-        {% if choice.description or choice.error %}
+        {% if choice.description %}
           <span class="description">{{ choice.description }}</span>
         {% endif %}
         <span class="text">
