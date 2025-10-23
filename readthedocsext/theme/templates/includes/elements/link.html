@@ -31,7 +31,7 @@
 
 <a href="{{ url }}"
    class="{{ class }}"
-   {% if is_external %}target="_blank" rel="nofollow"{% endif %}
+   {% if is_external %}target="_blank" rel="nofollow noopener noreferrer"{% endif %}
    {% if label %}data-content="{{ label }}" aria-label="{{ label }}"{% endif %}>
   {{ text }}
   {% if is_external %}
