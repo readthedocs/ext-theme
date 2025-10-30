@@ -1,15 +1,17 @@
 {% extends "includes/crud/table_list.html" %}
 
-{% load blocktrans trans from i18n %}
+{% load trans blocktrans from i18n %}
 
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  <a class="ui button" href="?download=true">
-    <i class="fa-duotone fa-download icon"></i>
-    {% trans "Download traffic data" %}
-  </a>
+  {% if objects %}
+    <a class="ui button" href="?download=true">
+      <i class="fa-duotone fa-download icon"></i>
+      {% trans "Download traffic data" %}
+    </a>
+  {% endif %}
 {% endblock create_button %}
 
 {% block list_placeholder_icon_class %}
@@ -23,11 +25,15 @@
     {% blocktrans trimmed %}
       Traffic data will be accumulated as readers view your documentation.
     {% endblocktrans %}
+    {% url 'projects_addons' project.slug as addons_url %}
+    {% blocktrans with url=addons_url trimmed %}
+      Traffic analytics must be enabled in your project's <a href="{{ url }}">Addons settings</a>.
+    {% endblocktrans %}
   </div>
 {% endblock list_placeholder_header %}
 {% block list_placeholder_text %}
   <a class="ui button"
-     href="https://docs.readthedocs.io/en/stable/analytics.html"
+     href="https://docs.readthedocs.io/en/stable/traffic-analytics.html"
      aria-label="{% trans "Learn more about traffic analytics in our documentation" %}"
      target="_blank">{% trans "Learn more" %}</a>
 {% endblock list_placeholder_text %}
