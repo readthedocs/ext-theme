@@ -26,7 +26,7 @@
   <div class="{% if not enabled %}ui basic fitted disabled segment{% endif %}"
        data-bind="using: ProjectTrafficAnalyticsView()">
 
-    {% include "projects/partials/edit/traffic_list.html" with objects=top_pages_200 %}
+    {% include "projects/partials/edit/traffic_list.html" with objects=top_pages_200 show_addons_link=True %}
 
     {% if top_pages_200 %}
       <h3 class="ui small header">
