@@ -23,7 +23,6 @@
   {% if not enabled %}
     {% include "organizations/includes/feature_disabled.html" with project=project plan="Advanced" %}
   {% endif %}
-
   <div class="{% if not enabled %}ui basic fitted disabled segment{% endif %}"
        data-bind="using: ProjectTrafficAnalyticsView()">
 
@@ -78,7 +77,6 @@
 {% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/traffic-analytics.html" text="How to use traffic analytics" is_external=True class="item" %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/addons.html" text="Learn about Read the Docs Addons" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/analytics.html" text="How to use traffic analytics" is_external=True class="item" %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/technical-docs-seo-guide.html" text="How to do search engine optimization (SEO) for documentation projects" is_external=True class="item" %}
 {% endblock project_edit_sidebar_help_topics %}
