@@ -201,7 +201,7 @@ def readthedocs_language_name_translated(lang_code):
             return language_name_translated("zh-cn")
         return language_name_translated(lang_code)
     except Exception:
-        log.exception("Error getting language name")
+        log.info("Error getting language name")
         return lang_code
 
 
@@ -212,7 +212,7 @@ def readthedocs_language_name_local(lang_code):
             return language_name_local("zh-cn")
         return language_name_local(lang_code)
     except Exception:
-        log.exception("Error getting language name")
+        log.info("Error getting language name")
         return lang_code
 
 
