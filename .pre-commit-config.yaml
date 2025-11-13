@@ -23,6 +23,7 @@ repos:
       - id: check-shebang-scripts-are-executable
       - id: check-symlinks
       - id: check-vcs-permalinks
+        exclude: "^readthedocsext/theme/static/.*\\.js\\.map$"
       - id: check-yaml
       - id: destroyed-symlinks
       - id: end-of-file-fixer
