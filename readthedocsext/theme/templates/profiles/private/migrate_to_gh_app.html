@@ -2,6 +2,7 @@
 
 {% load provider_login_url from socialaccount %}
 {% load trans blocktrans from i18n %}
+{% load has_sso_enabled from organizations %}
 
 {% block title %}
   {% trans "Migrate account to GitHub App" %}
@@ -13,270 +14,310 @@
       {% trans "Migrate account to GitHub App" %}
     </h2>
 
-    <div>
-      <div class="ui two column centered grid">
-        <div class="five wide computer five wide table sixteen wide mobile column">
-          <div class="ui fluid vertical steps">
-            <a class="step {% if step == "overview" %}active{% endif %}"
-               href="{% url 'migrate_to_github_app' %}?step=overview">
-              <div class="content">
-                <div class="title">{% trans "Overview" %}</div>
-                <div class="description">
-                  {% trans "Read before starting the migration process" %}
+    {% with user_has_sso_enabled=user|has_sso_enabled %}
+      {# Reasons to disable the navigation and migration page content #}
+      {% firstof user_has_sso_enabled as is_disabled %}
+
+      <div class="ui basic segment">
+        <div class="ui two column centered grid">
+          <div class="five wide computer five wide table sixteen wide mobile column">
+            <div class="ui fluid vertical steps">
+              <a class="step {% if is_disabled %}disabled{% elif step == "overview" %}active{% endif %}"
+                 href="{% url 'migrate_to_github_app' %}?step=overview"
+                 {% if is_disabled %}tabindex=-1{% endif %}>
+                <div class="content">
+                  <div class="title">{% trans "Overview" %}</div>
+                  <div class="description">
+                    {% trans "Read before starting the migration process" %}
+                  </div>
                 </div>
-              </div>
-            </a>
-            <a class="step {% if step == "connect" %}active{% endif %} {% if step_connect_completed %}completed{% endif %}"
-               href="{% url 'migrate_to_github_app' %}?step=connect">
-              <div class="content">
-                <div class="title">{% trans "Connect account" %}</div>
-                <div class="description">
-                  {% trans "Connect your account to our new GitHub App" %}
+              </a>
+              <a class="step {% if is_disabled %}disabled{% elif step == "connect" %}active{% endif %} {% if step_connect_completed %}completed{% endif %}"
+                 href="{% url 'migrate_to_github_app' %}?step=connect"
+                 {% if is_disabled %}tabindex=-1{% endif %}>
+                <div class="content">
+                  <div class="title">{% trans "Connect account" %}</div>
+                  <div class="description">
+                    {% trans "Connect your account to our new GitHub App" %}
+                  </div>
                 </div>
-              </div>
-            </a>
-            <a class="step {% if step == "install" %}active{% endif %} {% if not step_connect_completed %}disabled{% endif %}"
-               href="{% url 'migrate_to_github_app' %}?step=install">
-              <div class="content">
-                <div class="title">{% trans "Install GitHub App" %}</div>
-                <div class="description">
-                  {% trans "Install the GitHub App in all your repositories connected to a project" %}
+              </a>
+              <a class="step {% if is_disabled %}disabled{% elif step == "install" %}active{% endif %} {% if not step_connect_completed %}disabled{% endif %}"
+                 href="{% url 'migrate_to_github_app' %}?step=install"
+                 {% if is_disabled %}tabindex=-1{% endif %}>
+                <div class="content">
+                  <div class="title">{% trans "Install GitHub App" %}</div>
+                  <div class="description">
+                    {% trans "Install the GitHub App in all your repositories connected to a project" %}
+                  </div>
                 </div>
-              </div>
-            </a>
-            <a class="step {% if step == "migrate" %}active{% endif %} {% if not step_connect_completed %}disabled{% endif %}"
-               href="{% url 'migrate_to_github_app' %}?step=migrate">
-              <div class="content">
-                <div class="title">{% trans "Migrate projects" %}</div>
-                <div class="description">
-                  {% trans "Migrate your projects to the GitHub App" %}
+              </a>
+              <a class="step {% if is_disabled %}disabled{% elif step == "migrate" %}active{% endif %} {% if not step_connect_completed %}disabled{% endif %}"
+                 href="{% url 'migrate_to_github_app' %}?step=migrate"
+                 {% if is_disabled %}tabindex=-1{% endif %}>
+                <div class="content">
+                  <div class="title">{% trans "Migrate projects" %}</div>
+                  <div class="description">
+                    {% trans "Migrate your projects to the GitHub App" %}
+                  </div>
                 </div>
-              </div>
-            </a>
-            <a class="step {% if step == "revoke" %}active{% endif %} {% if not step_connect_completed %}disabled{% endif %}"
-               href="{% url 'migrate_to_github_app' %}?step=revoke">
-              <div class="content">
-                <div class="title">{% trans "Revoke access to old integration" %}</div>
-                <div class="description">
-                  {% trans "Revoke access to our old GitHub OAuth app from your GitHub account" %}
+              </a>
+              <a class="step {% if is_disabled %}disabled{% elif step == "revoke" %}active{% endif %} {% if not step_connect_completed %}disabled{% endif %}"
+                 href="{% url 'migrate_to_github_app' %}?step=revoke"
+                 {% if is_disabled %}tabindex=-1{% endif %}>
+                <div class="content">
+                  <div class="title">{% trans "Revoke access to old integration" %}</div>
+                  <div class="description">
+                    {% trans "Revoke access to our old GitHub OAuth app from your GitHub account" %}
+                  </div>
                 </div>
-              </div>
-            </a>
-            <a class="step {% if step == "disconnect" %}active{% endif %} {% if step_disconnect_completed %}completed{% endif %} {% if not step_connect_completed or not step_revoke_completed %}disabled{% endif %}"
-               href="{% url 'migrate_to_github_app' %}?step=disconnect">
-              <div class="content">
-                <div class="title">{% trans "Disconnect old integration" %}</div>
-                <div class="description">
-                  {% trans "Disconnect our old GitHub OAuth app from your Read the Docs account" %}
+              </a>
+              <a class="step {% if is_disabled %}disabled{% elif step == "disconnect" %}active{% endif %} {% if step_disconnect_completed %}completed{% endif %} {% if not step_connect_completed or not step_revoke_completed %}disabled{% endif %}"
+                 href="{% url 'migrate_to_github_app' %}?step=disconnect"
+                 {% if is_disabled %}tabindex=-1{% endif %}>
+                <div class="content">
+                  <div class="title">{% trans "Disconnect old integration" %}</div>
+                  <div class="description">
+                    {% trans "Disconnect our old GitHub OAuth app from your Read the Docs account" %}
+                  </div>
                 </div>
-              </div>
-            </a>
+              </a>
+            </div>
           </div>
-        </div>
-        <div class="eleven wide computer eleven wide tablet sixteen wide mobile column">
-          <div class="ui basic segment">
-            {% if step == "overview" %}
-              <p>
-                {% blocktrans trimmed with blog_post="https://about.readthedocs.com/blog/2025/06/announcing-our-github-app-beta/" %}
-                  We’re introducing a new GitHub App to replace our old GitHub OAuth app.
-                  This new app offers more granular permissions and better GitHub integration.
-                  Learn more in our <a href="{{ blog_post }}">blog post</a>.
-                {% endblocktrans %}
-              </p>
+          <div class="eleven wide computer eleven wide tablet sixteen wide mobile column">
 
-              {% if old_github_accounts.count > 1 %}
-                <div class="ui message warning">
-                  <i class="fad fa-warning icon"></i>
-                  {% url 'socialaccount_connections' as socialaccount_connections %}
-                  {% blocktrans trimmed with socialaccount_connections=socialaccount_connections %}
-                    You have <a href="{{ socialaccount_connections }}">multiple GitHub accounts</a> linked,
-                    <strong>make sure you complete the steps while logged in to the correct GitHub account</strong>.
-                  {% endblocktrans %}
-                </div>
-              {% endif %}
-
-              <p>
-                {% blocktrans trimmed %}
-                  This guide will help you migrate your account to the new GitHub App.
-                  Some things you should know:
-                {% endblocktrans %}
-              </p>
-
-              <p>
-                <ul>
-                  <li>
-                    {% blocktrans trimmed %}
-                      Migrating all projects is optional,
-                      you can skip the &quot;Install GitHub App&quot; and &quot;Migrate Projects&quot; steps.
-                    {% endblocktrans %}
-                  </li>
-                  <li>
-                    {% blocktrans trimmed %}
-                      Connecting your account to our new GitHub App and revoking access to our old GitHub OAuth app is required,
-                      as the old app is deprecated and will be removed.
-                    {% endblocktrans %}
-                  </li>
-                  <li>
-                    {% blocktrans trimmed %}
-                      Some steps require you to make changes on GitHub.
-                      Refresh the page after making the changes to see updates.
-                    {% endblocktrans %}
-                  </li>
-                  <li>
-                    {% blocktrans trimmed %}
-                      New projects created after connecting your account to the new GitHub App don't need migration,
-                      as they will be automatically connected to the new GitHub App.
-                    {% endblocktrans %}
-                  </li>
-                  <li>
-                    {% blocktrans trimmed with connect_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#connect-a-repository-to-an-existing-project" %}
-                      Projects not linked to a GitHub repository can be <a href="{{ connect_docs }}">linked</a> after connecting your account. These don't need migration.
-                    {% endblocktrans %}
-                  </li>
-                  <li>
-                    {% blocktrans trimmed %}
-                      You can go back to this page page at any time to see the status of your migration,
-                      or to complete the migration later.
-                    {% endblocktrans %}
-                  </li>
-                </ul>
-              </p>
-              <div class="ui divider"></div>
-              <a href="?step=connect" class="ui button">{% trans "Start" %}</a>
-            {% elif step == "connect" %}
-              <p>
-                {% blocktrans trimmed %}
-                  First, start by connecting your Read the Docs account to our GitHub App.
-                  You'll be prompted to grant access to the app.
-                {% endblocktrans %}
-              </p>
-
-              {% include "profiles/partials/github_oauth_list.html" with objects=old_github_accounts %}
-
-              <div class="ui divider"></div>
-              <a class="ui button {% if not step_connect_completed %}disabled{% endif %}"
-                 href="?step=install">{% trans "Next" %}</a>
-            {% elif step == "install" %}
-              <p>
-                {% blocktrans trimmed %}
-                  Next, you will install our GitHub App on each organization and account that has attached repositories.
-                  While approving access you will be able to select and deselect individual repositories.
-                {% endblocktrans %}
-              </p>
-
-              {% include "profiles/partials/github_app_target_list.html" with objects=installation_target_groups skip_pagination=True %}
-
-              {% if installation_target_groups %}
-                <div class="ui message info">
-                  <i class="fad fa-info-circle icon"></i>
-                  {% blocktrans trimmed with manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" %}
-                    If you skip installation during migration, you will need to <a href="{{ manual_migration_docs }}">manually migrate</a> your project to keep it working.
-                  {% endblocktrans %}
-                </div>
-              {% endif %}
-
-              <div class="ui divider"></div>
-
-              <a class="ui button" href="?step=migrate">{% trans "Next" %}</a>
-              <a class="ui basic button" href="?step=migrate">{% trans "Skip installation and continue" %}</a>
-            {% elif step == "migrate" %}
-              <p>
-                {% blocktrans trimmed with manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" connect_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#connect-a-repository-to-an-existing-project" %}
-                  After installing our GitHub App on each of your repositories,
-                  you will need to migrate your Read the Docs projects to use
-                  the new connection.
-                  If your project isn't listed, you may need to <a href="{{ manual_migration_docs }}">manually migrate it</a> or <a href="{{ connect_docs }}">connect it to a GitHub repository</a>.
-                {% endblocktrans %}
-              </p>
-
-              {% if migration_targets %}
-                <div class="ui segment">
-                  <h3 class="ui small header">{% trans "Migrate all projects" %}</h3>
-                  <p>
-                    {% blocktrans trimmed %}
-                      You might need to take additional steps for some projects that can't be migrated automatically.
-                    {% endblocktrans %}
-                  </p>
-
-                  <form class="ui form" method="post" action=".">
-                    {% csrf_token %}
-                    <button class="ui button" type="submit">
-                      {% trans "Migrate all projects" %}
-                    </button>
-                  </form>
-                </div>
-              {% endif %}
-
-              {% include "profiles/partials/github_app_project_list.html" with objects=migration_targets skip_pagination=True %}
-
-              <div class="ui medium header">{% trans "Projects already migrated" %}</div>
-
-              {% include "profiles/partials/github_app_project_migrated_list.html" with objects=migrated_projects skip_pagination=True %}
-
-              <div class="ui divider"></div>
-
-              <a class="ui button" href="?step=revoke">{% trans "Next" %}</a>
-            {% elif step == "revoke" %}
-              <div class="ui small warning message">
-                <i class="fad fa-warning icon"></i>
-                {% blocktrans trimmed %}
-                  During the beta period, we don't recommend revoking access to our old GitHub OAuth app.
-                  You will be reminded to complete this step after the beta period ends.
-                {% endblocktrans %}
-              </div>
-              <div class="ui disabled basic segment">
+            <div class="ui basic segment">
+              {% if is_disabled %}
+                {% if user_has_sso_enabled %}
+                  {% comment %}
+                    Block SSO users from using the migration view for now, migrating
+                    projects in SSO organizations can remove access to users that haven't
+                    migrated their account yet.
+                  {% endcomment %}
+                  <div class="ui error message">
+                    <div class="content">
+                      <div class="header">
+                        {% blocktrans trimmed %}
+                          Migration to our GitHub App is not yet supported for your organization
+                        {% endblocktrans %}
+                      </div>
+                      <div class="description">
+                        {% url "support" as url_support %}
+                        {% blocktrans trimmed with url_support=url_support %}
+                          Organizations that use GitHub single sign-on for authentication
+                          are not yet able to migrate to our new GitHub App integration.
+                          All organization projects and members must be migrated at the same time
+                          in order for all users to retain access to projects.
+                          <a href="{{ url_support }}">Contact support for more information</a>
+                          or to be notified when we starting testing support for progressive migration for projects and users.
+                        {% endblocktrans %}
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% elif step == "overview" %}
                 <p>
-                  {% blocktrans trimmed %}
-                    Revoke access to our old GitHub OAuth app.
-                    You'll be redirected to GitHub, where you need to click on "Revoke access".
+                  {% blocktrans trimmed with blog_post="https://about.readthedocs.com/blog/2025/06/announcing-our-github-app-beta/" %}
+                    We’re introducing a new GitHub App to replace our old GitHub OAuth app.
+                    This new app offers more granular permissions and better GitHub integration.
+                    Learn more in our <a href="{{ blog_post }}">blog post</a>.
                   {% endblocktrans %}
                 </p>
 
-                {% if has_projects_pending_migration and not step_revoke_completed %}
-                  <div class="ui small warning message">
+                {% if old_github_accounts.count > 1 %}
+                  <div class="ui message warning">
                     <i class="fad fa-warning icon"></i>
-                    {% blocktrans trimmed with migrate_step="?step=migrate" manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" %}
-                      You have projects that need to be <a href="{{ migrate_step }}">migrated</a>.
-                      If you revoke access now, you'll need to <a href="{{ manual_migration_docs }}">manually migrate</a> them.
+                    {% url 'socialaccount_connections' as socialaccount_connections %}
+                    {% blocktrans trimmed with socialaccount_connections=socialaccount_connections %}
+                      You have <a href="{{ socialaccount_connections }}">multiple GitHub accounts</a> linked,
+                      <strong>make sure you complete the steps while logged in to the correct GitHub account</strong>.
                     {% endblocktrans %}
                   </div>
                 {% endif %}
 
-                {% include "profiles/partials/github_oauth_revoke_list.html" with objects=old_github_accounts current_page=request.get_full_path %}
-              </div>
-
-              <div class="ui divider"></div>
-              <a class="ui button {% if not step_revoke_completed %}disabled{% endif %}"
-                 href="?step=disconnect">{% trans "Next" %}</a>
-            {% elif step == "disconnect" %}
-              <div class="ui small warning message">
-                <i class="fad fa-warning icon"></i>
-                {% blocktrans trimmed %}
-                  During the beta period, we don't recommend disconnecting your account from our old GitHub OAuth app.
-                  You will be reminded to complete this step after the beta period ends.
-                {% endblocktrans %}
-              </div>
-              <div class="ui disabled basic segment">
                 <p>
                   {% blocktrans trimmed %}
-                    Disconnect the old GitHub OAuth app from your Read the Docs account.
+                    This guide will help you migrate your account to the new GitHub App.
+                    Some things you should know:
                   {% endblocktrans %}
                 </p>
 
-                <div class="ui message info">
-                  <i class="fad fa-info-circle icon"></i>
-                  {% blocktrans trimmed with manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" %}
-                    After disconnecting the old GitHub OAuth app, you won't be able to see this page again.
-                    If you have projects that need to be migrated, you'll need to <a href="{{ manual_migration_docs }}">manually migrate</a> them.
+                <p>
+                  <ul>
+                    <li>
+                      {% blocktrans trimmed %}
+                        Migrating all projects is optional,
+                        you can skip the &quot;Install GitHub App&quot; and &quot;Migrate Projects&quot; steps.
+                      {% endblocktrans %}
+                    </li>
+                    <li>
+                      {% blocktrans trimmed %}
+                        Connecting your account to our new GitHub App and revoking access to our old GitHub OAuth app is required,
+                        as the old app is deprecated and will be removed.
+                      {% endblocktrans %}
+                    </li>
+                    <li>
+                      {% blocktrans trimmed %}
+                        Some steps require you to make changes on GitHub.
+                        Refresh the page after making the changes to see updates.
+                      {% endblocktrans %}
+                    </li>
+                    <li>
+                      {% blocktrans trimmed %}
+                        New projects created after connecting your account to the new GitHub App don't need migration,
+                        as they will be automatically connected to the new GitHub App.
+                      {% endblocktrans %}
+                    </li>
+                    <li>
+                      {% blocktrans trimmed with connect_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#connect-a-repository-to-an-existing-project" %}
+                        Projects not linked to a GitHub repository can be <a href="{{ connect_docs }}">linked</a> after connecting your account. These don't need migration.
+                      {% endblocktrans %}
+                    </li>
+                    <li>
+                      {% blocktrans trimmed %}
+                        You can go back to this page page at any time to see the status of your migration,
+                        or to complete the migration later.
+                      {% endblocktrans %}
+                    </li>
+                  </ul>
+                </p>
+                <div class="ui divider"></div>
+                <a href="?step=connect" class="ui button">{% trans "Start" %}</a>
+              {% elif step == "connect" %}
+                <p>
+                  {% blocktrans trimmed %}
+                    First, start by connecting your Read the Docs account to our GitHub App.
+                    You'll be prompted to grant access to the app.
+                  {% endblocktrans %}
+                </p>
+
+                {% include "profiles/partials/github_oauth_list.html" with objects=old_github_accounts %}
+
+                <div class="ui divider"></div>
+                <a class="ui button {% if not step_connect_completed %}disabled{% endif %}"
+                   href="?step=install">{% trans "Next" %}</a>
+              {% elif step == "install" %}
+                <p>
+                  {% blocktrans trimmed %}
+                    Next, you will install our GitHub App on each organization and account that has attached repositories.
+                    While approving access you will be able to select and deselect individual repositories.
+                  {% endblocktrans %}
+                </p>
+
+                {% include "profiles/partials/github_app_target_list.html" with objects=installation_target_groups skip_pagination=True %}
+
+                {% if installation_target_groups %}
+                  <div class="ui message info">
+                    <i class="fad fa-info-circle icon"></i>
+                    {% blocktrans trimmed with manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" %}
+                      If you skip installation during migration, you will need to <a href="{{ manual_migration_docs }}">manually migrate</a> your project to keep it working.
+                    {% endblocktrans %}
+                  </div>
+                {% endif %}
+
+                <div class="ui divider"></div>
+
+                <a class="ui button" href="?step=migrate">{% trans "Next" %}</a>
+                <a class="ui basic button" href="?step=migrate">{% trans "Skip installation and continue" %}</a>
+              {% elif step == "migrate" %}
+                <p>
+                  {% blocktrans trimmed with manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" connect_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#connect-a-repository-to-an-existing-project" %}
+                    After installing our GitHub App on each of your repositories,
+                    you will need to migrate your Read the Docs projects to use
+                    the new connection.
+                    If your project isn't listed, you may need to <a href="{{ manual_migration_docs }}">manually migrate it</a> or <a href="{{ connect_docs }}">connect it to a GitHub repository</a>.
+                  {% endblocktrans %}
+                </p>
+
+                {% if migration_targets %}
+                  <div class="ui segment">
+                    <h3 class="ui small header">{% trans "Migrate all projects" %}</h3>
+                    <p>
+                      {% blocktrans trimmed %}
+                        You might need to take additional steps for some projects that can't be migrated automatically.
+                      {% endblocktrans %}
+                    </p>
+
+                    <form class="ui form" method="post" action=".">
+                      {% csrf_token %}
+                      <button class="ui button" type="submit">
+                        {% trans "Migrate all projects" %}
+                      </button>
+                    </form>
+                  </div>
+                {% endif %}
+
+                {% include "profiles/partials/github_app_project_list.html" with objects=migration_targets skip_pagination=True %}
+
+                <div class="ui medium header">{% trans "Projects already migrated" %}</div>
+
+                {% include "profiles/partials/github_app_project_migrated_list.html" with objects=migrated_projects skip_pagination=True %}
+
+                <div class="ui divider"></div>
+
+                <a class="ui button" href="?step=revoke">{% trans "Next" %}</a>
+              {% elif step == "revoke" %}
+                <div class="ui small warning message">
+                  <i class="fad fa-warning icon"></i>
+                  {% blocktrans trimmed %}
+                    During the beta period, we don't recommend revoking access to our old GitHub OAuth app.
+                    You will be reminded to complete this step after the beta period ends.
                   {% endblocktrans %}
                 </div>
+                <div class="ui disabled basic segment">
+                  <p>
+                    {% blocktrans trimmed %}
+                      Revoke access to our old GitHub OAuth app.
+                      You'll be redirected to GitHub, where you need to click on "Revoke access".
+                    {% endblocktrans %}
+                  </p>
 
-                {% include "profiles/partials/github_oauth_disconnect_list.html" with objects=old_github_accounts %}
-              </div>
-            {% endif %}
+                  {% if has_projects_pending_migration and not step_revoke_completed %}
+                    <div class="ui small warning message">
+                      <i class="fad fa-warning icon"></i>
+                      {% blocktrans trimmed with migrate_step="?step=migrate" manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" %}
+                        You have projects that need to be <a href="{{ migrate_step }}">migrated</a>.
+                        If you revoke access now, you'll need to <a href="{{ manual_migration_docs }}">manually migrate</a> them.
+                      {% endblocktrans %}
+                    </div>
+                  {% endif %}
+
+                  {% include "profiles/partials/github_oauth_revoke_list.html" with objects=old_github_accounts current_page=request.get_full_path %}
+                </div>
+
+                <div class="ui divider"></div>
+                <a class="ui button {% if not step_revoke_completed %}disabled{% endif %}"
+                   href="?step=disconnect">{% trans "Next" %}</a>
+              {% elif step == "disconnect" %}
+                <div class="ui small warning message">
+                  <i class="fad fa-warning icon"></i>
+                  {% blocktrans trimmed %}
+                    During the beta period, we don't recommend disconnecting your account from our old GitHub OAuth app.
+                    You will be reminded to complete this step after the beta period ends.
+                  {% endblocktrans %}
+                </div>
+                <div class="ui disabled basic segment">
+                  <p>
+                    {% blocktrans trimmed %}
+                      Disconnect the old GitHub OAuth app from your Read the Docs account.
+                    {% endblocktrans %}
+                  </p>
+
+                  <div class="ui message info">
+                    <i class="fad fa-info-circle icon"></i>
+                    {% blocktrans trimmed with manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" %}
+                      After disconnecting the old GitHub OAuth app, you won't be able to see this page again.
+                      If you have projects that need to be migrated, you'll need to <a href="{{ manual_migration_docs }}">manually migrate</a> them.
+                    {% endblocktrans %}
+                  </div>
+
+                  {% include "profiles/partials/github_oauth_disconnect_list.html" with objects=old_github_accounts %}
+                </div>
+              {% endif %}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    {% endwith %}
   </div>
 {% endblock content %}
