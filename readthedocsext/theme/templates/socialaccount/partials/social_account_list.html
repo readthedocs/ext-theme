@@ -15,9 +15,16 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  <div class="ui green button"
-       data-bind="click: $root.show_modal('socialaccount-connections')">
-    {% trans "Add new connection" %}
+
+  <div class="two column">
+    <a href="https://github.com/apps/{{ GITHUB_APP_NAME }}/installations/new/"
+       target="_blank">
+      <div class="ui button green">{% trans "Manage GitHub App" %}</div>
+    </a>
+    <div class="ui button green"
+         data-bind="click: $root.show_modal('socialaccount-connections')">
+      {% trans "Add new connection" %}
+    </div>
   </div>
 {% endblock create_button %}
 
