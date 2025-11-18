@@ -186,5 +186,6 @@ export default (env, argv) => {
         overlay: false,
       },
     },
+    devtool: "source-map",
   };
 };
