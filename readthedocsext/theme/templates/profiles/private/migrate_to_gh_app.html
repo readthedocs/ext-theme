@@ -14,7 +14,7 @@
       {% trans "Migrate account to GitHub App" %}
     </h2>
 
-    {% with user_has_sso_enabled=user|has_sso_enabled %}
+    {% with user_has_sso_enabled=user|has_sso_enabled:"allauth" %}
       {# Reasons to disable the navigation and migration page content #}
       {% firstof user_has_sso_enabled as is_disabled %}
 
