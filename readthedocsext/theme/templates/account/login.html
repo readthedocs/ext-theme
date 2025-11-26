@@ -69,65 +69,67 @@
     </div>
   </div>
 
-  <div class="ui basic center aligned tab segment" data-tab="vcs">
-    <div class="ui relaxed list">
-      {% block authentication_vcs %}
-        {# Translators: this will read "Log in with GitHub", where "log in" is a verb #}
-        {% blocktrans asvar text_log_in %}Log in using{% endblocktrans %}
-        {% include "socialaccount/snippets/provider_list.html" with process="login" verbiage=text_log_in %}
-      {% endblock authentication_vcs %}
+  <div data-bind="using: LoginView()">
+    <div class="ui basic center aligned tab segment" data-tab="vcs">
+      <div class="ui relaxed list">
+        {% block authentication_vcs %}
+          {# Translators: this will read "Log in with GitHub", where "log in" is a verb #}
+          {% blocktrans asvar text_log_in %}Log in using{% endblocktrans %}
+          {% include "socialaccount/snippets/provider_list.html" with process="login" verbiage=text_log_in %}
+        {% endblock authentication_vcs %}
+      </div>
     </div>
-  </div>
-  <div class="ui basic vertically fitted tab segment" data-tab="email">
-    {% block authentication_email %}
-      <p class="ui center aligned vertically fitted small basic fluid segment">
-        {# The /email addition is to route to the tab page on the login/signup forms, using the tab module history setting #}
-        {% blocktrans trimmed %}
-          Need an account? <a href="{{ signup_url }}#/email">Sign up</a> first.
-        {% endblocktrans %}
-      </p>
+    <div class="ui basic vertically fitted tab segment" data-tab="email">
+      {% block authentication_email %}
+        <p class="ui center aligned vertically fitted small basic fluid segment">
+          {# The /email addition is to route to the tab page on the login/signup forms, using the tab module history setting #}
+          {% blocktrans trimmed %}
+            Need an account? <a href="{{ signup_url }}#/email">Sign up</a> first.
+          {% endblocktrans %}
+        </p>
 
-      <form class="ui form"
-            method="post"
-            action="{% url "account_login" %}#/email">
-        {% csrf_token %}
-        {{ form|crispy }}
-        {% if redirect_field_value %}
-          <input type="hidden"
-                 name="{{ redirect_field_name }}"
-                 value="{{ redirect_field_value }}" />
-        {% endif %}
+        <form class="ui form"
+              method="post"
+              action="{% url "account_login" %}#/email">
+          {% csrf_token %}
+          {{ form|crispy }}
+          {% if redirect_field_value %}
+            <input type="hidden"
+                   name="{{ redirect_field_name }}"
+                   value="{{ redirect_field_value }}" />
+          {% endif %}
 
-        <div class="ui stackable relaxed text menu">
-          <a class="item" href="{% url 'account_reset_password' %}">{% trans "Forgot your password?" %}</a>
-          <div class="right menu">
-            <button class="ui primary button"
-                    data-bind="click: $root.save_login_method"
-                    data-provider="email"
-                    type="submit">{% trans "Log in" %}</button>
+          <div class="ui stackable relaxed text menu">
+            <a class="item" href="{% url 'account_reset_password' %}">{% trans "Forgot your password?" %}</a>
+            <div class="right menu">
+              <button class="ui primary button"
+                      data-bind="click: save_login_method"
+                      data-provider="email"
+                      type="submit">{% trans "Log in" %}</button>
+            </div>
           </div>
-        </div>
 
-      </form>
-    {% endblock authentication_email %}
-  </div>
-
-  {% if USE_ORGANIZATIONS %}
-    <div class="ui basic center aligned tab segment" data-tab="sso">
-      <a href="{% url "saml_resolve_login" %}{% if redirect_field_value %}?{{ redirect_field_name }}={{ redirect_field_value }}{% endif %}">
-
-        <button class="ui button"
-                data-bind="click: $root.save_login_method"
-                data-provider="sso"
-                type="submit"
-                {% if last_login_method == "sso" %} data-tooltip="Last used" data-variation="teal visible" data-position="right center" {% endif %}
-                title="Single sign-on">
-          <i class="fas fa-shield-alt icon" aria-hidden="true"></i>
-          {% trans "Log in using single sign-on" %}
-        </button>
-      </a>
+        </form>
+      {% endblock authentication_email %}
     </div>
-  {% endif %}
+
+    {% if USE_ORGANIZATIONS %}
+      <div class="ui basic center aligned tab segment" data-tab="sso">
+        <a href="{% url "saml_resolve_login" %}{% if redirect_field_value %}?{{ redirect_field_name }}={{ redirect_field_value }}{% endif %}">
+
+          <button class="ui button"
+                  data-bind="click: save_login_method"
+                  data-provider="sso"
+                  type="submit"
+                  {% if last_login_method == "sso" %} data-tooltip="Last used" data-variation="teal visible" data-position="right center" {% endif %}
+                  title="Single sign-on">
+            <i class="fas fa-shield-alt icon" aria-hidden="true"></i>
+            {% trans "Log in using single sign-on" %}
+          </button>
+        </a>
+      </div>
+    {% endif %}
+  </div>
 
   {% block authentication_extra %}
   {% endblock authentication_extra %}

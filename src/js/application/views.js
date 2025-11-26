@@ -67,7 +67,7 @@ export class ApplicationView {
       }
 
       // Remove "visible" variation property to remove "Last used" tooltip
-      const buttons = document.querySelectorAll("button.ui");
+      const buttons = document.querySelectorAll(".button.ui");
       for (const button of buttons) {
         if (button.dataset.variation) {
           const variation = button.dataset.variation.split(" ");
@@ -103,31 +103,5 @@ export class ApplicationView {
       form.submit();
     }
     return false;
-  }
-
-  /**
-   * Save the provider used for login.
-   *
-   * This could be used like:
-   *
-   * .. code:: html
-   *
-   *     <form method="post" action="...">
-   *       <button data-bind="click: $root.save_login_method">
-   *         Log in using GitHub
-   *       </button>
-   *     </form>
-   *
-   * @param {Object} data - Context data
-   * @param {Event} event - Click event
-   * @returns {knockout_click}
-   */
-  save_login_method(data, event) {
-    const elem = event.currentTarget;
-    if (window.isSecureContext) {
-      console.debug("Setting last login method: ", elem.dataset.provider);
-      cookieStore.set("last-login-method", elem.dataset.provider);
-    }
-    return true;
   }
 }
