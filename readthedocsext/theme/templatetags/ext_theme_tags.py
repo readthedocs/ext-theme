@@ -1,5 +1,8 @@
 import logging
+import re
 from urllib.parse import urljoin
+
+from django.db.models.query import QuerySet
 
 from django import template
 from django.conf import settings
@@ -187,7 +190,7 @@ def readthedocs_language_name(lang_code):
             return language_name("zh-cn")
         return language_name(lang_code)
     except Exception:
-        log.exception("Error getting language name")
+        log.debug(f"Unknown language code.")
         return lang_code
 
 
@@ -198,7 +201,7 @@ def readthedocs_language_name_translated(lang_code):
             return language_name_translated("zh-cn")
         return language_name_translated(lang_code)
     except Exception:
-        log.exception("Error getting language name")
+        log.info("Error getting language name")
         return lang_code
 
 
@@ -209,5 +212,22 @@ def readthedocs_language_name_local(lang_code):
             return language_name_local("zh-cn")
         return language_name_local(lang_code)
     except Exception:
-        log.exception("Error getting language name")
+        log.info("Error getting language name")
         return lang_code
+
+
+@register.filter
+def is_empty(value):
+    """
+    Check if an iterable or queryset is empty.
+
+    This avoids using `not value` on a queryset, so the queryset is not evaluated.
+    """
+    if isinstance(value, QuerySet):
+        return not value.exists()
+    return not value
+
+
+@register.simple_block_tag
+def whitespaceless(content):
+    return re.sub(r"\s+", " ", content).lstrip().rstrip()

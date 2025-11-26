@@ -1,0 +1,68 @@
+{% load crispy_field from crispy_forms_field %}
+{% load blocktrans trans from i18n %}
+
+{% comment rst %}
+  Rich select field template
+  ==========================
+
+  This template is used by the :py:class:`RichSelect` widget type to display a
+  complex dropdown select. Normally, select fields are only a value and text
+  choice option, but the :py:class:`RichSelect` widget type instead displays a
+  FUI dropdown type with a number of additions, like an image, right foated
+  description, and an error description. This gives a field type where we can
+  provide a reason why the choice is disabled, before the user tries to submit
+  the form.
+
+  To use this template, use the RichSelect class and :py:class:`RichChoice` data class to populate the from choices. A brief example is:
+
+  .. code:: python
+
+      choice = RichChoice(name="Foo", value="foo", error="Unavailable", image_url="...")
+      field = forms.ChoiceField(
+          ...,
+          widget=RichSelect(),
+          choices=[(choice.value, choice)],
+      )
+
+{% endcomment %}
+
+<div class="ui fluid selection category search dropdown{% if field.attrs.multiple %} multiple{% endif %}"
+     data-bind="semanticui: { dropdown: {}}">
+  {{ field.as_hidden }}
+  <i class="dropdown icon"></i>
+  <div class="default text">{{ field.attrs.placeholder }}</div>
+  <div class="menu">
+    {% for _, choice in field.field.choices %}
+      {% comment %}
+        Text data attribute specifies the value shown when the item is selected
+        in the dropdown. Normally this is a loose copy of the HTML of the item,
+        including images, error messages, etc. However, display of the selected
+        item looks a bit different and attributes like the field error appear
+        in a confusing way. This will show the selected text only instead, but
+        the dropdown will still have a rich display.
+      {% endcomment %}
+      <div class="{% if choice.disabled %}disabled{% endif %} item"
+           data-value="{{ choice.value }}"
+           data-text="{{ choice.text }}">
+        {% if choice.image_url %}
+          <img class="ui mini avatar image"
+               src="{{ choice.image_url }}"
+               {% if choice.image_alt %}alt="{{ choice.image_alt }}"{% endif %} />
+        {% endif %}
+        {% if choice.description %}
+          <span class="description">{{ choice.description }}</span>
+        {% endif %}
+        <span class="text">
+          {{ choice.text }}
+          {% if choice.error %}
+            <span class="ui red text">
+              <i class="fas fa-exclamation-triangle icon"></i>
+              {{ choice.error }}
+            </span>
+          {% endif %}
+        </span>
+
+      </div>
+    {% endfor %}
+  </div>
+</div>
