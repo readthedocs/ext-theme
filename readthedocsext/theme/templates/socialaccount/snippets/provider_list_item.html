@@ -7,26 +7,20 @@
         action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
     {% csrf_token %}
 
-    {# djlint: off #}
+    {# djlint: off D018 #}
     <button class="ui {{ button_classes }} button"
-            data-bind="click: $root.save_login_method"
+            data-bind="click: save_login_method"
             data-provider="{{ provider.id }}"
             type="submit"
+            {% if last_login_method == provider.id|lower %} data-tooltip="Last used" data-variation="teal visible" data-position="right center" {% endif %}
+            title="{{ provider.name }}">
+      {# djlint: on #}
 
-            {% if last_login_method == provider.id|lower %}
-            data-tooltip="Last used"
-            data-variation="teal visible"
-            data-position="right center"
-            {% endif %}
+      <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
+      {% blocktrans trimmed with provider_name=provider.app.name|default:provider.name verbiage=verbiage|default:'Connect to' %}
+        {{ verbiage }} {{ provider_name }}
+      {% endblocktrans %}
+    </button>
 
-      title="{{ provider.name }}">
-    {# djlint: on #}
-
-    <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
-    {% blocktrans trimmed with provider_name=provider.app.name|default:provider.name verbiage=verbiage|default:'Connect to' %}
-      {{ verbiage }} {{ provider_name }}
-    {% endblocktrans %}
-  </button>
-
-</form>
+  </form>
 {% endif %}

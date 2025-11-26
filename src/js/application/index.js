@@ -8,6 +8,7 @@ import * as plugins from "./plugins";
 import { Registry } from "./registry";
 
 // Application views
+import * as account_views from "../account";
 import * as build_views from "../build";
 import * as core_views from "../core";
 import * as gold_views from "../gold";
