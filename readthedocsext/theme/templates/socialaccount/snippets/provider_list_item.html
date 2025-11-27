@@ -9,7 +9,7 @@
 
     {# djlint: off D018 #}
     <button class="ui {{ button_classes }} button"
-            {% if show_last_login_method %}data-bind="click: save_login_method.bind($data, '{{ provider.id }}'), semanticui: { popup: popup_login_method('{{ provider.id }}', 'right center') }"{% endif %}
+            data-bind="click: save_login_method.bind($data, '{{ provider.id }}'), semanticui: { popup: popup_login_method('{{ provider.id }}', 'right center') }"
             type="submit">
       {# djlint: on #}
 

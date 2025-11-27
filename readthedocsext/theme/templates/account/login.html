@@ -74,7 +74,7 @@
         {% block authentication_vcs %}
           {# Translators: this will read "Log in with GitHub", where "log in" is a verb #}
           {% blocktrans asvar text_log_in %}Log in using{% endblocktrans %}
-          {% include "socialaccount/snippets/provider_list.html" with process="login" verbiage=text_log_in show_last_login_method=True %}
+          {% include "socialaccount/snippets/provider_list.html" with process="login" verbiage=text_log_in %}
         {% endblock authentication_vcs %}
       </div>
     </div>
