@@ -9,11 +9,8 @@
 
     {# djlint: off D018 #}
     <button class="ui {{ button_classes }} button"
-            data-bind="click: save_login_method"
-            data-provider="{{ provider.id }}"
-            type="submit"
-            {% if last_login_method == provider.id|lower %} data-tooltip="Last used" data-variation="teal visible" data-position="right center" {% endif %}
-            title="{{ provider.name }}">
+            {% if show_last_login_method %}data-bind="click: save_login_method.bind($data, '{{ provider.id }}'), semanticui: { popup: popup_login_method('{{ provider.id }}', 'right center') }"{% endif %}
+            type="submit">
       {# djlint: on #}
 
       <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>

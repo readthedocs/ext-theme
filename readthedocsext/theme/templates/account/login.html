@@ -19,63 +19,62 @@
 {% block content_body %}
   {% get_providers as socialaccount_providers %}
 
-  <div class="ui basic horizontally fitted segment">
-    <div class="ui form">
-      <div class="field">
-        <label>
-          {% block authentication_header_text %}
-            {% trans "Log in using:" %}
-          {% endblock authentication_header_text %}
-        </label>
+  <div data-bind="using: LoginView({last_tab: '{{ last_login_tab }}', last_method: '{{ last_login_method }}'})">
+    <div class="ui basic horizontally fitted segment">
+      <div class="ui form">
+        <div class="field">
+          <label>
+            {% block authentication_header_text %}
+              {% trans "Log in using:" %}
+            {% endblock authentication_header_text %}
+          </label>
+        </div>
+      </div>
+
+      <div class="ui small stackable teal centered fluid wrapping menu"
+           data-bind="semanticui: {tabs: { autoTabActivation: last_tab() }}">
+
+        <a class="item" data-tab="vcs">
+          <i class="fas fa-cloud icon"></i>
+          {% block authentication_vcs_text %}
+            {% trans "Connected account" %}
+          {% endblock authentication_vcs_text %}
+        </a>
+
+        {# If allowed providers is given, disable the email menu item #}
+        <a class="{% if allowed_providers %}disabled{% endif %} item"
+           data-bind="semanticui: { popup: popup_login_method('email') }"
+           data-tab="email">
+          <i class="fas fa-envelope icon"></i>
+          {% block authentication_email_text %}
+            {% trans "Email" %}
+          {% endblock authentication_email_text %}
+        </a>
+
+        {% if USE_ORGANIZATIONS %}
+          <a class="item" data-tab="sso">
+            <i class="fas fa-shield-alt icon"></i>
+            {% trans "Single sign-on" %}
+          </a>
+        {% endif %}
+
+        {% if project_password_url %}
+          <a class="item" href="{{ project_password_url }}">
+            <i class="fas fa-lock icon"></i>
+            {% block authentication_password_text %}
+              {% trans "Password" %}
+            {% endblock authentication_password_text %}
+          </a>
+        {% endif %}
       </div>
     </div>
 
-    <div class="ui small stackable teal centered fluid wrapping menu" data-bind="semanticui: {tabs: {
-      {% if last_login_tab %}autoTabActivation: '{{ last_login_tab }}'{% endif %}
-      }}">
-
-      <a class="item" data-tab="vcs">
-        <i class="fas fa-cloud icon"></i>
-        {% block authentication_vcs_text %}
-          {% trans "Connected account" %}
-        {% endblock authentication_vcs_text %}
-      </a>
-
-      {# If allowed providers is given, disable the email menu item #}
-      <a class="{% if allowed_providers %}disabled{% endif %} item"
-         {% if last_login_tab == "email" %} data-tooltip="Last used" data-variation="teal visible" data-position="top center" {% endif %}
-         data-tab="email">
-        <i class="fas fa-envelope icon"></i>
-        {% block authentication_email_text %}
-          {% trans "Email" %}
-        {% endblock authentication_email_text %}
-      </a>
-
-      {% if USE_ORGANIZATIONS %}
-        <a class="item" data-tab="sso">
-          <i class="fas fa-shield-alt icon"></i>
-          {% trans "Single sign-on" %}
-        </a>
-      {% endif %}
-
-      {% if project_password_url %}
-        <a class="item" href="{{ project_password_url }}">
-          <i class="fas fa-lock icon"></i>
-          {% block authentication_password_text %}
-            {% trans "Password" %}
-          {% endblock authentication_password_text %}
-        </a>
-      {% endif %}
-    </div>
-  </div>
-
-  <div data-bind="using: LoginView()">
     <div class="ui basic center aligned tab segment" data-tab="vcs">
       <div class="ui relaxed list">
         {% block authentication_vcs %}
           {# Translators: this will read "Log in with GitHub", where "log in" is a verb #}
           {% blocktrans asvar text_log_in %}Log in using{% endblocktrans %}
-          {% include "socialaccount/snippets/provider_list.html" with process="login" verbiage=text_log_in %}
+          {% include "socialaccount/snippets/provider_list.html" with process="login" verbiage=text_log_in show_last_login_method=True %}
         {% endblock authentication_vcs %}
       </div>
     </div>
@@ -103,8 +102,7 @@
             <a class="item" href="{% url 'account_reset_password' %}">{% trans "Forgot your password?" %}</a>
             <div class="right menu">
               <button class="ui primary button"
-                      data-bind="click: save_login_method"
-                      data-provider="email"
+                      data-bind="click: save_login_method.bind($data, 'email')"
                       type="submit">{% trans "Log in" %}</button>
             </div>
           </div>
@@ -118,11 +116,9 @@
         <a href="{% url "saml_resolve_login" %}{% if redirect_field_value %}?{{ redirect_field_name }}={{ redirect_field_value }}{% endif %}">
 
           <button class="ui button"
-                  data-bind="click: save_login_method"
-                  data-provider="sso"
                   type="submit"
-                  {% if last_login_method == "sso" %} data-tooltip="Last used" data-variation="teal visible" data-position="right center" {% endif %}
-                  title="Single sign-on">
+                  data-bind="click: save_login_method.bind($data, 'sso'), semanticui: { popup: popup_login_method('sso') }"
+                  title="{% trans "Single sign-on" %}">
             <i class="fas fa-shield-alt icon" aria-hidden="true"></i>
             {% trans "Log in using single sign-on" %}
           </button>

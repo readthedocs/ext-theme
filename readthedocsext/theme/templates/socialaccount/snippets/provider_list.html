@@ -107,7 +107,7 @@
                 </div>
                 <div class="extra">
                   {% with button_classes=forloop.first|yesno:"right floated primary,right floated basic" %}
-                    {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider button_classes=button_classes %}
+                    {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider button_classes=button_classes show_last_login_method=show_last_login_method %}
                   {% endwith %}
                 </div>
               </div>
@@ -140,7 +140,7 @@
     {% endcomment %}
   {% else %}
     <li class="item">
-      {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider %}
+      {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider show_last_login_method=show_last_login_method %}
     </li>
   {% endif %}
 {% endfor %}
