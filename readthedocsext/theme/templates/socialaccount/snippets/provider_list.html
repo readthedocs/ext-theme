@@ -20,8 +20,7 @@
   {% trans "GitHub" as provider_name %}
   <li class="item">
     <a class="ui button"
-       {% if last_login_method == "github" or last_login_method == "githubapp" %} data-tooltip="Last used" data-variation="teal visible" data-position="right center" {% endif %}
-       data-bind="click: $root.show_modal('github-select')"
+       data-bind="click: show_github_modal, semanticui: { popup: popup_login_method(['github','githubapp'], 'right center') }"
        title="{{ provider_name }}">
       <i class="fa-brands fa-github icon"></i>
       {% blocktrans trimmed with provider_name=provider_name verbiage=verbiage|default:'Connect to' %}
@@ -29,7 +28,9 @@
       {% endblocktrans %}
     </a>
   </li>
-  <div class="ui tiny modal" data-modal-id="github-select">
+
+  <div class="ui tiny modal"
+       data-bind="semanticui: { modal: github_modal_config() }">
     <div class="header">
       {% blocktrans trimmed with verbiage=verbiage|default:'Connect to' provider_name=provider_name %}
         {{ verbiage }} {{ provider_name }}
