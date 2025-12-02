@@ -7,9 +7,12 @@
         action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
     {% csrf_token %}
 
+    {# djlint: off D018 #}
     <button class="ui {{ button_classes }} button"
-            type="submit"
-            title="{{ provider.name }}">
+            data-bind="click: save_login_method.bind($data, '{{ provider.id }}'), semanticui: { popup: popup_login_method('{{ provider.id }}', 'right center') }"
+            type="submit">
+      {# djlint: on #}
+
       <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
       {% blocktrans trimmed with provider_name=provider.app.name|default:provider.name verbiage=verbiage|default:'Connect to' %}
         {{ verbiage }} {{ provider_name }}
