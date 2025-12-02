@@ -288,7 +288,7 @@ export const webcomponent = {
  * .. code:: js
  *
  *     $(element).popup({"on": "click"});
- *       $(element).modal({"closable": false});
+ *     $(element).modal({"closable": false});
  *
  * Passing arguments
  * -----------------
@@ -372,7 +372,7 @@ export const webcomponent = {
  *       });
  *     });
  *
- * This is most helpful for utilizing SUI module _behaviors_. Behaviors are
+ * This is most helpful for utilizing SUI module *behaviors*. Behaviors are
  * listed on most SUI modules, such as:
  * https://fomantic-ui.com/modules/popup.html#behavior
  *
