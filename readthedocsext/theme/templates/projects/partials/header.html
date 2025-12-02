@@ -201,6 +201,18 @@ collapsed, to save visual space and can be expanded with the right label.
         and also know what rules are matching this project.
       {% endcomment %}
       <div class="content">
+        <h3>{% trans "Admin" %}</h3>
+        <div class="ui vertical list">
+          <div class="item">
+            <a href="{{ ADMIN_URL }}/projects/project/{{ project.pk }}/change/"
+               target="_blank">{% trans "View project in Django admin" %}</a>
+          </div>
+          <div class="item">
+            <a href="{{ ADMIN_URL }}/projects/project/?slug={{ project.slug }}"
+               target="_blank">{% trans "View project changelist filtered by slug" %}</a>
+          </div>
+        </div>
+
         {% if not USE_ORGANIZATIONS %}
           <h3>{% trans "Spam" %}</h3>
           <div class="ui sub header">{% trans "Spam score" %}</div>
