@@ -1,19 +1,23 @@
 {% extends "profiles/base_edit.html" %}
 
-{% load i18n %}
+{% load trans blocktrans from i18n %}
 
-{% block title %}{% trans "Connected services" %}{% endblock %}
-{% block edit_content_header %}{% trans "Connected services" %}{% endblock %}
-{% block profile_admin_social_accounts %}active{% endblock %}
+{% block title %}
+  {% trans "Connected services" %}
+{% endblock title %}
+{% block edit_content_header %}
+  {% trans "Connected services" %}
+{% endblock edit_content_header %}
+{% block profile_admin_social_accounts %}
+  active
+{% endblock profile_admin_social_accounts %}
 
 {% block edit_content %}
   {% include "socialaccount/partials/social_account_list.html" with objects=form.accounts %}
 
   <div class="ui tiny modal" data-modal-id="socialaccount-connections">
     <i class="fa-solid fa-close close icon"></i>
-    <div class="header">
-      {% trans "Add a connection" %}
-    </div>
+    <div class="header">{% trans "Add a connection" %}</div>
     <div class="content center aligned">
       <div class="ui basic center aligned segment">
         <p>
@@ -21,15 +25,13 @@
             You can connect your account with any of the following providers:
           {% endblocktrans %}
         </p>
-        <div class="ui relaxed list">
+        <div class="ui relaxed list" data-bind="using: SocialAccountView()">
           {% include "socialaccount/snippets/provider_list.html" with process="connect" next="" %}
         </div>
       </div>
     </div>
     <div class="actions">
-      <div class="ui cancel button">
-        {% trans "Cancel" %}
-      </div>
+      <div class="ui cancel button">{% trans "Cancel" %}</div>
     </div>
   </div>
-{% endblock %}
+{% endblock edit_content %}
