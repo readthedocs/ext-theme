@@ -26,7 +26,7 @@
 
 {% endcomment %}
 
-<div class="ui fluid selection category search dropdown{% if field.attrs.multiple %} multiple{% endif %}"
+<div class="ui long fluid selection category search dropdown{% if field.attrs.multiple %} multiple{% endif %}"
      data-bind="semanticui: { dropdown: {}}">
   {{ field.as_hidden }}
   <i class="dropdown icon"></i>
@@ -41,7 +41,7 @@
         in a confusing way. This will show the selected text only instead, but
         the dropdown will still have a rich display.
       {% endcomment %}
-      <div class="{% if choice.disabled %}disabled{% endif %} item"
+      <div class="{% if choice.disabled %}disabled{% endif %} vertical item"
            data-value="{{ choice.value }}"
            data-text="{{ choice.text }}">
         {% if choice.image_url %}
@@ -52,16 +52,13 @@
         {% if choice.description %}
           <span class="description">{{ choice.description }}</span>
         {% endif %}
-        <span class="text">
-          {{ choice.text }}
-          {% if choice.error %}
-            <span class="ui red text">
-              <i class="fas fa-exclamation-triangle icon"></i>
-              {{ choice.error }}
-            </span>
-          {% endif %}
-        </span>
-
+        <span class="text">{{ choice.text }}</span>
+        {% if choice.error %}
+          <span class="ui red text extra content">
+            <i class="fas fa-exclamation-triangle icon"></i>
+            {{ choice.error }}
+          </span>
+        {% endif %}
       </div>
     {% endfor %}
   </div>

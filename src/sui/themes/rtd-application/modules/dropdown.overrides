@@ -12,3 +12,41 @@
     text-overflow: ellipsis;
   }
 }
+
+// Vertical list item fixes to include image placement. Without this, the
+// vertical item columns are in an odd order and the image does not scale at
+// all. Use a grid instead of flex layout for a bit easier placement of out of
+// order elements.
+.ui.ui.ui.dropdown .menu > .vertical.item {
+  display: grid;
+  grid-template-columns: 3em auto auto;
+
+  > .image {
+    grid-column: 1/1;
+    grid-row: 1/3;
+    align-self: center;
+    // Image should be 2em: 3em column width minus 0.5em margin left & right
+    margin-top: 0em;
+    margin-bottom: 0em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+  }
+
+  > .text {
+    grid-column: 2/2;
+    grid-row: 1/1;
+  }
+
+  > .description {
+    grid-column: 2/2;
+    grid-row: 2/2;
+  }
+
+  // Extra content area can be used for a third line or error states. In the
+  // case of our rich select element, it's for item error state display.
+  > .extra.content,
+  > .meta {
+    grid-column: 2/2;
+    grid-row: 3/3;
+  }
+}
