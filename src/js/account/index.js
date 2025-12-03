@@ -114,12 +114,12 @@ export class LoginView extends SocialAccountView {
    * @returns {knockout_click}
    */
   save_login_method(method) {
+    console.debug("Saving last login method:", method);
+    let cookie = `last-login-method=${method}`;
     if (window.isSecureContext) {
-      console.debug("Setting last login method:", method);
-      cookieStore.set("last-login-method", method);
-    } else {
-      console.debug("Insecure, not setting last login method:", method);
+      cookie = cookie + `; Secure`;
     }
+    document.cookie = cookie;
     return true;
   }
 
