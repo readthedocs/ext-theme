@@ -19,17 +19,19 @@
 // order elements.
 .ui.ui.ui.dropdown .menu > .vertical.item {
   display: grid;
-  grid-template-columns: 3em auto auto;
+  grid-template-columns: min-content auto;
 
   > .image {
     grid-column: 1/1;
     grid-row: 1/3;
     align-self: center;
-    // Image should be 2em: 3em column width minus 0.5em margin left & right
+    width: 2em;
+    min-width: 2em;
+    max-width: 2em;
     margin-top: 0em;
     margin-bottom: 0em;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
+    margin-left: 0em;
+    margin-right: 1em;
   }
 
   > .text {
