@@ -178,7 +178,7 @@ collapsed, to save visual space and can be expanded with the right label.
           </a>
         {% endif %}
         {% if request.user|is_admin:project %}
-          {% if user.is_staff %}
+          {% if request.user.is_staff %}
             <a class="item" data-bind="click: $root.show_modal('project-debug')">
               <i class="fa-duotone fa-microscope icon"></i>
               {% trans "Debug" %}
@@ -193,35 +193,49 @@ collapsed, to save visual space and can be expanded with the right label.
       </div>
     </div>
 
-    <div class="ui mini modal" data-modal-id="project-debug">
-      <div class="header">{% trans "Debug information" %}</div>
-      {% comment %}
-        Show spam information on community instance.
-        Allows us to quickly understand what's the spam score,
-        and also know what rules are matching this project.
-      {% endcomment %}
-      <div class="content">
-        {% if not USE_ORGANIZATIONS %}
-          <h3>{% trans "Spam" %}</h3>
-          <div class="ui sub header">{% trans "Spam score" %}</div>
-          <span>{{ project|get_spam_score }}</span>
-          {% if project.spam_rules.exists %}
-            <div class="ui sub header">{% trans "Spam matching rules" %}</div>
-            <div class="ui vertical list">
-              {% for rule in project.spam_rules.all %}
-                <div class="item">
-                  <a href="{{ ADMIN_URL }}/spamfighting/spamrule/{{ rule.pk }}/change/"
-                     target="_blank">{{ rule.spam_rule_type|cut:"readthedocsext.spamfighting.rules." }}</a>
-                </div>
-              {% endfor %}
+    {% if request.user.is_staff %}
+      <div class="ui mini modal" data-modal-id="project-debug">
+        <div class="header">{% trans "Debug information" %}</div>
+        {% comment %}
+          Show spam information on community instance.
+          Allows us to quickly understand what's the spam score,
+          and also know what rules are matching this project.
+        {% endcomment %}
+        <div class="content">
+          <h3>{% trans "Admin" %}</h3>
+          <div class="ui vertical list">
+            <div class="item">
+              <a href="{{ ADMIN_URL }}/projects/project/{{ project.pk }}/change/"
+                 target="_blank">{% trans "View project in Django admin" %}</a>
             </div>
+            <div class="item">
+              <a href="{{ ADMIN_URL }}/projects/project/?slug={{ project.slug }}"
+                 target="_blank">{% trans "View project changelist filtered by slug" %}</a>
+            </div>
+          </div>
+
+          {% if not USE_ORGANIZATIONS %}
+            <h3>{% trans "Spam" %}</h3>
+            <div class="ui sub header">{% trans "Spam score" %}</div>
+            <span>{{ project|get_spam_score }}</span>
+            {% if project.spam_rules.exists %}
+              <div class="ui sub header">{% trans "Spam matching rules" %}</div>
+              <div class="ui vertical list">
+                {% for rule in project.spam_rules.all %}
+                  <div class="item">
+                    <a href="{{ ADMIN_URL }}/spamfighting/spamrule/{{ rule.pk }}/change/"
+                       target="_blank">{{ rule.spam_rule_type|cut:"readthedocsext.spamfighting.rules." }}</a>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
           {% endif %}
-        {% endif %}
+        </div>
+        <div class="actions">
+          <a href="#" class="ui negative button">{% trans "Close" %}</a>
+        </div>
       </div>
-      <div class="actions">
-        <a href="#" class="ui negative button">{% trans "Close" %}</a>
-      </div>
-    </div>
+    {% endif %}
   {% endblock project_header_navigation %}
 
 {% endblock project_header %}

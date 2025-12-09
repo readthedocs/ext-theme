@@ -269,32 +269,68 @@ export const webcomponent = {
 };
 
 /**
- * SemanticUI Knockout binding for applying SemanticUI jQuery plugins, and
- * plugin configuration to individual elements.
+ * Knockout binding for calling SemanticUI jQuery plugins on individual elements
  *
- * .. warning::
- *     The modal plugin is not supported in this configuration because of some
- *     fun interaction with jQuery.
+ * This binding provides direct access to all of the SemanticUI jQuery plugins
+ * provided by each of the SemanticUI module units.
  *
- * There are two methods of using this Knockout plugin. The first is using
- * literal values from tempaltes:
+ * Each key passed into the ``semanticui`` binding represents a module plugin
+ * that will be called by the data binding. For example, a data binding that
+ * initializes ``popup()`` and ``modal()`` module plugins is:
+ *
+ * .. code:: html
+ *
+ *     <div data-bind="semanticui: { popup: {'on': 'click'}, modal: {'closable': false}}">
+ *
+ * Which would be the following if using the standard jQuery initialization
+ * pattern described by SUI guides:
+ *
+ * .. code:: js
+ *
+ *     $(element).popup({"on": "click"});
+ *     $(element).modal({"closable": false});
+ *
+ * Passing arguments
+ * -----------------
+ *
+ * There are three available patterns you can use for passing arguments into the
+ * plugin methods:
+ *
+ * A literal value inside the data binding attribute in template code
+ *   The simplest option, useful if arguments are fairly basic.
+ *
+ * An observable in the data binding attribute
+ *   This is useful when the arguments passed into the plugin method are
+ *   complex or conditional.
+ *
+ * An anonymous function through an observable
+ *   This is for advanced cases and the best pattern for using SUI module
+ *   behaviors.
+ *
+ * Literal value
+ * ~~~~~~~~~~~~~
+ *
+ * If you only need to pass basic arguments into the plugin, you can do so in
+ * template code without any further JS:
  *
  * .. code:: html
  *
  *     <a class="ui item" data-bind="semanticui: {popup: {on: 'click'}}">
  *
- * This template code would be similar to executing the following JS:
+ * To compare this to the standard initialization pattern described by the SUI
+ * documentation, which relies on jQuery for targeting:
  *
  * .. code:: js
  *
- *     $(".ui.item").popup({on: "click"});
+ *     $(element).popup({on: "click"});
  *
- * The second way of using this plugin is through an Knockout observable that
- * returns either a literal object or a function from the observable.
+ * Observable value
+ * ~~~~~~~~~~~~~~~~
  *
- * See :func:`BuildDetailView.progress_config` for an example of both.
- *
- * To pass a literal object via an observable, use an observable such as:
+ * For complex and conditional arguments, it's usually better to pass an
+ * observable to the binding for the module plugin. Because we will be creating
+ * observables, this requires a view class. Inside the view class, an
+ * observable can be declared:
  *
  * .. code:: js
  *
@@ -305,19 +341,50 @@ export const webcomponent = {
  *       }
  *     });
  *
- * You can also return a function from an observable. This function will be
- * called with a single argument: a callback function representing the jQuery
- * plugin method for the underlying element. This allows for also executing
- * module _behaviors_. Behaviors are listed on some SUI modules, such as:
- * https://fomantic-ui.com/modules/progress.html#behavior
- *
- * For example, the bound element in template code would be:
+ * Our template code would reference the observable instead of a literal:
  *
  * .. code:: html
  *
- *     <a class="ui item" data-bind="semanticui: {progress: progress_config() }">
+ *     <a class="ui item" data-bind="semanticui: {popup: popup_config()}">
  *
- * The the matching observable code to trigger a behavior:
+ * .. seealso::
+ *     :func:`BuildDetailView.progress_config`
+ *       An example of an observable passing arguments to the ``progress()``
+ *       module jQuery plugin.
+ *
+ * Anonymous function
+ * ~~~~~~~~~~~~~~~~~~
+ *
+ * For deep usage of the SUI module jQuery plugins, you can also set an
+ * observable to an anonymous function value to use the plugin method directly
+ * on an individual element. This binding will call into that function with the
+ * jQuery plugin method exposed as a function as the only argument.
+ *
+ * With the template code still using an observable in the data binding on the
+ * view layer, an observable using an anonymous function instead would be:
+ *
+ * .. code:: js
+ *
+ *     this.popup_config = ko.observable((popup) => {
+ *       popup({
+ *         label: "Test",
+ *         on: "click",
+ *       });
+ *     });
+ *
+ * This is most helpful for utilizing SUI module *behaviors*. Behaviors are
+ * listed on most SUI modules, such as:
+ * https://fomantic-ui.com/modules/popup.html#behavior
+ *
+ * To now call module behaviors from this observable:
+ *
+ * .. code:: js
+ *
+ *     this.popup_config((popup) => popup("show"));
+ *
+ * It's also possible to mix these patterns and call behaviors more than once.
+ * For example a progress bar that progressively updates can mix both plugin
+ * initialization and subsequent behavior calls after initialization:
  *
  * .. code:: js
  *
