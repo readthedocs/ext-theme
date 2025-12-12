@@ -1,7 +1,7 @@
-import logging
 import re
 from urllib.parse import urljoin
 
+import structlog
 from django.db.models.query import QuerySet
 
 from django import template
@@ -17,12 +17,11 @@ from allauth.socialaccount.templatetags.socialaccount import (
     get_providers as base_get_providers,
 )
 
-log = logging.getLogger(__name__)
+log = structlog.get_logger(__name__)
 register = template.Library()
 
 
 class WebpackStaticNode(StaticNode):
-
     """
     Like static template tag, but for Webpack dev server assets
 
