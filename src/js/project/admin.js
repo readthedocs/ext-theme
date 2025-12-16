@@ -4,6 +4,58 @@ import ko from "knockout";
 import { Registry } from "../application/registry";
 
 /**
+ * Project basic settings view
+ */
+export class ProjectSettingsView {
+  static view_name = "ProjectSettingsView";
+
+  constructor() {
+    this.config = ko.observable({});
+    this.config.subscribe((config) => {
+      this.repo_has_errors(config.repo_has_errors);
+      if (!config.can_connect_repository) {
+        this.use_manual_configuration(true);
+      }
+    });
+
+    this.dimmer_config = ko.observable((dimmer) => {
+      dimmer("show");
+    });
+
+    this.use_manual_configuration = ko.observable(false);
+    this.use_manual_configuration.subscribe((use_manual_configuration) => {
+      if (use_manual_configuration) {
+        this.remote_repository((dropdown) => {
+          dropdown("set selected", "", true);
+        });
+      } else {
+        this.remote_repository((dropdown) => {
+          // Restore value that was there on page load, ``preventChangeTrigger=true``
+          // to avoid refiring off the field value change event
+          dropdown("restore defaults", true);
+        });
+      }
+    });
+
+    this.repo = ko.observable();
+    this.repo_has_errors = ko.observable(false);
+    this.repo_has_errors.subscribe((repo_has_errors) => {
+      this.use_manual_configuration(true);
+    });
+    this.remote_repository = ko.observable({
+      onChange: (value, text) => {
+        if (value == "") {
+          this.use_manual_configuration(true);
+        } else {
+          this.use_manual_configuration(false);
+        }
+      },
+    });
+  }
+}
+Registry.add_view(ProjectSettingsView);
+
+/**
  * Project automation rule form view
  *
  * @param {Object} automation_rule - Initial instance data, optional

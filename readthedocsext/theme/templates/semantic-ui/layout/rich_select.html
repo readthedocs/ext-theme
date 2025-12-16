@@ -1,5 +1,6 @@
 {% load crispy_field from crispy_forms_field %}
 {% load blocktrans trans from i18n %}
+{% load whitespaceless from ext_theme_tags %}
 
 {% comment rst %}
   Rich select field template
@@ -26,8 +27,18 @@
 
 {% endcomment %}
 
+{% whitespaceless as form_data_bind %}
+  {% if "data-bind" not in field.field.widget.attrs.keys %}
+    semanticui: { dropdown: {}}
+  {% else %}
+    {% for key, value in field.field.widget.attrs.items %}
+      {% if key == "data-bind" %}{{ value }}{% endif %}
+    {% endfor %}
+  {% endif %}
+{% endwhitespaceless %}
+
 <div class="ui long fluid selection category search dropdown{% if field.attrs.multiple %} multiple{% endif %}"
-     data-bind="semanticui: { dropdown: {}}">
+     data-bind="{{ form_data_bind }}">
   {{ field.as_hidden }}
   <i class="dropdown icon"></i>
   <div class="default text">{{ field.attrs.placeholder }}</div>
@@ -42,7 +53,7 @@
         the dropdown will still have a rich display.
       {% endcomment %}
       <div class="{% if choice.disabled %}disabled{% endif %} vertical item"
-           data-value="{{ choice.value }}"
+           data-value="{{ choice.value|default_if_none:"" }}"
            data-text="{{ choice.text }}">
         {% if choice.image_url %}
           <img class="ui mini avatar image"

@@ -1,0 +1,62 @@
+{% load alter_field from ext_theme_tags %}
+{% load as_crispy_field from crispy_forms_tags %}
+{% load blocktrans trans from i18n %}
+
+{% comment rst %}
+  Project repository combination field
+  ====================================
+{% endcomment %}
+
+{% with field_repo=multifield.bound_fields.0 field_remote_repository=multifield.bound_fields.1 %}
+  <div class="ui required field">
+    <label for="{{ multifield.id_for_label }}"
+           class="ui {{ multifield.label_class }}">
+      {{ multifield.label_html|safe }}
+    </label>
+
+    <script type="application/json" data-bind="jsonInit: config">
+      {
+        "repo_has_errors": {{ field_repo.errors|yesno:"true,false" }},
+        "remote_repository_has_errors": {{ field_remote_repository.errors|yesno:"true,false" }},
+        "can_connect_repository": true
+      }
+    </script>
+
+    <div class="ui segment">
+      <div class="ui basic fitted blurring segment">
+
+        <div class="ui {% if false %}active{% endif %} inverted dimmer">
+          <div class="ui message">
+            <i class="fas fa-circle-info icon"></i>
+            Connect a service provider to connect a repository to this project
+          </div>
+        </div>
+
+        {% alter_field field_remote_repository data_bind="semanticui: { dropdown: remote_repository() }, css: { disabled: use_manual_configuration() }" %}
+        {{ field_remote_repository|as_crispy_field }}
+
+        <div class="field">
+          <div class="ui checkbox">
+            <input type="checkbox"
+                   data-bind="checked: use_manual_configuration"
+                   tabindex="0" />
+            <label>Use manual configuration for repository URL</label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="ko hidden"
+           data-bind="css: { hidden: !use_manual_configuration() }">
+        <div class="ui small message">
+          We recommend using a connected repository for most projects,
+          only advanced users should manually configure the repository URL.
+        </div>
+
+        {% alter_field field_repo data_bind="valueInit: repo, value: repo, attr: { disabled: !use_manual_configuration() }" %}
+        {{ field_repo|as_crispy_field }}
+      </div>
+
+    </div>
+  </div>
+{% endwith %}

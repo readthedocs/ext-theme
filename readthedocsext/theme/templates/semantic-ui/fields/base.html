@@ -7,6 +7,7 @@
   {% whitespaceless as all_field_classes %}
     {% if not field|is_checkbox %}
       {% if field.field.required %}required{% endif %}
+      {% if field.field.disabled %}disabled{% endif %}
       {% if field.errors %}error{% endif %}
       {% if 'form-horizontal' in form_class %}inline{% endif %}
       field
@@ -36,6 +37,7 @@
   {% endblock field-label %}
 
   {% block field-input %}
+    {# TODO move this to a property on the form instead? #}
     {% if field|is_rich_select %}
       {% include "semantic-ui/layout/rich_select.html" %}
       {% include "semantic-ui/layout/field_errors_block.html" %}
