@@ -1,0 +1,32 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% load trans blocktrans from i18n %}
+
+{% comment rst %}
+  This template is used by the GHA migration template to list projects that need to be migrated manually.
+{% endcomment %}
+
+{% block list_placeholder_icon %}
+{% endblock list_placeholder_icon %}
+{% block list_placeholder_text %}
+{% endblock list_placeholder_text %}
+
+{% block top_menu %}
+{% endblock top_menu %}
+
+{% block list_item_image %}
+{% endblock list_item_image %}
+
+{% block list_item_header %}
+  <a href="{% url 'projects_detail' object.slug %}" target="_blank">{{ object.name }}</a>
+{% endblock list_item_header %}
+
+{% block list_item_right_menu %}
+  <div class="item">
+    <a href="{{ object.repository_html_url }}"
+       class="ui small basic image nowrap label">
+      <i class="fa-brands fa-github icon"></i>
+      <code>{{ object.repository_full_name }}</code>
+    </a>
+  </div>
+{% endblock list_item_right_menu %}
