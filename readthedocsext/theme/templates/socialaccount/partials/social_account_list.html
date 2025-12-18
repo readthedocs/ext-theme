@@ -1,5 +1,6 @@
 {% extends "includes/crud/table_list.html" %}
 
+{% load has_github_app_account from readthedocs.socialaccounts %}
 {% load blocktrans trans from i18n %}
 {% load can_be_disconnected from readthedocs.socialaccounts %}
 
@@ -43,16 +44,50 @@
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_menu %}
-  <form method="post" action="{% url 'socialaccount_connections' %}">
-    {% csrf_token %}
-    <input type="hidden" name="account" value="{{ object.id }}" />
+  {% if object.get_provider.id == "github" %}
     <div class="ui small icon buttons">
+      {% if object|has_github_app_account %}
+        <a class="ui icon button"
+           data-content="{% trans "Complete migration to GitHub App" %}"
+           href="{% url "migrate_to_github_app" %}"
+           target="_blank">
+          <i class="fad fa-circle-arrow-up"></i>
+          Complete Migration
+        </a>
+      {% else %}
+        <a class="ui icon button"
+           data-content="{% trans "Migrate to GitHub App" %}"
+           href="{% url "migrate_to_github_app" %}"
+           target="_blank">
+          <i class="fad fa-rocket icon"></i>
+          Migrate to GitHub App
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if object.get_provider.id == "githubapp" %}
+    <div class="ui small icon buttons">
+      <a class="ui icon button"
+         data-content="{% trans "Manage GitHub App on GitHub" %}"
+         href="https://github.com/apps/{{ GITHUB_APP_NAME }}/installations/new/"
+         target="_blank">
+        Manage
+        <i class="fad fa-external-link icon"></i>
+      </a>
+    </div>
+  {% endif %}
+
+  <div class="ui small icon buttons">
+    <form method="post" action="{% url 'socialaccount_connections' %}">
+      {% csrf_token %}
+      <input type="hidden" name="account" value="{{ object.id }}" />
       <button class="ui button {% if not object|can_be_disconnected %}disabled{% endif %}"
               data-content="{% trans "Disconnect account" %}">
         <i class="fas fa-trash icon"></i>
       </button>
-    </div>
-  </form>
+    </form>
+  </div>
 {% endblock list_item_right_menu %}
 
 {% block list_item_image %}
