@@ -70,6 +70,8 @@
                href="{% url "projects_traffic_analytics" project.slug %}">{% trans "Traffic analytics" %}</a>
             <a class="item {% block project_search_analytics_active %}{% endblock project_search_analytics_active %}"
                href="{% url "projects_search_analytics" project.slug %}">{% trans "Search analytics" %}</a>
+            <a class="item {% block project_otel_config_active %}{% endblock project_otel_config_active %}"
+               href="{% url "projects_otel_config" project.slug %}">{% trans "OpenTelemetry" %}</a>
             {% if USE_ORGANIZATIONS %}
               <a class="item {% block project_keys_active %}{% endblock project_keys_active %}"
                  href="{% url "projects_keys" project.slug %}">{% trans "SSH keys" %}</a>
