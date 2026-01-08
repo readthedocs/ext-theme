@@ -2,9 +2,9 @@
   <body>
     <div data-bind="using: TestView()">
       <form>
-        <select name="predefined_match_arg" data-bind="value: predefined_match_arg">
+        <select name="predefined_match_arg" data-bind="valueInit: predefined_match_arg, value: predefined_match_arg">
           <option value="">Custom</option>
-          <option value="all-versions">All versions</option>
+          <option value="all-versions" selected>All versions</option>
           <option value="semver-versions">SemVer versions</option>
         </select>
         <div data-bind="visible: is_match_arg_visible">
@@ -50,6 +50,15 @@
 
       runTests(async () => {
         describe("Project automation rule view", () => {
+          it("initializes with selected value from form", async () => {
+            await promise;
+
+            // The select should initialize with "all-versions" as it has the selected attribute
+            expect(view.predefined_match_arg()).to.equal("all-versions");
+            expect(view.is_match_arg_visible()).to.be.false;
+            expect(view.is_all_versions()).to.be.true;
+          });
+
           it("shows custom match field only when custom option is selected", async () => {
             await promise;
 
