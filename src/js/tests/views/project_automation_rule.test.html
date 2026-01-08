@@ -1,0 +1,90 @@
+<html>
+  <body>
+    <div data-bind="using: TestView()">
+      <form>
+        <select
+          name="predefined_match_arg"
+          data-bind="value: predefined_match_arg"
+        >
+          <option value="">Custom</option>
+          <option value="all-versions">All versions</option>
+          <option value="semver-versions">SemVer versions</option>
+        </select>
+        <input
+          type="text"
+          name="match_arg"
+          data-bind="visible: is_match_arg_visible"
+        />
+      </form>
+      <div data-bind="text: done()"></div>
+    </div>
+
+    <script type="module">
+      import { expect } from "@open-wc/testing";
+      import { runTests } from "@web/test-runner-mocha";
+      import { default as ko } from "knockout";
+
+      import { Application } from "../../application";
+      import { Registry } from "../../application/registry";
+      import { ProjectAutomationRuleView } from "../../project/admin";
+
+      const app = new Application({ debug: true });
+
+      let view;
+      let promise;
+
+      class TestView extends ProjectAutomationRuleView {
+        static view_name = "TestView";
+
+        constructor() {
+          super();
+          view = this;
+          promise = new Promise((resolve) => {
+            this._promise_resolve = resolve;
+          });
+        }
+
+        done() {
+          this._promise_resolve();
+        }
+      }
+
+      Registry.add_view(TestView);
+      app.run();
+
+      runTests(async () => {
+        describe("Project automation rule view", () => {
+          it("shows custom match field only when custom option is selected", async () => {
+            await promise;
+
+            // When custom option is selected (empty string)
+            view.predefined_match_arg("");
+            expect(view.is_match_arg_visible()).to.be.true;
+            expect(view.is_custom()).to.be.true;
+            expect(view.is_all_versions()).to.be.false;
+            expect(view.is_semver_versions()).to.be.false;
+
+            // When "all-versions" is selected
+            view.predefined_match_arg("all-versions");
+            expect(view.is_match_arg_visible()).to.be.false;
+            expect(view.is_custom()).to.be.false;
+            expect(view.is_all_versions()).to.be.true;
+            expect(view.is_semver_versions()).to.be.false;
+
+            // When "semver-versions" is selected
+            view.predefined_match_arg("semver-versions");
+            expect(view.is_match_arg_visible()).to.be.false;
+            expect(view.is_custom()).to.be.false;
+            expect(view.is_all_versions()).to.be.false;
+            expect(view.is_semver_versions()).to.be.true;
+
+            // Back to custom
+            view.predefined_match_arg("");
+            expect(view.is_match_arg_visible()).to.be.true;
+            expect(view.is_custom()).to.be.true;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
