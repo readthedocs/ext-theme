@@ -18,12 +18,17 @@
   {% else %}
     {% trans "Add rule" as button_text %}
   {% endif %}
-  <form class="ui form" method="post" action="." data-bind="using: ProjectAutomationRuleView()">
+  <form class="ui form"
+        method="post"
+        action="."
+        data-bind="using: ProjectAutomationRuleView()">
     {% csrf_token %}
     {% alter_field form.predefined_match_arg data_bind="if: true, value: predefined_match_arg" classes="manual select" %}
     {% alter_field form.match_arg data_bind="visible: is_match_arg_visible" %}
     {{ form|crispy }}
-    <div class="ui info message" data-bind="visible: is_all_versions() || is_semver_versions()" style="display: none;">
+    <div class="ui info message"
+         data-bind="visible: is_all_versions() || is_semver_versions()"
+         style="display: none">
       <span data-bind="visible: is_all_versions">
         {% trans "All versions will be matched by this rule." %}
       </span>

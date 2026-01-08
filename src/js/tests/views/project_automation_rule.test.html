@@ -2,19 +2,14 @@
   <body>
     <div data-bind="using: TestView()">
       <form>
-        <select
-          name="predefined_match_arg"
-          data-bind="value: predefined_match_arg"
-        >
+        <select name="predefined_match_arg" data-bind="value: predefined_match_arg">
           <option value="">Custom</option>
           <option value="all-versions">All versions</option>
           <option value="semver-versions">SemVer versions</option>
         </select>
-        <input
-          type="text"
-          name="match_arg"
-          data-bind="visible: is_match_arg_visible"
-        />
+        <input type="text"
+               name="match_arg"
+               data-bind="visible: is_match_arg_visible" />
       </form>
       <div data-bind="text: done()"></div>
     </div>
