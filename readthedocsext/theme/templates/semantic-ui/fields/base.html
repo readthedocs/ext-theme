@@ -15,7 +15,7 @@
     {% if field.css_classes %}{{ field.css_classes }}{% endif %}
   {% endwhitespaceless %}
 
-  <{{ tag|default:"div" }} id="div_{{ field.auto_id }}" class="{{ all_field_classes }}">
+  <{{ tag|default:"div" }} id="div_{{ field.auto_id }}" class="{{ all_field_classes }}"{% if field.field.widget.attrs.wrapper_data_bind %} data-bind="{{ field.field.widget.attrs.wrapper_data_bind }}"{% endif %}>
 
   {% block field-label %}
     {% if field.label and form_show_labels %}

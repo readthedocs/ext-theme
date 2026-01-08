@@ -7,9 +7,10 @@
           <option value="all-versions">All versions</option>
           <option value="semver-versions">SemVer versions</option>
         </select>
-        <input type="text"
-               name="match_arg"
-               data-bind="visible: is_match_arg_visible" />
+        <div data-bind="visible: is_match_arg_visible">
+          <label for="match_arg">Custom match</label>
+          <input type="text" name="match_arg" />
+        </div>
       </form>
       <div data-bind="text: done()"></div>
     </div>

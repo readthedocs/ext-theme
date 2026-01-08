@@ -82,13 +82,15 @@ def settings_dashboard():
 
 
 @register.simple_tag(name="alter_field", takes_context=True)
-def alter_field(context, field, data_bind=None, classes=None, label_classes=None):
+def alter_field(context, field, data_bind=None, classes=None, label_classes=None, wrapper_data_bind=None):
     if not isinstance(field, boundfield.BoundField) and settings.DEBUG:
         raise Exception("data_bind got passed an invalid or inexistent field")
     if data_bind is not None:
         field.field.widget.attrs["data-bind"] = data_bind
     if classes is not None:
         field.field.widget.attrs["class"] = classes
+    if wrapper_data_bind is not None:
+        field.field.widget.attrs["wrapper_data_bind"] = wrapper_data_bind
     return ""
 
 
