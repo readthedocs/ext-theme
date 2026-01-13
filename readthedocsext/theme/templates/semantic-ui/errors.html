@@ -13,21 +13,19 @@
           `messages` attribute. This can either be a single message or multiple
           messages.
         {% endcomment %}
-        {% if error.messages|length == 1%}
-          {{ error.messages|first|safe }}
+        {% if error.messages|length == 1 %}
+          {{ error.messages|first }}
         {% else %}
           <ul class="list">
-            {% for message in error.messages %}
-              <li>{{ message|safe }}</li>
-            {% endfor %}
+            {% for message in error.messages %}<li>{{ message }}</li>{% endfor %}
           </ul>
         {% endif %}
       {% else %}
         {% comment %}
           Some older form errors don't use attached messages at all, in which
-          case we can treat these as just unsafe strings.
+          case we can treat these as a single message.
         {% endcomment %}
-        {{ error|safe }}
+        {{ error }}
       {% endif %}
     </div>
   {% endfor %}
