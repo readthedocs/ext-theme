@@ -33,16 +33,16 @@
 {% endcomment %}
 
 {% if url %}
-<a {% if popup %}data-content="{{ popup }}" aria-label="{{ popup }}"{% endif %}
-   href="{{ url }}"
-   class="ui {% if classes %}{{ classes }}{% else %}{% if not text %}icon{% endif %}{% endif %} label">
-  {% if icon %}<i class="{{ icon }} icon"></i>{% endif %}
-  {{ text }}
-</a>
+  <a {% if popup %}data-content="{{ popup }}" aria-label="{{ popup }}"{% endif %}
+     href="{{ url }}"
+     class="ui {% if classes %}{{ classes }}{% else %}{% if not text %}icon{% endif %}{% endif %} label">
+    {% if icon %}<i class="{{ icon }} icon"></i>{% endif %}
+    {{ text }}
+  </a>
 {% else %}
-<span {% if popup %}data-content="{{ popup }}" aria-label="{{ popup }}"{% endif %}
-      class="ui {% if classes %}{{ classes }}{% else %}{% if not text %}icon{% endif %}{% endif %} label">
-  {% if icon %}<i class="{{ icon }} icon"></i>{% endif %}
-  {{ text }}
-</span>
+  <span {% if popup %}data-content="{{ popup }}" aria-label="{{ popup }}"{% endif %}
+        class="ui {% if classes %}{{ classes }}{% else %}{% if not text %}icon{% endif %}{% endif %} label">
+    {% if icon %}<i class="{{ icon }} icon"></i>{% endif %}
+    {{ text }}
+  </span>
 {% endif %}
