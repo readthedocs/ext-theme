@@ -27,7 +27,7 @@
       {% endcomment %}
       <label for="{{ field.id_for_label }}"
              class="ui {{ label_class }}"
-             {% if field.help_text %} data-html="{{ field.help_text|force_escape }}" data-bind="semanticui: {popup: {hoverable: true}}"{% endif %}>
+             {% if field.help_text %} data-html="{{ field.help_text|force_escape }}" data-bind="semanticui: {popup: {hoverable: true, delay: {show: 500}}}"{% endif %}>
         {{ field.label|safe }}
         {% if field.help_text %}
           <i class="ui grey fa-duotone fa-circle-question icon"></i>

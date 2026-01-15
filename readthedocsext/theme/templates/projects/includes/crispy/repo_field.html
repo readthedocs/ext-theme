@@ -1,0 +1,14 @@
+{% extends "semantic-ui/fields/base.html" %}
+
+
+{% block x-field-outer %}
+  {% comment %}
+  <readthedocs-project-repo-field
+    name="{{ field.name }}"
+    value="{{ field.field.value|default_if_none:"" }}"
+    placeholder="{{ field.field.placeholder|default_if_none:"" }}"
+    error="{{ field.error|default_if_none:"" }}">
+    {{ block.super }}
+  </readthedocs-project-repo-field>
+  {% endcomment %}
+{% endblock x-field-outer %}

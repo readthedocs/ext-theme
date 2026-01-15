@@ -3,57 +3,212 @@ import ko from "knockout";
 
 import { Registry } from "../application/registry";
 
+import { html, nothing, render } from "lit";
+import { when } from "lit/directives/when.js";
+import { classMap } from "lit/directives/class-map.js";
+import { ref, createRef } from "lit/directives/ref.js";
+import { map } from "lit/directives/map.js";
+
+import { LightDOMElement } from "../application/elements";
+
 /**
- * Project basic settings view
+ * Combination field for project repository
+ *
+ * This element uses progressive enhancement of the existing form fields from
+ * Django/Crispy. This web component adds dynamic interaction between the
+ * fields and some additional UI elements to help describe what the user is
+ * changing about the project.
+ *
+ * This uses :js:class:`InputFieldElement` and :js:class:`RichSelectFieldElement`
+ * to isolate direct DOM manipulation from template driven web component logic.
  */
-export class ProjectSettingsView {
-  static view_name = "ProjectSettingsView";
+export class ProjectRepositoryMultifieldElement extends LightDOMElement {
+  static properties = {
+    label: { type: String },
+
+    repoValue: { type: String },
+    repoError: { state: true },
+    remoteRepositoryValue: { type: String },
+    remoteRepositoryUrl: { type: String },
+    remoteRepositoryError: { state: true },
+
+    useManual: { state: true },
+    previousChoice: { state: true },
+  };
+
+  // TODO references
+  refRemoteRepository = createRef();
+  refRepo = createRef();
 
   constructor() {
-    this.config = ko.observable({});
-    this.config.subscribe((config) => {
-      this.repo_has_errors(config.repo_has_errors);
-      if (!config.can_connect_repository) {
-        this.use_manual_configuration(true);
-      }
-    });
+    super();
+    this.remoteRepositoryValue = "";
+    this.useManual = true;
+  }
 
-    this.dimmer_config = ko.observable((dimmer) => {
-      dimmer("show");
-    });
+  connectedCallback() {
+    super.connectedCallback();
 
-    this.use_manual_configuration = ko.observable(false);
-    this.use_manual_configuration.subscribe((use_manual_configuration) => {
-      if (use_manual_configuration) {
-        this.remote_repository((dropdown) => {
-          dropdown("set selected", "", true);
-        });
-      } else {
-        this.remote_repository((dropdown) => {
-          // Restore value that was there on page load, ``preventChangeTrigger=true``
-          // to avoid refiring off the field value change event
-          dropdown("restore defaults", true);
-        });
-      }
-    });
+    this.slotRemoteRepository = Array.from(
+      this.querySelector("#div_id_remote_repository").children,
+    );
+    this.slotRepo = Array.from(this.querySelector("#div_id_repo").children);
 
-    this.repo = ko.observable();
-    this.repo_has_errors = ko.observable(false);
-    this.repo_has_errors.subscribe((repo_has_errors) => {
-      this.use_manual_configuration(true);
-    });
-    this.remote_repository = ko.observable({
-      onChange: (value, text) => {
-        if (value == "") {
-          this.use_manual_configuration(true);
-        } else {
-          this.use_manual_configuration(false);
+    // Mimic shadow DOM default slot behavior, unused slotted children are discarded
+    this.slotDefault = document.createElement("div");
+    this.slotDefault.replaceChildren(...this.children);
+  }
+
+  listenerRemoteRepository(event) {
+    if (
+      event.type == "change" &&
+      event.target === this.refRemoteRepository.value
+    ) {
+      this.remoteRepositoryValue = event.target.value;
+      this.remoteRepositoryUrl = event.target.description;
+      this.remoteRepositoryError = event.target.hasError;
+    }
+  }
+
+  listenerRepo(event) {
+    if (event.type == "change" && event.target === this.refRepo.value) {
+      this.repoValue = event.target.value;
+      this.repoError = event.target.hasError;
+    }
+  }
+
+  toggleManual(event) {
+    this.useManual = Boolean(event.target.checked);
+  }
+
+  /**
+   * Renders combined repository field
+   *
+   * The elements we targeted in :js:method:`connectedCallback` are used in
+   * this render template. When an :js:class:`Element` is included in a rendered
+   * template, Lit is internally calling :js:method:`Element.appendChild`. When
+   * ``appendChild`` is called with an element that already has a parent, that
+   * element is simply moved in the DOM. So, by including these elements (with
+   * ``${this.refRepo.value}``), we're moving the elements around in our light
+   * DOM.
+   */
+  render() {
+    const isRemoteRepositoryDimmed = false;
+    const isRemoteRepositoryDisabled = this.useManual;
+    const isRemoteRepositoryUsable =
+      isRemoteRepositoryDimmed || isRemoteRepositoryDisabled;
+
+    const classesRemoteRepositoryField = {
+      disabled: !isRemoteRepositoryDimmed && isRemoteRepositoryDisabled,
+      error: Boolean(this.remoteRepositoryError),
+    };
+    const classesRepoField = {
+      disabled: !this.useManual,
+      error: Boolean(this.repoError),
+    };
+    const classesUseManualField = {
+      disabled: isRemoteRepositoryDimmed,
+    };
+
+    return html`
+      <div class="ui required field">
+        <label>
+          ${this.label}
+        </label>
+
+        <div class="ui field segment">
+          <readthedocs-richselect-field
+            .value="${this.remoteRepositoryValue}"
+            .disabled="${this.useManual}"
+            @change="${this.listenerRemoteRepository}"
+            ${ref(this.refRemoteRepository)}
+          >
+            <div
+              class="ui basic fitted blurring segment ${classMap(
+                classesRemoteRepositoryField,
+              )} field"
+            >
+              ${when(
+                isRemoteRepositoryDimmed,
+                () => html`
+                  <div class="ui inverted active dimmer">
+                    <div class="ui message">
+                      <i class="fas fa-circle-info icon"></i>
+                      Add a connected service account to use automatic
+                      repository connections
+                    </div>
+                  </div>
+                `,
+              )}
+              ${this.slotRemoteRepository}
+              ${when(
+                !isRemoteRepositoryDimmed,
+                () => html`
+                  <div class="ui small message">
+                    <i class="fas fa-circle-info icon"></i>
+                    Another user maintains the connection to this repository.
+                  </div>
+                `,
+              )}
+
+              <div class="ui divider"></div>
+            </div>
+          </readthedocs-richselect-field>
+
+          <div
+            class="ui basic fitted segment ${classMap(
+              classesUseManualField,
+            )} field"
+          >
+            <div class="ui checkbox">
+              <input
+                type="checkbox"
+                ?checked="${this.useManual}"
+                @change="${this.toggleManual}"
+              />
+              <label> Use manually configured repository URL </label>
+            </div>
+          </div>
+
+          <readthedocs-input-field
+            .value="${this.repoValue}"
+            .disabled="${!this.useManual}"
+            @change="${this.listenerRepo}"
+            ${ref(this.refRepo)}
+          >
+            <div class="ui ${classMap(classesRepoField)} field">
+              ${this.slotRepo}
+            </div>
+          </readthedocs-input-field>
+        </div>
+      </div>
+    `;
+  }
+
+  willUpdate(changed) {
+    if (changed.has("remoteRepositoryValue")) {
+      if (this.remoteRepositoryValue !== "" && !changed.has("useManual")) {
+        this.useManual = false;
+        this.repoValue = this.remoteRepositoryUrl;
+        if (this.repoError) {
+          this.repoError = false;
+          this.refRepo.value.clearErrors();
         }
-      },
-    });
+      }
+    } else if (changed.has("useManual")) {
+      if (this.useManual) {
+        this.previousChoice = this.remoteRepositoryValue;
+        this.remoteRepositoryValue = "";
+      } else {
+        this.remoteRepositoryValue = this.previousChoice;
+      }
+    }
   }
 }
-Registry.add_view(ProjectSettingsView);
+customElements.define(
+  "readthedocs-project-repository-multifield",
+  ProjectRepositoryMultifieldElement,
+);
 
 /**
  * Project automation rule form view
