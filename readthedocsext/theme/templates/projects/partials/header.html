@@ -29,7 +29,11 @@ collapsed, to save visual space and can be expanded with the right label.
           <div class="right aligned eight wide computer eight wide tablet sixteen wide left aligned mobile middle aligned column">
             {% include "includes/components/config_label.html" with icon="fa-solid fa-language" text=project.language|upper popup=project.language|readthedocs_language_name_local %}
             {% for organization in project.organizations.all %}
-              {% include "includes/components/config_label.html" with icon="fa-solid fa-building" text=organization.name url=organization.get_absolute_url %}
+              <a href="{{ organization.get_absolute_url }}" class="ui basic image label">
+                <img alt="{% blocktrans trimmed with organization_name=organization.name %}{{ organization_name }} organization{% endblocktrans %}"
+                     src="{{ organization.get_avatar_url }}" />
+                {{ organization.name }}
+              </a>
             {% endfor %}
 
             {# The dropdown action button, to swap between expanded/collapsed #}
