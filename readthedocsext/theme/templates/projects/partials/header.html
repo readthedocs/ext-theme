@@ -32,6 +32,7 @@ collapsed, to save visual space and can be expanded with the right label.
               <a href="{{ organization.get_absolute_url }}" class="ui basic image label">
                 <img alt="{% blocktrans trimmed with organization_name=organization.name %}{{ organization_name }} organization{% endblocktrans %}"
                      src="{{ organization.get_avatar_url }}" />
+                <i class="fa-solid fa-building icon"></i>
                 {{ organization.name }}
               </a>
             {% endfor %}
