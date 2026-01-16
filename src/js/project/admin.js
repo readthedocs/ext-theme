@@ -34,6 +34,7 @@ import { LightDOMElement } from "../application/elements";
  * @property {Boolean} useManual - Switch field to use manual repository URL
  * @property {String} previousChoice - Store previous value for remote repository
  *
+ * @property {Boolean} dontSync - Don't update the repo field, project is flagged with DONT_SYNC_REMOTE_REPO
  * @property {String} showConnectedServiceWarning - Show a warning about missing connected services?
  * @property {String} showManualUrlWarning - Show a warning about switching to manual URL?
  * @property {String} urlDocsManual - URL for manual warning
@@ -52,6 +53,10 @@ export class ProjectRepositoryMultifieldElement extends LightDOMElement {
     useManual: { state: true },
     previousChoice: { state: true },
 
+    dontSync: {
+      type: Boolean,
+      attribute: "dont-sync",
+    },
     showConnectedServiceWarning: {
       type: Boolean,
       attribute: "show-connected-service-warning",
@@ -229,13 +234,19 @@ export class ProjectRepositoryMultifieldElement extends LightDOMElement {
     if (changed.has("remoteRepositoryValue")) {
       if (this.remoteRepositoryValue !== "" && !changed.has("useManual")) {
         this.useManual = false;
-        this.repoValue = this.remoteRepositoryUrl;
+        // Project is flagged to not sync the repo field, we'll do the same in
+        // our UX in this form for now.
+        if (!this.dontSync) {
+          this.repoValue = this.remoteRepositoryUrl;
+        }
+        // Reset errors on the repo field
         if (this.repoError) {
           this.repoError = false;
           this.refRepo.value.clearErrors();
         }
       }
     } else if (changed.has("useManual")) {
+      // Store default so we can restore it if the user unchecks useManual
       if (this.useManual) {
         this.previousChoice = this.remoteRepositoryValue;
         this.remoteRepositoryValue = "";

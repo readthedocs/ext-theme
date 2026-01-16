@@ -1,10 +1,5 @@
 import jquery from "jquery";
 
-window.emitLitDebugLogEvents = true;
-window.addEventListener("lit-debug", (event) => {
-  console.debug("Lit event:", event.detail);
-});
-
 import { html } from "lit";
 import { when } from "lit/directives/when.js";
 import { ref, createRef } from "lit/directives/ref.js";
