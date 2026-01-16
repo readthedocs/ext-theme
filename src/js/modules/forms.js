@@ -31,11 +31,11 @@ import { LightDOMElement } from "../application/elements";
  *         </readthedocs-input-field>
  *       `;
  *
- * @event {change} TODO
- * @property {value}
- * @property {disabled}
- * @property {selector}
- * @property {hasError}
+ * @property {String} value - Input field value for the form
+ * @property {Boolean} disabled - Is the field in a disabled state? Controls tab index
+ * @property {String} selector - CSS selector used to find the input in the light DOM
+ * @property {Boolean} hasError - Are there errors in the field
+ * @fires change - Event fired on attribute and error state changes
  */
 export class FieldElement extends LightDOMElement {
   static properties = {
@@ -45,9 +45,9 @@ export class FieldElement extends LightDOMElement {
     hasError: { type: Boolean },
   };
 
-  /** @param {Ref} Reference to the input element */
+  /** @attr {Ref} refInput - Reference to the input element */
   refInput = createRef();
-  /** @param {Ref} Reference to the errors list element */
+  /** @attr {Ref} refErrors - Reference to the errors list element */
   refErrors = createRef();
 
   constructor() {
@@ -111,6 +111,8 @@ export class FieldElement extends LightDOMElement {
    *
    * In a Lit template, subscribe to this event in a render template with:
    * ``<readthedocs-field @change="${this.someEventHandler}">``.
+   *
+   * @fires change - Change event fired on property changes and error state
    */
   dispatchChangeEvent() {
     this.dispatchEvent(
@@ -159,6 +161,9 @@ customElements.define("readthedocs-input-field", InputFieldElement);
  *
  * This relies on the SUI dropdown module and module behaviors to drive all of
  * the element properties and dropdown UI manipulation.
+ *
+ * @property {String} description - Rich select field choice description data
+ * @fires change - On dropdown select and initial element set up, fires event
  */
 export class RichSelectFieldElement extends FieldElement {
   static get properties() {
@@ -194,6 +199,8 @@ export class RichSelectFieldElement extends FieldElement {
    * This calls into the SUI jQuery ``dropdown`` module and can be used for
    * both configuring the module or calling any of the behaviors the module
    * provides (see https://fomantic-ui.com/modules/dropdown.html#behavior)
+   *
+   * @param {...*} args - All arguments to this functionm pass through
    */
   dropdown(...args) {
     return jquery(this.refInput.value).dropdown(...args);

@@ -37,7 +37,6 @@
   {% endblock field-label %}
 
   {% block field-input %}
-    {# TODO move this to a property on the form instead? #}
     {% if field|is_rich_select %}
       {% include "semantic-ui/layout/rich_select.html" %}
       {% include "semantic-ui/layout/field_errors_block.html" %}
