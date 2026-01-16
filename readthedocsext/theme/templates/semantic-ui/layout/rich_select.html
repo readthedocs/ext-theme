@@ -28,7 +28,7 @@
 {% endcomment %}
 
 {% whitespaceless as form_data_bind %}
-  {% if data_bind or data_bind == "" %}
+  {% if data_bind %}
     {{ data_bind }}
   {% elif "data-bind" in field.field.widget.attrs.keys %}
     {% for key, value in field.field.widget.attrs.items %}
@@ -39,10 +39,15 @@
   {% endif %}
 {% endwhitespaceless %}
 
-<div class="ui long fluid selection category search dropdown{% if field.attrs.multiple %} multiple{% endif %}"
-     data-bind="{{ form_data_bind }}"
-     data-semanticui-dropdown="true"
-     slot="{{ field.name }}-input">
+{% whitespaceless as field_classes %}
+  ui long fluid selection search dropdown
+  {% if field.field.widget.attrs.readonly %}read-only{% endif %}
+  {% if field.attrs.multiple %}multiple{% endif %}
+  field
+{% endwhitespaceless %}
+
+<div class="{{ field_classes }}"
+     {% if field.field.widget.attrs.use_data_binding %} data-bind="{{ form_data_bind }}" {% else %} data-semanticui-dropdown="true" {% endif %}>
   {{ field.as_hidden }}
   <i class="dropdown icon"></i>
   <input class="search" tabindex="-1" />
@@ -70,10 +75,20 @@
           <span class="description">{{ choice.description }}</span>
         {% endif %}
         <span class="text">{{ choice.text }}</span>
-        {% if choice.error %}
-          <span class="ui red text extra content">
-            <i class="fas fa-exclamation-triangle icon"></i>
-            {{ choice.error }}
+        {% if choice.extra or choice.error %}
+          <span class="extra content">
+            {% if choice.extra %}
+              <span class="ui basic label">
+                <i class="fas fa-info-circle icon"></i>
+                {{ choice.extra }}
+              </span>
+            {% endif %}
+            {% if choice.error %}
+              <span class="ui basic red label">
+                <i class="fas fa-exclamation-triangle icon"></i>
+                {{ choice.error }}
+              </span>
+            {% endif %}
           </span>
         {% endif %}
       </div>

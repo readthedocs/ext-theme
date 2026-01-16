@@ -8,6 +8,7 @@ import { when } from "lit/directives/when.js";
 import { classMap } from "lit/directives/class-map.js";
 import { ref, createRef } from "lit/directives/ref.js";
 import { map } from "lit/directives/map.js";
+import { msg } from "@lit/localize";
 
 import { LightDOMElement } from "../application/elements";
 
@@ -21,6 +22,22 @@ import { LightDOMElement } from "../application/elements";
  *
  * This uses :js:class:`InputFieldElement` and :js:class:`RichSelectFieldElement`
  * to isolate direct DOM manipulation from template driven web component logic.
+ *
+ * @property {String} label - Combination field label text
+ *
+ * @property {String} repoValue - Value for the repo field
+ * @property {Boolean} repoError - Error state for the repo field
+ * @property {String} remoteRepositoryValue - Value for the remote repository field
+ * @property {String} remoteRepositoryUrl - URL for the remote repository field
+ * @property {Boolean} remoteRepositoryError - Error state for the remote repository field
+ *
+ * @property {Boolean} useManual - Switch field to use manual repository URL
+ * @property {String} previousChoice - Store previous value for remote repository
+ *
+ * @property {String} showConnectedServiceWarning - Show a warning about missing connected services?
+ * @property {String} showManualUrlWarning - Show a warning about switching to manual URL?
+ * @property {String} urlDocsManual - URL for manual warning
+ * @property {String} urlConnectedServices - URL for connected services warning
  */
 export class ProjectRepositoryMultifieldElement extends LightDOMElement {
   static properties = {
@@ -34,10 +51,29 @@ export class ProjectRepositoryMultifieldElement extends LightDOMElement {
 
     useManual: { state: true },
     previousChoice: { state: true },
+
+    showConnectedServiceWarning: {
+      type: Boolean,
+      attribute: "show-connected-service-warning",
+    },
+    showManualUrlWarning: {
+      type: Boolean,
+      attribute: "show-manual-url-warning",
+    },
+    urlConnectedServices: {
+      type: String,
+      attribute: "url-connected-services",
+    },
+    urlDocsManual: {
+      type: String,
+      attribute: "url-docs-manual",
+    },
   };
 
-  // TODO references
+  /** @attr {Ref} refRemoteRepository - Reference to the field web component for
+   * remote repository field */
   refRemoteRepository = createRef();
+  /** @attr {Ref} refRepo - Reference to the field web component for repo field */
   refRepo = createRef();
 
   constructor() {
@@ -46,15 +82,26 @@ export class ProjectRepositoryMultifieldElement extends LightDOMElement {
     this.useManual = true;
   }
 
+  /**
+   * Pick up elements for enhancement
+   *
+   * This is like fake slotting, something we can't use because we're not using
+   * shadow DOM. The targeted elements are used in :js:class:`render`, which is
+   * how these elements are moved into this light DOM.
+   *
+   * Children are manipulated slightly, we don't use all the child elements and
+   * work with the output DOM that Crispy gives for now.
+   */
   connectedCallback() {
     super.connectedCallback();
-
     this.slotRemoteRepository = Array.from(
       this.querySelector("#div_id_remote_repository").children,
     );
     this.slotRepo = Array.from(this.querySelector("#div_id_repo").children);
 
-    // Mimic shadow DOM default slot behavior, unused slotted children are discarded
+    // Mimic shadow DOM default slot behavior. All children are moved into a
+    // disconnected element, so after slotted children are placed in the DOM the
+    // leftover element aren't displayed.
     this.slotDefault = document.createElement("div");
     this.slotDefault.replaceChildren(...this.children);
   }
@@ -79,42 +126,22 @@ export class ProjectRepositoryMultifieldElement extends LightDOMElement {
 
   toggleManual(event) {
     this.useManual = Boolean(event.target.checked);
+    this.showManualUrlWarning = this.useManual;
   }
 
-  /**
-   * Renders combined repository field
-   *
-   * The elements we targeted in :js:method:`connectedCallback` are used in
-   * this render template. When an :js:class:`Element` is included in a rendered
-   * template, Lit is internally calling :js:method:`Element.appendChild`. When
-   * ``appendChild`` is called with an element that already has a parent, that
-   * element is simply moved in the DOM. So, by including these elements (with
-   * ``${this.refRepo.value}``), we're moving the elements around in our light
-   * DOM.
-   */
   render() {
-    const isRemoteRepositoryDimmed = false;
-    const isRemoteRepositoryDisabled = this.useManual;
-    const isRemoteRepositoryUsable =
-      isRemoteRepositoryDimmed || isRemoteRepositoryDisabled;
-
     const classesRemoteRepositoryField = {
-      disabled: !isRemoteRepositoryDimmed && isRemoteRepositoryDisabled,
+      disabled: this.useManual,
       error: Boolean(this.remoteRepositoryError),
     };
     const classesRepoField = {
       disabled: !this.useManual,
       error: Boolean(this.repoError),
     };
-    const classesUseManualField = {
-      disabled: isRemoteRepositoryDimmed,
-    };
 
     return html`
       <div class="ui required field">
-        <label>
-          ${this.label}
-        </label>
+        <label> ${this.label} </label>
 
         <div class="ui field segment">
           <readthedocs-richselect-field
@@ -123,43 +150,38 @@ export class ProjectRepositoryMultifieldElement extends LightDOMElement {
             @change="${this.listenerRemoteRepository}"
             ${ref(this.refRemoteRepository)}
           >
+            ${when(
+              this.showConnectedServiceWarning && !this.useManual,
+              () => html`
+                <div class="ui message">
+                  <div class="header">
+                    <i class="fas fa-circle-info icon"></i>
+                    ${msg(
+                      `No connected services are configured for your account`,
+                    )}
+                  </div>
+                  ${msg(
+                    html`You must
+                      <a href="${this.urlConnectedServices}"
+                        >add a connected service</a
+                      >
+                      in order to modify a project's connected repository.`,
+                  )}
+                </div>
+              `,
+            )}
             <div
-              class="ui basic fitted blurring segment ${classMap(
+              class="ui basic fitted segment ${classMap(
                 classesRemoteRepositoryField,
               )} field"
             >
-              ${when(
-                isRemoteRepositoryDimmed,
-                () => html`
-                  <div class="ui inverted active dimmer">
-                    <div class="ui message">
-                      <i class="fas fa-circle-info icon"></i>
-                      Add a connected service account to use automatic
-                      repository connections
-                    </div>
-                  </div>
-                `,
-              )}
               ${this.slotRemoteRepository}
-              ${when(
-                !isRemoteRepositoryDimmed,
-                () => html`
-                  <div class="ui small message">
-                    <i class="fas fa-circle-info icon"></i>
-                    Another user maintains the connection to this repository.
-                  </div>
-                `,
-              )}
 
               <div class="ui divider"></div>
             </div>
           </readthedocs-richselect-field>
 
-          <div
-            class="ui basic fitted segment ${classMap(
-              classesUseManualField,
-            )} field"
-          >
+          <div class="ui basic fitted segment field">
             <div class="ui checkbox">
               <input
                 type="checkbox"
@@ -176,7 +198,25 @@ export class ProjectRepositoryMultifieldElement extends LightDOMElement {
             @change="${this.listenerRepo}"
             ${ref(this.refRepo)}
           >
-            <div class="ui ${classMap(classesRepoField)} field">
+            ${when(
+              this.showManualUrlWarning,
+              () => html`
+                <div class="ui message">
+                  <div class="header">
+                    <i class="fas fa-circle-info icon"></i>
+                    ${msg(`Additional setup steps are required`)}
+                  </div>
+                  ${msg(html`
+                    To learn how to set up a project with a manually configured
+                    repository URL,
+                    <a href="${this.urlDocsManual}" target="_blank">
+                      see our guide on configuring manual Git integrations </a
+                    >.
+                  `)}
+                </div>
+              `,
+            )}
+            <div class="ui ${classMap(classesRepoField)} last field">
               ${this.slotRepo}
             </div>
           </readthedocs-input-field>

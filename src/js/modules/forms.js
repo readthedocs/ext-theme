@@ -127,7 +127,7 @@ export class FieldElement extends LightDOMElement {
   clearErrors() {
     if (this.hasError) {
       const elemErrors = this.refErrors.value;
-      elem.remove();
+      elemErrors.remove();
       this.hasError = false;
     }
   }

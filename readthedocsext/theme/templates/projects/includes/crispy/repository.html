@@ -1,7 +1,4 @@
-{% load alter_field from ext_theme_tags %}
-{% load as_crispy_field from crispy_forms_tags %}
-{% load crispy_field from crispy_forms_field %}
-{% load blocktrans trans from i18n %}
+{% load whitespaceless from ext_theme_tags %}
 
 {% comment rst %}
   Project repository combination field
@@ -12,8 +9,14 @@
   :js:class:`ProjectRepositoyMultifieldElement` for all of the added functionality.
 {% endcomment %}
 
-<readthedocs-project-repository-multifield
-    {% if not form.remote_repository.disabled %}has-connect-services{% endif %}
-    label="{{ multifield.label_html|safe }}">
-  {{ fields_output|safe }} 
+{# djlint wasn't happy with all of these attributes for some reason #}
+{% whitespaceless as multifield_attrs %}
+  label="{{ multifield.label_html|safe }}"
+  url-connected-services="{% url "socialaccount_connections" %}"
+  url-docs-manual="https://docs.readthedocs.com/platform/stable/guides/setup/git-repo-manual.html"
+  {{ multifield.flat_attrs|safe }}
+{% endwhitespaceless %}
+
+<readthedocs-project-repository-multifield {{ multifield_attrs|safe }}>
+  {{ fields_output|safe }}
 </readthedocs-project-repository-multifield>

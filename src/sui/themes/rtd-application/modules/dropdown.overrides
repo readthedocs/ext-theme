@@ -20,6 +20,7 @@
 .ui.ui.ui.dropdown .menu > .vertical.item {
   display: grid;
   grid-template-columns: min-content auto;
+  gap: 0.25em;
 
   > .image {
     grid-column: 1/1;
@@ -50,5 +51,7 @@
   > .meta {
     grid-column: 2/2;
     grid-row: 3/3;
+
+    font-size: 0.9em;
   }
 }
