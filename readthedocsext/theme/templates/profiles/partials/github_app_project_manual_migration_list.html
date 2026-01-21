@@ -15,18 +15,30 @@
 {% endblock top_menu %}
 
 {% block list_item_image %}
+  {% include "projects/includes/project_image.html" with project=object %}
 {% endblock list_item_image %}
 
 {% block list_item_header %}
-  <a href="{% url 'projects_detail' object.slug %}" target="_blank">{{ object.name }}</a>
+  <a href="{% url "projects_detail" object.slug %}">{{ object.name }}</a>
 {% endblock list_item_header %}
 
-{% block list_item_right_menu %}
+{% block list_item_meta %}
   <div class="item">
     <a href="{{ object.repository_html_url }}"
-       class="ui small basic image nowrap label">
+       class="ui small basic image nowrap label"
+       target="_blank">
       <i class="fa-brands fa-github icon"></i>
       <code>{{ object.repository_full_name }}</code>
+    </a>
+  </div>
+{% endblock list_item_meta %}
+
+{% block list_item_right_menu %}
+  <div class="ui small icon buttons">
+    <a class="ui icon button"
+       href="{% url "projects_edit" object.slug %}"
+       data-content="{{ label_configure }}">
+      <i class="fa-duotone fa-wrench icon"></i>
     </a>
   </div>
 {% endblock list_item_right_menu %}
