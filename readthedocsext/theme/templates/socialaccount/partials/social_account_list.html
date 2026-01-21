@@ -44,21 +44,23 @@
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_menu %}
-  <div class="ui small icon buttons">
-    {% if object.get_provider.id == "github" %}
+  {% if object.get_provider.id == "github" %}
+    <div class="ui small buttons">
       {% if object|has_github_app_account %}
-        <a class="ui icon button"
+        <a class="ui secondary button"
            data-content="{% trans "Complete migration to GitHub App" %}"
            href="{% url "migrate_to_github_app" %}"
-           target="_blank">Migrate</a>
+           target="_blank">{% trans "Migrate" %}</a>
       {% else %}
-        <a class="ui icon button"
+        <a class="ui secondary button"
            data-content="{% trans "Migrate to GitHub App" %}"
            href="{% url "migrate_to_github_app" %}"
-           target="_blank">Migrate</a>
+           target="_blank">{% trans "Migrate" %}</a>
       {% endif %}
-    {% endif %}
+    </div>
+  {% endif %}
 
+  <div class="ui small icon buttons">
     {% if object.get_provider.id == "githubapp" %}
       <a class="ui icon button"
          data-content="{% trans "Manage GitHub App on GitHub" %}"
