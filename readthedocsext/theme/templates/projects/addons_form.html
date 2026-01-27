@@ -51,6 +51,7 @@
         <a class="item" data-tab="filetreediff">{% trans "File tree diff" %}</a>
         <a class="item" data-tab="link-previews">{% trans "Link previews" %}</a>
         <a class="item" data-tab="hotkeys">{% trans "Hotkeys" %}</a>
+        <a class="item" data-tab="custom-script">{% trans "Custom script" %}</a>
         <a class="item" data-tab="advanced">{% trans "Advanced" %}</a>
       </div>
     {% endif %}
@@ -75,6 +76,7 @@
       {% block addons_search %}
         <div class="ui tab" data-tab="search">
           {{ form.search_enabled | as_crispy_field }}
+          {{ form.search_show_subprojects_filter | as_crispy_field }}
         </div>
       {% endblock addons_search %}
 
@@ -118,6 +120,13 @@
           {{ form.hotkeys_enabled | as_crispy_field }}
         </div>
       {% endblock addons_hotkeys %}
+
+      {% block addons_custom_script %}
+        <div class="ui tab" data-tab="custom-script">
+          {{ form.customscript_enabled | as_crispy_field }}
+          {{ form.customscript_src | as_crispy_field }}
+        </div>
+      {% endblock addons_custom_script %}
 
       {% block addons_advanced %}
         <div class="ui tab" data-tab="advanced">
