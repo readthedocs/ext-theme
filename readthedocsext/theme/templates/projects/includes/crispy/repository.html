@@ -1,0 +1,22 @@
+{% load whitespaceless from ext_theme_tags %}
+
+{% comment rst %}
+  Project repository combination field
+  ====================================
+
+  This element wraps multiple fields and progressively enhances them to provide
+  two fields that interact with each other before form submission. It relies on
+  :js:class:`ProjectRepositoyMultifieldElement` for all of the added functionality.
+{% endcomment %}
+
+{# djlint wasn't happy with all of these attributes for some reason #}
+{% whitespaceless as multifield_attrs %}
+  label="{{ multifield.label_html|safe }}"
+  url-connected-services="{% url "socialaccount_connections" %}"
+  url-docs-manual="https://docs.readthedocs.com/platform/stable/guides/setup/git-repo-manual.html"
+  {{ multifield.flat_attrs|safe }}
+{% endwhitespaceless %}
+
+<readthedocs-project-repository-multifield {{ multifield_attrs|safe }}>
+  {{ fields_output|safe }}
+</readthedocs-project-repository-multifield>
