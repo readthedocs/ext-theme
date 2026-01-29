@@ -32,17 +32,18 @@
 
 {% endcomment %}
 
-{% if url %}
-  <a {% if popup %}data-content="{{ popup }}" aria-label="{{ popup }}"{% endif %}
-     href="{{ url }}"
-     class="ui {% if classes %}{{ classes }}{% else %}{% if not text %}icon{% endif %}{% endif %} label">
-    {% if icon %}<i class="{{ icon }} icon"></i>{% endif %}
-    {{ text }}
-  </a>
-{% else %}
-  <span {% if popup %}data-content="{{ popup }}" aria-label="{{ popup }}"{% endif %}
-        class="ui {% if classes %}{{ classes }}{% else %}{% if not text %}icon{% endif %}{% endif %} label">
-    {% if icon %}<i class="{{ icon }} icon"></i>{% endif %}
-    {{ text }}
-  </span>
-{% endif %}
+{% with tag_name=url|yesno:"a,span" %}
+  <{{ tag_name }}
+  {% if popup %}data-content="{{ popup }}" aria-label="{{ popup }}"{% endif %}
+  {% if url %}href="{{ url }}"{% endif %}
+  class="ui
+  {% if classes %}
+    {{ classes }}
+  {% else %}
+    {% if not text %}icon{% endif %}
+  {% endif %}
+  label">
+  {% if icon %}<i class="{{ icon }} icon"></i>{% endif %}
+  {{ text }}
+  </{{ tag_name }}>
+{% endwith %}
