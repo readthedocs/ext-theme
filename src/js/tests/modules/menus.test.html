@@ -5,13 +5,19 @@
     <readthedocs-api url="#">
       <readthedocs-item-docs>
       </readthedocs-item-docs>
+      <readthedocs-item-project-admin url-settings="https://example.com/settings/">
+      </readthedocs-item-project-admin>
     </readthedocs-api>
 
     <script type="module">
       import { expect, elementUpdated } from "@open-wc/testing";
       import { runTests } from "@web/test-runner-mocha";
 
-      import { ItemDocsElement, APIProviderElement } from "../../modules/menus";
+      import {
+        ItemDocsElement,
+        ItemProjectAdminElement,
+        APIProviderElement,
+      } from "../../modules/menus";
 
       runTests(async () => {
         describe("API menu", () => {
@@ -41,6 +47,50 @@
 
             expect(consumer).dom.to.be.not.null;
             expect(element.href).to.equal("https://example.com/#test");
+          });
+
+          it("project admin button enables for admins", async () => {
+            const provider = document.querySelector("readthedocs-api");
+            const consumer = document.querySelector(
+              "readthedocs-item-project-admin",
+            );
+
+            const value = {
+              permissions: {
+                admin: true,
+              },
+              urls: {
+                settings: "https://example.com/#settings",
+              },
+            };
+            provider._providerData.setValue(value);
+            await elementUpdated(consumer);
+            const element = consumer.querySelector("a");
+
+            expect(element.href).to.equal("https://example.com/#settings");
+            expect(element.classList.contains("disabled")).to.equal(false);
+          });
+
+          it("project admin button disables for non-admins", async () => {
+            const provider = document.querySelector("readthedocs-api");
+            const consumer = document.querySelector(
+              "readthedocs-item-project-admin",
+            );
+
+            const value = {
+              permissions: {
+                admin: false,
+              },
+              urls: {
+                settings: "https://example.com/#settings",
+              },
+            };
+            provider._providerData.setValue(value);
+            await elementUpdated(consumer);
+            const element = consumer.querySelector("a");
+
+            expect(element.classList.contains("disabled")).to.equal(true);
+            expect(element.getAttribute("tabindex")).to.equal("-1");
           });
         });
       });
