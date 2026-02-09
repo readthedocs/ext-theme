@@ -209,6 +209,17 @@
 
               {% include "profiles/partials/github_app_project_list.html" with objects=migration_targets skip_pagination=True %}
 
+              {% if manual_migration_required.exists %}
+                <div class="ui medium header">{% trans "Manual migration required" %}</div>
+                <p>
+                  {% blocktrans trimmed with manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" %}
+                    The following projects aren't connected to a repository,
+                    you need to <a href="{{ manual_migration_docs }}">manually migrate them</a> to use the new GitHub App.
+                  {% endblocktrans %}
+                </p>
+                {% include "profiles/partials/github_app_project_manual_migration_list.html" with objects=manual_migration_required skip_pagination=True %}
+              {% endif %}
+
               <div class="ui medium header">{% trans "Projects already migrated" %}</div>
 
               {% include "profiles/partials/github_app_project_migrated_list.html" with objects=migrated_projects skip_pagination=True %}
