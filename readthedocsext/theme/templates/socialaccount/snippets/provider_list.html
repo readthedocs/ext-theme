@@ -52,59 +52,41 @@
                     {% blocktrans trimmed %}
                       Our GitHub OAuth app
                     {% endblocktrans %}
-                    <span class="ui compact small basic label">Default</span>
                   {% elif provider.id == "githubapp" %}
                     {% blocktrans trimmed %}
                       Our GitHub App
                     {% endblocktrans %}
-                    <span class="ui violet compact small basic label">Beta</span>
                   {% endif %}
                 </div>
                 <div class="description">
                   <p>
-                    {# As we progress in a beta test period, the connect text should be tuned to make GHA sound like less of a beta feature. #}
-                    {% with is_early_beta=False %}
-                      {% if provider.id == "github" %}
-                        {% if process == "connect" and is_early_beta %}
+                    {% if provider.id == "github" %}
+                      {% if process == "connect" %}
+                        {% blocktrans trimmed %}
+                          For users reconnecting a previously connected GitHub account and users unable to switch to our new app.
+                        {% endblocktrans %}
+                        <i>
                           {% blocktrans trimmed %}
-                            For new users and users reconnecting a previously connected GitHub account.
+                            We recommend new users connect their account using our GitHub App.
                           {% endblocktrans %}
-                        {% elif process == "connect" and not is_early_beta %}
-                          {% blocktrans trimmed %}
-                            For users reconnecting a previously connected GitHub account and users unable to switch to our new app.
-                          {% endblocktrans %}
-                          <i>
-                            {% blocktrans trimmed %}
-                              We recommend new users connect their account using our GitHub App.
-                            {% endblocktrans %}
-                          </i>
-                        {% else %}
-                          {% blocktrans trimmed %}
-                            For users that haven't switched their connected GitHub accounts to our new GitHub App.
-                          {% endblocktrans %}
-                        {% endif %}
-                      {% elif provider.id == "githubapp" %}
-                        {% if process == "connect" and is_early_beta %}
-                          {% blocktrans trimmed %}
-                            For users that would like early access to our new app and would like to test new features.
-                          {% endblocktrans %}
-                          <i>
-                            {% blocktrans trimmed %}
-                              We recommend only advanced users use this method.
-                            {% endblocktrans %}
-                          </i>
-                        {% elif process == "connect" and not is_early_beta %}
-                          {% blocktrans trimmed %}
-                            For users that want granular control of permissions to repositories.
-                          {% endblocktrans %}
-                        {% else %}
-                          {% blocktrans trimmed %}
-                            For users that have switched their connected GitHub accounts already,
-                            or that would like to switch to our new GitHub App.
-                          {% endblocktrans %}
-                        {% endif %}
+                        </i>
+                      {% else %}
+                        {% blocktrans trimmed %}
+                          For users that haven't switched their connected GitHub accounts to our new GitHub App.
+                        {% endblocktrans %}
                       {% endif %}
-                    {% endwith %}
+                    {% elif provider.id == "githubapp" %}
+                      {% if process == "connect" %}
+                        {% blocktrans trimmed %}
+                          For users that want granular control of permissions to repositories.
+                        {% endblocktrans %}
+                      {% else %}
+                        {% blocktrans trimmed %}
+                          For users that have switched their connected GitHub accounts already,
+                          or that would like to switch to our new GitHub App.
+                        {% endblocktrans %}
+                      {% endif %}
+                    {% endif %}
                   </p>
                 </div>
                 <div class="extra">
