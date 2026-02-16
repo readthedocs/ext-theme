@@ -7,12 +7,14 @@
 
 {% block create_button %}
   {% url "projects_automation_rule_regex_create" project_slug=project.slug as create_regex_url %}
-  {% url "projects_automation_rule_push_create" project_slug=project.slug as create_push_url %}
+  {% url "projects_automation_rule_webhook_create" project_slug=project.slug as create_webhook_url %}
   {% trans "Add version rule" as create_regex_text %}
-  {% trans "Add push rule" as create_push_text %}
+  {% trans "Add webhook rule" as create_webhook_text %}
   {% comment %} <div class="ui buttons"> {% endcomment %}
     {% include "includes/crud/create_button.html" with url=create_regex_url text=create_regex_text %}
-    {% include "includes/crud/create_button.html" with url=create_push_url text=create_push_text %}
+    {% if user.is_superuser %}
+       {% include "includes/crud/create_button.html" with url=create_webhook_url text=create_webhook_text %}
+    {% endif %}
   {% comment %} </div> {% endcomment %}
 {% endblock create_button %}
 
