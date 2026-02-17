@@ -10,12 +10,10 @@
   {% url "projects_automation_rule_webhook_create" project_slug=project.slug as create_webhook_url %}
   {% trans "Add version rule" as create_regex_text %}
   {% trans "Add webhook rule" as create_webhook_text %}
-  {% comment %} <div class="ui buttons"> {% endcomment %}
-    {% include "includes/crud/create_button.html" with url=create_regex_url text=create_regex_text %}
-    {% if user.is_superuser %}
-       {% include "includes/crud/create_button.html" with url=create_webhook_url text=create_webhook_text %}
-    {% endif %}
-  {% comment %} </div> {% endcomment %}
+  {% include "includes/crud/create_button.html" with url=create_regex_url text=create_regex_text %}
+  {% if user.is_superuser %}
+    {% include "includes/crud/create_button.html" with url=create_webhook_url text=create_webhook_text %}
+  {% endif %}
 {% endblock create_button %}
 
 {% block list_placeholder_icon_class %}
