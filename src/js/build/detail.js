@@ -88,6 +88,24 @@ class BuildCommand {
     });
     /** @computed {Boolean} This command is a debug class command */
     this.is_debug = ko.observable(is_debug);
+    /** @observable {string|null} Build step/job metadata for this command */
+    this.build_step = ko.observable(
+      build_command.job ||
+        build_command.build_job ||
+        build_command.step ||
+        null,
+    );
+    /** @computed {string|null} Build step metadata display label */
+    this.build_step_label = ko.computed(() => {
+      const build_step = this.build_step();
+      if (!build_step) {
+        return null;
+      }
+      if (build_step.includes(":")) {
+        return build_step;
+      }
+      return `job:${build_step}`;
+    });
     /** @computed {Boolean} Hide debug commands until debug mode is enabled */
     this.is_visible = ko.computed(
       () => {

@@ -247,6 +247,8 @@
                    data-bind="text: '{% trans "Running" %}', visible: !finished() && !$parent.is_finished()"></a>
                 <a class="ui mini inverted label"
                    data-bind="text: '{% trans "Killed" %}', visible: !finished() && $parent.is_finished()"></a>
+                <a class="ui mini basic inverted label"
+                   data-bind="text: build_step_label, visible: build_step_label"></a>
                 <a class="ui mini inverted label"
                    data-bind="text: run_time() + 's', visible: finished()"></a>
                 <a class="ui mini inverted label"
