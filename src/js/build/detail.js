@@ -201,7 +201,7 @@ export class BuildDetailView {
   constructor(build = {}, url_api_build, url_api_notifications) {
     /** @type {number} The build pk/id to fetch */
     this.id = build.id;
-    /** @type {string} APIv2 build detail API URL */
+    /** @type {string} Build detail API URL */
     this.url_api_build = url_api_build;
     /** @type {string} APIv3 build notification API URL */
     this.url_api_notifications = url_api_notifications;
@@ -419,14 +419,42 @@ export class BuildDetailView {
   }
 
   /**
-   * Continually poll our APIv2 for build object and update Build, BuildCommand,
+   * Normalize build detail API responses for rendering.
+   *
+   * We currently consume APIv3 for build detail, but this keeps compatibility
+   * with APIv2-shaped responses while the frontend transitions.
+   *
+   * @param {Object} data - Build detail API response payload
+   * @returns {Object}
+   */
+  normalize_build_data(data) {
+    // APIv2: state is a string ("building"), APIv3: object ({code, name})
+    if (typeof data.state !== "object" || data.state === null) {
+      return data;
+    }
+
+    return {
+      ...data,
+      date: data.created,
+      length: data.duration,
+      state: data.state.code,
+      state_display: data.state.name,
+      commands: data.commands || [],
+      config: data.config ?? null,
+    };
+  }
+
+  /**
+   * Continually poll our build API and update Build, BuildCommand,
    * and BuildCommandOutput states. When the API return indicates the build is
    * finished, we stop recursive polling.
    */
   poll_api_build() {
     jquery
       .getJSON(this.url_api_build)
-      .then((data) => {
+      .then((data_raw) => {
+        const data = this.normalize_build_data(data_raw);
+
         this.date(data.date);
         this.success(data.success);
         this.error(data.error);
@@ -445,14 +473,16 @@ export class BuildDetailView {
 
         // This is a mock command used to preview the command output.
         // TODO probably do this in the application instead
-        this.add_command({
-          id: 0,
-          command: "readthedocs-build --show-config",
-          output: JSON.stringify(data.config, null, "  "),
-          exit_code: 0,
-          run_time: 0,
-          is_debug: true,
-        });
+        if (data.config !== null && data.config !== undefined) {
+          this.add_command({
+            id: 0,
+            command: "readthedocs-build --show-config",
+            output: JSON.stringify(data.config, null, "  "),
+            exit_code: 0,
+            run_time: 0,
+            is_debug: true,
+          });
+        }
         for (const command of data.commands) {
           this.add_command(command);
         }
@@ -479,11 +509,9 @@ export class BuildDetailView {
 
   /** Poll APIv3 build notification API directly
    *
-   * We have to do this because we rely on the build APIv2 for everything else
-   * and the APIv3 build endpoints don't have the data required yet.
+   * We poll notifications separately from the build detail endpoint.
    *
-   * TODO this should all happen under a single build API v3 poll instead, and
-   * this method should go away.
+   * TODO include notifications in the same build detail API request.
    *
    * @param {str} url - APIv3 build notification endpoint
    */

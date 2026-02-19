@@ -12,7 +12,7 @@
 {% endblock content-header %}
 
 {% block content %}
-  <div data-bind="using: BuildDetailView({}, '{% url "build-detail" build.id %}', '{% url "projects-builds-notifications-list" build.project.slug build.id %}')">
+  <div data-bind="using: BuildDetailView({}, '{% url "projects-builds-detail" parent_lookup_project__slug=build.project.slug build_pk=build.id %}?expand=config', '{% url "projects-builds-notifications-list" build.project.slug build.id %}')">
 
     {% block build_detail_metadata %}
       <div class="ui top attached segment">
