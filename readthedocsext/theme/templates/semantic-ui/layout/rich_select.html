@@ -1,5 +1,6 @@
 {% load crispy_field from crispy_forms_field %}
 {% load blocktrans trans from i18n %}
+{% load whitespaceless from ext_theme_tags %}
 
 {% comment rst %}
   Rich select field template
@@ -26,10 +27,30 @@
 
 {% endcomment %}
 
-<div class="ui long fluid selection category search dropdown{% if field.attrs.multiple %} multiple{% endif %}"
-     data-bind="semanticui: { dropdown: {}}">
+{% whitespaceless as form_data_bind %}
+  {% if data_bind %}
+    {{ data_bind }}
+  {% elif "data-bind" in field.field.widget.attrs.keys %}
+    {% for key, value in field.field.widget.attrs.items %}
+      {% if key == "data-bind" %}{{ value }}{% endif %}
+    {% endfor %}
+  {% else %}
+    semanticui: { dropdown: {}}
+  {% endif %}
+{% endwhitespaceless %}
+
+{% whitespaceless as field_classes %}
+  ui long fluid selection search dropdown
+  {% if field.field.widget.attrs.readonly %}read-only{% endif %}
+  {% if field.attrs.multiple %}multiple{% endif %}
+  field
+{% endwhitespaceless %}
+
+<div class="{{ field_classes }}"
+     {% if field.field.widget.attrs.use_data_binding %} data-bind="{{ form_data_bind }}" {% else %} data-semanticui-dropdown="true" {% endif %}>
   {{ field.as_hidden }}
   <i class="dropdown icon"></i>
+  <input class="search" tabindex="-1" />
   <div class="default text">{{ field.attrs.placeholder }}</div>
   <div class="menu">
     {% for _, choice in field.field.choices %}
@@ -42,8 +63,9 @@
         the dropdown will still have a rich display.
       {% endcomment %}
       <div class="{% if choice.disabled %}disabled{% endif %} vertical item"
-           data-value="{{ choice.value }}"
-           data-text="{{ choice.text }}">
+           data-value="{{ choice.value|default_if_none:"" }}"
+           data-text="{{ choice.text }}"
+           data-description="{{ choice.description }}">
         {% if choice.image_url %}
           <img class="ui mini avatar image"
                src="{{ choice.image_url }}"
@@ -53,10 +75,20 @@
           <span class="description">{{ choice.description }}</span>
         {% endif %}
         <span class="text">{{ choice.text }}</span>
-        {% if choice.error %}
-          <span class="ui red text extra content">
-            <i class="fas fa-exclamation-triangle icon"></i>
-            {{ choice.error }}
+        {% if choice.extra or choice.error %}
+          <span class="extra content">
+            {% if choice.extra %}
+              <span class="ui basic label">
+                <i class="fas fa-info-circle icon"></i>
+                {{ choice.extra }}
+              </span>
+            {% endif %}
+            {% if choice.error %}
+              <span class="ui basic red label">
+                <i class="fas fa-exclamation-triangle icon"></i>
+                {{ choice.error }}
+              </span>
+            {% endif %}
           </span>
         {% endif %}
       </div>
