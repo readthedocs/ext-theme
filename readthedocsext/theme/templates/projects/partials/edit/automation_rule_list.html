@@ -6,9 +6,14 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  {% url "projects_automation_rule_regex_create" project_slug=project.slug as create_url %}
-  {% trans "Add rule" as create_text %}
-  {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
+  {% url "projects_automation_rule_regex_create" project_slug=project.slug as create_regex_url %}
+  {% url "projects_automation_rule_webhook_create" project_slug=project.slug as create_webhook_url %}
+  {% trans "Add version rule" as create_regex_text %}
+  {% trans "Add webhook rule" as create_webhook_text %}
+  {% include "includes/crud/create_button.html" with url=create_regex_url text=create_regex_text %}
+  {% if user.is_superuser %}
+    {% include "includes/crud/create_button.html" with url=create_webhook_url text=create_webhook_text %}
+  {% endif %}
 {% endblock create_button %}
 
 {% block list_placeholder_icon_class %}
@@ -63,7 +68,7 @@
   {% endif %}
 
   <a class="ui button"
-     href="{% url 'projects_automation_rule_regex_edit' project_slug=project.slug automation_rule_pk=object.pk %}"
+     href="{{ object.get_edit_url }}"
      data-content="{% trans "Edit rule" %}">
     <i class="fas fa-wrench icon"></i>
   </a>
