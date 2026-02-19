@@ -1,8 +1,7 @@
 {% extends "projects/automation_rule_list.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
-{% load ext_theme_tags %}
+{% load trans from i18n %}
+{% load crispy from crispy_forms_tags %}
 
 {% block project_edit_content_subheader %}
   {% if object %}
@@ -18,14 +17,20 @@
   {% else %}
     {% trans "Add rule" as button_text %}
   {% endif %}
-  <form class="ui form" method="post" action="." data-bind="using: ProjectAutomationRuleView()">
+  <form class="ui form"
+        method="post"
+        action="."
+        data-bind="using: ProjectAutomationRuleView()">
     {% csrf_token %}
     {{ form|crispy }}
     {% comment %}
         TODO: update this code to match the new push rules.
         I think that all these data-bind won't be needed.
     {% endcomment %}
-    <div class="ui info message" data-bind="visible: is_all_versions() || is_semver_versions()" style="display: none;">
+    {# djlint: off H021 #}
+    <div class="ui info message"
+         data-bind="visible: is_all_versions() || is_semver_versions()"
+         style="display: none">
       <span data-bind="visible: is_all_versions">
         {% trans "All versions will be matched by this rule." %}
       </span>
@@ -33,7 +38,7 @@
         {% trans "Versions incremented based on semantic versioning rules will be matched by this rule." %}
       </span>
     </div>
+    {# djlint: on H021 #}
     <input class="ui primary button" type="submit" value="{{ button_text }}">
   </form>
-{% endblock %}
-
+{% endblock project_edit_content %}
