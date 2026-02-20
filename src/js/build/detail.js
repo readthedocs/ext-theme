@@ -20,12 +20,11 @@ const BUILD_STEP_LABELS = {
   install: "Install",
   build: "Build",
   upload: "Upload",
-  other: "Other",
 };
 
 function get_build_step_key(build_step) {
   if (!build_step) {
-    return "other";
+    return null;
   }
 
   const normalized = String(build_step);
@@ -53,6 +52,9 @@ function get_build_step_key(build_step) {
 
 function get_build_step_label(build_step) {
   const build_step_key = get_build_step_key(build_step);
+  if (!build_step_key) {
+    return null;
+  }
   if (BUILD_STEP_LABELS[build_step_key]) {
     return BUILD_STEP_LABELS[build_step_key];
   }
@@ -599,10 +601,15 @@ export class BuildDetailView {
 
       const step = get_build_step_key(command_search.build_step());
       if (command_search === command) {
+        if (!step) {
+          return false;
+        }
         return previous_step !== step;
       }
 
-      previous_step = step;
+      if (step) {
+        previous_step = step;
+      }
     }
 
     return false;
