@@ -36,11 +36,12 @@
       <readthedocs-item-docs {% if not object.has_good_build %}disabled{% endif %}
                              label="{% blocktrans with name=object.name %}View documentation for project {{ name }}{% endblocktrans %}">
       </readthedocs-item-docs>
-      <button class="ui dropdown button">
-        <i class="fa-solid fa-ellipsis icon"></i>
-        <readthedocs-menu-project-admin class="menu" url-settings="{% url "projects_edit" object.slug %}">
-        </readthedocs-menu-project-admin>
-      </button>
+      {% blocktrans trimmed with name=object.name asvar label_configure %}
+        Configure project {{ name }}
+      {% endblocktrans %}
+      <readthedocs-item-project-admin label="{{ label_configure }}"
+                                      url-settings="{% url "projects_edit" object.slug %}">
+      </readthedocs-item-project-admin>
     </div>
   </readthedocs-api>
 {% endblock list_item_right_menu %}

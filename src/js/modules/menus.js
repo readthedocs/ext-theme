@@ -347,6 +347,52 @@ export class ItemDocsElement extends APIConsumerElement {
 }
 customElements.define("readthedocs-item-docs", ItemDocsElement);
 
+export class ItemProjectAdminElement extends APIConsumerElement {
+  static properties = {
+    ...APIConsumerElement.properties,
+    urlSettings: { type: String, attribute: "url-settings" },
+  };
+
+  handleClick(event) {
+    const isAdmin = this.data?.permissions?.admin;
+    if (this.disabled || isAdmin === false) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
+    this.queueEvent(event);
+  }
+
+  render() {
+    const isAdmin = this.data?.permissions?.admin;
+    const isDisabled = this.disabled || isAdmin === false;
+    const urlSettings = this.data?.urls?.settings || this.urlSettings || "#";
+    const label = this.label || msg(`Configure project`);
+
+    return html`
+      <a
+        class="ui button ${classMap({
+          disabled: isDisabled,
+          loading: !isDisabled && this.state === States.LOADING,
+        })}"
+        href=${urlSettings}
+        @click=${this.handleClick}
+        data-content="${label}"
+        aria-label="${label}"
+        aria-disabled="${isDisabled}"
+        tabindex=${isDisabled ? -1 : 0}
+      >
+        <i class="fa-duotone fa-wrench icon"></i>
+      </a>
+    `;
+  }
+}
+customElements.define(
+  "readthedocs-item-project-admin",
+  ItemProjectAdminElement,
+);
+
 export class ItemDownloadsElement extends APIConsumerElement {
   render() {
     let label = this.label || msg(`Offline formats`);
