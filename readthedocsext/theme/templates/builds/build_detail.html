@@ -232,6 +232,13 @@
         <table class="ko hidden ui small very basic compact inverted selectable command unstackable table"
                data-bind="css: { hidden: !commands(), 'single line': !is_wrapped() }, foreach: commands">
           <tbody>
+            <tr class="top aligned section"
+                data-bind="visible: (is_visible() || $parent.show_debug()) && $parent.is_step_start($data)">
+              <td colspan="2">
+                <a class="ui mini basic inverted label"
+                   data-bind="text: build_step_label"></a>
+              </td>
+            </tr>
             <tr class="top aligned command"
                 data-bind="visible: is_visible() || $parent.show_debug()">
               <td class="collapsing">
@@ -247,8 +254,6 @@
                    data-bind="text: '{% trans "Running" %}', visible: !finished() && !$parent.is_finished()"></a>
                 <a class="ui mini inverted label"
                    data-bind="text: '{% trans "Killed" %}', visible: !finished() && $parent.is_finished()"></a>
-                <a class="ui mini basic inverted label"
-                   data-bind="text: build_step_label, visible: build_step_label"></a>
                 <a class="ui mini inverted label"
                    data-bind="text: run_time() + 's', visible: finished()"></a>
                 <a class="ui mini inverted label"

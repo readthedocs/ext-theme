@@ -13,6 +13,52 @@ dayjs.extend(RelativeTime);
 dayjs.extend(Duration);
 dayjs.extend(LocalizedFormat);
 
+const BUILD_STEP_LABELS = {
+  checkout: "Checkout",
+  system_dependencies: "System dependencies",
+  create_environment: "Create environment",
+  install: "Install",
+  build: "Build",
+  upload: "Upload",
+  other: "Other",
+};
+
+function get_build_step_key(build_step) {
+  if (!build_step) {
+    return "other";
+  }
+
+  const normalized = String(build_step);
+  if (normalized.includes("checkout")) {
+    return "checkout";
+  }
+  if (normalized.includes("system_dependencies")) {
+    return "system_dependencies";
+  }
+  if (normalized.includes("create_environment")) {
+    return "create_environment";
+  }
+  if (normalized.includes("install")) {
+    return "install";
+  }
+  if (normalized.includes("build")) {
+    return "build";
+  }
+  if (normalized.includes("upload")) {
+    return "upload";
+  }
+
+  return normalized;
+}
+
+function get_build_step_label(build_step) {
+  const build_step_key = get_build_step_key(build_step);
+  if (BUILD_STEP_LABELS[build_step_key]) {
+    return BUILD_STEP_LABELS[build_step_key];
+  }
+  return String(build_step_key).replace(/_/g, " ");
+}
+
 /** Build command output subview, represented in :class:`BuildCommand` as an
  * array of output lines.
  *
@@ -97,14 +143,7 @@ class BuildCommand {
     );
     /** @computed {string|null} Build step metadata display label */
     this.build_step_label = ko.computed(() => {
-      const build_step = this.build_step();
-      if (!build_step) {
-        return null;
-      }
-      if (build_step.includes(":")) {
-        return build_step;
-      }
-      return `job:${build_step}`;
+      return get_build_step_label(this.build_step());
     });
     /** @computed {Boolean} Hide debug commands until debug mode is enabled */
     this.is_visible = ko.computed(
@@ -532,9 +571,41 @@ export class BuildDetailView {
       command_found.exit_code(command.exit_code || 0);
       command_found.run_time(command.run_time);
       command_found.end_time(command.end_time);
+      command_found.build_step(
+        command.job ||
+          command.build_job ||
+          command.step ||
+          command_found.build_step(),
+      );
     } else {
       this.commands.push(new BuildCommand(command));
     }
+  }
+
+  /**
+   * Is this command the first visible command of a build step section?
+   *
+   * @param {BuildCommand} command - Command to evaluate
+   * @returns {Boolean}
+   */
+  is_step_start(command) {
+    const show_debug = this.show_debug();
+    let previous_step = null;
+
+    for (const command_search of this.commands()) {
+      if (!show_debug && !command_search.is_visible()) {
+        continue;
+      }
+
+      const step = get_build_step_key(command_search.build_step());
+      if (command_search === command) {
+        return previous_step !== step;
+      }
+
+      previous_step = step;
+    }
+
+    return false;
   }
 
   /**
