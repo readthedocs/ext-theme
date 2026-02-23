@@ -2,6 +2,7 @@
 {% load is_admin from privacy_tags %}
 {% load gravatar_url from gravatar %}
 {% load get_spam_score readthedocs_language_name readthedocs_language_name_local from ext_theme_tags %}
+{% load get_project_active_versions from projects_tags %}
 
 {% comment %}
 
@@ -163,7 +164,8 @@ collapsed, to save visual space and can be expanded with the right label.
       <a class="item {{ overview_active }}"
          href="{{ project.get_absolute_url }}">
         {% trans "Versions" %}
-        <span class="ui tiny teal circular label">{{ project.active_versions.count }}</span>
+        {% get_project_active_versions project request.user as active_versions %}
+        <span class="ui tiny teal circular label">{{ active_versions.count }}</span>
       </a>
       <a class="item {{ builds_active }}" href="{{ project.get_builds_url }}">
         {% trans "Builds" %}
