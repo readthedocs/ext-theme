@@ -1,0 +1,6 @@
+// When a field is nested in a web component, it gets a reduced margin from
+// ``.form .field:last-child``. This rule returns these elements to the default field
+// styling and provides an explicit ``.last`` class to escape this.
+.ui.ui.ui.form .field:only-child:not(.last) {
+  margin: @fieldMargin;
+}
