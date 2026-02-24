@@ -5,20 +5,53 @@
 {% block top_left_menu_items %}
 {% endblock top_left_menu_items %}
 
-{% comment %}
-  Do not show an empty menu bar at the top. Once users can add SSH keys, we can
-  remove this override and enable the ``create_button`` block
-{% endcomment %}
 {% block top_menu %}
+  <div class="ui stackable text menu">
+    <div class="right menu">
+      <div class="item">
+        <form class="ui form"
+              method="post"
+              action="{% url "projects_keys_reattach" project_slug=project.slug %}">
+          {% csrf_token %}
+          <button class="ui button"
+                  {% if not can_reattach_key_automatically %}disabled{% endif %}>
+            <i class="fa-duotone fa-refresh icon"></i>
+            {% trans "Reattach to Git provider" %}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% if not can_reattach_key_automatically %}
+    <div class="ui warning message">
+      <div class="header">
+        {% blocktrans trimmed %}
+          SSH key can't be automatically reattached to Git provider
+        {% endblocktrans %}
+      </div>
+      <p>
+        {% if not project.remote_repository %}
+          {% url "projects_edit" project_slug=project.slug as project_edit_url %}
+          {% blocktrans trimmed with project_edit_url=project_edit_url %}
+            You need to <a href="{{ project_edit_url }}">connect this project to a Git repository</a> first.
+          {% endblocktrans %}
+        </p>
+      {% else %}
+        {% url "socialaccount_connections" as socialaccount_connections_url %}
+        {% blocktrans trimmed with socialaccount_connections_url=socialaccount_connections_url %}
+          You need to <a href="{{ socialaccount_connections_url }}">connect your account to a Git provider associated with this project</a> first.
+        {% endblocktrans %}
+        <p>
+        {% endif %}
+        {% blocktrans trimmed %}
+          Alternatively, you can
+          <a href="https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html#copy-your-project-s-public-key">manually add the SSH key to your Git provider</a>.
+        {% endblocktrans %}
+      </p>
+    </div>
+  {% endif %}
 {% endblock top_menu %}
-{% block create_button %}
-  {% comment %}
-  {# TODO this is not supported currently, and is an admin only action #}
-  {% url "..." project.slug as create_url %}
-  {% trans "Add SSH key" as create_text %}
-  {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
-  {% endcomment %}
-{% endblock create_button %}
 
 {% block list_placeholder_icon_class %}
   fa-duotone fa-lock-keyhole
