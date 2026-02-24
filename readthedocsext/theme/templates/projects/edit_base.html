@@ -11,6 +11,12 @@
     <div class="five wide computer five wide tablet sixteen wide mobile column">
 
       <div class="ui vertical pointing fluid menu">
+        {# Overview link standalone before sections #}
+        <a class="item {% block project_overview_active %}{% endblock project_overview_active %}"
+           href="{% url "projects_overview" project.slug %}">
+          <i class="dashboard icon"></i>
+          {% trans "Project Overview" %}
+        </a>
 
         <div class="item">
           <div class="header">{% trans "Setup" %}</div>
