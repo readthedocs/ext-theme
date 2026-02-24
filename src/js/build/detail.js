@@ -68,6 +68,8 @@ class BuildCommand {
     this.id = ko.observable(build_command.id);
     /** @observable {string} Build command executed */
     this.command = ko.observable(command);
+    /** @observable {string} Build command description */
+    this.description = ko.observable(build_command.description || "");
     /** @observable {number} Build command posix exit code */
     this.exit_code = ko.observable(build_command.exit_code || 0);
     /** @computed {Boolean} Was :func:`exit_code` successful? */

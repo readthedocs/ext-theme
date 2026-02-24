@@ -251,6 +251,9 @@
                    data-bind="text: run_time() + 's', visible: finished()"></a>
                 <a class="ui mini inverted label"
                    data-bind="text: '{% trans "Exit" %}: ' + exit_code(), visible: finished() && exit_code() > 0"></a>
+                <div class="ui tiny grey text"
+                     data-bind="text: description, visible: description() && $parent.show_debug()">
+                </div>
               </td>
             </tr>
           </tbody>
