@@ -145,10 +145,10 @@ collapsed, to save visual space and can be expanded with the right label.
                   </a>
                 {% endwith %}
               {% else %}
-                <a href="{{ project.repo }}" class="ui basic nowrap label">
+                <div class="ui basic nowrap label">
                   <i class="fas fa-code-fork icon"></i>
                   <code>{{ project.repo }}</code>
-                </a>
+                </div>
               {% endif %}
             {% endblock project_header_repository %}
           </div>
