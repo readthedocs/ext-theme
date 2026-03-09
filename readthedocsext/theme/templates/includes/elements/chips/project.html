@@ -56,7 +56,7 @@
               <a href="{{ repo.html_url }}">{{ repo.full_name }}</a>
             {% endwith %}
           {% else %}
-            <a href="{{ project.repo }}">{{ project.repo }}</a>
+            {{ project.repo }}
           {% endif %}
         </div>
       </div>
