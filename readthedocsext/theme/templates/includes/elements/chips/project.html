@@ -1,7 +1,7 @@
 {% extends "includes/elements/chips/base.html" %}
 
 {% load trans from i18n %}
-{% load readthedocs_language_name from ext_theme_tags %}
+{% load readthedocs_language_name starts_with from ext_theme_tags %}
 
 {% block chip_view_params %}
   '{% url "projects-detail" project.slug %}'
@@ -55,6 +55,8 @@
             {% with repo=project.remote_repository %}
               <a href="{{ repo.html_url }}">{{ repo.full_name }}</a>
             {% endwith %}
+          {% elif project.repo|starts_with:"https://" %}
+            <a href="{{ project.repo }}">{{ project.repo }}</a>
           {% else %}
             {{ project.repo }}
           {% endif %}

@@ -1,7 +1,7 @@
 {% load blocktrans trans from i18n %}
 {% load is_admin from privacy_tags %}
 {% load gravatar_url from gravatar %}
-{% load get_spam_score readthedocs_language_name readthedocs_language_name_local from ext_theme_tags %}
+{% load get_spam_score readthedocs_language_name readthedocs_language_name_local starts_with from ext_theme_tags %}
 {% load get_project_active_versions from projects_tags %}
 
 {% comment %}
@@ -144,6 +144,11 @@ collapsed, to save visual space and can be expanded with the right label.
                     <code>{{ repo.full_name }}</code>
                   </a>
                 {% endwith %}
+              {% elif project.repo|starts_with:"https://" %}
+                <a href="{{ project.repo }}" class="ui basic nowrap label">
+                  <i class="fas fa-code-fork icon"></i>
+                  <code>{{ project.repo }}</code>
+                </a>
               {% else %}
                 <div class="ui basic nowrap label">
                   <i class="fas fa-code-fork icon"></i>
