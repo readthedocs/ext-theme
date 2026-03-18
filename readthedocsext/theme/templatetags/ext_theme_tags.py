@@ -230,3 +230,9 @@ def is_empty(value):
 @register.simple_block_tag
 def whitespaceless(content):
     return re.sub(r"\s+", " ", content).lstrip().rstrip()
+
+
+@register.filter
+def starts_with(value, arg):
+    """Usage: {% if value|starts_with:"prefix" %}"""
+    return str(value).startswith(str(arg))
