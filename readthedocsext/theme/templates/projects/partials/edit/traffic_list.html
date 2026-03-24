@@ -7,7 +7,7 @@
 
 {% block create_button %}
   {% if objects %}
-    <a class="ui button" href="?download=true">
+    <a class="ui button" href="?download=true&status={{ http_status }}">
       <i class="fa-duotone fa-download icon"></i>
       {% trans "Download traffic data" %}
     </a>
