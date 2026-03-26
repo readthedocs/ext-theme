@@ -232,6 +232,13 @@
         <table class="ko hidden ui small very basic compact inverted selectable command unstackable table"
                data-bind="css: { hidden: !commands(), 'single line': !is_wrapped() }, foreach: commands">
           <tbody>
+            <tr class="top aligned section"
+                data-bind="visible: (is_visible() || $parent.show_debug()) && $parent.is_step_start($data)">
+              <td colspan="2">
+                <a class="ui mini basic inverted label"
+                   data-bind="text: build_step_label"></a>
+              </td>
+            </tr>
             <tr class="top aligned command"
                 data-bind="visible: is_visible() || $parent.show_debug()">
               <td class="collapsing">
