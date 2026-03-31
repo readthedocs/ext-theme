@@ -26,7 +26,7 @@
   <div class="{% if not enabled %}ui basic fitted disabled segment{% endif %}"
        data-bind="using: ProjectTrafficAnalyticsView()">
 
-    {% include "projects/partials/edit/traffic_list.html" with objects=top_pages_200 show_addons_link=True %}
+    {% include "projects/partials/edit/traffic_list.html" with objects=top_pages_200 show_addons_link=True http_status=200 %}
 
     {% if top_pages_200 %}
       <h3 class="ui small header">
@@ -70,7 +70,7 @@
         {% trans "Not found pages (404)" %}
         <div class="sub header">{% trans "For the last month" %}</div>
       </h3>
-      {% include "projects/partials/edit/traffic_list.html" with objects=top_pages_404 %}
+      {% include "projects/partials/edit/traffic_list.html" with objects=top_pages_404 http_status=404 %}
     {% endif %}
 
   </div>
