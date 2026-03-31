@@ -113,7 +113,7 @@ export class FieldElement extends LightDOMElement {
     this.dispatchEvent(
       new CustomEvent("change", {
         bubbles: false,
-        composed: true,
+        composed: false,
       }),
     );
   }

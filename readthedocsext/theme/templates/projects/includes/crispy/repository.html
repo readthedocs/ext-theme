@@ -11,7 +11,7 @@
 
 {# djlint wasn't happy with all of these attributes for some reason #}
 {% whitespaceless as multifield_attrs %}
-  label="{{ multifield.label_html|safe }}"
+  label="{{ multifield.label_html }}"
   url-connected-services="{% url "socialaccount_connections" %}"
   url-docs-manual="https://docs.readthedocs.com/platform/stable/guides/setup/git-repo-manual.html"
   {{ multifield.flat_attrs|safe }}
