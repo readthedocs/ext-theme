@@ -11,6 +11,12 @@
 {% block project_edit_content_header %}
   {% trans "Search Analytics" %}
 {% endblock project_edit_content_header %}
+{% block project_edit_content_subheader %}
+  {% blocktrans trimmed %}
+    View what readers are searching for in your documentation and identify content gaps.
+  {% endblocktrans %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/search-analytics.html" text=_("Learn more") is_external=True %}
+{% endblock project_edit_content_subheader %}
 
 {% block project_edit_content %}
   {% comment %}

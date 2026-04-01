@@ -3,10 +3,20 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-{% block title %}{{ project.name }} - {% trans "Webhooks" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "Webhooks" %}
+{% endblock %}
 
 {% block project_webhooks_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Webhooks" %}{% endblock %}
+{% block project_edit_content_header %}
+  {% trans "Webhooks" %}
+{% endblock %}
+{% block project_edit_content_subheader %}
+  {% blocktrans trimmed %}
+    Send HTTP requests to external services when events occur on your project.
+  {% endblocktrans %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/guides/build/webhooks.html" text=_("Learn more") is_external=True %}
+{% endblock project_edit_content_subheader %}
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/webhook_list.html" with objects=object_list %}
