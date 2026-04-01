@@ -1,21 +1,28 @@
 {% extends "dashboard/base_dashboard.html" %}
-{% load i18n %}
+{% load trans from i18n %}
 
-{% block dash-nav-create %}active{% endblock %}
+{% block dash-nav-create %}
+  active
+{% endblock dash %}
 
-{% block title %}{% trans "Create a new project" %}{% endblock %}
+{% block title %}
+  {% trans "Create a new project" %}
+{% endblock title %}
 
 {% block content-header %}
   <h1>{% trans "Create a New Project" %}</h1>
-{% endblock %}
+{% endblock content %}
 
 {% block content %}
   <p>
     {% trans "Create new documentation here. If you already have docs in a public repository," %}
     <a href="{% url "projects_import" %}">{% trans "import an existing project" %}</a>.
   </p>
-  <form class="ui form" method="post" action=".">{% csrf_token %}
+  <form class="ui form" method="post" action=".">
+    {% csrf_token %}
     {{ form.as_p }}
-    <p><input class="ui button" type="submit" value="{% trans "Create" %}" /></p>
+    <p>
+      <input class="ui button" type="submit" value="{% trans "Create" %}" />
+    </p>
   </form>
-{% endblock %}
+{% endblock content %}

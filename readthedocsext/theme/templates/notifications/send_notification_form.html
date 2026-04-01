@@ -1,9 +1,9 @@
 {% extends "admin/base_site.html" %}
-{% load i18n %}
+{% load blocktrans endblocktrans trans from i18n %}
 
 {% block content %}
 
-  <h3>{% trans 'Send Email' %}</h3>
+  <h3>{% trans "Send Email" %}</h3>
 
   <p>
     {% blocktrans trimmed %}
@@ -38,6 +38,9 @@
     {% csrf_token %}
     {{ form.as_p }}
     <input type="hidden" name="action" value="{{ action_name }}" />
-    <input type="submit" class="ui button" name="send" value="{% trans 'Send Messages' %}" />
+    <input type="submit"
+           class="ui button"
+           name="send"
+           value="{% trans "Send Messages" %}" />
   </form>
-{% endblock %}
+{% endblock content %}

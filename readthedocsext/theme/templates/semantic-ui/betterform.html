@@ -1,8 +1,6 @@
 {% for fieldset in form.fieldsets %}
   <fieldset class="fieldset-{{ forloop.counter }} {{ fieldset.classes }}">
-    {% if fieldset.legend %}
-      <legend>{{ fieldset.legend }}</legend>
-    {% endif %}
+    {% if fieldset.legend %}<legend>{{ fieldset.legend }}</legend>{% endif %}
 
     {% if fieldset.description %}
       <p class="description">{{ fieldset.description }}</p>
@@ -15,7 +13,5 @@
         {% include "semantic-ui/field.html" %}
       {% endif %}
     {% endfor %}
-    {% if not forloop.last or not fieldset_open %}
-      </fieldset>
-    {% endif %}
+    {% if not forloop.last or not fieldset_open %}</fieldset>{% endif %}
 {% endfor %}

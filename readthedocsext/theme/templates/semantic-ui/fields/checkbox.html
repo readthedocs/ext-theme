@@ -1,9 +1,9 @@
 {% extends "semantic-ui/fields/base.html" %}
 
-{% load crispy_forms_field %}
+{% load crispy_field from crispy_forms_field %}
 
 {% block field-outer %}
-  <div class="{% if field.field.required %}required {% endif %}{% if field.errors %}error {% endif %}{% if 'form-horizontal' in form_class %}inline {% endif %}field">
+  <div class="{% if field.field.required %}required {% endif %}{% if field.errors %}error {% endif %}{% if "form-horizontal" in form_class %}inline {% endif %}field">
     <div class="ui checkbox">
       {% if label_class or field.field.widget.attrs.class %}
         <div class="{% for offset in bootstrap_checkbox_offsets %}{{ offset }} {% endfor %}{{ field_class }}{{ field.field.widget.attrs.class }}">
@@ -20,7 +20,7 @@
 {% endblock field-label %}
 
 {% block field-input %}
-  {% crispy_field field 'class' 'form-check-input' %}
+  {% crispy_field field "class" "form-check-input" %}
 
   {% if form_show_labels %}
     <label for="{{ field.id_for_label }}" class="form-check-label">
@@ -32,10 +32,12 @@
         Here we are including it in a data attribute, so we need to escape it.
         We use force_escape, since escape skips strings marked as safe.
         {% endcomment %}
-        <i class="ui small grey fa-duotone fa-circle-question icon" data-html="{{ field.help_text|force_escape }}" data-bind="semanticui: {popup: {hoverable: true}}"></i>
+        <i class="ui small grey fa-duotone fa-circle-question icon"
+           data-html="{{ field.help_text|force_escape }}"
+           data-bind="semanticui: {popup: {hoverable: true}}"></i>
       {% endif %}
     </label>
   {% endif %}
 
-  {% include 'semantic-ui/layout/field_errors_block.html' with direction="left" %}
+  {% include "semantic-ui/layout/field_errors_block.html" with direction="left" %}
 {% endblock field-input %}

@@ -1,14 +1,17 @@
 {% extends "organizations/teams/base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
-{% load organizations %}
+{% load blocktrans endblocktrans trans from i18n %}
+{% load crispy from crispy_forms_tags %}
 
-{% block subtitle %}{% trans "Projects" %}{% endblock %}
+{% block subtitle %}
+  {% trans "Projects" %}
+{% endblock subtitle %}
 {% block subview_content_header %}
   {% trans "Projects" %}
 {% endblock subview_content_header %}
-{% block team_sidebar_projects %}active{% endblock %}
+{% block team_sidebar_projects %}
+  active
+{% endblock team_sidebar_projects %}
 
 {% block subview_content %}
   <div class="ui small info message">

@@ -1,11 +1,12 @@
 {% extends "audit/partials/log_list.html" %}
 
-{% load i18n %}
+{% load blocktrans endblocktrans trans from i18n %}
 
 {% block top_left_menu_items %}
   <div class="header item">{% trans "Duration" %}</div>
   <div class="active item">
-    <div class="ui link dropdown" data-bind="semanticui: {dropdown: {action: 'select'}}">
+    <div class="ui link dropdown"
+         data-bind="semanticui: {dropdown: {action: 'select'}}">
       <span class="text">
         {% if days_limit and days_limit > 0 %}
           {% blocktrans trimmed with duration=days_limit %}
@@ -31,9 +32,7 @@
           {# We don't show upgrade information if the duration is unlimited #}
           <div class="divider"></div>
           <a class="item" href="#">
-            <span class="header">
-              {% trans "Need longer retention?" %}
-            </span>
+            <span class="header">{% trans "Need longer retention?" %}</span>
             <p>
               {% blocktrans trimmed %}
                 Upgrade your plan to increase the log storage duration.

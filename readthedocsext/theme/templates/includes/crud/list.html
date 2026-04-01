@@ -64,8 +64,7 @@
 
 {% endcomment %}
 
-{% load i18n %}
-{% load pagination_tags %}
+{% load autopaginate paginate from pagination_tags %}
 
 <div {% block view_binding %}{% endblock view_binding %}>
   {% block top_menu %}
@@ -92,7 +91,7 @@
                 {% comment %}
                   <button class="ui button">Add</button>
                 {% endcomment %}
-              {% endblock %}
+              {% endblock create_button %}
             </div>
           {% endblock top_right_menu_items %}
         </div>
@@ -100,10 +99,8 @@
     </div>
   {% endblock top_menu %}
 
-  {% comment %}
-    Testing for boolean here is not efficient, but we support both querysets and arrays here #}
-    {% if not objects.exists %}
-  {% endcomment %}
+  {# Testing for boolean here is not efficient, but we support both querysets and arrays here #}
+  {# {% if not objects.exists %} #}
   {% if not objects %}
     {% comment "rst" %}
       Placeholder blocks
@@ -140,7 +137,7 @@
       {% block list_placeholder %}
         <div class="ui icon header">
           {% block list_placeholder_icon %}
-            <i class="{% block list_placeholder_icon_class %}{% endblock %} icon"></i>
+            <i class="{% block list_placeholder_icon_class %}{% endblock list_placeholder_icon_class %} icon"></i>
           {% endblock list_placeholder_icon %}
           {% block list_placeholder_header %}
             There are no objects here.
@@ -190,7 +187,7 @@
 
       .. describe:: list_item_right_buttons
 
-          A list of ``<a class="ui icon button"/>`` elements. Can also contain
+          A list of ``<a class="ui icon button" />`` elements. Can also contain
           dropdown menus.
 
           .. seealso::
@@ -225,7 +222,7 @@
     {% endcomment %}
     {% block list %}
       <div class="ui segment">
-        <div class="{% block list_classes %}ui middle aligned very relaxed divided list{% endblock %}">
+        <div class="{% block list_classes %}ui middle aligned very relaxed divided list{% endblock list_classes %}">
 
           {% if not skip_pagination %}
             {% autopaginate objects 15 %}
@@ -233,52 +230,54 @@
 
           {% for object in objects %}
             {# Item view for each object in objects queryset #}
-            {% block list_item_start %}<div class="item">{% endblock list_item_start %}
-            {% block list_item %}
+            {% block list_item_start %}
+              <div class="item">
+              {% endblock list_item_start %}
+              {% block list_item %}
 
-              {% block list_item_right_menu %}
-                <div class="ui mini right floated buttons">
-                  {% block list_item_right_buttons %}
+                {% block list_item_right_menu %}
+                  <div class="ui mini right floated buttons">
+                    {% block list_item_right_buttons %}
                       {% comment %}
                         <a class="ui icon button">
                           <i class="fa-solid fa-refresh icon"></i>
                         </a>
                       {% endcomment %}
-                  {% endblock list_item_right_buttons %}
-                </div>
-              {% endblock list_item_right_menu %}
+                    {% endblock list_item_right_buttons %}
+                  </div>
+                {% endblock list_item_right_menu %}
 
-              {% block list_item_image %}
-              {% endblock list_item_image %}
+                {% block list_item_image %}
+                {% endblock list_item_image %}
 
-              <div class="content">
+                <div class="content">
 
-                <div class="header">
-                  {% block list_item_header %}
-                    {{ object }}
-                  {% endblock list_item_header %}
-                </div>
+                  <div class="header">
+                    {% block list_item_header %}
+                      {{ object }}
+                    {% endblock list_item_header %}
+                  </div>
 
-                <div class="description">
-                  {% block list_item_description %}
-                    <div class="ui stackable text menu">
-                      {% block list_item_meta %}
+                  <div class="description">
+                    {% block list_item_description %}
+                      <div class="ui stackable text menu">
+                        {% block list_item_meta %}
                           {% comment %}
                             <div class="item">
                               <i class="fa-solid fa-code-branch icon"></i>
                               <code>{{ build.commit|truncatechars:8 }}</code>
                             </div>
                           {% endcomment %}
-                      {% endblock list_item_meta %}
-                    </div>
-                  {% endblock list_item_description %}
+                        {% endblock list_item_meta %}
+                      </div>
+                    {% endblock list_item_description %}
+                  </div>
                 </div>
-              </div>
 
-              {% block list_item_extra %}
-              {% endblock list_item_extra %}
+                {% block list_item_extra %}
+                {% endblock list_item_extra %}
 
-            {% endblock list_item %}
+              {% endblock list_item %}
             </div>
           {% endfor %}
 
