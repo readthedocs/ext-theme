@@ -14,18 +14,18 @@
 {% block organization_edit_content_header %}
   {% trans "Authorization" %}
 {% endblock organization_edit_content_header %}
+{% block organization_edit_content_subheader %}
+  {% blocktrans trimmed %}
+    Change how users authenticate in your organization and manage access to projects and documentation.
+  {% endblocktrans %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/commercial/single-sign-on.html" text=_("Learn more") is_external=True %}
+{% endblock organization_edit_content_subheader %}
 
 {% block organization_edit_sidebar_help_topics %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/en/stable/commercial/single-sign-on.html" text=_("Organization single sign-on") is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/commercial/single-sign-on.html" text=_("Single sign-on") is_external=True class="item" %}
 {% endblock organization_edit_sidebar_help_topics %}
 
 {% block organization_edit_content %}
-  <p>
-    {% blocktrans trimmed %}
-      Change how users authenticate in your organization and reuse permissions from another service to control access to your projects and documentation.
-    {% endblocktrans %}
-  </p>
-
   {% if organization.ssointegration %}
     <div class="ui message">
       <div class="header">{% trans "Invite users into your organization" %}</div>

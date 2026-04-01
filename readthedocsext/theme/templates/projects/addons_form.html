@@ -13,11 +13,18 @@
 {% block project_edit_content_header %}
   {% trans "Addons" %}
 {% endblock project_edit_content_header %}
+{% block project_edit_content_subheader %}
+  {% blocktrans trimmed %}
+    Configure features on your project's hosted documentation,
+    such as the flyout menu, search, analytics, and more.
+  {% endblocktrans %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/addons.html" text=_("Learn more") is_external=True %}
+{% endblock project_edit_content_subheader %}
 
 {% block project_edit_sidebar_help_topics %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/addons.html" text="Addons documentation" is_external=True class="item" %}
-  {% include "includes/elements/link.html" with url="https://about.readthedocs.com/blog/2024/04/enable-beta-addons/" text="Blog post: Empower your documentation with addons" is_external=True class="item" %}
-  {% include "includes/elements/link.html" with url="https://blog.readthedocs.com/addons-flyout-menu-beta/" text="Blog post: Addons flyout menu beta" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/addons.html" text=_("Addons") is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/flyout-menu.html" text=_("Flyout menu") is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/visual-diff.html" text=_("Visual diff") is_external=True class="item" %}
 {% endblock project_edit_sidebar_help_topics %}
 
 {% block project_edit_content %}
@@ -28,14 +35,6 @@
     {% csrf_token %}
 
     <div>
-      <p>
-        {# Translators: Addons is a proper noun and should be capitalized #}
-        {% blocktrans trimmed %}
-          Addons provide features on your project's hosted documentation,
-          such as our flyout navigation menu, search, analytics, and more.
-        {% endblocktrans %}
-      </p>
-
       {{ form.enabled|as_crispy_field }}
       {{ form.project|as_crispy_field }}
     </div>

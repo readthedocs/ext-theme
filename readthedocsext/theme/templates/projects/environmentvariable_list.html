@@ -12,13 +12,19 @@
 {% block project_edit_content_header %}
   {% trans "Environment variables" %}
 {% endblock project_edit_content_header %}
+{% block project_edit_content_subheader %}
+  {% blocktrans trimmed %}
+    Manage custom environment variables that are available during your documentation builds.
+  {% endblocktrans %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/environment-variables.html" text=_("Learn more") is_external=True %}
+{% endblock project_edit_content_subheader %}
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/environment_variable_list.html" with objects=object_list %}
 {% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/environment-variables.html" text="How to use custom environment variables" is_external=True class="item" %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/environment-variables.html" text="Understanding environment variables" is_external=True class="item" %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/reference/environment-variables.html" text="Predefined environment variables" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/environment-variables.html" text=_("Environment variables") is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/guides/environment-variables.html" text=_("Using custom environment variables") is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/reference/environment-variables.html" text=_("Predefined environment variables") is_external=True class="item" %}
 {% endblock project_edit_sidebar_help_topics %}

@@ -53,6 +53,16 @@
               </div>
             </div>
           {% endif %}
+          {% if request.user.is_staff %}
+            <div class="item">
+              <div class="header">{% trans "Debug" %}</div>
+              <div class="menu">
+                <a class="item"
+                   href="{{ ADMIN_URL }}/auth/user/{{ request.user.pk }}/change/"
+                   target="_blank">{% trans "View user in Django admin" %}</a>
+              </div>
+            </div>
+          {% endif %}
           {# djlint: on T003 #}
         {% endblock %}
       </div>

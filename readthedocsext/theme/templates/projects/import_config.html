@@ -32,7 +32,7 @@
         <div class="item" data-tab="others">{% trans "Others" %}</div>
         {# The `actionable` class here prevents the select from selecting the text #}
         <a class="actionable item"
-           href="https://docs.readthedocs.io/page/config-file/index.html#getting-started-with-a-template"
+           href="https://docs.readthedocs.com/platform/stable/config-file/index.html#getting-started-with-a-template"
            target="_blank">{% trans "See more examples" %}</a>
       </div>
     </div>
@@ -51,7 +51,7 @@
       <code class="highlight">
         <pre id="project-create-sample-sphinx">
 # Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+# See https://docs.readthedocs.com/platform/stable/config-file/v2.html for details
 
 # Required
 version: 2
@@ -68,7 +68,7 @@ sphinx:
 
 # Optionally, but recommended,
 # declare the Python requirements required to build your documentation
-# See https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
+# See https://docs.readthedocs.com/platform/stable/guides/reproducible-builds.html
 # python:
 #    install:
 #    - requirements: docs/requirements.txt
@@ -90,7 +90,7 @@ sphinx:
       <code class="highlight">
         <pre id="project-create-sample-mkdocs">
 # Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+# See https://docs.readthedocs.com/platform/stable/config-file/v2.html for details
 
 # Required
 version: 2
@@ -107,7 +107,7 @@ mkdocs:
 
 # Optionally, but recommended,
 # declare the Python requirements required to build your documentation
-# See https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
+# See https://docs.readthedocs.com/platform/stable/guides/reproducible-builds.html
 # python:
 #    install:
 #    - requirements: docs/requirements.txt
@@ -129,7 +129,7 @@ mkdocs:
       <code class="highlight">
         <pre id="project-create-sample-docusaurus">
 # Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+# See https://docs.readthedocs.com/platform/stable/config-file/v2.html for details
 
 # Required
 version: 2
@@ -166,7 +166,7 @@ build:
       <code class="highlight">
         <pre id="project-create-sample-pelican">
 # Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+# See https://docs.readthedocs.com/platform/stable/config-file/v2.html for details
 
 # Required
 version: 2
@@ -200,7 +200,7 @@ build:
       <code class="highlight">
         <pre id="project-create-sample-jekyll">
 # Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+# See https://docs.readthedocs.com/platform/stable/config-file/v2.html for details
 
 # Required
 version: 2
@@ -235,7 +235,7 @@ build:
       <code class="highlight">
         <pre id="project-create-sample-others">
 # Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+# See https://docs.readthedocs.com/platform/stable/config-file/v2.html for details
 
 # Required
 version: 2
@@ -270,7 +270,7 @@ build:
 {% endblock project_add_content_form %}
 
 {% block project_add_sidebar_help_topics %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/config-file/index.html" text="Configuration file tutorial" is_external=True class="item" %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/config-file/v2.html" text="Configuration file reference" is_external=True class="item" %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/setup/git-repo-manual.html" text="Manually configuring a Git repository" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/config-file/index.html" text="Configuration file tutorial" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/config-file/v2.html" text="Configuration file reference" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/guides/setup/git-repo-manual.html" text="Manually configuring a Git repository" is_external=True class="item" %}
 {% endblock project_add_sidebar_help_topics %}

@@ -9,6 +9,12 @@
 {% block project_edit_content_header %}
   {% trans "Settings" %}
 {% endblock project_edit_content_header %}
+{% block project_edit_content_subheader %}
+  {% blocktrans trimmed %}
+    Configure your project's name, repository, and default settings.
+  {% endblocktrans %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/intro/add-project.html" text=_("Learn more") is_external=True %}
+{% endblock project_edit_content_subheader %}
 {% block project_edit_active %}
   active
 {% endblock project_edit_active %}
@@ -71,16 +77,14 @@
 {% block project_edit_sidebar_help_topics_content %}
   <div class="ui mini header">{% trans "Tutorials" %}</div>
   <div class="ui bulleted list">
-    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/tutorial/index.html" text="Getting started" is_external=True class="item" %}
-    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/intro/import-guide.html" text="Importing your documentation" is_external=True class="item" %}
-    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/intro/doctools.html" text="Quickstart with popular tools" is_external=True class="item" %}
+    {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/tutorial/index.html" text=_("Getting started") is_external=True class="item" %}
+    {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/intro/add-project.html" text=_("Adding a project") is_external=True class="item" %}
+    {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/intro/doctools.html" text=_("Popular documentation tools") is_external=True class="item" %}
   </div>
   <div class="ui mini header">{% trans "Resources" %}</div>
   <div class="ui bulleted list">
-    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/config-file/v2.html" text="Configuration file" is_external=True class="item" %}
-    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/pull-requests.html" text="How to configure pull request builds" is_external=True class="item" %}
-    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/automation-rules.html" text="How to manage versions automatically" is_external=True class="item" %}
-    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/setup/monorepo.html" text="How to use a .readthedocs.yaml file in a sub-folder" is_external=True class="item" %}
-    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/versioning-schemes.html" text="URL versioning schemes" is_external=True class="item" %}
+    {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/config-file/v2.html" text=_("Configuration file") is_external=True class="item" %}
+    {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/versioning-schemes.html" text=_("Versioning schemes") is_external=True class="item" %}
+    {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/build-customization.html" text=_("Build customization") is_external=True class="item" %}
   </div>
 {% endblock project_edit_sidebar_help_topics_content %}

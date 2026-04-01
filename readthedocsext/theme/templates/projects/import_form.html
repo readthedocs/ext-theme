@@ -10,7 +10,8 @@
 {% endblock project_add_subheader %}
 
 {% block project_add_sidebar_content %}
-  <div class="ui fluid secondary pointing vertical menu" data-bind="css: {vertical: device.computer()}">
+  <div class="ui fluid secondary pointing vertical menu"
+       data-bind="css: {vertical: device.computer()}">
     <a class="active item" data-tab="automatic">
       <i class="fa-duotone fa-magic icon"></i>
       {% trans "Configure automatically" %}
@@ -22,7 +23,9 @@
   </div>
 {% endblock project_add_sidebar_content %}
 
-{% block project_add_data_bind %}data-bind="using: ProjectCreateView()"{% endblock %}
+{% block project_add_data_bind %}
+  data-bind="using: ProjectCreateView()"
+{% endblock %}
 
 {% block project_add_content_form %}
   {% block project_add_automatic_tab %}
@@ -30,7 +33,7 @@
 
       {{ form_automatic | as_crispy_errors }}
 
-      <div class="ui {% if form_automatic.is_disabled %} disabled {% endif %} basic segment">
+      <div class="ui {% if form_automatic.is_disabled %}disabled{% endif %} basic segment">
         {% include "projects/partials/project_create_automatic.html" %}
       </div>
     </div>
@@ -41,7 +44,7 @@
 
       {{ form_manual | as_crispy_errors }}
 
-      <div class="ui {% if form_manual.is_disabled %} disabled {% endif %} basic segment">
+      <div class="ui {% if form_manual.is_disabled %}disabled{% endif %} basic segment">
         <div class="ui small message">
           <div class="header">
             <i class="fa-solid fa-triangle-exclamation icon"></i>
@@ -61,9 +64,9 @@
           </p>
         </div>
         <div class="ui right aligned basic segment">
-          <a class="ui basic button" href="https://docs.readthedocs.io/page/intro/import-guide.html" target="_blank">
-            {% trans "Learn more" %}
-          </a>
+          <a class="ui basic button"
+             href="https://docs.readthedocs.com/platform/stable/intro/add-project.html"
+             target="_blank">{% trans "Learn more" %}</a>
           <a class="ui primary button" href="{% url 'projects_import_manual' %}">
             {% trans "Continue" %}
           </a>

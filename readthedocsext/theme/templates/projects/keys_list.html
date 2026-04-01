@@ -2,10 +2,24 @@
 
 {% load i18n %}
 
-{% block title %}{{ project.name }} - {% trans "SSH keys" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "SSH keys" %}
+{% endblock %}
 
 {% block project_keys_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "SSH keys" %}{% endblock %}
+{% block project_edit_content_header %}
+  {% trans "SSH keys" %}
+{% endblock %}
+{% block project_edit_content_subheader %}
+  {% blocktrans trimmed %}
+    Manage SSH keys used to access private repositories for building your documentation.
+  {% endblocktrans %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/guides/setup/git-repo-manual.html" text=_("Learn more") is_external=True %}
+{% endblock project_edit_content_subheader %}
+
+{% block project_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/guides/setup/git-repo-manual.html" text=_("Manual Git repository setup") is_external=True class="item" %}
+{% endblock project_edit_sidebar_help_topics %}
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/keys_list.html" with objects=corporateprofile_list %}

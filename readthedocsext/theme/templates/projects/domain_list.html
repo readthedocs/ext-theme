@@ -12,6 +12,12 @@
 {% block project_edit_content_header %}
   {% trans "Domains" %}
 {% endblock project_edit_content_header %}
+{% block project_edit_content_subheader %}
+  {% blocktrans trimmed %}
+    Serve your documentation on a custom domain.
+  {% endblocktrans %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/custom-domains.html" text=_("Learn more") is_external=True %}
+{% endblock project_edit_content_subheader %}
 
 {% block project_edit_content %}
   {% comment %}
@@ -30,7 +36,7 @@
 {% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/custom-domains.html" text="How to manage custom domains" is_external=True class="item" %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/subprojects.html" text="Subprojects: host multiple projects on a single domain" is_external=True class="item" %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/technical-docs-seo-guide.html#canonical-urls" text="Canonical URLs and domains" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/custom-domains.html" text=_("Custom domains") is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/guides/custom-domains.html" text=_("Managing custom domains") is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/canonical-urls.html" text=_("Canonical URLs") is_external=True class="item" %}
 {% endblock project_edit_sidebar_help_topics %}
