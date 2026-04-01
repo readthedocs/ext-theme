@@ -18,7 +18,7 @@
 {% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/environment-variables.html" text="How to use custom environment variables" is_external=True class="item" %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/environment-variables.html" text="Understanding environment variables" is_external=True class="item" %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/reference/environment-variables.html" text="Predefined environment variables" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/environment-variables.html" text=_("Environment variables") is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/environment-variables.html" text=_("Using custom environment variables") is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/reference/environment-variables.html" text=_("Predefined environment variables") is_external=True class="item" %}
 {% endblock project_edit_sidebar_help_topics %}

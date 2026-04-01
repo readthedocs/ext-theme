@@ -4,10 +4,14 @@
 {% load static %}
 {% load crispy_forms_filters %}
 
-{% block title %}{% trans "Pull request builds" %}{% endblock %}
+{% block title %}
+  {% trans "Pull request builds" %}
+{% endblock %}
 
 {% block project_pull_requests_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Pull request builds" %}{% endblock %}
+{% block project_edit_content_header %}
+  {% trans "Pull request builds" %}
+{% endblock %}
 
 {% block project_edit_content %}
   <p>
@@ -20,11 +24,13 @@
     {% csrf_token %}
     {{ form | crispy }}
 
-    <input class="ui {% if form.errors and form.is_disabled %}disabled{% endif %} primary button" type="submit"
+    <input class="ui {% if form.errors and form.is_disabled %}disabled{% endif %} primary button"
+           type="submit"
            value="{% trans " Update" %}">
   </form>
 {% endblock %}
 
 {% block project_edit_sidebar_help_topics %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/pull-requests.html" text="Pull request builds" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/pull-requests.html" text=_("Pull request builds") is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/pull-requests.html" text=_("Configuring pull request builds") is_external=True class="item" %}
 {% endblock project_edit_sidebar_help_topics %}
