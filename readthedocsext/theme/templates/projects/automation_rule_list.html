@@ -2,10 +2,20 @@
 
 {% load i18n %}
 
-{% block title %}{{ project.name }} - {% trans "Automation Rules" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "Automation Rules" %}
+{% endblock %}
 
 {% block project_automation_rules_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Automation Rules" %}{% endblock %}
+{% block project_edit_content_header %}
+  {% trans "Automation Rules" %}
+{% endblock %}
+{% block project_edit_content_subheader %}
+  {% blocktrans trimmed %}
+    Automatically manage versions when new tags or branches are created in your repository.
+  {% endblocktrans %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/automation-rules.html" text=_("Learn more") is_external=True %}
+{% endblock project_edit_content_subheader %}
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/automation_rule_list.html" with objects=object_list %}

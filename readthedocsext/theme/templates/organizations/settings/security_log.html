@@ -12,6 +12,12 @@
 {% block organization_edit_content_header %}
   {% trans "Security log" %}
 {% endblock organization_edit_content_header %}
+{% block organization_edit_content_subheader %}
+  {% blocktrans trimmed %}
+    Review security-related events and actions taken within your organization.
+  {% endblocktrans %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/security-log.html" text=_("Learn more") is_external=True %}
+{% endblock organization_edit_content_subheader %}
 
 {% block organization_edit_sidebar_help_topics %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/security-log.html#organization-security-log" text=_("Organization security log") is_external=True class="item" %}

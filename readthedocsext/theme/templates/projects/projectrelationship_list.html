@@ -2,19 +2,27 @@
 
 {% load i18n %}
 
-{% block title %}{{ project.name }} - {% trans "Subprojects" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "Subprojects" %}
+{% endblock %}
 
 {% block project_subprojects_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Subprojects" %}{% endblock %}
+{% block project_edit_content_header %}
+  {% trans "Subprojects" %}
+{% endblock %}
+{% block project_edit_content_subheader %}
+  {% blocktrans trimmed %}
+    Host multiple documentation projects as sub-paths on a single domain.
+  {% endblocktrans %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/subprojects.html" text=_("Learn more") is_external=True %}
+{% endblock project_edit_content_subheader %}
 
 {% block project_edit_content %}
   {% if superproject %}
     <div class="ui icon message">
       <i class="fa-duotone fa-circle-exclamation icon"></i>
       <div class="content">
-        <div class="header">
-          {% trans "Nested subprojects are not supported" %}
-        </div>
+        <div class="header">{% trans "Nested subprojects are not supported" %}</div>
         <p>
           {% blocktrans trimmed with project=superproject.name %}
             This project is already configured as a subproject of {{ project }}.
