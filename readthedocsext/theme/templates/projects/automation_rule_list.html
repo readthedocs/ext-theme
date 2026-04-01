@@ -2,10 +2,14 @@
 
 {% load i18n %}
 
-{% block title %}{{ project.name }} - {% trans "Automation Rules" %}{% endblock %}
+{% block title %}
+  {{ project.name }} - {% trans "Automation Rules" %}
+{% endblock %}
 
 {% block project_automation_rules_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Automation Rules" %}{% endblock %}
+{% block project_edit_content_header %}
+  {% trans "Automation Rules" %}
+{% endblock %}
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/automation_rule_list.html" with objects=object_list %}
@@ -13,6 +17,6 @@
 {% endblock %}
 
 {% block project_edit_sidebar_help_topics %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/automation-rules.html" text="How to manage versions automatically" is_external=True class="item" %}
-  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/automation-rules.html" text="Automation rules" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/guides/automation-rules.html" text="How to manage versions automatically" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/automation-rules.html" text="Automation rules" is_external=True class="item" %}
 {% endblock project_edit_sidebar_help_topics %}

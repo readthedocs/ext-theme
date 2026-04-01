@@ -112,14 +112,16 @@
   <!-- Call to action -->
   <div class="ui inverted segment basic center aligned very padded">
     <div class="ui container">
-      <a href="https://docs.readthedocs.io/page/intro/getting-started-with-sphinx.html"
+      <a href="https://docs.readthedocs.com/platform/stable/intro/sphinx.html"
          target="_blank"
          class="ui button primary">{% trans "Getting started guide" %}</a>
     </div>
   </div>
 
   <!-- Search -->
-  <div class="ui container very padded">{# include "includes/widesearchbar.html" #}</div>
+  <div class="ui container very padded">
+    {# include "includes/widesearchbar.html" #}
+  </div>
 
   {% if featured_list %}
     {% comment %}
@@ -166,7 +168,9 @@
   <!-- Funding and Contributing -->
   <section class="ui basic segment very padded">
     <div class="ui container">
-      <h2 class="ui header center aligned">{% trans "Read the Docs is funded by the community" %}</h2>
+      <h2 class="ui header center aligned">
+        {% trans "Read the Docs is funded by the community" %}
+      </h2>
       <p>
 
         {% url "advertising" as advertising_url %}
@@ -187,10 +191,11 @@
         {% blocktrans trimmed %}
           Read the Docs is <strong>community supported</strong>.
           It depends on users like you to contribute to development, support, and operations.
-          You can learn more about how to <a href="https://docs.readthedocs.io/page/contribute.html"
+          You can learn more about how to <a href="https://docs.readthedocs.com/platform/stable/contribute.html"
     target="_blank">contribute</a> in our
           docs.
-          Thanks so much to our wonderful <a href="https://docs.readthedocs.io/page/team.html" target="_blank">community team</a> who helps us
+          Thanks so much to our wonderful <a href="https://docs.readthedocs.com/platform/stable/team.html"
+    target="_blank">community team</a> who helps us
           run the site.
           Read the Docs wouldn't be possible without them.
         {% endblocktrans %}
