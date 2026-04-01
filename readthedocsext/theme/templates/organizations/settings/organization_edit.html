@@ -14,6 +14,10 @@
   {% trans "Details" %}
 {% endblock organization_edit_content_header %}
 
+{% block organization_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/commercial/organizations.html" text=_("Organizations") is_external=True class="item" %}
+{% endblock organization_edit_sidebar_help_topics %}
+
 {% block organization_edit_content %}
   <form class="ui form"
         method="post"
