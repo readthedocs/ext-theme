@@ -18,10 +18,7 @@
 
     {% block head_links %}
       <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" />
-      <link rel="stylesheet"
-            type="text/css"
-            media="all"
-            href="{% webpack_static "readthedocsext/theme/css/site.css" %}" />
+      <link rel="stylesheet" type="text/css" media="all" href="{% webpack_static "readthedocsext/theme/css/site.css" %}" />
     {% endblock head_links %}
     {# TODO deprecate extra_links #}
     {% block extra_links %}
@@ -79,10 +76,8 @@
     {% endblock footer %}
 
     {% block body_scripts %}
-      <script type="text/javascript"
-              src="{% webpack_static "readthedocsext/theme/js/vendor.js" %}"></script>
-      <script type="text/javascript"
-              src="{% webpack_static "readthedocsext/theme/js/site.js" %}"></script>
+      <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/vendor.js" %}"></script>
+      <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/site.js" %}"></script>
     {% endblock body_scripts %}
   </body>
 </html>

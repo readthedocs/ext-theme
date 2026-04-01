@@ -4,7 +4,9 @@
 
 {% load is_admin from privacy_tags %}
 
-{% block title %}{% trans "Builds" %}{% endblock title %}
+{% block title %}
+  {% trans "Builds" %}
+{% endblock title %}
 
 {% block content-header %}
   {% include "projects/partials/header.html" with builds_active="active" %}

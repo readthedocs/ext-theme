@@ -2,8 +2,7 @@
 
 <div class="{% if inline_class %}inline fields{% else %}grouped fields{% endif %}">
 
-  <div class="{% if inline_class %}ui radio checkbox{% endif %}{% if field_class %} {{ field_class }}{% endif %}"
-       {% if flat_attrs %}{{ flat_attrs|safe }}{% endif %}>
+  <div class="{% if inline_class %}ui radio checkbox{% endif %}{% if field_class %} {{ field_class }}{% endif %}" {% if flat_attrs %}{{ flat_attrs|safe }}{% endif %}>
     {% include "semantic-ui/layout/field_errors_block.html" %}
 
     {% for choice in field.field.choices %}
@@ -15,12 +14,7 @@
                  class="form-check{% if inline_class %}{{ inline_class }}{% else %}label{% endif %}">
             {{ choice.1|unlocalize }}
           </label>
-          <input type="radio"
-                 {% if choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked="checked"{% endif %}
-                 name="{{ field.html_name }}"
-                 id="id_{{ field.id_for_label }}_{{ forloop.counter }}"
-                 value="{{ choice.0|unlocalize }}"
-                 {{ field.field.widget.attrs|flatatt }}>
+          <input type="radio" {% if choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.id_for_label }}_{{ forloop.counter }}" value="{{ choice.0|unlocalize }}" {{ field.field.widget.attrs|flatatt }}>
           {% if not inline_class %}
           </div>
         </div>
