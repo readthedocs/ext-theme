@@ -1,9 +1,13 @@
 {% extends "profiles/base_edit.html" %}
-{% load i18n %}
+{% load blocktrans endblocktrans trans from i18n %}
 
-{% block profile-admin-gold-edit %}active{% endblock %}
+{% block profile-admin-gold-edit %}
+  active
+{% endblock profile %}
 
-{% block title %}Cancel Gold membership{% endblock %}
+{% block title %}
+  Cancel Gold membership
+{% endblock title %}
 
 {% block edit_content %}
   <h2>Cancel Gold membership</h2>
@@ -14,8 +18,10 @@
     {% endblocktrans %}
   </p>
 
-  <form  class="ui form" method="post" action="{% url "gold_cancel" %}">
+  <form class="ui form" method="post" action="{% url "gold_cancel" %}">
     {% csrf_token %}
-    <input class="ui button"  type="submit" value="{% trans "Cancel Gold membership" %}">
+    <input class="ui button"
+           type="submit"
+           value="{% trans "Cancel Gold membership" %}">
   </form>
-{% endblock %}
+{% endblock edit_content %}

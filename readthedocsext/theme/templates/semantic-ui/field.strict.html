@@ -1,13 +1,13 @@
-{% load crispy_forms_field %}
+{% load crispy_field is_checkbox from crispy_forms_field %}
 
 {% if field.is_hidden %}
   {{ field }}
 {% else %}
-  <div id="div_{{ field.auto_id }}" class="ctrlHolder{% if field.errors %} error{% endif %}{% if field|is_checkbox %} checkbox{% endif %}{% if field.field.widget.attrs.class %} {{ field.field.widget.attrs.class }}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+  <div id="div_{{ field.auto_id }}"
+       class="ctrlHolder{% if field.errors %} error{% endif %}{% if field|is_checkbox %} checkbox{% endif %}{% if field.field.widget.attrs.class %} {{ field.field.widget.attrs.class }}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
     {% for error in field.errors %}
-      <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="errorField">
-        {{ error }}
-      </p>
+      <p id="error_{{ forloop.counter }}_{{ field.auto_id }}"
+         class="errorField">{{ error }}</p>
     {% endfor %}
 
     {% if field|is_checkbox %}
@@ -16,7 +16,8 @@
 
     {% if field.label %}
       <label for="{{ field.id_for_label }}" class="inlineLabel">
-        {{ field.label|safe }}{% if field.field.required %}<em>*</em>{% endif %}
+        {{ field.label|safe }}
+        {% if field.field.required %}<em>*</em>{% endif %}
       </label>
     {% endif %}
 
@@ -25,7 +26,9 @@
     {% endif %}
 
     {% if field.help_text %}
-      <p id="hint_{{ field.auto_id }}" class="formHint">{{ field.help_text|safe }}</p>
+      <p id="hint_{{ field.auto_id }}" class="formHint">
+        {{ field.help_text|safe }}
+      </p>
     {% endif %}
   </div>
 {% endif %}

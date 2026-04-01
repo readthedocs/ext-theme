@@ -1,13 +1,19 @@
 {% extends "profiles/base_edit.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load blocktrans endblocktrans trans from i18n %}
+{% load crispy from crispy_forms_tags %}
 
-{% block title %}{% trans "Delete account" %}{% endblock %}
+{% block title %}
+  {% trans "Delete account" %}
+{% endblock title %}
 
-{% block profile_admin_details %}active{% endblock %}
+{% block profile_admin_details %}
+  active
+{% endblock profile_admin_details %}
 
-{% block edit_content_header %}{% trans "Delete account" %}{% endblock %}
+{% block edit_content_header %}
+  {% trans "Delete account" %}
+{% endblock edit_content_header %}
 
 {% block edit_content %}
   <p>
@@ -16,7 +22,7 @@
     {% endblocktrans %}
   </p>
 
-  <form class="ui form" method="POST" action=".">
+  <form class="ui form" method="post" action=".">
     {% csrf_token %}
     {{ form|crispy }}
 
@@ -25,8 +31,6 @@
       {% trans "Delete account" %}
     </button>
 
-    <p class="ui red text">
-      {% trans "Be careful! This cannot be undone!" %}
-    </p>
+    <p class="ui red text">{% trans "Be careful! This cannot be undone!" %}</p>
   </form>
-{% endblock %}
+{% endblock edit_content %}

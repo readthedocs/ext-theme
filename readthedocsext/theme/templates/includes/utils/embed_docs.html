@@ -6,7 +6,7 @@
   Aside from including this file, you need to add this snippet:
 
   {% block project_edit_sidebar_help_topics %}
-    <div data-bind="using: EmbedTopicsView('{% block project_edit_sidebar_embed_doc %}{% endblock %}')">
+    <div data-bind="using: EmbedTopicsView('{% block project_edit_sidebar_embed_doc %}{% endblock project_edit_sidebar_embed_doc %}')">
       <div data-bind="template: { name: 'doc-topics' }"></div>
     </div>
   {% endblock project_edit_sidebar_help_topics %}

@@ -1,7 +1,7 @@
 {
   "indent": "2",
   "preserve_blank_lines": true,
-  "ignore": "H006",
+  "ignore": "H006,H021,H005,H030,H031,D018,H020",
   "max_line_length": 80,
   "custom_blocks": "whitespaceless",
   "custom_html": "readthedocs-\\w+-\\w+-\\w+,readthedocs-\\w+-\\w+,readthedocs-\\w+",

@@ -1,17 +1,22 @@
 {% extends "organizations/teams/base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
-{% load organizations %}
+{% load trans from i18n %}
+{% load crispy from crispy_forms_tags %}
 
-{% block subtitle %}{% trans "Invite member" %}{% endblock %}
-{% block subview_content_header %}{% trans "Invite member" %}{% endblock %}
-{% block team_sidebar_members %}active{% endblock %}
+{% block subtitle %}
+  {% trans "Invite member" %}
+{% endblock subtitle %}
+{% block subview_content_header %}
+  {% trans "Invite member" %}
+{% endblock subview_content_header %}
+{% block team_sidebar_members %}
+  active
+{% endblock team_sidebar_members %}
 
 {% block subview_content_subheader_breadcrumbs %}
   {% include "organizations/includes/team_breadcrumbs.html" with team=team last_active=False %}
   <span class="divider">/</span>
-  <span class="section active">{% trans "Members" %}</a>
+  <span class="section active">{% trans "Members" %}</span>
 {% endblock subview_content_subheader_breadcrumbs %}
 
 {% block subview_content %}

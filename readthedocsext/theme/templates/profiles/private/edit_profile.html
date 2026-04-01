@@ -1,12 +1,17 @@
 {% extends "profiles/base_edit.html" %}
 
-{% load i18n %}
-{% load gravatar %}
-{% load crispy_forms_tags %}
+{% load blocktrans endblocktrans trans from i18n %}
+{% load crispy from crispy_forms_tags %}
 
-{% block title %}{% trans "Account" %}{% endblock %}
-{% block profile_admin_details %}active{% endblock %}
-{% block edit_content_header %}{% trans "Account" %}{% endblock %}
+{% block title %}
+  {% trans "Account" %}
+{% endblock title %}
+{% block profile_admin_details %}
+  active
+{% endblock profile_admin_details %}
+{% block edit_content_header %}
+  {% trans "Account" %}
+{% endblock edit_content_header %}
 
 {% block edit_content %}
   <div class="ui computer reversed stackable grid">
@@ -14,24 +19,18 @@
       {% include "profiles/includes/profile_card.html" with profile=request.user.profile is_editable=True %}
     </div>
     <div class="eight wide computer sixteen wide tablet column">
-      <form method="POST" action="." class="ui form">
+      <form method="post" action="." class="ui form">
         {% csrf_token %}
         {{ form|crispy }}
-        <button class="ui primary button" type="submit">
-          {% trans "Save" %}
-        </button>
+        <button class="ui primary button" type="submit">{% trans "Save" %}</button>
       </form>
     </div>
   </div>
 
-  <div class="ui horizontal divider">
-    {% trans "More" %}
-  </div>
+  <div class="ui horizontal divider">{% trans "More" %}</div>
 
   <div class="ui red segment">
-    <h3 class="ui small header">
-      {% trans "Delete account" %}
-    </h3>
+    <h3 class="ui small header">{% trans "Delete account" %}</h3>
 
     <p>
       {% blocktrans trimmed %}
@@ -48,4 +47,4 @@
 {% endblock edit_content %}
 
 {% block edit_sidebar %}
-{% endblock %}
+{% endblock edit_sidebar %}

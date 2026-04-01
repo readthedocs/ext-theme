@@ -33,7 +33,7 @@
 
 {% endcomment %}
 
-{% load i18n %}
+{% load blocktrans endblocktrans trans from i18n %}
 
 {# When not a page title, treat the entire breadcrumb as a link to the build #}
 {% if not is_page_title %}<a href="{{ build.get_absolute_url }}">{% endif %}

@@ -1,8 +1,8 @@
 {% extends "projects/base.html" %}
 
-{% load i18n %}
+{% load trans from i18n %}
 
-{% block title %}{% trans "Popular tags" %}{% endblock %}
+{% block title %}{% trans "Popular tags" %}{% endblock title %}
 
 {% block content %}
   <ul class="ui list">
@@ -10,4 +10,4 @@
       <li class="item"><a href="{% url "projects_tag_detail" tag.slug %}">{{ tag.name }}</a></li>
     {% endfor %}
   </ul>
-{% endblock %}
+{% endblock content %}

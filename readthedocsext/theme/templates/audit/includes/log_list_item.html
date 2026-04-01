@@ -4,21 +4,13 @@
 {% endcomment %}
 
 <div class="item">
-  {% if icon %}
-    <i class="fas {{ icon }} icon"></i>
-  {% endif %}
+  {% if icon %}<i class="fas {{ icon }} icon"></i>{% endif %}
   <div class="content">
-    <div class="header">
-      {{ field }}
-    </div>
-    {% if url %}
-      <a href="{{ url }}">
-    {% endif %}
-    <span {% if tooltip %}data-content="{{ tooltip }}" aria-label="{{ tooltip }}"{% endif %}>
-      {{ value }}
-    </span>
-    {% if url %}
-      </a>
-    {% endif %}
+    <div class="header">{{ field }}</div>
+    {% if url %}<a href="{{ url }}">{% endif %}
+      <span {% if tooltip %}data-content="{{ tooltip }}" aria-label="{{ tooltip }}"{% endif %}>
+        {{ value }}
+      </span>
+      {% if url %}</a>{% endif %}
   </div>
 </div>

@@ -1,14 +1,16 @@
 {% extends "organizations/base.html" %}
 
-{% load i18n %}
+{% load trans from i18n %}
 
-{% load organizations %}
+{% load has_sso_enabled from organizations %}
 
-{% block title %}{{ organization.name }} - {% trans "Teams" %}{% endblock %}
+{% block title %}
+  {{ organization.name }} - {% trans "Teams" %}
+{% endblock title %}
 
 {% block content-header %}
   {% include "organizations/partials/header.html" with organization=organization teams_active="active" %}
-{% endblock %}
+{% endblock content %}
 
 {% block content %}
   {% if organization|has_sso_enabled:"allauth" %}

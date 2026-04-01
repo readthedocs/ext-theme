@@ -1,23 +1,26 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load trans from i18n %}
 
-{% block nav-dashboard %} class="active"{% endblock %}
+{% block nav-dashboard %}
+  class="active"
+{% endblock nav %}
 
 {% block content-header %}
 
-    <!-- BEGIN filter bar -->
+  <!-- BEGIN filter bar -->
   <div id="project_bar">
     <div class="ui basic segment">
 
       <h1>{% trans "Filter" %}</h1>
 
       <ul>
-        {% block filter_bar %}{% endblock %}
+        {% block filter_bar %}
+        {% endblock filter_bar %}
       </ul>
 
     </div>
   </div>
-    <!-- END filter bar -->
+  <!-- END filter bar -->
 
-{% endblock %}
+{% endblock content %}

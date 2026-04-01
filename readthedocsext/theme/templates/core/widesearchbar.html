@@ -1,22 +1,26 @@
-{% load i18n %}
+{% load trans from i18n %}
 
-        <!-- BEGIN wide search bar -->
+<!-- BEGIN wide search bar -->
 <h3>{% trans "Search all the docs" %}</h3>
 
 <div>
   <div class="ui category search">
-    <form class="ui form" action="{% url "search" %}" method="GET">
+    <form class="ui form" action="{% url "search" %}" method="get">
       <div class="field">
         <div class="fields">
           <div class="twelve wide field">
-            <input type="text" name="q" value="{{ term }}" id="id_site_search" placeholder="{% trans 'Search Read the Docs' %}">
+            <input type="text"
+                   name="q"
+                   value="{{ term }}"
+                   id="id_site_search"
+                   placeholder="{% trans "Search Read the Docs" %}">
           </div>
           <div class="four wide field">
-                    {% comment %} Translators: This is about starting a search {% endcomment %}
+            {% comment %} Translators: This is about starting a search {% endcomment %}
             <input class="ui button" type="submit" value="{% trans "Let's do this." %}">
           </div>
         </div>
-      </form>
-
-    </div>
+      </div>
+    </form>
   </div>
+</div>

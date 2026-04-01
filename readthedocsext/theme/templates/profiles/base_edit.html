@@ -21,24 +21,24 @@
           <div class="item">
             <div class="header">{% trans "Account" %}</div>
             <div class="menu">
-              <a class="item {% block profile_admin_details %}{% endblock %}"
+              <a class="item {% block profile_admin_details %}{% endblock profile_admin_details %}"
                  href="{% url 'profiles_profile_edit' %}">{% trans "Account" %}</a>
-              <a class="item {% block profile_admin_change_email %}{% endblock %}"
+              <a class="item {% block profile_admin_change_email %}{% endblock profile_admin_change_email %}"
                  href="{% url 'account_email' %}">{% trans "Email addresses" %}</a>
-              <a class="item {% block profile_admin_social_accounts %}{% endblock %}"
+              <a class="item {% block profile_admin_social_accounts %}{% endblock profile_admin_social_accounts %}"
                  href="{% url 'socialaccount_connections' %}">{% trans "Connected services" %}</a>
             </div>
           </div>
           <div class="item">
             <div class="header">{% trans "Security" %}</div>
             <div class="menu">
-              <a class="item {% block profile_admin_change_password %}{% endblock %}"
+              <a class="item {% block profile_admin_change_password %}{% endblock profile_admin_change_password %}"
                  href="{% url 'account_change_password' %}">{% trans "Change password" %}</a>
-              <a class="item {% block profile_admin_mfa %}{% endblock %}"
+              <a class="item {% block profile_admin_mfa %}{% endblock profile_admin_mfa %}"
                  href="{% url 'mfa_index' %}">{% trans "Two-factor authentication" %}</a>
-              <a class="item {% block profile-admin-security-log %}{% endblock %}"
+              <a class="item {% block profile-admin-security-log %}{% endblock profile %}"
                  href="{% url 'profiles_security_log' %}">{% trans "Security log" %}</a>
-              <a class="item {% block profile_admin_tokens %}{% endblock %}"
+              <a class="item {% block profile_admin_tokens %}{% endblock profile_admin_tokens %}"
                  href="{% url 'profiles_tokens' %}">{% trans "API tokens" %}</a>
             </div>
           </div>
@@ -46,15 +46,15 @@
             <div class="item">
               <div class="header">{% trans "Advertising" %}</div>
               <div class="menu">
-                <a class="item {% block profile_admin_advertising %}{% endblock %}"
+                <a class="item {% block profile_admin_advertising %}{% endblock profile_admin_advertising %}"
                    href="{% url 'account_advertising' %}">{% trans "Advertising" %}</a>
-                <a class="item {% block profile_admin_gold_edit %}{% endblock %}"
+                <a class="item {% block profile_admin_gold_edit %}{% endblock profile_admin_gold_edit %}"
                    href="{% url 'gold_detail' %}">{% trans "Gold membership" %}</a>
               </div>
             </div>
           {% endif %}
           {# djlint: on T003 #}
-        {% endblock %}
+        {% endblock profile %}
       </div>
 
       {% block edit_sidebar %}
@@ -81,4 +81,4 @@
 
     </div>
   </div>
-{% endblock %}
+{% endblock edit_content %}

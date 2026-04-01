@@ -1,4 +1,3 @@
-{% load ext_theme_tags %}
 
 {% comment %}
   This template is used by the base template to provide a list of messages on
@@ -17,24 +16,9 @@
     {% endcomment %}
     {# fmt:off #}
     {% spaceless %}
-      <div style="display: none;"
-           data-bind="
-semanticui: {
-  toast: {
-    {% comment %}
-      SECURITY: We need to HTML escape the message before escaping it for JS,
-      since the content will be inserted via JS (decoded), not from a template.
-      If the message was intenationally marked as safe, it won't be escaped
-      (the escape filter handles this).
-    {% endcomment %}
-    message: '{{ message|escape|escapejs }}',
-    showProgress: 'bottom',
-    classProgress: 'primary',
-    class: '{{ message.tags }}',
-    displayTime: 7500,
-  }
-}">
-        </div>
+      <div style="display: none"
+           data-bind=" semanticui: { toast: { {% comment %} SECURITY: We need to HTML escape the message before escaping it for JS, since the content will be inserted via JS (decoded), not from a template. If the message was intenationally marked as safe, it won't be escaped (the escape filter handles this). {% endcomment %} message: '{{ message|escape|escapejs }}', showProgress: 'bottom', classProgress: 'primary', class: '{{ message.tags }}', displayTime: 7500, } }">
+      </div>
     {% endspaceless %}
     {# fmt:on #}
   {% endfor %}

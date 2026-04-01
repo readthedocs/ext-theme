@@ -1,6 +1,6 @@
-{% load i18n %}
+{% load trans from i18n %}
 
-    <!-- BEGIN project bar -->
+<!-- BEGIN project bar -->
 <div id="project_bar">
   <div>
 
@@ -9,14 +9,12 @@
     </div>
 
     <div class="options">
-
-
       <ul class="ui list">
-        {% block filter_bar %}{% endblock %}
+        {% block filter_bar %}
+        {% endblock filter_bar %}
       </ul>
     </div>
 
-
   </div>
 </div>
-    <!-- END project bar -->
+<!-- END project bar -->

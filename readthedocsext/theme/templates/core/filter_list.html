@@ -1,11 +1,9 @@
-{% load i18n %}
+{% load trans from i18n %}
 
 {% for obj in filter.qs %}
   <li class="item">
     <div id="obj-{{ obj.id }}">
-      <a href="{{ obj.get_absolute_url }}">
-        {{ obj }}
-      </a>
+      <a href="{{ obj.get_absolute_url }}">{{ obj }}</a>
     </div>
   </li>
 {% empty %}
