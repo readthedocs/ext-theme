@@ -2,3 +2,16 @@
 .ui.card > div.content:first-child > i.close {
   cursor: pointer;
 }
+
+// Fixes for chip element popups and oversized content
+.ui.popup > .ui.horizontal.card {
+  .content {
+    > .header {
+      display: inline-block;
+      max-width: @horizontalWidth * 0.8;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
