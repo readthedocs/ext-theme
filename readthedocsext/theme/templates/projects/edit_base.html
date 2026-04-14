@@ -54,6 +54,8 @@
                href="{% url "projects_translations" project.slug %}">{% trans "Translations" %}</a>
             <a class="item {% block project_domains_active %}{% endblock project_domains_active %}"
                href="{% url "projects_domains" project.slug %}">{% trans "Domains" %}</a>
+            <a class="item {% block project_search_active %}{% endblock project_search_active %}"
+               href="{% url "projects_search_settings" project.slug %}">{% trans "Search" %}</a>
           </div>
         </div>
 
