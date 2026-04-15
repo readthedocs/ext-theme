@@ -78,10 +78,6 @@
   <i class="fad fa-diamond-turn-right icon"></i>
 {% endblock list_item_image %}
 
-{% block list_item_header_classes %}
-  {{ block.super }} all breaking
-{% endblock list_item_header_classes %}
-
 {% block list_item_header %}
   {% spaceless %}
     <a href="{% url 'projects_redirects_edit' project_slug=project.slug redirect_pk=object.pk %}">

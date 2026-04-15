@@ -3,29 +3,70 @@
   font-size: @mediumFontSize;
 }
 
-// Try to avoid headers that wrap or overflow out of tables in table listing
-// display. Content cannot be both non-wrapping and also horizontally
-// constrained in a table. Table cells are meant to grow to content size, unless
-// using a fixed table layout or explicit cell widths.
-.ui.table tr > td {
-  > .ui.header {
-    // Don't allow icon/image/etc to wrap
-    white-space: nowrap;
+// Truncate some sections of headers where content is too long. This tries to
+// collapse only the necessary content and allows table cells to help control
+// the maximum width allowed. This supports both breadcrumb headers and link
+// headers and is used from both model listing views and pages like the build
+// detail view.
+//
+// Lots of extra specificity here because there are some default rules that can
+// interfere with the display type.
+.ui.ui.ui.ui.ui.truncating.header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "image content";
+  grid-gap: 0.25em;
 
-    > .content {
-      // But do allow wrapping on the content lines (sub header included)
-      white-space: initial;
-      word-break: break-word;
+  // The most common are images from image or icons, but there are a few spots
+  // where icons are nested in a ``span`` parent.
+  > .ui.image,
+  > i.icon,
+  > span:first-child:has(i.icon) {
+    grid-area: image;
+    align-self: center;
+  }
+
+  > .content {
+    display: grid;
+    grid-area: content;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    align-self: end;
+
+    > a,
+    > .sub.header,
+    > div.ui.text {
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      align-self: center;
+    }
+  }
+
+  // Similarly, treat breadcrumbs as flex for the same reason as above. This
+  // is normally another inline-block element that doesn't truncate content
+  // correctly.
+  > .content > .ui.breadcrumb,
+  > .content > a > .ui.breadcrumb,
+  > .ui.breadcrumb {
+    align-self: center;
+    display: flex;
+    overflow: hidden;
+
+    .section.truncating {
+      display: inline-block;
+      flex-shrink: 1;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle;
     }
 
-    // TODO this might be better off in the header overrides, but for now it's
-    // probably only needed in the table view. It can be moved to a separate
-    // rule if it's useful. It's useful for some content like URLs that wrap
-    // poorly with break-word.
-    &.all.breaking {
-      > .content {
-        word-break: break-all;
-      }
+    .divider,
+    .section:not(.truncating) {
+      flex-shrink: 0;
     }
   }
 }
