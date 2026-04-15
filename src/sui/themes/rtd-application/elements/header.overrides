@@ -26,11 +26,21 @@
     align-self: center;
   }
 
-  > .content {
+  // On some of the views we use just a header and labels, we can truncate these
+  // directly without using a grid because the truncated content isn't nested.
+  > .content:not(:has(> * + *)) {
+    grid-area: content;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  // On `.content` with two children (a + .sub.header, etc) trigger a grid view
+  // so truncated text can be limited to the width of the table cell.
+  > .content:has(> * + *) {
     display: grid;
     grid-area: content;
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: 1fr 1fr;
     align-self: end;
 
     > a,
