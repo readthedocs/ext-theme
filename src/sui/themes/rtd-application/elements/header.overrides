@@ -26,17 +26,17 @@
     align-self: center;
   }
 
-  // On some of the views we use just a header and labels, we can truncate these
-  // directly without using a grid because the truncated content isn't nested.
-  > .content:not(:has(> * + *)) {
+  // On some of the views we use just a header with some text and inner labels.
+  // The child nodes might be a text node and one or more labels, but no sub
+  // header element.
+  > .content:not(:has(> .sub.header)) {
     grid-area: content;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  // On `.content` with two children (a + .sub.header, etc) trigger a grid view
-  // so truncated text can be limited to the width of the table cell.
-  > .content:has(> * + *) {
+  // Otherwise, if there is a sub header, this should be a grid display.
+  > .content:has(> .sub.header) {
     display: grid;
     grid-area: content;
     grid-template-columns: 1fr;
@@ -54,9 +54,8 @@
     }
   }
 
-  // Similarly, treat breadcrumbs as flex for the same reason as above. This
-  // is normally another inline-block element that doesn't truncate content
-  // correctly.
+  // Treat breadcrumbs inside headers as flex so that table cell width can
+  // affect text overflow of individual sections.
   > .content > .ui.breadcrumb,
   > .content > a > .ui.breadcrumb,
   > .ui.breadcrumb {
