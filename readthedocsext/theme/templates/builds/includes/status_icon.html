@@ -40,18 +40,12 @@
 
 {# fmt:off #}
 {% whitespaceless as build_title %}
-  {% if build.state == 'finished' %}
-    {% if build.success %}
-      {% trans "Build succeeded" %}
-    {% else %}
-      {% trans "Build failed" %}
-    {% endif %}
-  {% elif build.state == 'cancelled' %}
-    {% trans "Build cancelled" %}
-  {% elif build.is_stale %}
-    {% trans "Build queued" %}
+  {% if build.state == 'finished' and build.success %}
+    {% trans "Build succeeded" %}
+  {% elif build.state == 'finished' %}
+    {% trans "Build failed" %}
   {% else %}
-    {% trans "Build in progress" %}
+    {{ build.get_state_display }}
   {% endif %}
 {% endwhitespaceless %}
 <span data-tooltip="{{ build_title }}"><i class="{% spaceless %}
