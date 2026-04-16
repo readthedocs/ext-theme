@@ -1,5 +1,5 @@
 // Because h1.ui.medium.header is still sized as an h1
-.ui.ui.ui.medium.header {
+@{uiImportant}.medium.header {
   font-size: @mediumFontSize;
 }
 
@@ -8,10 +8,7 @@
 // the maximum width allowed. This supports both breadcrumb headers and link
 // headers and is used from both model listing views and pages like the build
 // detail view.
-//
-// Lots of extra specificity here because there are some default rules that can
-// interfere with the display type.
-.ui.ui.ui.ui.ui.truncating.header {
+@{uiImportant}.truncating.header {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   grid-template-areas: "image content";
