@@ -270,19 +270,20 @@ export class ProjectAutomationRuleView {
   static view_name = "ProjectAutomationRuleView";
 
   constructor(automation_rule) {
-    this.predefined_match_arg = ko.observable();
-    this.is_match_arg_visible = ko.computed(() => {
-      let predefined_match_arg = this.predefined_match_arg();
-      return predefined_match_arg === "";
+    this.version_predefined_match_pattern = ko.observable();
+    this.is_version_match_pattern_visible = ko.computed(() => {
+      let version_predefined_match_pattern =
+        this.version_predefined_match_pattern();
+      return version_predefined_match_pattern === "custom-match";
     });
     this.is_all_versions = ko.computed(() => {
-      return this.predefined_match_arg() === "all-versions";
+      return this.version_predefined_match_pattern() === "all-versions";
     });
     this.is_semver_versions = ko.computed(() => {
-      return this.predefined_match_arg() === "semver-versions";
+      return this.version_predefined_match_pattern() === "semver-versions";
     });
     this.is_custom = ko.computed(() => {
-      return this.predefined_match_arg() === "custom-match";
+      return this.version_predefined_match_pattern() === "custom-match";
     });
   }
 }
