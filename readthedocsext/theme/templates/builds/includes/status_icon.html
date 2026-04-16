@@ -1,4 +1,5 @@
-{% load trans from i18n %}
+{% load i18n %}
+{% load whitespaceless from ext_theme_tags %}
 
 {% comment "rst" %}
 
@@ -38,7 +39,22 @@
 {% endcomment %}
 
 {# fmt:off #}
-<i class="{% spaceless %}
+{% whitespaceless as build_title %}
+  {% if build.state == 'finished' %}
+    {% if build.success %}
+      {% trans "Build succeeded" %}
+    {% else %}
+      {% trans "Build failed" %}
+    {% endif %}
+  {% elif build.state == 'cancelled' %}
+    {% trans "Build cancelled" %}
+  {% elif build.is_stale %}
+    {% trans "Build queued" %}
+  {% else %}
+    {% trans "Build in progress" %}
+  {% endif %}
+{% endwhitespaceless %}
+<span data-tooltip="{{ build_title }}"><i class="{% spaceless %}
 
   ui icon
 
@@ -113,19 +129,5 @@
     'loading grey fa-spinner-third': state.code !== 'finished' && state.code !== 'triggered' && state.code !== 'cancelled',
   }
 
-{% endspaceless %}"{% endif %}
-title="{% if build.state == 'finished' %}
-         {% if build.success %}
-           {% trans "Build succeeded" %}
-         {% else %}
-           {% trans "Build failed" %}
-         {% endif %}
-       {% elif build.state == 'cancelled' %}
-         {% trans "Build cancelled" %}
-       {% elif build.is_stale %}
-         {% trans "Build queued" %}
-       {% else %}
-         {% trans "Build in progress" %}
-       {% endif %}">
-</i>
+{% endspaceless %}"{% endif %}></i></span>
 {# fmt:on #}
