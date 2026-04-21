@@ -282,7 +282,7 @@ export class ProjectAutomationRuleView {
       return this.predefined_match_arg() === "semver-versions";
     });
     this.is_custom = ko.computed(() => {
-      return this.predefined_match_arg() === "custom-match";
+      return this.predefined_match_arg() === "";
     });
   }
 }
