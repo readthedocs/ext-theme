@@ -1,31 +1,78 @@
 // Because h1.ui.medium.header is still sized as an h1
-.ui.ui.ui.medium.header {
+@{uiImportant}.medium.header {
   font-size: @mediumFontSize;
 }
 
-// Try to avoid headers that wrap or overflow out of tables in table listing
-// display. Content cannot be both non-wrapping and also horizontally
-// constrained in a table. Table cells are meant to grow to content size, unless
-// using a fixed table layout or explicit cell widths.
-.ui.table tr > td {
-  > .ui.header {
-    // Don't allow icon/image/etc to wrap
-    white-space: nowrap;
+// Truncate some sections of headers where content is too long. This tries to
+// collapse only the necessary content and allows table cells to help control
+// the maximum width allowed. This supports both breadcrumb headers and link
+// headers and is used from both model listing views and pages like the build
+// detail view.
+@{uiImportant}.truncating.header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "image content";
+  grid-gap: 0.25em;
 
-    > .content {
-      // But do allow wrapping on the content lines (sub header included)
-      white-space: initial;
-      word-break: break-word;
+  // The most common are images from image or icons, but there are a few spots
+  // where icons are nested in a ``span`` parent.
+  > .ui.image,
+  > i.icon,
+  > span:first-child:has(i.icon) {
+    grid-area: image;
+    align-self: center;
+  }
+
+  // On some of the views we use just a header with some text and inner labels.
+  // The child nodes might be a text node and one or more labels, but no sub
+  // header element.
+  > .content:not(:has(> .sub.header)) {
+    grid-area: content;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  // Otherwise, if there is a sub header, this should be a grid display.
+  > .content:has(> .sub.header) {
+    display: grid;
+    grid-area: content;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    align-self: end;
+
+    > a,
+    > .sub.header,
+    > div.ui.text {
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      align-self: center;
+    }
+  }
+
+  // Treat breadcrumbs inside headers as flex so that table cell width can
+  // affect text overflow of individual sections.
+  > .content > .ui.breadcrumb,
+  > .content > a > .ui.breadcrumb,
+  > .ui.breadcrumb {
+    align-self: center;
+    display: flex;
+    overflow: hidden;
+
+    .section.truncating {
+      display: inline-block;
+      flex-shrink: 1;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle;
     }
 
-    // TODO this might be better off in the header overrides, but for now it's
-    // probably only needed in the table view. It can be moved to a separate
-    // rule if it's useful. It's useful for some content like URLs that wrap
-    // poorly with break-word.
-    &.all.breaking {
-      > .content {
-        word-break: break-all;
-      }
+    .divider,
+    .section:not(.truncating) {
+      flex-shrink: 0;
     }
   }
 }
