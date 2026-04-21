@@ -19,3 +19,14 @@
 // Colors
 //@primaryColor: var(--readthedocs-dashboard-primary);
 //@secondaryColor: var(--readthedocs-dashboard-secondary);
+
+// Variable for high specificity `.ui` selector, a shortcut to increase
+// specificity (1, 1, 0), which should be a higher specificity than any of the
+// base SUI rule selectors. `#_` is just a short, non-existant id.
+//
+// Use this as a selector variable:
+//
+// @{uiImportant}.small.header { ... }
+//
+// prettier-ignore
+@uiImportant: .ui:not(#_);
