@@ -8,6 +8,18 @@
         <input type="hidden"
                name="{{ field.name }}"
                value="{% if field.value.0|length == 1 %}{{ field.value|default:"" }}{% else %}{{ field.value.0|default:"" }}{% endif %}" />
+      {% elif field.field.widget.input_type == "text" %}
+        <div class="item">
+          <div class="content">
+            <div class="ui icon input">
+              <input type="text"
+                     name="{{ field.name }}"
+                     value="{{ field.value|default:"" }}"
+                     placeholder="{{ field.label }}" />
+              <i class="fa-solid fa-magnifying-glass icon"></i>
+            </div>
+          </div>
+        </div>
       {% else %}
         <div class="item">
           <div class="content">
