@@ -34,3 +34,103 @@
     display: none;
   }
 }
+
+body:not(#_) {
+  background-color: darken(@black, 5);
+
+  .ui:not(.basic).segment :extend(.ui.inverted.segment) {}
+  .ui.basic.segment :extend(.ui.inverted.basic.segment) {}
+  .ui.loading.segment :extend(.ui.inverted.loading.segment) {}
+  .ui.loading.segment::before :extend(.ui.inverted.loading.segment::before) {}
+  .ui.loading.segment::after :extend(.ui.inverted.loading.segment::after) {}
+
+  .ui.header :extend(.ui.inverted.header) {}
+  .ui.header .content > .sub.header :extend(.ui.inverted.header .sub.header) {}
+  .ui.header .sub.header :extend(.ui.inverted.header .sub.header) {}
+
+  .ui:not(.basic).label :extend(.ui.basic.label) {}
+  .ui:not(.basic).label :extend(.ui.inverted.basic.label) {}
+  .ui.ui.label :extend(.ui.inverted.label) {}
+  .ui.basic.label :extend(.ui.inverted.basic.label) {}
+  // TODO colors
+  .ui.teal.label :extend(.ui.ui.ui.teal.label) {}
+
+  .ui.popup :extend(.ui.inverted.popup) {}
+  .ui.popup :extend(.ui.inverted.popup) {}
+  .ui.left.center.popup::before :extend(.ui.inverted.left.center.popup::before) {}
+  .ui.right.center.popup::before :extend(.ui.inverted.right.center.popup::before) {}
+
+  .ui.buttons :extend(.ui.inverted.buttons) {}
+  .ui.buttons .button :extend(.ui.inverted.button) {}
+  .ui.button :extend(.ui.inverted.button) {}
+  .ui.button:hover :extend(.ui.inverted.button:hover) {}
+  .ui.green.button :extend(.ui.inverted.green.button) {}
+
+  .ui.menu :extend(.ui.inverted.menu) {}
+  .ui.menu .item :extend(.ui.inverted.menu .item) {}
+  .ui.menu .item:before :extend(.ui.inverted.menu .item:before) {}
+  .ui.menu .item:hover :extend(.ui.inverted.menu .item:hover) {}
+  .ui.menu .active.item :extend(.ui.inverted.menu .active.item) {}
+  .ui.pointing.menu .active.item::after :extend(.ui.ui.ui.inverted.pointing.menu .active.item::after) {}
+
+  .ui.dropdown :extend(.ui.inverted.dropdown) {}
+  .ui.dropdown .menu :extend(.ui.inverted.dropdown .menu) {}
+  .ui.dropdown .menu > .header :extend(.ui.inverted.dropdown .menu > .header) {}
+  .ui.dropdown .menu > .item :extend(.ui.inverted.dropdown .menu > .item) {}
+  .ui.dropdown .menu .selected.item :extend(.ui.inverted.dropdown .menu .selected.item) {}
+  .ui.dropdown .menu > .item > .description :extend(.ui.inverted.dropdown .menu > .item > .description) {}
+  .ui.dropdown .menu > .item:hover :extend(.ui.inverted.dropdown .menu > .item:hover) {}
+  .ui.selection.dropdown :extend(.ui.inverted.selection.dropdown) {}
+  .ui.selection.dropdown input :extend(.ui.inverted.selection.dropdown input) {}
+  .ui.selection.dropdown .menu > .item :extend(.ui.inverted.selection.dropdown .menu > .item) {}
+
+  .ui.form :extend(.ui.inverted.form) {}
+  .ui.form label :extend(.ui.inverted.form label) {}
+
+  .ui.cards > card :extend(.ui.inverted.card) {}
+  .ui.card :extend(.ui.inverted.card) {}
+  .ui.card > .content > .header :extend(.ui.inverted.card > .content > .header) {}
+  .ui.card > .content > .description :extend(.ui.inverted.card > .content > .description) {}
+  .ui.card > .extra :extend(.ui.inverted.card > .extra) {}
+
+  .ui.list :extend(.ui.inverted.list) {}
+  .ui.list > .item > .content :extend(.ui.inverted.list > .item > .content) {}
+  .ui.list > .item .header :extend(.ui.inverted.list > .item .header) {}
+
+  .ui.progress :extend(.ui.inverted.progress) {}
+  .ui.progress .bar :extend(.ui.inverted.progress .bar) {}
+  .ui.progress > .label :extend(.ui.inverted.progress > .label) {}
+
+  .ui.message :extend(.ui.inverted.message) {}
+
+  // And some polish fixes for background colors that don't match SUI inverted
+  // colors and patterns.
+
+  // We still need the non-inverted loading button styles to take precedence.
+  // Copying some light specificity hacks from FUI.
+  .ui.ui.ui.loading.button :extend(.ui.ui.ui.ui.ui.ui.loading.button) {}
+
+  // Match text menus like filter lists with the background color, not the
+  // segment color.
+  .ui.text.menu,
+  .ui.secondary.menu {
+    background-color: initial;
+  }
+
+  // Unfortunately `!important` was used on some of these rules so we are forced
+  // to use it as well. Do not use `!important` unless the underlying rules
+  // specifically already use `!important`.
+  .ui.menu .ui.dropdown .menu > .item {
+    color: rgba(255, 255, 255, 0.8) !important;
+
+    &:hover {
+      // TODO not teal
+      background: @teal !important;
+    }
+  }
+
+  // Invert the logo
+  .ui.image[src*="readthedocsext/theme/images/logo-wordmark-dark.svg"] {
+    filter: invert(100) brightness(110);
+  }
+}
