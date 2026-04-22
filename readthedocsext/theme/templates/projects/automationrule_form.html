@@ -26,13 +26,12 @@
     {% alter_field form.version_predefined_match_pattern data_bind="if: true, value: version_predefined_match_pattern" classes="manual select" %}
     {% alter_field form.version_match_pattern data_bind="enable: is_version_match_pattern_visible" %}
     {{ form|crispy }}
-    <div class="ui info message"
-         data-bind="visible: is_all_versions() || is_semver_versions()"
-         style="display: none">
-      <span data-bind="visible: is_all_versions()">
+    <div class="ui info visible message ko hidden"
+         data-bind="css: {hidden: !(is_all_versions() || is_semver_versions())}">
+      <span class="ko hidden" data-bind="css: {hidden: !is_all_versions()}">
         {% trans "All versions will be matched by this rule." %}
       </span>
-      <span data-bind="visible: is_semver_versions()">
+      <span class="ko hidden" data-bind="css: {hidden: !is_semver_versions()}">
         {% trans "Versions incremented based on semantic versioning rules will be matched by this rule." %}
       </span>
     </div>
