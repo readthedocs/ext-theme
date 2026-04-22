@@ -272,7 +272,7 @@ export class ProjectAutomationRuleView {
   constructor(automation_rule) {
     this.version_predefined_match_pattern = ko.observable();
     this.is_version_match_pattern_visible = ko.computed(() => {
-      let version_predefined_match_pattern =
+      const version_predefined_match_pattern =
         this.version_predefined_match_pattern();
       return version_predefined_match_pattern === "custom-match";
     });
