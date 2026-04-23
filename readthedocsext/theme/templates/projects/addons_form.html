@@ -105,6 +105,7 @@
         <div class="ui tab" data-tab="filetreediff">
           {{ form.filetreediff_enabled | as_crispy_field }}
           {{ form.filetreediff_ignored_files | as_crispy_field }}
+          {{ form.options_base_version | as_crispy_field }}
         </div>
       {% endblock addons_filetreediff %}
 
