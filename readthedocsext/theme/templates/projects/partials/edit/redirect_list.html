@@ -3,6 +3,9 @@
 {% load trans blocktrans from i18n %}
 
 {% block top_left_menu_items %}
+  <div data-bind="using: FilterView()">
+    {% include "includes/filters/form.html" with fields=filter.form %}
+  </div>
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
@@ -77,10 +80,6 @@
 {% block list_item_image %}
   <i class="fad fa-diamond-turn-right icon"></i>
 {% endblock list_item_image %}
-
-{% block list_item_header_classes %}
-  {{ block.super }} all breaking
-{% endblock list_item_header_classes %}
 
 {% block list_item_header %}
   {% spaceless %}
