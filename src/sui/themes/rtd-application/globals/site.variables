@@ -15,6 +15,14 @@
   inherits: false;
   initial-value: @violet;
 }
+// Warm amber accent used for subtle highlights on entrance pages
+// (login/signup/password reset) to visually distinguish them from the
+// dashboard while still harmonizing with the teal/violet brand palette.
+@property --readthedocs-dashboard-accent {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #d9a441;
+}
 
 // Colors
 //@primaryColor: var(--readthedocs-dashboard-primary);

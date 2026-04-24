@@ -1,3 +1,19 @@
+// Entrance pages (login, signup, password reset, email confirm, etc.)
+//
+// Subtle amber accent that visually distinguishes these pages from the main
+// teal/violet dashboard. Applied as a thin top stripe on the card and a soft
+// tint behind the footer logo area so the distinction is recognizable without
+// competing with primary CTAs.
+body.entrance {
+  .ui.fluid.card {
+    border-top: 3px solid var(--readthedocs-dashboard-accent);
+
+    > .extra.content {
+      background-color: rgba(217, 164, 65, 0.06);
+    }
+  }
+}
+
 // Knockout default styles
 //
 // Note: repeating a selector like this is a way to beef up specificity without

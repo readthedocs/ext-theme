@@ -3,6 +3,8 @@
 {% load static from static %}
 {% load trans from i18n %}
 
+{% block body_class %}entrance{% endblock body_class %}
+
 {% block content-wrapper %}
   {# This is overriding the normal base.html content-wrapper, #}
   {# so we need to include notifications here so they're displayed. #}
