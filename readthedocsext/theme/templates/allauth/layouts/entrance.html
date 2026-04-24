@@ -19,6 +19,11 @@
   {% block content_extra_logo %}
     <div class="right floated">
       {# djlint: off D018 #}
+      {% if "readthedocs.org" in PRODUCTION_DOMAIN %}
+        <span class="site-label">{% trans "Community" %}</span>
+      {% elif "readthedocs.com" in PRODUCTION_DOMAIN %}
+        <span class="site-label">{% trans "Business" %}</span>
+      {% endif %}
       <a href="//{{ PRODUCTION_DOMAIN }}/"
          aria-label="{% trans "Read the Docs" %}">
         <img class="ui middle aligned image"

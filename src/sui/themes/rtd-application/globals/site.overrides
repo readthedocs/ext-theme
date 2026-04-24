@@ -7,20 +7,27 @@ body.site-business {
 
 // Entrance pages (login, signup, password reset, email confirm, etc.)
 //
-// Subtle accent that visually distinguishes these pages from the main
-// teal/violet dashboard. Applied as a thin top stripe on the card and a soft
-// tint behind the footer logo area so the distinction is recognizable without
-// competing with primary CTAs.
+// The entrance card's extra content area is treated as a footer for the card,
+// mirroring how the main site footer groups its logos: a softly tinted band
+// that hosts the Read the Docs wordmark and a small site-specific label. The
+// label is colored with the per-site accent so Community and Business are
+// visually distinguishable without adding a loud border or button color.
 body.entrance {
-  .ui.fluid.card {
-    border-top: 3px solid var(--readthedocs-dashboard-accent);
+  .ui.fluid.card > .extra.content {
+    background-color: color-mix(
+      in srgb,
+      var(--readthedocs-dashboard-accent) 6%,
+      transparent
+    );
 
-    > .extra.content {
-      background-color: color-mix(
-        in srgb,
-        var(--readthedocs-dashboard-accent) 6%,
-        transparent
-      );
+    .site-label {
+      color: var(--readthedocs-dashboard-accent);
+      font-size: 0.85em;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-right: 0.75em;
+      vertical-align: middle;
     }
   }
 }
