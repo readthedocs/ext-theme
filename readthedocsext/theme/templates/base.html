@@ -41,7 +41,9 @@
               crossorigin="anonymous"></script>
     {% endblock head_scripts %}
   </head>
-  <body class="{% block body_class %}{% endblock body_class %}">
+  {# djlint:off #}
+  <body class="{% if "readthedocs.org" in PRODUCTION_DOMAIN %}site-community{% elif "readthedocs.com" in PRODUCTION_DOMAIN %}site-business{% endif %} {% block body_class %}{% endblock body_class %}">
+  {# djlint:on #}
 
     {% block header %}
       {% include "includes/header.html" %}

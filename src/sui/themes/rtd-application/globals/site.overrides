@@ -1,6 +1,13 @@
+// Business (readthedocs.com) uses a warmer terracotta accent so its entrance
+// pages are distinguishable from the Community amber. The Community default
+// is defined as the `@property` initial-value in site.variables.
+body.site-business {
+  --readthedocs-dashboard-accent: #c4553c;
+}
+
 // Entrance pages (login, signup, password reset, email confirm, etc.)
 //
-// Subtle amber accent that visually distinguishes these pages from the main
+// Subtle accent that visually distinguishes these pages from the main
 // teal/violet dashboard. Applied as a thin top stripe on the card and a soft
 // tint behind the footer logo area so the distinction is recognizable without
 // competing with primary CTAs.
@@ -9,7 +16,11 @@ body.entrance {
     border-top: 3px solid var(--readthedocs-dashboard-accent);
 
     > .extra.content {
-      background-color: rgba(217, 164, 65, 0.06);
+      background-color: color-mix(
+        in srgb,
+        var(--readthedocs-dashboard-accent) 6%,
+        transparent
+      );
     }
   }
 }
