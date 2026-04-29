@@ -8,12 +8,13 @@
 {% endblock %}
 
 {% block project_edit_content %}
-  <form
-    class="ui form"
-    method="post"
-    action="{% url 'projects_integrations_create' project_slug=project.slug %}">
+  <form class="ui form"
+        method="post"
+        action="{% url 'projects_integrations_create' project_slug=project.slug %}">
     {% csrf_token %}
     {{ form|crispy }}
-    <input class="ui primary button" type="submit" value="{% trans "Add Git integration" %}">
+    <input class="ui primary button"
+           type="submit"
+           value="{% trans "Add Git integration" %}">
   </form>
 {% endblock %}
