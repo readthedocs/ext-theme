@@ -8,7 +8,7 @@
 
 {% block create_button %}
   {% url "projects_integrations_create" project_slug=project.slug as create_url %}
-  {% trans "Add integration" as create_text %}
+  {% trans "Add Git integration" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
 {% endblock create_button %}
 
@@ -17,11 +17,11 @@
 {% endblock list_placeholder_icon_class %}
 {% block list_placeholder_header %}
   {% blocktrans trimmed %}
-    No integrations have been configured yet
+    No Git integrations have been configured yet
   {% endblocktrans %}
   <div class="sub header">
     {% blocktrans trimmed %}
-      Integrations extend the functionality of Read the Docs to other services,
+      Git integrations extend the functionality of Read the Docs to other services,
       such as GitHub, GitLab, and Bitbucket
     {% endblocktrans %}
   </div>
@@ -46,9 +46,9 @@
   {% endwith %}
 
   {% url 'projects_integrations_delete' project_slug=project.slug integration_pk=object.pk as form_url %}
-  {% trans "Remove integration" as action_text %}
+  {% trans "Remove Git integration" as action_text %}
   {% blocktrans trimmed asvar content_text with description=object.get_integration_type_display %}
-    Remove integration {{ description }}?
+    Remove Git integration {{ description }}?
   {% endblocktrans %}
   {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text content_text=content_text is_disabled=object.is_remote_only %}
 {% endblock list_item_right_buttons %}
