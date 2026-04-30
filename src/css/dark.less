@@ -1,0 +1,840 @@
+/* Dashboard dark mode support
+ * ===========================
+ *
+ * This is a mild hack that overrides the default FUI element styles with the
+ * inverted variant styles when we detect the user is using the dark theme.
+ * The end result is that the inverted element styles can overlay the existing
+ * element styles using a media query and without altering template HTML with
+ * all of the extra inverted classes.
+ *
+ * There are two caveats below to this method and both are due to how LESS works.
+ *
+ * Using the dark mode CSS
+ * -----------------------
+ *
+ * The first caveat is that we can't use LESS `extend()` with LESS media queries
+ * because of how it handles scoping inside media queries -- these have local
+ * scope with no access to global scope.
+ *
+ * So, the following does not work and will output * nothing, because
+ * `.ui.inverted.label` does not exist in the local scope of the `@media` rule:
+ *
+ * .. code:: less
+ *
+ *     @media ... {
+ *       .ui.label :extend(.ui.inverted.label) {};
+ *     }
+ *
+ * So instead, we output the dark mode alterations as a separate CSS file and
+ * include it using link element with media attributes to active the media query:
+ *
+ * .. code:: html
+ *
+ *     <link rel="stylesheet" href="site.css" media="all" />
+ *     <link rel="stylesheet" href="dark.css" media="{{ if use_dark_theme|yesno:"all,(prefers-color-scheme: dark)" }}" />
+ *
+ * The conditional media query rule attribute is what activates dark mode on
+ * `dark` theme and on `system` theme when the preferred color scheme is dark.
+ *
+ * Updating rules
+ * --------------
+ *
+ * The second caveat is that LESS requires us to extend rules individually. This
+ * means it isn't possible to extend with just `extend(.ui.inverted.button)`
+ * and get all of the related rules, we must also extend rules like
+ * `extend(.ui.inverted.button:hover)` and so on.
+ *
+ * All of the selectors below were pulled from the compiled site CSS and copied
+ * here. The aim is to extend any rule that has a selector for inverted styles
+ * (eg `.ui.inverted.label`) and override the matching non-inverted selector
+ * (eg `.ui.label`) when dark mode is enabled.
+ *
+ * There are a lot of rules below, but the process to build this list is
+ * reproducible. The basic approach is:
+ *
+ * - Filter the compiled site CSS to gather the actual rule selectors we want to
+ *   extend:
+ *
+ * .. code:: console
+ *
+ *     prettier --parser css < readthedocsext/theme/static/readthedocsext/theme/css/site.css | grep '.inverted'
+ *
+ * - From here, to fix a particular style issue, search this list of selctors
+ *   for a rule that matches and is missing below.
+ * - Selectors using features like `:not()` or `:has()` can't be extended yet.
+ *   These can be skipped for now.
+ * - Transform the selectors to match the rules below, extend from the inverted
+ *   style selector to the non-inverted selector (mostly just remove
+ *   `.inverted` from the selectors).
+ * - Ordering is important still, or use specificity to control the rule order.
+ * - Lastly, there are a few overrides where we want extend alternate styles,
+ *   these have special rules and are noted below -- eg `.ui.label` extends
+ *   `.ui.basic.inverted.label`, not `.ui.inverted.label`.
+ */
+
+// This import is treated as a LESS source file, not CSS, so that we can use
+// `extend()` on the rules, and `reference` avoids reimporting all of the rules.
+// Only the rules that are extended via `extend` will be output in this CSS file.
+@import (reference, less)
+  "../../readthedocsext/theme/static/readthedocsext/theme/css/site.css";
+@import (reference) "fomantic-ui-less/themes/default/globals/colors.less";
+
+// Avoid formatting all of the lines to wrap
+// prettier-ignore
+html[data-theme="dark"]:not(#_),
+html[data-theme="system"]:not(#_) {
+
+  // Segments
+  .ui:not(.basic).segment :extend(.ui.inverted.segment) {};
+  .ui.loading.segment :extend(.ui.inverted.loading.segment) {};
+  .ui.loading.segment:before :extend(.ui.inverted.loading.segment:before) {};
+  .ui.loading.segments :extend(.ui.inverted.loading.segments) {};
+  .ui.loading.segments:before :extend(.ui.inverted.loading.segments:before) {};
+  .ui.stacked.segment :extend(.ui.stacked.inverted.segment) {};
+  .ui.stacked.segment:after :extend(.ui.stacked.inverted.segment:after) {};
+  .ui.stacked.segment:before :extend(.ui.stacked.inverted.segment:before) {};
+  .ui.stacked.segments :extend(.ui.stacked.inverted.segments) {};
+  .ui.stacked.segments:after :extend(.ui.stacked.inverted.segments:after) {};
+  .ui.stacked.segments:before :extend(.ui.stacked.inverted.segments:before) {};
+  .ui.primary.segment :extend(.ui.primary.inverted.segment) {};
+  .ui.secondary.segment :extend(.ui.secondary.inverted.segment) {};
+  .ui.tertiary.segment :extend(.ui.tertiary.inverted.segment) {};
+  .ui.red.segment :extend(.ui.tertiary.inverted.segment) {};
+  .ui.ui.ui.ui.ui.red.segment :extend(.ui.ui.ui.ui.ui.inverted.red.segment) {};
+  .ui.orange.segment :extend(.ui.tertiary.inverted.segment) {};
+  .ui.ui.ui.ui.ui.orange.segment :extend(.ui.ui.ui.ui.ui.inverted.orange.segment) {};
+  .ui.yellow.segment :extend(.ui.tertiary.inverted.segment) {};
+  .ui.ui.ui.ui.ui.yellow.segment :extend(.ui.ui.ui.ui.ui.inverted.yellow.segment) {};
+  .ui.olive.segment :extend(.ui.tertiary.inverted.segment) {};
+  .ui.ui.ui.ui.ui.olive.segment :extend(.ui.ui.ui.ui.ui.inverted.olive.segment) {};
+  .ui.green.segment :extend(.ui.tertiary.inverted.segment) {};
+  .ui.ui.ui.ui.ui.green.segment :extend(.ui.ui.ui.ui.ui.inverted.green.segment) {};
+  .ui.teal.segment :extend(.ui.tertiary.inverted.segment) {};
+  .ui.ui.ui.ui.ui.teal.segment :extend(.ui.ui.ui.ui.ui.inverted.teal.segment) {};
+  .ui.blue.segment :extend(.ui.tertiary.inverted.segment) {};
+  .ui.ui.ui.ui.ui.blue.segment :extend(.ui.ui.ui.ui.ui.inverted.blue.segment) {};
+  .ui.violet.segment :extend(.ui.tertiary.inverted.segment) {};
+  .ui.ui.ui.ui.ui.violet.segment :extend(.ui.ui.ui.ui.ui.inverted.violet.segment) {};
+  .ui.purple.segment :extend(.ui.tertiary.inverted.segment) {};
+  .ui.ui.ui.ui.ui.purple.segment :extend(.ui.ui.ui.ui.ui.inverted.purple.segment) {};
+  .ui.pink.segment :extend(.ui.tertiary.inverted.segment) {};
+  .ui.ui.ui.ui.ui.pink.segment :extend(.ui.ui.ui.ui.ui.inverted.pink.segment) {};
+  .ui.brown.segment :extend(.ui.tertiary.inverted.segment) {};
+  .ui.ui.ui.ui.ui.brown.segment :extend(.ui.ui.ui.ui.ui.inverted.brown.segment) {};
+  .ui.grey.segment :extend(.ui.tertiary.inverted.segment) {};
+  .ui.ui.ui.ui.ui.grey.segment :extend(.ui.ui.ui.ui.ui.inverted.grey.segment) {};
+  .ui.black.segment :extend(.ui.tertiary.inverted.segment) {};
+  .ui.ui.ui.ui.ui.black.segment :extend(.ui.ui.ui.ui.ui.inverted.black.segment) {};
+
+  // Header
+  .ui.header :extend(.ui.inverted.header) {};
+  .ui.header .content > .sub.header :extend(.ui.inverted.header .sub.header) {};
+  .ui.header .sub.header :extend(.ui.inverted.header .sub.header) {};
+
+  // Label
+  .ui:not(.basic).label :extend(.ui.basic.label) {};
+  .ui:not(.basic).label :extend(.ui.inverted.basic.label) {};
+  .ui.ui.label :extend(.ui.inverted.label) {};
+  .ui.basic.label :extend(.ui.inverted.basic.label) {};
+  a.ui.ui.ui.basic.primary.label:hover :extend(a.ui.ui.ui.inverted.basic.primary.label:hover) {};
+  a.ui.ui.ui.inverted.primary.label:hover :extend(a.ui.ui.ui.inverted.primary.label:hover) {};
+  .ui.ui.ui.inverted.basic.primary.label :extend(.ui.ui.ui.inverted.basic.primary.label) {};
+  .ui.ui.ui.inverted.primary.label :extend(.ui.ui.ui.inverted.primary.label) {};
+  a.ui.ui.ui.basic.secondary.label:hover :extend(a.ui.ui.ui.inverted.basic.secondary.label:hover) {};
+  a.ui.ui.ui.inverted.secondary.label:hover :extend(a.ui.ui.ui.inverted.secondary.label:hover) {};
+  .ui.ui.ui.inverted.basic.secondary.label :extend(.ui.ui.ui.inverted.basic.secondary.label) {};
+  .ui.ui.ui.inverted.secondary.label :extend(.ui.ui.ui.inverted.secondary.label) {};
+  a.ui.ui.ui.basic.red.label:hover :extend(a.ui.ui.ui.inverted.basic.red.label:hover) {};
+  a.ui.ui.ui.inverted.red.label:hover :extend(a.ui.ui.ui.inverted.red.label:hover) {};
+  .ui.ui.ui.inverted.basic.red.label :extend(.ui.ui.ui.inverted.basic.red.label) {};
+  .ui.ui.ui.inverted.red.label :extend(.ui.ui.ui.inverted.red.label) {};
+  a.ui.ui.ui.basic.orange.label:hover :extend(a.ui.ui.ui.inverted.basic.orange.label:hover) {};
+  a.ui.ui.ui.inverted.orange.label:hover :extend(a.ui.ui.ui.inverted.orange.label:hover) {};
+  .ui.ui.ui.inverted.basic.orange.label :extend(.ui.ui.ui.inverted.basic.orange.label) {};
+  .ui.ui.ui.inverted.orange.label :extend(.ui.ui.ui.inverted.orange.label) {};
+  a.ui.ui.ui.basic.yellow.label:hover :extend(a.ui.ui.ui.inverted.basic.yellow.label:hover) {};
+  a.ui.ui.ui.inverted.yellow.label:hover :extend(a.ui.ui.ui.inverted.yellow.label:hover) {};
+  .ui.ui.ui.inverted.basic.yellow.label :extend(.ui.ui.ui.inverted.basic.yellow.label) {};
+  .ui.ui.ui.inverted.yellow.label :extend(.ui.ui.ui.inverted.yellow.label) {};
+  a.ui.ui.ui.basic.olive.label:hover :extend(a.ui.ui.ui.inverted.basic.olive.label:hover) {};
+  a.ui.ui.ui.inverted.olive.label:hover :extend(a.ui.ui.ui.inverted.olive.label:hover) {};
+  .ui.ui.ui.inverted.basic.olive.label :extend(.ui.ui.ui.inverted.basic.olive.label) {};
+  .ui.ui.ui.inverted.olive.label :extend(.ui.ui.ui.inverted.olive.label) {};
+  a.ui.ui.ui.basic.green.label:hover :extend(a.ui.ui.ui.inverted.basic.green.label:hover) {};
+  a.ui.ui.ui.inverted.green.label:hover :extend(a.ui.ui.ui.inverted.green.label:hover) {};
+  .ui.ui.ui.inverted.basic.green.label :extend(.ui.ui.ui.inverted.basic.green.label) {};
+  .ui.ui.ui.inverted.green.label :extend(.ui.ui.ui.inverted.green.label) {};
+  a.ui.ui.ui.basic.teal.label:hover :extend(a.ui.ui.ui.inverted.basic.teal.label:hover) {};
+  a.ui.ui.ui.inverted.teal.label:hover :extend(a.ui.ui.ui.inverted.teal.label:hover) {};
+  .ui.ui.ui.inverted.basic.teal.label :extend(.ui.ui.ui.inverted.basic.teal.label) {};
+  .ui.ui.ui.inverted.teal.label :extend(.ui.ui.ui.inverted.teal.label) {};
+  a.ui.ui.ui.basic.blue.label:hover :extend(a.ui.ui.ui.inverted.basic.blue.label:hover) {};
+  a.ui.ui.ui.inverted.blue.label:hover :extend(a.ui.ui.ui.inverted.blue.label:hover) {};
+  .ui.ui.ui.inverted.basic.blue.label :extend(.ui.ui.ui.inverted.basic.blue.label) {};
+  .ui.ui.ui.inverted.blue.label :extend(.ui.ui.ui.inverted.blue.label) {};
+  a.ui.ui.ui.basic.violet.label:hover :extend(a.ui.ui.ui.inverted.basic.violet.label:hover) {};
+  a.ui.ui.ui.inverted.violet.label:hover :extend(a.ui.ui.ui.inverted.violet.label:hover) {};
+  .ui.ui.ui.inverted.basic.violet.label :extend(.ui.ui.ui.inverted.basic.violet.label) {};
+  .ui.ui.ui.inverted.violet.label :extend(.ui.ui.ui.inverted.violet.label) {};
+  a.ui.ui.ui.basic.purple.label:hover :extend(a.ui.ui.ui.inverted.basic.purple.label:hover) {};
+  a.ui.ui.ui.inverted.purple.label:hover :extend(a.ui.ui.ui.inverted.purple.label:hover) {};
+  .ui.ui.ui.inverted.basic.purple.label :extend(.ui.ui.ui.inverted.basic.purple.label) {};
+  .ui.ui.ui.inverted.purple.label :extend(.ui.ui.ui.inverted.purple.label) {};
+  a.ui.ui.ui.basic.pink.label:hover :extend(a.ui.ui.ui.inverted.basic.pink.label:hover) {};
+  a.ui.ui.ui.inverted.pink.label:hover :extend(a.ui.ui.ui.inverted.pink.label:hover) {};
+  .ui.ui.ui.inverted.basic.pink.label :extend(.ui.ui.ui.inverted.basic.pink.label) {};
+  .ui.ui.ui.inverted.pink.label :extend(.ui.ui.ui.inverted.pink.label) {};
+  a.ui.ui.ui.basic.brown.label:hover :extend(a.ui.ui.ui.inverted.basic.brown.label:hover) {};
+  a.ui.ui.ui.inverted.brown.label:hover :extend(a.ui.ui.ui.inverted.brown.label:hover) {};
+  .ui.ui.ui.inverted.basic.brown.label :extend(.ui.ui.ui.inverted.basic.brown.label) {};
+  .ui.ui.ui.inverted.brown.label :extend(.ui.ui.ui.inverted.brown.label) {};
+  a.ui.ui.ui.basic.grey.label:hover :extend(a.ui.ui.ui.inverted.basic.grey.label:hover) {};
+  a.ui.ui.ui.inverted.grey.label:hover :extend(a.ui.ui.ui.inverted.grey.label:hover) {};
+  .ui.ui.ui.inverted.basic.grey.label :extend(.ui.ui.ui.inverted.basic.grey.label) {};
+  .ui.ui.ui.inverted.grey.label :extend(.ui.ui.ui.inverted.grey.label) {};
+  a.ui.ui.ui.basic.black.label:hover :extend(a.ui.ui.ui.inverted.basic.black.label:hover) {};
+  a.ui.ui.ui.inverted.black.label:hover :extend(a.ui.ui.ui.inverted.black.label:hover) {};
+  .ui.ui.ui.inverted.basic.black.label :extend(.ui.ui.ui.inverted.basic.black.label) {};
+  .ui.ui.ui.inverted.black.label :extend(.ui.ui.ui.inverted.black.label) {};
+
+  // Popup
+  .ui.popup :extend(.ui.inverted.popup) {};
+  .ui.popup:before :extend(.ui.inverted.popup:before) {};
+  .ui.popup .header :extend(.ui.inverted.popup .header) {};
+  .ui.primary.loading.popup :extend(.ui.inverted.primary.loading.popup) {};
+  .ui.right.center.popup:before :extend(.ui.inverted.right.center.popup:before) {};
+  .ui.left.center.popup:before :extend(.ui.inverted.left.center.popup:before) {};
+  .ui.bottom.popup:before :extend(.ui.inverted.bottom.popup:before) {};
+  .ui.top.popup:before :extend(.ui.inverted.top.popup:before) {};
+
+  // Buttons
+  .ui.button :extend(.ui.inverted.button) {};
+  .ui.button :extend(.ui.inverted.button) {};
+  .ui.button.active :extend(.ui.inverted.button.active) {};
+  .ui.button.active:focus :extend(.ui.inverted.button.active:focus) {};
+  .ui.button:focus :extend(.ui.inverted.button:focus) {};
+  .ui.button:hover :extend(.ui.inverted.button:hover) {};
+  .ui.buttons .button :extend(.ui.inverted.buttons .button) {};
+  .ui.buttons .button:first-child :extend(.ui.inverted.buttons .button:first-child) {};
+
+  .ui.primary.button :extend(.ui.inverted.primary.button) {};
+  .ui.primary.button.active :extend(.ui.inverted.primary.button.active) {};
+  .ui.primary.button:active :extend(.ui.inverted.primary.button:active) {};
+  .ui.primary.button:active :extend(.ui.inverted.primary.button:active) {};
+  .ui.primary.button:focus :extend(.ui.inverted.primary.button:focus) {};
+  .ui.primary.button:focus :extend(.ui.inverted.primary.button:focus) {};
+  .ui.primary.button:hover :extend(.ui.inverted.primary.button:hover) {};
+  .ui.primary.button:hover :extend(.ui.inverted.primary.button:hover) {};
+  .ui.primary.buttons .active.button :extend(.ui.inverted.primary.buttons .active.button) {};
+  .ui.primary.buttons .basic.active.button :extend(.ui.inverted.primary.buttons .basic.active.button) {};
+  .ui.primary.buttons .basic.button :extend(.ui.inverted.primary.buttons .basic.button) {};
+  .ui.primary.buttons .basic.button:active :extend(.ui.inverted.primary.buttons .basic.button:active) {};
+  .ui.primary.buttons .basic.button:hover :extend(.ui.inverted.primary.buttons .basic.button:hover) {};
+  .ui.primary.buttons .button :extend(.ui.inverted.primary.buttons .button) {};
+  .ui.primary.buttons .button.active :extend(.ui.inverted.primary.buttons .button.active) {};
+  .ui.primary.buttons .button:active :extend(.ui.inverted.primary.buttons .button:active) {};
+  .ui.primary.buttons .button:active :extend(.ui.inverted.primary.buttons .button:active) {};
+  .ui.primary.buttons .button:focus :extend(.ui.inverted.primary.buttons .button:focus) {};
+  .ui.primary.buttons .button:focus :extend(.ui.inverted.primary.buttons .button:focus) {};
+  .ui.primary.buttons .button:hover :extend(.ui.inverted.primary.buttons .button:hover) {};
+  .ui.primary.buttons .button:hover :extend(.ui.inverted.primary.buttons .button:hover) {};
+
+  .ui.secondary.button :extend(.ui.inverted.secondary.button) {};
+  .ui.secondary.button.active :extend(.ui.inverted.secondary.button.active) {};
+  .ui.secondary.button:active :extend(.ui.inverted.secondary.button:active) {};
+  .ui.secondary.button:active :extend(.ui.inverted.secondary.button:active) {};
+  .ui.secondary.button:focus :extend(.ui.inverted.secondary.button:focus) {};
+  .ui.secondary.button:focus :extend(.ui.inverted.secondary.button:focus) {};
+  .ui.secondary.button:hover :extend(.ui.inverted.secondary.button:hover) {};
+  .ui.secondary.button:hover :extend(.ui.inverted.secondary.button:hover) {};
+  .ui.secondary.buttons .active.button :extend(.ui.inverted.secondary.buttons .active.button) {};
+  .ui.secondary.buttons .basic.active.button :extend(.ui.inverted.secondary.buttons .basic.active.button) {};
+  .ui.secondary.buttons .basic.button :extend(.ui.inverted.secondary.buttons .basic.button) {};
+  .ui.secondary.buttons .basic.button:active :extend(.ui.inverted.secondary.buttons .basic.button:active) {};
+  .ui.secondary.buttons .basic.button:hover :extend(.ui.inverted.secondary.buttons .basic.button:hover) {};
+  .ui.secondary.buttons .button :extend(.ui.inverted.secondary.buttons .button) {};
+  .ui.secondary.buttons .button.active :extend(.ui.inverted.secondary.buttons .button.active) {};
+  .ui.secondary.buttons .button:active :extend(.ui.inverted.secondary.buttons .button:active) {};
+  .ui.secondary.buttons .button:active :extend(.ui.inverted.secondary.buttons .button:active) {};
+  .ui.secondary.buttons .button:focus :extend(.ui.inverted.secondary.buttons .button:focus) {};
+  .ui.secondary.buttons .button:focus :extend(.ui.inverted.secondary.buttons .button:focus) {};
+  .ui.secondary.buttons .button:hover :extend(.ui.inverted.secondary.buttons .button:hover) {};
+  .ui.secondary.buttons .button:hover :extend(.ui.inverted.secondary.buttons .button:hover) {};
+
+  .ui.red.button :extend(.ui.inverted.red.button) {};
+  .ui.red.button.active :extend(.ui.inverted.red.button.active) {};
+  .ui.red.button:active :extend(.ui.inverted.red.button:active) {};
+  .ui.red.button:active :extend(.ui.inverted.red.button:active) {};
+  .ui.red.button:focus :extend(.ui.inverted.red.button:focus) {};
+  .ui.red.button:focus :extend(.ui.inverted.red.button:focus) {};
+  .ui.red.button:hover :extend(.ui.inverted.red.button:hover) {};
+  .ui.red.button:hover :extend(.ui.inverted.red.button:hover) {};
+  .ui.red.buttons .active.button :extend(.ui.inverted.red.buttons .active.button) {};
+  .ui.red.buttons .basic.active.button :extend(.ui.inverted.red.buttons .basic.active.button) {};
+  .ui.red.buttons .basic.button :extend(.ui.inverted.red.buttons .basic.button) {};
+  .ui.red.buttons .basic.button:active :extend(.ui.inverted.red.buttons .basic.button:active) {};
+  .ui.red.buttons .basic.button:hover :extend(.ui.inverted.red.buttons .basic.button:hover) {};
+  .ui.red.buttons .button :extend(.ui.inverted.red.buttons .button) {};
+  .ui.red.buttons .button.active :extend(.ui.inverted.red.buttons .button.active) {};
+  .ui.red.buttons .button:active :extend(.ui.inverted.red.buttons .button:active) {};
+  .ui.red.buttons .button:active :extend(.ui.inverted.red.buttons .button:active) {};
+  .ui.red.buttons .button:focus :extend(.ui.inverted.red.buttons .button:focus) {};
+  .ui.red.buttons .button:focus :extend(.ui.inverted.red.buttons .button:focus) {};
+  .ui.red.buttons .button:hover :extend(.ui.inverted.red.buttons .button:hover) {};
+  .ui.red.buttons .button:hover :extend(.ui.inverted.red.buttons .button:hover) {};
+
+  .ui.orange.button :extend(.ui.inverted.orange.button) {};
+  .ui.orange.button.active :extend(.ui.inverted.orange.button.active) {};
+  .ui.orange.button:active :extend(.ui.inverted.orange.button:active) {};
+  .ui.orange.button:active :extend(.ui.inverted.orange.button:active) {};
+  .ui.orange.button:focus :extend(.ui.inverted.orange.button:focus) {};
+  .ui.orange.button:focus :extend(.ui.inverted.orange.button:focus) {};
+  .ui.orange.button:hover :extend(.ui.inverted.orange.button:hover) {};
+  .ui.orange.button:hover :extend(.ui.inverted.orange.button:hover) {};
+  .ui.orange.buttons .active.button :extend(.ui.inverted.orange.buttons .active.button) {};
+  .ui.orange.buttons .basic.active.button :extend(.ui.inverted.orange.buttons .basic.active.button) {};
+  .ui.orange.buttons .basic.button :extend(.ui.inverted.orange.buttons .basic.button) {};
+  .ui.orange.buttons .basic.button:active :extend(.ui.inverted.orange.buttons .basic.button:active) {};
+  .ui.orange.buttons .basic.button:hover :extend(.ui.inverted.orange.buttons .basic.button:hover) {};
+  .ui.orange.buttons .button :extend(.ui.inverted.orange.buttons .button) {};
+  .ui.orange.buttons .button.active :extend(.ui.inverted.orange.buttons .button.active) {};
+  .ui.orange.buttons .button:active :extend(.ui.inverted.orange.buttons .button:active) {};
+  .ui.orange.buttons .button:active :extend(.ui.inverted.orange.buttons .button:active) {};
+  .ui.orange.buttons .button:focus :extend(.ui.inverted.orange.buttons .button:focus) {};
+  .ui.orange.buttons .button:focus :extend(.ui.inverted.orange.buttons .button:focus) {};
+  .ui.orange.buttons .button:hover :extend(.ui.inverted.orange.buttons .button:hover) {};
+  .ui.orange.buttons .button:hover :extend(.ui.inverted.orange.buttons .button:hover) {};
+
+  .ui.yellow.button :extend(.ui.inverted.yellow.button) {};
+  .ui.yellow.button.active :extend(.ui.inverted.yellow.button.active) {};
+  .ui.yellow.button:active :extend(.ui.inverted.yellow.button:active) {};
+  .ui.yellow.button:active :extend(.ui.inverted.yellow.button:active) {};
+  .ui.yellow.button:focus :extend(.ui.inverted.yellow.button:focus) {};
+  .ui.yellow.button:focus :extend(.ui.inverted.yellow.button:focus) {};
+  .ui.yellow.button:hover :extend(.ui.inverted.yellow.button:hover) {};
+  .ui.yellow.button:hover :extend(.ui.inverted.yellow.button:hover) {};
+  .ui.yellow.buttons .active.button :extend(.ui.inverted.yellow.buttons .active.button) {};
+  .ui.yellow.buttons .basic.active.button :extend(.ui.inverted.yellow.buttons .basic.active.button) {};
+  .ui.yellow.buttons .basic.button :extend(.ui.inverted.yellow.buttons .basic.button) {};
+  .ui.yellow.buttons .basic.button:active :extend(.ui.inverted.yellow.buttons .basic.button:active) {};
+  .ui.yellow.buttons .basic.button:hover :extend(.ui.inverted.yellow.buttons .basic.button:hover) {};
+  .ui.yellow.buttons .button :extend(.ui.inverted.yellow.buttons .button) {};
+  .ui.yellow.buttons .button.active :extend(.ui.inverted.yellow.buttons .button.active) {};
+  .ui.yellow.buttons .button:active :extend(.ui.inverted.yellow.buttons .button:active) {};
+  .ui.yellow.buttons .button:active :extend(.ui.inverted.yellow.buttons .button:active) {};
+  .ui.yellow.buttons .button:focus :extend(.ui.inverted.yellow.buttons .button:focus) {};
+  .ui.yellow.buttons .button:focus :extend(.ui.inverted.yellow.buttons .button:focus) {};
+  .ui.yellow.buttons .button:hover :extend(.ui.inverted.yellow.buttons .button:hover) {};
+  .ui.yellow.buttons .button:hover :extend(.ui.inverted.yellow.buttons .button:hover) {};
+
+  .ui.olive.button :extend(.ui.inverted.olive.button) {};
+  .ui.olive.button.active :extend(.ui.inverted.olive.button.active) {};
+  .ui.olive.button:active :extend(.ui.inverted.olive.button:active) {};
+  .ui.olive.button:active :extend(.ui.inverted.olive.button:active) {};
+  .ui.olive.button:focus :extend(.ui.inverted.olive.button:focus) {};
+  .ui.olive.button:focus :extend(.ui.inverted.olive.button:focus) {};
+  .ui.olive.button:hover :extend(.ui.inverted.olive.button:hover) {};
+  .ui.olive.button:hover :extend(.ui.inverted.olive.button:hover) {};
+  .ui.olive.buttons .active.button :extend(.ui.inverted.olive.buttons .active.button) {};
+  .ui.olive.buttons .basic.active.button :extend(.ui.inverted.olive.buttons .basic.active.button) {};
+  .ui.olive.buttons .basic.button :extend(.ui.inverted.olive.buttons .basic.button) {};
+  .ui.olive.buttons .basic.button:active :extend(.ui.inverted.olive.buttons .basic.button:active) {};
+  .ui.olive.buttons .basic.button:hover :extend(.ui.inverted.olive.buttons .basic.button:hover) {};
+  .ui.olive.buttons .button :extend(.ui.inverted.olive.buttons .button) {};
+  .ui.olive.buttons .button.active :extend(.ui.inverted.olive.buttons .button.active) {};
+  .ui.olive.buttons .button:active :extend(.ui.inverted.olive.buttons .button:active) {};
+  .ui.olive.buttons .button:active :extend(.ui.inverted.olive.buttons .button:active) {};
+  .ui.olive.buttons .button:focus :extend(.ui.inverted.olive.buttons .button:focus) {};
+  .ui.olive.buttons .button:focus :extend(.ui.inverted.olive.buttons .button:focus) {};
+  .ui.olive.buttons .button:hover :extend(.ui.inverted.olive.buttons .button:hover) {};
+  .ui.olive.buttons .button:hover :extend(.ui.inverted.olive.buttons .button:hover) {};
+
+  .ui.green.button :extend(.ui.inverted.green.button) {};
+  .ui.green.button.active :extend(.ui.inverted.green.button.active) {};
+  .ui.green.button:active :extend(.ui.inverted.green.button:active) {};
+  .ui.green.button:active :extend(.ui.inverted.green.button:active) {};
+  .ui.green.button:focus :extend(.ui.inverted.green.button:focus) {};
+  .ui.green.button:focus :extend(.ui.inverted.green.button:focus) {};
+  .ui.green.button:hover :extend(.ui.inverted.green.button:hover) {};
+  .ui.green.button:hover :extend(.ui.inverted.green.button:hover) {};
+  .ui.green.buttons .active.button :extend(.ui.inverted.green.buttons .active.button) {};
+  .ui.green.buttons .basic.active.button :extend(.ui.inverted.green.buttons .basic.active.button) {};
+  .ui.green.buttons .basic.button :extend(.ui.inverted.green.buttons .basic.button) {};
+  .ui.green.buttons .basic.button:active :extend(.ui.inverted.green.buttons .basic.button:active) {};
+  .ui.green.buttons .basic.button:hover :extend(.ui.inverted.green.buttons .basic.button:hover) {};
+  .ui.green.buttons .button :extend(.ui.inverted.green.buttons .button) {};
+  .ui.green.buttons .button.active :extend(.ui.inverted.green.buttons .button.active) {};
+  .ui.green.buttons .button:active :extend(.ui.inverted.green.buttons .button:active) {};
+  .ui.green.buttons .button:active :extend(.ui.inverted.green.buttons .button:active) {};
+  .ui.green.buttons .button:focus :extend(.ui.inverted.green.buttons .button:focus) {};
+  .ui.green.buttons .button:focus :extend(.ui.inverted.green.buttons .button:focus) {};
+  .ui.green.buttons .button:hover :extend(.ui.inverted.green.buttons .button:hover) {};
+  .ui.green.buttons .button:hover :extend(.ui.inverted.green.buttons .button:hover) {};
+
+  .ui.teal.button :extend(.ui.inverted.teal.button) {};
+  .ui.teal.button.active :extend(.ui.inverted.teal.button.active) {};
+  .ui.teal.button:active :extend(.ui.inverted.teal.button:active) {};
+  .ui.teal.button:active :extend(.ui.inverted.teal.button:active) {};
+  .ui.teal.button:focus :extend(.ui.inverted.teal.button:focus) {};
+  .ui.teal.button:focus :extend(.ui.inverted.teal.button:focus) {};
+  .ui.teal.button:hover :extend(.ui.inverted.teal.button:hover) {};
+  .ui.teal.button:hover :extend(.ui.inverted.teal.button:hover) {};
+  .ui.teal.buttons .active.button :extend(.ui.inverted.teal.buttons .active.button) {};
+  .ui.teal.buttons .basic.active.button :extend(.ui.inverted.teal.buttons .basic.active.button) {};
+  .ui.teal.buttons .basic.button :extend(.ui.inverted.teal.buttons .basic.button) {};
+  .ui.teal.buttons .basic.button:active :extend(.ui.inverted.teal.buttons .basic.button:active) {};
+  .ui.teal.buttons .basic.button:hover :extend(.ui.inverted.teal.buttons .basic.button:hover) {};
+  .ui.teal.buttons .button :extend(.ui.inverted.teal.buttons .button) {};
+  .ui.teal.buttons .button.active :extend(.ui.inverted.teal.buttons .button.active) {};
+  .ui.teal.buttons .button:active :extend(.ui.inverted.teal.buttons .button:active) {};
+  .ui.teal.buttons .button:active :extend(.ui.inverted.teal.buttons .button:active) {};
+  .ui.teal.buttons .button:focus :extend(.ui.inverted.teal.buttons .button:focus) {};
+  .ui.teal.buttons .button:focus :extend(.ui.inverted.teal.buttons .button:focus) {};
+  .ui.teal.buttons .button:hover :extend(.ui.inverted.teal.buttons .button:hover) {};
+  .ui.teal.buttons .button:hover :extend(.ui.inverted.teal.buttons .button:hover) {};
+
+  .ui.blue.button :extend(.ui.inverted.blue.button) {};
+  .ui.blue.button.active :extend(.ui.inverted.blue.button.active) {};
+  .ui.blue.button:active :extend(.ui.inverted.blue.button:active) {};
+  .ui.blue.button:active :extend(.ui.inverted.blue.button:active) {};
+  .ui.blue.button:focus :extend(.ui.inverted.blue.button:focus) {};
+  .ui.blue.button:focus :extend(.ui.inverted.blue.button:focus) {};
+  .ui.blue.button:hover :extend(.ui.inverted.blue.button:hover) {};
+  .ui.blue.button:hover :extend(.ui.inverted.blue.button:hover) {};
+  .ui.blue.buttons .active.button :extend(.ui.inverted.blue.buttons .active.button) {};
+  .ui.blue.buttons .basic.active.button :extend(.ui.inverted.blue.buttons .basic.active.button) {};
+  .ui.blue.buttons .basic.button :extend(.ui.inverted.blue.buttons .basic.button) {};
+  .ui.blue.buttons .basic.button:active :extend(.ui.inverted.blue.buttons .basic.button:active) {};
+  .ui.blue.buttons .basic.button:hover :extend(.ui.inverted.blue.buttons .basic.button:hover) {};
+  .ui.blue.buttons .button :extend(.ui.inverted.blue.buttons .button) {};
+  .ui.blue.buttons .button.active :extend(.ui.inverted.blue.buttons .button.active) {};
+  .ui.blue.buttons .button:active :extend(.ui.inverted.blue.buttons .button:active) {};
+  .ui.blue.buttons .button:active :extend(.ui.inverted.blue.buttons .button:active) {};
+  .ui.blue.buttons .button:focus :extend(.ui.inverted.blue.buttons .button:focus) {};
+  .ui.blue.buttons .button:focus :extend(.ui.inverted.blue.buttons .button:focus) {};
+  .ui.blue.buttons .button:hover :extend(.ui.inverted.blue.buttons .button:hover) {};
+  .ui.blue.buttons .button:hover :extend(.ui.inverted.blue.buttons .button:hover) {};
+
+  .ui.violet.button :extend(.ui.inverted.violet.button) {};
+  .ui.violet.button.active :extend(.ui.inverted.violet.button.active) {};
+  .ui.violet.button:active :extend(.ui.inverted.violet.button:active) {};
+  .ui.violet.button:active :extend(.ui.inverted.violet.button:active) {};
+  .ui.violet.button:focus :extend(.ui.inverted.violet.button:focus) {};
+  .ui.violet.button:focus :extend(.ui.inverted.violet.button:focus) {};
+  .ui.violet.button:hover :extend(.ui.inverted.violet.button:hover) {};
+  .ui.violet.button:hover :extend(.ui.inverted.violet.button:hover) {};
+  .ui.violet.buttons .active.button :extend(.ui.inverted.violet.buttons .active.button) {};
+  .ui.violet.buttons .basic.active.button :extend(.ui.inverted.violet.buttons .basic.active.button) {};
+  .ui.violet.buttons .basic.button :extend(.ui.inverted.violet.buttons .basic.button) {};
+  .ui.violet.buttons .basic.button:active :extend(.ui.inverted.violet.buttons .basic.button:active) {};
+  .ui.violet.buttons .basic.button:hover :extend(.ui.inverted.violet.buttons .basic.button:hover) {};
+  .ui.violet.buttons .button :extend(.ui.inverted.violet.buttons .button) {};
+  .ui.violet.buttons .button.active :extend(.ui.inverted.violet.buttons .button.active) {};
+  .ui.violet.buttons .button:active :extend(.ui.inverted.violet.buttons .button:active) {};
+  .ui.violet.buttons .button:active :extend(.ui.inverted.violet.buttons .button:active) {};
+  .ui.violet.buttons .button:focus :extend(.ui.inverted.violet.buttons .button:focus) {};
+  .ui.violet.buttons .button:focus :extend(.ui.inverted.violet.buttons .button:focus) {};
+  .ui.violet.buttons .button:hover :extend(.ui.inverted.violet.buttons .button:hover) {};
+  .ui.violet.buttons .button:hover :extend(.ui.inverted.violet.buttons .button:hover) {};
+
+  .ui.purple.button :extend(.ui.inverted.purple.button) {};
+  .ui.purple.button.active :extend(.ui.inverted.purple.button.active) {};
+  .ui.purple.button:active :extend(.ui.inverted.purple.button:active) {};
+  .ui.purple.button:active :extend(.ui.inverted.purple.button:active) {};
+  .ui.purple.button:focus :extend(.ui.inverted.purple.button:focus) {};
+  .ui.purple.button:focus :extend(.ui.inverted.purple.button:focus) {};
+  .ui.purple.button:hover :extend(.ui.inverted.purple.button:hover) {};
+  .ui.purple.button:hover :extend(.ui.inverted.purple.button:hover) {};
+  .ui.purple.buttons .active.button :extend(.ui.inverted.purple.buttons .active.button) {};
+  .ui.purple.buttons .basic.active.button :extend(.ui.inverted.purple.buttons .basic.active.button) {};
+  .ui.purple.buttons .basic.button :extend(.ui.inverted.purple.buttons .basic.button) {};
+  .ui.purple.buttons .basic.button:active :extend(.ui.inverted.purple.buttons .basic.button:active) {};
+  .ui.purple.buttons .basic.button:hover :extend(.ui.inverted.purple.buttons .basic.button:hover) {};
+  .ui.purple.buttons .button :extend(.ui.inverted.purple.buttons .button) {};
+  .ui.purple.buttons .button.active :extend(.ui.inverted.purple.buttons .button.active) {};
+  .ui.purple.buttons .button:active :extend(.ui.inverted.purple.buttons .button:active) {};
+  .ui.purple.buttons .button:active :extend(.ui.inverted.purple.buttons .button:active) {};
+  .ui.purple.buttons .button:focus :extend(.ui.inverted.purple.buttons .button:focus) {};
+  .ui.purple.buttons .button:focus :extend(.ui.inverted.purple.buttons .button:focus) {};
+  .ui.purple.buttons .button:hover :extend(.ui.inverted.purple.buttons .button:hover) {};
+  .ui.purple.buttons .button:hover :extend(.ui.inverted.purple.buttons .button:hover) {};
+
+  .ui.pink.button :extend(.ui.inverted.pink.button) {};
+  .ui.pink.button.active :extend(.ui.inverted.pink.button.active) {};
+  .ui.pink.button:active :extend(.ui.inverted.pink.button:active) {};
+  .ui.pink.button:active :extend(.ui.inverted.pink.button:active) {};
+  .ui.pink.button:focus :extend(.ui.inverted.pink.button:focus) {};
+  .ui.pink.button:focus :extend(.ui.inverted.pink.button:focus) {};
+  .ui.pink.button:hover :extend(.ui.inverted.pink.button:hover) {};
+  .ui.pink.button:hover :extend(.ui.inverted.pink.button:hover) {};
+  .ui.pink.buttons .active.button :extend(.ui.inverted.pink.buttons .active.button) {};
+  .ui.pink.buttons .basic.active.button :extend(.ui.inverted.pink.buttons .basic.active.button) {};
+  .ui.pink.buttons .basic.button :extend(.ui.inverted.pink.buttons .basic.button) {};
+  .ui.pink.buttons .basic.button:active :extend(.ui.inverted.pink.buttons .basic.button:active) {};
+  .ui.pink.buttons .basic.button:hover :extend(.ui.inverted.pink.buttons .basic.button:hover) {};
+  .ui.pink.buttons .button :extend(.ui.inverted.pink.buttons .button) {};
+  .ui.pink.buttons .button.active :extend(.ui.inverted.pink.buttons .button.active) {};
+  .ui.pink.buttons .button:active :extend(.ui.inverted.pink.buttons .button:active) {};
+  .ui.pink.buttons .button:active :extend(.ui.inverted.pink.buttons .button:active) {};
+  .ui.pink.buttons .button:focus :extend(.ui.inverted.pink.buttons .button:focus) {};
+  .ui.pink.buttons .button:focus :extend(.ui.inverted.pink.buttons .button:focus) {};
+  .ui.pink.buttons .button:hover :extend(.ui.inverted.pink.buttons .button:hover) {};
+  .ui.pink.buttons .button:hover :extend(.ui.inverted.pink.buttons .button:hover) {};
+
+  .ui.brown.button :extend(.ui.inverted.brown.button) {};
+  .ui.brown.button.active :extend(.ui.inverted.brown.button.active) {};
+  .ui.brown.button:active :extend(.ui.inverted.brown.button:active) {};
+  .ui.brown.button:active :extend(.ui.inverted.brown.button:active) {};
+  .ui.brown.button:focus :extend(.ui.inverted.brown.button:focus) {};
+  .ui.brown.button:focus :extend(.ui.inverted.brown.button:focus) {};
+  .ui.brown.button:hover :extend(.ui.inverted.brown.button:hover) {};
+  .ui.brown.button:hover :extend(.ui.inverted.brown.button:hover) {};
+  .ui.brown.buttons .active.button :extend(.ui.inverted.brown.buttons .active.button) {};
+  .ui.brown.buttons .basic.active.button :extend(.ui.inverted.brown.buttons .basic.active.button) {};
+  .ui.brown.buttons .basic.button :extend(.ui.inverted.brown.buttons .basic.button) {};
+  .ui.brown.buttons .basic.button:active :extend(.ui.inverted.brown.buttons .basic.button:active) {};
+  .ui.brown.buttons .basic.button:hover :extend(.ui.inverted.brown.buttons .basic.button:hover) {};
+  .ui.brown.buttons .button :extend(.ui.inverted.brown.buttons .button) {};
+  .ui.brown.buttons .button.active :extend(.ui.inverted.brown.buttons .button.active) {};
+  .ui.brown.buttons .button:active :extend(.ui.inverted.brown.buttons .button:active) {};
+  .ui.brown.buttons .button:active :extend(.ui.inverted.brown.buttons .button:active) {};
+  .ui.brown.buttons .button:focus :extend(.ui.inverted.brown.buttons .button:focus) {};
+  .ui.brown.buttons .button:focus :extend(.ui.inverted.brown.buttons .button:focus) {};
+  .ui.brown.buttons .button:hover :extend(.ui.inverted.brown.buttons .button:hover) {};
+  .ui.brown.buttons .button:hover :extend(.ui.inverted.brown.buttons .button:hover) {};
+
+  .ui.grey.button :extend(.ui.inverted.grey.button) {};
+  .ui.grey.button.active :extend(.ui.inverted.grey.button.active) {};
+  .ui.grey.button:active :extend(.ui.inverted.grey.button:active) {};
+  .ui.grey.button:active :extend(.ui.inverted.grey.button:active) {};
+  .ui.grey.button:focus :extend(.ui.inverted.grey.button:focus) {};
+  .ui.grey.button:focus :extend(.ui.inverted.grey.button:focus) {};
+  .ui.grey.button:hover :extend(.ui.inverted.grey.button:hover) {};
+  .ui.grey.button:hover :extend(.ui.inverted.grey.button:hover) {};
+  .ui.grey.buttons .active.button :extend(.ui.inverted.grey.buttons .active.button) {};
+  .ui.grey.buttons .basic.active.button :extend(.ui.inverted.grey.buttons .basic.active.button) {};
+  .ui.grey.buttons .basic.button :extend(.ui.inverted.grey.buttons .basic.button) {};
+  .ui.grey.buttons .basic.button:active :extend(.ui.inverted.grey.buttons .basic.button:active) {};
+  .ui.grey.buttons .basic.button:hover :extend(.ui.inverted.grey.buttons .basic.button:hover) {};
+  .ui.grey.buttons .button :extend(.ui.inverted.grey.buttons .button) {};
+  .ui.grey.buttons .button.active :extend(.ui.inverted.grey.buttons .button.active) {};
+  .ui.grey.buttons .button:active :extend(.ui.inverted.grey.buttons .button:active) {};
+  .ui.grey.buttons .button:active :extend(.ui.inverted.grey.buttons .button:active) {};
+  .ui.grey.buttons .button:focus :extend(.ui.inverted.grey.buttons .button:focus) {};
+  .ui.grey.buttons .button:focus :extend(.ui.inverted.grey.buttons .button:focus) {};
+  .ui.grey.buttons .button:hover :extend(.ui.inverted.grey.buttons .button:hover) {};
+  .ui.grey.buttons .button:hover :extend(.ui.inverted.grey.buttons .button:hover) {};
+
+  .ui.black.button :extend(.ui.inverted.black.button) {};
+  .ui.black.button.active :extend(.ui.inverted.black.button.active) {};
+  .ui.black.button:active :extend(.ui.inverted.black.button:active) {};
+  .ui.black.button:active :extend(.ui.inverted.black.button:active) {};
+  .ui.black.button:focus :extend(.ui.inverted.black.button:focus) {};
+  .ui.black.button:focus :extend(.ui.inverted.black.button:focus) {};
+  .ui.black.button:hover :extend(.ui.inverted.black.button:hover) {};
+  .ui.black.button:hover :extend(.ui.inverted.black.button:hover) {};
+  .ui.black.buttons .active.button :extend(.ui.inverted.black.buttons .active.button) {};
+  .ui.black.buttons .basic.active.button :extend(.ui.inverted.black.buttons .basic.active.button) {};
+  .ui.black.buttons .basic.button :extend(.ui.inverted.black.buttons .basic.button) {};
+  .ui.black.buttons .basic.button:active :extend(.ui.inverted.black.buttons .basic.button:active) {};
+  .ui.black.buttons .basic.button:hover :extend(.ui.inverted.black.buttons .basic.button:hover) {};
+  .ui.black.buttons .button :extend(.ui.inverted.black.buttons .button) {};
+  .ui.black.buttons .button.active :extend(.ui.inverted.black.buttons .button.active) {};
+  .ui.black.buttons .button:active :extend(.ui.inverted.black.buttons .button:active) {};
+  .ui.black.buttons .button:active :extend(.ui.inverted.black.buttons .button:active) {};
+  .ui.black.buttons .button:focus :extend(.ui.inverted.black.buttons .button:focus) {};
+  .ui.black.buttons .button:focus :extend(.ui.inverted.black.buttons .button:focus) {};
+  .ui.black.buttons .button:hover :extend(.ui.inverted.black.buttons .button:hover) {};
+  .ui.black.buttons .button:hover :extend(.ui.inverted.black.buttons .button:hover) {};
+
+  // Menus
+  .ui.menu :extend(.ui.inverted.menu) {};
+  .ui.menu .active.item :extend(.ui.inverted.menu .active.item) {};
+  .ui.menu .active.item:hover :extend(.ui.inverted.menu .active.item:hover) {};
+  .ui.menu a.item:active :extend(.ui.inverted.menu a.item:active) {};
+  .ui.menu a.item:hover :extend(.ui.inverted.menu a.item:hover) {};
+  .ui.menu .dropdown.item:hover :extend(.ui.inverted.menu .dropdown.item:hover) {};
+  .ui.menu .header.item :extend(.ui.inverted.menu .header.item) {};
+  .ui.menu .item :extend(.ui.inverted.menu .item) {};
+  .ui.menu .item:before :extend(.ui.inverted.menu .item:before) {};
+  .ui.menu .item.menu :extend(.ui.inverted.menu .item.menu) {};
+  .ui.menu .link.item:active :extend(.ui.inverted.menu .link.item:active) {};
+  .ui.menu .link.item:hover :extend(.ui.inverted.menu .link.item:hover) {};
+  .ui.pointing.menu .active.item:after :extend(.ui.inverted.pointing.menu .active.item:after) {};
+  .ui.pointing.menu .active.item:hover:after :extend(.ui.inverted.pointing.menu .active.item:hover:after) {};
+  .ui.menu .search.dropdown.item > .search :extend(.ui.inverted.menu .search.dropdown.item > .search) {};
+  .ui.menu .search.dropdown.item > .text :extend(.ui.inverted.menu .search.dropdown.item > .text) {};
+  .ui.menu .ui.dropdown .menu > .active.item :extend(.ui.menu .ui.inverted.dropdown .menu > .active.item) {};
+  .ui.menu .ui.dropdown .menu > .item :extend(.ui.menu .ui.inverted.dropdown .menu > .item) {};
+  .ui.menu .ui.dropdown .menu > .item:hover :extend(.ui.menu .ui.inverted.dropdown .menu > .item:hover) {};
+  .ui.menu .ui.dropdown .menu > .selected.item :extend(.ui.menu .ui.inverted.dropdown .menu > .selected.item) {};
+
+  // Message
+  .ui.message :extend(.ui.inverted.message) {};
+  .ui.error.message :extend(.ui.inverted.error.message) {};
+  .ui.error.message .header :extend(.ui.inverted.error.message .header) {};
+  .ui.info.message :extend(.ui.inverted.info.message) {};
+  .ui.info.message .header :extend(.ui.inverted.info.message .header) {};
+  .ui.negative.message :extend(.ui.inverted.negative.message) {};
+  .ui.negative.message .header :extend(.ui.inverted.negative.message .header) {};
+  .ui.positive.message :extend(.ui.inverted.positive.message) {};
+  .ui.positive.message .header :extend(.ui.inverted.positive.message .header) {};
+  .ui.success.message :extend(.ui.inverted.success.message) {};
+  .ui.success.message .header :extend(.ui.inverted.success.message .header) {};
+  .ui.warning.message :extend(.ui.inverted.warning.message) {};
+  .ui.warning.message .header :extend(.ui.inverted.warning.message .header) {};
+
+  // Modal
+  .ui.modal :extend(.ui.inverted.modal) {};
+  .ui.modal > .actions :extend(.ui.inverted.modal > .actions) {};
+  .ui.modal > .close.inside :extend(.ui.inverted.modal > .close.inside) {};
+  .ui.modal > .content :extend(.ui.inverted.modal > .content) {};
+  .ui.modal > .header :extend(.ui.inverted.modal > .header) {};
+  .ui.dimmer .modal > .close :extend(.ui.dimmer .inverted.modal > .close) {};
+
+  // Dimmer
+  .ui.dimmer :extend(.ui.inverted.dimmer) {};
+  .ui.dimmer :extend(.very.very.very.very.light.inverted.dimmer) {};
+  .ui.dimmer > .basic.modal :extend(.ui.inverted.dimmer > .basic.modal) {};
+  .ui.dimmer > .content :extend(.ui.inverted.dimmer > .content) {};
+  .ui.dimmer > .modal > .close :extend(.ui.inverted.dimmer > .modal > .close) {};
+  .ui.dimmer > .ui.basic.modal > .header :extend(.ui.inverted.dimmer > .ui.basic.modal > .header) {};
+  .ui.dimmer > .ui.elastic.loader :extend(.ui.inverted.dimmer > .ui.elastic.loader) {};
+  .ui.dimmer > .ui.loader :extend(.ui.inverted.dimmer > .ui.loader) {};
+  .ui.dimmer > .ui.modal :extend(.ui.inverted.dimmer > .ui.modal) {};
+  .medium.medium.medium.medium.medium.dimmer :extend(.medium.medium.medium.medium.medium.inverted.dimmer) {};
+  .light.light.light.light.light.dimmer :extend(.light.light.light.light.light.inverted.dimmer) {};
+  .very.very.very.very.light.dimmer :extend(.very.very.very.very.light.inverted.dimmer) {};
+
+  // Notification messages
+  .ui.notification.error.message :extend(.ui.inverted.notification.error.message) {};
+  .ui.notification.error.message a:active :extend(.ui.inverted.notification.error.message a:active) {};
+  .ui.notification.error.message a:hover :extend(.ui.inverted.notification.error.message a:hover) {};
+  .ui.notification.error.message a:link :extend(.ui.inverted.notification.error.message a:link) {};
+  .ui.notification.error.message a:visited :extend(.ui.inverted.notification.error.message a:visited) {};
+  .ui.notification.error.message .header :extend(.ui.inverted.notification.error.message .header) {};
+  .ui.notification.error.message .header > i.icon :extend(.ui.inverted.notification.error.message .header > i.icon) {};
+  .ui.notification.error.message > i.icon:not(.close) :extend(.ui.inverted.notification.error.message > i.icon:not(.close)) {};
+  .ui.notification.info.message :extend(.ui.inverted.notification.info.message) {};
+  .ui.notification.info.message a:active :extend(.ui.inverted.notification.info.message a:active) {};
+  .ui.notification.info.message a:hover :extend(.ui.inverted.notification.info.message a:hover) {};
+  .ui.notification.info.message a:link :extend(.ui.inverted.notification.info.message a:link) {};
+  .ui.notification.info.message a:visited :extend(.ui.inverted.notification.info.message a:visited) {};
+  .ui.notification.info.message .header :extend(.ui.inverted.notification.info.message .header) {};
+  .ui.notification.info.message .header > i.icon :extend(.ui.inverted.notification.info.message .header > i.icon) {};
+  .ui.notification.info.message > i.icon:not(.close) :extend(.ui.inverted.notification.info.message > i.icon:not(.close)) {};
+  .ui.notification.note.message :extend(.ui.inverted.notification.note.message) {};
+  .ui.notification.note.message a:active :extend(.ui.inverted.notification.note.message a:active) {};
+  .ui.notification.note.message a:hover :extend(.ui.inverted.notification.note.message a:hover) {};
+  .ui.notification.note.message a:link :extend(.ui.inverted.notification.note.message a:link) {};
+  .ui.notification.note.message a:visited :extend(.ui.inverted.notification.note.message a:visited) {};
+  .ui.notification.note.message .header :extend(.ui.inverted.notification.note.message .header) {};
+  .ui.notification.note.message .header > i.icon :extend(.ui.inverted.notification.note.message .header > i.icon) {};
+  .ui.notification.note.message > i.icon:not(.close) :extend(.ui.inverted.notification.note.message > i.icon:not(.close)) {};
+  .ui.notification.tip.message :extend(.ui.inverted.notification.tip.message) {};
+  .ui.notification.tip.message a:active :extend(.ui.inverted.notification.tip.message a:active) {};
+  .ui.notification.tip.message a:hover :extend(.ui.inverted.notification.tip.message a:hover) {};
+  .ui.notification.tip.message a:link :extend(.ui.inverted.notification.tip.message a:link) {};
+  .ui.notification.tip.message a:visited :extend(.ui.inverted.notification.tip.message a:visited) {};
+  .ui.notification.tip.message .header :extend(.ui.inverted.notification.tip.message .header) {};
+  .ui.notification.tip.message .header > i.icon :extend(.ui.inverted.notification.tip.message .header > i.icon) {};
+  .ui.notification.tip.message > i.icon:not(.close) :extend(.ui.inverted.notification.tip.message > i.icon:not(.close)) {};
+  .ui.notification.warning.message :extend(.ui.inverted.notification.warning.message) {};
+  .ui.notification.warning.message a:active :extend(.ui.inverted.notification.warning.message a:active) {};
+  .ui.notification.warning.message a:hover :extend(.ui.inverted.notification.warning.message a:hover) {};
+  .ui.notification.warning.message a:link :extend(.ui.inverted.notification.warning.message a:link) {};
+  .ui.notification.warning.message a:visited :extend(.ui.inverted.notification.warning.message a:visited) {};
+  .ui.notification.warning.message .header :extend(.ui.inverted.notification.warning.message .header) {};
+  .ui.notification.warning.message .header > i.icon :extend(.ui.inverted.notification.warning.message .header > i.icon) {};
+  .ui.notification.warning.message > i.icon:not(.close) :extend(.ui.inverted.notification.warning.message > i.icon:not(.close)) {};
+
+  // Dropdown
+  .ui.dropdown .menu :extend(.ui.dropdown .inverted.menu) {};
+  .ui.dropdown input::selection :extend(.ui.inverted.dropdown input::selection) {};
+  .ui.dropdown > .text > .description :extend(.ui.inverted.dropdown > .text > .description) {};
+  .ui.dropdown .menu .active.item :extend(.ui.dropdown .inverted.menu .active.item) {};
+  .ui.dropdown .menu > .divider :extend(.ui.dropdown .inverted.menu > .divider) {};
+  .ui.dropdown .menu > .header :extend(.ui.dropdown .inverted.menu > .header) {};
+  .ui.dropdown .menu > .item :extend(.ui.dropdown .inverted.menu > .item) {};
+  .ui.dropdown .menu > .item > .description :extend(.ui.dropdown .inverted.menu > .item > .description) {};
+  .ui.dropdown .menu > .item:first-child :extend(.ui.dropdown .inverted.menu > .item:first-child) {};
+  .ui.dropdown .menu > .item:hover :extend(.ui.dropdown .inverted.menu > .item:hover) {};
+  .ui.dropdown .menu .selected.item :extend(.ui.dropdown .inverted.menu .selected.item) {};
+  .ui.dropdown .menu::-webkit-scrollbar-thumb :extend(.ui.dropdown .inverted.menu::-webkit-scrollbar-thumb) {};
+  .ui.dropdown .menu::-webkit-scrollbar-thumb:hover :extend(.ui.dropdown .inverted.menu::-webkit-scrollbar-thumb:hover) {};
+  .ui.dropdown .menu::-webkit-scrollbar-thumb:window-inactive :extend(.ui.dropdown .inverted.menu::-webkit-scrollbar-thumb:window-inactive) {};
+  .ui.dropdown .menu::-webkit-scrollbar-track :extend(.ui.dropdown .inverted.menu::-webkit-scrollbar-track) {};
+  .ui.dropdown .scrolling.menu :extend(.ui.dropdown .inverted.scrolling.menu) {};
+  .ui.active.search.dropdown input.search:focus + .text :extend(.ui.inverted.active.search.dropdown input.search:focus + .text) {};
+  .ui.active.search.dropdown input.search:focus + .text .flag :extend(.ui.inverted.active.search.dropdown input.search:focus + .text .flag) {};
+  .ui.active.search.dropdown input.search:focus + .text i.icon :extend(.ui.inverted.active.search.dropdown input.search:focus + .text i.icon) {};
+  .ui.selection.dropdown :extend(.ui.inverted.selection.dropdown) {};
+  .ui.selection.dropdown input :extend(.ui.inverted.selection.dropdown input) {};
+  .ui.selection.dropdown .menu > .item :extend(.ui.inverted.selection.dropdown .menu > .item) {};
+  .ui.selection.active.dropdown:hover :extend(.ui.inverted.selection.active.dropdown:hover) {};
+  .ui.selection.active.dropdown .menu :extend(.ui.inverted.selection.active.dropdown .menu) {};
+  .ui.selection.dropdown :extend(.ui.inverted.selection.dropdown) {};
+  .ui.selection.dropdown:hover :extend(.ui.inverted.selection.dropdown:hover) {};
+  .ui.selection.dropdown input :extend(.ui.inverted.selection.dropdown input) {};
+  .ui.selection.dropdown .menu > .item :extend(.ui.inverted.selection.dropdown .menu > .item) {};
+  .ui.selection.dropdown .menu > .item :extend(.ui.selection.dropdown .inverted.menu > .item) {};
+  .ui.selection.simple.dropdown:hover .menu :extend(.ui.selection.simple.dropdown:hover .inverted.menu) {};
+  .ui.selection.simple.dropdown:hover .menu :extend(.ui.inverted.selection.simple.dropdown:hover .menu) {};
+  .ui.multiple.dropdown > .label :extend(.ui.inverted.multiple.dropdown > .label) {};
+  .ui.multiple.dropdown > .label > .close.icon :extend(.ui.inverted.multiple.dropdown > .label > .close.icon) {};
+  .ui.multiple.dropdown > .label > .close.icon:hover :extend(.ui.inverted.multiple.dropdown > .label > .close.icon:hover) {};
+  .ui.multiple.dropdown > .label > .delete.icon :extend(.ui.inverted.multiple.dropdown > .label > .delete.icon) {};
+  .ui.multiple.dropdown > .label > .delete.icon:hover :extend(.ui.inverted.multiple.dropdown > .label > .delete.icon:hover) {};
+  .ui.multiple.dropdown > .label:hover :extend(.ui.inverted.multiple.dropdown > .label:hover) {};
+  .ui.pointing.dropdown > .menu:after :extend(.ui.inverted.pointing.dropdown > .menu:after) {};
+
+  // Forms
+  .ui.form label :extend(.ui.inverted.form label) {};
+  .ui.form .segment label :extend(.ui.form .inverted.segment label) {};
+  .ui.form .segment .ui.checkbox label :extend(.ui.form .inverted.segment .ui.checkbox label) {};
+  .ui.form .error.field label :extend(.ui.inverted.form .error.field label) {};
+  .ui.form .fields.error .field label :extend(.ui.inverted.form .fields.error .field label) {};
+  .ui.form .fields.info .field label :extend(.ui.inverted.form .fields.info .field label) {};
+  .ui.form .fields.success .field label :extend(.ui.inverted.form .fields.success .field label) {};
+  .ui.form .fields.warning .field label :extend(.ui.inverted.form .fields.warning .field label) {};
+  .ui.form .info.field label :extend(.ui.inverted.form .info.field label) {};
+  .ui.form .inline.field > label :extend(.ui.inverted.form .inline.field > label) {};
+  .ui.form .inline.field > p :extend(.ui.inverted.form .inline.field > p) {};
+  .ui.form .inline.fields .field > label :extend(.ui.inverted.form .inline.fields .field > label) {};
+  .ui.form .inline.fields .field > p :extend(.ui.inverted.form .inline.fields .field > p) {};
+  .ui.form .inline.fields > label :extend(.ui.inverted.form .inline.fields > label) {};
+  .ui.form input[type="color"] :extend(.ui.inverted.form input[type="color"]) {};
+  .ui.form input[type="date"] :extend(.ui.inverted.form input[type="date"]) {};
+  .ui.form input[type="datetime-local"] :extend(.ui.inverted.form input[type="datetime-local"]) {};
+  .ui.form input[type="email"] :extend(.ui.inverted.form input[type="email"]) {};
+  .ui.form input[type="file"] :extend(.ui.inverted.form input[type="file"]) {};
+  .ui.form input[type="month"] :extend(.ui.inverted.form input[type="month"]) {};
+  .ui.form input[type="number"] :extend(.ui.inverted.form input[type="number"]) {};
+  .ui.form input[type="password"] :extend(.ui.inverted.form input[type="password"]) {};
+  .ui.form input[type="search"] :extend(.ui.inverted.form input[type="search"]) {};
+  .ui.form input[type="tel"] :extend(.ui.inverted.form input[type="tel"]) {};
+  .ui.form input[type="text"] :extend(.ui.inverted.form input[type="text"]) {};
+  .ui.form input[type="time"] :extend(.ui.inverted.form input[type="time"]) {};
+  .ui.form input[type="url"] :extend(.ui.inverted.form input[type="url"]) {};
+  .ui.form input[type="week"] :extend(.ui.inverted.form input[type="week"]) {};
+  .ui.form label :extend(.ui.inverted.form label) {};
+  .ui.form .success.field label :extend(.ui.inverted.form .success.field label) {};
+  .ui.form .ui.checkbox label :extend(.ui.inverted.form .ui.checkbox label) {};
+  .ui.form .warning.field label :extend(.ui.inverted.form .warning.field label) {};
+  .ui.loading.form :extend(.ui.inverted.loading.form) {};
+  .ui.loading.form:before :extend(.ui.inverted.loading.form:before) {};
+
+  // Card
+  a.ui.card:hover :extend(a.inverted.ui.card:hover) {};
+  .ui.card :extend(.ui.inverted.card) {};
+  .ui.loading.card :extend(.ui.inverted.loading.card) {};
+  .ui.loading.card:before :extend(.ui.inverted.loading.card:before) {};
+  .ui.card > .content :extend(.ui.inverted.card > .content) {};
+  .ui.card > .content > a.header :extend(.ui.inverted.card > .content > a.header) {};
+  .ui.card > .content > a.header:hover :extend(.ui.inverted.card > .content > a.header:hover) {};
+  .ui.card > .content > .description :extend(.ui.inverted.card > .content > .description) {};
+  .ui.card > .content > .header :extend(.ui.inverted.card > .content > .header) {};
+  .ui.card > .extra :extend(.ui.inverted.card > .extra) {};
+  .ui.card .meta :extend(.ui.inverted.card .meta) {};
+  .ui.cards > .card :extend(.ui.inverted.cards > .card) {};
+  .ui.cards > .card > .content :extend(.ui.inverted.cards > .card > .content) {};
+  .ui.cards > .card > .content > a.header :extend(.ui.inverted.cards > .card > .content > a.header) {};
+  .ui.cards > .card > .content > a.header:hover :extend(.ui.inverted.cards > .card > .content > a.header:hover) {};
+  .ui.cards > .card > .content > .description :extend(.ui.inverted.cards > .card > .content > .description) {};
+  .ui.cards > .card > .content > .header :extend(.ui.inverted.cards > .card > .content > .header) {};
+  .ui.cards > .card > .extra :extend(.ui.inverted.cards > .card > .extra) {};
+  .ui.cards > .card .meta :extend(.ui.inverted.cards > .card .meta) {};
+
+  // Lists
+  .ui.link.list a.item :extend(.ui.inverted.link.list a.item) {};
+  .ui.link.list .item :extend(.ui.inverted.link.list .item) {};
+  .ui.list > a.item :extend(.ui.inverted.list > a.item) {};
+  .ui.list > a.item:hover :extend(.ui.inverted.list > a.item:hover) {};
+  .ui.list > a.item > i.icon :extend(.ui.inverted.list > a.item > i.icon) {};
+  .ui.list > .disabled.item :extend(.ui.inverted.list > .disabled.item) {};
+  .ui.list > .item > .content :extend(.ui.inverted.list > .item > .content) {};
+  .ui.list > .item .description :extend(.ui.inverted.list > .item .description) {};
+  .ui.list > .item .header :extend(.ui.inverted.list > .item .header) {};
+  .ui.list .list > a.item :extend(.ui.inverted.list .list > a.item) {};
+  .ui.list .list > a.item:hover :extend(.ui.inverted.list .list > a.item:hover) {};
+  .ui.list .list > a.item > i.icon :extend(.ui.inverted.list .list > a.item > i.icon) {};
+  .ui.list .list > .disabled.item :extend(.ui.inverted.list .list > .disabled.item) {};
+  .ui.list .list > .item > .content :extend(.ui.inverted.list .list > .item > .content) {};
+  .ui.list .list > .item .description :extend(.ui.inverted.list .list > .item .description) {};
+  .ui.list .list > .item .header :extend(.ui.inverted.list .list > .item .header) {};
+  .ui.ui.link.list a.active.item :extend(.ui.ui.inverted.link.list a.active.item) {};
+  .ui.ui.link.list a.item:active :extend(.ui.ui.inverted.link.list a.item:active) {};
+  .ui.ui.link.list a.item:hover :extend(.ui.ui.inverted.link.list a.item:hover) {};
+
+  // Progress
+  .ui.progress :extend(.ui.inverted.progress) {};
+  .ui.progress .bar :extend(.ui.inverted.progress .bar) {};
+  .ui.progress > .label :extend(.ui.inverted.progress > .label) {};
+
+  // Divider
+  .ui.divider :extend(.ui.divider.inverted) {};
+  .ui.divider:after :extend(.ui.divider.inverted:after) {};
+  .ui.divider:before :extend(.ui.divider.inverted:before) {};
+  .ui.vertical.divider :extend(.ui.vertical.inverted.divider) {};
+
+  // Feed
+  .ui.feed > .event :extend(.ui.inverted.feed > .event) {};
+  .ui.feed > .event > .content .date :extend(.ui.inverted.feed > .event > .content .date) {};
+  .ui.feed > .event > .content .extra.text :extend(.ui.inverted.feed > .event > .content .extra.text) {};
+  .ui.feed > .event > .content .meta .active.like i.icon :extend(.ui.inverted.feed > .event > .content .meta .active.like i.icon) {};
+  .ui.feed > .event > .content .meta .like :extend(.ui.inverted.feed > .event > .content .meta .like) {};
+  .ui.feed > .event > .content .meta .like:hover :extend(.ui.inverted.feed > .event > .content .meta .like:hover) {};
+  .ui.feed > .event > .content .summary :extend(.ui.inverted.feed > .event > .content .summary) {};
+  .ui.feed > .event > .label i.icon :extend(.ui.inverted.feed > .event > .label i.icon) {};
+
+  // And some polish fixes for background colors that don't match SUI inverted
+  // colors and patterns.
+  body {
+    // TODO color
+    background-color: darken(#111, 5);
+  }
+
+  // We still need the non-inverted loading button styles to take precedence.
+  // Copying some light specificity hacks from FUI.
+  //.ui.ui.ui.loading.button :extend(.ui.ui.ui.ui.ui.ui.loading.button) {};
+
+  // Match text menus like filter lists with the background color, not the
+  // segment color.
+  .ui.text.menu,
+  .ui.secondary.menu {
+    background-color: initial;
+  }
+
+  // Forms
+  .ui.form ::placeholder {
+    // TODO color
+    color: #666;
+  }
+  .ui.form .field input,
+  .ui.form .field textarea {
+    background-color: #252a31;
+    color: #fff;
+  }
+
+  .ui.bulleted.list .item:before {
+    // TODO color
+    color: #fff;
+  }
+
+  // Unfortunately `!important` was used on some of these rules so we are forced
+  // to use it as well. Do not use `!important` unless the underlying rules
+  // specifically already use `!important`.
+  .ui.menu .ui.dropdown .menu > .item {
+    color: rgba(255, 255, 255, 0.8) !important;
+
+    &:hover {
+      // TODO color
+      background: #666 !important;
+    }
+  }
+
+  // Invert the logo
+  .ui.image[src*="readthedocsext/theme/images/logo-wordmark-dark.svg"] {
+    filter: invert(100) brightness(110);
+  }
+}

@@ -4,16 +4,44 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 import TerserPlugin from "terser-webpack-plugin";
 
-// Use export as a function to inspect `--mode`
+// Use export as a function to inspect `--mode` and to use multiple entrypoints
+// with dependencies.
 export default (env, argv) => {
-  const is_production = argv.mode == "production";
+  const promiseSite = new Promise((resolve, reject) => {
+    const config = {
+      name: "site",
+      entry: {
+        site: ["./src/css/site.less", "./src/js/site.js"],
+      },
+    };
+    resolve(getCommonConfig(env, argv, config));
+  });
+  const promiseDark = new Promise((resolve, reject) => {
+    const config = {
+      name: "dark",
+      entry: {
+        dark: ["./src/css/dark.less", "./src/js/dark.js"],
+      },
+      // Depends on the CSS output of `site`, require this is built first
+      dependencies: ["site"],
+    };
+    resolve(getCommonConfig(env, argv, config));
+  });
 
-  return {
-    entry: {
-      // LESS goes first because the output library only exports that last entry
-      // point in an entry point array
-      site: ["./src/css/site.less", "./src/js/site.js"],
-    },
+  return Promise.all([promiseSite, promiseDark]);
+};
+
+/**
+ * Common configuration to both entrypoints
+ *
+ * This is two separate configurations instead of just two separate entrypoints
+ * because we require `dependencies` to allow the `dark` entrypoint to rely on the
+ * built CSS output of the `site` entrypoint.
+ */
+function getCommonConfig(env, argv, config) {
+  const isProduction = argv.mode == "production";
+
+  const configBase = {
     externals: {
       moment: "moment",
     },
@@ -32,7 +60,7 @@ export default (env, argv) => {
       ),
     },
     optimization: {
-      minimize: is_production,
+      minimize: isProduction,
       minimizer: [
         new TerserPlugin({
           // Avoids creating a `.LICENSE.txt` file
@@ -59,7 +87,7 @@ export default (env, argv) => {
     // Use filesystem for cache instead memory (default) to be re-use the cache
     // between Docker container starts/stops. This speeds up boot time a lot.
     cache: {
-      type: is_production ? "memory" : "filesystem",
+      type: isProduction ? "memory" : "filesystem",
     },
 
     module: {
@@ -103,6 +131,16 @@ export default (env, argv) => {
                       path.join("node_modules/@readthedocs/sui-common-theme/"),
                     ),
                     path.resolve(path.join("node_modules/fomantic-ui-less/")),
+                    path.resolve(
+                      path.join(
+                        "readthedocsext",
+                        "theme",
+                        "static",
+                        "readthedocsext",
+                        "theme",
+                        "css",
+                      ),
+                    ),
                   ],
                 },
               },
@@ -135,7 +173,7 @@ export default (env, argv) => {
     },
     plugins: [
       new webpack.DefinePlugin({
-        DEBUG_MODE: !is_production,
+        DEBUG_MODE: !isProduction,
       }),
       new MiniCssExtractPlugin({
         filename: "css/[name].css?[contenthash]",
@@ -151,6 +189,16 @@ export default (env, argv) => {
     resolve: {
       alias: {
         "../../theme.config": path.resolve(path.join("src/sui/theme.config")),
+        "site.css": path.resolve(
+          path.join(
+            "readthedocsext",
+            "theme",
+            "static",
+            "readthedocsext",
+            "theme",
+            "css",
+          ),
+        ),
       },
       extensions: [".less", ".js", ".json", ".overrides", ".variables"],
     },
@@ -177,7 +225,7 @@ export default (env, argv) => {
         index: true,
       },
       static: {
-        directory: path.join("readthedocsext/theme"),
+        directory: path.join("readthedocsext/theme/static"),
         serveIndex: true,
       },
       allowedHosts: "all",
@@ -188,4 +236,9 @@ export default (env, argv) => {
     },
     devtool: "source-map",
   };
-};
+
+  const configFull = {};
+  Object.assign(configFull, configBase);
+  Object.assign(configFull, config);
+  return configFull;
+}
