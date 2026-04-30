@@ -13,6 +13,28 @@ export default (env, argv) => {
       entry: {
         site: ["./src/css/site.less", "./src/js/site.js"],
       },
+      // Only one dev server
+      devServer: {
+        open: false,
+        hot: false,
+        liveReload: true,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+        devMiddleware: {
+          publicPath: "/readthedocsext/theme",
+          index: true,
+        },
+        static: {
+          directory: path.join("readthedocsext/theme/static"),
+          serveIndex: true,
+        },
+        allowedHosts: "all",
+        watchFiles: ["readthedocsext/theme/**/*.html"],
+        client: {
+          overlay: false,
+        },
+      },
     };
     resolve(getCommonConfig(env, argv, config));
   });
@@ -212,27 +234,6 @@ function getCommonConfig(env, argv, config) {
         "./readthedocs.org/",
         "readthedocsext_theme.egg-info",
       ],
-    },
-    devServer: {
-      open: false,
-      hot: false,
-      liveReload: true,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-      devMiddleware: {
-        publicPath: "/readthedocsext/theme",
-        index: true,
-      },
-      static: {
-        directory: path.join("readthedocsext/theme/static"),
-        serveIndex: true,
-      },
-      allowedHosts: "all",
-      watchFiles: ["readthedocsext/theme/**/*.html"],
-      client: {
-        overlay: false,
-      },
     },
     devtool: "source-map",
   };
