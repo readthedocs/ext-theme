@@ -14,6 +14,7 @@ commands:
       - run:
           name: Ensure built assets are up to date
           command: |
+            git status readthedocsext/ --porcelain
             if [[ `git status readthedocsext/ --porcelain` ]]
             then
               echo "ERROR: assets are out of date. Make sure to run 'npm run build' on your branch."
