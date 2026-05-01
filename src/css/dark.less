@@ -769,8 +769,44 @@ html[data-theme="system"]:not(#_) {
 
   // Progress
   .ui.progress :extend(.ui.inverted.progress) {};
-  .ui.progress .bar :extend(.ui.inverted.progress .bar) {};
+  // Skip. It just resets the background color
+  //.ui.progress .bar :extend(.ui.inverted.progress .bar) {};
   .ui.progress > .label :extend(.ui.inverted.progress > .label) {};
+  .ui.progress .bar > .progress :extend(.ui.inverted.progress .bar > .progress) {};
+  .ui.progress.success > .label :extend(.ui.inverted.progress.success > .label) {};
+  .ui.progress.warning > .label :extend(.ui.inverted.progress.warning > .label) {};
+  .ui.progress.error > .label :extend(.ui.inverted.progress.error > .label) {};
+  .ui.progress[data-percent="0"] .bar .progress :extend(.ui.inverted.progress[data-percent="0"] .bar .progress) {};
+  .ui.progress .black.bar :extend(.ui.inverted.progress .black.bar) {};
+  .ui.progress .blue.bar :extend(.ui.inverted.progress .blue.bar) {};
+  .ui.progress .brown.bar :extend(.ui.inverted.progress .brown.bar) {};
+  .ui.progress .green.bar :extend(.ui.inverted.progress .green.bar) {};
+  .ui.progress .grey.bar :extend(.ui.inverted.progress .grey.bar) {};
+  .ui.progress .olive.bar :extend(.ui.inverted.progress .olive.bar) {};
+  .ui.progress .orange.bar :extend(.ui.inverted.progress .orange.bar) {};
+  .ui.progress .pink.bar :extend(.ui.inverted.progress .pink.bar) {};
+  .ui.progress .primary.bar :extend(.ui.inverted.progress .primary.bar) {};
+  .ui.progress .purple.bar :extend(.ui.inverted.progress .purple.bar) {};
+  .ui.progress .red.bar :extend(.ui.inverted.progress .red.bar) {};
+  .ui.progress .secondary.bar :extend(.ui.inverted.progress .secondary.bar) {};
+  .ui.progress .teal.bar :extend(.ui.inverted.progress .teal.bar) {};
+  .ui.progress .violet.bar :extend(.ui.inverted.progress .violet.bar) {};
+  .ui.progress .yellow.bar :extend(.ui.inverted.progress .yellow.bar) {};
+  .ui.black.progress .bar :extend(.ui.black.inverted.progress .bar) {};
+  .ui.blue.progress .bar :extend(.ui.blue.inverted.progress .bar) {};
+  .ui.brown.progress .bar :extend(.ui.brown.inverted.progress .bar) {};
+  .ui.green.progress .bar :extend(.ui.green.inverted.progress .bar) {};
+  .ui.grey.progress .bar :extend(.ui.grey.inverted.progress .bar) {};
+  .ui.olive.progress .bar :extend(.ui.olive.inverted.progress .bar) {};
+  .ui.orange.progress .bar :extend(.ui.orange.inverted.progress .bar) {};
+  .ui.pink.progress .bar :extend(.ui.pink.inverted.progress .bar) {};
+  .ui.primary.progress .bar :extend(.ui.primary.inverted.progress .bar) {};
+  .ui.purple.progress .bar :extend(.ui.purple.inverted.progress .bar) {};
+  .ui.red.progress .bar :extend(.ui.red.inverted.progress .bar) {};
+  .ui.secondary.progress .bar :extend(.ui.secondary.inverted.progress .bar) {};
+  .ui.teal.progress .bar :extend(.ui.teal.inverted.progress .bar) {};
+  .ui.violet.progress .bar :extend(.ui.violet.inverted.progress .bar) {};
+  .ui.yellow.progress .bar :extend(.ui.yellow.inverted.progress .bar) {};
 
   // Divider
   .ui.divider :extend(.ui.divider.inverted) {};
