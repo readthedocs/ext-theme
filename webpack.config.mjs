@@ -8,12 +8,14 @@ import TerserPlugin from "terser-webpack-plugin";
 // with dependencies.
 export default (env, argv) => {
   const promiseSite = new Promise((resolve, reject) => {
-    const config = {
+    let config = getCommonConfig(env, argv);
+    Object.assign(config, {
       name: "site",
       entry: {
         site: ["./src/css/site.less", "./src/js/site.js"],
       },
-      // Only one dev server
+      // Only define one dev server configuration, you can't specify this in
+      // both entry points.
       devServer: {
         open: false,
         hot: false,
@@ -26,7 +28,7 @@ export default (env, argv) => {
           index: true,
         },
         static: {
-          directory: path.join("readthedocsext/theme/static"),
+          directory: path.join("readthedocsext/theme"),
           serveIndex: true,
         },
         allowedHosts: "all",
@@ -35,19 +37,25 @@ export default (env, argv) => {
           overlay: false,
         },
       },
-    };
-    resolve(getCommonConfig(env, argv, config));
+    });
+    resolve(config);
   });
   const promiseDark = new Promise((resolve, reject) => {
-    const config = {
+    let config = getCommonConfig(env, argv);
+    Object.assign(config, {
       name: "dark",
       entry: {
         dark: ["./src/css/dark.less", "./src/js/dark.js"],
       },
       // Depends on the CSS output of `site`, require this is built first
       dependencies: ["site"],
-    };
-    resolve(getCommonConfig(env, argv, config));
+    });
+
+    // Don't use split chunks on this entry as it overwrites the site vendor
+    // bundle.
+    delete config.optimization.splitChunks;
+
+    resolve(config);
   });
 
   return Promise.all([promiseSite, promiseDark]);
@@ -60,10 +68,10 @@ export default (env, argv) => {
  * because we require `dependencies` to allow the `dark` entrypoint to rely on the
  * built CSS output of the `site` entrypoint.
  */
-function getCommonConfig(env, argv, config) {
+function getCommonConfig(env, argv) {
   const isProduction = argv.mode == "production";
 
-  const configBase = {
+  return {
     externals: {
       moment: "moment",
     },
@@ -82,6 +90,7 @@ function getCommonConfig(env, argv, config) {
       ),
     },
     optimization: {
+      runtimeChunk: "multiple",
       minimize: isProduction,
       minimizer: [
         new TerserPlugin({
@@ -237,9 +246,4 @@ function getCommonConfig(env, argv, config) {
     },
     devtool: "source-map",
   };
-
-  const configFull = {};
-  Object.assign(configFull, configBase);
-  Object.assign(configFull, config);
-  return configFull;
 }

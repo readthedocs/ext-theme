@@ -86,6 +86,7 @@
     {% endblock footer %}
 
     {% block body_scripts %}
+      <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/runtime~site.js" %}"></script>
       <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/vendor.js" %}"></script>
       <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/site.js" %}"></script>
     {% endblock body_scripts %}
