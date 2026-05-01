@@ -830,9 +830,8 @@ html[data-theme="system"]:not(#_) {
     background-color: darken(@black, 5);
   }
 
-  // We still need the non-inverted loading button styles to take precedence.
-  // Copying some light specificity hacks from FUI.
-  //.ui.ui.ui.loading.button :extend(.ui.ui.ui.ui.ui.ui.loading.button) {};
+  // Fix a slight display issue by reapplying the noninverted loading styles
+  .ui.ui.ui.loading.button :extend(.ui.ui.ui.ui.ui.ui.loading.button) {};
 
   // Match text menus like filter lists with the background color, not the
   // segment color.
