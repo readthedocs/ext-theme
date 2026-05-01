@@ -77,6 +77,7 @@
 // Only the rules that are extended via `extend` will be output in this CSS file.
 @import (reference, less)
   "../../readthedocsext/theme/static/readthedocsext/theme/css/site.css";
+@import (reference) "fomantic-ui-less/themes/default/globals/site.variables";
 @import (reference) "fomantic-ui-less/themes/default/globals/colors.less";
 
 // Avoid formatting all of the lines to wrap
@@ -790,8 +791,7 @@ html[data-theme="system"]:not(#_) {
   // And some polish fixes for background colors that don't match SUI inverted
   // colors and patterns.
   body {
-    // TODO color
-    background-color: darken(#111, 5);
+    background-color: darken(@black, 5);
   }
 
   // We still need the non-inverted loading button styles to take precedence.
@@ -807,8 +807,7 @@ html[data-theme="system"]:not(#_) {
 
   // Forms
   .ui.form ::placeholder {
-    // TODO color
-    color: #666;
+    color: @grey;
   }
   .ui.form .field input,
   .ui.form .field textarea {
@@ -817,8 +816,7 @@ html[data-theme="system"]:not(#_) {
   }
 
   .ui.bulleted.list .item:before {
-    // TODO color
-    color: #fff;
+    color: @white;
   }
 
   // Unfortunately `!important` was used on some of these rules so we are forced
@@ -828,8 +826,7 @@ html[data-theme="system"]:not(#_) {
     color: rgba(255, 255, 255, 0.8) !important;
 
     &:hover {
-      // TODO color
-      background: #666 !important;
+      background: @grey !important;
     }
   }
 
