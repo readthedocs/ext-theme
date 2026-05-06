@@ -119,7 +119,7 @@
             <i class="large fa-duotone fa-language icon"></i>
             <div class="content">
               <div class="header">{% trans "Language" %}</div>
-              <div class="description">
+              <div class="description" data-bind="using: FooterView()">
                 {% block language_select_form %}
                   {% get_current_language as current_lang %}
                   <form action="{% url 'set_language' %}" method="post">
@@ -128,7 +128,7 @@
                     </div>
                     {% csrf_token %}
                     <div class="ui very wide search dropdown"
-                         data-bind="semanticui: { dropdown: {direction: 'upward', fullTextSearch: true, cache: false}}">
+                         data-bind="semanticui: { dropdown: language_config }">
                       <input type="hidden" name="language" />
                       <span class="default text">{{ current_lang | readthedocs_language_name_local }}</span>
                       <i class="fa-solid fa-caret-down icon"></i>
@@ -150,10 +150,6 @@
                         {% endfor %}
                       </div>
                     </div>
-                    {# TODO this button would be better off as a onChange event #}
-                    <button class="ui tiny compact basic inverted button">
-                      {% trans "Update" %}
-                    </button>
                   </form>
                 {% endblock language_select_form %}
               </div>
