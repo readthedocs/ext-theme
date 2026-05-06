@@ -79,6 +79,7 @@
   "../../readthedocsext/theme/static/readthedocsext/theme/css/site.css";
 @import (reference) "fomantic-ui-less/themes/default/globals/site.variables";
 @import (reference) "fomantic-ui-less/themes/default/globals/colors.less";
+@import (reference) "fomantic-ui-less/themes/default/views/card.variables";
 
 // Avoid formatting all of the lines to wrap
 // prettier-ignore
@@ -830,6 +831,11 @@ html[data-theme="system"]:not(#_) {
     background-color: darken(@black, 5);
   }
 
+  .ui.container,
+  .ui.text.container {
+    color: @white;
+  }
+
   // Fix a slight display issue by reapplying the noninverted loading styles
   .ui.ui.ui.loading.button :extend(.ui.ui.ui.ui.ui.ui.loading.button) {};
 
@@ -868,5 +874,24 @@ html[data-theme="system"]:not(#_) {
   // Invert the logo
   .ui.image[src*="readthedocsext/theme/images/logo-wordmark-dark.svg"] {
     filter: invert(100) brightness(110);
+  }
+
+  // Card rules we can't use extend with, copied from card definitions and
+  // `.inverted` class removed from selectors
+  .ui.cards > .card .meta > a:not(.ui),
+  .ui.card .meta > a:not(.ui) {
+      color: @invertedMetaLinkColor;
+  }
+  .ui.cards > .card .meta > a:not(.ui):hover,
+  .ui.card .meta > a:not(.ui):hover {
+      color: @invertedMetaLinkHoverColor;
+  }
+  .ui.cards > .card > .extra a:not(.ui),
+  .ui.card > .extra a:not(.ui) {
+      color: @invertedExtraLinkColor;
+  }
+  .ui.cards > .card > .extra a:not(.ui):hover,
+  .ui.card > .extra a:not(.ui):hover {
+      color: @extraLinkHoverColor;
   }
 }
