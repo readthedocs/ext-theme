@@ -96,7 +96,7 @@
                   </div>
                 </div>
 
-                {% if request.user.is_superuser %}
+                {% if request.user.is_superuser or request.user.is_impersonate %}
                   <div class="item">
                     <i class="grey fa-duotone fa-helmet-safety icon"></i>
                     <div class="content">
