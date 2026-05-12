@@ -106,6 +106,14 @@
       </div>
     {% endblock build_detail_metadata %}
 
+    {% block build_detail_files_changed %}
+      {% if build.is_external and build.file_changes %}
+        <div class="ui attached segment">
+          {% include "builds/partials/files_changed.html" with build=build %}
+        </div>
+      {% endif %}
+    {% endblock build_detail_files_changed %}
+
     <div class="ui attached stackable menu">
       <a class="active item">
         <i class="fa-duotone fa-terminal icon"></i>

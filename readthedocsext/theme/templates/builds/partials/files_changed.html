@@ -1,0 +1,90 @@
+{% comment "rst" %}
+
+  Files changed
+  =============
+
+  ``builds/partials/files_changed.html``
+
+  An overview of the files that changed for a pull request build. The content
+  mirrors the summary posted as a comment on the pull request: a list of
+  documentation files added, modified, deleted, or renamed in the preview,
+  each linked to the rendered page when available.
+
+  Template parameters
+  -------------------
+
+  .. describe:: build
+
+     The build instance. Only rendered when ``build.is_external`` is true and
+     ``build.file_changes`` has entries. Each entry is expected to have:
+
+     - ``path``: the file path in the repository
+     - ``status``: one of ``added``, ``modified``, ``deleted``, ``renamed``
+     - ``url``: a link to view the file in the preview (optional)
+     - ``previous_path``: the prior path for ``renamed`` entries (optional)
+
+{% endcomment %}
+
+{% load blocktrans trans from i18n %}
+
+{% if build.is_external and build.file_changes %}
+  {% trans "Added" as text_added %}
+  {% trans "Deleted" as text_deleted %}
+  {% trans "Renamed" as text_renamed %}
+  {% trans "Modified" as text_modified %}
+
+  <h3 class="ui header">
+    {% trans "Files changed" %}
+    <div class="sub header">
+      {% blocktrans trimmed count counter=build.file_changes|length %}
+        {{ counter }} file changed in this pull request preview.
+      {% plural %}
+        {{ counter }} files changed in this pull request preview.
+      {% endblocktrans %}
+    </div>
+  </h3>
+
+  <table class="ui very basic compact selectable unstackable table">
+    <tbody>
+      {% for change in build.file_changes %}
+        <tr>
+          <td class="collapsing">
+            {% if change.status == "added" %}
+              <i class="green fa-duotone fa-file-plus icon"
+                 title="{{ text_added }}"
+                 aria-label="{{ text_added }}"></i>
+            {% elif change.status == "deleted" %}
+              <i class="red fa-duotone fa-file-minus icon"
+                 title="{{ text_deleted }}"
+                 aria-label="{{ text_deleted }}"></i>
+            {% elif change.status == "renamed" %}
+              <i class="blue fa-duotone fa-file-pen icon"
+                 title="{{ text_renamed }}"
+                 aria-label="{{ text_renamed }}"></i>
+            {% else %}
+              <i class="yellow fa-duotone fa-file-pen icon"
+                 title="{{ text_modified }}"
+                 aria-label="{{ text_modified }}"></i>
+            {% endif %}
+          </td>
+          <td>
+            {% if change.url and change.status != "deleted" %}
+              <a href="{{ change.url }}" target="_blank" rel="noopener">
+                <code>{{ change.path }}</code>
+              </a>
+            {% else %}
+              <code>{{ change.path }}</code>
+            {% endif %}
+            {% if change.status == "renamed" and change.previous_path %}
+              <div class="ui small grey text">
+                {% blocktrans trimmed with previous=change.previous_path %}
+                  Renamed from <code>{{ previous }}</code>
+                {% endblocktrans %}
+              </div>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
