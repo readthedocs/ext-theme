@@ -96,16 +96,6 @@
                   </div>
                 </div>
 
-                {% if request.user.is_superuser or request.user.is_impersonate %}
-                  <div class="item">
-                    <i class="grey fa-duotone fa-helmet-safety icon"></i>
-                    <div class="content">
-                      <span class="sub header">{% trans "Builder" %}</span>
-                      <span>{{ build.builder }}</span>
-                    </div>
-                  </div>
-                {% endif %}
-
               </div>
             </div>
           {% endblock build_detail_metadata_right %}
