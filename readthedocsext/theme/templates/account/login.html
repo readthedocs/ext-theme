@@ -8,31 +8,25 @@
   {% trans "Log in" %}
 {% endblock head_title %}
 
-{% block content_title_text %}
-  {% if is_from_cas_login %}
-    {% trans "Log in to view this documentation" %}
-  {% elif USE_ORGANIZATIONS %}
-    {% trans "Log in to Read the Docs Business" %}
-  {% else %}
-    {% trans "Log in to Read the Docs Community" %}
-  {% endif %}
-{% endblock content_title_text %}
+{% block content_title %}
+  <div class="ui center aligned header">
+    {% block content_title_text %}
+      {% if is_from_cas_login %}
+        {% trans "Log in to view this documentation" %}
+      {% elif USE_ORGANIZATIONS %}
+        {% trans "Log in to Read the Docs Business" %}
+      {% else %}
+        {% trans "Log in to Read the Docs Community" %}
+      {% endif %}
+    {% endblock content_title_text %}
+  </div>
+{% endblock content_title %}
 
 {% block content_body %}
   {% get_providers as socialaccount_providers %}
 
   <div data-bind="using: LoginView({last_tab: '{{ last_login_tab }}', last_method: '{{ last_login_method }}'})">
     <div class="ui basic horizontally fitted segment">
-      <div class="ui form">
-        <div class="field">
-          <label>
-            {% block authentication_header_text %}
-              {% trans "Log in using:" %}
-            {% endblock authentication_header_text %}
-          </label>
-        </div>
-      </div>
-
       <div class="ui small stackable teal centered fluid wrapping menu"
            data-bind="semanticui: {tabs: { autoTabActivation: last_tab() }}">
 
