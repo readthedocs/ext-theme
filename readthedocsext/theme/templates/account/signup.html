@@ -8,13 +8,17 @@
   {% trans "Sign up" %}
 {% endblock head_title %}
 
-{% block content_title_text %}
-  {% if USE_ORGANIZATIONS %}
-    {% trans "Sign up for Read the Docs Business" %}
-  {% else %}
-    {% trans "Sign up for Read the Docs Community" %}
-  {% endif %}
-{% endblock content_title_text %}
+{% block content_title %}
+  <div class="ui center aligned header">
+    {% block content_title_text %}
+      {% if USE_ORGANIZATIONS %}
+        {% trans "Sign up for Read the Docs Business" %}
+      {% else %}
+        {% trans "Sign up for Read the Docs Community" %}
+      {% endif %}
+    {% endblock content_title_text %}
+  </div>
+{% endblock content_title %}
 
 {% block authentication_vcs_text %}
   {% trans "Connect account" %}
