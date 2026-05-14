@@ -11,8 +11,10 @@
 {% block content_title_text %}
   {% if is_from_cas_login %}
     {% trans "Log in to view this documentation" %}
+  {% elif USE_ORGANIZATIONS %}
+    {% trans "Log in to Read the Docs Business" %}
   {% else %}
-    {% trans "Log in to continue" %}
+    {% trans "Log in to Read the Docs Community" %}
   {% endif %}
 {% endblock content_title_text %}
 
