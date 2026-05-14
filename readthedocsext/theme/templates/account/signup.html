@@ -9,7 +9,13 @@
 {% endblock head_title %}
 
 {% block content_title_text %}
-  {% trans "Sign up to continue" %}
+  {% if "readthedocs.org" in PRODUCTION_DOMAIN %}
+    {% trans "Sign up for Read the Docs Community" %}
+  {% elif "readthedocs.com" in PRODUCTION_DOMAIN %}
+    {% trans "Sign up for Read the Docs Business" %}
+  {% else %}
+    {% trans "Sign up for Read the Docs" %}
+  {% endif %}
 {% endblock content_title_text %}
 
 {% block authentication_vcs_text %}
@@ -19,7 +25,6 @@
   {% trans "Sign up with email" %}
 {% endblock authentication_email_text %}
 {% block authentication_header_text %}
-  {% trans "Sign up using:" %}
 {% endblock authentication_header_text %}
 
 {% block authentication_vcs %}
