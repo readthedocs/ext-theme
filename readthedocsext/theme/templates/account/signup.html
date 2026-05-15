@@ -10,15 +10,11 @@
 
 {% block content_title_text %}
   {% if USE_ORGANIZATIONS %}
-    {% trans "Sign up for Read the Docs Business" %}
+    {% trans "Sign up for Read the Docs for Business" %}
   {% else %}
     {% trans "Sign up for Read the Docs Community" %}
   {% endif %}
 {% endblock content_title_text %}
-
-{% block authentication_email_text %}
-  {% trans "Email" %}
-{% endblock authentication_email_text %}
 
 {% block authentication_vcs %}
   {# Translators: this will read "Sign up using GitHub", where "sign up" is a verb #}
