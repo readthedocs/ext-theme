@@ -138,6 +138,14 @@ def get_spam_score(project):
     return spam_score(project)
 
 
+@register.simple_tag
+def get_project_badge_url(project):
+    """Return the badge URL for a project's default version, including the token for private versions."""
+    from readthedocs.projects.views.public import ProjectBadgeView
+
+    return ProjectBadgeView.get_badge_url(project.slug, project.get_default_version())
+
+
 @register.simple_tag(takes_context=True)
 def get_providers(context, process="login"):
     """

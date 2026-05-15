@@ -1,7 +1,7 @@
 {% load blocktrans trans from i18n %}
 {% load is_admin from privacy_tags %}
 {% load gravatar_url from gravatar %}
-{% load get_spam_score readthedocs_language_name readthedocs_language_name_local starts_with from ext_theme_tags %}
+{% load get_project_badge_url get_spam_score readthedocs_language_name readthedocs_language_name_local starts_with from ext_theme_tags %}
 {% load get_project_active_versions from projects_tags %}
 
 {% comment %}
@@ -220,6 +220,10 @@ collapsed, to save visual space and can be expanded with the right label.
                  target="_blank">{% trans "View project changelist filtered by slug" %}</a>
             </div>
           </div>
+
+          <h3>{% trans "Badge URL" %}</h3>
+          {% get_project_badge_url project as badge_url %}
+          <pre>{{ badge_url }}</pre>
 
           {% if not USE_ORGANIZATIONS %}
             <h3>{% trans "Spam" %}</h3>
