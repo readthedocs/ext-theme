@@ -228,12 +228,10 @@ collapsed, to save visual space and can be expanded with the right label.
                 <div class="ui sub header">{% trans "Builder" %}</div>
                 <span>{{ build.builder }}</span>
               </div>
-              {% if request.user.is_staff %}
-                <div class="item">
-                  <a href="{{ ADMIN_URL }}/builds/build/{{ build.pk }}/change/"
-                     target="_blank">{% trans "View build in Django admin" %}</a>
-                </div>
-              {% endif %}
+              <div class="item">
+                <a href="{{ ADMIN_URL }}/builds/build/{{ build.pk }}/change/"
+                   target="_blank">{% trans "View build in Django admin" %}</a>
+              </div>
             </div>
           {% endif %}
 
