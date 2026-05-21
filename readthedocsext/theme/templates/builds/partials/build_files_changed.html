@@ -12,6 +12,9 @@
   base. Pull request builds are compared against the base version, while
   normal version builds are compared against the version's previous build.
 
+  Pull request builds also show a pull request info card. NOTE: most of the
+  card is demo data -- see the comment on the card below.
+
   Template parameters
   -------------------
 
@@ -28,6 +31,42 @@
 {% load i18n %}
 
 <div class="build-files-changed">
+
+  {% if build.is_external %}
+    {% comment %}
+      DEMO pull request info card.
+
+      Read the Docs does not store pull request metadata yet (title, author,
+      state, base/head branches), so the highlighted values below are
+      placeholders for this demo. Only the pull request number and link use
+      real data. Wire the rest to the Git provider before shipping.
+    {% endcomment %}
+    <div class="ui segment">
+      <div class="ui relaxed list">
+        <div class="item">
+          <i class="big grey fa-duotone fa-code-pull-request icon"></i>
+          <div class="content">
+            <div class="header">
+              <a href="{{ build.version.vcs_url }}" target="_blank" rel="noopener">
+                {# Demo data #}
+                Add latency-test guide and CLI timing reference
+              </a>
+              <span class="ui grey text">#{{ build.get_version_name }}</span>
+              {# Demo data #}
+              <span class="ui mini green label">{% trans "Open" %}</span>
+            </div>
+            <div class="description">
+              {# Demo data #}
+              {% blocktrans trimmed with author="ericholscher" base="main" head="latency-test" %}
+                <strong>{{ author }}</strong> wants to merge into
+                <code>{{ base }}</code> from <code>{{ head }}</code>.
+              {% endblocktrans %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
 
   <p class="ui grey text">
     {% if build.is_external %}
