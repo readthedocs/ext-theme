@@ -402,6 +402,11 @@ export class BuildDetailView {
     /** @observable {Boolean} Show debug/info commands */
     this.show_debug = ko.observable(false);
 
+    /* Files changed */
+    /** @observable {Boolean} Show the files changed tab instead of the build
+     * command output */
+    this.show_files_changed = ko.observable(false);
+
     /** @observable {Boolean} Are we still polling the API? */
     this.is_polling = ko.observable(true);
     this.is_polling.subscribe((is_polling) => {
@@ -603,6 +608,16 @@ export class BuildDetailView {
   toggle_debug() {
     const show_debug = this.show_debug();
     this.show_debug(!show_debug);
+  }
+
+  /** Show the build command output tab */
+  show_output() {
+    this.show_files_changed(false);
+  }
+
+  /** Show the files changed tab */
+  show_files_changed_tab() {
+    this.show_files_changed(true);
   }
 
   /** Update all attributes and observables that depend on build state */

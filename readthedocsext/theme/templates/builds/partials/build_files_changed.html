@@ -1,0 +1,136 @@
+{% comment "rst" %}
+
+  Build files changed
+  ===================
+
+  ``builds/partials/build_files_changed.html``
+
+  Renders the contents of the "Files changed" tab on the build detail page.
+
+  It shows the file tree diff for a build: the documentation pages that were
+  added, modified, or deleted compared to a base. Pull request builds are
+  compared against the base version, while normal version builds are compared
+  against the version's previous build.
+
+  Template parameters
+  -------------------
+
+  .. describe:: build
+
+     The build instance the diff belongs to.
+
+  .. describe:: files_changed_diff
+
+     A ``FileTreeDiff`` instance with the added, modified, and deleted files.
+
+{% endcomment %}
+
+{% load i18n %}
+
+<div class="ui basic segment">
+
+  <h3 class="ui header">
+    <i class="fa-duotone fa-file-diff icon"></i>
+    <div class="content">
+      {% trans "Files changed" %}
+      <div class="sub header">
+        {% if build.is_external %}
+          {% blocktrans trimmed with base_version=files_changed_diff.base_version.verbose_name %}
+            Comparing this pull request against <code>{{ base_version }}</code>.
+          {% endblocktrans %}
+        {% else %}
+          {% blocktrans trimmed with base_build_id=files_changed_diff.base_version_build.pk %}
+            Comparing this build against the previous build (#{{ base_build_id }}) of this version.
+          {% endblocktrans %}
+        {% endif %}
+      </div>
+    </div>
+  </h3>
+
+  {% if files_changed_diff.outdated %}
+    <div class="ui warning message">
+      <i class="fa-duotone fa-triangle-exclamation icon"></i>
+      {% trans "A newer build exists for this version, so this comparison may be out of date." %}
+    </div>
+  {% endif %}
+
+  {% if files_changed_diff.files %}
+
+    <div class="ui horizontal divided list">
+      <div class="item">
+        {% blocktrans trimmed count counter=files_changed_diff.files|length %}
+          {{ counter }} file changed
+        {% plural %}
+          {{ counter }} files changed
+        {% endblocktrans %}
+      </div>
+      {% if files_changed_diff.added %}
+        <div class="item">
+          <i class="green fa-solid fa-plus icon"></i>
+          {% blocktrans trimmed with counter=files_changed_diff.added|length %}
+            {{ counter }} added
+          {% endblocktrans %}
+        </div>
+      {% endif %}
+      {% if files_changed_diff.modified %}
+        <div class="item">
+          <i class="yellow fa-solid fa-pen icon"></i>
+          {% blocktrans trimmed with counter=files_changed_diff.modified|length %}
+            {{ counter }} modified
+          {% endblocktrans %}
+        </div>
+      {% endif %}
+      {% if files_changed_diff.deleted %}
+        <div class="item">
+          <i class="red fa-solid fa-minus icon"></i>
+          {% blocktrans trimmed with counter=files_changed_diff.deleted|length %}
+            {{ counter }} deleted
+          {% endblocktrans %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="ui divided relaxed list">
+      {% for file in files_changed_diff.added %}
+        <div class="item">
+          <i class="green fa-duotone fa-circle-plus icon"></i>
+          <div class="content">
+            <a class="header" href="{{ file.url }}" target="_blank" rel="noopener">
+              <code>{{ file.path }}</code>
+            </a>
+            <div class="description">{% trans "Added" %}</div>
+          </div>
+        </div>
+      {% endfor %}
+      {% for file in files_changed_diff.modified %}
+        <div class="item">
+          <i class="yellow fa-duotone fa-pen-circle icon"></i>
+          <div class="content">
+            <a class="header" href="{{ file.url }}" target="_blank" rel="noopener">
+              <code>{{ file.path }}</code>
+            </a>
+            <div class="description">{% trans "Modified" %}</div>
+          </div>
+        </div>
+      {% endfor %}
+      {% for file in files_changed_diff.deleted %}
+        <div class="item">
+          <i class="red fa-duotone fa-circle-minus icon"></i>
+          <div class="content">
+            <span class="header"><code>{{ file.path }}</code></span>
+            <div class="description">{% trans "Deleted" %}</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+  {% else %}
+
+    <div class="ui basic center aligned segment">
+      <i class="fa-duotone fa-circle-check large green icon"></i>
+      <p>{% trans "No documentation files changed in this build." %}</p>
+    </div>
+
+  {% endif %}
+
+</div>

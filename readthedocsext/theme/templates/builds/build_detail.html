@@ -107,10 +107,18 @@
     {% endblock build_detail_metadata %}
 
     <div class="ui attached stackable menu">
-      <a class="active item">
+      <a class="active item"
+         data-bind="click: show_output, css: {active: !show_files_changed()}">
         <i class="fa-duotone fa-terminal icon"></i>
         {% trans "Output" %}
       </a>
+      {% if files_changed_diff %}
+        <a class="item"
+           data-bind="click: show_files_changed_tab, css: {active: show_files_changed()}">
+          <i class="fa-duotone fa-file-diff icon"></i>
+          {% trans "Files changed" %}
+        </a>
+      {% endif %}
       <a class="item" href="{% url "build-detail" build.pk "txt" %}">
         <i class="fa-duotone fa-memo-circle-info icon"></i>
         {% trans "Raw log" %}
@@ -219,7 +227,8 @@
         </div>
       {% endblock build_detail_notifications %}
 
-      <div class="ui inverted bottom attached horizontally scrolling segment transition slide">
+      <div class="ui inverted bottom attached horizontally scrolling segment transition slide"
+           data-bind="visible: !show_files_changed()">
 
         {% comment %}
           This is a loading placeholder. The extra element is to fill out the
@@ -279,6 +288,13 @@
           </div>
         </div>
 
+      </div>
+    {% endif %}
+
+    {% if files_changed_diff %}
+      <div class="ui bottom attached segment ko hidden"
+           data-bind="css: { hidden: !show_files_changed() }">
+        {% include "builds/partials/build_files_changed.html" %}
       </div>
     {% endif %}
 
