@@ -52,9 +52,9 @@
             </a>
             <span class="ui grey text">#{{ build.get_version_name }}</span>
             {% if build.version.state == "open" %}
-              <span class="ui mini green label">{% trans "Open" %}</span>
+              <span class="ui mini horizontal green label">{% trans "Open" %}</span>
             {% elif build.version.state == "closed" %}
-              <span class="ui mini grey label">{% trans "Closed" %}</span>
+              <span class="ui mini horizontal grey label">{% trans "Closed" %}</span>
             {% endif %}
           </div>
           <div class="description">
