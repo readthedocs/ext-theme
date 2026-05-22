@@ -617,7 +617,7 @@ export class BuildDetailView {
       "build-command-" + failed_command.id(),
     );
     if (elem && elem.scrollIntoView) {
-      elem.scrollIntoView({ behavior: "auto", block: "center" });
+      elem.scrollIntoView({ behavior: "auto", block: "start" });
     }
   }
 
