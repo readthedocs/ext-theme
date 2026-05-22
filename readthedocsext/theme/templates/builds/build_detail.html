@@ -107,11 +107,6 @@
     {% endblock build_detail_metadata %}
 
     <div class="ui attached stackable menu">
-      <a class="active item"
-         data-bind="click: show_output_tab, css: {active: !show_files_changed()}">
-        <i class="fa-duotone fa-terminal icon"></i>
-        {% trans "Output" %}
-      </a>
       {% if files_changed_diff %}
         <a class="item"
            data-bind="click: show_files_changed_tab, css: {active: show_files_changed()}">
@@ -119,6 +114,11 @@
           {% trans "Files changed" %}
         </a>
       {% endif %}
+      <a class="active item"
+         data-bind="click: show_output_tab, css: {active: !show_files_changed()}">
+        <i class="fa-duotone fa-terminal icon"></i>
+        {% trans "Output" %}
+      </a>
       <a class="item" href="{% url "build-detail" build.pk "txt" %}">
         <i class="fa-duotone fa-memo-circle-info icon"></i>
         {% trans "Raw log" %}
