@@ -598,13 +598,6 @@ export class BuildDetailView {
     this.legacy_output(true);
   }
 
-  /** Helper for toggling debug mode on the view. This hides some informational
-   * commands and the configuration file output step */
-  toggle_debug() {
-    const show_debug = this.show_debug();
-    this.show_debug(!show_debug);
-  }
-
   /** Update all attributes and observables that depend on build state */
   update_state(state) {
     // Is build in one of the finished states?
