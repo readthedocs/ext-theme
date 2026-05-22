@@ -111,8 +111,9 @@ class BuildCommand {
       }
     });
 
-    /** @observable {Boolean} Is this command expanded? */
-    this.is_expanded = ko.observable(false);
+    /** @observable {Boolean} Is this command expanded? Failed commands start
+     * expanded, including on initial page load of an already finished build. */
+    this.is_expanded = ko.observable(this.exit_code() > 0);
     this.exit_code.subscribe((exit_code) => {
       if (exit_code !== undefined && exit_code > 0) {
         this.is_expanded(true);
@@ -406,7 +407,13 @@ export class BuildDetailView {
     this.is_polling = ko.observable(true);
     this.is_polling.subscribe((is_polling) => {
       if (!is_polling) {
-        this.set_selected_line_from_hash(this.selected_hash());
+        // Focus a specific output line if one is linked via the URL hash,
+        // otherwise fall back to focusing the first failed command.
+        if (this.selected_hash()) {
+          this.set_selected_line_from_hash(this.selected_hash());
+        } else {
+          this.scroll_to_first_failed_command();
+        }
       }
     });
 
@@ -590,6 +597,31 @@ export class BuildDetailView {
           this.set_selected_line(selected_line);
         }
       }
+    }
+  }
+
+  /**
+   * Expand and scroll to the first failed build command.
+   *
+   * This brings the build error into view when the page loads or polling
+   * finishes, so users don't have to scroll through the output to find it.
+   */
+  scroll_to_first_failed_command() {
+    const failed_command = ko.utils.arrayFirst(this.commands(), (command) => {
+      return command.exit_code() > 0;
+    });
+    if (!failed_command) {
+      return;
+    }
+    failed_command.is_expanded(true);
+    const elem = document.getElementById(
+      "build-command-" + failed_command.id(),
+    );
+    if (elem && elem.scrollIntoView) {
+      elem.scrollIntoView({
+        behavior: "auto",
+        block: "center",
+      });
     }
   }
 
