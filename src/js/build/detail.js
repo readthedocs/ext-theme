@@ -198,7 +198,12 @@ class BuildCommand {
 export class BuildDetailView {
   static view_name = "BuildDetailView";
 
-  constructor(build = {}, url_api_build, url_api_notifications) {
+  constructor(
+    build = {},
+    url_api_build,
+    url_api_notifications,
+    show_files_changed = false,
+  ) {
     /** @type {number} The build pk/id to fetch */
     this.id = build.id;
     /** @type {string} APIv2 build detail API URL */
@@ -404,8 +409,9 @@ export class BuildDetailView {
 
     /* Files changed */
     /** @observable {Boolean} Show the files changed tab instead of the build
-     * command output */
-    this.show_files_changed = ko.observable(false);
+     * command output. Defaults to the files changed tab when a diff is
+     * available for this build. */
+    this.show_files_changed = ko.observable(show_files_changed);
 
     /** @observable {Boolean} Are we still polling the API? */
     this.is_polling = ko.observable(true);

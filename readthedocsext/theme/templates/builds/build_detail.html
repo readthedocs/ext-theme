@@ -12,7 +12,7 @@
 {% endblock content-header %}
 
 {% block content %}
-  <div data-bind="using: BuildDetailView({}, '{% url "build-detail" build.id %}', '{% url "projects-builds-notifications-list" build.project.slug build.id %}')">
+  <div data-bind="using: BuildDetailView({}, '{% url "build-detail" build.id %}', '{% url "projects-builds-notifications-list" build.project.slug build.id %}', {{ files_changed_diff|yesno:"true,false" }})">
 
     {% block build_detail_metadata %}
       <div class="ui top attached segment">
@@ -108,13 +108,13 @@
 
     <div class="ui attached stackable menu">
       {% if files_changed_diff %}
-        <a class="item"
+        <a class="active item"
            data-bind="click: show_files_changed_tab, css: {active: show_files_changed()}">
-          <i class="fa-duotone fa-file-diff icon"></i>
+          <i class="fa-duotone fa-code-compare icon"></i>
           {% trans "Files changed" %}
         </a>
       {% endif %}
-      <a class="active item"
+      <a class="item{% if not files_changed_diff %} active{% endif %}"
          data-bind="click: show_output_tab, css: {active: !show_files_changed()}">
         <i class="fa-duotone fa-terminal icon"></i>
         {% trans "Output" %}
@@ -227,8 +227,8 @@
         </div>
       {% endblock build_detail_notifications %}
 
-      <div class="ui inverted bottom attached horizontally scrolling segment transition slide"
-           data-bind="visible: !show_files_changed()">
+      <div class="ui inverted bottom attached horizontally scrolling segment transition slide{% if files_changed_diff %} ko hidden{% endif %}"
+           data-bind="css: { hidden: show_files_changed() }">
 
         {% comment %}
           This is a loading placeholder. The extra element is to fill out the
@@ -292,7 +292,7 @@
     {% endif %}
 
     {% if files_changed_diff %}
-      <div class="ui bottom attached segment ko hidden"
+      <div class="ui bottom attached segment ko"
            data-bind="css: { hidden: !show_files_changed() }">
         {% include "builds/partials/build_files_changed.html" %}
       </div>
