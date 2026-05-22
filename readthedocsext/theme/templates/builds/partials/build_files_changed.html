@@ -12,8 +12,9 @@
   base. Pull request builds are compared against the base version, while
   normal version builds are compared against the version's previous build.
 
-  Pull request builds also show a pull request info card. NOTE: most of the
-  card is demo data -- see the comment on the card below.
+  Pull request builds also show a pull request info card. NOTE: the title,
+  author, and branch names on that card are demo data -- see the comment on
+  the card below.
 
   Template parameters
   -------------------
@@ -34,12 +35,12 @@
 
   {% if build.is_external %}
     {% comment %}
-      DEMO pull request info card.
+      Partly-demo pull request info card.
 
-      Read the Docs does not store pull request metadata yet (title, author,
-      state, base/head branches), so the highlighted values below are
-      placeholders for this demo. Only the pull request number and link use
-      real data. Wire the rest to the Git provider before shipping.
+      The pull request number, link, and state use real data. The title,
+      author, and base/head branch names are demo placeholders -- Read the
+      Docs does not store that metadata yet. Wire them to the Git provider
+      before shipping.
     {% endcomment %}
     <div class="ui segment">
       <div class="ui relaxed list">
@@ -52,8 +53,11 @@
                 Add latency-test guide and CLI timing reference
               </a>
               <span class="ui grey text">#{{ build.get_version_name }}</span>
-              {# Demo data #}
-              <span class="ui mini green label">{% trans "Open" %}</span>
+              {% if build.version.state == "open" %}
+                <span class="ui mini green label">{% trans "Open" %}</span>
+              {% elif build.version.state == "closed" %}
+                <span class="ui mini grey label">{% trans "Closed" %}</span>
+              {% endif %}
             </div>
             <div class="description">
               {# Demo data #}
