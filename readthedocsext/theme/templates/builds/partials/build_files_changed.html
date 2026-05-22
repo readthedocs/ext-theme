@@ -41,29 +41,25 @@
     before shipping.
   {% endcomment %}
   <div class="ui segment">
-    <div class="ui relaxed list">
-      <div class="item">
-        <i class="big grey fa-duotone fa-code-pull-request icon"></i>
-        <div class="content">
-          <div class="header">
-            <a href="{{ build.version.vcs_url }}" target="_blank" rel="noopener">
-              {# Demo data #}
-              Add latency-test guide and CLI timing reference
-            </a>
-            <span class="ui grey text">#{{ build.get_version_name }}</span>
-            {% if build.version.state == "open" %}
-              <span class="ui mini horizontal green label">{% trans "Open" %}</span>
-            {% elif build.version.state == "closed" %}
-              <span class="ui mini horizontal grey label">{% trans "Closed" %}</span>
-            {% endif %}
-          </div>
-          <div class="description">
-            {# Demo data #}
-            {% blocktrans trimmed with author="ericholscher" base="main" head="latency-test" %}
-              <strong>{{ author }}</strong> wants to merge into
-              <code>{{ base }}</code> from <code>{{ head }}</code>.
-            {% endblocktrans %}
-          </div>
+    <div class="ui header">
+      <i class="grey fa-duotone fa-code-pull-request icon"></i>
+      <div class="content">
+        <a href="{{ build.version.vcs_url }}" target="_blank" rel="noopener">
+          {# Demo data #}
+          Add latency-test guide and CLI timing reference
+        </a>
+        <span class="ui grey text">#{{ build.get_version_name }}</span>
+        {% if build.version.state == "open" %}
+          <span class="ui mini horizontal green label">{% trans "Open" %}</span>
+        {% elif build.version.state == "closed" %}
+          <span class="ui mini horizontal grey label">{% trans "Closed" %}</span>
+        {% endif %}
+        <div class="sub header">
+          {# Demo data #}
+          {% blocktrans trimmed with author="ericholscher" base="main" head="latency-test" %}
+            <strong>{{ author }}</strong> wants to merge into
+            <code>{{ base }}</code> from <code>{{ head }}</code>.
+          {% endblocktrans %}
         </div>
       </div>
     </div>
