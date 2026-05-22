@@ -111,8 +111,8 @@ class BuildCommand {
       }
     });
 
-    /** @observable {Boolean} Is this command expanded? Failed commands start
-     * expanded, including on initial page load of an already finished build. */
+    /** @observable {Boolean} Is this command expanded? Failed commands are
+     * expanded by default. */
     this.is_expanded = ko.observable(this.exit_code() > 0);
     this.exit_code.subscribe((exit_code) => {
       if (exit_code !== undefined && exit_code > 0) {
@@ -407,8 +407,8 @@ export class BuildDetailView {
     this.is_polling = ko.observable(true);
     this.is_polling.subscribe((is_polling) => {
       if (!is_polling) {
-        // Focus a specific output line if one is linked via the URL hash,
-        // otherwise fall back to focusing the first failed command.
+        // Scroll to the linked output line if there is one, otherwise scroll
+        // to the first failed command.
         if (this.selected_hash()) {
           this.set_selected_line_from_hash(this.selected_hash());
         } else {
@@ -601,10 +601,10 @@ export class BuildDetailView {
   }
 
   /**
-   * Expand and scroll to the first failed build command.
+   * Scroll to the first failed build command.
    *
-   * This brings the build error into view when the page loads or polling
-   * finishes, so users don't have to scroll through the output to find it.
+   * Failed commands are already expanded, so this just brings the build
+   * error into view on page load or when polling finishes.
    */
   scroll_to_first_failed_command() {
     const failed_command = ko.utils.arrayFirst(this.commands(), (command) => {
@@ -613,15 +613,11 @@ export class BuildDetailView {
     if (!failed_command) {
       return;
     }
-    failed_command.is_expanded(true);
     const elem = document.getElementById(
       "build-command-" + failed_command.id(),
     );
     if (elem && elem.scrollIntoView) {
-      elem.scrollIntoView({
-        behavior: "auto",
-        block: "center",
-      });
+      elem.scrollIntoView({ behavior: "auto", block: "center" });
     }
   }
 
