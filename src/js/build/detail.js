@@ -610,12 +610,12 @@ export class BuildDetailView {
     this.show_debug(!show_debug);
   }
 
-  /** Show the build command output tab */
-  show_output() {
+  /** Switch the build detail view to the build command output tab */
+  show_output_tab() {
     this.show_files_changed(false);
   }
 
-  /** Show the files changed tab */
+  /** Switch the build detail view to the files changed tab */
   show_files_changed_tab() {
     this.show_files_changed(true);
   }

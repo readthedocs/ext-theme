@@ -31,131 +31,124 @@
 
 {% load i18n %}
 
-<div class="build-files-changed">
+{% if build.is_external %}
+  {% comment %}
+    Partly-demo pull request info card.
 
-  {% if build.is_external %}
-    {% comment %}
-      Partly-demo pull request info card.
-
-      The pull request number, link, and state use real data. The title,
-      author, and base/head branch names are demo placeholders -- Read the
-      Docs does not store that metadata yet. Wire them to the Git provider
-      before shipping.
-    {% endcomment %}
-    <div class="ui segment">
-      <div class="ui relaxed list">
-        <div class="item">
-          <i class="big grey fa-duotone fa-code-pull-request icon"></i>
-          <div class="content">
-            <div class="header">
-              <a href="{{ build.version.vcs_url }}" target="_blank" rel="noopener">
-                {# Demo data #}
-                Add latency-test guide and CLI timing reference
-              </a>
-              <span class="ui grey text">#{{ build.get_version_name }}</span>
-              {% if build.version.state == "open" %}
-                <span class="ui mini green label">{% trans "Open" %}</span>
-              {% elif build.version.state == "closed" %}
-                <span class="ui mini grey label">{% trans "Closed" %}</span>
-              {% endif %}
-            </div>
-            <div class="description">
+    The pull request number, link, and state use real data. The title,
+    author, and base/head branch names are demo placeholders -- Read the
+    Docs does not store that metadata yet. Wire them to the Git provider
+    before shipping.
+  {% endcomment %}
+  <div class="ui segment">
+    <div class="ui relaxed list">
+      <div class="item">
+        <i class="big grey fa-duotone fa-code-pull-request icon"></i>
+        <div class="content">
+          <div class="header">
+            <a href="{{ build.version.vcs_url }}" target="_blank" rel="noopener">
               {# Demo data #}
-              {% blocktrans trimmed with author="ericholscher" base="main" head="latency-test" %}
-                <strong>{{ author }}</strong> wants to merge into
-                <code>{{ base }}</code> from <code>{{ head }}</code>.
-              {% endblocktrans %}
-            </div>
+              Add latency-test guide and CLI timing reference
+            </a>
+            <span class="ui grey text">#{{ build.get_version_name }}</span>
+            {% if build.version.state == "open" %}
+              <span class="ui mini green label">{% trans "Open" %}</span>
+            {% elif build.version.state == "closed" %}
+              <span class="ui mini grey label">{% trans "Closed" %}</span>
+            {% endif %}
+          </div>
+          <div class="description">
+            {# Demo data #}
+            {% blocktrans trimmed with author="ericholscher" base="main" head="latency-test" %}
+              <strong>{{ author }}</strong> wants to merge into
+              <code>{{ base }}</code> from <code>{{ head }}</code>.
+            {% endblocktrans %}
           </div>
         </div>
       </div>
     </div>
-  {% endif %}
+  </div>
+{% endif %}
 
-  <p class="ui grey text">
-    {% if build.is_external %}
-      {% blocktrans trimmed with base_version=files_changed_diff.base_version.verbose_name %}
-        Comparing this pull request against <code>{{ base_version }}</code>.
-      {% endblocktrans %}
-    {% else %}
-      {% blocktrans trimmed with base_build_id=files_changed_diff.base_version_build.pk %}
-        Comparing this build against the previous build (#{{ base_build_id }}) of this version.
-      {% endblocktrans %}
-    {% endif %}
-  </p>
-
-  {% if files_changed_diff.outdated %}
-    <div class="ui warning message">
-      <i class="fa-duotone fa-triangle-exclamation icon"></i>
-      {% trans "A newer build exists for this version, so this comparison may be out of date." %}
-    </div>
-  {% endif %}
-
-  {% if files_changed_diff.files %}
-
-    <div class="ui segments">
-      <div class="ui secondary segment">
-        {% blocktrans trimmed count counter=files_changed_diff.files|length %}
-          <strong>{{ counter }}</strong> file changed
-        {% plural %}
-          <strong>{{ counter }}</strong> files changed
-        {% endblocktrans %}
-        {% if files_changed_diff.added %}
-          ·
-          {% blocktrans trimmed with counter=files_changed_diff.added|length %}
-            <strong>{{ counter }}</strong> added
-          {% endblocktrans %}
-        {% endif %}
-        {% if files_changed_diff.modified %}
-          ·
-          {% blocktrans trimmed with counter=files_changed_diff.modified|length %}
-            <strong>{{ counter }}</strong> modified
-          {% endblocktrans %}
-        {% endif %}
-        {% if files_changed_diff.deleted %}
-          ·
-          {% blocktrans trimmed with counter=files_changed_diff.deleted|length %}
-            <strong>{{ counter }}</strong> deleted
-          {% endblocktrans %}
-        {% endif %}
-      </div>
-
-      <div class="ui segment">
-        <div class="ui divided relaxed list">
-          {% for file in files_changed_diff.files %}
-            <div class="item">
-              {% if file.status == "added" %}
-                <i class="green fa-duotone fa-square-plus icon"
-                   title="{% trans "Added" %}"></i>
-              {% elif file.status == "deleted" %}
-                <i class="red fa-duotone fa-square-minus icon"
-                   title="{% trans "Deleted" %}"></i>
-              {% else %}
-                <i class="orange fa-duotone fa-pen-to-square icon"
-                   title="{% trans "Modified" %}"></i>
-              {% endif %}
-              <div class="content">
-                {% if file.status == "deleted" %}
-                  <code>{{ file.path }}</code>
-                {% else %}
-                  <a href="{{ file.url }}" target="_blank" rel="noopener">
-                    <code>{{ file.path }}</code>
-                  </a>
-                {% endif %}
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-
+<p class="ui grey text">
+  {% if build.is_external %}
+    {% blocktrans trimmed with base_version=files_changed_diff.base_version.verbose_name %}
+      Comparing this pull request against <code>{{ base_version }}</code>.
+    {% endblocktrans %}
   {% else %}
+    {% blocktrans trimmed with base_build_id=files_changed_diff.base_version_build.pk %}
+      Comparing this build against the previous build (#{{ base_build_id }}) of this version.
+    {% endblocktrans %}
+  {% endif %}
+</p>
 
-    <div class="ui basic center aligned segment">
-      <i class="fa-duotone fa-circle-check large green icon"></i>
-      <p>{% trans "No documentation files changed in this build." %}</p>
+{% if files_changed_diff.outdated %}
+  <div class="ui warning message">
+    <i class="fa-duotone fa-triangle-exclamation icon"></i>
+    {% trans "A newer build exists for this version, so this comparison may be out of date." %}
+  </div>
+{% endif %}
+
+{% if files_changed_diff.files %}
+
+  <div class="ui segments">
+    <div class="ui secondary segment">
+      {% blocktrans trimmed count counter=files_changed_diff.files|length %}
+        <strong>{{ counter }}</strong> file changed
+      {% plural %}
+        <strong>{{ counter }}</strong> files changed
+      {% endblocktrans %}
+      {% if files_changed_diff.added %}
+        ·
+        {% blocktrans trimmed with counter=files_changed_diff.added|length %}
+          <strong>{{ counter }}</strong> added
+        {% endblocktrans %}
+      {% endif %}
+      {% if files_changed_diff.modified %}
+        ·
+        {% blocktrans trimmed with counter=files_changed_diff.modified|length %}
+          <strong>{{ counter }}</strong> modified
+        {% endblocktrans %}
+      {% endif %}
+      {% if files_changed_diff.deleted %}
+        ·
+        {% blocktrans trimmed with counter=files_changed_diff.deleted|length %}
+          <strong>{{ counter }}</strong> deleted
+        {% endblocktrans %}
+      {% endif %}
     </div>
 
-  {% endif %}
+    <div class="ui segment">
+      <div class="ui divided relaxed list">
+        {% for file in files_changed_diff.files %}
+          <div class="item">
+            {% if file.status == "added" %}
+              <i class="green fa-duotone fa-square-plus icon"></i>
+            {% elif file.status == "deleted" %}
+              <i class="red fa-duotone fa-square-minus icon"></i>
+            {% else %}
+              <i class="orange fa-duotone fa-pen-to-square icon"></i>
+            {% endif %}
+            <div class="content">
+              {% if file.status == "deleted" %}
+                <code>{{ file.path }}</code>
+              {% else %}
+                <a href="{{ file.url }}" target="_blank" rel="noopener">
+                  <code>{{ file.path }}</code>
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 
-</div>
+{% else %}
+
+  <div class="ui basic center aligned segment">
+    <i class="fa-duotone fa-circle-check large green icon"></i>
+    <p>{% trans "No documentation files changed in this build." %}</p>
+  </div>
+
+{% endif %}
