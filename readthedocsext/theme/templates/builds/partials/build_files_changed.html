@@ -30,6 +30,11 @@
 {% load blocktrans trans from i18n %}
 
 {% if build.is_external %}
+  {% comment %}
+    The state badge is a direct child of the header on purpose: Fomantic only
+    vertically centers a label via `.ui.header > .ui.label`. Wrapping the
+    content -- for example, to add a header icon -- breaks that centering.
+  {% endcomment %}
   <div class="ui segment">
     <div class="ui small header">
       <a href="{{ build.version.vcs_url }}" target="_blank" rel="noopener">
