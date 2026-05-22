@@ -12,9 +12,7 @@
   base. Pull request builds are compared against the base version, while
   normal version builds are compared against the version's previous build.
 
-  Pull request builds also show a pull request info card. NOTE: the title,
-  author, and branch names on that card are demo data -- see the comment on
-  the card below.
+  Pull request builds also show a small pull request info card.
 
   Template parameters
   -------------------
@@ -32,35 +30,18 @@
 {% load blocktrans trans from i18n %}
 
 {% if build.is_external %}
-  {% comment %}
-    Partly-demo pull request info card.
-
-    The pull request number, link, and state use real data. The title,
-    author, and base/head branch names are demo placeholders -- Read the
-    Docs does not store that metadata yet. Wire them to the Git provider
-    before shipping.
-  {% endcomment %}
   <div class="ui segment">
-    <div class="ui header">
+    <div class="ui small header">
       <i class="grey fa-duotone fa-code-pull-request icon"></i>
       <div class="content">
         <a href="{{ build.version.vcs_url }}" target="_blank" rel="noopener">
-          {# Demo data #}
-          Add latency-test guide and CLI timing reference
+          {{ build.external_version_name|lower|capfirst }} #{{ build.get_version_name }}
         </a>
-        <span class="ui grey text">#{{ build.get_version_name }}</span>
         {% if build.version.state == "open" %}
           <span class="ui mini horizontal green label">{% trans "Open" %}</span>
         {% elif build.version.state == "closed" %}
           <span class="ui mini horizontal grey label">{% trans "Closed" %}</span>
         {% endif %}
-        <div class="sub header">
-          {# Demo data #}
-          {% blocktrans trimmed with author="ericholscher" base="main" head="latency-test" %}
-            <strong>{{ author }}</strong> wants to merge into
-            <code>{{ base }}</code> from <code>{{ head }}</code>.
-          {% endblocktrans %}
-        </div>
       </div>
     </div>
   </div>
