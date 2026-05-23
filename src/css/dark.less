@@ -78,7 +78,10 @@
 @import (reference, less)
   "../../readthedocsext/theme/static/readthedocsext/theme/css/site.css";
 @import (reference) "fomantic-ui-less/themes/default/globals/site.variables";
+@import (reference)
+  "@readthedocs/sui-common-theme/themes/rtd-common/globals/site.variables";
 @import (reference) "fomantic-ui-less/themes/default/globals/colors.less";
+@import (reference) "fomantic-ui-less/themes/default/modules/dropdown.variables";
 @import (reference) "fomantic-ui-less/themes/default/views/card.variables";
 
 // Avoid formatting all of the lines to wrap
@@ -705,6 +708,7 @@ html[data-theme="system"]:not(#_) {
   .ui.form .inline.fields .field > label :extend(.ui.inverted.form .inline.fields .field > label) {};
   .ui.form .inline.fields .field > p :extend(.ui.inverted.form .inline.fields .field > p) {};
   .ui.form .inline.fields > label :extend(.ui.inverted.form .inline.fields > label) {};
+  .ui.input > input :extend(.ui.inverted.input > input) {};
   .ui.form input[type="color"] :extend(.ui.inverted.form input[type="color"]) {};
   .ui.form input[type="date"] :extend(.ui.inverted.form input[type="date"]) {};
   .ui.form input[type="datetime-local"] :extend(.ui.inverted.form input[type="datetime-local"]) {};
@@ -725,6 +729,8 @@ html[data-theme="system"]:not(#_) {
   .ui.form .warning.field label :extend(.ui.inverted.form .warning.field label) {};
   .ui.loading.form :extend(.ui.inverted.loading.form) {};
   .ui.loading.form:before :extend(.ui.inverted.loading.form:before) {};
+  .ui.ui.ui.checkbox + label :extend(.ui.ui.ui.inverted.checkbox + label) {};
+  .ui.ui.ui.checkbox label :extend(.ui.ui.ui.inverted.checkbox label) {};
 
   // Card
   a.ui.card:hover :extend(a.inverted.ui.card:hover) {};
@@ -825,10 +831,15 @@ html[data-theme="system"]:not(#_) {
   .ui.feed > .event > .content .summary :extend(.ui.inverted.feed > .event > .content .summary) {};
   .ui.feed > .event > .label i.icon :extend(.ui.inverted.feed > .event > .label i.icon) {};
 
+  // Breadcrumb
+  .ui.breadcrumb :extend(.ui.inverted.breadcrumb) {};
+  .ui.breadcrumb > .active.section :extend(.ui.inverted.breadcrumb > .active.section) {};
+  .ui.breadcrumb > .divider :extend(.ui.inverted.breadcrumb > .divider) {};
+
   // And some polish fixes for background colors that don't match SUI inverted
   // colors and patterns.
   body {
-    background-color: darken(@black, 5);
+    background-color: darken(@black, 8);
   }
 
   .ui.container,
@@ -852,8 +863,13 @@ html[data-theme="system"]:not(#_) {
   }
   .ui.form .field input,
   .ui.form .field textarea {
-    background-color: #252a31;
-    color: #fff;
+    background-color: @black;
+    color: @white;
+  }
+
+  .ui.segment:not(.basic) .ui.input > input[type="text"] {
+    background-color: fadeout(@grey, 60);
+    color: @white;
   }
 
   .ui.bulleted.list .item:before {
@@ -870,6 +886,11 @@ html[data-theme="system"]:not(#_) {
       background: @grey !important;
     }
   }
+
+  // Dropdown rules we can't use extend with, copied from dropdown definition
+  .ui.dropdown .menu > .message:not(.ui) {
+    color: @invertedMessageColor;
+  };
 
   // Invert the logo
   .ui.image[src*="readthedocsext/theme/images/logo-wordmark-dark.svg"] {
@@ -893,5 +914,11 @@ html[data-theme="system"]:not(#_) {
   .ui.cards > .card > .extra a:not(.ui):hover,
   .ui.card > .extra a:not(.ui):hover {
       color: @extraLinkHoverColor;
+  }
+
+  // We use a muted grey for the build id to de-emphasize it visually. The huge,
+  // shared integer is pretty meaningless from a user persepective.
+  .ui.breadcrumb .ui.grey.text {
+      color: @invertedUnselectedTextColor;
   }
 }
