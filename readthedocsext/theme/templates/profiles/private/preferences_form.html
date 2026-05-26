@@ -1,0 +1,25 @@
+{% extends "profiles/base_edit.html" %}
+
+{% load trans from i18n %}
+{% load crispy from crispy_forms_tags %}
+
+{% block title %}
+  {% trans "Preferences" %}
+{% endblock title %}
+{% block profile_admin_preferences %}
+  active
+{% endblock profile_admin_preferences %}
+{% block edit_content_header %}
+  {% trans "Preferences" %}
+{% endblock edit_content_header %}
+
+{% block edit_content %}
+  <form method="post" action="." class="ui form">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="ui primary button" type="submit">{% trans "Save" %}</button>
+  </form>
+{% endblock edit_content %}
+
+{% block edit_sidebar %}
+{% endblock edit_sidebar %}

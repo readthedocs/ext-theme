@@ -27,6 +27,8 @@
                  href="{% url 'account_email' %}">{% trans "Email addresses" %}</a>
               <a class="item {% block profile_admin_social_accounts %}{% endblock %}"
                  href="{% url 'socialaccount_connections' %}">{% trans "Connected services" %}</a>
+              <a class="item {% block profile_admin_preferences %}{% endblock %}"
+                 href="{% url 'profiles_preferences_edit' %}">{% trans "Preferences" %}</a>
             </div>
           </div>
           <div class="item">
