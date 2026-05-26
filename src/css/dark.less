@@ -892,8 +892,9 @@ html[data-theme="system"]:not(#_) {
     color: @invertedMessageColor;
   };
 
-  // Invert the logo
-  .ui.image[src*="readthedocsext/theme/images/logo-wordmark-dark.svg"] {
+  // Invert the logo, no extension as dev uses `logo-wordmark-dark.svg` and
+  // prod uses `logo-wordmark-dark.{hash}.svg`
+  .ui.image[src*="readthedocsext/theme/images/logo-wordmark-dark."] {
     filter: invert(100) brightness(110);
   }
 
