@@ -344,6 +344,10 @@ export class BuildDetailView {
     this.builder = ko.observable(build.builder);
     /** @observable {Array.<Object>} Build command objects as an array */
     this.commands = ko.observableArray(build.commands);
+    /** @computed {Boolean} Does the build have at least one failed command? */
+    this.has_failed_command = ko.computed(() => {
+      return this.commands().some((command) => command.exit_code() > 0);
+    });
 
     /** @observable {string} Repository commit for the build */
     this.commit = ko.observable(build.commit);
@@ -406,11 +410,7 @@ export class BuildDetailView {
     this.is_polling = ko.observable(true);
     this.is_polling.subscribe((is_polling) => {
       if (!is_polling) {
-        if (this.selected_hash()) {
-          this.set_selected_line_from_hash(this.selected_hash());
-        } else {
-          this.set_selected_line_from_first_failed_command();
-        }
+        this.set_selected_line_from_hash(this.selected_hash());
       }
     });
 
@@ -567,6 +567,13 @@ export class BuildDetailView {
    * @param {string} selected_hash - Hash to lookup
    */
   set_selected_line_from_hash(selected_hash) {
+    // Special hash that resolves to the first failed command instead of a
+    // specific output line. Useful for deep-linking from GitHub PR comments.
+    if (selected_hash === "#error") {
+      this.set_selected_line_from_first_failed_command();
+      return;
+    }
+
     const re_hash = /^#(\d+)--(\d+)$/; // (?:$|(\d+)$)/; // multiple lines!
 
     if (selected_hash) {

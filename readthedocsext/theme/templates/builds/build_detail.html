@@ -215,6 +215,11 @@
               {% trans "There was an error with this build" %}
             </div>
             <p data-bind="text: error"></p>
+            <a class="ko hidden ui inverted basic small button"
+               data-bind="css: { hidden: !has_failed_command() }, click: set_selected_line_from_first_failed_command">
+              <i class="fad fa-arrow-down icon"></i>
+              {% trans "Jump to failed command" %}
+            </a>
           </div>
         </div>
       {% endblock build_detail_notifications %}
