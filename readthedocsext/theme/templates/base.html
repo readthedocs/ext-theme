@@ -2,7 +2,7 @@
 {% load webpack_static settings_dashboard from ext_theme_tags %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="{{ request.user.profile.theme }}">
   <head>
 
     {# Hide weird spaces in title #}
@@ -18,7 +18,17 @@
 
     {% block head_links %}
       <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" />
-      <link rel="stylesheet" type="text/css" media="all" href="{% webpack_static "readthedocsext/theme/css/site.css" %}" />
+      {% comment %}
+        Always include the light theme styles. If the theme is not explicitly a
+        light theme, then theme is either `dark` or `system` and we include the
+        dark styles. If explicitly `dark` theme, the dark mode rules are always
+        active. Otherwise, theme is `system` and we use the media query to
+        conditionally activate dark mode rules.
+      {% endcomment %}
+      <link rel="stylesheet" type="text/css" href="{% webpack_static "readthedocsext/theme/css/site.css" %}" media="all" />
+      {% if not request.user.profile.use_light_theme %}
+        <link rel="stylesheet" type="text/css" href="{% webpack_static "readthedocsext/theme/css/dark.css" %}" media="{{ request.user.profile.use_dark_theme|yesno:"all,(prefers-color-scheme: dark)" }}" />
+      {% endif %}
     {% endblock head_links %}
     {# TODO deprecate extra_links #}
     {% block extra_links %}
@@ -76,6 +86,7 @@
     {% endblock footer %}
 
     {% block body_scripts %}
+      <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/runtime~site.js" %}"></script>
       <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/vendor.js" %}"></script>
       <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/site.js" %}"></script>
     {% endblock body_scripts %}
