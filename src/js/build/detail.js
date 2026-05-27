@@ -406,7 +406,11 @@ export class BuildDetailView {
     this.is_polling = ko.observable(true);
     this.is_polling.subscribe((is_polling) => {
       if (!is_polling) {
-        this.set_selected_line_from_hash(this.selected_hash());
+        if (this.selected_hash()) {
+          this.set_selected_line_from_hash(this.selected_hash());
+        } else {
+          this.set_selected_line_from_first_failed_command();
+        }
       }
     });
 
@@ -590,6 +594,22 @@ export class BuildDetailView {
           this.set_selected_line(selected_line);
         }
       }
+    }
+  }
+
+  /**
+   * Select the first output line of the first failed command.
+   *
+   * Reuses :meth:`set_selected_line` so the existing view logic runs:
+   * expanding the command, marking the line, scrolling to it, and updating
+   * the URL hash.
+   */
+  set_selected_line_from_first_failed_command() {
+    const failed_command = ko.utils.arrayFirst(this.commands(), (command) => {
+      return command.exit_code() > 0;
+    });
+    if (failed_command && failed_command.output_lines().length) {
+      this.set_selected_line(failed_command.output_lines()[0]);
     }
   }
 
