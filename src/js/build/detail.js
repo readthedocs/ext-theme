@@ -407,13 +407,7 @@ export class BuildDetailView {
     this.is_polling = ko.observable(true);
     this.is_polling.subscribe((is_polling) => {
       if (!is_polling) {
-        // Scroll to the linked output line if there is one, otherwise scroll
-        // to the first failed command.
-        if (this.selected_hash()) {
-          this.set_selected_line_from_hash(this.selected_hash());
-        } else {
-          this.scroll_to_first_failed_command();
-        }
+        this.set_selected_line_from_hash(this.selected_hash());
       }
     });
 
@@ -597,27 +591,6 @@ export class BuildDetailView {
           this.set_selected_line(selected_line);
         }
       }
-    }
-  }
-
-  /**
-   * Scroll to the first failed build command.
-   *
-   * Failed commands are already expanded, so this just brings the build
-   * error into view on page load or when polling finishes.
-   */
-  scroll_to_first_failed_command() {
-    const failed_command = ko.utils.arrayFirst(this.commands(), (command) => {
-      return command.exit_code() > 0;
-    });
-    if (!failed_command) {
-      return;
-    }
-    const elem = document.getElementById(
-      "build-command-" + failed_command.id(),
-    );
-    if (elem && elem.scrollIntoView) {
-      elem.scrollIntoView({ behavior: "auto", block: "start" });
     }
   }
 

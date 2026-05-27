@@ -235,7 +235,7 @@
                data-bind="css: { hidden: !commands(), 'single line': !is_wrapped() }, foreach: commands">
           <tbody>
             <tr class="top aligned command"
-                data-bind="visible: is_visible() || $parent.show_debug(), attr: { id: 'build-command-' + id() }">
+                data-bind="visible: is_visible() || $parent.show_debug()">
               <td class="collapsing">
                 <a class="ui icon left floated" data-bind="click: toggle_expanded">
                   <i class="grey fa-solid fa-angle-right icon"
