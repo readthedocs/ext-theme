@@ -50,7 +50,10 @@
             <div class="header">{% trans "Preferences" %}</div>
             <div class="menu">
               <a class="item {% block profile_admin_dashboard_preferences %}{% endblock %}"
-                 href="{% url 'profiles_dashboard_preferences_edit' %}">{% trans "Dashboard" %}</a>
+                 href="{% url 'profiles_dashboard_preferences_edit' %}">
+                {% trans "Dashboard" %}
+                <div class="ui basic primary label">{% trans "New" %}</div>
+              </a>
               {% if USE_PROMOS %}
                 <a class="item {% block profile_admin_advertising %}{% endblock %}"
                    href="{% url 'account_advertising' %}">{% trans "Advertising" %}</a>
