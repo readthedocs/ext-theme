@@ -6,6 +6,9 @@ build:
     # Python 3.9 is required here since we are using an old version of Sphinx
     python: "3.9"
     nodejs: "22"
+  jobs:
+    post_install:
+      - npm install -g "npm@11.10"
 
 python:
   install:
@@ -16,8 +19,3 @@ python:
 
 sphinx:
   configuration: docs/conf.py
-
-build:
-  jobs:
-    pre_install:
-      - npm install -g "npm@11.10"
