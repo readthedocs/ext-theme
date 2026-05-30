@@ -16,6 +16,10 @@
     "test:dev": "web-test-runner --watch",
     "test:debug": "web-test-runner --manual --open"
   },
+  "engines": {
+    "node": ">22.0.0",
+    "npm": ">11.10.0"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
