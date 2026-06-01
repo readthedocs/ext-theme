@@ -9,7 +9,6 @@ commands:
     description: "Ensure built assets are up to date"
     steps:
       - checkout
-      - run: sudo npm install -g "npm@11.10"
       - run: npm ci
       - run: npm run build
       - run:
@@ -27,7 +26,6 @@ commands:
       - browser-tools/install_chrome
       - browser-tools/install_chromedriver
       - checkout
-      - run: sudo npm install -g "npm@11.10"
       - run: npm ci
       - run: npm test
 
@@ -38,20 +36,19 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: "22.11"
-      - run: npm install -g "npm@11.10"
+          node-version: "24.16"
       - run: npm ci
       - run: npm run lint
       - run: pip install pre-commit
       - run: pre-commit run --from-ref origin/HEAD --to-ref HEAD
   build:
     docker:
-      - image: "cimg/node:22.11"
+      - image: "cimg/node:24.16"
     steps:
       - run-build: {}
   test:
     docker:
-      - image: "cimg/node:22.11"
+      - image: "cimg/node:24.16"
     steps:
       - run-test: {}
 
