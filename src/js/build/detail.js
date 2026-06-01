@@ -344,6 +344,10 @@ export class BuildDetailView {
     this.builder = ko.observable(build.builder);
     /** @observable {Array.<Object>} Build command objects as an array */
     this.commands = ko.observableArray(build.commands);
+    /** @computed {Boolean} Does the build have at least one failed command? */
+    this.has_failed_command = ko.computed(() => {
+      return this.commands().some((command) => command.exit_code() > 0);
+    });
 
     /** @observable {string} Repository commit for the build */
     this.commit = ko.observable(build.commit);
@@ -563,6 +567,13 @@ export class BuildDetailView {
    * @param {string} selected_hash - Hash to lookup
    */
   set_selected_line_from_hash(selected_hash) {
+    // Special hash that resolves to the first failed command instead of a
+    // specific output line. Useful for deep-linking from GitHub PR comments.
+    if (selected_hash === "#error") {
+      this.set_selected_line_from_first_failed_command();
+      return;
+    }
+
     const re_hash = /^#(\d+)--(\d+)$/; // (?:$|(\d+)$)/; // multiple lines!
 
     if (selected_hash) {
@@ -590,6 +601,22 @@ export class BuildDetailView {
           this.set_selected_line(selected_line);
         }
       }
+    }
+  }
+
+  /**
+   * Select the first output line of the first failed command.
+   *
+   * Reuses :meth:`set_selected_line` so the existing view logic runs:
+   * expanding the command, marking the line, scrolling to it, and updating
+   * the URL hash.
+   */
+  set_selected_line_from_first_failed_command() {
+    const failed_command = ko.utils.arrayFirst(this.commands(), (command) => {
+      return command.exit_code() > 0;
+    });
+    if (failed_command && failed_command.output_lines().length) {
+      this.set_selected_line(failed_command.output_lines()[0]);
     }
   }
 
