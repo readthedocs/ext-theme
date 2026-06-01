@@ -111,8 +111,9 @@ class BuildCommand {
       }
     });
 
-    /** @observable {Boolean} Is this command expanded? */
-    this.is_expanded = ko.observable(false);
+    /** @observable {Boolean} Is this command expanded? Failed commands are
+     * expanded by default. */
+    this.is_expanded = ko.observable(this.exit_code() > 0);
     this.exit_code.subscribe((exit_code) => {
       if (exit_code !== undefined && exit_code > 0) {
         this.is_expanded(true);
