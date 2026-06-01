@@ -50,7 +50,7 @@
     "imports-loader": "^4.0.1",
     "jquery": "^3.4.1",
     "jquery-address": "^1.6.0",
-    "jsdoc": "^4.0.2",
+    "jsdoc": "^4.0.4",
     "knockout": "^3.5.1",
     "lato-font": "^3.0.0",
     "less": "^4.2.0",
