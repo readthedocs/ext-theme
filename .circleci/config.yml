@@ -36,19 +36,19 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: "22.11"
+          node-version: "24.16"
       - run: npm ci
       - run: npm run lint
       - run: pip install pre-commit
       - run: pre-commit run --from-ref origin/HEAD --to-ref HEAD
   build:
     docker:
-      - image: "cimg/node:22.11"
+      - image: "cimg/node:24.16"
     steps:
       - run-build: {}
   test:
     docker:
-      - image: "cimg/node:22.11"
+      - image: "cimg/node:24.16"
     steps:
       - run-test: {}
 
