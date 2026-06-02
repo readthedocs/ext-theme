@@ -177,12 +177,14 @@ collapsed, to save visual space and can be expanded with the right label.
         <span class="ui tiny teal circular label">{{ project.builds.count }}</span>
       </a>
       <div class="right menu">
-        {# Show top-level view docs button on non-build pages with a good build #}
-        {% if project.has_good_build and not build %}
-          <a class="item" href="{{ project.get_docs_url }}">
-            <i class="fa-duotone fa-book icon"></i>
-            {% trans "View docs" %}
-          </a>
+        {# Highlight the published docs: the highest-value output of a project. #}
+        {% if project.has_good_build %}
+          <div class="item">
+            <a class="ui small primary button" href="{{ project.get_docs_url }}">
+              <i class="fa-duotone fa-book icon"></i>
+              {% trans "View docs" %}
+            </a>
+          </div>
         {% endif %}
         {% if request.user|is_admin:project %}
           {% if request.user.is_staff or request.user.is_impersonate %}

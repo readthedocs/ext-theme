@@ -84,6 +84,19 @@ active_item
             <div class="right menu">
               {% block header_right_menu %}
 
+                {% block header_menu_add_project %}
+                  {% if request.user.is_authenticated %}
+                    <div class="item">
+                      <a class="ui small green button"
+                         href="{% url 'projects_import' %}"
+                         data-content="{% trans "Import a documentation project" %}">
+                        <i class="fa-solid fa-plus icon"></i>
+                        {% trans "Add project" %}
+                      </a>
+                    </div>
+                  {% endif %}
+                {% endblock header_menu_add_project %}
+
                 {% block header_menu_search %}
                   {% if request.user.is_authenticated %}
                     <div class="item">
