@@ -115,11 +115,6 @@
         <i class="fa-duotone fa-memo-circle-info icon"></i>
         {% trans "Raw log" %}
       </a>
-      <a class="ui item"
-         data-bind="click: toggle_debug, css: {active: show_debug()}">
-        <i class="fa-duotone fa-microscope icon"></i>
-        {% trans "Debug" %}
-      </a>
       <div class="item">
         <div class="ui small checkbox">
           <input type="checkbox" data-bind="checked: is_wrapped" />
@@ -234,8 +229,7 @@
         <table class="ko hidden ui small very basic compact inverted selectable command unstackable table"
                data-bind="css: { hidden: !commands(), 'single line': !is_wrapped() }, foreach: commands">
           <tbody>
-            <tr class="top aligned command"
-                data-bind="visible: is_visible() || $parent.show_debug()">
+            <tr class="top aligned command">
               <td class="collapsing">
                 <a class="ui icon left floated" data-bind="click: toggle_expanded">
                   <i class="grey fa-solid fa-angle-right icon"
@@ -256,7 +250,7 @@
               </td>
             </tr>
           </tbody>
-          <tbody data-bind="visible: (is_visible() || $parent.show_debug()) && is_expanded(), foreach: output_lines">
+          <tbody data-bind="visible: is_expanded(), foreach: output_lines">
             <tr data-bind="css: {'left olive marked': is_selected()}"
                 class="top aligned">
               <td class="collapsing line number">

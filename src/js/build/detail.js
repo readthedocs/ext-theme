@@ -88,18 +88,6 @@ class BuildCommand {
     });
     /** @computed {Boolean} This command is a debug class command */
     this.is_debug = ko.observable(is_debug);
-    /** @computed {Boolean} Hide debug commands until debug mode is enabled */
-    this.is_visible = ko.computed(
-      () => {
-        if (this.is_debug()) {
-          return false;
-        } else {
-          return true;
-        }
-      },
-      null,
-      { deferEvaluation: true },
-    );
     /** @computed {string} Command text class */
     this.command_class = ko.computed(() => {
       if (this.is_debug()) {
@@ -390,17 +378,10 @@ export class BuildDetailView {
     );
     // Update the new selected line
     this.selected_line.subscribe((selected_line) => {
-      if (selected_line.command.is_debug()) {
-        this.show_debug(true);
-      }
       selected_line.command.is_expanded(true);
       selected_line.is_selected(true);
       this.selected_hash(selected_line.anchor_id());
     });
-
-    /* Debug */
-    /** @observable {Boolean} Show debug/info commands */
-    this.show_debug = ko.observable(false);
 
     /** @observable {Boolean} Are we still polling the API? */
     this.is_polling = ko.observable(true);
@@ -596,13 +577,6 @@ export class BuildDetailView {
   // TODO is this needed? This is likely old view cruft
   show_legacy_output() {
     this.legacy_output(true);
-  }
-
-  /** Helper for toggling debug mode on the view. This hides some informational
-   * commands and the configuration file output step */
-  toggle_debug() {
-    const show_debug = this.show_debug();
-    this.show_debug(!show_debug);
   }
 
   /** Update all attributes and observables that depend on build state */
