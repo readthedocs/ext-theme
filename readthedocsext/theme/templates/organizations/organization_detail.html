@@ -1,6 +1,6 @@
 {% extends "organizations/base.html" %}
 
-{% load trans blocktrans from i18n %}
+{% load trans from i18n %}
 {% load gravatar_url from gravatar %}
 
 {% load has_sso_enabled from organizations %}
@@ -9,10 +9,17 @@
   {{ organization.name }}
 {% endblock title %}
 
-{# djlint:off #}
-{% block meta_title %}{{ organization.name }}{% endblock meta_title %}
-{% block meta_description %}{% if organization.description %}{{ organization.description }}{% else %}{% trans "Organization on Read the Docs" %}{% endif %}{% endblock meta_description %}
-{# djlint:on #}
+{% block head_meta %}
+  {% trans "Organization on Read the Docs" as default_description %}
+  <meta name="description"
+        content="{% firstof organization.description default_description %}" />
+  <meta property="og:title" content="{{ organization.name }}" />
+  <meta property="og:description"
+        content="{% firstof organization.description default_description %}" />
+  <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Read the Docs" />
+{% endblock head_meta %}
 
 {% block content-header %}
   {% include "organizations/partials/header.html" with organization=organization projects_active="active" %}

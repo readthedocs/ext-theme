@@ -7,10 +7,16 @@
   {% blocktrans with profile.user as user %}{{ user }}'s profile{% endblocktrans %}
 {% endblock title %}
 
-{# djlint:off #}
-{% block meta_title %}{% blocktrans with user=profile.user %}{{ user }}'s profile{% endblocktrans %}{% endblock meta_title %}
-{% block meta_description %}{% blocktrans with user=profile.user %}{{ user }}'s projects on Read the Docs{% endblocktrans %}{% endblock meta_description %}
-{# djlint:on #}
+{% block head_meta %}
+  {% blocktrans with user=profile.user asvar og_title %}{{ user }}'s profile{% endblocktrans %}
+  {% blocktrans with user=profile.user asvar og_description %}{{ user }}'s projects on Read the Docs{% endblocktrans %}
+  <meta name="description" content="{{ og_description }}" />
+  <meta property="og:title" content="{{ og_title }}" />
+  <meta property="og:description" content="{{ og_description }}" />
+  <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Read the Docs" />
+{% endblock head_meta %}
 
 {% block content %}
   <div class="ui stackable computer reversed grid">
