@@ -14,12 +14,14 @@
       <meta name="description"
             content="Read the Docs is a documentation publishing and hosting platform for technical documentation" />
       <meta name="keywords" content="documentation hosting" />
+      <link rel="canonical" href="{{ request.build_absolute_uri }}" />
       <meta property="og:title" content="Read the Docs" />
       <meta property="og:description"
             content="Read the Docs is a documentation publishing and hosting platform for technical documentation" />
       <meta property="og:url" content="{{ request.build_absolute_uri }}" />
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="Read the Docs" />
+      <meta name="twitter:card" content="summary" />
     {% endblock head_meta %}
 
     {% block head_links %}

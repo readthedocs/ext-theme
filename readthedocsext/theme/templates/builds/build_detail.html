@@ -4,7 +4,7 @@
 {% load is_admin from privacy_tags %}
 
 {% block title %}
-  {{ build.project.name }}
+  {% blocktrans with pk=build.pk name=build.project.name %}Build #{{ pk }} - {{ name }}{% endblocktrans %}
 {% endblock title %}
 
 {% block head_meta %}
