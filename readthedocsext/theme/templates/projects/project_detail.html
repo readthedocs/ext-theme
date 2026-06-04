@@ -1,10 +1,12 @@
 {% extends "projects/base.html" %}
 
-{% load projects_tags %}
+{% block body_class %}
+  project_detail
+{% endblock body_class %}
 
-{% block body_class %}project_detail{% endblock %}
-
-{% block title %}{{ project.name }}{% endblock %}
+{% block title %}
+  {{ project.name }}
+{% endblock title %}
 
 {# djlint:off #}
 {% block meta_title %}{{ project.name }}{% endblock meta_title %}
@@ -13,7 +15,7 @@
 
 {% block content-header %}
   {% include "projects/partials/header.html" with overview_active="active" %}
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
   {% comment %}
@@ -26,4 +28,4 @@
   {% endcomment %}
 
   {% include "builds/partials/version_list.html" with objects=versions %}
-{% endblock %}
+{% endblock content %}

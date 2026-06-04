@@ -1,11 +1,13 @@
 {% extends "organizations/base.html" %}
 
-{% load i18n %}
-{% load gravatar %}
+{% load trans from i18n %}
+{% load gravatar_url from gravatar %}
 
-{% load organizations %}
+{% load has_sso_enabled from organizations %}
 
-{% block title %}{{ organization.name }}{% endblock %}
+{% block title %}
+  {{ organization.name }}
+{% endblock title %}
 
 {# djlint:off #}
 {% block meta_title %}{{ organization.name }}{% endblock meta_title %}
@@ -14,7 +16,7 @@
 
 {% block content-header %}
   {% include "organizations/partials/header.html" with organization=organization projects_active="active" %}
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
   {% if organization|has_sso_enabled:"allauth" %}

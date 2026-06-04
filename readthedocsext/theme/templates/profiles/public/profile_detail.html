@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% load i18n %}
-{% load privacy_tags %}
+{% load blocktrans from i18n %}
+{% load get_public_projects from privacy_tags %}
 
 {% block title %}
   {% blocktrans with profile.user as user %}{{ user }}'s profile{% endblocktrans %}
-{% endblock %}
+{% endblock title %}
 
 {# djlint:off #}
 {% block meta_title %}{{ profile.user }}'s profile{% endblock meta_title %}
@@ -25,4 +25,4 @@
       {% include "profiles/partials/profile_project_list.html" with objects=project_list objects=public_projects %}
     </div>
   </div>
-{% endblock %}
+{% endblock content %}
