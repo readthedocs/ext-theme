@@ -8,8 +8,8 @@
 {% endblock title %}
 
 {# djlint:off #}
-{% block meta_title %}Build #{{ build.pk }} - {{ build.project.name }}{% endblock meta_title %}
-{% block meta_description %}{{ build.get_result_display }} for {{ build.get_version_name }} on {{ build.project.name }}{% endblock meta_description %}
+{% block meta_title %}{% blocktrans with pk=build.pk name=build.project.name %}Build #{{ pk }} - {{ name }}{% endblocktrans %}{% endblock meta_title %}
+{% block meta_description %}{% blocktrans with result=build.get_result_display version=build.get_version_name project=build.project.name %}{{ result }} for {{ version }} on {{ project }}{% endblocktrans %}{% endblock meta_description %}
 {# djlint:on #}
 
 {% block content-header %}

@@ -1,6 +1,6 @@
 {% extends "organizations/base.html" %}
 
-{% load trans from i18n %}
+{% load trans blocktrans from i18n %}
 {% load gravatar_url from gravatar %}
 
 {% load has_sso_enabled from organizations %}
@@ -11,7 +11,7 @@
 
 {# djlint:off #}
 {% block meta_title %}{{ organization.name }}{% endblock meta_title %}
-{% block meta_description %}{% firstof organization.description "Organization on Read the Docs" %}{% endblock meta_description %}
+{% block meta_description %}{% if organization.description %}{{ organization.description }}{% else %}{% trans "Organization on Read the Docs" %}{% endif %}{% endblock meta_description %}
 {# djlint:on #}
 
 {% block content-header %}

@@ -11,12 +11,10 @@
     {# djlint:on #}
 
     {% block head_meta %}
-      <meta name="description"
-            content="Read the Docs is a documentation publishing and hosting platform for technical documentation" />
       <meta name="keywords" content="documentation hosting" />
       {# djlint:off #}
       <meta property="og:title" content="{% block meta_title %}Read the Docs{% endblock meta_title %}" />
-      <meta property="og:description" content="{% block meta_description %}Read the Docs is a documentation publishing and hosting platform for technical documentation{% endblock meta_description %}" />
+      <meta name="description" property="og:description" content="{% block meta_description %}Read the Docs is a documentation publishing and hosting platform for technical documentation{% endblock meta_description %}" />
       {# djlint:on #}
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="Read the Docs" />

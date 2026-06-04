@@ -1,5 +1,7 @@
 {% extends "projects/base.html" %}
 
+{% load trans from i18n %}
+
 {% block body_class %}
   project_detail
 {% endblock body_class %}
@@ -10,7 +12,7 @@
 
 {# djlint:off #}
 {% block meta_title %}{{ project.name }}{% endblock meta_title %}
-{% block meta_description %}{% firstof project.description "Documentation project on Read the Docs" %}{% endblock meta_description %}
+{% block meta_description %}{% if project.description %}{{ project.description }}{% else %}{% trans "Documentation project on Read the Docs" %}{% endif %}{% endblock meta_description %}
 {# djlint:on #}
 
 {% block content-header %}
