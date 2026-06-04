@@ -6,6 +6,11 @@
 
 {% block title %}{{ project.name }}{% endblock %}
 
+{# djlint:off #}
+{% block meta_title %}{{ project.name }}{% endblock meta_title %}
+{% block meta_description %}{% firstof project.description "Documentation project on Read the Docs" %}{% endblock meta_description %}
+{# djlint:on #}
+
 {% block content-header %}
   {% include "projects/partials/header.html" with overview_active="active" %}
 {% endblock %}

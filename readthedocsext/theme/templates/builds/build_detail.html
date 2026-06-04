@@ -9,7 +9,7 @@
 
 {# djlint:off #}
 {% block meta_title %}Build #{{ build.pk }} - {{ build.project.name }}{% endblock meta_title %}
-{% block meta_description %}{% if build.state == "finished" %}{% if build.success %}Build passed{% else %}Build failed{% endif %}{% elif build.state == "cancelled" %}Build cancelled{% else %}Build in progress ({{ build.get_state_display }}){% endif %} for {{ build.get_version_name }} on {{ build.project.name }}{% endblock meta_description %}
+{% block meta_description %}{{ build.get_result_display }} for {{ build.get_version_name }} on {{ build.project.name }}{% endblock meta_description %}
 {# djlint:on #}
 
 {% block content-header %}

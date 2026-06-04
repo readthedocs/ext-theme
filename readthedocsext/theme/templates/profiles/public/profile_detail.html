@@ -3,7 +3,14 @@
 {% load i18n %}
 {% load privacy_tags %}
 
-{% block title %}{% blocktrans with profile.user as user %}{{ user }}'s profile{% endblocktrans %}{% endblock %}
+{% block title %}
+  {% blocktrans with profile.user as user %}{{ user }}'s profile{% endblocktrans %}
+{% endblock %}
+
+{# djlint:off #}
+{% block meta_title %}{{ profile.user }}'s profile{% endblock meta_title %}
+{% block meta_description %}{{ profile.user }}'s projects on Read the Docs{% endblock meta_description %}
+{# djlint:on #}
 
 {% block content %}
   <div class="ui stackable computer reversed grid">
