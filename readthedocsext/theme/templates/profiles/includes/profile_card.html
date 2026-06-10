@@ -33,19 +33,6 @@
 
     <div class="description">
       <div class="ui list">
-
-        {% if profile.homepage %}
-          <div class="item">
-            <i class="fa-solid fa-link icon"></i>
-            <div class="content">
-              {% blocktrans asvar text_homepage trimmed %}
-                User's homepage
-              {% endblocktrans %}
-              {% include "includes/elements/link.html" with is_external=True url=profile.homepage text=profile.homepage label=text_homepage %}
-            </div>
-          </div>
-        {% endif %}
-
         {% for socialaccount in profile.user.socialaccount_set.all %}
           {% with socialaccount.get_provider_account as provider %}
             <div class="item">
