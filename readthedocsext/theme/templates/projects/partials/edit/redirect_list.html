@@ -35,7 +35,8 @@
 {% block list_item_right_buttons %}
   {% trans "Move up" as button_up_text %}
   {% trans "Move down" as button_down_text %}
-  {% if not forloop.first %}
+  {# Show the "move up" button unless this is the very first redirect across all pages. #}
+  {% if not forloop.first or page_obj.has_previous %}
     <button class="ui icon button"
             data-bind="click: $root.post_child_form"
             data-content="{{ button_up_text }}"
@@ -49,7 +50,8 @@
     </button>
   {% endif %}
 
-  {% if not forloop.last %}
+  {# Show the "move down" button unless this is the very last redirect across all pages. #}
+  {% if not forloop.last or page_obj.has_next %}
     <button class="ui icon button"
             data-bind="click: $root.post_child_form"
             data-content="{{ button_down_text }}"
