@@ -9,10 +9,10 @@
       <a class="ui bottom right corner label">
         <i class="fa-duotone fa-edit icon"></i>
       </a>
-      <img src="{% gravatar_url profile.user.email 256 %}">
+      <img alt="{% trans "User avatar" %}" src="{% gravatar_url profile.user.email 256 %}">
     </div>
   {% else %}
-    <img class="image" src="{% gravatar_url profile.user.email 256 %}">
+    <img class="image" alt="{% trans "User avatar" %}" src="{% gravatar_url profile.user.email 256 %}">
   {% endif %}
   <div class="content">
 
