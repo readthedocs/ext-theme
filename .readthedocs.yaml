@@ -3,8 +3,7 @@ version: 2
 build:
   os: ubuntu-26.04
   tools:
-    # Python 3.9 is required here since we are using an old version of Sphinx
-    python: "3.9"
+    python: "3.14"
     # TODO use 24.16 when we update our build tools
     nodejs: "24"
   jobs:
