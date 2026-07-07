@@ -32,7 +32,7 @@ commands:
 jobs:
   lint:
     docker:
-      - image: "cimg/python:3.11.8"
+      - image: "cimg/python:3.14"
     steps:
       - checkout
       - node/install:
