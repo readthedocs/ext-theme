@@ -33,6 +33,7 @@ repos:
     hooks:
       - id: djlint-reformat-django
       - id: djlint-django
+        # Error pages have intentionally inlined styles
         exclude: "^readthedocsext/theme/static/readthedocsext/theme/error-pages/.*$"
   - repo: local
     hooks:
