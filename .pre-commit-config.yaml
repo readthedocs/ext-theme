@@ -33,6 +33,7 @@ repos:
     hooks:
       - id: djlint-reformat-django
       - id: djlint-django
+        exclude: "^readthedocsext/theme/static/readthedocsext/theme/error-pages/.*$"
   - repo: local
     hooks:
       - id: check-build-assets
