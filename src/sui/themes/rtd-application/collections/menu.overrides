@@ -6,3 +6,10 @@
     display: none;
   }
 }
+
+.dark-theme-override({
+  .ui.attached.menu:not(.borderless),
+  .ui.vertical.menu {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+});

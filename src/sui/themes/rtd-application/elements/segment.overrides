@@ -18,3 +18,18 @@
 .ui.inverted.basic.segments {
   background: @basicBackground;
 }
+// Bring back borders on attached segments, these are missing from inverted
+.dark-theme-override({
+  .ui.segments,
+  .ui.segments .segment,
+  .ui.segment {
+    &[class*="top attached"] {
+      border: @invertedPiledBorder;
+      border-bottom: none;
+    }
+    &[class*="bottom attached"] {
+      border: @invertedPiledBorder;
+      border-top: none;
+    }
+  }
+});
