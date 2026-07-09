@@ -2,11 +2,11 @@
 
 # If the working tree already has unstaged changes from earlier
 # auto-fix hooks, don't both running this check and just report fail
-if tree_before=$(git status --porcelain); then
+if tree_before=$(git diff readthedocsext/); then
     cat <<EOF
 Working tree is already dirty before asset build.
 
-% git status --porcelain
+% git diff readthedocsext/
 ${tree_before}
 EOF
     exit 1
@@ -19,7 +19,7 @@ then
     cat <<EOF
 Assets are out of date. Make sure to run 'npm run build' on your branch.
 
-% git diff readthedocsext/ 
+% git diff readthedocsext/
 ${tree_after}
 EOF
     exit 1
