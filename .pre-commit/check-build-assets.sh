@@ -2,7 +2,7 @@
 
 # If the working tree already has unstaged changes from earlier
 # auto-fix hooks, don't both running this check and just report fail
-if tree_before=$(git diff readthedocsext/); then
+if ! tree_before=$(git diff --stat --exit-code); then
     cat <<EOF
 Working tree is already dirty before asset build.
 
@@ -14,7 +14,7 @@ fi
 
 npm run build
 
-if tree_after=$(git diff readthedocsext/); then
+if ! tree_after=$(git diff --stat --exit-code readthedocsext/); then
 then
     cat <<EOF
 Assets are out of date. Make sure to run 'npm run build' on your branch.
