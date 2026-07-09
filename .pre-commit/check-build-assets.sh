@@ -15,7 +15,6 @@ fi
 npm run build
 
 if ! tree_after=$(git diff --stat --exit-code readthedocsext/); then
-then
     cat <<EOF
 Assets are out of date. Make sure to run 'npm run build' on your branch.
 
