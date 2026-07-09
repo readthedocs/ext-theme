@@ -11,3 +11,10 @@
   max-height: fit-content;
   overscroll-behavior: auto;
 }
+
+// Dark theme fix, use transparent background for basic segments
+.ui.inverted.basic.segment,
+.ui.segments .ui.inverted.basic.segment,
+.ui.inverted.basic.segments {
+  background: @basicBackground;
+}

@@ -1,0 +1,16 @@
+// Make selection and hover use primary color
+@selectedBackground: fadeout(@primaryTertiaryColorHover, 50%);
+@selectedColor: @selectedTextColor;
+@hoveredItemBackground: fadeout(@primaryTertiaryColorHover, 75%);
+@hoveredItemColor: @selectedTextColor;
+@invertedSelectedBackground: fadeout(@primaryTertiaryColorHover, 25%);
+@invertedSelectedColor: @primaryTextColor;
+@invertedHoveredItemBackground: fadeout(@primaryTertiaryColorHover, 50%);
+@invertedHoveredItemColor: @primaryTextColor;
+
+// Dark theme fixes
+// Use common field input styling for background and border. Use alpha to make
+// sure nested elements on lighter elements like segments have a bit more contrast.
+@invertedSelectionBackground: rgba(255, 255, 255, 0.1);
+@invertedSelectionBorderColor: rgba(255, 255, 255, 0.15);
+@invertedSelectionBorder: 1px solid @invertedSelectionBorderColor;

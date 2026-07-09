@@ -4,22 +4,6 @@
 @variationInputInvalid: false;
 @variationFormInvalid: false;
 
-// CSS variables
-@property --readthedocs-dashboard-primary {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: @teal;
-}
-@property --readthedocs-dashboard-secondary {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: @violet;
-}
-
-// Colors
-//@primaryColor: var(--readthedocs-dashboard-primary);
-//@secondaryColor: var(--readthedocs-dashboard-secondary);
-
 // Variable for high specificity `.ui` selector, a shortcut to increase
 // specificity (1, 1, 0), which should be a higher specificity than any of the
 // base SUI rule selectors. `#_` is just a short, non-existant id.
@@ -30,3 +14,34 @@
 //
 // prettier-ignore
 @uiImportant: .ui:not(#_);
+
+// Style overrides
+// Highlight/select colors
+@highlightBackground: @secondaryBackground;
+@highlightColor: @secondaryTextColor;
+@inputHighlightBackground: @secondaryBackground;
+@inputHighlightColor: @secondaryTextColor;
+
+// Color definitions for variations
+//
+// We don't use some of the default colors, which are a bit too neon colored by
+// default. There are a number of color variables we're not setting though,
+// which should probably be mapped out a bit more thoroughly.
+//
+// TODO move these to the common theme
+@primaryColor: @teal;
+@secondaryColor: @violet;
+@linkColor: @primaryColor;
+
+@lightTeal: mix(@teal, #fff, 80%);
+@lightViolet: mix(@violet, #fff, 80%);
+
+@lightPrimaryColor: @lightTeal;
+@lightSecondaryColor: @lightViolet;
+@lightPrimaryColorHover: @primaryColor;
+@lightSecondaryColorHover: @secondaryColor;
+
+@primaryBackground: @lightTeal;
+@secondaryBackground: @lightViolet;
+@primaryHoverTextColor: @primaryTextColor;
+@secondaryHoverTextColor: @secondaryTextColor;

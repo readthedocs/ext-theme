@@ -4,3 +4,49 @@
 .ui.ui.ui.form .field:only-child:not(.last) {
   margin: @fieldMargin;
 }
+
+// Dark theme overrides, these are missing inverted styles
+.dark-theme-override({
+  .ui.form ::placeholder {
+    color: @invertedUnselectedTextColor;
+    opacity: 1;
+  }
+  .ui.form :focus::placeholder {
+    color: @invertedMutedTextColor;
+  }
+  .ui.form input:not([type]),
+  .ui.form input[type="color"],
+  .ui.form input[type="date"],
+  .ui.form input[type="datetime-local"],
+  .ui.form input[type="email"],
+  .ui.form input[type="month"],
+  .ui.form input[type="number"],
+  .ui.form input[type="password"],
+  .ui.form input[type="search"],
+  .ui.form input[type="tel"],
+  .ui.form input[type="time"],
+  .ui.form input[type="text"],
+  .ui.form input[type="file"],
+  .ui.form input[type="url"],
+  .ui.form input[type="week"] {
+    background: @invertedInputBackground;
+
+    &:focus {
+      border-color: @focusedFormBorderColor;
+    }
+  }
+});
+
+.ui.inverted.form textarea {
+  background: @invertedInputBackground;
+  border-color: @invertedInputBorderColor;
+  color: @invertedInputColor;
+  box-shadow: @invertedInputBoxShadow;
+}
+
+.ui.inverted.form select {
+  background: @invertedInputBackground;
+  border-color: @invertedInputBorderColor;
+  color: @invertedInputColor;
+  box-shadow: @invertedInputBoxShadow;
+}

@@ -69,3 +69,15 @@ readthedocs-avatar.ui.image {
     .avatarWidth(@massiveWidth);
   }
 }
+
+// Dark theme fix, invertable images and handy for black and white SVGS.
+.dark-theme-override({
+  .ui.invertable.image {
+    filter: invert(100) brightness(110);
+  }
+});
+
+// Mostly just for QR codes like MFA codes
+.ui.white.background.image {
+  background: @white;
+}
