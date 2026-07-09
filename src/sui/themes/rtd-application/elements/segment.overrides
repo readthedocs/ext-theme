@@ -18,11 +18,11 @@
 .ui.inverted.basic.segments {
   background: @basicBackground;
 }
-// Bring back borders on attached segments, these are missing from inverted
 .dark-theme-override({
   .ui.segments,
   .ui.segments .segment,
   .ui.segment {
+    // Bring back borders on attached segments, these are removed from inverted in FUI
     &[class*="top attached"] {
       border: @invertedPiledBorder;
       border-bottom: none;
@@ -32,4 +32,23 @@
       border-top: none;
     }
   }
+});
+// Less aggressive colored segment styles, mimic basic colored segments with
+// border on the top instead of flat inverted. We only want this for segments
+// that are `class="ui red segment"`, not `class="ui inverted red segment"`,
+// so we will only do this when dark theme is active, not adjust the inverted
+// styles.
+.dark-theme-override({
+  each(@variationSegmentColors, {
+    @color: @value;
+    @c: @colors[@@color][color];
+    .ui.@{color}.segments:not(#_),
+    .ui.@{color}.segments .segment:not(#_),
+    .ui.@{color}.segment:not(#_) {
+      background-color: @invertedBackground;
+      color: @invertedTextColor;
+      border: @invertedPiledBorder;
+      border-top: 2px solid @c;
+    }
+  });
 });
