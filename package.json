@@ -61,7 +61,7 @@
     "path": "^0.12.7",
     "plausible-tracker": "^0.3.8",
     "postcss": "^8.5.15",
-    "postcss-fomanticui-dark": "github:agjohnson/postcss-fomanticui-dark#4140232",
+    "postcss-fomanticui-dark": "^1.0.2",
     "postcss-loader": "^8.2.1",
     "prettier": "^3.0.3",
     "pure-rand": "^6.1.0",
