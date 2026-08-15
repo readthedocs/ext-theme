@@ -45,3 +45,9 @@
 @secondaryBackground: @lightViolet;
 @primaryHoverTextColor: @primaryTextColor;
 @secondaryHoverTextColor: @secondaryTextColor;
+
+// Less aggressive inverted shadow on floating boxes and menus. This affects
+// toasts, dropdowns, popups, etc.
+@invertedFloatingShadow:
+  0 2px 4px 0 rgba(225, 225, 225, 0.15),
+  0 2px 10px 0 rgba(225, 225, 225, 0.1);
