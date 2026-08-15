@@ -14,6 +14,10 @@
 // Dark theme fix for pointing popup, inverted arrow color isn't supported by
 // default. This is required to put a border around the popup.
 .dark-theme-override({
+  .ui.top.popup::before,
+  .ui.bottom.popup::before,
+  .ui.left.popup::before,
+  .ui.right.popup::before,
   .ui.popup::before {
     box-shadow: @invertedArrowBoxShadow;
     background: @invertedBackground;
