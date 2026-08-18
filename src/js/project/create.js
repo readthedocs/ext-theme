@@ -77,14 +77,54 @@ export class ProjectCreateView extends ResponsiveView {
     this.allow_private_repos = ko.observable(false);
     /** @observable {string} The error message to show the user */
     this.error = ko.observable();
+    /** @observableArray {RemoteRepository[]} First page of the user's
+     * repositories, shown as a browsable list before any search */
+    this.browse_repos = ko.observableArray([]);
+    /** @observable {Boolean} Has the browse list finished loading? */
+    this.browse_repos_loaded = ko.observable(false);
 
     // Wait for config to be loaded to init search
     this.config.subscribe((config) => {
       if (config !== undefined) {
         this.allow_private_repos(config.allow_private_repos);
         this.init_search();
+        this.load_browse_repos();
       }
     });
+  }
+
+  /**
+   * Load the first page of the user's repositories for browsing.
+   *
+   * The search dropdown only shows results in response to a query, so without
+   * this list a fully synced account looks the same as an empty one until the
+   * user types something.
+   */
+  load_browse_repos() {
+    const config = this.config();
+
+    jquery
+      .getJSON(config.urls.remoterepository_list)
+      .done((response) => {
+        this.browse_repos(
+          response.results.map((repo) => new RemoteRepository(repo)),
+        );
+      })
+      .fail((error) => {
+        console.error("Error loading remote repositories:", error);
+      })
+      .always(() => {
+        this.browse_repos_loaded(true);
+      });
+  }
+
+  /**
+   * Select a repository from the browse list.
+   *
+   * @param {RemoteRepository} repo - The repository the user clicked
+   */
+  select_repo(repo) {
+    this.selected(repo);
   }
 
   /**
