@@ -1,0 +1,7 @@
+// Use a darker color label for inverted labels, the default inverted style
+// doesn't have enough contrast.
+@invertedBackgroundColor: if(
+  iscolor(@backgroundColor),
+  darken(@backgroundColor, 50),
+  @backgroundColor
+);
