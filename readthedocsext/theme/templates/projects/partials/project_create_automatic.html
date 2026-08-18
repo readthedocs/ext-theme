@@ -113,80 +113,7 @@
     </div>
     <div class="content">
       <div class="ui segment">
-        <div class="ui small divided items">
-
-          {% if "githubapp" in socialaccount_providers %}
-            <div class="item">
-              <div class="content">
-                <div class="description">
-                  {% comment %}
-                    This terminology comes from the documentation for GitHub App management.
-                    Our GHA is "installed" for users or organizations and GitHub users
-                    "grant access to repositories" (or on the GHA installation page
-                    "install GHA _for repositories_").
-                  {% endcomment %}
-                  {# TODO detect if users have only installed on individual repositories so we can be more definite with this guidance #}
-                  {% blocktrans trimmed %}
-                    If our GitHub App was only granted access to select repositories,
-                    repositories without access will not display in your repository list.
-                    You will need to grant access to additional repositories each time you create a project.
-                  {% endblocktrans %}
-                </div>
-                <div class="extra">
-                  <a class="ui right floated button"
-                     href="https://github.com/apps/{{ GITHUB_APP_NAME }}/installations/new/"
-                     target="_blank">
-                    <i class="fa-brands fa-github icon"></i>
-                    {% trans "Update GitHub App installation" %}
-                  </a>
-                </div>
-              </div>
-            </div>
-          {% endif %}
-
-          {# This should show for all providers and manually connected repositories #}
-          <div class="item">
-            <div class="content">
-              <div class="description">
-                {% blocktrans trimmed %}
-                  Your connected service account might be out of sync
-                  and a manual refresh may be required to update your list of repositories.
-                {% endblocktrans %}
-              </div>
-              <div class="extra">
-                <a class="ui right floated button"
-                   data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing(), positive: is_synced()}">
-                  <i class="fa-duotone fa-refresh icon"
-                     data-bind="css: {'fa-refresh': !is_synced(), 'fa-check': is_synced()}"></i>
-                  {% trans "Refresh your repositories" %}
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {% if "github" in socialaccount_providers %}
-            {# This doesn't cover GitHub App providers, the fix for GHA is different #}
-            <div class="item">
-              <div class="content">
-                <div class="description">
-                  {% blocktrans trimmed %}
-                    If your repository list does not include repositories from one of your GitHub organizations,
-                    our GitHub application may not be approved by the organization yet.
-                    In this case, you should try requesting approval of our GitHub application from the organization.
-                  {% endblocktrans %}
-                </div>
-                <div class="extra">
-                  <a class="ui right floated button"
-                     href="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#github-permission-troubleshooting">
-                    <i class="fa-duotone fa-circle-check icon"></i>
-                    {% trans "Learn how to request approval" %}
-                  </a>
-                </div>
-              </div>
-            </div>
-          {% endif %}
-
-        </div>
+        {% include "projects/partials/project_create_repair_items.html" %}
       </div>
     </div>
     <div class="actions">
@@ -198,23 +125,62 @@
 {% block project_add_automatic_placeholder %}
   <div class="ui basic horizontally fitted segment"
        data-bind="visible: !is_selected()">
-    <div class="ui top attached placeholder segment">
-      <div class="ui icon header">
-        {# Push user towards searching using input above #}
-        <i class="fad fa-search icon"></i>
-        {% trans "Select a repository" %}
+    {% if not has_connected_vcs_account %}
+      {# No Git provider connected: searching can never return results #}
+      <div class="ui top attached placeholder segment">
+        <div class="ui icon header">
+          <i class="fad fa-plug icon"></i>
+          {% trans "Connect a Git provider" %}
 
-        <div class="sub header">
-          {# User has connected accounts, don't point to connecting GitHub/etc #}
-          {% blocktrans trimmed %}
-            Use the search above to find the repository you would like to
-            use to build your new project. This project will be connected to
-            the repository through your connected account.
-          {% endblocktrans %}
+          <div class="sub header">
+            {% blocktrans trimmed %}
+              Your account isn't connected to GitHub, Bitbucket, or GitLab yet.
+              Connect a provider to choose from a list of your repositories.
+            {% endblocktrans %}
+          </div>
+        </div>
+        <a class="ui primary button"
+           href="{% url 'socialaccount_connections' %}">
+          {% trans "Connect a provider" %}
+        </a>
+      </div>
+    {% elif not has_remote_repositories %}
+      {# Provider connected but no repositories synced: explain the likely fixes inline #}
+      <div class="ui top attached placeholder segment">
+        <div class="ui icon header">
+          <i class="fad fa-search icon"></i>
+          {% trans "No repositories found yet" %}
+
+          <div class="sub header">
+            {% blocktrans trimmed %}
+              We can't see any repositories on your connected account yet.
+              This usually has a quick fix:
+            {% endblocktrans %}
+          </div>
         </div>
       </div>
+      <div class="ui bottom attached segment">
+        {% include "projects/partials/project_create_repair_items.html" %}
+      </div>
+    {% else %}
+      <div class="ui top attached placeholder segment">
+        <div class="ui icon header">
+          {# Push user towards searching using input above #}
+          <i class="fad fa-search icon"></i>
+          {% trans "Select a repository" %}
 
-    </div>
+          <div class="sub header">
+            {# User has connected accounts, don't point to connecting GitHub/etc #}
+            {% blocktrans trimmed %}
+              Use the search above to find the repository you would like to
+              use to build your new project. This project will be connected to
+              the repository through your connected account.
+            {% endblocktrans %}
+          </div>
+        </div>
+
+      </div>
+    {% endif %}
   </div>
 {% endblock project_add_automatic_placeholder %}
 

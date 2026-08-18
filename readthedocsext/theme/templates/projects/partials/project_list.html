@@ -24,9 +24,11 @@
   {% trans "You don't have any projects configured yet" %}
 {% endblock list_placeholder_header_empty %}
 {% block list_placeholder_text_empty %}
+  {% url "projects_import" as import_url %}
+  <a href="{{ import_url }}" class="ui primary button">{% trans "Add your first project" %}</a>
   <a href="https://docs.readthedocs.io/page/tutorial/"
      target="_blank"
-     class="ui primary button">{% trans "Learn how to get started" %}</a>
+     class="ui button">{% trans "Learn how to get started" %}</a>
 {% endblock list_placeholder_text_empty %}
 
 {% block list_item_right_menu %}
