@@ -169,7 +169,45 @@
         {% include "projects/partials/project_create_repair_items.html" %}
       </div>
     {% else %}
-      <div class="ui top attached placeholder segment">
+      {# Browsable first page of repositories; the search above covers the rest #}
+      <div class="ko hidden"
+           data-bind="css: {hidden: browse_repos().length == 0}">
+        <div class="ui top attached segment">
+          <div class="ui small header">
+            {% trans "Your repositories" %}
+            <div class="sub header">
+              {% blocktrans trimmed %}
+                Select a repository to create your project from,
+                or use the search above to find more of your repositories.
+              {% endblocktrans %}
+            </div>
+          </div>
+        </div>
+        <div class="ui bottom attached segment">
+          <div class="ui middle aligned divided selection list"
+               data-bind="foreach: browse_repos">
+            <div class="item" data-bind="click: $parent.select_repo.bind($parent)">
+              <img class="ui avatar image"
+                   data-bind="attr: {src: avatar_url}"
+                   alt="{% trans "Repository logo" %}" />
+              <div class="content">
+                <div class="header">
+                  <span data-bind="text: full_name"></span>
+                  <i class="fa-duotone fa-eye-slash small icon ko hidden"
+                     data-bind="css: {hidden: !is_private()}"></i>
+                  <i class="fa-duotone fa-magic small icon ko hidden"
+                     data-bind="css: {hidden: !has_admin()}"></i>
+                  <i class="fa-duotone fa-download small icon ko hidden"
+                     data-bind="css: {hidden: !has_project()}"></i>
+                </div>
+                <div class="description" data-bind="text: clone_url"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ui top attached placeholder segment ko"
+           data-bind="css: {hidden: browse_repos().length > 0}">
         <div class="ui icon header">
           {# Push user towards searching using input above #}
           <i class="fad fa-search icon"></i>
