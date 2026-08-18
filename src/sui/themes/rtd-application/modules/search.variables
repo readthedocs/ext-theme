@@ -1,0 +1,41 @@
+// Dark theme fixes, adds a pseudo variant for inverted search
+// This doesn't exist in FUI at all, the implementation here is just a simple
+// copy of the rules that affects some colors.
+@invertedPromptBackground: @black;
+@invertedPromptColor: @invertedTextColor;
+@invertedPromptFocusBackground: @invertedPromptBackground;
+@invertedPromptFocusColor: @invertedTextColor;
+
+@invertedResultsBackground: @black;
+@invertedResultsBoxShadow: @invertedFloatingShadow;
+@invertedResultsBorder: rgba(255, 255, 255, 0.15);
+
+@invertedResultTextColor: @invertedTextColor;
+@invertedResultTitleColor: @invertedTextColor;
+@invertedResultDescriptionColor: @invertedLightTextColor;
+@invertedResultPriceColor: @green;
+
+@invertedResultHoverBackground: fadeout(@primaryTertiaryColorHover, 50%);
+
+@invertedResultActiveBackground: #3d3e3f;
+@invertedResultActiveTitleColor: @invertedTextColor;
+@invertedResultActiveDescriptionColor: @invertedTextColor;
+
+@invertedMessageHeaderColor: @invertedTextColor;
+@invertedMessageDescriptionColor: @invertedTextColor;
+
+@invertedActionBackground: #191a1b;
+@invertedActionColor: @invertedTextColor;
+@invertedActionHoverBackground: #2d2e2f;
+
+@invertedCategoryBackground: #191a1b;
+@invertedCategoryNameBackground: transparent;
+@invertedCategoryNameColor: @invertedLightTextColor;
+@invertedCategoryNameActiveColor: @invertedTextColor;
+@invertedCategoryActiveBackground: #2d2e2f;
+@invertedCategoryResultBackground: @black;
+
+@invertedHighlightMatchesBackground: fadeout(@primaryTertiaryColorHover, 50%);
+@invertedHighlightMatchesColor: @invertedTextColor;
+
+@invertedLoaderLineColor: rgb(255 255 255 / 0.2);

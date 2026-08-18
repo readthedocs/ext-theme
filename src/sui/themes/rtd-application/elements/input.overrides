@@ -1,0 +1,14 @@
+// Dark theme fix, inputs don't have inverted styles
+.ui.inverted.input {
+  color: @invertedTextColor;
+}
+.ui.inverted.input > input {
+  background: @invertedInputBackground;
+  border-color: @invertedInputBorderColor;
+  color: @invertedTextColor;
+}
+
+.ui.inverted.input > input::placeholder {
+  // Placeholder text needs a lighter color to be legible
+  color: @invertedUnselectedTextColor;
+}
