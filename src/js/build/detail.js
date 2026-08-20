@@ -80,6 +80,8 @@ class BuildCommand {
     });
     /** @observable {number} Command run time in seconds */
     this.run_time = ko.observable(build_command.run_time);
+    /** @observable {string} Command start date/time */
+    this.start_date = ko.observable(build_command.start_date);
     /** @observable {number} Command end time in seconds */
     this.end_time = ko.observable(build_command.end_time);
     /** @computed {Boolean} Command is finished running? */
@@ -322,9 +324,16 @@ export class BuildDetailView {
       if (length) {
         duration = dayjs.duration(length, "seconds");
       } else {
-        // Infer length from build start time
+        // Infer length from first command start date if available, otherwise
+        // fall back to build start date
         const dateNow = dayjs();
-        const dateStart = dayjs(this.date());
+        const first_command = ko.utils.arrayFirst(
+          this.commands(),
+          (cmd) => cmd.start_date() !== null && cmd.start_date() !== undefined,
+        );
+        const dateStart = dayjs(
+          first_command ? first_command.start_date() : this.date(),
+        );
         duration = dayjs.duration(dateNow.diff(dateStart));
       }
       let formatParts = ["s[s]"];
@@ -439,10 +448,6 @@ export class BuildDetailView {
         this.state(data.state);
         this.state_display(data.state_display);
 
-        // Always update date and length, as these should update as the build progresses
-        this.date.valueHasMutated();
-        this.length.valueHasMutated();
-
         // This is a mock command used to preview the command output.
         // TODO probably do this in the application instead
         this.add_command({
@@ -456,6 +461,10 @@ export class BuildDetailView {
         for (const command of data.commands) {
           this.add_command(command);
         }
+
+        // Always update date and length, as these should update as the build progresses
+        this.date.valueHasMutated();
+        this.length.valueHasMutated();
 
         // We've completed a request to the API. From here, we are not loading
         // from the API, but we'll be polling until the build is finished.
