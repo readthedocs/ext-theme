@@ -11,3 +11,5 @@
 /.tox/
 /common/
 /.direnv/
+/worktree/
+/worktrees/

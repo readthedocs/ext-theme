@@ -1,0 +1,2 @@
+// Dark theme fixes
+@invertedBackground: transparent; // Hack, there is no inverted table background variable

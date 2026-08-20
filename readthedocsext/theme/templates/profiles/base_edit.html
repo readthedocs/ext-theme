@@ -22,11 +22,15 @@
             <div class="header">{% trans "Account" %}</div>
             <div class="menu">
               <a class="item {% block profile_admin_details %}{% endblock %}"
-                 href="{% url 'profiles_profile_edit' %}">{% trans "Account" %}</a>
+                 href="{% url 'profiles_profile_edit' %}">{% trans "Profile" %}</a>
               <a class="item {% block profile_admin_change_email %}{% endblock %}"
                  href="{% url 'account_email' %}">{% trans "Email addresses" %}</a>
               <a class="item {% block profile_admin_social_accounts %}{% endblock %}"
                  href="{% url 'socialaccount_connections' %}">{% trans "Connected services" %}</a>
+              {% if USE_PROMOS %}
+                <a class="item {% block profile_admin_gold_edit %}{% endblock %}"
+                   href="{% url 'gold_detail' %}">{% trans "Gold membership" %}</a>
+              {% endif %}
             </div>
           </div>
           <div class="item">
@@ -42,17 +46,20 @@
                  href="{% url 'profiles_tokens' %}">{% trans "API tokens" %}</a>
             </div>
           </div>
-          {% if USE_PROMOS %}
-            <div class="item">
-              <div class="header">{% trans "Advertising" %}</div>
-              <div class="menu">
+          <div class="item">
+            <div class="header">{% trans "Preferences" %}</div>
+            <div class="menu">
+              <a class="item {% block profile_admin_dashboard_preferences %}{% endblock %}"
+                 href="{% url 'profiles_dashboard_preferences_edit' %}">
+                {% trans "Dashboard" %}
+                <div class="ui basic primary label">{% trans "New" %}</div>
+              </a>
+              {% if USE_PROMOS %}
                 <a class="item {% block profile_admin_advertising %}{% endblock %}"
                    href="{% url 'account_advertising' %}">{% trans "Advertising" %}</a>
-                <a class="item {% block profile_admin_gold_edit %}{% endblock %}"
-                   href="{% url 'gold_detail' %}">{% trans "Gold membership" %}</a>
-              </div>
+              {% endif %}
             </div>
-          {% endif %}
+          </div>
           {# djlint: on T003 #}
         {% endblock %}
       </div>

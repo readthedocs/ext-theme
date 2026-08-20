@@ -1,0 +1,4 @@
+// Dark theme fixes
+@invertedBackground: @black;
+@invertedInputBackground: rgba(255, 255, 255, 0.1);
+@invertedInputBorderColor: rgba(255, 255, 255, 0.15);
