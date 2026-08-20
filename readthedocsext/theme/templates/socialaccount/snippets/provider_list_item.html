@@ -7,9 +7,10 @@
         action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
     {% csrf_token %}
 
+    {# SECURITY: always use escapejs when including user input in a JS context, like data-bind #}
     {# djlint: off D018 #}
     <button class="ui {{ button_classes }} button"
-            data-bind="click: save_login_method.bind($data, '{{ provider.id }}'), semanticui: { popup: popup_login_method('{{ provider.id }}', 'right center') }"
+            data-bind="click: save_login_method.bind($data, '{{ provider.id|escapejs }}'), semanticui: { popup: popup_login_method('{{ provider.id|escapejs }}', 'right center') }"
             type="submit">
       {# djlint: on #}
 

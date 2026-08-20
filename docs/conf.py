@@ -3,6 +3,11 @@ import sys
 
 sys.path.insert(0, os.path.abspath("."))
 
+# Update path for sphinx-js to find jsdoc
+os.environ["PATH"] = (
+    os.path.abspath("../node_modules/.bin/") + os.pathsep + os.environ.get("PATH", "")
+)
+
 import docext  # noqa
 
 project = "readthedocsext-theme"

@@ -5,8 +5,8 @@
   "main": "src/js/index.js",
   "type": "module",
   "scripts": {
-    "clean-js": "rm -v readthedocsext/theme/static/readthedocsext/theme/js/*.js; exit 0",
-    "clean-css": "rm -v readthedocsext/theme/static/readthedocsext/theme/css/*.css; exit 0",
+    "clean-js": "rm -v readthedocsext/theme/static/readthedocsext/theme/js/*.{js,map}; exit 0",
+    "clean-css": "rm -v readthedocsext/theme/static/readthedocsext/theme/css/*.{css,map}; exit 0",
     "clean": "npm run clean-js && npm run clean-css",
     "build": "npm run clean && webpack --mode=production --progress",
     "dev": "webpack-dev-server --mode=development",
@@ -15,6 +15,10 @@
     "test": "web-test-runner",
     "test:dev": "web-test-runner --watch",
     "test:debug": "web-test-runner --manual --open"
+  },
+  "engines": {
+    "node": ">=24.16.0",
+    "npm": ">=11.10.0"
   },
   "author": "",
   "license": "ISC",
@@ -46,7 +50,7 @@
     "imports-loader": "^4.0.1",
     "jquery": "^3.4.1",
     "jquery-address": "^1.6.0",
-    "jsdoc": "^4.0.2",
+    "jsdoc": "^4.0.4",
     "knockout": "^3.5.1",
     "lato-font": "^3.0.0",
     "less": "^4.2.0",
@@ -62,9 +66,9 @@
     "sanitize-html": "^2.11.0",
     "style-loader": "^3.3.3",
     "url-loader": "^4.1.1",
-    "webpack": "^5.88.2",
+    "webpack": "^5.106.2",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1",
+    "webpack-dev-server": "^5.2.3",
     "webpack-merge": "^5.9.0",
     "webpack-shell-plugin": "^0.5.0",
     "webpack-watch-files-plugin": "^1.2.1"

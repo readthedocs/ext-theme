@@ -45,7 +45,7 @@
 {% whitespaceless as field_classes %}
   ui long fluid selection search dropdown
   {% if field.field.widget.attrs.readonly %}read-only{% endif %}
-  {% if field.attrs.multiple %}multiple{% endif %}
+  {% if field.field.widget.attrs.multiple %}multiple{% endif %}
   field
 {% endwhitespaceless %}
 

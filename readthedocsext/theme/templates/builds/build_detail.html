@@ -21,7 +21,7 @@
           {# Build progress on the left #}
           {% block build_detail_metadata_left %}
             <div class="ui eleven wide column">
-              <div class="ui header">
+              <div class="ui truncating header">
                 {% comment %}
                   The state icon expects the build API response directly instead, so
                   we recreate the used fields here.
@@ -34,7 +34,9 @@
                 <span data-bind="with: {state: {code: state()}, success: success()}">
                   {% include "builds/includes/status_icon.html" with build=build size="small" circular=True data_bind=True %}
                 </span>
-                {% include "builds/includes/build_name.html" with build=build is_page_title=True %}
+                <div class="content">
+                  {% include "builds/includes/build_name.html" with build=build is_page_title=True %}
+                </div>
               </div>
 
               <div class="ui basic segment loading padded"

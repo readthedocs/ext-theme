@@ -29,7 +29,7 @@
                      name="{{ field.name }}"
                      value="{% if field.value.0|length == 1 %}{{ field.value|default:"" }}{% else %}{{ field.value.0|default:"" }}{% endif %}" />
               <div class="ui sub header">
-                {{ field.label|safe }}
+                {{ field.label }}
                 <i class="fa-solid fa-caret-down small icon"></i>
               </div>
               {# This is filled using the FUI `activate` action on the dropdown #}
@@ -45,7 +45,7 @@
                   <a class="item"
                      data-value="{{ value }}"
                      data-analytics-events="filter-activated"
-                     data-analytics-property-filter="{{ label|safe }}">{{ label|safe }}</a>
+                     data-analytics-property-filter="{{ label }}">{{ label }}</a>
                 {% endfor %}
               </div>
             </div>
