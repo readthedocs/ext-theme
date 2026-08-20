@@ -2,6 +2,7 @@
 
 {% load blocktrans trans from i18n %}
 {% load naturaltime from humanize %}
+{% load whitespaceless from ext_theme_tags %}
 
 {% block top_left_menu_items %}
   <div data-bind="using: FilterView()">
@@ -73,9 +74,14 @@
   </readthedocs-api>
 {% endblock list_item_right_menu %}
 
-{% block list_item_icon %}
-  {% include "builds/includes/status_icon.html" with build=object.latest_build circular=True %}
-{% endblock list_item_icon %}
+{% block list_item_image %}
+  {% whitespaceless as build_status %}
+    {% include "builds/includes/status_text.html" with build=object.latest_build %}
+  {% endwhitespaceless %}
+  <span class="ui center aligned image" data-content="{{ build_status }}">
+    {% include "builds/includes/status_icon.html" with build=object.latest_build circular=True %}
+  </span>
+{% endblock list_item_image %}
 
 {% block list_item_header %}
   <a href="{% url "builds_project_list" object.project.slug %}?version__slug={{ object.slug }}"

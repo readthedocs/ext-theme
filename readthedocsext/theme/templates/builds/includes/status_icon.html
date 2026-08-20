@@ -1,6 +1,3 @@
-{% load i18n %}
-{% load whitespaceless from ext_theme_tags %}
-
 {% comment "rst" %}
 
   Build status icon
@@ -38,17 +35,8 @@
 
 {% endcomment %}
 
-{# fmt:off #}
-{% whitespaceless as build_title %}
-  {% if build.state == 'finished' and build.success %}
-    {% trans "Build succeeded" %}
-  {% elif build.state == 'finished' %}
-    {% trans "Build failed" %}
-  {% else %}
-    {{ build.get_state_display }}
-  {% endif %}
-{% endwhitespaceless %}
-<span data-tooltip="{{ build_title }}"><i class="{% spaceless %}
+{# djlint:off #}
+<i class="{% spaceless %}
 
   ui icon
 
@@ -123,5 +111,5 @@
     'loading grey fa-spinner-third': state.code !== 'finished' && state.code !== 'triggered' && state.code !== 'cancelled',
   }
 
-{% endspaceless %}"{% endif %}></i></span>
-{# fmt:on #}
+{% endspaceless %}"{% endif %}></i>
+{# djlint:on #}

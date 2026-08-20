@@ -1,0 +1,31 @@
+{% load trans from i18n %}
+
+{% comment "rst" %}
+
+  Build status text
+  =================
+
+  Human readable description of the build status. This mirrors the states that
+  ``builds/includes/status_icon.html`` renders as an icon, so the two stay in
+  sync.
+
+  This is a separate template so it can be used inside an attribute, like the
+  popup ``data-content`` on the element wrapping the status icon. Wrap the
+  include in ``whitespaceless`` there, so the attribute is a single line.
+
+  Template parameters:
+
+  build
+    The build instance for the status text.
+
+{% endcomment %}
+
+{% if build.state == 'finished' and build.success %}
+  {% trans "Build succeeded" %}
+{% elif build.state == 'finished' %}
+  {% trans "Build failed" %}
+{% elif build.state == 'cancelled' %}
+  {% trans "Build cancelled" %}
+{% else %}
+  {{ build.get_state_display }}
+{% endif %}

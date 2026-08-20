@@ -2,6 +2,7 @@
 
 {% load trans blocktrans from i18n %}
 {% load naturaltime from humanize %}
+{% load whitespaceless from ext_theme_tags %}
 
 {% load is_admin from privacy_tags %}
 
@@ -53,9 +54,14 @@
   {% endif %}
 {% endblock list_item_right_buttons %}
 
-{% block list_item_icon %}
-  {% include "builds/includes/status_icon.html" with build=object circular=True %}
-{% endblock list_item_icon %}
+{% block list_item_image %}
+  {% whitespaceless as build_status %}
+    {% include "builds/includes/status_text.html" with build=object %}
+  {% endwhitespaceless %}
+  <span class="ui center aligned image" data-content="{{ build_status }}">
+    {% include "builds/includes/status_icon.html" with build=object circular=True %}
+  </span>
+{% endblock list_item_image %}
 
 {% block list_item_header %}
   {% include "builds/includes/build_name.html" with build=object %}
