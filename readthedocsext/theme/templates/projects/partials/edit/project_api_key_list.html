@@ -1,0 +1,89 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% load trans blocktrans from i18n %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  {% url "projects_apikeys_create" project_slug=project.slug as create_url %}
+  {% trans "Add API token" as create_text %}
+  {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
+{% endblock create_button %}
+
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-key
+{% endblock list_placeholder_icon_class %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No API tokens have been created yet
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      API tokens give access to this project alone, and can be given read only or
+      read and write permissions. Unlike your personal API token, they don't
+      grant access to any of your other projects.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button"
+     href="https://docs.readthedocs.io/page/api/v3.html#authentication-and-authorization"
+     aria-label="{% trans "Learn more about the API in our documentation" %}"
+     target="_blank">{% trans "Learn more" %}</a>
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  {% url 'projects_apikeys_revoke' project_slug=project.slug apikey_prefix=object.prefix as form_url %}
+  {% trans "Revoke token" as action_text %}
+  {% blocktrans trimmed asvar content_text with name=object.name %}
+    Revoke API token {{ name }}?
+  {% endblocktrans %}
+  {% blocktrans trimmed asvar warning_text %}
+    This can't be undone. Anything using this token will stop working immediately.
+  {% endblocktrans %}
+  {% include "includes/crud/remove_button.html" with id=object.prefix form_url=form_url action_text=action_text content_text=content_text warning_text=warning_text %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_icon %}
+  {% if object.is_read_only %}
+    <i class="fad fa-eye icon" data-content="{% trans "Read only" %}"></i>
+  {% else %}
+    <i class="fad fa-pen-to-square icon"
+       data-content="{% trans "Read and write" %}"></i>
+  {% endif %}
+{% endblock list_item_icon %}
+
+{% block list_item_header %}
+  {{ object.name }}
+  <div class="sub header">
+    <code>{{ object.prefix }}...</code>
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_extra %}
+  {% if object.description %}
+    <div class="ui small text">{{ object.description }}</div>
+  {% endif %}
+{% endblock list_item_extra %}
+
+{% block list_item_meta_items %}
+  <div class="item">
+    <div class="ui basic label">{{ object.get_permission_level_display }}</div>
+  </div>
+  <div class="item">
+    {% if object.expiry_date %}
+      {% if object.has_expired %}
+        {% blocktrans trimmed with date=object.expiry_date %}
+          Expired on {{ date }}
+        {% endblocktrans %}
+      {% else %}
+        {% blocktrans trimmed with date=object.expiry_date %}
+          Expires on {{ date }}
+        {% endblocktrans %}
+      {% endif %}
+    {% else %}
+      {% trans "Never expires" %}
+    {% endif %}
+  </div>
+{% endblock list_item_meta_items %}

@@ -28,6 +28,8 @@
             {% endif %}
             <a class="item {% block project_automation_rules_active %}{% endblock project_automation_rules_active %}"
                href="{% url "projects_automation_rule_list" project.slug %}">{% trans "Automation rules" %}</a>
+            <a class="item {% block project_api_keys_active %}{% endblock project_api_keys_active %}"
+               href="{% url "projects_apikeys" project.slug %}">{% trans "API tokens" %}</a>
           </div>
         </div>
 
