@@ -1,0 +1,46 @@
+{% extends "projects/project_edit_base.html" %}
+
+{% load trans blocktrans from i18n %}
+
+{% block title %}
+  {{ project.name }} - {% trans "API tokens" %}
+{% endblock title %}
+
+{% block project_api_keys_active %}
+  active
+{% endblock project_api_keys_active %}
+{% block project_edit_content_header %}
+  {% trans "API tokens" %}
+{% endblock project_edit_content_header %}
+
+{% block project_edit_content %}
+  {% if created_api_key %}
+    <div class="ui icon success message">
+      <i class="fa-duotone fa-key icon"></i>
+      <div class="content">
+        <div class="header">{% trans "Copy your new API token now" %}</div>
+        <p>
+          {% blocktrans trimmed %}
+            This is the only time the token will be shown. Store it somewhere safe.
+          {% endblocktrans %}
+        </p>
+        <div class="ui fluid action input">
+          <input type="text" value="{{ created_api_key }}" readonly>
+          <div class="ui icon button"
+            data-clipboard-text="{{ created_api_key }}"
+            {# Translators: past tense as this shown after clicking #}
+            data-content="{% trans "Copied!" %}">
+            <i class="fa-solid fa-clipboard icon">
+            </i>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% include "projects/partials/edit/project_api_key_list.html" with objects=object_list %}
+{% endblock project_edit_content %}
+
+{% block project_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/api/v3.html#authentication-and-authorization" text="Authenticating with the API" is_external=True class="item" %}
+{% endblock project_edit_sidebar_help_topics %}
