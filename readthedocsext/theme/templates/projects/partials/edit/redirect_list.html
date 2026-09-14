@@ -17,20 +17,24 @@
 {% block list_placeholder_icon_class %}
   fa-duotone fa-signs-post
 {% endblock list_placeholder_icon_class %}
-{% block list_placeholder_header %}
+{% block list_placeholder_header_filtered %}
+  {% trans "No matching redirects found" %}
+{% endblock list_placeholder_header_filtered %}
+{% block list_placeholder_header_empty %}
   {% blocktrans trimmed %}
     No redirects exist yet
   {% endblocktrans %}
   <div class="sub header">
     {% trans "Redirects allow you to fix links to pages that have moved." %}
   </div>
-{% endblock list_placeholder_header %}
-{% block list_placeholder_text %}
+{% endblock list_placeholder_header_empty %}
+{% block list_placeholder_text_empty %}
   <a class="ui button"
      href="https://docs.readthedocs.io/page/guides/redirects.html"
      target="_blank"
+     rel="nofollow noopener noreferrer"
      aria-label="{% trans "Learn more about custom redirects in our documentation" %}">{% trans "Learn more" %}</a>
-{% endblock list_placeholder_text %}
+{% endblock list_placeholder_text_empty %}
 
 {% block list_item_right_buttons %}
   {% trans "Move up" as button_up_text %}
