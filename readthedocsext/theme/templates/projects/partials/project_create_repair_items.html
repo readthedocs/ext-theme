@@ -1,0 +1,104 @@
+{% load trans blocktrans from i18n %}
+
+{% comment rst %}
+  Repository list repair items
+  ============================
+
+  The common fixes for a missing or empty repository list. Included in two
+  places on the project import page: inline, when the user's repository list
+  is empty on page load, and in the "Repair" modal behind the search popup.
+
+  Expects the import view context: ``socialaccount_providers``,
+  ``has_github_app_repositories``, and ``GITHUB_APP_NAME``.
+{% endcomment %}
+
+<div class="ui small divided items">
+
+  {% if "githubapp" in socialaccount_providers %}
+    <div class="item">
+      <div class="content">
+        <div class="description">
+          {% comment %}
+            This terminology comes from the documentation for GitHub App management.
+            Our GHA is "installed" for users or organizations and GitHub users
+            "grant access to repositories" (or on the GHA installation page
+            "install GHA _for repositories_").
+          {% endcomment %}
+          {% comment %}
+            The explicit False comparison keeps the install-first copy off
+            until the application side ships this context variable — an
+            undefined variable falls through to the previous copy.
+          {% endcomment %}
+          {% if has_github_app_repositories == False %}
+            {% blocktrans trimmed %}
+              Our GitHub App doesn't have access to any of your repositories yet.
+              Install the app on your GitHub account or organization, and grant it
+              access to the repositories you want to build.
+            {% endblocktrans %}
+          {% else %}
+            {% blocktrans trimmed %}
+              If our GitHub App was only granted access to select repositories,
+              repositories without access will not display in your repository list.
+              You will need to grant access to additional repositories each time you create a project.
+            {% endblocktrans %}
+          {% endif %}
+        </div>
+        <div class="extra">
+          <a class="ui right floated button"
+             href="https://github.com/apps/{{ GITHUB_APP_NAME }}/installations/new/"
+             target="_blank">
+            <i class="fa-brands fa-github icon"></i>
+            {% if has_github_app_repositories == False %}
+              {% trans "Install GitHub App" %}
+            {% else %}
+              {% trans "Update GitHub App installation" %}
+            {% endif %}
+          </a>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {# This should show for all providers and manually connected repositories #}
+  <div class="item">
+    <div class="content">
+      <div class="description">
+        {% blocktrans trimmed %}
+          Your connected service account might be out of sync
+          and a manual refresh may be required to update your list of repositories.
+        {% endblocktrans %}
+      </div>
+      <div class="extra">
+        <a class="ui right floated button"
+           data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing(), positive: is_synced()}">
+          <i class="fa-duotone fa-refresh icon"
+             data-bind="css: {'fa-refresh': !is_synced(), 'fa-check': is_synced()}"></i>
+          {% trans "Refresh your repositories" %}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  {% if "github" in socialaccount_providers or "githubapp" in socialaccount_providers %}
+    {# Organization owners approve access for the GitHub App and OAuth app alike #}
+    <div class="item">
+      <div class="content">
+        <div class="description">
+          {% blocktrans trimmed %}
+            If your repository list does not include repositories from one of your GitHub organizations,
+            our GitHub application may not be approved by the organization yet.
+            In this case, you should try requesting approval of our GitHub application from the organization.
+          {% endblocktrans %}
+        </div>
+        <div class="extra">
+          <a class="ui right floated button"
+             href="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#github-permission-troubleshooting">
+            <i class="fa-duotone fa-circle-check icon"></i>
+            {% trans "Learn how to request approval" %}
+          </a>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+</div>
