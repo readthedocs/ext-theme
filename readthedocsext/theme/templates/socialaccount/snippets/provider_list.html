@@ -1,23 +1,25 @@
 {% load trans blocktrans from i18n %}
-{% load get_github_providers get_providers has_last_login_method from ext_theme_tags %}
+{% load get_github_providers get_providers get_provider_alternatives from ext_theme_tags %}
 
 {% comment %}
-  ``get_providers`` filters out providers marked as hidden or collapsed in our
-  settings file. Collapsed providers are listed under "More options" at the
-  bottom of this template, unless ``allowed_providers`` restricts the list.
+  ``get_providers`` filters out providers marked as hidden in our settings file.
+  Providers marked as an alternative to another provider are attached to that
+  provider's button as a dropdown, instead of getting a button of their own.
+  When ``allowed_providers`` restricts the list, they are listed like any other
+  provider.
   ``get_github_providers`` is just used for the modal and can be removed eventually.
 {% endcomment %}
 {% if allowed_providers %}
-  {% get_providers process=process collapsed=None as providers %}
+  {% get_providers process=process alternatives=None as providers %}
 {% else %}
   {% get_providers process=process as providers %}
-  {% get_providers process=process collapsed=True as providers_collapsed %}
+  {% get_providers process=process alternatives=True as providers_alternative %}
 {% endif %}
 {% get_github_providers process=process as providers_github %}
 
 {% comment %}
-  If both GitHub providers are configured, and they are not hidden or
-  collapsed in settings, we'll show these providers in a modal.
+  If both GitHub providers are configured, and neither is hidden or an
+  alternative to the other in settings, we'll show these providers in a modal.
 
   If ``allowed_providers`` is set, we skip the modal and just show the allowed
   providers in the list below.
@@ -129,34 +131,19 @@
       on login.
     {% endcomment %}
   {% else %}
+    {% comment %}
+      Alternative providers are attached to this provider's button as a
+      dropdown, so that they are still available without being a primary
+      option. This keeps our GitHub OAuth app one click away from our GitHub
+      App button.
+    {% endcomment %}
+    {% get_provider_alternatives providers_alternative provider as alternatives %}
     <li class="item">
-      {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider %}
+      {% if alternatives %}
+        {% include "socialaccount/snippets/provider_list_item_alternatives.html" with process=process verbiage=text_log_in provider=provider alternatives=alternatives %}
+      {% else %}
+        {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider %}
+      {% endif %}
     </li>
   {% endif %}
 {% endfor %}
-
-{% comment %}
-  Collapsed providers keep the GitHub OAuth app available while the GitHub App
-  is the default choice. The section starts expanded if the user last logged
-  in with one of these providers, so the "Last used" popup is visible.
-{% endcomment %}
-{% if providers_collapsed %}
-  {% has_last_login_method providers_collapsed as expanded %}
-  <li class="item">
-    <div class="ui fluid accordion">
-      <div class="title {% if expanded %}active{% endif %}">
-        <i class="dropdown icon"></i>
-        {% trans "More options" %}
-      </div>
-      <div class="content {% if expanded %}active{% endif %}">
-        <div class="ui relaxed list">
-          {% for provider in providers_collapsed %}
-            <div class="item">
-              {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider %}
-            </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-  </li>
-{% endif %}

@@ -138,14 +138,8 @@ def get_spam_score(project):
     return spam_score(project)
 
 
-def _get_app_setting(provider, name, process):
-    """Return a boolean app setting that can also be set per Allauth process (``{name}_on_{process}``)."""
-    app_settings = provider.app.settings
-    return bool(app_settings.get(name) or app_settings.get(f"{name}_on_{process}"))
-
-
 @register.simple_tag(takes_context=True)
-def get_providers(context, process="login", collapsed=False):
+def get_providers(context, process="login", alternatives=False):
     """
     Adds additional app setting support and sorting to the Allauth provider list tag.
 
@@ -158,9 +152,10 @@ def get_providers(context, process="login", collapsed=False):
     ``hidden_on_login``/``hidden_on_connect``/``hidden_on_{process}`` (bool)
         Hide the provider from the Allauth process view
 
-    ``collapsed``/``collapsed_on_{process}`` (bool)
-        Show the provider under a collapsed "More options" section, to keep a
-        legacy provider available without making it a primary option.
+    ``alternative_to`` (str)
+        Id of the provider this provider is a less prominent alternative to.
+        Alternatives are attached to that provider's button as a dropdown
+        instead of getting a button of their own.
 
     ``priority``
         Priority order value for list of providers, higher values are lower in priority on the list.
@@ -168,18 +163,18 @@ def get_providers(context, process="login", collapsed=False):
     Additionally, filter out providers from the database -- applications that
     have a ``pk`` -- these are per-user applications like SAML.
 
-    :param collapsed: ``False`` leaves collapsed providers out, ``True`` returns
-        only the collapsed providers, and ``None`` returns both.
+    :param alternatives: ``False`` leaves alternative providers out, ``True``
+        returns only the alternatives, and ``None`` returns both.
     """
     # The base Allauth ``get_providers`` tag filters out providers marked as hidden in our settings file.
     providers = [
         provider
         for provider in base_get_providers(context)
-        if not _get_app_setting(provider, "hidden", process)
+        if not provider.app.settings.get(f"hidden_on_{process}", False)
         and not provider.app.pk
         and (
-            collapsed is None
-            or _get_app_setting(provider, "collapsed", process) == collapsed
+            alternatives is None
+            or bool(provider.app.settings.get("alternative_to")) == alternatives
         )
     ]
     return sorted(
@@ -194,11 +189,14 @@ def get_github_providers(context, process="login"):
     return list(filter(lambda provider: "github" in provider.id, providers))
 
 
-@register.simple_tag(takes_context=True)
-def has_last_login_method(context, providers):
-    """Return whether the last login method of the user is one of ``providers``."""
-    last_login_method = context.get("last_login_method")
-    return any(provider.id == last_login_method for provider in providers)
+@register.simple_tag
+def get_provider_alternatives(providers, provider):
+    """Filter ``providers`` down to the ones that are an alternative to ``provider``."""
+    return [
+        alternative
+        for alternative in providers or []
+        if alternative.app.settings.get("alternative_to") == provider.id
+    ]
 
 
 # Simple solution to not supported "zh" language code.

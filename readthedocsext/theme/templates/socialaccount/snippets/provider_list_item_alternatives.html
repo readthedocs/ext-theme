@@ -1,0 +1,64 @@
+{% load provider_login_url from socialaccount %}
+{% load blocktrans from i18n %}
+
+{% comment %}
+  A provider button with its alternative providers attached as a dropdown, for
+  example our GitHub App with our older GitHub OAuth app as an alternative.
+
+  Every button submits this one form, so they share its CSRF token. The
+  alternatives point the form at their own provider with ``formaction``.
+{% endcomment %}
+
+{% blocktrans asvar label_alternatives trimmed %}
+  More options
+{% endblocktrans %}
+
+<form class="ui form"
+      method="post"
+      action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+  {% csrf_token %}
+
+  <div class="ui buttons">
+
+    {# SECURITY: always use escapejs when including user input in a JS context, like data-bind #}
+    {# djlint: off D018 #}
+    <button class="ui button"
+            data-bind="click: save_login_method.bind($data, '{{ provider.id|escapejs }}'), semanticui: { popup: popup_login_method('{{ provider.id|escapejs }}', 'right center') }"
+            type="submit">
+      <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
+      {% blocktrans trimmed with provider_name=provider.app.name|default:provider.name verbiage=verbiage|default:'Connect to' %}
+        {{ verbiage }} {{ provider_name }}
+      {% endblocktrans %}
+    </button>
+
+    <div class="ui floating dropdown icon button"
+         data-bind="semanticui: { popup: popup_login_method([{% for alternative in alternatives %}'{{ alternative.id|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}], 'right center') }"
+         title="{{ label_alternatives }}"
+         aria-label="{{ label_alternatives }}">
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        {% comment %}
+          Fomantic only opens a dropdown that has ``item`` children, and a
+          ``button`` item keeps the browser's native button chrome, which the
+          menu item styles don't reset. This is inline until we can add a rule
+          to ``dropdown.overrides`` and rebuild the assets.
+        {% endcomment %}
+        {% for alternative in alternatives %}
+          <button class="item"
+                  style="appearance: none;
+                         background: transparent;
+                         width: 100%"
+                  data-bind="click: save_login_method.bind($data, '{{ alternative.id|escapejs }}')"
+                  formaction="{% provider_login_url alternative.id process=process scope=scope auth_params=auth_params %}"
+                  type="submit">
+            {# djlint: on #}
+            <i class="fa-brands fa-{{ alternative.name|lower }} icon"></i>
+            {% blocktrans trimmed with provider_name=alternative.app.name|default:alternative.name verbiage=verbiage|default:'Connect to' %}
+              {{ verbiage }} {{ provider_name }}
+            {% endblocktrans %}
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</form>
