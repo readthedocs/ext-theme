@@ -1,21 +1,24 @@
 {% load trans blocktrans from i18n %}
-{% load get_github_providers get_providers from ext_theme_tags %}
+{% load get_github_providers get_providers has_last_login_method from ext_theme_tags %}
 
 {% comment %}
-  ``get_providers`` filters out providers marked as hidden in our settings file.
+  ``get_providers`` filters out providers marked as hidden or collapsed in our
+  settings file. Collapsed providers are listed at the bottom of this template.
   ``get_github_providers`` is just used for the modal and can be removed eventually.
 {% endcomment %}
 {% get_providers process=process as providers %}
+{% get_providers process=process collapsed=True as providers_collapsed %}
 {% get_github_providers process=process as providers_github %}
 
 {% comment %}
-  If both GitHub providers are configured, and they are not ``hidden=True`` or
-  ``hidden_on_{process}=True`` in settings, we'll show these providers in a modal.
+  If both GitHub providers are configured, and they are not ``hidden=True``,
+  ``hidden_on_{process}=True``, ``collapsed=True``, or
+  ``collapsed_on_{process}=True`` in settings, we'll show these providers in a
+  modal.
 
   If ``allowed_providers`` is set, we skip the modal and just show the allowed
   providers in the list below.
 {% endcomment %}
-{% get_providers process=process as providers %}
 {% if providers_github|length == 2 and not allowed_providers %}
   {% trans "GitHub" as provider_name %}
   <li class="item">
@@ -128,3 +131,40 @@
     </li>
   {% endif %}
 {% endfor %}
+
+{% comment %}
+  Providers with ``collapsed=True`` or ``collapsed_on_{process}=True`` in
+  settings are hidden under "More options" by default. This keeps the GitHub
+  OAuth app available while the GitHub App is the default choice.
+
+  The section starts expanded if the user last logged in with one of these
+  providers, so the "Last used" popup is visible.
+
+  If ``allowed_providers`` is set, these providers are listed normally instead.
+{% endcomment %}
+{% if providers_collapsed and allowed_providers %}
+  {% for provider in providers_collapsed %}
+    <li class="item">
+      {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider %}
+    </li>
+  {% endfor %}
+{% elif providers_collapsed %}
+  {% has_last_login_method providers_collapsed as expanded %}
+  <li class="item">
+    <div class="ui fluid accordion">
+      <div class="title {% if expanded %}active{% endif %}">
+        <i class="dropdown icon"></i>
+        {% trans "More options" %}
+      </div>
+      <div class="content {% if expanded %}active{% endif %}">
+        <div class="ui relaxed list">
+          {% for provider in providers_collapsed %}
+            <div class="item">
+              {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </li>
+{% endif %}

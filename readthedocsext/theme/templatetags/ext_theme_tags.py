@@ -138,8 +138,17 @@ def get_spam_score(project):
     return spam_score(project)
 
 
+def _is_provider_collapsed(provider, process):
+    """Return whether the provider is collapsed for the given Allauth process."""
+    settings = provider.app.settings
+    return bool(
+        settings.get("collapsed", False)
+        or settings.get(f"collapsed_on_{process}", False)
+    )
+
+
 @register.simple_tag(takes_context=True)
-def get_providers(context, process="login"):
+def get_providers(context, process="login", collapsed=False):
     """
     Adds additional app setting support and sorting to the Allauth provider list tag.
 
@@ -152,11 +161,22 @@ def get_providers(context, process="login"):
     ``hidden_on_login``/``hidden_on_connect``/``hidden_on_{process}`` (bool)
         Hide the provider from the Allauth process view
 
+    ``collapsed`` (bool)
+        Show the provider under a collapsed "More options" section, hidden by
+        default. Used to keep a legacy provider available, without making it a
+        primary option.
+
+    ``collapsed_on_login``/``collapsed_on_connect``/``collapsed_on_{process}`` (bool)
+        Collapse the provider only for the Allauth process view
+
     ``priority``
         Priority order value for list of providers, higher values are lower in priority on the list.
 
     Additionally, filter out providers from the database -- applications that
     have a ``pk`` -- these are per-user applications like SAML.
+
+    :param collapsed: When ``True``, return only the collapsed providers.
+        Otherwise, collapsed providers are left out.
     """
     # The base Allauth ``get_providers`` tag filters out providers marked as hidden in our settings file.
     providers = [
@@ -164,6 +184,7 @@ def get_providers(context, process="login"):
         for provider in base_get_providers(context)
         if not provider.app.settings.get(f"hidden_on_{process}", False)
         and not provider.app.pk
+        and _is_provider_collapsed(provider, process) == collapsed
     ]
     return sorted(
         providers, key=lambda provider: provider.app.settings.get("priority", 100)
@@ -175,6 +196,13 @@ def get_providers(context, process="login"):
 def get_github_providers(context, process="login"):
     providers = get_providers(context, process)
     return list(filter(lambda provider: "github" in provider.id, providers))
+
+
+@register.simple_tag(takes_context=True)
+def has_last_login_method(context, providers):
+    """Return whether the last login method of the user is one of ``providers``."""
+    last_login_method = context.get("last_login_method")
+    return any(provider.id == last_login_method for provider in providers)
 
 
 # Simple solution to not supported "zh" language code.
