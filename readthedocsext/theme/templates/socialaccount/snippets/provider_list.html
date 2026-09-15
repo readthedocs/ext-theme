@@ -3,18 +3,21 @@
 
 {% comment %}
   ``get_providers`` filters out providers marked as hidden or collapsed in our
-  settings file. Collapsed providers are listed at the bottom of this template.
+  settings file. Collapsed providers are listed under "More options" at the
+  bottom of this template, unless ``allowed_providers`` restricts the list.
   ``get_github_providers`` is just used for the modal and can be removed eventually.
 {% endcomment %}
-{% get_providers process=process as providers %}
-{% get_providers process=process collapsed=True as providers_collapsed %}
+{% if allowed_providers %}
+  {% get_providers process=process collapsed=None as providers %}
+{% else %}
+  {% get_providers process=process as providers %}
+  {% get_providers process=process collapsed=True as providers_collapsed %}
+{% endif %}
 {% get_github_providers process=process as providers_github %}
 
 {% comment %}
-  If both GitHub providers are configured, and they are not ``hidden=True``,
-  ``hidden_on_{process}=True``, ``collapsed=True``, or
-  ``collapsed_on_{process}=True`` in settings, we'll show these providers in a
-  modal.
+  If both GitHub providers are configured, and they are not hidden or
+  collapsed in settings, we'll show these providers in a modal.
 
   If ``allowed_providers`` is set, we skip the modal and just show the allowed
   providers in the list below.
@@ -133,22 +136,11 @@
 {% endfor %}
 
 {% comment %}
-  Providers with ``collapsed=True`` or ``collapsed_on_{process}=True`` in
-  settings are hidden under "More options" by default. This keeps the GitHub
-  OAuth app available while the GitHub App is the default choice.
-
-  The section starts expanded if the user last logged in with one of these
-  providers, so the "Last used" popup is visible.
-
-  If ``allowed_providers`` is set, these providers are listed normally instead.
+  Collapsed providers keep the GitHub OAuth app available while the GitHub App
+  is the default choice. The section starts expanded if the user last logged
+  in with one of these providers, so the "Last used" popup is visible.
 {% endcomment %}
-{% if providers_collapsed and allowed_providers %}
-  {% for provider in providers_collapsed %}
-    <li class="item">
-      {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider %}
-    </li>
-  {% endfor %}
-{% elif providers_collapsed %}
+{% if providers_collapsed %}
   {% has_last_login_method providers_collapsed as expanded %}
   <li class="item">
     <div class="ui fluid accordion">
