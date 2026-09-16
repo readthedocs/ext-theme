@@ -55,14 +55,3 @@
     font-size: 0.9em;
   }
 }
-
-// Menu items that submit a form, for example the alternative login providers
-// attached to a provider button. SemanticUI only opens a dropdown that has
-// `item` children, so these have to be `button` elements, which keep the
-// browser's native button chrome that the menu item styles don't reset.
-.ui.ui.ui.dropdown .menu > button.item {
-  width: 100%;
-  appearance: none;
-  background: transparent;
-  font-family: inherit;
-}

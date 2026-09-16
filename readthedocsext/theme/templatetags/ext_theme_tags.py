@@ -185,7 +185,8 @@ def get_providers(context, process="login", alternatives=False):
 # TODO remove this after we don't need to separate the providers with a modal
 @register.simple_tag(takes_context=True)
 def get_github_providers(context, process="login"):
-    providers = get_providers(context, process)
+    # Alternatives are listed in the modal too, so don't filter them out here.
+    providers = get_providers(context, process, alternatives=None)
     return list(filter(lambda provider: "github" in provider.id, providers))
 
 
