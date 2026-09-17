@@ -1,0 +1,44 @@
+{% load provider_login_url from socialaccount %}
+{% load blocktrans from i18n %}
+
+{% comment %}
+  A provider button with a second button that opens the GitHub modal, where the
+  provider's alternatives are listed with a description of each one. For
+  example our GitHub App, with our older GitHub OAuth app as an alternative.
+
+  The alternatives live in the modal rather than a dropdown menu because
+  SemanticUI dropdown items can't be activated with a keyboard.
+{% endcomment %}
+
+{% blocktrans asvar label_alternatives trimmed %}
+  More options
+{% endblocktrans %}
+
+<form class="ui form"
+      method="post"
+      action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+  {% csrf_token %}
+
+  <div class="ui buttons">
+
+    {# SECURITY: always use escapejs when including user input in a JS context, like data-bind #}
+    {# djlint: off D018 #}
+    <button class="ui button"
+            data-bind="click: save_login_method.bind($data, '{{ provider.id|escapejs }}'), semanticui: { popup: popup_login_method('{{ provider.id|escapejs }}', 'right center') }"
+            type="submit">
+      <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
+      {% blocktrans trimmed with provider_name=provider.app.name|default:provider.name verbiage=verbiage|default:'Connect to' %}
+        {{ verbiage }} {{ provider_name }}
+      {% endblocktrans %}
+    </button>
+
+    <button class="ui icon button"
+            data-bind="click: show_github_modal, semanticui: { popup: popup_login_method([{% for alternative in alternatives %}'{{ alternative.id|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}], 'right center') }"
+            type="button"
+            title="{{ label_alternatives }}"
+            aria-label="{{ label_alternatives }}">
+      {# djlint: on #}
+      <i class="fa-solid fa-caret-down icon"></i>
+    </button>
+  </div>
+</form>

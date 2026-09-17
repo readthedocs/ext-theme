@@ -1,33 +1,48 @@
 {% load trans blocktrans from i18n %}
-{% load get_github_providers get_providers from ext_theme_tags %}
+{% load get_github_providers get_providers get_provider_alternatives from ext_theme_tags %}
 
 {% comment %}
   ``get_providers`` filters out providers marked as hidden in our settings file.
+  Providers marked as an alternative to another provider don't get a button of
+  their own. They are reached through a second button next to that provider,
+  which opens the modal below. When ``allowed_providers`` restricts the list,
+  they are listed like any other provider.
   ``get_github_providers`` is just used for the modal and can be removed eventually.
 {% endcomment %}
-{% get_providers process=process as providers %}
+{% if allowed_providers %}
+  {% get_providers process=process alternatives=None as providers %}
+{% else %}
+  {% get_providers process=process as providers %}
+  {% get_providers process=process alternatives=True as providers_alternative %}
+{% endif %}
 {% get_github_providers process=process as providers_github %}
 
 {% comment %}
-  If both GitHub providers are configured, and they are not ``hidden=True`` or
-  ``hidden_on_{process}=True`` in settings, we'll show these providers in a modal.
+  If both GitHub providers are configured, and neither is hidden in settings,
+  we'll show these providers in a modal.
+
+  Without alternatives configured, one GitHub button opens the modal and
+  neither GitHub provider is listed below. With them, the provider the
+  alternatives belong to is listed below as usual, and the second button next
+  to it opens this modal.
 
   If ``allowed_providers`` is set, we skip the modal and just show the allowed
   providers in the list below.
 {% endcomment %}
-{% get_providers process=process as providers %}
 {% if providers_github|length == 2 and not allowed_providers %}
   {% trans "GitHub" as provider_name %}
-  <li class="item">
-    <a class="ui button"
-       data-bind="click: show_github_modal, semanticui: { popup: popup_login_method(['github','githubapp'], 'right center') }"
-       title="{{ provider_name }}">
-      <i class="fa-brands fa-github icon"></i>
-      {% blocktrans trimmed with provider_name=provider_name verbiage=verbiage|default:'Connect to' %}
-        {{ verbiage }} {{ provider_name }}
-      {% endblocktrans %}
-    </a>
-  </li>
+  {% if not providers_alternative %}
+    <li class="item">
+      <a class="ui button"
+         data-bind="click: show_github_modal, semanticui: { popup: popup_login_method(['github','githubapp'], 'right center') }"
+         title="{{ provider_name }}">
+        <i class="fa-brands fa-github icon"></i>
+        {% blocktrans trimmed with provider_name=provider_name verbiage=verbiage|default:'Connect to' %}
+          {{ verbiage }} {{ provider_name }}
+        {% endblocktrans %}
+      </a>
+    </li>
+  {% endif %}
 
   <div class="ui tiny modal"
        data-bind="semanticui: { modal: github_modal_config() }">
@@ -114,17 +129,27 @@
 
 {# This is the basic list but with sorting now. If there is a modal above, we skip the GitHub providers here #}
 {% for provider in providers %}
-  {% if providers_github|length == 2 and "github" in provider.id and not allowed_providers %}
+  {% if providers_github|length == 2 and "github" in provider.id and not allowed_providers and not providers_alternative %}
     {% comment %}
       TODO remove this after we are mostly using GHA and don't need a modal
 
-      Skip any provider that is in the modal above if the modal is in use. This
-      adjusts for when one provider is shown on connect but the modal is used
-      on login.
+      Skip any provider that is in the modal above if the modal button is in
+      use. This adjusts for when one provider is shown on connect but the modal
+      is used on login.
     {% endcomment %}
   {% else %}
+    {% comment %}
+      A provider with alternatives gets a second button next to it, which opens
+      the modal above. That keeps our GitHub OAuth app one click away from our
+      GitHub App button, without it being a primary option.
+    {% endcomment %}
+    {% get_provider_alternatives providers_alternative provider as alternatives %}
     <li class="item">
-      {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider %}
+      {% if alternatives %}
+        {% include "socialaccount/snippets/provider_list_item_alternatives.html" with process=process verbiage=text_log_in provider=provider alternatives=alternatives %}
+      {% else %}
+        {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=text_log_in provider=provider %}
+      {% endif %}
     </li>
   {% endif %}
 {% endfor %}
