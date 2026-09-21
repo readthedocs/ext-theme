@@ -135,9 +135,8 @@ export class ProjectCreateView extends ResponsiveView {
   init_search() {
     const config = this.config();
     // Load the first page of repositories on focus, before the user types, so
-    // the search doesn't look empty. Large enough to be useful, small enough
-    // to avoid loading hundreds of avatars at once.
-    const maxResults = 50;
+    // the search doesn't look empty.
+    const maxResults = 10;
     const url =
       config.urls.remoterepository_list +
       `?limit=${maxResults}&full_name={query}`;
