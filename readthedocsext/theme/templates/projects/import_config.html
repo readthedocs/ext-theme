@@ -2,54 +2,77 @@
 {% load blocktrans trans from i18n %}
 
 {% block project_add_subheader %}
-  {% trans "Add a configuration file to your project" %}
+  {% if direct_upload_available %}
+    {% trans "Choose how your documentation is built" %}
+  {% else %}
+    {% trans "Add a configuration file to your project" %}
+  {% endif %}
 {% endblock project_add_subheader %}
 
-{% block project_add_content_classes %}
-  ui fourteen wide tablet twelve wide computer column
-{% endblock project_add_content_classes %}
+{% block wizard_form %}
+  {{ wizard.form.non_field_errors }}
 
-{% block project_add_content_form %}
-  <div class="ui small info message">
-    {% blocktrans trimmed %}
-      A <strong><code>.readthedocs.yaml</code> file is required at the root of your repository</strong> to build your project's documentation.
-      You can pick an example for your documentation tool as a starting point below,
-      and save and commit it to your repository.
-    {% endblocktrans %}
-  </div>
-
-  <div class="ui basic fitted right aligned segment">
-    <span>{% trans "Example configuration for:" %}</span>
-    <div class="ui inline dropdown" data-bind="semanticui: { dropdown: {}}">
-      <span class="text">Sphinx</span>
-      <i class="dropdown icon"></i>
-      <div class="menu" data-bind="semanticui: { tabmenu: {}}">
-        <div class="item" data-tab="sphinx">Sphinx</div>
-        <div class="item" data-tab="mkdocs">MkDocs</div>
-        <div class="item" data-tab="pelican">Pelican</div>
-        <div class="item" data-tab="docusaurus">Docusaurus</div>
-        <div class="item" data-tab="jekyll">Jekyll</div>
-        <div class="item" data-tab="others">{% trans "Others" %}</div>
-        {# The `actionable` class here prevents the select from selecting the text #}
-        <a class="actionable item"
-           href="https://docs.readthedocs.io/page/config-file/index.html#getting-started-with-a-template"
-           target="_blank">{% trans "See more examples" %}</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="ui bottom attached active tab" data-tab="sphinx">
-    <div class="ui mini padded inverted scrolling segment">
-      <div class="ui top attached label">
-        <code>.readthedocs.yaml</code>
-      </div>
-      <a class="ui top right attached icon label"
-         href="#"
-         data-clipboard-target="#project-create-sample-sphinx">
-        <i class="fas fa-copy icon"></i>
+  {% if direct_upload_available %}
+    {# Both panes are direct children of the container below, so tabs are scoped and don't clash with the YAML sample tabs #}
+    <div class="ui top attached tabular menu"
+         data-bind="semanticui: { tabmenu: { context: '#project-create-build-method', childrenOnly: true } }">
+      <a class="active item" data-tab="readthedocs">
+        <i class="fa-duotone fa-gears icon"></i>
+        {% trans "Build on Read the Docs" %}
       </a>
-      <code class="highlight">
-        <pre id="project-create-sample-sphinx">
+      <a class="item" data-tab="direct_upload">
+        <i class="fa-duotone fa-cloud-arrow-up icon"></i>
+        {% trans "Build externally and upload" %}
+      </a>
+    </div>
+  {% endif %}
+
+  <div id="project-create-build-method">
+    <div class="ui {% if direct_upload_available %}bottom attached segment{% endif %} active tab"
+         data-tab="readthedocs">
+
+      <div class="ui small info message">
+        {% blocktrans trimmed %}
+          A <strong><code>.readthedocs.yaml</code> file is required at the root of your repository</strong> to build your project's documentation.
+          You can pick an example for your documentation tool as a starting point below,
+          and save and commit it to your repository.
+        {% endblocktrans %}
+      </div>
+
+      <div class="ui basic fitted right aligned segment">
+        <span>{% trans "Example configuration for:" %}</span>
+        <div class="ui inline dropdown" data-bind="semanticui: { dropdown: {}}">
+          <span class="text">Sphinx</span>
+          <i class="dropdown icon"></i>
+          <div class="menu"
+               data-bind="semanticui: { tabmenu: { context: '#project-create-config-samples', childrenOnly: true } }">
+            <div class="item" data-tab="sphinx">Sphinx</div>
+            <div class="item" data-tab="mkdocs">MkDocs</div>
+            <div class="item" data-tab="pelican">Pelican</div>
+            <div class="item" data-tab="docusaurus">Docusaurus</div>
+            <div class="item" data-tab="jekyll">Jekyll</div>
+            <div class="item" data-tab="others">{% trans "Others" %}</div>
+            {# The `actionable` class here prevents the select from selecting the text #}
+            <a class="actionable item"
+               href="https://docs.readthedocs.io/page/config-file/index.html#getting-started-with-a-template"
+               target="_blank">{% trans "See more examples" %}</a>
+          </div>
+        </div>
+      </div>
+
+      <div id="project-create-config-samples">
+        <div class="ui bottom attached active tab" data-tab="sphinx">
+          <div class="ui mini padded inverted scrolling segment">
+            <div class="ui top attached label">
+              <code>.readthedocs.yaml</code>
+            </div>
+            <a class="ui top right attached icon label"
+               href="#"
+               data-clipboard-target="#project-create-sample-sphinx">
+              <i class="fas fa-copy icon"></i>
+            </a>
+            <code class="highlight">
+              <pre id="project-create-sample-sphinx">
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
@@ -73,22 +96,22 @@ sphinx:
 #    install:
 #    - requirements: docs/requirements.txt
         </pre>
-      </code>
-    </div>
-  </div>
+            </code>
+          </div>
+        </div>
 
-  <div class="ui bottom attached tab" data-tab="mkdocs">
-    <div class="ui mini padded inverted scrolling segment">
-      <div class="ui top attached label">
-        <code>.readthedocs.yaml</code>
-      </div>
-      <a class="ui top right attached icon label"
-         href="#"
-         data-clipboard-target="#project-create-sample-mkdocs">
-        <i class="fas fa-copy icon"></i>
-      </a>
-      <code class="highlight">
-        <pre id="project-create-sample-mkdocs">
+        <div class="ui bottom attached tab" data-tab="mkdocs">
+          <div class="ui mini padded inverted scrolling segment">
+            <div class="ui top attached label">
+              <code>.readthedocs.yaml</code>
+            </div>
+            <a class="ui top right attached icon label"
+               href="#"
+               data-clipboard-target="#project-create-sample-mkdocs">
+              <i class="fas fa-copy icon"></i>
+            </a>
+            <code class="highlight">
+              <pre id="project-create-sample-mkdocs">
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
@@ -112,22 +135,22 @@ mkdocs:
 #    install:
 #    - requirements: docs/requirements.txt
         </pre>
-      </code>
-    </div>
-  </div>
+            </code>
+          </div>
+        </div>
 
-  <div class="ui bottom attached tab" data-tab="docusaurus">
-    <div class="ui mini padded inverted scrolling segment">
-      <div class="ui top attached label">
-        <code>.readthedocs.yaml</code>
-      </div>
-      <a class="ui top right attached icon label"
-         href="#"
-         data-clipboard-target="#project-create-sample-docusaurus">
-        <i class="fas fa-copy icon"></i>
-      </a>
-      <code class="highlight">
-        <pre id="project-create-sample-docusaurus">
+        <div class="ui bottom attached tab" data-tab="docusaurus">
+          <div class="ui mini padded inverted scrolling segment">
+            <div class="ui top attached label">
+              <code>.readthedocs.yaml</code>
+            </div>
+            <a class="ui top right attached icon label"
+               href="#"
+               data-clipboard-target="#project-create-sample-docusaurus">
+              <i class="fas fa-copy icon"></i>
+            </a>
+            <code class="highlight">
+              <pre id="project-create-sample-docusaurus">
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
@@ -149,22 +172,22 @@ build:
     - mkdir --parents $READTHEDOCS_OUTPUT/html/
     - cp --recursive docs/build/* $READTHEDOCS_OUTPUT/html/
         </pre>
-      </code>
-    </div>
-  </div>
+            </code>
+          </div>
+        </div>
 
-  <div class="ui bottom attached tab" data-tab="pelican">
-    <div class="ui mini padded inverted scrolling segment">
-      <div class="ui top attached label">
-        <code>.readthedocs.yaml</code>
-      </div>
-      <a class="ui top right attached icon label"
-         href="#"
-         data-clipboard-target="#project-create-sample-pelican">
-        <i class="fas fa-copy icon"></i>
-      </a>
-      <code class="highlight">
-        <pre id="project-create-sample-pelican">
+        <div class="ui bottom attached tab" data-tab="pelican">
+          <div class="ui mini padded inverted scrolling segment">
+            <div class="ui top attached label">
+              <code>.readthedocs.yaml</code>
+            </div>
+            <a class="ui top right attached icon label"
+               href="#"
+               data-clipboard-target="#project-create-sample-pelican">
+              <i class="fas fa-copy icon"></i>
+            </a>
+            <code class="highlight">
+              <pre id="project-create-sample-pelican">
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
@@ -183,22 +206,22 @@ build:
     # Build the site and save generated files into Read the Docs directory
     - pelican --settings docs/pelicanconf.py --output $READTHEDOCS_OUTPUT/html
         </pre>
-      </code>
-    </div>
-  </div>
+            </code>
+          </div>
+        </div>
 
-  <div class="ui bottom attached tab" data-tab="jekyll">
-    <div class="ui mini padded inverted scrolling segment">
-      <div class="ui top attached label">
-        <code>.readthedocs.yaml</code>
-      </div>
-      <a class="ui top right attached icon label"
-         href="#"
-         data-clipboard-target="#project-create-sample-jekyll">
-        <i class="fas fa-copy icon"></i>
-      </a>
-      <code class="highlight">
-        <pre id="project-create-sample-jekyll">
+        <div class="ui bottom attached tab" data-tab="jekyll">
+          <div class="ui mini padded inverted scrolling segment">
+            <div class="ui top attached label">
+              <code>.readthedocs.yaml</code>
+            </div>
+            <a class="ui top right attached icon label"
+               href="#"
+               data-clipboard-target="#project-create-sample-jekyll">
+              <i class="fas fa-copy icon"></i>
+            </a>
+            <code class="highlight">
+              <pre id="project-create-sample-jekyll">
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
@@ -218,22 +241,22 @@ build:
     # Build the site and save generated files into Read the Docs directory
     - jekyll build --destination $READTHEDOCS_OUTPUT/html
         </pre>
-      </code>
-    </div>
-  </div>
+            </code>
+          </div>
+        </div>
 
-  <div class="ui bottom attached tab" data-tab="others">
-    <div class="ui mini padded inverted scrolling segment">
-      <div class="ui top attached label">
-        <code>.readthedocs.yaml</code>
-      </div>
-      <a class="ui top right attached icon label"
-         href="#"
-         data-clipboard-target="#project-create-sample-others">
-        <i class="fas fa-copy icon"></i>
-      </a>
-      <code class="highlight">
-        <pre id="project-create-sample-others">
+        <div class="ui bottom attached tab" data-tab="others">
+          <div class="ui mini padded inverted scrolling segment">
+            <div class="ui top attached label">
+              <code>.readthedocs.yaml</code>
+            </div>
+            <a class="ui top right attached icon label"
+               href="#"
+               data-clipboard-target="#project-create-sample-others">
+              <i class="fas fa-copy icon"></i>
+            </a>
+            <code class="highlight">
+              <pre id="project-create-sample-others">
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
@@ -260,17 +283,115 @@ build:
     #  - Build the documentation
     #  - Save the generated files in $READTHEDOCS_OUTPUT/html
         </pre>
-      </code>
+            </code>
+          </div>
+        </div>
+      </div>
+      {# /project-create-config-samples #}
+
+      <div class="ui small modal" data-modal-id="i-need-help">
+        <div class="header">{% trans "Add configuration file to your project" %}</div>
+        <div class="content">
+          <p>{% trans "These are the steps you need to follow:" %}</p>
+          <ol>
+            <li>
+              {% trans "Create a <code>.readthedocs.yaml</code> file in your repository." %}
+            </li>
+            <li>
+              {% trans "Copy the contents of one of our examples to your project's <code>.readthedocs.yaml</code>." %}
+            </li>
+            <li>{% trans "Merge this change to your project's repository." %}.</li>
+          </ol>
+          <p>
+            {% trans "Once that's done Read the Docs will be able to build your project's documentation." %}
+          </p>
+        </div>
+        <div class="actions">
+          <div class="ui cancel button">{% trans "Close" %}</div>
+        </div>
+      </div>
+
+      <div class="ui basic fitted right aligned segment">
+        <button data-bind="click: $root.show_modal('i-need-help')"
+                type="button"
+                class="ui button">{% trans "I need help" %}</button>
+
+        <button class="ui primary button"
+                type="submit"
+                name="config-build_method"
+                value="readthedocs">{% trans "This file exists" %}</button>
+      </div>
+
     </div>
+    {# /readthedocs tab #}
+
+    {% if direct_upload_available %}
+      <div class="ui bottom attached segment tab" data-tab="direct_upload">
+        <div class="ui small info message">
+          {% blocktrans trimmed %}
+            <strong>Read the Docs will not build this project.</strong>
+            Build the documentation in your own pipeline, for example in GitHub Actions,
+            and upload the result with the upload action or the <code>readthedocs-upload</code> command line client.
+            Versions, pull request previews, search, Addons and custom domains work as usual.
+          {% endblocktrans %}
+        </div>
+
+        <p>
+          {% blocktrans trimmed %}
+            Your project is created without any versions.
+            The first one appears when your pipeline uploads the documentation:
+            pushes to a branch or tag create that version on Read the Docs,
+            and pull requests get previews.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed with url="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html" %}
+            Click <strong>I need help</strong> for the steps to set up the upload,
+            or read the <a href="{{ url }}" target="_blank">direct upload documentation</a>.
+          {% endblocktrans %}
+        </p>
+
+        <div class="ui modal" data-modal-id="i-need-help-direct-upload">
+          <div class="header">{% trans "Upload your documentation to Read the Docs" %}</div>
+          <div class="scrolling content">
+            {% include "projects/partials/direct_upload_steps.html" with project_slug=project_slug %}
+          </div>
+          <div class="actions">
+            <div class="ui cancel button">{% trans "Close" %}</div>
+          </div>
+        </div>
+
+        <div class="ui basic fitted right aligned segment">
+          <button data-bind="click: $root.show_modal('i-need-help-direct-upload')"
+                  type="button"
+                  class="ui button">{% trans "I need help" %}</button>
+
+          <button class="ui primary button"
+                  type="submit"
+                  name="config-build_method"
+                  value="direct_upload">
+            <i class="fa-duotone fa-cloud-arrow-up icon"></i>
+            {% trans "I will upload my documentation" %}
+          </button>
+        </div>
+      </div>
+    {% endif %}
   </div>
+  {# /project-create-build-method #}
+{% endblock wizard_form %}
 
-  {# Show the base form #}
-  {{ block.super }}
-
-{% endblock project_add_content_form %}
+{% block wizard_actions %}
+  {% if wizard.steps.prev %}
+    <button class="ui button"
+            name="wizard_goto_step"
+            value="{{ wizard.steps.prev }}">{% trans "Previous" %}</button>
+  {% endif %}
+{% endblock wizard_actions %}
 
 {% block project_add_sidebar_help_topics %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/config-file/index.html" text="Configuration file tutorial" is_external=True class="item" %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/config-file/v2.html" text="Configuration file reference" is_external=True class="item" %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/setup/git-repo-manual.html" text="Manually configuring a Git repository" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html" text="Direct upload" is_external=True class="item" %}
 {% endblock project_add_sidebar_help_topics %}

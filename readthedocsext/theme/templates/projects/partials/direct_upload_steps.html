@@ -1,0 +1,71 @@
+{% load blocktrans trans from i18n %}
+
+{% comment %}
+  Steps to upload documentation with direct upload.
+  Used inside the "I need help" modal of the Add project wizard.
+{% endcomment %}
+
+<!-- BEGIN direct upload steps -->
+<p>{% trans "These are the steps you need to follow after adding the project:" %}</p>
+<ol>
+  <li>
+    {% url "profiles_tokens" as tokens_url %}
+    {% blocktrans trimmed %}
+      <a href="{{ tokens_url }}" target="_blank">Create an API token</a> and store it as a secret named <code>READTHEDOCS_TOKEN</code> in your pipeline.
+    {% endblocktrans %}
+  </li>
+  <li>
+    {% trans "Add the upload step after the step that builds your documentation, using the upload action or the command line client." %}
+  </li>
+  <li>
+    {% trans "Push to your repository. The uploaded documentation shows up as a version of your project." %}
+  </li>
+</ol>
+
+<h4 class="ui header">{% trans "GitHub Actions" %}</h4>
+<div class="ui mini padded inverted scrolling segment">
+  <div class="ui top attached label">
+    <code>.github/workflows/docs.yaml</code>
+  </div>
+  <a class="ui top right attached icon label"
+     href="#"
+     data-clipboard-target="#direct-upload-sample-github-actions">
+    <i class="fas fa-copy icon"></i>
+  </a>
+  <code class="highlight">
+    <pre id="direct-upload-sample-github-actions">
+# Build your documentation with the tool you already use, then upload it
+- uses: readthedocs/upload-action@v1
+  with:
+    token: ${% templatetag openvariable %} secrets.READTHEDOCS_TOKEN {% templatetag closevariable %}
+    project-slug: {{ project_slug|default:"&lt;your-project-slug&gt;" }}
+    html: _build/html</pre>
+  </code>
+</div>
+
+<h4 class="ui header">{% trans "Command line" %}</h4>
+<div class="ui mini padded inverted scrolling segment">
+  <div class="ui top attached label">
+    <code>console</code>
+  </div>
+  <a class="ui top right attached icon label"
+     href="#"
+     data-clipboard-target="#direct-upload-sample-command-line">
+    <i class="fas fa-copy icon"></i>
+  </a>
+  <code class="highlight">
+    <pre id="direct-upload-sample-command-line">
+$ export READTHEDOCS_TOKEN=&lt;token&gt;
+$ uvx --from readthedocs-upload readthedocs upload \
+    --project-slug {{ project_slug|default:"&lt;your-project-slug&gt;" }} \
+    --html _build/html</pre>
+  </code>
+</div>
+
+<p>
+  {% blocktrans trimmed with url="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html" %}
+    Pushes to a branch or tag create that version on Read the Docs, and pull requests get previews.
+    Read more in the <a href="{{ url }}" target="_blank">direct upload documentation</a>.
+  {% endblocktrans %}
+</p>
+<!-- END direct upload steps -->
