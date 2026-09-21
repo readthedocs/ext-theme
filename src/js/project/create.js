@@ -134,8 +134,6 @@ export class ProjectCreateView extends ResponsiveView {
    */
   init_search() {
     const config = this.config();
-    // Load the first page of repositories on focus, before the user types, so
-    // the search doesn't look empty.
     const maxResults = 10;
     const url =
       config.urls.remoterepository_list +
@@ -210,8 +208,6 @@ export class ProjectCreateView extends ResponsiveView {
       },
       fullTextSearch: true,
       maxResults: maxResults,
-      // Show results immediately on focus, so users see what repositories
-      // are available without having to guess at a name first.
       minCharacters: 0,
       searchOnFocus: true,
       onSelect: (result, response) => {

@@ -88,8 +88,8 @@ export class ProjectVersionCreateView {
     const maxResults = 100;
     // String interpolation over URLSearchParams here as FUI uses basic string
     // replacement for `{query}`, but this is encoded for URLSearchParams.
-    // Only inactive versions are listed. Active versions are already on the
-    // versions listing page and can't be activated again.
+    // Active versions are already on the versions listing page and can't be
+    // activated again.
     const url =
       config.api_url + `?limit=${maxResults}&active=false&verbose_name={query}`;
     const errors = config.errors || {};
