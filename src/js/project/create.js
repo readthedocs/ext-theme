@@ -134,7 +134,13 @@ export class ProjectCreateView extends ResponsiveView {
    */
   init_search() {
     const config = this.config();
-    const url = config.urls.remoterepository_list + "?full_name={query}";
+    // Load the first page of repositories on focus, before the user types, so
+    // the search doesn't look empty. Large enough to be useful, small enough
+    // to avoid loading hundreds of avatars at once.
+    const maxResults = 50;
+    const url =
+      config.urls.remoterepository_list +
+      `?limit=${maxResults}&full_name={query}`;
 
     // Configuration for the trigger of the popup element. We manually show the
     // popup in the case that the user has tried searching multiple times
@@ -204,6 +210,11 @@ export class ProjectCreateView extends ResponsiveView {
         title: ".title .text",
       },
       fullTextSearch: true,
+      maxResults: maxResults,
+      // Show results immediately on focus, so users see what repositories
+      // are available without having to guess at a name first.
+      minCharacters: 0,
+      searchOnFocus: true,
       onSelect: (result, response) => {
         this.selected(new RemoteRepository(result));
       },
