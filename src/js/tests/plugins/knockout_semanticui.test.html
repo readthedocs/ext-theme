@@ -26,8 +26,6 @@
       import { Registry } from "../../application/registry";
 
       const app = new Application({ debug: true });
-      // Focus the search input before the SUI module is initialized, like the
-      // ``autofocus`` attribute does on page load.
       document.querySelector(".ui.search .prompt").focus();
       app.run();
 

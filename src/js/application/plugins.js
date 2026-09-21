@@ -451,12 +451,8 @@ export const semanticui = {
           );
           jq_element[key](value);
 
-          // An input with ``autofocus`` is focused before the search module is
-          // initialized, so the module never sees a focus event and
-          // ``searchOnFocus`` does nothing. Replay the event for the module.
-          // This waits for the element's other bindings to apply first, as a
-          // binding like ``css: {disabled: ...}`` makes the module drop the
-          // query while the element is still disabled.
+          // ``autofocus`` fires before the module exists. Deferred as the module
+          // drops queries until a ``css`` binding removes ``disabled``.
           if (key === "search" && element.contains(document.activeElement)) {
             queueMicrotask(() => {
               jq_element.search("event focus");
