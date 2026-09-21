@@ -198,61 +198,112 @@
 {% block project_add_automatic_placeholder %}
   <div class="ui basic horizontally fitted segment"
        data-bind="visible: !is_selected()">
-    {# Browsable first page of repositories; the search above covers the rest #}
-    <div class="ko hidden"
-         data-bind="css: {hidden: browse_repos().length == 0}">
-      <div class="ui top attached segment">
-        <div class="ui small header">
-          {% trans "Your repositories" %}
+    {% comment %}
+      The explicit False comparisons keep these states off until the
+      application side ships the context variables — an undefined variable
+      falls through to the previous placeholder instead of showing the
+      "connect a provider" state to everyone.
+    {% endcomment %}
+    {% if has_connected_vcs_account == False %}
+      {# No Git provider connected: searching can never return results #}
+      <div class="ui top attached placeholder segment">
+        <div class="ui icon header">
+          <i class="fad fa-plug icon"></i>
+          {% trans "Connect a Git provider" %}
+
           <div class="sub header">
             {% blocktrans trimmed %}
-              Select a repository to create your project from,
-              or use the search above to find more of your repositories.
+              Your account isn't connected to GitHub, Bitbucket, or GitLab yet.
+              Connect a provider to choose from a list of your repositories.
             {% endblocktrans %}
           </div>
         </div>
+        <a class="ui primary button"
+           href="{% url 'socialaccount_connections' %}">
+          {% trans "Connect a provider" %}
+        </a>
       </div>
-      <div class="ui bottom attached segment">
-        <div class="ui middle aligned divided selection list"
-             data-bind="foreach: browse_repos">
-          <div class="item" data-bind="click: $parent.select_repo.bind($parent)">
-            <img class="ui avatar image"
-                 data-bind="attr: {src: avatar_url}"
-                 alt="{% trans "Repository logo" %}" />
-            <div class="content">
-              <div class="header">
-                <span data-bind="text: full_name"></span>
-                <i class="fa-duotone fa-eye-slash small icon ko hidden"
-                   data-bind="css: {hidden: !is_private()}"></i>
-                <i class="fa-duotone fa-magic small icon ko hidden"
-                   data-bind="css: {hidden: !has_admin()}"></i>
-                <i class="fa-duotone fa-download small icon ko hidden"
-                   data-bind="css: {hidden: !has_project()}"></i>
+    {% elif has_remote_repositories == False %}
+      {# Provider connected but no repositories synced: point at the quick fixes #}
+      <div class="ui top attached placeholder segment">
+        <div class="ui icon header">
+          <i class="fad fa-search icon"></i>
+          {% trans "No repositories found yet" %}
+
+          <div class="sub header">
+            {% blocktrans trimmed %}
+              We can't see any repositories on your connected account yet.
+              Refreshing your repositories usually fixes this.
+            {% endblocktrans %}
+          </div>
+        </div>
+        <a class="ui primary button"
+           data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing(), positive: is_synced()}">
+          <i class="fa-duotone fa-refresh icon"
+             data-bind="css: {'fa-refresh': !is_synced(), 'fa-check': is_synced()}"></i>
+          {% trans "Refresh your repositories" %}
+        </a>
+        <div class="ui center aligned basic segment">
+          <a href="#repair" data-bind="click: show_modal">{% trans "More ways to repair your repository list" %}</a>
+        </div>
+      </div>
+    {% else %}
+      {# Browsable first page of repositories; the search above covers the rest #}
+      <div class="ko hidden"
+           data-bind="css: {hidden: browse_repos().length == 0}">
+        <div class="ui top attached segment">
+          <div class="ui small header">
+            {% trans "Your repositories" %}
+            <div class="sub header">
+              {% blocktrans trimmed %}
+                Select a repository to create your project from,
+                or use the search above to find more of your repositories.
+              {% endblocktrans %}
+            </div>
+          </div>
+        </div>
+        <div class="ui bottom attached segment">
+          <div class="ui middle aligned divided selection list"
+               data-bind="foreach: browse_repos">
+            <div class="item" data-bind="click: $parent.select_repo.bind($parent)">
+              <img class="ui avatar image"
+                   data-bind="attr: {src: avatar_url}"
+                   alt="{% trans "Repository logo" %}" />
+              <div class="content">
+                <div class="header">
+                  <span data-bind="text: full_name"></span>
+                  <i class="fa-duotone fa-eye-slash small icon ko hidden"
+                     data-bind="css: {hidden: !is_private()}"></i>
+                  <i class="fa-duotone fa-magic small icon ko hidden"
+                     data-bind="css: {hidden: !has_admin()}"></i>
+                  <i class="fa-duotone fa-download small icon ko hidden"
+                     data-bind="css: {hidden: !has_project()}"></i>
+                </div>
+                <div class="description" data-bind="text: clone_url"></div>
               </div>
-              <div class="description" data-bind="text: clone_url"></div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="ui top attached placeholder segment ko"
-         data-bind="css: {hidden: browse_repos().length > 0}">
-      <div class="ui icon header">
-        {# Push user towards searching using input above #}
-        <i class="fad fa-search icon"></i>
-        {% trans "Select a repository" %}
+      <div class="ui top attached placeholder segment ko"
+           data-bind="css: {hidden: browse_repos().length > 0}">
+        <div class="ui icon header">
+          {# Push user towards searching using input above #}
+          <i class="fad fa-search icon"></i>
+          {% trans "Select a repository" %}
 
-        <div class="sub header">
-          {# User has connected accounts, don't point to connecting GitHub/etc #}
-          {% blocktrans trimmed %}
-            Use the search above to find the repository you would like to
-            use to build your new project. This project will be connected to
-            the repository through your connected account.
-          {% endblocktrans %}
+          <div class="sub header">
+            {# User has connected accounts, don't point to connecting GitHub/etc #}
+            {% blocktrans trimmed %}
+              Use the search above to find the repository you would like to
+              use to build your new project. This project will be connected to
+              the repository through your connected account.
+            {% endblocktrans %}
+          </div>
         </div>
-      </div>
 
-    </div>
+      </div>
+    {% endif %}
   </div>
 {% endblock project_add_automatic_placeholder %}
 
