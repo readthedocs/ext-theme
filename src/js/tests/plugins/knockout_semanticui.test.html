@@ -1,3 +1,4 @@
+<!-- djlint:off H005,H016,H030,H031 -->
 <html>
   <body>
     <div class="ui dropdown" data-bind="semanticui: { dropdown: {}}">
@@ -9,8 +10,14 @@
       </div>
     </div>
 
+    <div class="ui disabled search"
+         data-bind="semanticui: { search: { apiSettings: { url: '/search?q={query}', mockResponse: { results: [{ title: 'Choice 1' }] } }, minCharacters: 0, searchOnFocus: true } }, css: { disabled: false }">
+      <input class="prompt" type="text" />
+      <div class="results"></div>
+    </div>
+
     <script type="module">
-      import { expect } from "@open-wc/testing";
+      import { expect, waitUntil } from "@open-wc/testing";
       import { runTests } from "@web/test-runner-mocha";
       import { default as ko } from "knockout";
       import { default as jquery } from "jquery";
@@ -19,6 +26,7 @@
       import { Registry } from "../../application/registry";
 
       const app = new Application({ debug: true });
+      document.querySelector(".ui.search .prompt").focus();
       app.run();
 
       runTests(async () => {
@@ -40,6 +48,14 @@
             expect(moduleData.is.active()).to.be.false;
             expect(moduleData.is.disabled()).to.be.false;
             expect(moduleData.is.empty()).to.be.false;
+          });
+
+          it("SUI search queries on init when its input is already focused", async () => {
+            const elem = jquery(".ui.search");
+            await waitUntil(
+              () => elem.find(".results .result").length === 1,
+              "Search results were not shown",
+            );
           });
         });
       });

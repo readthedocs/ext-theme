@@ -134,7 +134,10 @@ export class ProjectCreateView extends ResponsiveView {
    */
   init_search() {
     const config = this.config();
-    const url = config.urls.remoterepository_list + "?full_name={query}";
+    const maxResults = 10;
+    const url =
+      config.urls.remoterepository_list +
+      `?limit=${maxResults}&full_name={query}`;
 
     // Configuration for the trigger of the popup element. We manually show the
     // popup in the case that the user has tried searching multiple times
@@ -204,6 +207,9 @@ export class ProjectCreateView extends ResponsiveView {
         title: ".title .text",
       },
       fullTextSearch: true,
+      maxResults: maxResults,
+      minCharacters: 0,
+      searchOnFocus: true,
       onSelect: (result, response) => {
         this.selected(new RemoteRepository(result));
       },

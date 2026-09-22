@@ -450,6 +450,14 @@ export const semanticui = {
             element,
           );
           jq_element[key](value);
+
+          // ``autofocus`` fires before the module exists. Deferred as the module
+          // drops queries until a ``css`` binding removes ``disabled``.
+          if (key === "search" && element.contains(document.activeElement)) {
+            queueMicrotask(() => {
+              jq_element.search("event focus");
+            });
+          }
         }
 
         // Set attribute for CSS selector on element. This is used to avoid

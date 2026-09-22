@@ -2,7 +2,6 @@ import ko from "knockout";
 import jquery from "jquery";
 import { html, render } from "lit";
 import { map } from "lit/directives/map.js";
-import { when } from "lit/directives/when.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import * as admin from "./admin";
@@ -89,7 +88,8 @@ export class ProjectVersionCreateView {
     const maxResults = 100;
     // String interpolation over URLSearchParams here as FUI uses basic string
     // replacement for `{query}`, but this is encoded for URLSearchParams.
-    const url = config.api_url + `?limit=${maxResults}&verbose_name={query}`;
+    const url =
+      config.api_url + `?limit=${maxResults}&active=false&verbose_name={query}`;
     const errors = config.errors || {};
     return {
       apiSettings: {
@@ -138,15 +138,6 @@ export class ProjectVersionCreateView {
                             "fa-tag": version.type === "tag",
                           })} small icon"
                         ></i>
-                        ${when(
-                          version.active,
-                          () => html`
-                            <span class="ui horizontal label">
-                              <i class="fas fa-check icon"></i>
-                              Active
-                            </span>
-                          `,
-                        )}
                       </div>
                       <div class="description">
                         <code>${version.identifier}</code>
