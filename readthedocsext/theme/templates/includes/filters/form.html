@@ -8,6 +8,18 @@
         <input type="hidden"
                name="{{ field.name }}"
                value="{% if field.value.0|length == 1 %}{{ field.value|default:"" }}{% else %}{{ field.value.0|default:"" }}{% endif %}" />
+      {% elif field.field.widget.input_type == "text" %}
+        {# Free text filters submit the form on enter, like the dropdowns submit on change #}
+        <div class="item">
+          <div class="ui small icon input">
+            <input type="text"
+                   name="{{ field.name }}"
+                   value="{{ field.value|default:"" }}"
+                   placeholder="{{ field.label }}"
+                   aria-label="{{ field.label }}" />
+            <i class="fa-solid fa-magnifying-glass icon"></i>
+          </div>
+        </div>
       {% else %}
         <div class="item">
           <div class="content">
