@@ -35,9 +35,10 @@
           <div class="ui buttons">
 
             {% comment %}
-              The two "Last used" popups sit on opposite sides of the split
-              button, so that people who last logged in with an alternative are
-              pointed at the second button instead of this one.
+              The two "Last used" popups are placed apart, so that people who
+              last logged in with an alternative are pointed at the second
+              button instead of this one. The second one sits above the button
+              rather than beside it, where there is no room for it on a phone.
             {% endcomment %}
 
             {# SECURITY: always use escapejs when including user input in a JS context, like data-bind #}
@@ -55,7 +56,7 @@
               More options
             {% endblocktrans %}
             <button class="ui icon button"
-                    data-bind="click: show_github_modal, semanticui: { popup: popup_login_method(['github'], 'right center') }"
+                    data-bind="click: show_github_modal, semanticui: { popup: popup_login_method(['github'], 'top right') }"
                     type="button"
                     title="{{ label_more_options }}"
                     aria-label="{{ label_more_options }}">
