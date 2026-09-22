@@ -11,22 +11,18 @@
   details to the import view, which seeds the import wizard.
 
   This is rendered inside the ``ProjectCreateView`` Knockout binding, which
-  provides the repository resync action used in the list header and in the
-  empty placeholder.
+  provides the repository resync action used in the empty placeholder.
 {% endcomment %}
 
 {% block top_left_menu_items %}
-  <div data-bind="using: FilterView()">
+  {# Nested inside the ProjectCreateView binding, so reference the root view explicitly #}
+  <div data-bind="using: $root.FilterView()">
     {% include "includes/filters/form.html" with fields=filter.form %}
   </div>
 {% endblock top_left_menu_items %}
 
+{# No create button: refreshing the list lives in the message below it and in the empty placeholder #}
 {% block create_button %}
-  <button class="ui basic button"
-          data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
-    <i class="fa-duotone fa-refresh icon"></i>
-    {% trans "Refresh repositories" %}
-  </button>
 {% endblock create_button %}
 
 {% block list_placeholder_icon_class %}
@@ -73,7 +69,11 @@
   {% endif %}
 {% endblock list_item_header %}
 
-{% block list_item_meta_items %}
+{# Drop the meta column entirely so long repository names have room #}
+{% block list_item_meta_column %}
+{% endblock list_item_meta_column %}
+
+{% block list_item_extra_items %}
   {% if object.private %}
     {% trans "Private" context "Repository is private" as text %}
     {% if allow_private_repos %}
@@ -98,12 +98,16 @@
   {% endif %}
 
   {% for project in object.linked_projects %}
-    {% trans "Already imported as" as detail %}
+    {% trans "Already imported" as text %}
+    {% blocktrans trimmed with name=project.name asvar popup %}
+      Already imported as {{ name }}
+    {% endblocktrans %}
+    {% url "projects_detail" project.slug as url %}
     <div class="item">
-      {% include "includes/elements/chips/project.html" with project=project detail=detail %}
+      {% include "includes/components/config_label.html" with icon="fa-solid fa-check" text=text popup=popup url=url %}
     </div>
   {% endfor %}
-{% endblock list_item_meta_items %}
+{% endblock list_item_extra_items %}
 
 {% block list_item_right_menu %}
   <form action="{% url "projects_import" %}" method="post">

@@ -38,7 +38,12 @@
         This list might be out of date or reconfiguration might be necessary to update repositories.
       {% endblocktrans %}
     </p>
-    <a class="ui small compact button" data-bind="click: show_modal">{% trans "Repair" %}</a>
+    <button class="ui small compact button"
+            data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
+      <i class="fa-duotone fa-refresh icon"></i>
+      {% trans "Refresh repositories" %}
+    </button>
+    <a class="ui small compact basic button" data-bind="click: show_modal">{% trans "Repair" %}</a>
   </div>
 
   {% comment %}
