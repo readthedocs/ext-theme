@@ -1,5 +1,6 @@
 {% load trans blocktrans from i18n %}
 {% load get_github_providers get_providers from ext_theme_tags %}
+{% load provider_login_url from socialaccount %}
 
 {% comment %}
   ``get_providers`` filters out providers marked as hidden in our settings file.
@@ -18,16 +19,64 @@
 {% get_providers process=process as providers %}
 {% if providers_github|length == 2 and not allowed_providers %}
   {% trans "GitHub" as provider_name %}
-  <li class="item">
-    <a class="ui button"
-       data-bind="click: show_github_modal, semanticui: { popup: popup_login_method(['github','githubapp'], 'right center') }"
-       title="{{ provider_name }}">
-      <i class="fa-brands fa-github icon"></i>
-      {% blocktrans trimmed with provider_name=provider_name verbiage=verbiage|default:'Connect to' %}
-        {{ verbiage }} {{ provider_name }}
-      {% endblocktrans %}
-    </a>
-  </li>
+  {% comment %}
+    The first GitHub provider is the recommended one, the same one the modal
+    gives its primary button to. When it is marked as the default in settings,
+    it gets a button of its own and the modal moves behind a second button
+    next to it, so that nobody has to choose before they can log in.
+  {% endcomment %}
+  {% with default_provider=providers_github.0 %}
+    <li class="item">
+      {% if default_provider.app.settings.default %}
+        <form class="ui form"
+              method="post"
+              action="{% provider_login_url default_provider.id process=process scope=scope auth_params=auth_params %}">
+          {% csrf_token %}
+          <div class="ui buttons">
+
+            {% comment %}
+              The two "Last used" popups are placed apart, so that people who
+              last logged in with an alternative are pointed at the second
+              button instead of this one. The second one sits above the button
+              rather than beside it, where there is no room for it on a phone.
+            {% endcomment %}
+
+            {# SECURITY: always use escapejs when including user input in a JS context, like data-bind #}
+            {# djlint: off D018 #}
+            <button class="ui button"
+                    data-bind="click: save_login_method.bind($data, '{{ default_provider.id|escapejs }}'), semanticui: { popup: popup_login_method('{{ default_provider.id|escapejs }}', 'left center') }"
+                    type="submit">
+              <i class="fa-brands fa-github icon"></i>
+              {% blocktrans trimmed with provider_name=default_provider.app.name|default:default_provider.name verbiage=verbiage|default:'Connect to' %}
+                {{ verbiage }} {{ provider_name }}
+              {% endblocktrans %}
+            </button>
+
+            {% blocktrans asvar label_more_options trimmed %}
+              More options
+            {% endblocktrans %}
+            <button class="ui icon button"
+                    data-bind="click: show_github_modal, semanticui: { popup: popup_login_method(['github'], 'top right') }"
+                    type="button"
+                    title="{{ label_more_options }}"
+                    aria-label="{{ label_more_options }}">
+              {# djlint: on #}
+              <i class="fa-solid fa-caret-down icon"></i>
+            </button>
+          </div>
+        </form>
+      {% else %}
+        <a class="ui button"
+           data-bind="click: show_github_modal, semanticui: { popup: popup_login_method(['github','githubapp'], 'right center') }"
+           title="{{ provider_name }}">
+          <i class="fa-brands fa-github icon"></i>
+          {% blocktrans trimmed with provider_name=provider_name verbiage=verbiage|default:'Connect to' %}
+            {{ verbiage }} {{ provider_name }}
+          {% endblocktrans %}
+        </a>
+      {% endif %}
+    </li>
+  {% endwith %}
 
   <div class="ui tiny modal"
        data-bind="semanticui: { modal: github_modal_config() }">
