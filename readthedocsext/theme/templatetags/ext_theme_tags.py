@@ -139,7 +139,7 @@ def get_spam_score(project):
 
 
 @register.simple_tag(takes_context=True)
-def get_providers(context, process="login", alternatives=False):
+def get_providers(context, process="login"):
     """
     Adds additional app setting support and sorting to the Allauth provider list tag.
 
@@ -152,19 +152,11 @@ def get_providers(context, process="login", alternatives=False):
     ``hidden_on_login``/``hidden_on_connect``/``hidden_on_{process}`` (bool)
         Hide the provider from the Allauth process view
 
-    ``alternative_to`` (str)
-        Id of the provider this provider is a less prominent alternative to.
-        Alternatives are attached to that provider's button as a dropdown
-        instead of getting a button of their own.
-
     ``priority``
         Priority order value for list of providers, higher values are lower in priority on the list.
 
     Additionally, filter out providers from the database -- applications that
     have a ``pk`` -- these are per-user applications like SAML.
-
-    :param alternatives: ``False`` leaves alternative providers out, ``True``
-        returns only the alternatives, and ``None`` returns both.
     """
     # The base Allauth ``get_providers`` tag filters out providers marked as hidden in our settings file.
     providers = [
@@ -172,10 +164,6 @@ def get_providers(context, process="login", alternatives=False):
         for provider in base_get_providers(context)
         if not provider.app.settings.get(f"hidden_on_{process}", False)
         and not provider.app.pk
-        and (
-            alternatives is None
-            or bool(provider.app.settings.get("alternative_to")) == alternatives
-        )
     ]
     return sorted(
         providers, key=lambda provider: provider.app.settings.get("priority", 100)
@@ -185,19 +173,8 @@ def get_providers(context, process="login", alternatives=False):
 # TODO remove this after we don't need to separate the providers with a modal
 @register.simple_tag(takes_context=True)
 def get_github_providers(context, process="login"):
-    # Alternatives are listed in the modal too, so don't filter them out here.
-    providers = get_providers(context, process, alternatives=None)
+    providers = get_providers(context, process)
     return list(filter(lambda provider: "github" in provider.id, providers))
-
-
-@register.simple_tag
-def get_provider_alternatives(providers, provider):
-    """Filter ``providers`` down to the ones that are an alternative to ``provider``."""
-    return [
-        alternative
-        for alternative in providers or []
-        if alternative.app.settings.get("alternative_to") == provider.id
-    ]
 
 
 # Simple solution to not supported "zh" language code.
