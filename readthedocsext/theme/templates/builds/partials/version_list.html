@@ -28,7 +28,12 @@
   {% trans "This project doesn't have any versions yet" %}
 {% endblock list_placeholder_header_empty %}
 {% block list_placeholder_text_empty %}
-  {% if is_project_admin %}
+  {% if direct_upload_waiting %}
+    {% blocktrans trimmed with url="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html" %}
+      Upload your documentation to create the first version.
+      Read the <a href="{{ url }}" target="_blank">direct upload documentation</a> to learn how.
+    {% endblocktrans %}
+  {% elif is_project_admin %}
     <a href="{% url "project_version_create" project.slug %}"
        class="ui primary button">{% trans "Add version" %}</a>
   {% endif %}
@@ -55,12 +60,21 @@
           <i class="fa-solid fa-ellipsis icon"></i>
           <div class="menu">
             <div class="header">{% trans "Admin" %}</div>
-            <readthedocs-menu-build-rebuild class="item"
-                                            url="{% url "projects-versions-builds-list" object.project.slug object.slug %}"
-                                            csrf-token="{{ csrf_token }}">
-              <i class="fa-duotone fa-refresh icon"></i>
-              {% trans "Rebuild version" %}
-            </readthedocs-menu-build-rebuild>
+            {% if object.is_uploaded %}
+              {# Disabled items keep pointer events when they carry a popup, see dropdown.overrides #}
+              <div class="disabled item"
+                   data-content="{% trans "This version is updated by direct upload. Rebuild it from your own pipeline." %}">
+                <i class="fa-duotone fa-refresh icon"></i>
+                {% trans "Rebuild version" %}
+              </div>
+            {% else %}
+              <readthedocs-menu-build-rebuild class="item"
+                                              url="{% url "projects-versions-builds-list" object.project.slug object.slug %}"
+                                              csrf-token="{{ csrf_token }}">
+                <i class="fa-duotone fa-refresh icon"></i>
+                {% trans "Rebuild version" %}
+              </readthedocs-menu-build-rebuild>
+            {% endif %}
             <a class="item"
                href="{% url "project_version_detail" project.slug object.slug %}">
               <i class="fa-duotone fa-wrench icon"></i>

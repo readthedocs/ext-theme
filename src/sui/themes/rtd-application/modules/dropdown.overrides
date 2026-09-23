@@ -55,3 +55,9 @@
     font-size: 0.9em;
   }
 }
+
+// Disabled items normally swallow pointer events, which also kills their
+// tooltip. Allow them when the item explains itself through a popup.
+.ui.dropdown .menu > .disabled.item[data-content] {
+  pointer-events: auto;
+}

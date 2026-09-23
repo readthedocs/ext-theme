@@ -141,14 +141,24 @@
           </a>
 
           {% if object.project and object.version %}
-            <readthedocs-menu-build-rebuild class="link item ko hidden"
-                                            data-bind="css: { hidden: !can_retry() }"
-                                            url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
-                                            csrf-token="{{ csrf_token }}">
-              <i class="fa-duotone fa-refresh icon"></i>
-              {# Translators: this refers to rebuilding a version build #}
-              {% trans "Rebuild" %}
-            </readthedocs-menu-build-rebuild>
+            {% if object.version.is_uploaded %}
+              {# Disabled items keep pointer events when they carry a popup, see menu.overrides #}
+              <div class="disabled item"
+                   data-content="{% trans "This version is updated by direct upload. Rebuild it from your own pipeline." %}">
+                <i class="fa-duotone fa-refresh icon"></i>
+                {# Translators: this refers to rebuilding a version build #}
+                {% trans "Rebuild" %}
+              </div>
+            {% else %}
+              <readthedocs-menu-build-rebuild class="link item ko hidden"
+                                              data-bind="css: { hidden: !can_retry() }"
+                                              url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
+                                              csrf-token="{{ csrf_token }}">
+                <i class="fa-duotone fa-refresh icon"></i>
+                {# Translators: this refers to rebuilding a version build #}
+                {% trans "Rebuild" %}
+              </readthedocs-menu-build-rebuild>
+            {% endif %}
           {% endif %}
         {% endif %}
 
