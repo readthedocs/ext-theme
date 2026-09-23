@@ -2,46 +2,16 @@ import jquery from "jquery";
 import ko from "knockout";
 
 import * as tasks from "../tasks";
-import * as utils from "../core/utils";
 import { ResponsiveView } from "../core/views";
 import { Registry } from "../application/registry";
 
 /**
- * Remote repository instance for remote repository listing.
+ * Project creation view, for setting up a new project from a remote
+ * repository.
  *
- * @param {Object} remote_repo - Remote repository API data
- */
-class RemoteRepository {
-  constructor(remote_repo) {
-    // Just copy attributes over instead of prototyping. KO observables make a
-    // prototype change more awkward. Note, ``projects`` now comes directly from
-    // the API response, there is no need to parse this data from the v2
-    // ``matches`` response.
-    for (const key of Object.keys(remote_repo)) {
-      this[key] = remote_repo[key];
-    }
-
-    /** @observable {Boolean} Is this repository private? */
-    this.is_private = ko.observable(this.private);
-    /** @observable {Booleean} Is this repository active? */
-    this.is_active = ko.observable(this.active);
-    /** @observable {Boolean} Does user have admin privilege on the repo? */
-    this.has_admin = ko.observable(this.admin);
-    /** @computed {Boolean} Can user import this repository? */
-    this.is_locked = ko.computed(() => {
-      // TODO take platform private repo setting into consideration
-      return this.is_private() && !this.has_admin();
-    });
-    /** @observable {Boolean} Was the repository already imported? */
-    this.has_project = ko.computed(() => {
-      return this.projects.length > 0;
-    });
-  }
-}
-
-/**
- * Project creation view, for setting up a new project or linking an existing
- * repository to a new project.
+ * The repository list itself is rendered server side. This view only handles
+ * resyncing the user's remote repositories and the repair modal, which
+ * explains why a repository might be missing from the list.
  *
  * @extends {ResposiveView}
  */
@@ -54,36 +24,35 @@ export class ProjectCreateView extends ResponsiveView {
     /** Configuration passed in via :func:`~application.plugins.jsonInit`
      * @observable {Object} View configuration */
     this.config = ko.observable();
-    /** Configuration passed in via :func:`~application.plugins.jsonInit`
-     * @observable {Object} Search configuration */
-    this.search_config = ko.observable();
-    /** @observable {Object} Search popup module configuration */
-    this.search_popup_config = ko.observable();
-    /** @observable {Object} Search modal module configuration */
-    this.search_modal_config = ko.observable(undefined);
-    /** @observable {Object} The selected repository */
-    this.selected = ko.observable();
-    /** @observable {Boolean} Is UI loading from the API currently? */
-    this.is_loading = ko.observable(false);
+    /** @observable {Object} Repair modal module configuration */
+    this.repair_modal_config = ko.observable(undefined);
     /** @observable {Boolean} Are remote repositories current resyncing? */
     this.is_syncing = ko.observable(false);
     /** @observable {Boolean} Are remote repositories done resyncing? */
     this.is_synced = ko.observable(false);
-    /** @computed {Boolean} Is there a selected repository? */
-    this.is_selected = ko.computed(() => {
-      return this.selected() !== undefined;
-    });
-    /** @observable {Boolean} Can private repositories be imported */
-    this.allow_private_repos = ko.observable(false);
     /** @observable {string} The error message to show the user */
     this.error = ko.observable();
 
-    // Wait for config to be loaded to init search
+    // Wait for config to be loaded to init the modal
     this.config.subscribe((config) => {
       if (config !== undefined) {
-        this.allow_private_repos(config.allow_private_repos);
-        this.init_search();
+        this.init_modal();
       }
+    });
+  }
+
+  /**
+   * Set up the repair modal once :func:`config` is loaded.
+   *
+   * The modal is shown immediately on view load if the URL contains the
+   * ``#repair`` hash. Use this for linking users in support directly to this
+   * modal.
+   */
+  init_modal() {
+    const show_modal = jquery(location).attr("hash") == "#repair";
+    this.repair_modal_config({
+      autoShow: show_modal,
+      centered: false,
     });
   }
 
@@ -91,6 +60,9 @@ export class ProjectCreateView extends ResponsiveView {
    * Sync remote repository objects using a call to our API. This sets the UI to
    * a loading state so that user interaction can be limited. Configuration is
    * loaded using :func:`config` and :func:`application.plugins.jsonInit`.
+   *
+   * The repository list is rendered server side, so the page is reloaded once
+   * the sync finishes to show the updated list.
    */
   sync_remote_repos() {
     const config = this.config();
@@ -102,137 +74,25 @@ export class ProjectCreateView extends ResponsiveView {
 
     this.is_synced(false);
     this.is_syncing(true);
-    this.is_loading(true);
 
     let promise = tasks
       .trigger_task(params)
+      .done(() => {
+        this.is_synced(true);
+        window.location.reload();
+      })
       .fail((error) => {
         console.error("Error syncing remote repositories:", error.message);
         this.error(error.message);
-      })
-      .always(() => {
         this.is_syncing(false);
-        this.is_loading(false);
-        this.is_synced(true);
       });
 
     return promise;
   }
 
-  /**
-   * Set up SUI search once :func:`config` is fully loaded.
-   *
-   * This uses a Knockout template to make it easier to display the individual
-   * elements in the list. The template is loaded from the element
-   * ``remote-repo-results``.
-   *
-   * Ultimately, this sets :func:`search_config`, which is the configuration
-   * object that will be eventually be used by SUI search jQuery plugin.
-   *
-   * .. seealso::
-   *     https://knockoutjs.com/documentation/template-binding.html
-   */
-  init_search() {
-    const config = this.config();
-    const url = config.urls.remoterepository_list + "?full_name={query}";
-
-    // Configuration for the trigger of the popup element. We manually show the
-    // popup in the case that the user has tried searching multiple times
-    // unsuccessfully, or has a query with no results.
-    let attemptsRemaining = 3;
-    this.search_popup_config({
-      on: "manual",
-      position: "top right",
-      hoverable: true,
-      closable: true,
-      preserve: true,
-      onHidden: () => {
-        // If the user did something to hide the popup, like click outside the
-        // popup, reset the attempts so that the popup can show again.
-        attemptsRemaining = 3;
-      },
-      // Add a long delay so that hover doesn't accidentally dismiss the popup
-      delay: {
-        hide: 5000,
-      },
-    });
-
-    // Show repair modal immediately on view load if the URL contains `#repair` hash.
-    // Use this for linking users in support directly to this modal.
-    const show_modal = jquery(location).attr("hash") == "#repair";
-    this.search_modal_config({
-      autoShow: show_modal,
-      centered: false,
-    });
-
-    this.search_config({
-      // We use a Knockout template here, embedded in the template as a script
-      // element. This avoids string interpolation in JS and keeps HTML in one
-      // place, along with HTML translations.
-      type: "knockout",
-      templates: {
-        knockout: (response) => {
-          let node_temp = jquery("<div>");
-
-          ko.applyBindingsToNode(node_temp[0], {
-            template: {
-              name: "remote-repo-results",
-              data: {
-                remote_repos: response.results.map((repo) => {
-                  return new RemoteRepository(repo);
-                }),
-              },
-            },
-          });
-
-          const output = node_temp.html();
-          node_temp.remove();
-          return output;
-        },
-      },
-      error: {
-        noResultsHeader: "No matching repositories found",
-      },
-      apiSettings: {
-        url: url,
-      },
-      selector: {
-        // Required because the default of ``prompt`` is a rounded input
-        prompt: ".ui.text",
-        // Required as we use `.title` to style a complex result title. SUI uses
-        // the `text()` of this element to look up the result
-        title: ".title .text",
-      },
-      fullTextSearch: true,
-      onSelect: (result, response) => {
-        this.selected(new RemoteRepository(result));
-      },
-      // Listen for results and decide to show the resync popup based on what
-      // the user's interaction with search results.
-      onResults: (response, fromCache) => {
-        if ((response && response.count == 0) || attemptsRemaining <= 0) {
-          // Search results are empty or user tried searching multiple times
-          // unsuccessfully so far. Calls with the behavior style call supported by
-          // :js:func:`application.plugins.semanticui`.
-          this.search_popup_config((popup) => popup("show"));
-        }
-        attemptsRemaining--;
-      },
-    });
-  }
-
-  /** {Boolean} Is repository supported, based on permissions? */
-  is_repository_supported(repo) {
-    if (repo.is_private()) {
-      return this.allow_private_repos();
-    }
-    return true;
-  }
-
-  /** Show search modal */
+  /** Show repair modal */
   show_modal() {
-    this.search_popup_config((popup) => popup("hide"));
-    this.search_modal_config((modal) => modal("show"));
+    this.repair_modal_config((modal) => modal("show"));
   }
 }
 Registry.add_view(ProjectCreateView);

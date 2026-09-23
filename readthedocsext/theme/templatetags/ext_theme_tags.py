@@ -233,6 +233,19 @@ def whitespaceless(content):
 
 
 @register.filter
+def before_last(value, separator):
+    """
+    Return the part of ``value`` before the last ``separator``.
+
+    Used to show the owner of a repository from its full name, for example
+    ``readthedocs`` from ``readthedocs/readthedocs.org``. Returns the whole
+    value when the separator isn't found.
+    """
+    head, found, _ = str(value).rpartition(separator)
+    return head if found else value
+
+
+@register.filter
 def starts_with(value, arg):
     """Usage: {% if value|starts_with:"prefix" %}"""
     return str(value).startswith(str(arg))

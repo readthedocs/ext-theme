@@ -1,0 +1,149 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% load blocktrans trans from i18n %}
+{% load before_last from ext_theme_tags %}
+
+{% comment "rst" %}
+  Remote repository list
+  ======================
+
+  List of the user's remote repositories, used on the project import view to
+  select a repository to create a project from. Each row posts the repository
+  details to the import view, which seeds the import wizard.
+
+  This is rendered inside the ``ProjectCreateView`` Knockout binding, which
+  provides the repository resync action and the repair modal used in the
+  empty placeholders.
+{% endcomment %}
+
+{% block top_left_menu_items %}
+  {# Nested inside the ProjectCreateView binding, so reference the root view explicitly #}
+  <div data-bind="using: $root.FilterView()">
+    {% include "includes/filters/form.html" with fields=filter.form %}
+  </div>
+{% endblock top_left_menu_items %}
+
+{# No create button: refreshing the list lives in the message below it and in the empty placeholder #}
+{% block create_button %}
+{% endblock create_button %}
+
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-code-branch
+{% endblock list_placeholder_icon_class %}
+{% block list_placeholder_header_filtered %}
+  {% trans "No matching repositories found" %}
+{% endblock list_placeholder_header_filtered %}
+{% block list_placeholder_header_empty %}
+  {% trans "No repositories found from your connected accounts" %}
+{% endblock list_placeholder_header_empty %}
+{% block list_placeholder_text_filtered %}
+  <p>
+    {% blocktrans trimmed %}
+      Try changing your filters, or refresh your repositories if this one was recently created or shared with you.
+    {% endblocktrans %}
+  </p>
+  {% include "projects/partials/remote_repository_repair_buttons.html" %}
+{% endblock list_placeholder_text_filtered %}
+{% block list_placeholder_text_empty %}
+  <p>
+    {% blocktrans trimmed %}
+      Refresh your repositories if you recently connected an account or were given access to a repository.
+    {% endblocktrans %}
+  </p>
+  {% include "projects/partials/remote_repository_repair_buttons.html" %}
+  <a class="ui basic button" href="{% url "socialaccount_connections" %}">
+    {% trans "Connected accounts" %}
+  </a>
+{% endblock list_placeholder_text_empty %}
+
+{% block list_item_image %}
+  {% if object.avatar_url %}
+    <img class="ui small rounded image"
+         src="{{ object.avatar_url }}"
+         alt="{% blocktrans with name=object.full_name %}{{ name }} repository{% endblocktrans %}" />
+  {% else %}
+    <span class="ui center aligned image">
+      <i class="fa-duotone fa-code-branch icon"></i>
+    </span>
+  {% endif %}
+{% endblock list_item_image %}
+
+{% block list_item_header %}
+  {{ object.name }}
+  <div class="sub header">{{ object.full_name|before_last:"/" }}</div>
+{% endblock list_item_header %}
+
+{# Repository state as icon-only labels, the text is in the popup #}
+{% block list_item_extra_items %}
+  {% if object.private %}
+    {% if allow_private_repos %}
+      {% trans "This repository is private" as popup %}
+    {% else %}
+      {% trans "Private repositories are not supported" as popup %}
+    {% endif %}
+    <div class="item">
+      {% include "includes/components/config_label.html" with icon="fa-duotone fa-lock" popup=popup %}
+    </div>
+  {% endif %}
+
+  {% if not object.admin %}
+    {% blocktrans trimmed asvar popup %}
+      You don't have permission to configure this repository automatically.
+      Additional steps will be required to build it.
+    {% endblocktrans %}
+    <div class="item">
+      {% include "includes/components/config_label.html" with icon="fa-duotone fa-hand-sparkles" popup=popup %}
+    </div>
+  {% endif %}
+
+  {% for project in object.linked_projects %}
+    {% blocktrans trimmed with name=project.name asvar popup %}
+      Already imported as {{ name }}
+    {% endblocktrans %}
+    {% url "projects_detail" project.slug as url %}
+    <div class="item">
+      {% include "includes/components/config_label.html" with icon="fa-solid fa-check" popup=popup url=url %}
+    </div>
+  {% endfor %}
+{% endblock list_item_extra_items %}
+
+{% block list_item_right_menu %}
+  <form action="{% url "projects_import" %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="name" value="{{ object.name }}" />
+    <input type="hidden" name="repo" value="{{ object.clone_url }}" />
+    <input type="hidden" name="repo_type" value="{{ object.vcs }}" />
+    <input type="hidden"
+           name="project_url"
+           value="{{ object.html_url|default_if_none:"" }}" />
+    <input type="hidden" name="remote_repository" value="{{ object.pk }}" />
+
+    {% blocktrans trimmed with name=object.full_name asvar label %}
+      Create a project from {{ name }}
+    {% endblocktrans %}
+    {% if not object.admin %}
+      <span data-content="{% trans "You need admin permissions on this repository to configure it automatically" %}">
+        <button class="ui small disabled primary icon button"
+                type="button"
+                aria-label="{{ label }}">
+          <i class="fa-solid fa-arrow-right icon"></i>
+        </button>
+      </span>
+    {% elif object.private and not allow_private_repos %}
+      <span data-content="{% trans "Private repositories are not supported" %}">
+        <button class="ui small disabled primary icon button"
+                type="button"
+                aria-label="{{ label }}">
+          <i class="fa-solid fa-arrow-right icon"></i>
+        </button>
+      </span>
+    {% else %}
+      <button class="ui small primary icon button"
+              type="submit"
+              data-content="{{ label }}"
+              aria-label="{{ label }}">
+        <i class="fa-solid fa-arrow-right icon"></i>
+      </button>
+    {% endif %}
+  </form>
+{% endblock list_item_right_menu %}
