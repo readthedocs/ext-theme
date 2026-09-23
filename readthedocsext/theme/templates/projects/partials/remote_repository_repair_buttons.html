@@ -1,0 +1,16 @@
+{% load trans from i18n %}
+
+{% comment "rst" %}
+  Refresh and repair buttons for the remote repository list placeholders.
+  Both actions come from the ``ProjectCreateView`` Knockout view.
+{% endcomment %}
+
+<button class="ui primary button"
+        data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
+  <i class="fa-duotone fa-refresh icon"></i>
+  {% trans "Refresh repositories" %}
+</button>
+<button class="ui basic button" data-bind="click: show_modal">
+  <i class="fa-duotone fa-wrench icon"></i>
+  {% trans "Repair" %}
+</button>

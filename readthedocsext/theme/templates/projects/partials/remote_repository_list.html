@@ -12,7 +12,8 @@
   details to the import view, which seeds the import wizard.
 
   This is rendered inside the ``ProjectCreateView`` Knockout binding, which
-  provides the repository resync action used in the empty placeholder.
+  provides the repository resync action and the repair modal used in the
+  empty placeholders.
 {% endcomment %}
 
 {% block top_left_menu_items %}
@@ -35,17 +36,21 @@
 {% block list_placeholder_header_empty %}
   {% trans "No repositories found from your connected accounts" %}
 {% endblock list_placeholder_header_empty %}
+{% block list_placeholder_text_filtered %}
+  <p>
+    {% blocktrans trimmed %}
+      Try changing your filters, or refresh your repositories if this one was recently created or shared with you.
+    {% endblocktrans %}
+  </p>
+  {% include "projects/partials/remote_repository_repair_buttons.html" %}
+{% endblock list_placeholder_text_filtered %}
 {% block list_placeholder_text_empty %}
   <p>
     {% blocktrans trimmed %}
       Refresh your repositories if you recently connected an account or were given access to a repository.
     {% endblocktrans %}
   </p>
-  <button class="ui primary button"
-          data-bind="click: sync_remote_repos, css: {disabled: is_syncing(), loading: is_syncing()}">
-    <i class="fa-duotone fa-refresh icon"></i>
-    {% trans "Refresh repositories" %}
-  </button>
+  {% include "projects/partials/remote_repository_repair_buttons.html" %}
   <a class="ui basic button" href="{% url "socialaccount_connections" %}">
     {% trans "Connected accounts" %}
   </a>
