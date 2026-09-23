@@ -15,17 +15,21 @@
     {% endblocktrans %}
   </li>
   <li>
-    {% trans "Add the upload step after the step that builds your documentation, using the upload action or the command line client." %}
+    {% blocktrans trimmed with action_url="https://github.com/readthedocs/upload-action" cli_url="https://github.com/readthedocs/readthedocs-cli" %}
+      Add the upload step after the step that builds your documentation,
+      using the <a href="{{ action_url }}" target="_blank"><code>readthedocs/upload-action</code></a> GitHub action
+      or the <a href="{{ cli_url }}" target="_blank"><code>readthedocs-upload</code></a> command line client.
+    {% endblocktrans %}
   </li>
   <li>
-    {% trans "Push to your repository. The uploaded documentation shows up as a version of your project." %}
+    {% trans "Push a commit to your repository. Your pipeline builds the documentation and uploads it to Read the Docs, where it shows up as a version of your project." %}
   </li>
 </ol>
 
 <h4 class="ui header">{% trans "GitHub Actions" %}</h4>
 <div class="ui mini padded inverted scrolling segment">
   <div class="ui top attached label">
-    <code>.github/workflows/docs.yaml</code>
+    <code>.github/workflows/readthedocs-upload.yaml</code>
   </div>
   <a class="ui top right attached icon label"
      href="#"
@@ -64,7 +68,7 @@ $ uvx --from readthedocs-upload readthedocs upload \
 
 <p>
   {% blocktrans trimmed with url="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html" %}
-    Pushes to a branch or tag create that version on Read the Docs, and pull requests get previews.
+    Each branch or tag you push becomes a version on Read the Docs, and each pull request gets its own preview.
     Read more in the <a href="{{ url }}" target="_blank">direct upload documentation</a>.
   {% endblocktrans %}
 </p>
