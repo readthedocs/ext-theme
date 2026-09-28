@@ -10,7 +10,8 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  {% if is_project_admin %}
+  {# Versions of direct upload projects come from uploads, there is nothing to activate here #}
+  {% if is_project_admin and not project.is_direct_upload %}
     <a href="{% url "project_version_create" project.slug %}"
        class="ui primary button">
       <i class="fa-solid fa-plus icon"></i>
@@ -60,7 +61,9 @@
           <i class="fa-solid fa-ellipsis icon"></i>
           <div class="menu">
             <div class="header">{% trans "Admin" %}</div>
-            {% if object.is_uploaded %}
+            {% if project.is_direct_upload %}
+              {# Never built by Read the Docs, nothing to rebuild #}
+            {% elif object.is_uploaded %}
               {# Disabled items keep pointer events when they carry a popup, see dropdown.overrides #}
               <div class="disabled item"
                    data-content="{% trans "This version is updated by direct upload. Rebuild it from your own pipeline." %}">

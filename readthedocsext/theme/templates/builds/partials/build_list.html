@@ -41,7 +41,9 @@
         Rebuild version
       {% endblocktrans %}
 
-      {% if object.version.is_uploaded %}
+      {% if project.is_direct_upload %}
+        {# Never built by Read the Docs, nothing to rebuild #}
+      {% elif object.version.is_uploaded %}
         {# Disabled elements don't get pointer events, so the tooltip goes on the wrapper #}
         <span data-content="{% trans "This version is updated by direct upload. Rebuild it from your own pipeline." %}">
           <button class="ui disabled button" aria-label="{{ text_retry }}">
