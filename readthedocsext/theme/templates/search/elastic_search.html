@@ -154,6 +154,14 @@
           </h3>
         </div>
 
+        {% if fuzzy_fallback %}
+          <div class="ui info message">
+            {% blocktrans with query=search_query %}
+              No exact matches for `{{ query }}`. Showing results for similar terms.
+            {% endblocktrans %}
+          </div>
+        {% endif %}
+
 
         <div class="ui list">
 
