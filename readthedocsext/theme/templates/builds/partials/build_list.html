@@ -41,21 +41,14 @@
         Rebuild version
       {% endblocktrans %}
 
-      {% if project.is_direct_upload %}
-        {# Never built by Read the Docs, nothing to rebuild #}
-      {% elif object.version.is_uploaded %}
-        {# Disabled elements don't get pointer events, so the tooltip goes on the wrapper #}
-        <span data-content="{% trans "This version is updated by direct upload. Rebuild it from your own pipeline." %}">
-          <button class="ui disabled button" aria-label="{{ text_retry }}">
-            <i class="fas fa-arrows-rotate icon"></i>
-          </button>
-        </span>
-      {% else %}
+      {# Direct upload projects are never built by Read the Docs, nothing to rebuild #}
+      {% if not project.is_direct_upload %}
         <readthedocs-menu-build-rebuild class="ui button"
                                         url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
                                         csrf-token="{{ csrf_token }}"
                                         data-content="{{ text_retry }}"
-                                        aria-label="{{ text_retry }}">
+                                        aria-label="{{ text_retry }}"
+                                        {% if object.version.is_uploaded %}uploaded{% endif %}>
           <i class="fas fa-arrows-rotate icon"></i>
         </readthedocs-menu-build-rebuild>
       {% endif %}

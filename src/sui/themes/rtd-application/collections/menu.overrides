@@ -15,9 +15,3 @@
     }
   }
 });
-
-// Same as the dropdown override: disabled items with a popup keep pointer
-// events so the tooltip can show.
-.ui.ui.menu .item.disabled[data-content] {
-  pointer-events: auto;
-}
