@@ -1,0 +1,32 @@
+{% extends "projects/projectapikey_list.html" %}
+
+{% load trans blocktrans from i18n %}
+{% load crispy from crispy_forms_tags %}
+
+{% block project_edit_content_subheader %}
+  {% trans "Add API token" %}
+{% endblock project_edit_content_subheader %}
+
+{% block project_edit_content %}
+  <div class="ui icon message">
+    <i class="fa-duotone fa-circle-exclamation icon"></i>
+    <div class="content">
+      {% blocktrans trimmed %}
+        The token will only be shown once, right after creating it.
+        A read and write token can change and even delete this project,
+        so prefer a read only token unless you need to make changes.
+      {% endblocktrans %}
+    </div>
+  </div>
+
+  <form class="ui form"
+        method="post"
+        action="{% url 'projects_apikeys_create' project_slug=project.slug %}">
+    {% csrf_token %}
+    {{ form|crispy }}
+
+    <input class="ui primary button"
+           type="submit"
+           value="{% trans "Add API token" %}">
+  </form>
+{% endblock project_edit_content %}
