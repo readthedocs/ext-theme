@@ -126,11 +126,9 @@ collapsed, to save visual space and can be expanded with the right label.
                       </a>
                     {% endfor %}
 
-                    {% with other_maintainers=users|slice:"8:"|length %}
-                      {% if other_maintainers %}
-                        <span>{% trans "... and {other_maintainers} others" %}</span>
-                      {% endif %}
-                    {% endwith %}
+                    {% if users_count > 8 %}
+                      <span>{% trans "... and {other_maintainers} others" %}</span>
+                    {% endif %}
 
                   </div>
                 {% endwith %}
