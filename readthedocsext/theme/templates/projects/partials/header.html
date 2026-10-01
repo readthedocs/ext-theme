@@ -115,8 +115,6 @@ collapsed, to save visual space and can be expanded with the right label.
 
               {# TODO project teams and organization #}
 
-              {# Fetch the users once: slicing the manager directly ran a query per slice. #}
-              {# ``length`` evaluates the queryset so the slices below work on the cached list. #}
               {% with users=project.users.all %}
                 {% with users_count=users|length %}
                   <div class="ui overlapping avatar images">

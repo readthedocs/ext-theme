@@ -66,8 +66,6 @@ collapsed, to save visual space and can be expanded with the right label.
             {% block organization_header_owners %}
               <div class="ui sub header">{% trans "Owners" %}</div>
 
-              {# Fetch the owners once: slicing the manager directly ran a query per slice. #}
-              {# ``length`` evaluates the queryset so the slices below work on the cached list. #}
               {% with owners=organization.owners.all %}
                 {% with owners_count=owners|length %}
                   <div class="ui overlapping avatar images">
