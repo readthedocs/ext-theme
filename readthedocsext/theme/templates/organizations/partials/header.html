@@ -66,21 +66,27 @@ collapsed, to save visual space and can be expanded with the right label.
             {% block organization_header_owners %}
               <div class="ui sub header">{% trans "Owners" %}</div>
 
-              <div class="ui overlapping avatar images">
-                {% for user in organization.owners.all|slice:":8" %}
-                  <a href="{% url "profiles_profile_detail" user.username %}">
-                    <img class="ui image"
-                         src="{% gravatar_url user.email 32 %}"
-                         alt="{% blocktrans trimmed with username=user.username %}Profile for user {{ username }}{% endblocktrans %}" />
-                  </a>
-                {% endfor %}
+              {# Fetch the owners once: slicing the manager directly ran a query per slice. #}
+              {# ``length`` evaluates the queryset so the slices below work on the cached list. #}
+              {% with owners=organization.owners.all %}
+                {% with owners_count=owners|length %}
+                  <div class="ui overlapping avatar images">
+                    {% for user in owners|slice:":8" %}
+                      <a href="{% url "profiles_profile_detail" user.username %}">
+                        <img class="ui image"
+                             src="{% gravatar_url user.email 32 %}"
+                             alt="{% blocktrans trimmed with username=user.username %}Profile for user {{ username }}{% endblocktrans %}" />
+                      </a>
+                    {% endfor %}
 
-                {% with more_owners=organization.owners.all|slice:"8:"|length %}
-                  {% if more_owners %}
-                    <span>{% trans "... and {more_maintainers} others" %}</span>
-                  {% endif %}
+                    {% with more_owners=owners|slice:"8:"|length %}
+                      {% if more_owners %}
+                        <span>{% trans "... and {more_maintainers} others" %}</span>
+                      {% endif %}
+                    {% endwith %}
+                  </div>
                 {% endwith %}
-              </div>
+              {% endwith %}
             {% endblock organization_header_owners %}
 
           </div>
