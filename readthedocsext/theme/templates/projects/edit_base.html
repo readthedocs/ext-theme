@@ -23,8 +23,11 @@
               <a class="item {% block project_users_active %}{% endblock project_users_active %}"
                  href="{% url "projects_users" project.slug %}">{% trans "Maintainers" %}</a>
             {% endif %}
-            <a class="item {% block project_automation_rules_active %}{% endblock project_automation_rules_active %}"
-               href="{% url "projects_automation_rule_list" project.slug %}">{% trans "Automation rules" %}</a>
+            {# Automation rules don't run on direct upload projects: versions are managed from the user's pipeline #}
+            {% if not project.is_direct_upload %}
+              <a class="item {% block project_automation_rules_active %}{% endblock project_automation_rules_active %}"
+                 href="{% url "projects_automation_rule_list" project.slug %}">{% trans "Automation rules" %}</a>
+            {% endif %}
           </div>
         </div>
 
