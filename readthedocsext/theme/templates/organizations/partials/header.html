@@ -78,7 +78,11 @@ collapsed, to save visual space and can be expanded with the right label.
                     {% endfor %}
 
                     {% if owners_count > 8 %}
-                      <span>{% trans "... and {more_maintainers} others" %}</span>
+                      <span>
+                        {% blocktrans trimmed with more_owners=owners_count|add:"-8" %}
+                          ... and {{ more_owners }} others
+                        {% endblocktrans %}
+                      </span>
                     {% endif %}
                   </div>
                 {% endwith %}

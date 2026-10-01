@@ -127,7 +127,11 @@ collapsed, to save visual space and can be expanded with the right label.
                     {% endfor %}
 
                     {% if users_count > 8 %}
-                      <span>{% trans "... and {other_maintainers} others" %}</span>
+                      <span>
+                        {% blocktrans trimmed with other_maintainers=users_count|add:"-8" %}
+                          ... and {{ other_maintainers }} others
+                        {% endblocktrans %}
+                      </span>
                     {% endif %}
 
                   </div>
