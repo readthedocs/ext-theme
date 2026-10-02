@@ -318,8 +318,8 @@ build:
 
         <button class="ui primary button"
                 type="submit"
-                name="config-build_method"
-                value="readthedocs">{% trans "This file exists" %}</button>
+                name="config-is_direct_upload"
+                value="false">{% trans "This file exists" %}</button>
       </div>
 
     </div>
@@ -368,8 +368,8 @@ build:
 
           <button class="ui primary button"
                   type="submit"
-                  name="config-build_method"
-                  value="direct_upload">
+                  name="config-is_direct_upload"
+                  value="true">
             <i class="fa-duotone fa-cloud-arrow-up icon"></i>
             {% trans "I will upload my documentation" %}
           </button>
