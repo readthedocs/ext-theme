@@ -1,14 +1,30 @@
 {% extends "projects/base.html" %}
 
-{% load projects_tags %}
+{% load trans from i18n %}
 
-{% block body_class %}project_detail{% endblock %}
+{% block body_class %}
+  project_detail
+{% endblock body_class %}
 
-{% block title %}{{ project.name }}{% endblock %}
+{% block title %}
+  {{ project.name }}
+{% endblock title %}
+
+{% block head_meta %}
+  {% trans "Documentation project on Read the Docs" as default_description %}
+  <meta name="description"
+        content="{% firstof project.description default_description %}" />
+  <meta property="og:title" content="{{ project.name }}" />
+  <meta property="og:description"
+        content="{% firstof project.description default_description %}" />
+  <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Read the Docs" />
+{% endblock head_meta %}
 
 {% block content-header %}
   {% include "projects/partials/header.html" with overview_active="active" %}
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
   {% comment %}
@@ -21,4 +37,4 @@
   {% endcomment %}
 
   {% include "builds/partials/version_list.html" with objects=versions %}
-{% endblock %}
+{% endblock content %}
