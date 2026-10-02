@@ -20,11 +20,12 @@
   {% comment %}
     A GitHub provider marked ``default`` in settings is sorted first and gets
     its own button, with the modal behind a second button next to it, so
-    nobody has to choose a provider before they can log in.
+    there is a quick path to logging in with the preferred GitHub provider.
   {% endcomment %}
   {% with default_provider=providers_github.0 other_provider=providers_github.1 %}
     <li class="item">
       {% if default_provider.app.settings.default %}
+        {# The group attaches the caret to the provider button, which the include renders #}
         <div class="ui buttons">
           {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=verbiage provider=default_provider popup_position="left center" %}
 
