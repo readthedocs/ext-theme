@@ -344,6 +344,9 @@
       <span class="right floated">
         <form action="{% url 'projects_import' %}" method="post">
           {% csrf_token %}
+          {% if direct_upload_available %}
+            <input type="hidden" name="direct_upload" value="1" />
+          {% endif %}
           <input type="hidden" name="name" data-bind="value: name" />
           <input type="hidden" name="repo" data-bind="value: clone_url" />
           <input type="hidden" name="repo_type" data-bind="value: vcs" />

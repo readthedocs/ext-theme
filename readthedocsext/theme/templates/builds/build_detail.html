@@ -140,11 +140,13 @@
             {% trans "Cancel" %}
           </a>
 
-          {% if object.project and object.version %}
+          {# Direct upload projects are never built by Read the Docs, nothing to rebuild #}
+          {% if object.project and object.version and not project.is_direct_upload %}
             <readthedocs-menu-build-rebuild class="link item ko hidden"
                                             data-bind="css: { hidden: !can_retry() }"
                                             url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
-                                            csrf-token="{{ csrf_token }}">
+                                            csrf-token="{{ csrf_token }}"
+                                            {% if object.version.is_uploaded %}uploaded{% endif %}>
               <i class="fa-duotone fa-refresh icon"></i>
               {# Translators: this refers to rebuilding a version build #}
               {% trans "Rebuild" %}
