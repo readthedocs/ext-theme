@@ -1,0 +1,13 @@
+{% load trans from i18n %}
+
+{% comment %}
+  Label naming the site next to the logo, so Read the Docs Community and Read
+  the Docs Business can be told apart. Community uses the primary site color
+  and Business the secondary one.
+{% endcomment %}
+
+{% if USE_ORGANIZATIONS %}
+  <span class="ui tiny basic violet label">{% trans "Business" %}</span>
+{% else %}
+  <span class="ui tiny basic teal label">{% trans "Community" %}</span>
+{% endif %}

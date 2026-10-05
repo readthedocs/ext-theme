@@ -52,3 +52,21 @@ readthedocs-menu-build-rebuild[uploaded] {
     pointer-events: auto !important;
   }
 }
+
+// Logo with the site label next to it, used in the header and on the entrance
+// pages. The logo shrinks on narrow columns instead of wrapping the label.
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  max-width: 100%;
+
+  > .ui.image {
+    flex: 0 1 auto;
+    min-width: 0;
+    height: auto;
+  }
+  > .ui.label {
+    flex: none;
+  }
+}

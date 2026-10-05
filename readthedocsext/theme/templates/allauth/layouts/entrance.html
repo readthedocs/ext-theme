@@ -17,12 +17,14 @@
   {% block content_extra_logo %}
     <div class="right floated">
       {# djlint: off D018 #}
-      <a href="//{{ PRODUCTION_DOMAIN }}/"
+      <a class="site-logo"
+         href="//{{ PRODUCTION_DOMAIN }}/"
          aria-label="{% trans "Read the Docs" %}">
         <img class="ui middle aligned image"
              src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}"
              width="140"
              alt="{% trans "Read the Docs logo" %}" />
+        {% include "includes/utils/site_label.html" %}
       </a>
       {# djlint: on #}
     </div>
