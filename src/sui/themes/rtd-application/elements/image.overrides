@@ -81,3 +81,32 @@ readthedocs-avatar.ui.image {
 .ui.white.background.image {
   background: @white;
 }
+
+/*
+ * Labeled image variant
+ * =====================
+ *
+ * An image with a label next to it, used for the logo and site name in the
+ * header and on the entrance pages. The image shrinks on narrow columns
+ * instead of the label wrapping under it.
+ *
+ * .. code:: html
+ *
+ *     <a class="ui labeled image" href="...">
+ *       <img class="ui image" src="..." />
+ *       <span class="ui label">Community</span>
+ *     </a>
+ */
+.ui.labeled.image {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+
+  > .ui.image {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+  > .ui.label {
+    flex: none;
+  }
+}
