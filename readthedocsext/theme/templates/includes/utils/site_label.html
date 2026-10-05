@@ -1,0 +1,20 @@
+{% load trans from i18n %}
+
+{% comment %}
+  Label naming the site the user is on, so Read the Docs Community and Read
+  the Docs Business can be told apart on pages that otherwise share the same
+  layout and logo (log in, sign up, password reset, etc.).
+
+  Community uses the primary site color and Business the secondary color, see
+  ``src/sui/themes/rtd-application/globals/site.variables``.
+
+  Pass ``size`` to change the label size, for example:
+
+    {% include "includes/utils/site_label.html" with size="small" %}
+{% endcomment %}
+
+{% if USE_ORGANIZATIONS %}
+  <span class="ui{% if size %} {{ size }}{% endif %} violet label">{% trans "Business" %}</span>
+{% else %}
+  <span class="ui{% if size %} {{ size }}{% endif %} teal label">{% trans "Community" %}</span>
+{% endif %}

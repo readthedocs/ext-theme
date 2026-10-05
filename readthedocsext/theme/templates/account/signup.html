@@ -9,11 +9,8 @@
 {% endblock head_title %}
 
 {% block content_title_text %}
-  {% if USE_ORGANIZATIONS %}
-    {% trans "Sign up for Read the Docs Business" %}
-  {% else %}
-    {% trans "Sign up for Read the Docs Community" %}
-  {% endif %}
+  {% trans "Sign up for Read the Docs" %}
+  {% include "includes/utils/site_label.html" %}
 {% endblock content_title_text %}
 
 {% block authentication_vcs %}

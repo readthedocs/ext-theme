@@ -13,6 +13,15 @@
   {{ block.super }}
 {% endblock content-wrapper %}
 
+{# Color the card with the site color, so Community and Business look different #}
+{% block content_card_class %}
+  {% if USE_ORGANIZATIONS %}
+    violet
+  {% else %}
+    teal
+  {% endif %}
+{% endblock content_card_class %}
+
 {% block content_extra_text %}
   {% block content_extra_logo %}
     <div class="right floated">
@@ -25,6 +34,7 @@
              alt="{% trans "Read the Docs logo" %}" />
       </a>
       {# djlint: on #}
+      {% include "includes/utils/site_label.html" with size="small" %}
     </div>
   {% endblock content_extra_logo %}
 {% endblock content_extra_text %}
