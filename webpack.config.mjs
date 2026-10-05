@@ -59,7 +59,32 @@ export default (env, argv) => {
     resolve(config);
   });
 
-  return Promise.all([promiseSite, promiseDark]);
+  const promiseBusiness = new Promise((resolve, reject) => {
+    let config = getCommonConfig(env, argv);
+    Object.assign(config, {
+      name: "business",
+      entry: {
+        business: ["./src/css/business.less", "./src/js/dark.js"],
+        "business-dark": ["./src/css/business-dark.less", "./src/js/dark.js"],
+      },
+      // Keep the build order stable, this is the last stylesheet pair
+      dependencies: ["dark"],
+    });
+
+    // The Business theme is the site theme with the colors swapped, see
+    // `src/sui/theme.business.config`.
+    config.resolve.alias["../../theme.config"] = path.resolve(
+      path.join("src/sui/theme.business.config"),
+    );
+
+    // Don't use split chunks on this entry as it overwrites the site vendor
+    // bundle.
+    delete config.optimization.splitChunks;
+
+    resolve(config);
+  });
+
+  return Promise.all([promiseSite, promiseDark, promiseBusiness]);
 };
 
 // Common because it's duplicated across the two configs.
@@ -164,10 +189,10 @@ function getCommonConfig(env, argv) {
           },
         },
         {
-          resource: /src[/\\]css[/\\]site\.less$/,
+          resource: /src[/\\]css[/\\](site|business)\.less$/,
           oneOf: [
             {
-              // The loader used to produce the minified site.css file
+              // The loader used to produce the minified site.css and business.css files
               use: [
                 {
                   loader: MiniCssExtractPlugin.loader,
@@ -184,10 +209,10 @@ function getCommonConfig(env, argv) {
           ],
         },
         {
-          resource: /src[/\\]css[/\\]dark\.less$/,
+          resource: /src[/\\]css[/\\](dark|business-dark)\.less$/,
           oneOf: [
             {
-              // The loader used to produce the minified dark.css file
+              // The loader used to produce the minified dark.css and business-dark.css files
               use: [
                 {
                   loader: MiniCssExtractPlugin.loader,

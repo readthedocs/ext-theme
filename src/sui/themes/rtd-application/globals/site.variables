@@ -36,13 +36,13 @@
 @lightTeal: mix(@teal, #fff, 80%);
 @lightViolet: mix(@violet, #fff, 80%);
 
-@lightPrimaryColor: @lightTeal;
-@lightSecondaryColor: @lightViolet;
+@lightPrimaryColor: mix(@primaryColor, #fff, 80%);
+@lightSecondaryColor: mix(@secondaryColor, #fff, 80%);
 @lightPrimaryColorHover: @primaryColor;
 @lightSecondaryColorHover: @secondaryColor;
 
-@primaryBackground: @lightTeal;
-@secondaryBackground: @lightViolet;
+@primaryBackground: @lightPrimaryColor;
+@secondaryBackground: @lightSecondaryColor;
 @primaryHoverTextColor: @primaryTextColor;
 @secondaryHoverTextColor: @secondaryTextColor;
 
