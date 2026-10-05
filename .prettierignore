@@ -13,3 +13,6 @@
 /.direnv/
 /worktree/
 /worktrees/
+
+# Synced from readthedocs/common, keep byte for byte identical
+/AGENTS.md
