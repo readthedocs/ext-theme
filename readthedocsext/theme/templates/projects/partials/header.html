@@ -55,7 +55,7 @@ collapsed, to save visual space and can be expanded with the right label.
             {% block project_header_tags %}
               {# Manual tags #}
               {% for tag in project.tags.all %}
-                <a class="ui teal basic label"
+                <a class="ui primary basic label"
                    href="{% url "projects_tag_detail" tag.slug %}">{{ tag.name }}</a>
               {% endfor %}
             {% endblock project_header_tags %}
@@ -170,11 +170,11 @@ collapsed, to save visual space and can be expanded with the right label.
          href="{{ project.get_absolute_url }}">
         {% trans "Versions" %}
         {% get_project_active_versions project request.user as active_versions %}
-        <span class="ui tiny teal circular label">{{ active_versions.count }}</span>
+        <span class="ui tiny primary circular label">{{ active_versions.count }}</span>
       </a>
       <a class="item {{ builds_active }}" href="{{ project.get_builds_url }}">
         {% trans "Builds" %}
-        <span class="ui tiny teal circular label">{{ project.builds.count }}</span>
+        <span class="ui tiny primary circular label">{{ project.builds.count }}</span>
       </a>
       <div class="right menu">
         {# Show top-level view docs button on non-build pages with a good build #}

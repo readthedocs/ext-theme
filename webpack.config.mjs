@@ -87,7 +87,7 @@ export default (env, argv) => {
   return Promise.all([promiseSite, promiseDark, promiseBusiness]);
 };
 
-// Common because it's duplicated across the two configs.
+// Common because it's duplicated across the configs.
 const lessLoaderOptions = {
   lessLogAsWarnOrErr: true,
   lessOptions: {
@@ -111,13 +111,14 @@ const lessLoaderOptions = {
 };
 
 /**
- * Common configuration shared by both the site and dark entrypoints.
+ * Common configuration shared by the site, dark, and business entrypoints.
  *
- * This is two separate configurations instead of just two separate entrypoints
+ * These are separate configurations instead of just separate entrypoints
  * because the dark entrypoint compiles `dark.less` through
  * `postcss-fomanticui-dark` to produce a standalone dark-theme overlay
- * (`css/dark.css`). The dark entry also depends on the site entry being built
- * first (via `dependencies: ["site"]`).
+ * (`css/dark.css`), and the business configuration swaps the theme
+ * configuration used to compile the same stylesheets. Each configuration
+ * depends on the previous one being built first (via `dependencies`).
  */
 function getCommonConfig(env, argv) {
   const isProduction = argv.mode == "production";
