@@ -25,9 +25,20 @@
         active. Otherwise, theme is `system` and we use the media query to
         conditionally activate dark mode rules.
       {% endcomment %}
-      <link rel="stylesheet" type="text/css" href="{% webpack_static "readthedocsext/theme/css/site.css" %}" media="all" />
+      {# Business uses the same theme with the primary and secondary colors swapped #}
+      {% if USE_ORGANIZATIONS %}
+        {% webpack_static "readthedocsext/theme/css/business.css" as site_css %}
+        {% webpack_static "readthedocsext/theme/css/business-dark.css" as dark_css %}
+      {% else %}
+        {% webpack_static "readthedocsext/theme/css/site.css" as site_css %}
+        {% webpack_static "readthedocsext/theme/css/dark.css" as dark_css %}
+      {% endif %}
+      <link rel="stylesheet" type="text/css" href="{{ site_css }}" media="all" />
       {% if not request.user.profile.use_light_theme %}
-        <link rel="stylesheet" type="text/css" href="{% webpack_static "readthedocsext/theme/css/dark.css" %}" media="{{ request.user.profile.use_dark_theme|yesno:"all,(prefers-color-scheme: dark)" }}" />
+        <link rel="stylesheet"
+              type="text/css"
+              href="{{ dark_css }}"
+              media="{{ request.user.profile.use_dark_theme|yesno:"all,(prefers-color-scheme: dark)" }}" />
       {% endif %}
     {% endblock head_links %}
     {# TODO deprecate extra_links #}
@@ -86,9 +97,12 @@
     {% endblock footer %}
 
     {% block body_scripts %}
-      <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/runtime~site.js" %}"></script>
-      <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/vendor.js" %}"></script>
-      <script type="text/javascript" src="{% webpack_static "readthedocsext/theme/js/site.js" %}"></script>
+      <script type="text/javascript"
+              src="{% webpack_static "readthedocsext/theme/js/runtime~site.js" %}"></script>
+      <script type="text/javascript"
+              src="{% webpack_static "readthedocsext/theme/js/vendor.js" %}"></script>
+      <script type="text/javascript"
+              src="{% webpack_static "readthedocsext/theme/js/site.js" %}"></script>
     {% endblock body_scripts %}
   </body>
 </html>

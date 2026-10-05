@@ -28,7 +28,7 @@
   {# SECURITY: always use escapejs when including user input in a JS context, like data-bind #}
   <div data-bind="using: LoginView({last_tab: '{{ last_login_tab|escapejs }}', last_method: '{{ last_login_method|escapejs }}'})">
     <div class="ui basic horizontally fitted segment">
-      <div class="ui small stackable teal centered fluid wrapping menu"
+      <div class="ui small stackable primary centered fluid wrapping menu"
            data-bind="semanticui: {tabs: { autoTabActivation: last_tab() }}">
 
         <a class="item" data-tab="vcs">
