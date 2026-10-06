@@ -115,22 +115,28 @@ collapsed, to save visual space and can be expanded with the right label.
 
               {# TODO project teams and organization #}
 
-              <div class="ui overlapping avatar images">
-                {% for user in project.users.all|slice:":8" %}
-                  <a href="{% url "profiles_profile_detail" user.username %}">
-                    <img alt="{% blocktrans with usernamename=user.username %}User {{ username }} avatar{% endblocktrans %}"
-                         class="ui image"
-                         src="{% gravatar_url user.email 32 %}" />
-                  </a>
-                {% endfor %}
+              {% with users=project.users.all %}
+                {% with users_count=users|length %}
+                  <div class="ui overlapping avatar images">
+                    {% for user in users|slice:":8" %}
+                      <a href="{% url "profiles_profile_detail" user.username %}">
+                        <img alt="{% blocktrans with usernamename=user.username %}User {{ username }} avatar{% endblocktrans %}"
+                             class="ui image"
+                             src="{% gravatar_url user.email 32 %}" />
+                      </a>
+                    {% endfor %}
 
-                {% with other_maintainers=project.users.all|slice:"8:"|length %}
-                  {% if other_maintainers %}
-                    <span>{% trans "... and {other_maintainers} others" %}</span>
-                  {% endif %}
+                    {% if users_count > 8 %}
+                      <span>
+                        {% blocktrans trimmed with other_maintainers=users_count|add:"-8" %}
+                          ... and {{ other_maintainers }} others
+                        {% endblocktrans %}
+                      </span>
+                    {% endif %}
+
+                  </div>
                 {% endwith %}
-
-              </div>
+              {% endwith %}
             {% endblock project_header_maintainers %}
 
             {% block project_header_repository %}
