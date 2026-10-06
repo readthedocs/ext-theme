@@ -42,3 +42,13 @@
     display: none;
   }
 }
+
+// The rebuild control of an uploaded version is disabled but keeps its
+// tooltip, so it needs pointer events that Fomantic removes from disabled
+// buttons and menu items.
+readthedocs-menu-build-rebuild[uploaded] {
+  &.ui.disabled.button,
+  &.disabled.item {
+    pointer-events: auto !important;
+  }
+}
