@@ -15,19 +15,45 @@
   If ``allowed_providers`` is set, we skip the modal and just show the allowed
   providers in the list below.
 {% endcomment %}
-{% get_providers process=process as providers %}
 {% if providers_github|length == 2 and not allowed_providers %}
   {% trans "GitHub" as provider_name %}
-  <li class="item">
-    <a class="ui button"
-       data-bind="click: show_github_modal, semanticui: { popup: popup_login_method(['github','githubapp'], 'right center') }"
-       title="{{ provider_name }}">
-      <i class="fa-brands fa-github icon"></i>
-      {% blocktrans trimmed with provider_name=provider_name verbiage=verbiage|default:'Connect to' %}
-        {{ verbiage }} {{ provider_name }}
-      {% endblocktrans %}
-    </a>
-  </li>
+  {% comment %}
+    A GitHub provider marked ``default`` in settings is sorted first and gets
+    its own button, with the modal behind a second button next to it, so
+    there is a quick path to logging in with the preferred GitHub provider.
+  {% endcomment %}
+  {% with default_provider=providers_github.0 other_provider=providers_github.1 %}
+    <li class="item">
+      {% if default_provider.app.settings.default %}
+        {# The group attaches the caret to the provider button, which the include renders #}
+        <div class="ui buttons">
+          {% include "socialaccount/snippets/provider_list_item.html" with process=process verbiage=verbiage provider=default_provider popup_position="left center" %}
+
+          {% trans "More options" as label_more_options %}
+          {# The "Last used" popup for the other provider goes above the button, as there is no room beside it on a phone #}
+          {# SECURITY: always use escapejs when including user input in a JS context, like data-bind #}
+          {# djlint: off D018 #}
+          <button class="ui icon button"
+                  data-bind="click: show_github_modal, semanticui: { popup: popup_login_method('{{ other_provider.id|escapejs }}', 'top right') }"
+                  type="button"
+                  title="{{ label_more_options }}"
+                  aria-label="{{ label_more_options }}">
+            {# djlint: on #}
+            <i class="fa-solid fa-caret-down icon"></i>
+          </button>
+        </div>
+      {% else %}
+        <a class="ui button"
+           data-bind="click: show_github_modal, semanticui: { popup: popup_login_method(['github','githubapp'], 'right center') }"
+           title="{{ provider_name }}">
+          <i class="fa-brands fa-github icon"></i>
+          {% blocktrans trimmed with provider_name=provider_name verbiage=verbiage|default:'Connect to' %}
+            {{ verbiage }} {{ provider_name }}
+          {% endblocktrans %}
+        </a>
+      {% endif %}
+    </li>
+  {% endwith %}
 
   <div class="ui tiny modal"
        data-bind="semanticui: { modal: github_modal_config() }">

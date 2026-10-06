@@ -54,10 +54,18 @@
             {% if version.active %}
               <div class="ui warning message">
                 {% url "projects_redirects_create" project_slug=project.slug as url_redirects %}
-                {% blocktrans trimmed with url=url_redirects %}
-                  Deactivating a version or changing its slug will result in the deletion of its documentation.
-                  Make sure to <a href="{{ url }}" target="_blank">create a redirect</a> for these URLs to ensure old links continue working.
-                {% endblocktrans %}
+                {% if version.is_uploaded %}
+                  {% blocktrans trimmed with url=url_redirects %}
+                    This version was uploaded. Deactivating it deletes the version and its documentation;
+                    upload it again to recreate it.
+                    Make sure to <a href="{{ url }}" target="_blank">create a redirect</a> for these URLs to ensure old links continue working.
+                  {% endblocktrans %}
+                {% else %}
+                  {% blocktrans trimmed with url=url_redirects %}
+                    Deactivating a version or changing its slug will result in the deletion of its documentation.
+                    Make sure to <a href="{{ url }}" target="_blank">create a redirect</a> for these URLs to ensure old links continue working.
+                  {% endblocktrans %}
+                {% endif %}
               </div>
             {% endif %}
 
@@ -66,6 +74,10 @@
 
               {% alter_field form.active classes="ui toggle checkbox" %}
               {% alter_field form.hidden classes="ui toggle checkbox" %}
+              {# Only present on uploaded versions of projects built by Read the Docs #}
+              {% if "is_uploaded" in form.fields %}
+                {% alter_field form.is_uploaded classes="ui toggle checkbox" %}
+              {% endif %}
 
               {{ form | crispy }}
 
@@ -135,18 +147,20 @@
                 </div>
 
               </div>
-              <div class="ui small bottom attached center aligned message">
+              {% if not project.is_direct_upload %}
+                <div class="ui small bottom attached center aligned message">
 
-                {% trans "Are your versions out of date?" %}
+                  {% trans "Are your versions out of date?" %}
 
-                <readthedocs-button-sync-versions class="ui mini black basic compact right aligned button"
-                                                  url="{% url "projects-sync-versions" project.slug %}"
-                                                  csrf-token="{{ csrf_token }}">
-                  <i class="fa-solid fa-arrows-rotate icon"></i>
-                  {% trans "Resync versions" %}
-                </readthedocs-button-sync-versions>
+                  <readthedocs-button-sync-versions class="ui mini black basic compact right aligned button"
+                                                    url="{% url "projects-sync-versions" project.slug %}"
+                                                    csrf-token="{{ csrf_token }}">
+                    <i class="fa-solid fa-arrows-rotate icon"></i>
+                    {% trans "Resync versions" %}
+                  </readthedocs-button-sync-versions>
 
-              </div>
+                </div>
+              {% endif %}
             {% endblock version_create_placeholder %}
           </div>
         {% endblock project_version_form_search %}
