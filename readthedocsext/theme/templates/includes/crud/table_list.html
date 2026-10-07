@@ -18,9 +18,9 @@
       use the context variable ``objects`` by default, but some of our views can
       also use custom context variables, like ``projects`` or ``project_objects``.
 
-  .. describe:: skip_pagination
-
-      **Boolean, default=False**. Skip pagination calls and links
+      Pass in a ``Page`` instance to show pagination links -- ``page_obj`` on
+      list views that set ``paginate_by``, or a page from ``Paginator`` on
+      other views. Lists that are not paginated by the view show all objects.
 
   List top menu blocks
   --------------------
@@ -66,7 +66,6 @@
 {% endcomment %}
 
 {% load trans blocktrans from i18n %}
-{% load autopaginate paginate from pagination_tags %}
 
 <div {% block view_binding %}{% endblock view_binding %}>
   {% block top_menu %}
@@ -315,10 +314,6 @@
       <div class="ui vertically fitted segment">
         <table class="{% block list_classes %}ui very basic stacking table{% endblock list_classes %}">
 
-          {% if not skip_pagination %}
-            {% autopaginate objects 15 %}
-          {% endif %}
-
           <tbody>
             {% for object in objects %}
               {# Item view for each object in objects queryset #}
@@ -406,9 +401,7 @@
         </table>
       </div>
 
-      {% if not skip_pagination %}
-        {% paginate using "includes/crud/pagination.html" %}
-      {% endif %}
+      {% include "includes/crud/pagination.html" with page_obj=objects %}
 
     {% endblock list %}
   {% endif %}

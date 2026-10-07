@@ -6,10 +6,12 @@
 {% block title %}{{ project.name }} - {% trans "Webhooks" %}{% endblock %}
 
 {% block project_webhooks_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Webhooks" %}{% endblock %}
+{% block project_edit_content_header %}
+  {% trans "Webhooks" %}
+{% endblock %}
 
 {% block project_edit_content %}
-  {% include "projects/partials/edit/webhook_list.html" with objects=object_list %}
+  {% include "projects/partials/edit/webhook_list.html" with objects=page_obj %}
 {% endblock %}
 
 {% block project_edit_sidebar_help_topics %}

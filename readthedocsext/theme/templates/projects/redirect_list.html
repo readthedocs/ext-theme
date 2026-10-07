@@ -6,10 +6,12 @@
 {% block title %}{{ project.name }} - {% trans "Redirects" %}{% endblock %}
 
 {% block project_redirects_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Redirects" %}{% endblock %}
+{% block project_edit_content_header %}
+  {% trans "Redirects" %}
+{% endblock %}
 
 {% block project_edit_content %}
-  {% include "projects/partials/edit/redirect_list.html" with objects=redirects %}
+  {% include "projects/partials/edit/redirect_list.html" with objects=page_obj %}
 {% endblock %}
 
 {% block project_edit_sidebar_help_topics %}

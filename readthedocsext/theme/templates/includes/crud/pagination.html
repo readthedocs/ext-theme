@@ -1,35 +1,34 @@
-{% if is_paginated %}
+{% load elided_page_range from ext_theme_tags %}
+{% comment %}
+  Pagination controls for a ``Page`` instance passed in as ``page_obj``.
+
+  Nothing is rendered when ``page_obj`` is not a paginated ``Page``, or when
+  there is only one page.
+{% endcomment %}
+{% if page_obj.has_other_pages %}
   <div class="ui pagination wrapping menu">
 
     {% if page_obj.has_previous %}
       <a class="icon item"
-         href="?page{{ page_suffix }}={{ page_obj.previous_page_number }}{{ getvars }}"><i class="fa-solid fa-arrow-left icon"></i></a>
+         href="{% querystring page=page_obj.previous_page_number %}"><i class="fa-solid fa-arrow-left icon"></i></a>
     {% else %}
       <a class="disabled icon item"><i class="fa-solid fa-arrow-left icon"></i></a>
     {% endif %}
 
-    {% if display_page_links %}
-      {% for page in pages %}
-        {% if page %}
-          {% if page == page_obj.number %}
-            <div class="active item">{{ page }}</div>
-          {% else %}
-            {% if disable_link_for_first_page and page == 1 %}
-              <a href="{{ request.path }}{% if getvars %}?{{ getvars|slice:"1:" }}{% endif %}"
-                 class="item">{{ page }}</a>
-            {% else %}
-              <a href="?page{{ page_suffix }}={{ page }}{{ getvars }}" class="item">{{ page }}</a>
-            {% endif %}
-          {% endif %}
-        {% else %}
-          <div class="disabled item">...</div>
-        {% endif %}
-      {% endfor %}
-    {% endif %}
+    {% elided_page_range page_obj as pages %}
+    {% for page in pages %}
+      {% if page == page_obj.paginator.ELLIPSIS %}
+        <div class="disabled item">{{ page }}</div>
+      {% elif page == page_obj.number %}
+        <div class="active item">{{ page }}</div>
+      {% else %}
+        <a href="{% querystring page=page %}" class="item">{{ page }}</a>
+      {% endif %}
+    {% endfor %}
 
     {% if page_obj.has_next %}
       <a class="icon item"
-         href="?page{{ page_suffix }}={{ page_obj.next_page_number }}{{ getvars }}"><i class="fa-solid fa-arrow-right icon"></i></a>
+         href="{% querystring page=page_obj.next_page_number %}"><i class="fa-solid fa-arrow-right icon"></i></a>
     {% else %}
       <a class="disabled icon item"><i class="fa-solid fa-arrow-right icon"></i></a>
     {% endif %}

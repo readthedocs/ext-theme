@@ -25,7 +25,7 @@
     {% include "organizations/includes/feature_disabled.html" with project=project plan="Advanced" %}
   {% endif %}
   <div class="{% if not enabled %}ui basic fitted disabled segment{% endif %}">
-    {% include "projects/partials/edit/domain_list.html" with objects=object_list %}
+    {% include "projects/partials/edit/domain_list.html" with objects=page_obj %}
   </div>
 {% endblock project_edit_content %}
 

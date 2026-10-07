@@ -5,16 +5,16 @@
 {% block title %}{{ project.name }} - {% trans "Subprojects" %}{% endblock %}
 
 {% block project_subprojects_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Subprojects" %}{% endblock %}
+{% block project_edit_content_header %}
+  {% trans "Subprojects" %}
+{% endblock %}
 
 {% block project_edit_content %}
   {% if superproject %}
     <div class="ui icon message">
       <i class="fa-duotone fa-circle-exclamation icon"></i>
       <div class="content">
-        <div class="header">
-          {% trans "Nested subprojects are not supported" %}
-        </div>
+        <div class="header">{% trans "Nested subprojects are not supported" %}</div>
         <p>
           {% blocktrans trimmed with project=superproject.name %}
             This project is already configured as a subproject of {{ project }}.
@@ -31,7 +31,7 @@
       </div>
     </div>
   {% else %}
-    {% include "projects/partials/edit/subproject_list.html" with objects=object_list %}
+    {% include "projects/partials/edit/subproject_list.html" with objects=page_obj %}
   {% endif %}
 {% endblock %}
 

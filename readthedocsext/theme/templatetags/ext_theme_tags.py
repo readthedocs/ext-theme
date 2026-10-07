@@ -234,6 +234,22 @@ def is_empty(value):
     return not value
 
 
+@register.simple_tag
+def elided_page_range(page_obj, on_each_side=1, on_ends=1):
+    """
+    Return the page numbers to link to for ``page_obj``, with gaps elided.
+
+    This is ``Paginator.get_elided_page_range`` for the current page, which
+    can't be called with arguments from a template. Gaps are returned as
+    ``Paginator.ELLIPSIS``.
+    """
+    return page_obj.paginator.get_elided_page_range(
+        page_obj.number,
+        on_each_side=on_each_side,
+        on_ends=on_ends,
+    )
+
+
 @register.simple_block_tag
 def whitespaceless(content):
     return re.sub(r"\s+", " ", content).lstrip().rstrip()

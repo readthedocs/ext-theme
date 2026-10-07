@@ -14,7 +14,7 @@
 
 {% block subview_content %}
   {% with is_team_admin=request.user|org_owner:team is_org_admin=request.user|is_admin:organization %}
-    {% include "organizations/partials/team_member_list.html" with objects=team_members is_team_admin=is_team_admin is_org_admin=is_org_admin %}
+    {% include "organizations/partials/team_member_list.html" with objects=page_obj is_team_admin=is_team_admin is_org_admin=is_org_admin %}
   {% endwith %}
 
   {% comment %}
@@ -43,7 +43,7 @@
         <span class="ui circular small label">{{ invitations.count }}</span>
       </h2>
 
-      {% include "invitations/partials/invitation_list.html" with objects=invitations skip_pagination=True %}
+      {% include "invitations/partials/invitation_list.html" with objects=invitations %}
     {% endif %}
   {% endblock team_invitations %}
 {% endblock subview_content %}

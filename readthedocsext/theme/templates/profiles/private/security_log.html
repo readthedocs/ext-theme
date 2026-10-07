@@ -13,7 +13,7 @@
 {% endblock edit_content_header %}
 
 {% block edit_content %}
-  {% include "audit/partials/log_list.html" with objects=object_list omit_user=True %}
+  {% include "audit/partials/log_list.html" with objects=page_obj omit_user=True %}
 {% endblock edit_content %}
 
 {% block edit_sidebar %}
