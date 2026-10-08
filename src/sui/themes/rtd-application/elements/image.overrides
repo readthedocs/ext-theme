@@ -86,9 +86,10 @@ readthedocs-avatar.ui.image {
  * Labeled image variant
  * =====================
  *
- * An image with a label next to it, used for the logo and site name in the
- * header and on the entrance pages. The image shrinks on narrow columns
- * instead of the label wrapping under it.
+ * An image with a label next to it, used for the logo and site name on the
+ * entrance pages. The stacked variant puts the label under the right edge of
+ * the image instead, tucked into the space below it, so the header keeps the
+ * logo at full size without growing in either direction.
  *
  * .. code:: html
  *
@@ -96,17 +97,28 @@ readthedocs-avatar.ui.image {
  *       <img class="ui image" src="..." />
  *       <span class="ui label">Community</span>
  *     </a>
+ *
+ *     <a class="ui stacked labeled image" href="...">...</a>
  */
 .ui.labeled.image {
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
 
-  > .ui.image {
-    flex: 0 1 auto;
-    min-width: 0;
-  }
+  > .ui.image,
   > .ui.label {
     flex: none;
+  }
+
+  &.stacked {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
+
+    > .ui.label {
+      margin-top: 0.25em;
+      // Pull the label up into the padding below the image so it adds no height
+      margin-bottom: -2.5em;
+    }
   }
 }
