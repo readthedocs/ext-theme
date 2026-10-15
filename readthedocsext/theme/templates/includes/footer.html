@@ -1,7 +1,6 @@
-{% load trans get_current_language from i18n %}
+{% load trans from i18n %}
 {% load readthedocs_version from core_tags %}
 {% load static from static %}
-{% load readthedocs_language_name_local readthedocs_language_name_translated from ext_theme_tags %}
 
 <footer class="ui basic very padded inverted attached segment">
   <div class="ui container">
@@ -102,71 +101,13 @@
       </div>
     {% endblock footer_links %}
 
-    {% block footer_metadata %}
-      <div class="ui basic center aligned inverted segment">
-        <div class="ui very relaxed horizontal inverted list">
-          <div class="left aligned item">
-            <i class="large fa-duotone fa-code-branch icon"></i>
-            <div class="content">
-              <div class="header">{% trans "Version" %}</div>
-              <div class="description">
-                <a href="https://docs.readthedocs.io/page/changelog.html"
-                   target="_blank">{% readthedocs_version %}</a>
-              </div>
-            </div>
-          </div>
-          <div class="left aligned item">
-            <i class="large fa-duotone fa-language icon"></i>
-            <div class="content">
-              <div class="header">{% trans "Language" %}</div>
-              <div class="description">
-                {% block language_select_form %}
-                  {% get_current_language as current_lang %}
-                  <form action="{% url 'set_language' %}" method="post">
-                    <div class="field">
-                      <input name="next" type="hidden" value="/" />
-                    </div>
-                    {% csrf_token %}
-                    <div class="ui very wide search dropdown"
-                         data-bind="semanticui: { dropdown: {direction: 'upward', fullTextSearch: true, cache: false}}">
-                      <input type="hidden" name="language" />
-                      <span class="default text">{{ current_lang | readthedocs_language_name_local }}</span>
-                      <i class="fa-solid fa-caret-down icon"></i>
-                      <div class="menu">
-                        <div class="ui icon search input">
-                          <i class="search icon"></i>
-                          <input type="text" />
-                        </div>
-                        <div class="divider"></div>
-                        {% for lang in LANGUAGES %}
-                          <div class="vertical item {% if lang.0 == current_lang %}active{% endif %}"
-                               data-value="{{ lang.0 }}"
-                               data-text="{{ lang.0 | readthedocs_language_name_local }}">
-                            <div class="description">
-                              {{ lang.0 | readthedocs_language_name_translated }}
-                            </div>
-                            <div class="text">{{ lang.0 | readthedocs_language_name_local }}</div>
-                          </div>
-                        {% endfor %}
-                      </div>
-                    </div>
-                    {# TODO this button would be better off as a onChange event #}
-                    <button class="ui tiny compact basic inverted button">
-                      {% trans "Update" %}
-                    </button>
-                  </form>
-                {% endblock language_select_form %}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    {% endblock footer_metadata %}
-
     {% block footer_copyright %}
       <div class="ui basic center aligned inverted segment">
         <i class="fad fa-copyright icon"></i>
         Copyright {% now "Y" %}, Read the Docs, Inc &amp; contributors
+        ·
+        <a href="https://docs.readthedocs.io/page/changelog.html"
+           target="_blank">{% trans "Version" %} {% readthedocs_version %}</a>
       </div>
     {% endblock footer_copyright %}
 
