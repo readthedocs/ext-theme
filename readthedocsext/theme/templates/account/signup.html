@@ -3,10 +3,138 @@
 {% load account socialaccount %}
 {% load crispy from crispy_forms_tags %}
 {% load trans blocktrans from i18n %}
+{% load static from static %}
 
 {% block head_title %}
   {% trans "Sign up" %}
 {% endblock head_title %}
+
+{% comment %}
+  Marketing copy beside the sign up form, highlighting what the platform does.
+  The logo moves up here from the card footer, so the page only shows it once.
+{% endcomment %}
+{% block content_aside %}
+  <div class="left aligned middle aligned seven wide computer twelve wide tablet sixteen wide mobile column">
+    <div class="ui basic segment">
+      {# djlint: off D018 #}
+      <a class="ui labeled image"
+         href="//{{ PRODUCTION_DOMAIN }}/"
+         aria-label="{% trans "Read the Docs" %}">
+        <img class="ui middle aligned invertable image"
+             src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}"
+             width="160"
+             alt="{% trans "Read the Docs logo" %}" />
+        {% include "includes/utils/site_label.html" %}
+      </a>
+      {# djlint: on #}
+
+      {% if USE_ORGANIZATIONS %}
+        <h1 class="ui header">
+          {% trans "Documentation hosting for your team" %}
+          <div class="sub header">
+            {% blocktrans trimmed %}
+              Build and host private docs straight from Git,
+              with the access controls your business needs.
+              Start with a free 30-day trial.
+            {% endblocktrans %}
+          </div>
+        </h1>
+
+        <div class="ui relaxed list">
+          <div class="item">
+            <i class="large violet fa-solid fa-lock icon"></i>
+            <div class="content">
+              <div class="header">{% trans "Private documentation" %}</div>
+              <div class="description">
+                {% trans "Build from private repositories. Only the people you choose can read your docs." %}
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <i class="large violet fa-solid fa-shield-halved icon"></i>
+            <div class="content">
+              <div class="header">{% trans "Single sign-on" %}</div>
+              <div class="description">
+                {% trans "Log in with GitHub, GitLab, Bitbucket, Google Workspace, or SAML." %}
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <i class="large violet fa-solid fa-users icon"></i>
+            <div class="content">
+              <div class="header">{% trans "Teams and audit logs" %}</div>
+              <div class="description">
+                {% trans "Manage access by team, and keep a record of who did what." %}
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <i class="large violet fa-solid fa-headset icon"></i>
+            <div class="content">
+              <div class="header">{% trans "Priority support, no ads" %}</div>
+              <div class="description">
+                {% trans "A dedicated support team during business hours, and your docs are always ad-free." %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <h1 class="ui header">
+          {% trans "Free hosting for open source documentation" %}
+          <div class="sub header">
+            {% blocktrans trimmed %}
+              Build, version, and host your docs straight from Git.
+              Works with Sphinx, MkDocs, Docusaurus, and more.
+            {% endblocktrans %}
+          </div>
+        </h1>
+
+        <div class="ui relaxed list">
+          <div class="item">
+            <i class="large teal fa-solid fa-code-branch icon"></i>
+            <div class="content">
+              <div class="header">{% trans "Builds on every push" %}</div>
+              <div class="description">
+                {% trans "Connect GitHub, GitLab, or Bitbucket and your docs rebuild every time you push." %}
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <i class="large teal fa-solid fa-tags icon"></i>
+            <div class="content">
+              <div class="header">{% trans "Every version online" %}</div>
+              <div class="description">
+                {% trans "Keep your latest release and your in-progress branches hosted side by side." %}
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <i class="large teal fa-solid fa-code-pull-request icon"></i>
+            <div class="content">
+              <div class="header">{% trans "Pull request previews" %}</div>
+              <div class="description">
+                {% trans "Review documentation changes before you merge." %}
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <i class="large teal fa-solid fa-magnifying-glass icon"></i>
+            <div class="content">
+              <div class="header">{% trans "Search and custom domains" %}</div>
+              <div class="description">
+                {% trans "Full-text search across your docs, served from your own domain with HTTPS." %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock content_aside %}
+
+{# The logo is shown in the column beside the form instead #}
+{% block content_extra %}
+{% endblock content_extra %}
 
 {% block content_title_text %}
   {% if USE_ORGANIZATIONS %}
