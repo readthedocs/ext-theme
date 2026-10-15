@@ -7,6 +7,7 @@
   <div class="ui container">
 
     {% block footer_links %}
+      {# Keep these menus in sync with the footer on the website: https://github.com/readthedocs/website #}
       <div class="ui four column stackable grid very padded">
 
         <div class="column">
@@ -39,13 +40,16 @@
               <a class="item" href="https://docs.readthedocs.io" target="_blank">Documentation</a>
               <a class="item"
                  href="https://docs.readthedocs.io/page/tutorial/index.html"
-                 target="_blank">Getting started guide</a>
+                 target="_blank">Tutorial</a>
               <a class="item"
                  href="https://docs.readthedocs.io/page/config-file/"
                  target="_blank">Configure your project</a>
               <a class="item"
-                 href="https://docs.readthedocs.io/page/intro/doctools.html"
-                 target="_blank">Documentation tools</a>
+                 href="https://about.readthedocs.com/tools/"
+                 target="_blank">Popular documentation tools</a>
+              <a class="item"
+                 href="https://about.readthedocs.com/comparisons/"
+                 target="_blank">Compare to other platforms</a>
             {% endblock menu_learn %}
           </div>
         </div>
@@ -53,21 +57,18 @@
         <div class="column">
           <div class="ui vertical inverted text menu">
             {% block menu_services %}
-              <h4 class="ui inverted sub header">Services</h4>
-              <a class="item"
-                 href="https://about.readthedocs.com/pricing/"
-                 target="_blank">Pricing</a>
+              <h4 class="ui inverted sub header">Product</h4>
               <a class="item"
                  href="https://about.readthedocs.com/features/"
                  target="_blank">Features</a>
               <a class="item"
-                 href="https://www.ethicalads.io/advertisers/?ref=rtd"
-                 target="_blank">Advertise with Us</a>
+                 href="https://about.readthedocs.com/pricing/"
+                 target="_blank">Pricing</a>
               <a class="item"
-                 href="https://docs.readthedocs.io/page/privacy-policy.html"
+                 href="https://about.readthedocs.com/privacy-policy/"
                  target="_blank">Privacy Policy</a>
               <a class="item"
-                 href="https://docs.readthedocs.io/page/terms-of-service.html"
+                 href="https://about.readthedocs.com/terms-of-service/"
                  target="_blank">Terms of Service</a>
             {% endblock menu_services %}
           </div>
@@ -76,16 +77,19 @@
         <div class="column">
           <div class="ui vertical inverted text menu">
             {% block menu_about %}
-              <h4 class="ui inverted sub header">About us</h4>
+              <h4 class="ui inverted sub header">Company</h4>
               <a class="item"
                  href="https://about.readthedocs.com/company/"
-                 target="_blank">Company</a>
+                 target="_blank">About us</a>
               <a class="item"
-                 href="https://docs.readthedocs.io/page/team.html"
-                 target="_blank">Team</a>
+                 href="https://docs.readthedocs.io/page/support.html"
+                 target="_blank">Support</a>
+              <a class="item"
+                 href="https://www.ethicalads.io/advertisers/?ref=rtd"
+                 target="_blank">Advertise with Us</a>
               <a class="item"
                  href="https://dev.readthedocs.io/page/contribute.html"
-                 target="_blank">Contributing</a>
+                 target="_blank">Contribute</a>
             {% endblock menu_about %}
           </div>
         </div>
