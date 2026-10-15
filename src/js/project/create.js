@@ -134,7 +134,8 @@ export class ProjectCreateView extends ResponsiveView {
    */
   init_search() {
     const config = this.config();
-    const url = config.urls.remoterepository_list + "?full_name={query}";
+    const url =
+      config.urls.remoterepository_list + "?full_name={query}&ordering=import";
 
     // Configuration for the trigger of the popup element. We manually show the
     // popup in the case that the user has tried searching multiple times
