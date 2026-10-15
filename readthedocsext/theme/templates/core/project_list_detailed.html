@@ -7,7 +7,7 @@
     {% with project.users.all as users %}
       {% if users|length > 1 %}
         (
-        {% for user in project.users.all|slice:":3" %}
+        {% for user in users|slice:":3" %}
           {% if omit and user.pk != omit.pk %}
             <a href="{{ user.get_absolute_url }}">{{ user }}</a>
           {% endif %}
@@ -19,7 +19,7 @@
       {% else %}
         {% if omit and users.0.pk == omit.pk %}
         {% else %}
-          {% with project.users.all.0 as user %}
+          {% with users.0 as user %}
             (<a href="{{ user.get_absolute_url }}">{{ user }}</a>)
           {% endwith %}
         {% endif %}
