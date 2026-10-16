@@ -16,12 +16,11 @@
     <div class="ui basic very padded segment">
       {% if USE_ORGANIZATIONS %}
         <h2 class="ui header">
-          {% trans "Documentation hosting for your team" %}
+          {% trans "Decide who sees your docs" %}
           <div class="sub header">
             {% blocktrans trimmed %}
-              Build and host private docs straight from Git,
-              with the access controls your business needs.
-              Start with a free 30-day trial.
+              Control who can access your docs, from your internal team to the whole world.
+              Get started for free with a 30-day trial.
             {% endblocktrans %}
           </div>
         </h2>
@@ -31,9 +30,9 @@
             <h4 class="ui small icon header">
               <i class="violet fa-solid fa-lock icon"></i>
               <div class="content">
-                {% trans "Private documentation" %}
+                {% trans "Private repository support" %}
                 <div class="sub header">
-                  {% trans "Build from private repositories. Only the people you choose can read your docs." %}
+                  {% trans "Clone private repositories using a connected GitHub, GitLab, or Bitbucket account." %}
                 </div>
               </div>
             </h4>
@@ -44,7 +43,7 @@
               <div class="content">
                 {% trans "Single sign-on" %}
                 <div class="sub header">
-                  {% trans "Log in with GitHub, GitLab, Bitbucket, Google Workspace, or SAML." %}
+                  {% trans "Control who has access to your documentation with integrated authentication." %}
                 </div>
               </div>
             </h4>
@@ -53,20 +52,20 @@
             <h4 class="ui small icon header">
               <i class="violet fa-solid fa-users icon"></i>
               <div class="content">
-                {% trans "Teams and audit logs" %}
+                {% trans "Team management" %}
                 <div class="sub header">
-                  {% trans "Manage access by team, and keep a record of who did what." %}
+                  {% trans "Control access to your projects within your organization and group projects by teams." %}
                 </div>
               </div>
             </h4>
           </div>
           <div class="column">
             <h4 class="ui small icon header">
-              <i class="violet fa-solid fa-headset icon"></i>
+              <i class="violet fa-solid fa-list-check icon"></i>
               <div class="content">
-                {% trans "Priority support, no ads" %}
+                {% trans "Audit log" %}
                 <div class="sub header">
-                  {% trans "A dedicated support team during business hours, and your docs are always ad-free." %}
+                  {% trans "Track and review authentication attempts for your organization and all of your private documentation projects." %}
                 </div>
               </div>
             </h4>
@@ -74,11 +73,10 @@
         </div>
       {% else %}
         <h2 class="ui header">
-          {% trans "Free hosting for open source documentation" %}
+          {% trans "Always free for open source and community projects" %}
           <div class="sub header">
             {% blocktrans trimmed %}
-              Build, version, and host your docs straight from Git.
-              Works with Sphinx, MkDocs, Docusaurus, and more.
+              Connect your Git repository and treat docs like code.
             {% endblocktrans %}
           </div>
         </h2>
@@ -88,9 +86,9 @@
             <h4 class="ui small icon header">
               <i class="teal fa-solid fa-code-branch icon"></i>
               <div class="content">
-                {% trans "Builds on every push" %}
+                {% trans "Build automatically" %}
                 <div class="sub header">
-                  {% trans "Connect GitHub, GitLab, or Bitbucket and your docs rebuild every time you push." %}
+                  {% trans "Your documentation is rebuilt whenever a change is detected in your repository." %}
                 </div>
               </div>
             </h4>
@@ -99,9 +97,9 @@
             <h4 class="ui small icon header">
               <i class="teal fa-solid fa-tags icon"></i>
               <div class="content">
-                {% trans "Every version online" %}
+                {% trans "Versioning" %}
                 <div class="sub header">
-                  {% trans "Keep your latest release and your in-progress branches hosted side by side." %}
+                  {% trans "Build multiple versions from commits, branches, or tags in your repository." %}
                 </div>
               </div>
             </h4>
@@ -110,20 +108,20 @@
             <h4 class="ui small icon header">
               <i class="teal fa-solid fa-code-pull-request icon"></i>
               <div class="content">
-                {% trans "Pull request previews" %}
+                {% trans "Preview your changes" %}
                 <div class="sub header">
-                  {% trans "Review documentation changes before you merge." %}
+                  {% trans "Preview changes in every pull request. Reviewers see the rendered result, not raw diffs." %}
                 </div>
               </div>
             </h4>
           </div>
           <div class="column">
             <h4 class="ui small icon header">
-              <i class="teal fa-solid fa-magnifying-glass icon"></i>
+              <i class="teal fa-solid fa-toolbox icon"></i>
               <div class="content">
-                {% trans "Search and custom domains" %}
+                {% trans "Bring your own tools" %}
                 <div class="sub header">
-                  {% trans "Full-text search across your docs, served from your own domain with HTTPS." %}
+                  {% trans "Integrated support for Sphinx, MkDocs, Docusaurus, and more." %}
                 </div>
               </div>
             </h4>
