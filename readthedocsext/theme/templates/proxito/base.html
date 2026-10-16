@@ -32,13 +32,6 @@
 {% block content-wrapper %}
   <div class="ui very padded container">
     <div class="ui very tall centered grid">
-      {% comment %}
-        Optional column rendered beside the card, for pages that want
-        supporting content next to the form, like the sign up page.
-      {% endcomment %}
-      {% block content_aside %}
-      {% endblock content_aside %}
-
       <div class="left aligned middle aligned nine wide computer twelve wide tablet sixteen wide mobile column">
         <div class="ui fluid card">
           <div class="content">
@@ -67,6 +60,13 @@
           {% endblock content_extra %}
         </div>
       </div>
+
+      {% comment %}
+        Optional row rendered under the card, for pages that want supporting
+        content below the form, like the sign up page.
+      {% endcomment %}
+      {% block content_below %}
+      {% endblock content_below %}
     </div>
   </div>
 {% endblock content-wrapper %}
