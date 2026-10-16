@@ -1,22 +1,21 @@
-{% load trans get_current_language from i18n %}
+{% load trans from i18n %}
 {% load readthedocs_version from core_tags %}
 {% load static from static %}
-{% load readthedocs_language_name_local readthedocs_language_name_translated from ext_theme_tags %}
 
 <footer class="ui basic very padded inverted attached segment">
   <div class="ui container">
 
     {% block footer_links %}
+      {# Keep these menus in sync with the footer on the website: https://github.com/readthedocs/website #}
       <div class="ui four column stackable grid very padded">
 
         <div class="column">
           <div class="ui vertical inverted text menu">
             {% block menu_news %}
               <h4 class="ui inverted sub header">Stay updated</h4>
-              <a class="item" href="https://about.readthedocs.com/blog/">Blog</a>
-              <a class="item"
-                 href="https://landing.mailerlite.com/webforms/landing/t0a9l4">Newsletter</a>
-              <a class="item" href="https://status.readthedocs.com/">Status</a>
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/blog/" text="Blog" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://landing.mailerlite.com/webforms/landing/t0a9l4" text="Newsletter" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://status.readthedocs.com/" text="Status" is_external=True class="item" %}
               <div class="item">
                 <a href="https://github.com/readthedocs/"
                    aria-label="Read the Docs on GitHub"
@@ -36,13 +35,11 @@
           <div class="ui vertical inverted text menu">
             {% block menu_learn %}
               <h4 class="ui inverted sub header">Learn more</h4>
-              <a class="item" href="https://docs.readthedocs.io" target="_blank">Documentation</a>
-              <a class="item"
-                 href="https://docs.readthedocs.io/page/tutorial/index.html"
-                 target="_blank">Getting started guide</a>
-              <a class="item"
-                 href="https://docs.readthedocs.io/page/config-file/"
-                 target="_blank">Configure your project</a>
+              {% include "includes/elements/link.html" with url="https://docs.readthedocs.io" text="Documentation" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/tutorial/index.html" text="Tutorial" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/config-file/" text="Configure your project" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/tools/" text="Popular documentation tools" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/comparisons/" text="Compare to other platforms" is_external=True class="item" %}
             {% endblock menu_learn %}
           </div>
         </div>
@@ -50,22 +47,11 @@
         <div class="column">
           <div class="ui vertical inverted text menu">
             {% block menu_services %}
-              <h4 class="ui inverted sub header">Services</h4>
-              <a class="item"
-                 href="https://about.readthedocs.com/pricing/"
-                 target="_blank">Pricing</a>
-              <a class="item"
-                 href="https://about.readthedocs.com/features/"
-                 target="_blank">Features</a>
-              <a class="item"
-                 href="https://www.ethicalads.io/advertisers/?ref=rtd"
-                 target="_blank">Advertise with Us</a>
-              <a class="item"
-                 href="https://docs.readthedocs.io/page/privacy-policy.html"
-                 target="_blank">Privacy Policy</a>
-              <a class="item"
-                 href="https://docs.readthedocs.io/page/terms-of-service.html"
-                 target="_blank">Terms of Service</a>
+              <h4 class="ui inverted sub header">Product</h4>
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/features/" text="Features" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/pricing/" text="Pricing" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/privacy-policy/" text="Privacy Policy" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/terms-of-service/" text="Terms of Service" is_external=True class="item" %}
             {% endblock menu_services %}
           </div>
         </div>
@@ -73,28 +59,11 @@
         <div class="column">
           <div class="ui vertical inverted text menu">
             {% block menu_about %}
-              <h4 class="ui inverted sub header">About us</h4>
-              <a class="item"
-                 href="https://about.readthedocs.com/company/"
-                 target="_blank">Company</a>
-              <a class="item"
-                 href="https://docs.readthedocs.io/page/team.html"
-                 target="_blank">Team</a>
-              <a class="item"
-                 href="https://dev.readthedocs.io/page/contribute.html"
-                 target="_blank">Contributing</a>
-
-              {# TODO move this out of the footer and drop this menu from this block/column  #}
-              <h4 class="ui inverted sub header">Tools</h4>
-              <a class="item"
-                 href="https://about.readthedocs.com/tools/sphinx/"
-                 target="_blank">Sphinx</a>
-              <a class="item"
-                 href="https://about.readthedocs.com/tools/mkdocs/"
-                 target="_blank">MkDocs</a>
-              <a class="item"
-                 href="https://about.readthedocs.com/tools/jupyter-book/"
-                 target="_blank">Jupyter Book</a>
+              <h4 class="ui inverted sub header">Company</h4>
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/company/" text="About us" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/support.html" text="Support" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://www.ethicalads.io/advertisers/?ref=rtd" text="Advertise with Us" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://dev.readthedocs.io/page/contribute.html" text="Contribute" is_external=True class="item" %}
             {% endblock menu_about %}
           </div>
         </div>
@@ -102,71 +71,13 @@
       </div>
     {% endblock footer_links %}
 
-    {% block footer_metadata %}
-      <div class="ui basic center aligned inverted segment">
-        <div class="ui very relaxed horizontal inverted list">
-          <div class="left aligned item">
-            <i class="large fa-duotone fa-code-branch icon"></i>
-            <div class="content">
-              <div class="header">{% trans "Version" %}</div>
-              <div class="description">
-                <a href="https://docs.readthedocs.io/page/changelog.html"
-                   target="_blank">{% readthedocs_version %}</a>
-              </div>
-            </div>
-          </div>
-          <div class="left aligned item">
-            <i class="large fa-duotone fa-language icon"></i>
-            <div class="content">
-              <div class="header">{% trans "Language" %}</div>
-              <div class="description">
-                {% block language_select_form %}
-                  {% get_current_language as current_lang %}
-                  <form action="{% url 'set_language' %}" method="post">
-                    <div class="field">
-                      <input name="next" type="hidden" value="/" />
-                    </div>
-                    {% csrf_token %}
-                    <div class="ui very wide search dropdown"
-                         data-bind="semanticui: { dropdown: {direction: 'upward', fullTextSearch: true, cache: false}}">
-                      <input type="hidden" name="language" />
-                      <span class="default text">{{ current_lang | readthedocs_language_name_local }}</span>
-                      <i class="fa-solid fa-caret-down icon"></i>
-                      <div class="menu">
-                        <div class="ui icon search input">
-                          <i class="search icon"></i>
-                          <input type="text" />
-                        </div>
-                        <div class="divider"></div>
-                        {% for lang in LANGUAGES %}
-                          <div class="vertical item {% if lang.0 == current_lang %}active{% endif %}"
-                               data-value="{{ lang.0 }}"
-                               data-text="{{ lang.0 | readthedocs_language_name_local }}">
-                            <div class="description">
-                              {{ lang.0 | readthedocs_language_name_translated }}
-                            </div>
-                            <div class="text">{{ lang.0 | readthedocs_language_name_local }}</div>
-                          </div>
-                        {% endfor %}
-                      </div>
-                    </div>
-                    {# TODO this button would be better off as a onChange event #}
-                    <button class="ui tiny compact basic inverted button">
-                      {% trans "Update" %}
-                    </button>
-                  </form>
-                {% endblock language_select_form %}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    {% endblock footer_metadata %}
-
     {% block footer_copyright %}
       <div class="ui basic center aligned inverted segment">
         <i class="fad fa-copyright icon"></i>
         Copyright {% now "Y" %}, Read the Docs, Inc &amp; contributors
+        ·
+        <a href="https://docs.readthedocs.io/page/changelog.html"
+           target="_blank">{% trans "Version" %} {% readthedocs_version %}</a>
       </div>
     {% endblock footer_copyright %}
 
