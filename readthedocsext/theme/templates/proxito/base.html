@@ -60,6 +60,13 @@
           {% endblock content_extra %}
         </div>
       </div>
+
+      {% comment %}
+        Optional row rendered under the card, for pages that want supporting
+        content below the form, like the sign up page.
+      {% endcomment %}
+      {% block content_below %}
+      {% endblock content_below %}
     </div>
   </div>
 {% endblock content-wrapper %}
