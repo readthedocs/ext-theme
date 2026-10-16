@@ -13,10 +13,9 @@
           <div class="ui vertical inverted text menu">
             {% block menu_news %}
               <h4 class="ui inverted sub header">Stay updated</h4>
-              <a class="item" href="https://about.readthedocs.com/blog/">Blog</a>
-              <a class="item"
-                 href="https://landing.mailerlite.com/webforms/landing/t0a9l4">Newsletter</a>
-              <a class="item" href="https://status.readthedocs.com/">Status</a>
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/blog/" text="Blog" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://landing.mailerlite.com/webforms/landing/t0a9l4" text="Newsletter" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://status.readthedocs.com/" text="Status" is_external=True class="item" %}
               <div class="item">
                 <a href="https://github.com/readthedocs/"
                    aria-label="Read the Docs on GitHub"
@@ -36,19 +35,11 @@
           <div class="ui vertical inverted text menu">
             {% block menu_learn %}
               <h4 class="ui inverted sub header">Learn more</h4>
-              <a class="item" href="https://docs.readthedocs.io" target="_blank">Documentation</a>
-              <a class="item"
-                 href="https://docs.readthedocs.io/page/tutorial/index.html"
-                 target="_blank">Tutorial</a>
-              <a class="item"
-                 href="https://docs.readthedocs.io/page/config-file/"
-                 target="_blank">Configure your project</a>
-              <a class="item"
-                 href="https://about.readthedocs.com/tools/"
-                 target="_blank">Popular documentation tools</a>
-              <a class="item"
-                 href="https://about.readthedocs.com/comparisons/"
-                 target="_blank">Compare to other platforms</a>
+              {% include "includes/elements/link.html" with url="https://docs.readthedocs.io" text="Documentation" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/tutorial/index.html" text="Tutorial" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/config-file/" text="Configure your project" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/tools/" text="Popular documentation tools" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/comparisons/" text="Compare to other platforms" is_external=True class="item" %}
             {% endblock menu_learn %}
           </div>
         </div>
@@ -57,18 +48,10 @@
           <div class="ui vertical inverted text menu">
             {% block menu_services %}
               <h4 class="ui inverted sub header">Product</h4>
-              <a class="item"
-                 href="https://about.readthedocs.com/features/"
-                 target="_blank">Features</a>
-              <a class="item"
-                 href="https://about.readthedocs.com/pricing/"
-                 target="_blank">Pricing</a>
-              <a class="item"
-                 href="https://about.readthedocs.com/privacy-policy/"
-                 target="_blank">Privacy Policy</a>
-              <a class="item"
-                 href="https://about.readthedocs.com/terms-of-service/"
-                 target="_blank">Terms of Service</a>
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/features/" text="Features" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/pricing/" text="Pricing" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/privacy-policy/" text="Privacy Policy" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/terms-of-service/" text="Terms of Service" is_external=True class="item" %}
             {% endblock menu_services %}
           </div>
         </div>
@@ -77,18 +60,10 @@
           <div class="ui vertical inverted text menu">
             {% block menu_about %}
               <h4 class="ui inverted sub header">Company</h4>
-              <a class="item"
-                 href="https://about.readthedocs.com/company/"
-                 target="_blank">About us</a>
-              <a class="item"
-                 href="https://docs.readthedocs.io/page/support.html"
-                 target="_blank">Support</a>
-              <a class="item"
-                 href="https://www.ethicalads.io/advertisers/?ref=rtd"
-                 target="_blank">Advertise with Us</a>
-              <a class="item"
-                 href="https://dev.readthedocs.io/page/contribute.html"
-                 target="_blank">Contribute</a>
+              {% include "includes/elements/link.html" with url="https://about.readthedocs.com/company/" text="About us" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/support.html" text="Support" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://www.ethicalads.io/advertisers/?ref=rtd" text="Advertise with Us" is_external=True class="item" %}
+              {% include "includes/elements/link.html" with url="https://dev.readthedocs.io/page/contribute.html" text="Contribute" is_external=True class="item" %}
             {% endblock menu_about %}
           </div>
         </div>
