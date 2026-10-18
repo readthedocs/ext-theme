@@ -16,8 +16,6 @@
 {% block edit_content %}
   <form method="post" action="." class="ui form">
     {% csrf_token %}
-    {# Where Django's set_language view redirects after saving the language #}
-    <input type="hidden" name="next" value="{{ request.path }}" />
     {{ form|crispy }}
     <button class="ui primary button" type="submit">{% trans "Save" %}</button>
   </form>
