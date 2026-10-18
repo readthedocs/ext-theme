@@ -32,12 +32,14 @@
           <div class="ui vertical inverted text menu">
             {% block menu_learn %}
               <h4 class="ui inverted sub header">Learn more</h4>
-              <a class="item" href="https://docs.readthedocs.io" target="_blank">Documentation</a>
               <a class="item"
-                 href="https://docs.readthedocs.io/page/tutorial/index.html"
+                 href="https://docs.readthedocs.com/platform/stable/"
+                 target="_blank">Documentation</a>
+              <a class="item"
+                 href="https://docs.readthedocs.com/platform/stable/tutorial/index.html"
                  target="_blank">Tutorial</a>
               <a class="item"
-                 href="https://docs.readthedocs.io/page/config-file/"
+                 href="https://docs.readthedocs.com/platform/stable/config-file/index.html"
                  target="_blank">Configure your project</a>
               <a class="item"
                  href="https://docs.readthedocs.com/platform/stable/intro/doctools.html"
@@ -77,11 +79,11 @@
                  href="https://about.readthedocs.com/company/"
                  target="_blank">About us</a>
               <a class="item"
-                 href="https://docs.readthedocs.io/page/support.html"
+                 href="https://docs.readthedocs.com/platform/stable/support.html"
                  target="_blank">Support</a>
               {% include "includes/elements/link.html" with url="https://www.ethicalads.io/advertisers/?ref=rtd" text="Advertise with Us" is_external=True class="item" %}
               <a class="item"
-                 href="https://dev.readthedocs.io/page/contribute.html"
+                 href="https://docs.readthedocs.com/dev/latest/contribute.html"
                  target="_blank">Contribute</a>
             {% endblock menu_about %}
           </div>
@@ -95,7 +97,7 @@
         <i class="fad fa-copyright icon"></i>
         Copyright {% now "Y" %}, Read the Docs, Inc &amp; contributors
         ·
-        <a href="https://docs.readthedocs.io/page/changelog.html"
+        <a href="https://docs.readthedocs.com/platform/stable/changelog.html"
            target="_blank">{% trans "Version" %} {% readthedocs_version %}</a>
       </div>
     {% endblock footer_copyright %}
