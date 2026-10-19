@@ -51,6 +51,10 @@
           </div>
 
           <div class="content">
+            {% if not project.supports_multiple_versions and version.slug != project.get_default_version %}
+              {% include "projects/partials/single_version_notice.html" %}
+            {% endif %}
+
             {% if version.active %}
               <div class="ui warning message">
                 {% url "projects_redirects_create" project_slug=project.slug as url_redirects %}

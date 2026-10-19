@@ -1,14 +1,12 @@
 {% extends "projects/base.html" %}
 
-{% load projects_tags %}
+{% block body_class %}project_detail{% endblock body_class %}
 
-{% block body_class %}project_detail{% endblock %}
-
-{% block title %}{{ project.name }}{% endblock %}
+{% block title %}{{ project.name }}{% endblock title %}
 
 {% block content-header %}
   {% include "projects/partials/header.html" with overview_active="active" %}
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
   {% comment %}
@@ -20,5 +18,9 @@
     {% endif %}
   {% endcomment %}
 
+  {% if not project.supports_multiple_versions and project.all_active_versions.count > 1 %}
+    {% include "projects/partials/single_version_notice.html" %}
+  {% endif %}
+
   {% include "builds/partials/version_list.html" with objects=versions %}
-{% endblock %}
+{% endblock content %}
