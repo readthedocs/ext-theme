@@ -86,21 +86,20 @@
 {% block list_item_header %}
   {% spaceless %}
     <a href="{% url 'projects_redirects_edit' project_slug=project.slug redirect_pk=object.pk %}">
-      {% if object.from_url %}
+      {% if object.redirect_type == "clean_url_to_html" %}
+        <span>/</span><span class="ui violet text">$lang</span>
+        <span>/</span><span class="ui violet text">$version</span>
+        <span>/</span><span class="ui violet text">$file</span><span>/</span>
+      {% elif object.redirect_type == "html_to_clean_url" %}
+        <span>/</span><span class="ui violet text">$lang</span>
+        <span>/</span><span class="ui violet text">$version</span>
+        <span>/</span><span class="ui violet text">$file</span><span>.html</span>
+      {% else %}
         {% if object.redirect_type == "page" %}
           <span>/</span><span class="ui violet text">$lang</span>
           <span>/</span><span class="ui violet text">$version</span>
         {% endif %}
         <span>{{ object.from_url }}</span>
-      {% else %}
-        <span>/</span><span class="ui violet text">$lang</span>
-        <span>/</span><span class="ui violet text">$version</span>
-        <span>/</span><span class="ui violet text">$file</span>
-        {% if object.redirect_type == "clean_url_to_html" %}
-          <span>/</span>
-        {% elif object.redirect_type == "html_to_clean_url" %}
-          <span>.html</span>
-        {% endif %}
       {% endif %}
     </a>
   {% endspaceless %}
@@ -108,21 +107,20 @@
   <div class="sub header">
     <label>{% trans "Redirect to:" %}</label>
     {% spaceless %}
-      {% if object.from_url %}
+      {% if object.redirect_type == "clean_url_to_html" %}
+        <span>/</span><span class="ui violet text">$lang</span>
+        <span>/</span><span class="ui violet text">$version</span>
+        <span>/</span><span class="ui violet text">$file</span><span>.html</span>
+      {% elif object.redirect_type == "html_to_clean_url" %}
+        <span>/</span><span class="ui violet text">$lang</span>
+        <span>/</span><span class="ui violet text">$version</span>
+        <span>/</span><span class="ui violet text">$file</span><span>/</span>
+      {% else %}
         {% if object.redirect_type == "page" %}
           <span>/</span><span class="ui violet text">$lang</span>
           <span>/</span><span class="ui violet text">$version</span>
         {% endif %}
         <span>{{ object.to_url }}</span>
-      {% else %}
-        <span>/</span><span class="ui violet text">$lang</span>
-        <span>/</span><span class="ui violet text">$version</span>
-        <span>/</span><span class="ui violet text">$file</span>
-        {% if object.redirect_type == "clean_url_to_html" %}
-          <span>.html</span>
-        {% elif object.redirect_type == "html_to_clean_url" %}
-          <span>/</span>
-        {% endif %}
       {% endif %}
     {% endspaceless %}
   </div>
