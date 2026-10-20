@@ -9,10 +9,7 @@
     <div class="ui breadcrumb">
       <a class="section" href="{% url "projects_tokens" project.slug %}">{% trans "API tokens" %}</a>
       <span class="divider">/</span>
-      <a class="section"
-         href="{% url "projects_tokens_detail" project_slug=project.slug token_prefix=object.prefix %}">{{ object.name }}</a>
-      <span class="divider">/</span>
-      <div class="active section">{% trans "Edit" %}</div>
+      <div class="active section">{{ object.name }}</div>
     </div>
   {% else %}
     {% trans "Add API token" %}
@@ -24,6 +21,41 @@
     <form class="ui form" method="post" action=".">
       {% csrf_token %}
       {{ form|crispy }}
+
+      {# These can't be changed after the token is created #}
+      <div class="field">
+        <label for="token-value">{% trans "Token" %}</label>
+        <input type="text"
+               id="token-value"
+               value="{{ object.prefix }}.****"
+               readonly>
+      </div>
+      <div class="two fields">
+        <div class="field">
+          <label for="token-created">{% trans "Created" %}</label>
+          <input type="text"
+                 id="token-created"
+                 value="{{ object.created|date }}"
+                 readonly>
+        </div>
+        <div class="field">
+          <label for="token-expiration">{% trans "Expiration" %}</label>
+          {% if object.expiry_date %}
+            {% if object.has_expired %}
+              {% blocktrans trimmed with date=object.expiry_date|date asvar expiration %}
+                Expired on {{ date }}
+              {% endblocktrans %}
+            {% else %}
+              {% blocktrans trimmed with date=object.expiry_date|date asvar expiration %}
+                Expires on {{ date }}
+              {% endblocktrans %}
+            {% endif %}
+          {% else %}
+            {% trans "Never expires" as expiration %}
+          {% endif %}
+          <input type="text" id="token-expiration" value="{{ expiration }}" readonly>
+        </div>
+      </div>
 
       <input class="ui primary button" type="submit" value="{% trans "Save" %}">
     </form>
