@@ -51,8 +51,14 @@
           </div>
 
           <div class="content">
-            {% if not project.supports_multiple_versions and version.slug != project.get_default_version %}
-              {% include "projects/partials/single_version_notice.html" %}
+            {% if not project.supports_multiple_versions and version.slug != project.default_version %}
+              {% url "projects_edit" project_slug=project.slug as url_settings %}
+              <div class="ui warning message">
+                {% blocktrans trimmed with url=url_settings default_version=project.default_version %}
+                  This version is not served.
+                  <a href="{{ url }}">Single version projects</a> only serve the default version, <code>{{ default_version }}</code>.
+                {% endblocktrans %}
+              </div>
             {% endif %}
 
             {% if version.active %}

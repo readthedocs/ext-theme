@@ -44,10 +44,11 @@
   <readthedocs-api csrf-token="{{ csrf_token }}"
                    url="{% url "projects-versions-detail" object.project.slug object.slug %}">
     <div class="ui small icon buttons">
-      <readthedocs-item-docs {% if not object.built %}disabled{% endif %}
+      {# Single version projects only serve the default version, the others are built but unreachable #}
+      <readthedocs-item-docs {% if not object.built or not project.supports_multiple_versions and object.slug != project.default_version %}disabled{% endif %}
                              label="{% blocktrans with name=object.verbose_name %}View documentation for version {{ name }}{% endblocktrans %}">
       </readthedocs-item-docs>
-      <readthedocs-item-downloads {% if not object.has_pdf and not object.has_epub and not object.has_htmlzip %}disabled{% endif %}
+      <readthedocs-item-downloads {% if not object.has_pdf and not object.has_epub and not object.has_htmlzip or not project.supports_multiple_versions and object.slug != project.default_version %}disabled{% endif %}
                                   label="{% blocktrans with name=object.verbose_name %}Offline formats for version {{ name }}{% endblocktrans %}">
       </readthedocs-item-downloads>
 
@@ -144,6 +145,16 @@
     {% endblocktrans %}
     <div class="item">
       {% include "includes/components/config_label.html" with icon="fa-duotone fa-eye-slash" text=text popup=popup %}
+    </div>
+  {% endif %}
+
+  {% if not project.supports_multiple_versions and object.slug != project.default_version %}
+    {% trans "Not served" context "Version is not served" as text %}
+    {% blocktrans trimmed with version=object.verbose_name default_version=project.default_version asvar popup %}
+      Version {{ version }} is not served. Single version projects only serve the default version, {{ default_version }}
+    {% endblocktrans %}
+    <div class="item">
+      {% include "includes/components/config_label.html" with classes="basic warning" icon="fa-solid fa-circle-exclamation" text=text popup=popup %}
     </div>
   {% endif %}
 
