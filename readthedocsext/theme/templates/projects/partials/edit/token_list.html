@@ -52,12 +52,7 @@
 {% endblock list_item_right_buttons %}
 
 {% block list_item_icon %}
-  {% if object.has_expired %}
-    <i class="fa-duotone fa-key red icon"
-       data-content="{% trans "This token has expired and can't be used anymore" %}"></i>
-  {% else %}
-    <i class="fa-duotone fa-key icon"></i>
-  {% endif %}
+  <i class="fa-duotone fa-key icon"></i>
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
@@ -79,14 +74,15 @@
   <div class="item">
     <div class="content">
       {% if object.has_expired %}
-        <div class="header">{% trans "Expired" %}</div>
+        <div class="header">
+          <span class="ui red text"
+                data-content="{% trans "This token has expired and can't be used anymore" %}">{% trans "Expired" %}</span>
+        </div>
       {% else %}
         <div class="header">{% trans "Expires" %}</div>
       {% endif %}
       <div class="description">
-        {% if object.has_expired %}
-          <span class="ui red text">{{ object.expiry_date|date }}</span>
-        {% elif object.expiry_date %}
+        {% if object.expiry_date %}
           {{ object.expiry_date|date }}
         {% else %}
           {% trans "Never" %}
