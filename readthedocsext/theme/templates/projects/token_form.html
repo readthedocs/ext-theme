@@ -1,7 +1,8 @@
-{% extends "projects/projectapikey_list.html" %}
+{% extends "projects/token_list.html" %}
 
 {% load trans blocktrans from i18n %}
 {% load crispy from crispy_forms_tags %}
+{% load alter_field from ext_theme_tags %}
 
 {% block project_edit_content_subheader %}
   {% trans "Add API token" %}
@@ -20,8 +21,11 @@
 
   <form class="ui form"
         method="post"
-        action="{% url 'projects_apikeys_create' project_slug=project.slug %}">
+        action="{% url 'projects_tokens_create' project_slug=project.slug %}"
+        data-bind="using: ProjectTokenView()">
     {% csrf_token %}
+    {% alter_field form.expires_in data_bind="valueInit: expires_in" %}
+    {% alter_field form.expiration_date data_bind="enable: is_custom_expiration" %}
     {{ form|crispy }}
 
     <input class="ui primary button"

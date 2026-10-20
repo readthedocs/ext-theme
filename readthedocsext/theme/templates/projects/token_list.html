@@ -6,15 +6,15 @@
   {{ project.name }} - {% trans "API tokens" %}
 {% endblock title %}
 
-{% block project_api_keys_active %}
+{% block project_tokens_active %}
   active
-{% endblock project_api_keys_active %}
+{% endblock project_tokens_active %}
 {% block project_edit_content_header %}
   {% trans "API tokens" %}
 {% endblock project_edit_content_header %}
 
 {% block project_edit_content %}
-  {% if created_api_key %}
+  {% if created_token %}
     <div class="ui icon success message">
       <i class="fa-duotone fa-key icon"></i>
       <div class="content">
@@ -25,9 +25,9 @@
           {% endblocktrans %}
         </p>
         <div class="ui fluid action input">
-          <input type="text" value="{{ created_api_key }}" readonly>
+          <input type="text" value="{{ created_token }}" readonly>
           <div class="ui icon button"
-            data-clipboard-text="{{ created_api_key }}"
+            data-clipboard-text="{{ created_token }}"
             {# Translators: past tense as this shown after clicking #}
             data-content="{% trans "Copied!" %}">
             <i class="fa-solid fa-clipboard icon">
@@ -38,7 +38,7 @@
     </div>
   {% endif %}
 
-  {% include "projects/partials/edit/project_api_key_list.html" with objects=object_list %}
+  {% include "projects/partials/edit/token_list.html" with objects=object_list %}
 {% endblock project_edit_content %}
 
 {% block project_edit_sidebar_help_topics %}

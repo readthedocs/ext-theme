@@ -6,7 +6,7 @@
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
-  {% url "projects_apikeys_create" project_slug=project.slug as create_url %}
+  {% url "projects_tokens_create" project_slug=project.slug as create_url %}
   {% trans "Add API token" as create_text %}
   {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
 {% endblock create_button %}
@@ -34,7 +34,7 @@
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
-  {% url "projects_apikeys_revoke" project_slug=project.slug apikey_prefix=object.prefix as form_url %}
+  {% url "projects_tokens_delete" project_slug=project.slug token_prefix=object.prefix as form_url %}
   {% trans "Revoke token" as action_text %}
   {% blocktrans trimmed asvar content_text with name=object.name %}
     Revoke API token {{ name }}?
