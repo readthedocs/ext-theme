@@ -5,13 +5,6 @@
   background-color: @negativeBackgroundColor;
 }
 
-// Used for warning states, match colors of warning messages
-.ui.warning.label {
-  color: @warningTextColor;
-  border-color: @warningBorderColor;
-  background-color: @warningBackgroundColor;
-}
-
 .ui.nowrap.label {
   white-space: nowrap;
   overflow: hidden;
