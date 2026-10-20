@@ -5,31 +5,51 @@
 {% load alter_field from ext_theme_tags %}
 
 {% block project_edit_content_subheader %}
-  {% trans "Add API token" %}
+  {% if object %}
+    <div class="ui breadcrumb">
+      <a class="section" href="{% url "projects_tokens" project.slug %}">{% trans "API tokens" %}</a>
+      <span class="divider">/</span>
+      <a class="section"
+         href="{% url "projects_tokens_detail" project_slug=project.slug token_prefix=object.prefix %}">{{ object.name }}</a>
+      <span class="divider">/</span>
+      <div class="active section">{% trans "Edit" %}</div>
+    </div>
+  {% else %}
+    {% trans "Add API token" %}
+  {% endif %}
 {% endblock project_edit_content_subheader %}
 
 {% block project_edit_content %}
-  <div class="ui icon message">
-    <i class="fa-duotone fa-circle-exclamation icon"></i>
-    <div class="content">
-      {% blocktrans trimmed %}
-        The token is only shown once, right after you create it.
-        It gives access to this project only, with the permissions you choose.
-      {% endblocktrans %}
+  {% if object %}
+    <form class="ui form" method="post" action=".">
+      {% csrf_token %}
+      {{ form|crispy }}
+
+      <input class="ui primary button" type="submit" value="{% trans "Save" %}">
+    </form>
+  {% else %}
+    <div class="ui icon message">
+      <i class="fa-duotone fa-circle-exclamation icon"></i>
+      <div class="content">
+        {% blocktrans trimmed %}
+          The token is only shown once, right after you create it.
+          It gives access to this project only, with the permissions you choose.
+        {% endblocktrans %}
+      </div>
     </div>
-  </div>
 
-  <form class="ui form"
-        method="post"
-        action="{% url 'projects_tokens_create' project_slug=project.slug %}"
-        data-bind="using: ProjectTokenView()">
-    {% csrf_token %}
-    {% alter_field form.expires_in data_bind="valueInit: expires_in" %}
-    {% alter_field form.expiration_date data_bind="enable: is_custom_expiration" %}
-    {{ form|crispy }}
+    <form class="ui form"
+          method="post"
+          action="{% url 'projects_tokens_create' project_slug=project.slug %}"
+          data-bind="using: ProjectTokenView()">
+      {% csrf_token %}
+      {% alter_field form.expires_in data_bind="valueInit: expires_in" %}
+      {% alter_field form.expiration_date data_bind="enable: is_custom_expiration" %}
+      {{ form|crispy }}
 
-    <input class="ui primary button"
-           type="submit"
-           value="{% trans "Add API token" %}">
-  </form>
+      <input class="ui primary button"
+             type="submit"
+             value="{% trans "Add API token" %}">
+    </form>
+  {% endif %}
 {% endblock project_edit_content %}

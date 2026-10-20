@@ -11,6 +11,14 @@
 {% endblock project_edit_content_subheader %}
 
 {% block project_edit_content %}
+  <div class="ui basic right aligned fitted segment">
+    <a class="ui button"
+       href="{% url "projects_tokens_edit" project_slug=project.slug token_prefix=object.prefix %}">
+      <i class="fa-solid fa-wrench icon"></i>
+      {% trans "Edit" %}
+    </a>
+  </div>
+
   <div class="ui segment">
     <div class="ui relaxed list">
       <div class="item">
