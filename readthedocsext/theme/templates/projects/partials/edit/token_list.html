@@ -35,9 +35,9 @@
 
 {% block list_item_right_buttons %}
   {% url "projects_tokens_delete" project_slug=project.slug token_prefix=object.prefix as form_url %}
-  {% trans "Revoke token" as action_text %}
+  {% trans "Remove token" as action_text %}
   {% blocktrans trimmed asvar content_text with name=object.name %}
-    Revoke API token {{ name }}?
+    Remove token {{ name }}?
   {% endblocktrans %}
   {% blocktrans trimmed asvar warning_text %}
     This can't be undone. Anything using this token stops working immediately.
