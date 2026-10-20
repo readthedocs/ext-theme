@@ -35,12 +35,12 @@
 
 {% block list_item_right_buttons %}
   <a class="ui icon button"
-     href="{% url "projects_tokens_edit" project_slug=project.slug token_prefix=object.prefix %}"
+     href="{% url "projects_tokens_edit" project_slug=project.slug token_pk=object.pk %}"
      data-content="{% trans "Edit" %}">
     <i class="fa-solid fa-wrench icon"></i>
   </a>
 
-  {% url "projects_tokens_delete" project_slug=project.slug token_prefix=object.prefix as form_url %}
+  {% url "projects_tokens_delete" project_slug=project.slug token_pk=object.pk as form_url %}
   {% trans "Remove token" as action_text %}
   {% blocktrans trimmed asvar content_text with name=object.name %}
     Remove token {{ name }}?
@@ -48,7 +48,7 @@
   {% blocktrans trimmed asvar warning_text %}
     This can't be undone. Anything using this token stops working immediately.
   {% endblocktrans %}
-  {% include "includes/crud/remove_button.html" with id=object.prefix form_url=form_url action_text=action_text content_text=content_text warning_text=warning_text %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text content_text=content_text warning_text=warning_text %}
 {% endblock list_item_right_buttons %}
 
 {% block list_item_icon %}
@@ -56,7 +56,7 @@
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
-  <a href="{% url "projects_tokens_edit" project_slug=project.slug token_prefix=object.prefix %}">{{ object.name }}</a>
+  <a href="{% url "projects_tokens_edit" project_slug=project.slug token_pk=object.pk %}">{{ object.name }}</a>
   <div class="sub header">
     <code>{{ object.prefix }}.****</code>
   </div>
