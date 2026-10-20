@@ -52,18 +52,16 @@
 {% endblock list_item_right_buttons %}
 
 {% block list_item_icon %}
-  <i class="fa-duotone fa-key icon"></i>
+  {% if object.has_expired %}
+    <i class="fa-duotone fa-key red icon"
+       data-content="{% trans "This token has expired and can't be used anymore" %}"></i>
+  {% else %}
+    <i class="fa-duotone fa-key icon"></i>
+  {% endif %}
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
   <a href="{% url "projects_tokens_edit" project_slug=project.slug token_pk=object.pk %}">{{ object.name }}</a>
-  {% if object.has_expired %}
-    {% trans "Expired" as text %}
-    {% blocktrans trimmed asvar popup %}
-      This token has expired and can't be used anymore
-    {% endblocktrans %}
-    {% include "includes/components/config_label.html" with classes="red" icon="fa-solid fa-circle-exclamation" text=text popup=popup %}
-  {% endif %}
   <div class="sub header">
     <code>{{ object.prefix }}.****</code>
   </div>
@@ -85,8 +83,10 @@
       {% else %}
         <div class="header">{% trans "Expires" %}</div>
       {% endif %}
-      <div class="description {% if object.has_expired %}ui red text{% endif %}">
-        {% if object.expiry_date %}
+      <div class="description">
+        {% if object.has_expired %}
+          <span class="ui red text">{{ object.expiry_date|date }}</span>
+        {% elif object.expiry_date %}
           {{ object.expiry_date|date }}
         {% else %}
           {% trans "Never" %}
