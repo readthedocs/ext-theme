@@ -63,24 +63,28 @@
 {% endblock list_item_header %}
 
 {% block list_item_meta_items %}
-  {% for permission in object.permissions %}
-    <div class="item">
-      <div class="ui basic label">{{ permission }}</div>
-    </div>
-  {% endfor %}
   <div class="item">
-    {% if object.expiry_date %}
-      {% if object.has_expired %}
-        {% blocktrans trimmed with date=object.expiry_date|date %}
-          Expired on {{ date }}
-        {% endblocktrans %}
-      {% else %}
-        {% blocktrans trimmed with date=object.expiry_date|date %}
-          Expires on {{ date }}
-        {% endblocktrans %}
-      {% endif %}
-    {% else %}
-      {% trans "Never expires" %}
-    {% endif %}
+    {% for permission in object.permissions %}
+      <div class="ui basic label">{{ permission }}</div>
+    {% endfor %}
   </div>
 {% endblock list_item_meta_items %}
+
+{% block list_item_extra_items %}
+  <div class="item">
+    <div class="content">
+      {% if object.has_expired %}
+        <div class="header">{% trans "Expired" %}</div>
+      {% else %}
+        <div class="header">{% trans "Expires" %}</div>
+      {% endif %}
+      <div class="description">
+        {% if object.expiry_date %}
+          {{ object.expiry_date|date }}
+        {% else %}
+          {% trans "Never" %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock list_item_extra_items %}
