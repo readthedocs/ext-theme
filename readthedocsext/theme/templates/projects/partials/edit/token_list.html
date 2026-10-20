@@ -50,12 +50,9 @@
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
-  {{ object.name }}
+  <a href="{% url "projects_tokens_detail" project_slug=project.slug token_prefix=object.prefix %}">{{ object.name }}</a>
   <div class="sub header">
     <code>{{ object.prefix }}...</code>
-    {% if object.description %}
-      <div>{{ object.description }}</div>
-    {% endif %}
   </div>
 {% endblock list_item_header %}
 

@@ -1,0 +1,80 @@
+{% extends "projects/token_list.html" %}
+
+{% load trans blocktrans from i18n %}
+
+{% block project_edit_content_subheader %}
+  <div class="ui breadcrumb">
+    <a class="section" href="{% url "projects_tokens" project.slug %}">{% trans "API tokens" %}</a>
+    <span class="divider">/</span>
+    <div class="active section">{{ object.name }}</div>
+  </div>
+{% endblock project_edit_content_subheader %}
+
+{% block project_edit_content %}
+  <div class="ui segment">
+    <div class="ui relaxed list">
+      <div class="item">
+        <div class="content">
+          <div class="header">{% trans "Name" %}</div>
+          <div class="description">{{ object.name }}</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="content">
+          <div class="header">{% trans "Description" %}</div>
+          <div class="description">
+            {% if object.description %}
+              {{ object.description }}
+            {% else %}
+              <span class="ui grey text">{% trans "No description" %}</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="content">
+          <div class="header">{% trans "Prefix" %}</div>
+          <div class="description">
+            <code>{{ object.prefix }}...</code>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="content">
+          <div class="header">{% trans "Permissions" %}</div>
+          <div class="description">
+            {% for permission in object.permissions %}
+              <div class="ui basic label">{{ permission }}</div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="content">
+          <div class="header">{% trans "Created" %}</div>
+          <div class="description">{{ object.created|date }}</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="content">
+          <div class="header">{% trans "Expiration" %}</div>
+          <div class="description">
+            {% if object.expiry_date %}
+              {% if object.has_expired %}
+                {% blocktrans trimmed with date=object.expiry_date|date %}
+                  Expired on {{ date }}
+                {% endblocktrans %}
+              {% else %}
+                {% blocktrans trimmed with date=object.expiry_date|date %}
+                  Expires on {{ date }}
+                {% endblocktrans %}
+              {% endif %}
+            {% else %}
+              {% trans "Never expires" %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock project_edit_content %}
