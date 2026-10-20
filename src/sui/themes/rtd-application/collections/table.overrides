@@ -143,6 +143,34 @@
   }
 }
 
+/*
+ * Raw log variant
+ * ===============
+ *
+ * Same command table with every command expanded, no expander, and the
+ * metadata line from the TXT log above each command.
+ *
+ * .. code:: html
+ *
+ *     <div class="ui command raw table">
+ *       ...
+ *     </div>
+ */
+.ui.ui.ui.command.raw.table {
+  tr.command > td > code {
+    cursor: unset;
+
+    &.info {
+      display: block;
+    }
+  }
+
+  // Space out commands, there is no collapsed output to separate them
+  tbody:not(:first-child) > tr.command > td {
+    padding-top: 1em;
+  }
+}
+
 // Don't collapse labels inside model listing tables
 .ui.ui.ui.stacking.table .ui.list > .item > .ui.label {
   white-space: nowrap;

@@ -15,3 +15,14 @@
     }
   }
 });
+
+// Nested link inside the build detail "Raw log" item, opens the plain text log
+.ui.menu .item > a.raw.log.txt {
+  margin-left: 0.5em;
+  color: inherit;
+  opacity: 0.6;
+
+  &:hover {
+    opacity: 1;
+  }
+}
