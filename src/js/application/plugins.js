@@ -461,45 +461,6 @@ export const semanticui = {
 };
 
 /**
- * Detect headless and automated browsers, which should not be tracked
- *
- * Bots and scrapers driving a real browser engine execute our JS and would
- * otherwise show up as pageviews. Plausible's own ``script.js`` skips these
- * browsers, but the ``plausible-tracker`` library does not, so the same checks
- * are replicated here. Set ``window.__plausible`` to force tracking from an
- * automated browser, for example when testing.
- */
-export function isAutomatedBrowser() {
-  const automated =
-    window._phantom ||
-    window.__nightmare ||
-    window.navigator.webdriver ||
-    window.Cypress;
-  return Boolean(automated) && !window.__plausible;
-}
-
-/**
- * Track a pageview only once the page is visible to the user
- *
- * Browsers prerender and prefetch pages that the user may never open. Delaying
- * the pageview until the page becomes visible avoids counting these, matching
- * the behavior of Plausible's own ``script.js``.
- */
-export function trackPageviewWhenVisible(trackPageview) {
-  if (document.visibilityState === "visible") {
-    trackPageview();
-    return;
-  }
-  const onVisible = () => {
-    if (document.visibilityState === "visible") {
-      document.removeEventListener("visibilitychange", onVisible);
-      trackPageview();
-    }
-  };
-  document.addEventListener("visibilitychange", onVisible);
-}
-
-/**
  * Plausible tracking module
  *
  * This reuses jQuery to provide explicit tracking of events at Plausible. To
@@ -520,23 +481,17 @@ export function trackPageviewWhenVisible(trackPageview) {
  * In the case of a link with a ``href`` attribute, the link click event will
  * continue after all events have been tracked at Plausible, or after a 1s
  * timeout passes.
- *
- * Automated browsers are not tracked, see :func:`isAutomatedBrowser`.
  */
 function jqueryPlausible(domain, debug = false) {
-  if (isAutomatedBrowser()) {
-    console.debug("Plausible: ignoring automated browser");
-    return this;
-  }
-
   let plausibleSettings = { domain: domain };
   if (debug === true) {
     plausibleSettings.trackLocalhost = true;
   }
-  const { trackEvent, trackPageview } = Plausible(plausibleSettings);
+  const { trackEvent } = Plausible(plausibleSettings);
+  const { trackPageview } = Plausible(plausibleSettings);
 
-  // Track pageview for all pages, once the page is actually shown to the user
-  trackPageviewWhenVisible(trackPageview);
+  // Track pageview for all pages
+  trackPageview();
 
   return this.each((index, elem) => {
     // ``data-analytics`` is used on the website, but we added some more
