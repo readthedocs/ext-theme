@@ -64,7 +64,7 @@
 
 {% block list_item_meta_items %}
   <div class="item">
-    {% for permission in object.permissions %}
+    {% for permission in object.get_permissions_display %}
       <div class="ui basic label">{{ permission }}</div>
     {% endfor %}
   </div>
