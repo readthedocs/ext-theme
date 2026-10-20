@@ -149,7 +149,7 @@
   {% endif %}
 
   {% if not project.supports_multiple_versions and object.slug != project.default_version %}
-    {% trans "Not served" context "Version is not served" as text %}
+    {% trans "Unpublished" context "Version is built but not served" as text %}
     {% blocktrans trimmed with version=object.verbose_name default_version=project.default_version asvar popup %}
       Version {{ version }} is not served. Single version projects only serve the default version, {{ default_version }}
     {% endblocktrans %}
