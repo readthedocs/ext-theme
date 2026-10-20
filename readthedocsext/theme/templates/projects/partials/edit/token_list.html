@@ -63,6 +63,15 @@
 {% endblock list_item_header %}
 
 {% block list_item_meta_items %}
+  {% if object.has_expired %}
+    {% trans "Expired" as text %}
+    {% blocktrans trimmed asvar popup %}
+      This token has expired and can't be used anymore
+    {% endblocktrans %}
+    <div class="item">
+      {% include "includes/components/config_label.html" with classes="red" icon="fa-solid fa-circle-exclamation" text=text popup=popup %}
+    </div>
+  {% endif %}
   <div class="item">
     {% for permission in object.permissions %}
       <div class="ui basic label">{{ permission }}</div>
@@ -78,7 +87,7 @@
       {% else %}
         <div class="header">{% trans "Expires" %}</div>
       {% endif %}
-      <div class="description">
+      <div class="description {% if object.has_expired %}ui red text{% endif %}">
         {% if object.expiry_date %}
           {{ object.expiry_date|date }}
         {% else %}

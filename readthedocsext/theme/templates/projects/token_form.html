@@ -18,6 +18,18 @@
 
 {% block project_edit_content %}
   {% if object %}
+    {% if object.has_expired %}
+      <div class="ui icon error message">
+        <i class="fa-solid fa-circle-exclamation icon"></i>
+        <div class="content">
+          {% blocktrans trimmed %}
+            This token has expired and can't be used anymore.
+            Create a new token to keep uploading documentation.
+          {% endblocktrans %}
+        </div>
+      </div>
+    {% endif %}
+
     <form class="ui form" method="post" action=".">
       {% csrf_token %}
       {{ form|crispy }}
