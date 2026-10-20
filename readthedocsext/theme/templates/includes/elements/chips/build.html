@@ -3,7 +3,8 @@
 {% load naturaltime from humanize %}
 
 {% block chip_view_params %}
-  '{% url "projects-builds-detail" project.slug build.pk %}'
+  '{% url "projects-builds-detail" project.slug build.pk %}',
+  '{% url "projects-builds-notifications-list" project.slug build.pk %}'
 {% endblock chip_view_params %}
 
 {% block chip_url %}
@@ -44,7 +45,20 @@
 {% endblock popupcard_meta %}
 
 {% block popupcard_content %}
-  {% if build.error %}<p>{{ build.error }}</p>{% endif %}
+  {% comment %}
+    Build notifications are fetched on hover, see ``PopupcardView``.
+    Only the message is shown here, not the full ``readthedocs-notification`` element.
+  {% endcomment %}
+  <!-- ko foreach: $parent.notifications -->
+  <!-- ko if: message -->
+  <p>
+    <i class="icon" data-bind="class: 'fad ' + message.icon_classes"></i>
+    <strong data-bind="html: message.header"></strong>
+    <br>
+    <span data-bind="html: message.body"></span>
+  </p>
+  <!-- /ko -->
+  <!-- /ko -->
 {% endblock popupcard_content %}
 
 {% block popupcard_extra %}
