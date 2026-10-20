@@ -57,21 +57,19 @@
 
 {% block list_item_header %}
   <a href="{% url "projects_tokens_edit" project_slug=project.slug token_pk=object.pk %}">{{ object.name }}</a>
+  {% if object.has_expired %}
+    {% trans "Expired" as text %}
+    {% blocktrans trimmed asvar popup %}
+      This token has expired and can't be used anymore
+    {% endblocktrans %}
+    {% include "includes/components/config_label.html" with classes="red" icon="fa-solid fa-circle-exclamation" text=text popup=popup %}
+  {% endif %}
   <div class="sub header">
     <code>{{ object.prefix }}.****</code>
   </div>
 {% endblock list_item_header %}
 
 {% block list_item_meta_items %}
-  {% if object.has_expired %}
-    {% trans "Expired" as text %}
-    {% blocktrans trimmed asvar popup %}
-      This token has expired and can't be used anymore
-    {% endblocktrans %}
-    <div class="item">
-      {% include "includes/components/config_label.html" with classes="red" icon="fa-solid fa-circle-exclamation" text=text popup=popup %}
-    </div>
-  {% endif %}
   <div class="item">
     {% for permission in object.permissions %}
       <div class="ui basic label">{{ permission }}</div>
