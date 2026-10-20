@@ -1,5 +1,7 @@
 import { expect } from "@open-wc/testing";
 
+import jquery from "jquery";
+
 import { Application } from "../application";
 import { ApplicationView } from "../application/views";
 
@@ -30,5 +32,28 @@ describe("Application", () => {
     expect(config.webpack_public_path).to.be.undefined;
     expect(config.debug).to.be.true;
     expect(window.__webpack_public_path).to.be.undefined;
+  });
+
+  it("only tracks analytics when enabled in site configuration", () => {
+    document.body.innerHTML = `
+      <script type="application/json" id="site-config">
+        {"analytics_enabled": false}
+      </script>
+    `;
+    const app = new Application();
+    app.load_config();
+    app.configure_plugins();
+    let calls = 0;
+    jquery.fn.plausible = function () {
+      calls++;
+      return this;
+    };
+
+    app.add_jquery_plugins();
+    expect(calls).to.equal(0);
+
+    app.config.analytics_enabled = true;
+    app.add_jquery_plugins();
+    expect(calls).to.equal(1);
   });
 });

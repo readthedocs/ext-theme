@@ -59,14 +59,20 @@ def do_webpack_static(parser, token):
     return WebpackStaticNode.handle_token(parser, token)
 
 
-@register.simple_tag(name="settings_dashboard")
-def settings_dashboard():
+@register.simple_tag(name="settings_dashboard", takes_context=True)
+def settings_dashboard(context):
     """
     Configure dashboard from application settings.
 
     This uses application settings and passes a dictionary to templates, for use
     in a `json_script` filter. The site JS loads this JSON configuration.
     """
+    # Only track logged in users. Anonymous traffic to the dashboard is mostly
+    # crawlers, which inflates our Plausible usage without telling us anything.
+    request = context.get("request")
+    user = getattr(request, "user", None)
+    analytics_enabled = bool(user is not None and user.is_authenticated)
+
     # Prefix for static URLs, either from Webpack dev server or the standard
     # static URL
     webpack_server = getattr(settings, "RTD_EXT_THEME_DEV_SERVER", None)
@@ -78,6 +84,7 @@ def settings_dashboard():
         "webpack_public_path": f"{public_path_prefix}/readthedocsext/theme/",
         "production_domain": settings.PRODUCTION_DOMAIN,
         "sentry": getattr(settings, "SENTRY_BROWSER", {}),
+        "analytics_enabled": analytics_enabled,
     }
 
 
