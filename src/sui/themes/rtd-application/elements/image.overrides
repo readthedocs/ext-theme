@@ -1,5 +1,15 @@
-// Documented in the stylesheet reference:
-// https://docs.ops.verbthenouns.com/projects/ext-theme/en/latest/api/stylesheets.html#avatar-overlapping-variant
+/*
+ * Avatar overlapping variant
+ * ==========================
+ *
+ * Used to create stacking avatar bubbles for maintainer and team member lists.
+ *
+ * .. code:: html
+ *
+ *     <div class="ui overlapping avatar images">
+ *       <img class="ui image" src="..." />
+ *     </div>
+ */
 .ui.overlapping.avatar.images {
   margin-left: 0.25rem;
   > .ui.image,
@@ -72,8 +82,24 @@ readthedocs-avatar.ui.image {
   background: @white;
 }
 
-// Documented in the stylesheet reference:
-// https://docs.ops.verbthenouns.com/projects/ext-theme/en/latest/api/stylesheets.html#labeled-image-variant
+/*
+ * Labeled image variant
+ * =====================
+ *
+ * An image with a label next to it, used for the logo and site name on the
+ * entrance pages. The stacked variant puts the label under the right edge of
+ * the image instead, tucked into the space below it, so the header keeps the
+ * logo at full size without growing in either direction.
+ *
+ * .. code:: html
+ *
+ *     <a class="ui labeled image" href="...">
+ *       <img class="ui image" src="..." />
+ *       <span class="ui label">Community</span>
+ *     </a>
+ *
+ *     <a class="ui stacked labeled image" href="...">...</a>
+ */
 .ui.labeled.image {
   display: inline-flex;
   align-items: center;

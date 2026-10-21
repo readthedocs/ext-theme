@@ -1,6 +1,36 @@
-{% comment %}
-  Documented in the template API reference:
-  https://docs.ops.verbthenouns.com/projects/ext-theme/en/latest/api/templates.html#build-name
+{% comment "rst" %}
+
+  Build name
+  ==========
+
+  ``builds/includes/build_name.html``
+
+  A common include for showing the build name in a heading or title
+
+  This is a more complex heading than other elements. It uses a breadcrumb to
+  show the version the build was for, as well as the type of build in the case
+  that build is for a pull request version.
+
+  When used as a page title, on the build detail page, show some extra text and
+  nested breadcrumbs that we don't need to show in the build listing. This
+  gives some UI to link back to the build list or the version list. Normally,
+  the whole breadcrumb is linked as single link.
+
+  Template parameters
+  -------------------
+
+  .. describe:: build
+
+     The build instance to generate a name/header for.
+
+  .. describe:: is_page_title
+
+      **Boolean, default=False**. Add full build breadcrumbs and link each
+      section separately. This is used in the build detail page, where we want
+      the breadcrumbs to act more like breadcrumbs and want to link back to the
+      list of version builds. On the build listing page, we only want to link
+      to the build detail page for the build.
+
 {% endcomment %}
 
 {% load blocktrans trans from i18n %}
