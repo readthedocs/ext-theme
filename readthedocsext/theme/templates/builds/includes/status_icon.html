@@ -1,43 +1,9 @@
-{% load i18n %}
-
-{% comment "rst" %}
-
-  Build status icon
-  =================
-
-  This is the common icon used in a number of parts of the UI. It has two modes
-  of operation: as a static template, when the build instance is finished, and as
-  a partial Knockout view, when the build is in progress.
-
-  Template parameters:
-
-  build
-    The build instance for the icon.
-
-  size
-    Icon size class. Set to an empty string to use the default for the parent
-    element, default ``small``.
-
-  color
-    Normally configured dynamically, based on build state/status. Can be overridden
-    with this parameter however, if the icon is in an inverted element for example.
-
-  circular
-    Use an inverted circular icon, default ``False``.
-
-  classes
-    Additional class for the icon, default ``None``
-
-  data_bind
-    Add the Knockout view data binding if the build has not finished yet. This
-    is only really useful for views that use the build API.
-
-    This expects a response directly from the APIv3 build endpoint. You can mock
-    this data structure with ``<span data-bind="with: {status: {code: ... }}">``
-
+{% comment %}
+  Documented in the template API reference:
+  https://docs.ops.verbthenouns.com/projects/ext-theme/en/latest/api/templates.html#build-status-icon
 {% endcomment %}
 
-{# fmt:off #}
+{# djlint:off #}
 <i class="{% spaceless %}
 
   ui icon
@@ -114,4 +80,4 @@
   }
 
 {% endspaceless %}"{% endif %}></i>
-{# fmt:on #}
+{# djlint:on #}

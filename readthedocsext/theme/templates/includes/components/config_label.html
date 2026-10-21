@@ -1,35 +1,8 @@
 {% load trans from i18n %}
 
-{% comment "rst" %}
-  config_label
-  ============
-
-  This is used in list views, along the header line of each item. This is meant
-  to describe how the item is configured, where the second line in these list
-  views describes metadata about the item, if any.
-
-  This include takes several optional arguments on the include call:
-
-  .. describe:: icon
-
-    The icon class to use in the label
-
-  .. describe:: text
-
-    The text of the label, should be translated
-
-  .. describe:: url
-
-    URL that the lable can lead to
-
-  .. describe:: popup
-
-    The text in the popup, also used for ARIA labels
-
-  .. describe:: classes
-
-    Additional classes to apply to the label
-
+{% comment %}
+  Documented in the template API reference:
+  https://docs.ops.verbthenouns.com/projects/ext-theme/en/latest/api/templates.html#config-label
 {% endcomment %}
 
 {% with tag_name=url|yesno:"a,span" %}

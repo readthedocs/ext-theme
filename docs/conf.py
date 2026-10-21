@@ -19,7 +19,6 @@ version = release
 
 extensions = [
     "docext",
-    "sphinx.ext.autodoc",
     "sphinx_js",
 ]
 
@@ -27,11 +26,6 @@ templates_path = ["_templates"]
 html_static_path = ["_static"]
 
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
-
-autoanysrc_analyzers = {
-    "html": "docext.DjangoTemplateAnalyzer",
-    "css": "docext.CSSAnalyzer",
-}
 
 js_source_path = "../src/js"
 jsdoc_config_path = "jsdoc.json"
