@@ -36,6 +36,7 @@
 {% block list_item_right_buttons %}
   <a class="ui icon button"
      href="{% url "projects_tokens_edit" project_slug=project.slug token_pk=object.pk %}"
+     aria-label="{% blocktrans with name=object.name %}Edit token {{ name }}{% endblocktrans %}"
      data-content="{% trans "Edit" %}">
     <i class="fa-solid fa-wrench icon"></i>
   </a>
