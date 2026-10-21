@@ -42,7 +42,7 @@
                value="{{ object.prefix }}.****"
                readonly>
       </div>
-      <div class="two fields">
+      <div class="three fields">
         <div class="field">
           <label for="token-created">{% trans "Created" %}</label>
           <input type="text"
@@ -50,16 +50,6 @@
                  value="{{ object.created|date }}"
                  readonly>
         </div>
-        <div class="field">
-          <label for="token-created-by">{% trans "Created by" %}</label>
-          {% trans "Unknown" as unknown_user %}
-          <input type="text"
-                 id="token-created-by"
-                 value="{{ object.created_by.username|default:unknown_user }}"
-                 readonly>
-        </div>
-      </div>
-      <div class="two fields">
         <div class="field">
           <label for="token-expiration">{% trans "Expiration" %}</label>
           {% if object.expiry_date %}
