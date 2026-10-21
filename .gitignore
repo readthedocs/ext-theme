@@ -19,3 +19,4 @@ docs/out/
 
 # VS code generated files
 .vscode/
+.venv
