@@ -90,4 +90,18 @@
       </div>
     </div>
   </div>
+  <div class="item">
+    <div class="content">
+      <div class="header">{% trans "Last used" %}</div>
+      <div class="description">
+        {% if object.last_used_at %}
+          {% blocktrans trimmed with time=object.last_used_at|timesince %}
+            {{ time }} ago
+          {% endblocktrans %}
+        {% else %}
+          {% trans "Never" %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
 {% endblock list_item_extra_items %}

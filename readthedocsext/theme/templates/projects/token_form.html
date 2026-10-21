@@ -51,6 +51,16 @@
                  readonly>
         </div>
         <div class="field">
+          <label for="token-created-by">{% trans "Created by" %}</label>
+          {% trans "Unknown" as unknown_user %}
+          <input type="text"
+                 id="token-created-by"
+                 value="{{ object.created_by.username|default:unknown_user }}"
+                 readonly>
+        </div>
+      </div>
+      <div class="two fields">
+        <div class="field">
           <label for="token-expiration">{% trans "Expiration" %}</label>
           {% if object.expiry_date %}
             {% if object.has_expired %}
@@ -66,6 +76,17 @@
             {% trans "Never expires" as expiration %}
           {% endif %}
           <input type="text" id="token-expiration" value="{{ expiration }}" readonly>
+        </div>
+        <div class="field">
+          <label for="token-last-used">{% trans "Last used" %}</label>
+          {% if object.last_used_at %}
+            {% blocktrans trimmed with time=object.last_used_at|timesince asvar last_used %}
+              {{ time }} ago
+            {% endblocktrans %}
+          {% else %}
+            {% trans "Never" as last_used %}
+          {% endif %}
+          <input type="text" id="token-last-used" value="{{ last_used }}" readonly>
         </div>
       </div>
 
