@@ -1,7 +1,7 @@
 {% extends "projects/token_list.html" %}
 
 {% load trans blocktrans from i18n %}
-{% load crispy from crispy_forms_tags %}
+{% load crispy as_crispy_field as_crispy_errors from crispy_forms_tags %}
 {% load alter_field from ext_theme_tags %}
 
 {% block project_edit_content_subheader %}
@@ -89,7 +89,22 @@
       {% csrf_token %}
       {% alter_field form.expires_in data_bind="valueInit: expires_in" %}
       {% alter_field form.expiration_date data_bind="enable: is_custom_expiration" %}
-      {{ form|crispy }}
+
+      {# Manually reproduce the logic behind semantic-ui/uni_form.html, to only show the date with a custom expiration #}
+      <div class="ui basic fieldset segment">
+        {{ form|as_crispy_errors }}
+
+        {% for field in form %}
+          {% if field == form.expiration_date %}
+            {# Hidden until the view is bound, to avoid flashing the field #}
+            {# djlint: off H021 #}
+            <div data-bind="visible: is_custom_expiration" style="display: none">{{ field|as_crispy_field }}</div>
+            {# djlint: on H021 #}
+          {% else %}
+            {{ field|as_crispy_field }}
+          {% endif %}
+        {% endfor %}
+      </div>
 
       <input class="ui primary button"
              type="submit"
