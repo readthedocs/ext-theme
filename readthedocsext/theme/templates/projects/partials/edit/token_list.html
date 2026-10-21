@@ -62,13 +62,9 @@
   </div>
 {% endblock list_item_header %}
 
-{% block list_item_meta_items %}
-  <div class="item">
-    {% for permission in object.get_permissions_display %}
-      <div class="ui basic label">{{ permission }}</div>
-    {% endfor %}
-  </div>
-{% endblock list_item_meta_items %}
+{# Permissions are shown in the edit page, to leave more space for the name and prefix #}
+{% block list_item_meta_column %}
+{% endblock list_item_meta_column %}
 
 {% block list_item_extra_items %}
   <div class="item">
