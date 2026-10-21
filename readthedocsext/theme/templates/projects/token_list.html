@@ -25,14 +25,18 @@
           {% endblocktrans %}
         </p>
         <div class="ui fluid action input">
-          <input type="text" value="{{ created_token }}" aria-label="{% trans "New API token" %}" readonly>
+          <input type="text"
+                 value="{{ created_token }}"
+                 aria-label="{% trans "New API token" %}"
+                 readonly>
           <button type="button"
-                  class="ui icon button"
-                  aria-label="{% trans "Copy API token" %}"
-                  data-clipboard-text="{{ created_token }}"
-                  {# Translators: past tense as this shown after clicking #}
-                  data-content="{% trans "Copied!" %}">
-            <i class="fa-solid fa-clipboard icon" aria-hidden="true"></i>
+            class="ui icon button"
+            aria-label="{% trans "Copy API token" %}"
+            data-clipboard-text="{{ created_token }}"
+            {# Translators: past tense as this shown after clicking #}
+            data-content="{% trans "Copied!" %}">
+            <i class="fa-solid fa-clipboard icon" aria-hidden="true">
+            </i>
           </button>
         </div>
       </div>
