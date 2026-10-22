@@ -57,7 +57,7 @@
                  href="{% url "projects_environmentvariables" project.slug %}">{% trans "Environment variables" %}</a>
             {% endif %}
             {# API tokens are only used to upload documentation for now #}
-            {% if project.allows_direct_artifacts_upload %}
+            {% if project.allows_direct_upload %}
               <a class="item {% block project_tokens_active %}{% endblock project_tokens_active %}"
                  href="{% url "projects_tokens" project.slug %}">{% trans "API tokens" %}</a>
             {% endif %}
