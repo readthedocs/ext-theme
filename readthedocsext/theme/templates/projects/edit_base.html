@@ -33,6 +33,26 @@
           </div>
         </div>
 
+        {# Addons settings live in tabs on the addons page, link to each tab so they are discoverable #}
+        {% if project.addons.enabled %}
+          {% url "projects_addons" project.slug as addons_url %}
+          <div class="item">
+            <div class="header">{% trans "Addons" %}</div>
+            <div class="menu">
+              <a class="item" href="{{ addons_url }}#/flyout">{% trans "Flyout menu" %}</a>
+              <a class="item" href="{{ addons_url }}#/search">{% trans "Search" %}</a>
+              <a class="item" href="{{ addons_url }}#/notifications">{% trans "Notifications" %}</a>
+              <a class="item" href="{{ addons_url }}#/analytics">{% trans "Analytics" %}</a>
+              <a class="item" href="{{ addons_url }}#/docdiff">{% trans "Visual diff" %}</a>
+              <a class="item" href="{{ addons_url }}#/filetreediff">{% trans "File tree diff" %}</a>
+              <a class="item" href="{{ addons_url }}#/link-previews">{% trans "Link previews" %}</a>
+              <a class="item" href="{{ addons_url }}#/hotkeys">{% trans "Hotkeys" %}</a>
+              <a class="item" href="{{ addons_url }}#/custom-script">{% trans "Custom script" %}</a>
+              <a class="item" href="{{ addons_url }}#/advanced">{% trans "Advanced" %}</a>
+            </div>
+          </div>
+        {% endif %}
+
         <div class="item">
           <div class="header">{% trans "Building" %}</div>
           <div class="menu">
