@@ -44,7 +44,7 @@
   {% url "projects_tokens_delete" project_slug=project.slug token_pk=object.pk as form_url %}
   {% trans "Remove token" as action_text %}
   {% blocktrans trimmed asvar content_text with name=object.name %}
-    Remove token {{ name }}?
+    Remove token <code>{{ name }}</code>?
   {% endblocktrans %}
   {% blocktrans trimmed asvar warning_text %}
     This can't be undone. Anything using this token stops working immediately.
