@@ -59,8 +59,8 @@ def do_webpack_static(parser, token):
     return WebpackStaticNode.handle_token(parser, token)
 
 
-@register.simple_tag(name="settings_dashboard")
-def settings_dashboard():
+@register.simple_tag(name="settings_dashboard", takes_context=True)
+def settings_dashboard(context):
     """
     Configure dashboard from application settings.
 
@@ -78,6 +78,8 @@ def settings_dashboard():
         "webpack_public_path": f"{public_path_prefix}/readthedocsext/theme/",
         "production_domain": settings.PRODUCTION_DOMAIN,
         "sentry": getattr(settings, "SENTRY_BROWSER", {}),
+        # Only track logged in users, anonymous dashboard traffic is mostly crawlers
+        "analytics_enabled": context["request"].user.is_authenticated,
     }
 
 
