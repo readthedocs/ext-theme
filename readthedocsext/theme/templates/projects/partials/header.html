@@ -33,6 +33,25 @@ collapsed, to save visual space and can be expanded with the right label.
               {% include "includes/components/config_label.html" with icon="fa-solid fa-building" text=organization.name url=organization.get_absolute_url %}
             {% endfor %}
 
+            {# Where the documentation comes from: direct upload, a Git provider, or manual configuration #}
+            {% if project.is_direct_upload %}
+              {% include "includes/components/config_label.html" with icon="fa-solid fa-upload" text=_("Direct upload") popup=_("Built externally and uploaded") %}
+            {% elif project.is_github_app_project %}
+              {% include "includes/components/config_label.html" with icon="fa-brands fa-github" text=_("GitHub App") popup=_("Connected through the Read the Docs GitHub App") %}
+            {% elif project.remote_repository.vcs_provider == "github" %}
+              {% include "includes/components/config_label.html" with icon="fa-brands fa-github" text=_("GitHub") popup=_("Connected through GitHub OAuth") %}
+            {% elif project.remote_repository.vcs_provider == "gitlab" %}
+              {% include "includes/components/config_label.html" with icon="fa-brands fa-gitlab" text=_("GitLab") popup=_("Connected through GitLab") %}
+            {% elif project.remote_repository.vcs_provider == "bitbucket" %}
+              {% include "includes/components/config_label.html" with icon="fa-brands fa-bitbucket" text=_("Bitbucket") popup=_("Connected through Bitbucket") %}
+            {% else %}
+              {% include "includes/components/config_label.html" with icon="fa-solid fa-code-fork" text=_("Manual") popup=_("Not connected to a Git provider") %}
+            {% endif %}
+
+            {% if project.delisted %}
+              {% include "includes/components/config_label.html" with classes="red" icon="fa-solid fa-eye-slash" text=_("Delisted") popup=_("Removed from Read the Docs search and external search engines") %}
+            {% endif %}
+
             {# The dropdown action button, to swap between expanded/collapsed #}
             <a class="ui icon primary label"
                data-bind="click: toggle_collapsed"
