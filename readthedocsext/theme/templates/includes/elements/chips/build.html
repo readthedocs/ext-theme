@@ -45,20 +45,17 @@
 {% endblock popupcard_meta %}
 
 {% block popupcard_content %}
-  {% comment %}
-    Build notifications are fetched on hover, see ``PopupcardView``.
-    Only the message is shown here, not the full ``readthedocs-notification`` element.
-  {% endcomment %}
-  <!-- ko foreach: $parent.notifications -->
-  <!-- ko if: message -->
-  <p>
-    <i class="icon" data-bind="class: 'fad ' + message.icon_classes"></i>
-    <strong data-bind="html: message.header"></strong>
-    <br>
-    <span data-bind="html: message.body"></span>
-  </p>
-  <!-- /ko -->
-  <!-- /ko -->
+  {# Build notifications are fetched on hover, see ``PopupcardView``. Only the header is shown. #}
+  <div data-bind="foreach: $parent.notifications">
+    <div data-bind="if: message">
+      <div class="ui small notification message" data-bind="class: message.type">
+        <div class="header">
+          <i class="icon" data-bind="class: 'fad ' + message.icon_classes"></i>
+          <span data-bind="html: message.header"></span>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock popupcard_content %}
 
 {% block popupcard_extra %}
