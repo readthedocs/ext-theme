@@ -1,8 +1,14 @@
-{% load crispy_forms_field %}
+{% load is_checkbox from crispy_forms_field %}
 
 {% if field.is_hidden %}
   {{ field }}
 {% else %}
+  {% comment %}
+    Checkbox fields are rendered without the base field template because we
+    don't want the same label structure as normal input fields on checkboxes.
+    The labels are not over the checkbox, they are to the right side of the
+    checkbox
+  {% endcomment %}
   {% if field|is_checkbox %}
     {% include "semantic-ui/fields/checkbox.html" with field=field %}
   {% else %}

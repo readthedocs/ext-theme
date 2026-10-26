@@ -31,3 +31,10 @@ Tables
 .. autoanysrc:: tables
     :src: ../src/sui/themes/rtd-application/collections/table.overrides
     :analyzer: css
+
+Dark mode
+---------
+
+.. autoanysrc:: dark-mode
+    :src: ../src/css/dark.less
+    :analyzer: css

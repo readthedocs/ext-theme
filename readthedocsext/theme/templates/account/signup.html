@@ -1,26 +1,20 @@
 {% extends "account/login.html" %}
 
 {% load account socialaccount %}
-{% load crispy_forms_tags %}
-{% load i18n %}
+{% load crispy from crispy_forms_tags %}
+{% load trans blocktrans from i18n %}
 
 {% block head_title %}
   {% trans "Sign up" %}
 {% endblock head_title %}
 
-{% block authentication_header %}
-  {% trans "Sign up to continue" %}
-{% endblock authentication_header %}
-
-{% block authentication_vcs_text %}
-  {% trans "Connect account" %}
-{% endblock authentication_vcs_text %}
-{% block authentication_email_text %}
-  {% trans "Sign up with email" %}
-{% endblock authentication_email_text %}
-{% block authentication_header_text %}
-  {% trans "Sign up using:" %}
-{% endblock authentication_header_text %}
+{% block content_title_text %}
+  {% if USE_ORGANIZATIONS %}
+    {% trans "Sign up for Read the Docs Business" %}
+  {% else %}
+    {% trans "Sign up for Read the Docs Community" %}
+  {% endif %}
+{% endblock content_title_text %}
 
 {% block authentication_vcs %}
   {# Translators: this will read "Sign up using GitHub", where "sign up" is a verb #}

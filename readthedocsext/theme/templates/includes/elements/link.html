@@ -31,8 +31,8 @@
 
 <a href="{{ url }}"
    class="{{ class }}"
-   {% if is_external %} target="_blank"{% endif %}
-   {% if label%} data-content="{{ label }}" aria-label="{{ label }}"{% endif %}>
+   {% if is_external %}target="_blank" rel="nofollow noopener noreferrer"{% endif %}
+   {% if label %}data-content="{{ label }}" aria-label="{{ label }}"{% endif %}>
   {{ text }}
   {% if is_external %}
     <i class="fad fa-external-link small light gray middle aligned icon"></i>

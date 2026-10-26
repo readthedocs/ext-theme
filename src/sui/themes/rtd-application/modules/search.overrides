@@ -3,3 +3,99 @@
 .ui.search > .results .result .image {
   width: auto;
 }
+
+// Dark theme fixes, there are no inverted search module element so we add a
+// very basic example of this just altering some of the colors. The new
+// variables are in search.variables.
+.ui.inverted.search {
+  > .prompt {
+    background: @invertedPromptBackground;
+    color: @invertedPromptColor;
+    &:focus {
+      background: @invertedPromptFocusBackground;
+      color: @invertedPromptFocusColor;
+    }
+  }
+  > .results {
+    background: @invertedResultsBackground;
+    box-shadow: @invertedResultsBoxShadow;
+    border: @invertedResultsBorder;
+
+    .result {
+      color: @invertedResultTextColor;
+
+      &:hover {
+        background: @invertedResultHoverBackground;
+      }
+      .title {
+        color: @invertedResultTitleColor;
+      }
+      .description {
+        color: @invertedResultDescriptionColor;
+      }
+      .price {
+        color: @invertedResultPriceColor;
+      }
+      &.active {
+        background: @invertedResultActiveBackground;
+        .title {
+          color: @invertedResultActiveTitleColor;
+        }
+        .description {
+          color: @invertedResultActiveDescriptionColor;
+        }
+      }
+    }
+
+    > .message {
+      .header {
+        color: @invertedMessageHeaderColor;
+      }
+      .description {
+        color: @invertedMessageDescriptionColor;
+      }
+    }
+
+    > .action {
+      background: @invertedActionBackground;
+      color: @invertedActionColor;
+    }
+  }
+
+  .action:hover:not(div) {
+    background: @invertedActionHoverBackground;
+  }
+
+  mark {
+    background: @invertedHighlightMatchesBackground;
+    color: @invertedHighlightMatchesColor;
+  }
+}
+
+.ui.inverted.category.search {
+  > .results .category {
+    background: @invertedCategoryBackground;
+    &.active {
+      background: @invertedCategoryActiveBackground;
+      > .name {
+        color: @invertedCategoryNameActiveColor;
+      }
+    }
+    > .name {
+      background: @invertedCategoryNameBackground;
+      color: @invertedCategoryNameColor;
+    }
+    .results {
+      background: @invertedCategoryResultBackground;
+    }
+  }
+}
+
+.ui.inverted.loading.search .input > i.icon {
+  &::before {
+    border-color: @invertedLoaderFillColor;
+  }
+  &::after {
+    border-color: @invertedLoaderLineColor;
+  }
+}

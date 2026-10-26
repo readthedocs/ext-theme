@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  browser-tools: circleci/browser-tools@1.4.7
+  browser-tools: circleci/browser-tools@2.4.1
   node: circleci/node@6.3.0
 
 commands:
@@ -23,8 +23,8 @@ commands:
   run-test:
     description: "Run test suite"
     steps:
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
+      - browser-tools/install_chrome
+      - browser-tools/install_chromedriver
       - checkout
       - run: npm ci
       - run: npm test
@@ -32,23 +32,23 @@ commands:
 jobs:
   lint:
     docker:
-      - image: "cimg/python:3.11.8"
+      - image: "cimg/python:3.14"
     steps:
       - checkout
       - node/install:
-          node-version: "22.11"
+          node-version: "24.16"
       - run: npm ci
       - run: npm run lint
       - run: pip install pre-commit
       - run: pre-commit run --from-ref origin/HEAD --to-ref HEAD
   build:
     docker:
-      - image: "cimg/node:22.11"
+      - image: "cimg/node:24.16"
     steps:
       - run-build: {}
   test:
     docker:
-      - image: "cimg/node:22.11"
+      - image: "cimg/node:24.16"
     steps:
       - run-test: {}
 

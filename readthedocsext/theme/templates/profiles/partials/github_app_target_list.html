@@ -26,8 +26,7 @@
 {% block list_placeholder_text %}
   <a class="ui button"
      href="?step=revoke"
-     aria-label="{% trans "Skip this step" %}"
-     target="_blank">{% trans "Skip this step" %}</a>
+     aria-label="{% trans "Skip this step" %}">{% trans "Skip this step" %}</a>
 {% endblock list_placeholder_text %}
 
 {% block top_right_menu_items %}
@@ -75,6 +74,12 @@
       <i class="fa-solid fa-circle-check icon"></i>
       {% trans "Installed" %}
     </div>
+  {% elif object.target.has_installation %}
+    <a href="{{ object.link }}"
+       target="_blank"
+       class="ui small button"
+       data-content="{% blocktrans count count=object.repository_ids|length %}One repository requires installation{% plural %}{{ count }} repositories require installation{% endblocktrans %}"
+       data-bind="click: trackLinkClick">{% trans "Update" %}</a>
   {% else %}
     <a href="{{ object.link }}"
        target="_blank"

@@ -53,7 +53,7 @@
 
 {% block list_item_header %}
   <a href="{% url 'projects_manage' project_slug=object.child.slug %}">{{ object.child.name }}</a>
-  <a class="sub header" href="{{ object.get_absolute_url }}">{{ object.get_absolute_url|truncatechars:60 }}</a>
+  <a class="sub header" href="{{ object.get_absolute_url }}">{{ object.get_absolute_url }}</a>
 {% endblock list_item_header %}
 
 {% block list_item_meta_list %}

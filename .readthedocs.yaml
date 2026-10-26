@@ -1,11 +1,16 @@
 version: 2
 
 build:
-  os: ubuntu-22.04
+  os: ubuntu-26.04
   tools:
     # Python 3.9 is required here since we are using an old version of Sphinx
     python: "3.9"
-    nodejs: "16"
+    # TODO use 24.16 when we update our build tools
+    nodejs: "24"
+  jobs:
+    pre_install:
+      - asdf install nodejs 24.16.0
+      - asdf global nodejs 24.16.0
 
 python:
   install:

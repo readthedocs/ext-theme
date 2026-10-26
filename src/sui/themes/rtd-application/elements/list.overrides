@@ -56,6 +56,15 @@
   padding-left: 0em;
 }
 
+// Dark theme fix, there's no inverted bullet list
+.dark-theme-override({
+  .ui.bulleted.list .item:before {
+    color: @white;
+  }
+});
+
+// Some page specific styles
+
 // HTTP exchange list for integrations
 .ui.http-exchange.list {
   > .item {

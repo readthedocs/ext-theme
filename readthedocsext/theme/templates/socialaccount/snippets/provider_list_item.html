@@ -1,0 +1,33 @@
+{% load provider_login_url from socialaccount %}
+{% load blocktrans trans from i18n %}
+
+{% comment %}
+  Login or connect button for a single provider.
+
+  .. describe:: popup_position
+
+      Where to place the "Last used" popup, defaults to ``right center``.
+
+{% endcomment %}
+
+{% if allowed_providers and provider.id in allowed_providers or not allowed_providers %}
+  <form class="ui form"
+        method="post"
+        action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+    {% csrf_token %}
+
+    {# SECURITY: always use escapejs when including user input in a JS context, like data-bind #}
+    {# djlint: off D018 #}
+    <button class="ui {{ button_classes }} button"
+            data-bind="click: save_login_method.bind($data, '{{ provider.id|escapejs }}'), semanticui: { popup: popup_login_method('{{ provider.id|escapejs }}', '{{ popup_position|default:"right center" }}') }"
+            type="submit">
+      {# djlint: on #}
+
+      <i class="fa-brands fa-{{ provider.name|lower }} icon"></i>
+      {% blocktrans trimmed with provider_name=provider.app.name|default:provider.name verbiage=verbiage|default:'Connect to' %}
+        {{ verbiage }} {{ provider_name }}
+      {% endblocktrans %}
+    </button>
+
+  </form>
+{% endif %}

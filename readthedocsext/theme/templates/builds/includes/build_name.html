@@ -33,12 +33,14 @@
 
 {% endcomment %}
 
-{% load i18n %}
+{% load blocktrans trans from i18n %}
+
+{# djlint:off #}
 
 {# When not a page title, treat the entire breadcrumb as a link to the build #}
 {% if not is_page_title %}<a href="{{ build.get_absolute_url }}">{% endif %}
 <span class="ui {% if is_page_title %}large{% endif %} breadcrumb">
-  <span class="section">
+  <span class="truncating section">
       {# When used a a page title, link the sections independently #}
     {% if is_page_title %}
       <a href="{% url "projects_detail" build.project.slug %}?slug={{ build.get_version_slug }}">
@@ -62,7 +64,8 @@
     {# When used as a page title, show a section link for the filtered build list #}
     <span class="divider">/</span>
     {# Translators: this refers to a list of builds for a single project #}
-    <a class="section" href="{% url "builds_project_list" build.project.slug %}?version__slug={{ build.get_version_slug }}">
+    <a class="section"
+       href="{% url "builds_project_list" build.project.slug %}?version__slug={{ build.get_version_slug }}">
       {% trans "Builds" %}
     </a>
   {% endif %}
@@ -81,3 +84,5 @@
 </span>
 </a>
 {% if not is_page_title %}</a>{% endif %}
+
+{# djlint:on #}

@@ -1,23 +1,23 @@
 {% extends "organizations/base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load trans blocktrans from i18n %}
+{% load crispy from crispy_forms_tags %}
+{% load alter_field from ext_theme_tags %}
 
 {% block title %}
   {% blocktrans %}Create a new organization{% endblocktrans %}
-{% endblock %}
+{% endblock title %}
 
 {% block content %}
   <div class="ui very padded container">
     <div class="ui stackable centered grid">
       <div class="eight wide computer sixteen wide tablet left aligned column">
 
-        <h2 class="ui medium heading">
-          {% trans "Join or create an organization" %}
-        </h2>
+        <h2 class="ui medium heading">{% trans "Join or create an organization" %}</h2>
 
         <div class="ui segment">
-          <div class="ui link list" data-bind="semanticui: { tabmenu: {} }">
+          <div class="ui link list"
+               data-bind="semanticui: { tabs: {history: true, autoTabActivation: true} }">
             <a class="item" data-tab="empty">
               {% comment %}
                 Show nothing when the user arrives at this page.
@@ -28,9 +28,7 @@
             <a class="item" data-tab="registered">
               <i class="fad fa-building big icon"></i>
               <div class="content">
-                <div class="header">
-                  {% trans "Join an existing organization" %}
-                </div>
+                <div class="header">{% trans "Join an existing organization" %}</div>
                 <div class="description">
                   <p>
                     {% blocktrans trimmed %}
@@ -44,9 +42,7 @@
             <a class="item" data-tab="new">
               <i class="fad fa-plus big icon"></i>
               <div class="content">
-                <div class="header">
-                  {% trans "Create a new organization" %}
-                </div>
+                <div class="header">{% trans "Create a new organization" %}</div>
                 <div class="description">
                   <p>
                     {% blocktrans trimmed %}
@@ -60,9 +56,7 @@
             <a class="item" data-tab="not-sure">
               <i class="fad fa-question big icon"></i>
               <div class="content">
-                <div class="header">
-                  {% trans "I'm not sure" %}
-                </div>
+                <div class="header">{% trans "I'm not sure" %}</div>
                 <div class="description">
                   <p>
                     {% blocktrans trimmed %}
@@ -90,10 +84,23 @@
           {% endblocktrans %}
         </div>
 
-        <div class="ui tab" data-tab="new">
-          <form class="ui form" action="" method="post">
+        <div class="ui tab"
+             data-tab="new"
+             data-bind="using: new OrganizationCreateView()">
+          <form class="ui form" action="#/new" method="post">
             {% csrf_token %}
+            {% alter_field form.name data_bind="valueInit: name, textInput: name" %}
+            {% alter_field form.slug data_bind="valueInit:slug, text: slug, textInput: slug" %}
             {{ form|crispy }}
+
+            <div class="ui segment">
+              <div class="ui list">
+                <div class="item">
+                  <div class="sub header">{% trans "Example URL for a project" %}</div>
+                  <code data-bind="text: example"></code>
+                </div>
+              </div>
+            </div>
 
             <button class="ui primary button" type="submit">
               {% trans "Create organization" %}
@@ -118,9 +125,7 @@
 
           <div class="basic card">
             <div class="content">
-              <div class="header">
-                {% trans "30 day trial" %}
-              </div>
+              <div class="header">{% trans "30 day trial" %}</div>
               <div class="description">
                 {% blocktrans %}
                   No need to decide now. You can pick a plan that fits your
@@ -134,4 +139,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock content %}

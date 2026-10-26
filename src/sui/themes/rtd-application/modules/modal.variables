@@ -1,0 +1,3 @@
+// The default inverted modal is a light background, but we override this to be
+// a dark gray intead. The modal background comes from the `dimmer` module.
+@invertedDimmerCloseColor: @white;

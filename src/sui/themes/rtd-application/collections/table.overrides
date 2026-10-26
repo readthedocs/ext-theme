@@ -142,3 +142,8 @@
     }
   }
 }
+
+// Don't collapse labels inside model listing tables
+.ui.ui.ui.stacking.table .ui.list > .item > .ui.label {
+  white-space: nowrap;
+}

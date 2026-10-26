@@ -1,0 +1,5 @@
+// Dark theme fix adding a border to inverted popups, they are normally borderless
+@invertedBorderColor: @solidWhiteBorderColor;
+@invertedBorder: 1px solid @invertedBorderColor;
+@invertedArrowBoxShadow: @arrowStroke @arrowStroke 0 0 @invertedBorderColor;
+@invertedBoxShadow: @invertedFloatingShadow;

@@ -3,24 +3,108 @@ import webpack from "webpack";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 import TerserPlugin from "terser-webpack-plugin";
+import postcssFomanticDark from "postcss-fomanticui-dark";
 
-// Use export as a function to inspect `--mode`
+// Use export as a function to inspect `--mode` and to use multiple entrypoints
+// with dependencies.
 export default (env, argv) => {
-  const is_production = argv.mode == "production";
+  const promiseSite = new Promise((resolve, reject) => {
+    let config = getCommonConfig(env, argv);
+    Object.assign(config, {
+      name: "site",
+      entry: {
+        site: ["./src/css/site.less", "./src/js/site.js"],
+      },
+      // Only define one dev server configuration, you can't specify this in
+      // both entry points.
+      devServer: {
+        open: false,
+        hot: false,
+        liveReload: true,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+        devMiddleware: {
+          publicPath: "/readthedocsext/theme",
+          index: true,
+        },
+        static: {
+          directory: path.join("readthedocsext/theme"),
+          serveIndex: true,
+        },
+        allowedHosts: "all",
+        watchFiles: ["readthedocsext/theme/**/*.html"],
+        client: {
+          overlay: false,
+        },
+      },
+    });
+    resolve(config);
+  });
+  const promiseDark = new Promise((resolve, reject) => {
+    let config = getCommonConfig(env, argv);
+    Object.assign(config, {
+      name: "dark",
+      entry: {
+        dark: ["./src/css/dark.less", "./src/js/dark.js"],
+      },
+      // Depends on the CSS output of `site`, require this is built first
+      dependencies: ["site"],
+    });
+
+    // Don't use split chunks on this entry as it overwrites the site vendor
+    // bundle.
+    delete config.optimization.splitChunks;
+
+    resolve(config);
+  });
+
+  return Promise.all([promiseSite, promiseDark]);
+};
+
+// Common because it's duplicated across the two configs.
+const lessLoaderOptions = {
+  lessLogAsWarnOrErr: true,
+  lessOptions: {
+    paths: [
+      path.resolve(path.join(".")),
+      path.resolve(path.join("src/sui/")),
+      path.resolve(path.join("node_modules/@readthedocs/sui-common-theme/")),
+      path.resolve(path.join("node_modules/fomantic-ui-less/")),
+      path.resolve(
+        path.join(
+          "readthedocsext",
+          "theme",
+          "static",
+          "readthedocsext",
+          "theme",
+          "css",
+        ),
+      ),
+    ],
+  },
+};
+
+/**
+ * Common configuration shared by both the site and dark entrypoints.
+ *
+ * This is two separate configurations instead of just two separate entrypoints
+ * because the dark entrypoint compiles `dark.less` through
+ * `postcss-fomanticui-dark` to produce a standalone dark-theme overlay
+ * (`css/dark.css`). The dark entry also depends on the site entry being built
+ * first (via `dependencies: ["site"]`).
+ */
+function getCommonConfig(env, argv) {
+  const isProduction = argv.mode == "production";
 
   return {
-    entry: {
-      // LESS goes first because the output library only exports that last entry
-      // point in an entry point array
-      site: ["./src/css/site.less", "./src/js/site.js"],
-    },
     externals: {
       moment: "moment",
     },
     output: {
       filename: "js/[name].js?[contenthash]",
       chunkFilename: "js/vendors~[name].js?[contenthash]",
-      publicPath: "./",
+      publicPath: "auto",
       path: path.resolve(
         path.join(
           "readthedocsext",
@@ -32,7 +116,8 @@ export default (env, argv) => {
       ),
     },
     optimization: {
-      minimize: is_production,
+      runtimeChunk: "multiple",
+      minimize: isProduction,
       minimizer: [
         new TerserPlugin({
           // Avoids creating a `.LICENSE.txt` file
@@ -55,6 +140,13 @@ export default (env, argv) => {
         },
       },
     },
+
+    // Use filesystem for cache instead memory (default) to be re-use the cache
+    // between Docker container starts/stops. This speeds up boot time a lot.
+    cache: {
+      type: isProduction ? "memory" : "filesystem",
+    },
+
     module: {
       rules: [
         {
@@ -72,33 +164,50 @@ export default (env, argv) => {
           },
         },
         {
-          test: /\.less$/,
-          use: [
+          resource: /src[/\\]css[/\\]site\.less$/,
+          oneOf: [
             {
-              loader: MiniCssExtractPlugin.loader,
-            },
-            {
-              loader: "css-loader",
-            },
-            {
-              loader: "less-loader",
-              options: {
-                lessLogAsWarnOrErr: true,
-                lessOptions: {
-                  // LESS loader will try to load these before Webpack resolver
-                  // kicks in, which is the recommended method. These include
-                  // paths are a hack to theme.config and the theme loading
-                  // pattern. See `src/sui/theme.config` for more.
-                  paths: [
-                    path.resolve(path.join(".")),
-                    path.resolve(path.join("src/sui/")),
-                    path.resolve(
-                      path.join("node_modules/@readthedocs/sui-common-theme/"),
-                    ),
-                    path.resolve(path.join("node_modules/fomantic-ui-less/")),
-                  ],
+              // The loader used to produce the minified site.css file
+              use: [
+                {
+                  loader: MiniCssExtractPlugin.loader,
                 },
-              },
+                {
+                  loader: "css-loader",
+                },
+                {
+                  loader: "less-loader",
+                  options: lessLoaderOptions,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          resource: /src[/\\]css[/\\]dark\.less$/,
+          oneOf: [
+            {
+              // The loader used to produce the minified dark.css file
+              use: [
+                {
+                  loader: MiniCssExtractPlugin.loader,
+                },
+                {
+                  loader: "css-loader",
+                },
+                {
+                  loader: "postcss-loader",
+                  options: {
+                    postcssOptions: {
+                      plugins: [postcssFomanticDark()],
+                    },
+                  },
+                },
+                {
+                  loader: "less-loader",
+                  options: lessLoaderOptions,
+                },
+              ],
             },
           ],
         },
@@ -128,7 +237,7 @@ export default (env, argv) => {
     },
     plugins: [
       new webpack.DefinePlugin({
-        DEBUG_MODE: !is_production,
+        DEBUG_MODE: !isProduction,
       }),
       new MiniCssExtractPlugin({
         filename: "css/[name].css?[contenthash]",
@@ -144,6 +253,16 @@ export default (env, argv) => {
     resolve: {
       alias: {
         "../../theme.config": path.resolve(path.join("src/sui/theme.config")),
+        "site.css": path.resolve(
+          path.join(
+            "readthedocsext",
+            "theme",
+            "static",
+            "readthedocsext",
+            "theme",
+            "css",
+          ),
+        ),
       },
       extensions: [".less", ".js", ".json", ".overrides", ".variables"],
     },
@@ -158,26 +277,6 @@ export default (env, argv) => {
         "readthedocsext_theme.egg-info",
       ],
     },
-    devServer: {
-      open: false,
-      hot: false,
-      liveReload: true,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-      devMiddleware: {
-        publicPath: "/readthedocsext/theme",
-        index: true,
-      },
-      static: {
-        directory: path.join("readthedocsext/theme"),
-        serveIndex: true,
-      },
-      allowedHosts: "all",
-      watchFiles: ["readthedocsext/theme/**/*.html"],
-      client: {
-        overlay: false,
-      },
-    },
+    devtool: "source-map",
   };
-};
+}

@@ -11,3 +11,44 @@
   max-height: fit-content;
   overscroll-behavior: auto;
 }
+
+// Dark theme fixes
+.dark-theme-override({
+  // Not inverted selector ensures that if an element is ``class= ui inverted segment `` we
+  // aren t applying our dark theme rules to it.
+  .ui.segments:not(.inverted),
+  .ui.segments:not(.inverted) .segment,
+  .ui.segment:not(.inverted) {
+    // Use transparent background for basic segments in dark theme, mimic light
+    // theme instead of dark background.
+    background: @basicBackground;
+
+    // Bring back borders on attached segments, these are removed from inverted in FUI
+    &[class*="top attached"] {
+      border: @invertedPiledBorder;
+      border-bottom: none;
+    }
+    &[class*="bottom attached"] {
+      border: @invertedPiledBorder;
+      border-top: none;
+    }
+  }
+
+  // Less aggressive colored segment styles, mimic basic colored segments with
+  // border on the top instead of flat inverted. We only want this for segments
+  // that are `class= ui red segment `, not `class= ui inverted red segment `,
+  // so we will only do this when dark theme is active, not adjust the inverted
+  // styles.
+  each(@variationSegmentColors, {
+    @color: @value;
+    @c: @colors[@@color][color];
+    .ui.@{color}.segments:not(.inverted):not(#_),
+    .ui.@{color}.segments:not(.inverted):not(#_) .segment,
+    .ui.@{color}.segment:not(.inverted):not(#_) {
+      background-color: @invertedBackground;
+      color: @invertedTextColor;
+      border: @invertedPiledBorder;
+      border-top: 2px solid @c;
+    }
+  });
+});

@@ -28,7 +28,7 @@
 {% block list_placeholder_text %}
   <a class="ui button"
      href="https://docs.readthedocs.io/page/commercial/sharing.html"
-     target="_blank">{% trans "Learn more" %}</a>.
+     target="_blank">{% trans "Learn more" %}</a>
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
@@ -102,6 +102,18 @@
     <div class="content">
       <div class="header">{% trans "Expires" %}</div>
       <div class="description">{{ object.expires }}</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="content">
+      <div class="header">{% trans "Last used" %}</div>
+      <div class="description">
+        {% if object.last_used_at %}
+          {{ object.last_used_at|timesince }}
+        {% else %}
+          {% trans "Never" %}
+        {% endif %}
+      </div>
     </div>
   </div>
 {% endblock list_item_extra_items %}

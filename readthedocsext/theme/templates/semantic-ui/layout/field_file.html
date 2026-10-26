@@ -1,0 +1,91 @@
+{% load trans from i18n %}
+
+{% comment %}
+  File field seems to use a bound widget type that has an array of subwidgets
+  but only has a single actual widget. The Bootstrap crispy theme just iterates
+  over these widgets to get the first/only one. This might be a file field or
+  image field, so there is conditional logic for display here. The Bootstrap
+  theme used the instance data ``widget.data`` so this is following this
+  pattern.
+
+  Here's the data when the organization avatar field is rendered:
+
+    {
+      'name': 'avatar',
+      'is_hidden': False,
+      'required': False,
+      'value': <ImageFieldFile : avatars/organizations/526cf21abe15438aa0241d35013f5c36.png>,
+      'attrs': {
+        'accept': 'image/*',
+        'id': 'id_avatar',
+        'aria-describedby': 'id_avatar_helptext',
+        'disabled': False,
+        'checked': False
+      },
+      'template_name': 'django/forms/widgets/clearable_file_input.html',
+      'type': 'file',
+      'checkbox_name': 'avatar-clear',
+      'checkbox_id': 'avatar-clear_id',
+      'is_initial': True,
+      'input_text': 'Change',
+      'initial_text': 'Currently',
+      'clear_checkbox_label': 'Clear'
+    }
+
+{% endcomment %}
+
+{% for widget in field.subwidgets %}
+
+  {# Confusingly named, but ``is_initial`` signals that there is a current value/file for the file field #}
+  {% if widget.data.is_initial %}
+    <div class="ui top attached segment">
+      {# Is the field for image MIME types? Show the image if so, otherwise basic file info. #}
+      {% if widget.data.attrs.accept == "image/*" %}
+        <div class="ui basic center aligned segment">
+          <img class="ui small bordered centered image"
+               src="{{ field.value.url }}"
+               alt="{{ field.label }}" />
+          <span>{{ field.value.width }}x{{ field.value.height }}px</span>
+        </div>
+      {% else %}
+        <span class="inline field">
+          <label>{{ widget.data.initial_text }}:</label>
+          <div class="input">
+            <a href="{{ field.value.url }}" target="_blank">{{ field.value }}</a>
+          </div>
+        </span>
+      {% endif %}
+    </div>
+
+    <div class="ui bottom attached left aligned segment">
+      <div class="inline toggle field">
+        <div class="ui checkbox">
+          <input type="checkbox"
+                 name="{{ widget.data.checkbox_name }}"
+                 id="{{ widget.data.checkbox_id }}"
+                 {% if widget.attrs.disabled %}disabled{% endif %}
+                 {% if widget.attrs.checked %}checked{% endif %} />
+          <label for="{{ widget.data.checkbox_id }}">
+            {# The default text here is just "Clear", not super useful #}
+            {# widget.data.clear_checkbox_label #}
+            {% trans "Clear uploaded file" %}
+          </label>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="ui fluid file action input {{ field_class }}">
+    <input type="file"
+           id="{{ widget.data.attrs.id }}"
+           value="{{ widget.data.value }}"
+           name="{{ widget.data.name }}"
+           {% if widget.data.attrs.disabled %}disabled{% endif %} />
+
+    <label for="{{ widget.data.attrs.id }}" class="ui button">
+      <i class="fas {% if widget.data.attrs.accept == "image/*" %}fa-image{% else %}fa-upload{% endif %} icon"></i>
+      {{ widget.data.input_text }}
+    </label>
+  </div>
+
+{% endfor %}

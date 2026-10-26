@@ -1,5 +1,8 @@
-import logging
+import re
 from urllib.parse import urljoin
+
+import structlog
+from django.db.models.query import QuerySet
 
 from django import template
 from django.conf import settings
@@ -10,14 +13,15 @@ from django.templatetags.i18n import (
 )
 from django.templatetags.static import StaticNode, PrefixNode
 from django.forms import boundfield
+from allauth.socialaccount.templatetags.socialaccount import (
+    get_providers as base_get_providers,
+)
 
-
-log = logging.getLogger(__name__)
+log = structlog.get_logger(__name__)
 register = template.Library()
 
 
 class WebpackStaticNode(StaticNode):
-
     """
     Like static template tag, but for Webpack dev server assets
 
@@ -55,8 +59,8 @@ def do_webpack_static(parser, token):
     return WebpackStaticNode.handle_token(parser, token)
 
 
-@register.simple_tag(name="settings_dashboard")
-def settings_dashboard():
+@register.simple_tag(name="settings_dashboard", takes_context=True)
+def settings_dashboard(context):
     """
     Configure dashboard from application settings.
 
@@ -74,6 +78,8 @@ def settings_dashboard():
         "webpack_public_path": f"{public_path_prefix}/readthedocsext/theme/",
         "production_domain": settings.PRODUCTION_DOMAIN,
         "sentry": getattr(settings, "SENTRY_BROWSER", {}),
+        # Only track logged in users, anonymous dashboard traffic is mostly crawlers
+        "analytics_enabled": context["request"].user.is_authenticated,
     }
 
 
@@ -134,6 +140,52 @@ def get_spam_score(project):
     return spam_score(project)
 
 
+@register.simple_tag(takes_context=True)
+def get_providers(context, process="login"):
+    """
+    Adds additional app setting support and sorting to the Allauth provider list tag.
+
+    There are multiple app settings checked to determine if we show the
+    provider to the user and which order:
+
+    ``hidden`` (bool)
+        This comes from the base Allauth tag
+
+    ``hidden_on_login``/``hidden_on_connect``/``hidden_on_{process}`` (bool)
+        Hide the provider from the Allauth process view
+
+    ``priority``
+        Priority order value for list of providers, higher values are lower in priority on the list.
+
+    ``default`` (bool)
+        Always list this provider first, regardless of ``priority``
+
+    Additionally, filter out providers from the database -- applications that
+    have a ``pk`` -- these are per-user applications like SAML.
+    """
+    # The base Allauth ``get_providers`` tag filters out providers marked as hidden in our settings file.
+    providers = [
+        provider
+        for provider in base_get_providers(context)
+        if not provider.app.settings.get(f"hidden_on_{process}", False)
+        and not provider.app.pk
+    ]
+    return sorted(
+        providers,
+        key=lambda provider: (
+            not provider.app.settings.get("default", False),
+            provider.app.settings.get("priority", 100),
+        ),
+    )
+
+
+# TODO remove this after we don't need to separate the providers with a modal
+@register.simple_tag(takes_context=True)
+def get_github_providers(context, process="login"):
+    providers = get_providers(context, process)
+    return list(filter(lambda provider: "github" in provider.id, providers))
+
+
 # Simple solution to not supported "zh" language code.
 #
 # When `project.language="zh"` the Django `language_name_local` raises an exception and returns 500.
@@ -146,7 +198,7 @@ def readthedocs_language_name(lang_code):
             return language_name("zh-cn")
         return language_name(lang_code)
     except Exception:
-        log.exception("Error getting language name")
+        log.debug(f"Unknown language code.")
         return lang_code
 
 
@@ -157,7 +209,7 @@ def readthedocs_language_name_translated(lang_code):
             return language_name_translated("zh-cn")
         return language_name_translated(lang_code)
     except Exception:
-        log.exception("Error getting language name")
+        log.info("Error getting language name")
         return lang_code
 
 
@@ -168,5 +220,28 @@ def readthedocs_language_name_local(lang_code):
             return language_name_local("zh-cn")
         return language_name_local(lang_code)
     except Exception:
-        log.exception("Error getting language name")
+        log.info("Error getting language name")
         return lang_code
+
+
+@register.filter
+def is_empty(value):
+    """
+    Check if an iterable or queryset is empty.
+
+    This avoids using `not value` on a queryset, so the queryset is not evaluated.
+    """
+    if isinstance(value, QuerySet):
+        return not value.exists()
+    return not value
+
+
+@register.simple_block_tag
+def whitespaceless(content):
+    return re.sub(r"\s+", " ", content).lstrip().rstrip()
+
+
+@register.filter
+def starts_with(value, arg):
+    """Usage: {% if value|starts_with:"prefix" %}"""
+    return str(value).startswith(str(arg))
