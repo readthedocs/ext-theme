@@ -226,7 +226,7 @@ collapsed, to save visual space and can be expanded with the right label.
           <div class="ui vertical list">
             {% for maintainer in project.users.all|slice:":3" %}
               <a class="item"
-                 href="{% url "impersonate-start" uid=maintainer.pk %}"
+                 href="{{ ADMIN_URL|cut:"/admin" }}/impersonate/{{ maintainer.pk }}/"
                  target="_blank">{{ maintainer.username }}</a>
             {% endfor %}
             <a class="item"
@@ -242,7 +242,7 @@ collapsed, to save visual space and can be expanded with the right label.
                   {% with owner=organization.owners.first %}
                     {% if owner %}
                       <a class="item"
-                         href="{% url "impersonate-start" uid=owner.pk %}"
+                         href="{{ ADMIN_URL|cut:"/admin" }}/impersonate/{{ owner.pk }}/"
                          target="_blank">{{ owner.username }}</a>
                     {% endif %}
                   {% endwith %}
