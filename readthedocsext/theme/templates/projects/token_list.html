@@ -1,6 +1,6 @@
 {% extends "projects/project_edit_base.html" %}
 
-{% load trans blocktrans from i18n %}
+{% load trans from i18n %}
 
 {% block title %}
   {{ project.name }} - {% trans "API tokens" %}
@@ -14,35 +14,6 @@
 {% endblock project_edit_content_header %}
 
 {% block project_edit_content %}
-  {% if created_token %}
-    <div class="ui icon success message">
-      <i class="fa-duotone fa-key icon"></i>
-      <div class="content">
-        <div class="header">{% trans "Copy your new API token now" %}</div>
-        <p>
-          {% blocktrans trimmed %}
-            This is the only time the token is shown. Store it somewhere safe, like a secret in your CI provider.
-          {% endblocktrans %}
-        </p>
-        <div class="ui fluid action input">
-          <input type="text"
-                 value="{{ created_token }}"
-                 aria-label="{% trans "New API token" %}"
-                 readonly>
-          <button type="button"
-            class="ui icon button"
-            aria-label="{% trans "Copy API token" %}"
-            data-clipboard-text="{{ created_token }}"
-            {# Translators: past tense as this shown after clicking #}
-            data-content="{% trans "Copied!" %}">
-            <i class="fa-solid fa-clipboard icon" aria-hidden="true">
-            </i>
-          </button>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
   {% include "projects/partials/edit/token_list.html" with objects=object_list %}
 {% endblock project_edit_content %}
 
