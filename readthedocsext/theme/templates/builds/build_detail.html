@@ -4,8 +4,19 @@
 {% load is_admin from privacy_tags %}
 
 {% block title %}
-  {{ build.project.name }}
+  {% blocktrans with pk=build.pk name=build.project.name %}Build #{{ pk }} - {{ name }}{% endblocktrans %}
 {% endblock title %}
+
+{% block head_meta %}
+  {% blocktrans with pk=build.pk name=build.project.name asvar og_title %}Build #{{ pk }} - {{ name }}{% endblocktrans %}
+  {% blocktrans with result=build.get_result_display version=build.get_version_name project=build.project.name asvar og_description %}{{ result }} for {{ version }} on {{ project }}{% endblocktrans %}
+  <meta name="description" content="{{ og_description }}" />
+  <meta property="og:title" content="{{ og_title }}" />
+  <meta property="og:description" content="{{ og_description }}" />
+  <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Read the Docs" />
+{% endblock head_meta %}
 
 {% block content-header %}
   {% include "projects/partials/header.html" with builds_active="active" %}
