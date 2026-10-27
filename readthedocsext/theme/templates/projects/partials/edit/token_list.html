@@ -72,8 +72,9 @@
     <div class="content">
       {% if object.has_expired %}
         <div class="header">
-          <span data-content="{% trans "This token has expired and can't be used anymore" %}">{% trans "Expired" %}</span>
-          <i class="fad fa-circle-exclamation icon"></i>
+          {% trans "Expired" %}
+          <i class="fad fa-circle-exclamation icon"
+             data-content="{% trans "This token has expired and can't be used anymore" %}"></i>
         </div>
       {% else %}
         <div class="header">{% trans "Expires" %}</div>
