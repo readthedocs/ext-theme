@@ -79,8 +79,8 @@
         <div class="header">{% trans "Expires" %}</div>
       {% endif %}
       <div class="description">
-        {% if object.expiry_date %}
-          {{ object.expiry_date|date }}
+        {% if object.expires_at %}
+          {{ object.expires_at|date }}
         {% else %}
           {% trans "Never" %}
         {% endif %}

@@ -81,13 +81,13 @@
         </div>
         <div class="field">
           <label for="token-expiration">{% trans "Expiration" %}</label>
-          {% if object.expiry_date %}
+          {% if object.expires_at %}
             {% if object.has_expired %}
-              {% blocktrans trimmed with date=object.expiry_date|date asvar expiration %}
+              {% blocktrans trimmed with date=object.expires_at|date asvar expiration %}
                 Expired on {{ date }}
               {% endblocktrans %}
             {% else %}
-              {% blocktrans trimmed with date=object.expiry_date|date asvar expiration %}
+              {% blocktrans trimmed with date=object.expires_at|date asvar expiration %}
                 Expires on {{ date }}
               {% endblocktrans %}
             {% endif %}
