@@ -57,7 +57,20 @@ active_item
             {# djlint:off H021 #}
             <i class="fad fa-bars large icon" style="--fa-secondary-opacity: 0.8;"></i>
             {# djlint:on #}
-            <div class="menu">{% include "includes/utils/header_menus.html" %}</div>
+            <div class="menu">
+              {% if request.user.is_authenticated %}
+                {% include "includes/utils/header_menus.html" %}
+              {% else %}
+                <a class="item" href="{% url 'account_signup' %}">
+                  <i class="fa-duotone fa-user-plus icon"></i>
+                  {% trans "Sign up" %}
+                </a>
+                <a class="item" href="{% url 'account_login' %}">
+                  <i class="fa-duotone fa-sign-in icon"></i>
+                  {% trans "Log in" %}
+                </a>
+              {% endif %}
+            </div>
           </div>
         </div>
       {% endblock header_mobile_menu %}
