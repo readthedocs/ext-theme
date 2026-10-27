@@ -221,6 +221,39 @@ collapsed, to save visual space and can be expanded with the right label.
             </div>
           </div>
 
+          <h3>{% trans "Impersonate" %}</h3>
+          <div class="ui sub header">{% trans "Project maintainers" %}</div>
+          <div class="ui vertical list">
+            {% for maintainer in project.users.all|slice:":3" %}
+              <a class="item"
+                 href="{{ ADMIN_URL|cut:"/admin" }}/impersonate/{{ maintainer.pk }}/"
+                 target="_blank">{{ maintainer.username }}</a>
+            {% endfor %}
+            <a class="item"
+               href="{{ ADMIN_URL }}/auth/user/?projects={{ project.pk }}"
+               target="_blank">{% trans "View all maintainers in Django admin" %}</a>
+          </div>
+
+          {% if USE_ORGANIZATIONS %}
+            {% with organization=project.organizations.first %}
+              {% if organization %}
+                <div class="ui sub header">{% trans "Organization owner" %}</div>
+                <div class="ui vertical list">
+                  {% with owner=organization.owners.first %}
+                    {% if owner %}
+                      <a class="item"
+                         href="{{ ADMIN_URL|cut:"/admin" }}/impersonate/{{ owner.pk }}/"
+                         target="_blank">{{ owner.username }}</a>
+                    {% endif %}
+                  {% endwith %}
+                  <a class="item"
+                     href="{{ ADMIN_URL }}/auth/user/?owner_organizations={{ organization.pk }}"
+                     target="_blank">{% trans "View all owners in Django admin" %}</a>
+                </div>
+              {% endif %}
+            {% endwith %}
+          {% endif %}
+
           {% if build %}
             <h3>{% trans "Build" %}</h3>
             <div class="ui vertical list">
