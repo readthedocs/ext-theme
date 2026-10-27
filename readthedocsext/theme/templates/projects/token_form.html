@@ -1,0 +1,152 @@
+{% extends "projects/token_list.html" %}
+
+{% load trans blocktrans from i18n %}
+{% load crispy as_crispy_field as_crispy_errors from crispy_forms_tags %}
+{% load alter_field from ext_theme_tags %}
+
+{% block project_edit_content_subheader %}
+  {% if object %}
+    <div class="ui breadcrumb">
+      <a class="section" href="{% url "projects_tokens" project.slug %}">{% trans "API tokens" %}</a>
+      <span class="divider">/</span>
+      <div class="active section">{{ object.name }}</div>
+    </div>
+  {% else %}
+    {% trans "Add API token" %}
+  {% endif %}
+{% endblock project_edit_content_subheader %}
+
+{% block project_edit_content %}
+  {% if object %}
+    {% if created_token %}
+      <div class="ui icon success message">
+        <i class="fa-duotone fa-key icon"></i>
+        <div class="content">
+          <div class="header">{% trans "Copy your new API token now" %}</div>
+          <p>
+            {% blocktrans trimmed %}
+              This is the only time the token is shown. Store it somewhere safe, like a secret in your CI provider.
+            {% endblocktrans %}
+          </p>
+          <div class="ui fluid action input">
+            <input type="text"
+                   value="{{ created_token }}"
+                   aria-label="{% trans "New API token" %}"
+                   readonly>
+            <button type="button"
+              class="ui icon button"
+              aria-label="{% trans "Copy API token" %}"
+              data-clipboard-text="{{ created_token }}"
+              {# Translators: past tense as this shown after clicking #}
+              data-content="{% trans "Copied!" %}">
+              <i class="fa-solid fa-clipboard icon" aria-hidden="true">
+              </i>
+            </button>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if object.has_expired %}
+      <div class="ui icon error message">
+        <i class="fa-solid fa-circle-exclamation icon"></i>
+        <div class="content">
+          {% blocktrans trimmed %}
+            This token has expired and can't be used anymore.
+            Create a new token to replace it.
+          {% endblocktrans %}
+        </div>
+      </div>
+    {% endif %}
+
+    <form class="ui form" method="post" action=".">
+      {% csrf_token %}
+      {{ form|crispy }}
+
+      {# These can't be changed after the token is created #}
+      <div class="field">
+        <label>{% trans "Token" %}</label>
+        <div>
+          <code>{{ object.prefix }}_****</code>
+        </div>
+      </div>
+      <div class="three fields">
+        <div class="field">
+          <label>{% trans "Created" %}</label>
+          <div>{{ object.created|date }}</div>
+        </div>
+        <div class="field">
+          <label>{% trans "Expiration" %}</label>
+          <div>
+            {% if object.expires_at %}
+              {% if object.has_expired %}
+                {% blocktrans trimmed with date=object.expires_at|date %}
+                  Expired on {{ date }}
+                {% endblocktrans %}
+              {% else %}
+                {% blocktrans trimmed with date=object.expires_at|date %}
+                  Expires on {{ date }}
+                {% endblocktrans %}
+              {% endif %}
+            {% else %}
+              {% trans "Never expires" %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="field">
+          <label>{% trans "Last used" %}</label>
+          <div>
+            {% if object.last_used_at %}
+              {% blocktrans trimmed with time=object.last_used_at|timesince %}
+                {{ time }} ago
+              {% endblocktrans %}
+            {% else %}
+              {% trans "Never" %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <input class="ui primary button" type="submit" value="{% trans "Save" %}">
+    </form>
+  {% else %}
+    <div class="ui icon message">
+      <i class="fa-duotone fa-circle-exclamation icon"></i>
+      <div class="content">
+        {% blocktrans trimmed %}
+          The token is only shown once, right after you create it.
+          It gives access to this project only, with the permissions you choose.
+        {% endblocktrans %}
+      </div>
+    </div>
+
+    <form class="ui form"
+          method="post"
+          action="{% url 'projects_tokens_create' project_slug=project.slug %}"
+          data-bind="using: ProjectTokenView()">
+      {% csrf_token %}
+      {% alter_field form.expires_in data_bind="valueInit: expires_in" %}
+      {% alter_field form.expiration_date data_bind="enable: is_custom_expiration" %}
+
+      {# Manually reproduce the logic behind semantic-ui/uni_form.html, to only show the date with a custom expiration #}
+      <div class="ui basic fieldset segment">
+        {{ form|as_crispy_errors }}
+
+        {% for field in form %}
+          {% if field == form.expiration_date %}
+            {# Hidden until the view is bound, to avoid flashing the field #}
+            {# djlint: off H021 #}
+            <div data-bind="visible: is_custom_expiration" style="display: none">{{ field|as_crispy_field }}</div>
+            {# djlint: on H021 #}
+          {% else %}
+            {{ field|as_crispy_field }}
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <input class="ui primary button"
+             type="submit"
+             value="{% trans "Add API token" %}">
+    </form>
+  {% endif %}
+{% endblock project_edit_content %}

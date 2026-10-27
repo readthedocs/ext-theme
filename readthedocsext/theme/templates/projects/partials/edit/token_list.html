@@ -1,0 +1,105 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% load trans blocktrans from i18n %}
+
+{% block top_left_menu_items %}
+{% endblock top_left_menu_items %}
+
+{% block create_button %}
+  {% url "projects_tokens_create" project_slug=project.slug as create_url %}
+  {% trans "Add API token" as create_text %}
+  {% include "includes/crud/create_button.html" with url=create_url text=create_text %}
+{% endblock create_button %}
+
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-key
+{% endblock list_placeholder_icon_class %}
+{% block list_placeholder_header %}
+  {% blocktrans trimmed %}
+    No API tokens have been created yet
+  {% endblocktrans %}
+  <div class="sub header">
+    {% blocktrans trimmed %}
+      API tokens give access to this project only, with the permissions you choose.
+      Use them to upload documentation from your CI provider,
+      instead of your personal API token.
+    {% endblocktrans %}
+  </div>
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+  <a class="ui button"
+     href="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html"
+     aria-label="{% trans "Learn more about uploading documentation in our documentation" %}"
+     target="_blank">{% trans "Learn more" %}</a>
+{% endblock list_placeholder_text %}
+
+{% block list_item_right_buttons %}
+  <a class="ui icon button"
+     href="{% url "projects_tokens_edit" project_slug=project.slug token_pk=object.pk %}"
+     aria-label="{% blocktrans with name=object.name %}Edit token {{ name }}{% endblocktrans %}"
+     data-content="{% trans "Edit" %}">
+    <i class="fa-solid fa-wrench icon"></i>
+  </a>
+
+  {% url "projects_tokens_delete" project_slug=project.slug token_pk=object.pk as form_url %}
+  {% trans "Remove token" as action_text %}
+  {% blocktrans trimmed asvar content_text with name=object.name %}
+    Remove token <code>{{ name }}</code>?
+  {% endblocktrans %}
+  {% blocktrans trimmed asvar warning_text %}
+    This can't be undone. Anything using this token stops working immediately.
+  {% endblocktrans %}
+  {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text content_text=content_text warning_text=warning_text %}
+{% endblock list_item_right_buttons %}
+
+{% block list_item_icon %}
+  <i class="fa-duotone fa-key icon"></i>
+{% endblock list_item_icon %}
+
+{% block list_item_header %}
+  <a href="{% url "projects_tokens_edit" project_slug=project.slug token_pk=object.pk %}">{{ object.name }}</a>
+  <div class="sub header">
+    <code>{{ object.prefix }}_****</code>
+  </div>
+{% endblock list_item_header %}
+
+{# Permissions are shown in the edit page, to leave more space for the name and prefix #}
+{% block list_item_meta_column %}
+{% endblock list_item_meta_column %}
+
+{% block list_item_extra_items %}
+  <div class="item">
+    <div class="content">
+      {% if object.has_expired %}
+        <div class="header">
+          {% trans "Expired" %}
+          <i class="fad fa-circle-exclamation icon"
+             data-content="{% trans "This token has expired and can't be used anymore" %}"></i>
+        </div>
+      {% else %}
+        <div class="header">{% trans "Expires" %}</div>
+      {% endif %}
+      <div class="description">
+        {% if object.expires_at %}
+          {{ object.expires_at|date }}
+        {% else %}
+          {% trans "Never" %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="content">
+      <div class="header">{% trans "Last used" %}</div>
+      <div class="description">
+        {% if object.last_used_at %}
+          {% blocktrans trimmed with time=object.last_used_at|timesince %}
+            {{ time }} ago
+          {% endblocktrans %}
+        {% else %}
+          {% trans "Never" %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock list_item_extra_items %}
