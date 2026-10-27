@@ -59,7 +59,7 @@
 {% block list_item_header %}
   <a href="{% url "projects_tokens_edit" project_slug=project.slug token_pk=object.pk %}">{{ object.name }}</a>
   <div class="sub header">
-    <code>{{ object.prefix }}.****</code>
+    <code>{{ object.prefix }}_****</code>
   </div>
 {% endblock list_item_header %}
 
@@ -72,8 +72,8 @@
     <div class="content">
       {% if object.has_expired %}
         <div class="header">
-          <span class="ui red text"
-                data-content="{% trans "This token has expired and can't be used anymore" %}">{% trans "Expired" %}</span>
+          <span data-content="{% trans "This token has expired and can't be used anymore" %}">{% trans "Expired" %}</span>
+          <i class="fad fa-circle-exclamation icon"></i>
         </div>
       {% else %}
         <div class="header">{% trans "Expires" %}</div>
