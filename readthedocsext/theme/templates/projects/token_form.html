@@ -65,47 +65,45 @@
 
       {# These can't be changed after the token is created #}
       <div class="field">
-        <label for="token-value">{% trans "Token" %}</label>
-        <input type="text"
-               id="token-value"
-               value="{{ object.prefix }}_****"
-               readonly>
+        <label>{% trans "Token" %}</label>
+        <div>
+          <code>{{ object.prefix }}_****</code>
+        </div>
       </div>
       <div class="three fields">
         <div class="field">
-          <label for="token-created">{% trans "Created" %}</label>
-          <input type="text"
-                 id="token-created"
-                 value="{{ object.created|date }}"
-                 readonly>
+          <label>{% trans "Created" %}</label>
+          <div>{{ object.created|date }}</div>
         </div>
         <div class="field">
-          <label for="token-expiration">{% trans "Expiration" %}</label>
-          {% if object.expires_at %}
-            {% if object.has_expired %}
-              {% blocktrans trimmed with date=object.expires_at|date asvar expiration %}
-                Expired on {{ date }}
+          <label>{% trans "Expiration" %}</label>
+          <div>
+            {% if object.expires_at %}
+              {% if object.has_expired %}
+                {% blocktrans trimmed with date=object.expires_at|date %}
+                  Expired on {{ date }}
+                {% endblocktrans %}
+              {% else %}
+                {% blocktrans trimmed with date=object.expires_at|date %}
+                  Expires on {{ date }}
+                {% endblocktrans %}
+              {% endif %}
+            {% else %}
+              {% trans "Never expires" %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="field">
+          <label>{% trans "Last used" %}</label>
+          <div>
+            {% if object.last_used_at %}
+              {% blocktrans trimmed with time=object.last_used_at|timesince %}
+                {{ time }} ago
               {% endblocktrans %}
             {% else %}
-              {% blocktrans trimmed with date=object.expires_at|date asvar expiration %}
-                Expires on {{ date }}
-              {% endblocktrans %}
+              {% trans "Never" %}
             {% endif %}
-          {% else %}
-            {% trans "Never expires" as expiration %}
-          {% endif %}
-          <input type="text" id="token-expiration" value="{{ expiration }}" readonly>
-        </div>
-        <div class="field">
-          <label for="token-last-used">{% trans "Last used" %}</label>
-          {% if object.last_used_at %}
-            {% blocktrans trimmed with time=object.last_used_at|timesince asvar last_used %}
-              {{ time }} ago
-            {% endblocktrans %}
-          {% else %}
-            {% trans "Never" as last_used %}
-          {% endif %}
-          <input type="text" id="token-last-used" value="{{ last_used }}" readonly>
+          </div>
         </div>
       </div>
 
