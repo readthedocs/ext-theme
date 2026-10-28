@@ -8,6 +8,40 @@
   {% trans "Log in" %}
 {% endblock head_title %}
 
+{% comment %}
+  Promo for direct upload under the login form. The sign up page overrides
+  this block with its own feature highlights.
+{% endcomment %}
+{% block content_below %}
+  <div class="center aligned nine wide computer twelve wide tablet sixteen wide mobile column">
+    <div class="ui left aligned raised segment">
+      <span class="ui {{ USE_ORGANIZATIONS|yesno:'violet,teal' }} ribbon label">
+        <i class="fa-solid fa-bullhorn icon"></i>
+        {% trans "New feature" %}
+      </span>
+
+      <div class="ui basic center aligned segment">
+        <h3 class="ui small icon header">
+          <i class="{{ USE_ORGANIZATIONS|yesno:'violet,teal' }} fa-solid fa-cloud-arrow-up icon"></i>
+          <div class="content">
+            {% trans "Direct upload" %}
+            <span class="ui tiny horizontal basic label">{% trans "Beta" %}</span>
+            <div class="sub header">
+              {% trans "Build your documentation in your own CI and upload it to Read the Docs." %}
+            </div>
+          </div>
+        </h3>
+        <a class="ui small {{ USE_ORGANIZATIONS|yesno:'violet,teal' }} button"
+           href="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html"
+           target="_blank">
+          <i class="fa-solid fa-book icon"></i>
+          {% trans "Read the guide" %}
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock content_below %}
+
 {% block content_title %}
   <div class="ui center aligned header">
     {% block content_title_text %}
