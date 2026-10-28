@@ -26,13 +26,20 @@
     </div>
     <div class="five wide computer only column">
 
-      {% comment %}
-        Include an announcement in the side bar.
-
-        The announcement template to include comes from the application view `ProjectDashboard`.
-      {% endcomment %}
-      {% if announcement %}
-        {% include announcement %}
+      {% if blog_posts %}
+        <div class="ui basic segment">
+          <h2 class="ui small header">{% trans "From our blog" %}</h2>
+          <div class="ui relaxed list">
+            {% for post in blog_posts %}
+              <div class="item">
+                <div class="content">
+                  <a class="header" href="{{ post.url }}" target="_blank">{{ post.title }}</a>
+                  <div class="description">{{ post.published|date }}</div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
       {% endif %}
 
       <div class="ui basic segment">
