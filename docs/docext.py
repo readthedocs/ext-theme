@@ -59,15 +59,15 @@ class CSSAnalyzer(CommonAnalyzer):
 def build_init(app):
     from sphinx.builders.html import StandaloneHTMLBuilder
 
-    cmd_npm = subprocess.run(["npm", "bin"], text=True, capture_output=True)
-    path_bin = Path(cmd_npm.stdout.strip())
+    # ``npm bin`` was removed in npm 9, so resolve the path ourselves
+    path_pkg = (Path(__file__).parent / "..").resolve()
+    path_bin = path_pkg / "node_modules" / ".bin"
     path_jsdoc = path_bin / "jsdoc"
     logger.info("Path for jsdoc is: %s", str(path_jsdoc))
     os.environ["PATH"] += os.pathsep + str(path_bin)
     logger.info("PATH is: %s", os.environ["PATH"])
 
     if isinstance(app.builder, StandaloneHTMLBuilder):
-        path_pkg = (Path() / "..").resolve()
         logger.info("Path for package-lock.json is: %s", str(path_pkg))
         if not path_jsdoc.exists():
             subprocess.run(["npm", "ci"], text=True, cwd=path_pkg)
