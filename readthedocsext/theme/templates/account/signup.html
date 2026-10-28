@@ -12,164 +12,144 @@
   Marketing copy under the sign up form, highlighting what the platform does.
 {% endcomment %}
 {% block content_below %}
-  <div class="center aligned fourteen wide computer sixteen wide tablet sixteen wide mobile column">
-    <div class="ui basic very padded segment">
-      {% if USE_ORGANIZATIONS %}
-        <h2 class="ui header">
-          {% trans "Decide who sees your docs" %}
-          <div class="sub header">
-            {% blocktrans trimmed %}
-              Control who can access your docs, from your internal team to the whole world.
-              Get started for free with a 30-day trial.
-            {% endblocktrans %}
-          </div>
-        </h2>
-
-        <div class="ui four column doubling stackable relaxed grid">
-          <div class="column">
-            <h4 class="ui small icon header">
-              <i class="violet fa-solid fa-lock icon"></i>
-              <div class="content">
-                {% trans "Private repository support" %}
-                <div class="sub header">
-                  {% trans "Clone private repositories using a connected GitHub, GitLab, or Bitbucket account." %}
-                </div>
-              </div>
-            </h4>
-          </div>
-          <div class="column">
-            <h4 class="ui small icon header">
-              <i class="violet fa-solid fa-shield-halved icon"></i>
-              <div class="content">
-                {% trans "Single sign-on" %}
-                <div class="sub header">
-                  {% trans "Control who has access to your documentation with integrated authentication." %}
-                </div>
-              </div>
-            </h4>
-          </div>
-          <div class="column">
-            <h4 class="ui small icon header">
-              <i class="violet fa-solid fa-users icon"></i>
-              <div class="content">
-                {% trans "Team management" %}
-                <div class="sub header">
-                  {% trans "Control access to your projects within your organization and group projects by teams." %}
-                </div>
-              </div>
-            </h4>
-          </div>
-          <div class="column">
-            <h4 class="ui small icon header">
-              <i class="violet fa-solid fa-list-check icon"></i>
-              <div class="content">
-                {% trans "Audit log" %}
-                <div class="sub header">
-                  {% trans "Track and review authentication attempts for your organization and all of your private documentation projects." %}
-                </div>
-              </div>
-            </h4>
-          </div>
-        </div>
-      {% else %}
-        <h2 class="ui header">
-          {% trans "Always free for open source and community projects" %}
-          <div class="sub header">
-            {% blocktrans trimmed %}
-              Connect your Git repository and treat docs like code.
-            {% endblocktrans %}
-          </div>
-        </h2>
-
-        <div class="ui four column doubling stackable relaxed grid">
-          <div class="column">
-            <h4 class="ui small icon header">
-              <i class="teal fa-solid fa-code-branch icon"></i>
-              <div class="content">
-                {% trans "Build automatically" %}
-                <div class="sub header">
-                  {% trans "Your documentation is rebuilt whenever a change is detected in your repository." %}
-                </div>
-              </div>
-            </h4>
-          </div>
-          <div class="column">
-            <h4 class="ui small icon header">
-              <i class="teal fa-solid fa-tags icon"></i>
-              <div class="content">
-                {% trans "Versioning" %}
-                <div class="sub header">
-                  {% trans "Build multiple versions from commits, branches, or tags in your repository." %}
-                </div>
-              </div>
-            </h4>
-          </div>
-          <div class="column">
-            <h4 class="ui small icon header">
-              <i class="teal fa-solid fa-code-pull-request icon"></i>
-              <div class="content">
-                {% trans "Preview your changes" %}
-                <div class="sub header">
-                  {% trans "Preview changes in every pull request. Reviewers see the rendered result, not raw diffs." %}
-                </div>
-              </div>
-            </h4>
-          </div>
-          <div class="column">
-            <h4 class="ui small icon header">
-              <i class="teal fa-solid fa-toolbox icon"></i>
-              <div class="content">
-                {% trans "Bring your own tools" %}
-                <div class="sub header">
-                  {% trans "Integrated support for Sphinx, MkDocs, Docusaurus, and more." %}
-                </div>
-              </div>
-            </h4>
-          </div>
-        </div>
-      {% endif %}
-    </div>
-  </div>
-
-  {# Point people who landed on the wrong site at the other one #}
-  <div class="center aligned nine wide computer twelve wide tablet sixteen wide mobile column">
+  <div class="center aligned twelve wide computer fourteen wide tablet sixteen wide mobile column">
     <div class="ui left aligned raised segment">
-      {% if USE_ORGANIZATIONS %}
-        <span class="ui teal ribbon label">{% trans "Read the Docs Community" %}</span>
-        <div class="ui basic center aligned segment">
-          <h3 class="ui small icon header">
-            <i class="teal fa-solid fa-people-group icon"></i>
-            <div class="content">
-              {% trans "Working on a free or open-source project?" %}
-              <div class="sub header">
-                {% trans "Always free for open source and community projects, with ad-supported hosting." %}
-              </div>
+      <span class="ui {{ USE_ORGANIZATIONS|yesno:'violet,teal' }} ribbon label">
+        {% trans "What's included" %}
+      </span>
+
+      <div class="ui basic center aligned segment">
+        {% if USE_ORGANIZATIONS %}
+          <h2 class="ui header">
+            {% trans "Decide who sees your docs" %}
+            <div class="sub header">
+              {% blocktrans trimmed %}
+                Control who can access your docs, from your internal team to the whole world.
+                Get started for free with a 30-day trial.
+              {% endblocktrans %}
             </div>
-          </h3>
-          <a class="ui small teal button"
-             href="https://app.readthedocs.org/accounts/signup/">
-            {% trans "Sign up for Read the Docs Community" %}
-          </a>
-        </div>
-      {% else %}
-        <span class="ui violet ribbon label">{% trans "Read the Docs Business" %}</span>
-        <div class="ui basic center aligned segment">
-          <h3 class="ui small icon header">
-            <i class="violet fa-solid fa-building icon"></i>
-            <div class="content">
-              {% trans "Hosting docs for a commercial or non-free project?" %}
-              <div class="sub header">
-                {% trans "Private repositories and documentation, with team management for your organization. Get started for free with a 30-day trial." %}
-              </div>
+          </h2>
+
+          <div class="ui four column doubling stackable relaxed grid">
+            <div class="column">
+              <h4 class="ui small icon header">
+                <i class="violet fa-solid fa-lock icon"></i>
+                <div class="content">
+                  {% trans "Private repository support" %}
+                  <div class="sub header">
+                    {% trans "Clone private repositories using a connected GitHub, GitLab, or Bitbucket account." %}
+                  </div>
+                </div>
+              </h4>
             </div>
-          </h3>
-          <a class="ui small violet button"
-             href="https://app.readthedocs.com/accounts/signup/">
-            {% trans "Sign up for Read the Docs Business" %}
-          </a>
-        </div>
-      {% endif %}
+            <div class="column">
+              <h4 class="ui small icon header">
+                <i class="violet fa-solid fa-shield-halved icon"></i>
+                <div class="content">
+                  {% trans "Single sign-on" %}
+                  <div class="sub header">
+                    {% trans "Control who has access to your documentation with integrated authentication." %}
+                  </div>
+                </div>
+              </h4>
+            </div>
+            <div class="column">
+              <h4 class="ui small icon header">
+                <i class="violet fa-solid fa-users icon"></i>
+                <div class="content">
+                  {% trans "Team management" %}
+                  <div class="sub header">
+                    {% trans "Control access to your projects within your organization and group projects by teams." %}
+                  </div>
+                </div>
+              </h4>
+            </div>
+            <div class="column">
+              <h4 class="ui small icon header">
+                <i class="violet fa-solid fa-list-check icon"></i>
+                <div class="content">
+                  {% trans "Audit log" %}
+                  <div class="sub header">
+                    {% trans "Track and review authentication attempts for your organization and all of your private documentation projects." %}
+                  </div>
+                </div>
+              </h4>
+            </div>
+          </div>
+        {% else %}
+          <h2 class="ui header">
+            {% trans "Always free for open source and community projects" %}
+            <div class="sub header">
+              {% blocktrans trimmed %}
+                Connect your Git repository and treat docs like code.
+              {% endblocktrans %}
+            </div>
+          </h2>
+
+          <div class="ui four column doubling stackable relaxed grid">
+            <div class="column">
+              <h4 class="ui small icon header">
+                <i class="teal fa-solid fa-code-branch icon"></i>
+                <div class="content">
+                  {% trans "Build automatically" %}
+                  <div class="sub header">
+                    {% trans "Your documentation is rebuilt whenever a change is detected in your repository." %}
+                  </div>
+                </div>
+              </h4>
+            </div>
+            <div class="column">
+              <h4 class="ui small icon header">
+                <i class="teal fa-solid fa-tags icon"></i>
+                <div class="content">
+                  {% trans "Versioning" %}
+                  <div class="sub header">
+                    {% trans "Build multiple versions from commits, branches, or tags in your repository." %}
+                  </div>
+                </div>
+              </h4>
+            </div>
+            <div class="column">
+              <h4 class="ui small icon header">
+                <i class="teal fa-solid fa-code-pull-request icon"></i>
+                <div class="content">
+                  {% trans "Preview your changes" %}
+                  <div class="sub header">
+                    {% trans "Preview changes in every pull request. Reviewers see the rendered result, not raw diffs." %}
+                  </div>
+                </div>
+              </h4>
+            </div>
+            <div class="column">
+              <h4 class="ui small icon header">
+                <i class="teal fa-solid fa-toolbox icon"></i>
+                <div class="content">
+                  {% trans "Bring your own tools" %}
+                  <div class="sub header">
+                    {% trans "Integrated support for Sphinx, MkDocs, Docusaurus, and more." %}
+                  </div>
+                </div>
+              </h4>
+            </div>
+          </div>
+        {% endif %}
+      </div>
     </div>
+
+    {# Point people who landed on the wrong site at the other one #}
+    <p class="ui basic vertically padded segment">
+      {% if USE_ORGANIZATIONS %}
+        {% blocktrans trimmed with url="https://app.readthedocs.org/accounts/signup/" %}
+          Working on a free or open-source project?
+          <a href="{{ url }}">Sign up for Read the Docs Community</a> instead.
+        {% endblocktrans %}
+      {% else %}
+        {% blocktrans trimmed with url="https://app.readthedocs.com/accounts/signup/" %}
+          Hosting docs for a commercial or non-free project?
+          <a href="{{ url }}">Sign up for Read the Docs Business</a> instead.
+        {% endblocktrans %}
+      {% endif %}
+    </p>
   </div>
 {% endblock content_below %}
 
