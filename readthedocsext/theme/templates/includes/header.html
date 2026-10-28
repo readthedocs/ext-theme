@@ -120,18 +120,6 @@ active_item
                 {% block header_menu_icon_menus %}
                   {% if request.user.is_authenticated %}
                     <div class="item">
-                      {# Extra divs for spacing #}
-                      <div>
-                        <div class="ui disabled wide dropdown circular basic icon button"
-                             data-bind="semanticui: {dropdown: {action: 'select', displayType: 'block'}}">
-                          <i class="fa-solid fa-bell icon"></i>
-                          {# TODO This feature doesn't do anything yet, see https://github.com/readthedocs/ext-theme/issues/16 #}
-                          {% if False %}
-                            <span class="ui floating circular red label">{{ messages|length }}</span>
-                          {% endif %}
-                          <div class="menu"></div>
-                        </div>
-                      </div>
                       <div>
                         <a class="ui circular basic icon button"
                            href="{% url 'support' %}"
