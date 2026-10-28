@@ -71,6 +71,13 @@
             </h4>
           </div>
         </div>
+
+        <p class="ui basic vertically padded segment">
+          {% blocktrans trimmed with url="https://app.readthedocs.org/accounts/signup/" %}
+            Working on a free or open-source project?
+            <a href="{{ url }}">Sign up for Read the Docs Community</a> instead.
+          {% endblocktrans %}
+        </p>
       {% else %}
         <h2 class="ui header">
           {% trans "Always free for open source and community projects" %}
@@ -127,6 +134,13 @@
             </h4>
           </div>
         </div>
+
+        <p class="ui basic vertically padded segment">
+          {% blocktrans trimmed with url="https://app.readthedocs.com/accounts/signup/" %}
+            Hosting docs for a commercial or non-free project?
+            <a href="{{ url }}">Sign up for Read the Docs Business</a> instead.
+          {% endblocktrans %}
+        </p>
       {% endif %}
     </div>
   </div>
