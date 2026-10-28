@@ -26,6 +26,10 @@
     </div>
     <div class="five wide computer only column">
 
+      {% if announcement %}
+        {% include announcement %}
+      {% endif %}
+
       {% if blog_posts %}
         <div class="ui basic segment">
           <h2 class="ui small header">{% trans "From our blog" %}</h2>
