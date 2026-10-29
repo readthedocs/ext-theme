@@ -29,9 +29,17 @@ collapsed, to save visual space and can be expanded with the right label.
         {% block project_header_labels %}
           <div class="right aligned eight wide computer eight wide tablet sixteen wide left aligned mobile middle aligned column">
             {% include "includes/components/config_label.html" with icon="fa-solid fa-language" text=project.language|upper popup=project.language|readthedocs_language_name_local %}
+            {% if project.delisted %}
+              {% include "includes/components/config_label.html" with icon="fa-solid fa-eye-slash" text=_("Unofficial") popup=_("This project is not the official source for this software's documentation") %}
+            {% endif %}
             {% for organization in project.organizations.all %}
               {% include "includes/components/config_label.html" with icon="fa-solid fa-building" text=organization.name url=organization.get_absolute_url %}
             {% endfor %}
+
+            {# Where the documentation comes from: direct upload, a Git provider, or manual configuration #}
+            {% if project.is_direct_upload %}
+              {% include "includes/components/config_label.html" with icon="fa-solid fa-upload" text=_("Direct upload") popup=_("Built externally and uploaded") %}
+            {% endif %}
 
             {# The dropdown action button, to swap between expanded/collapsed #}
             <a class="ui icon primary label"
@@ -136,25 +144,52 @@ collapsed, to save visual space and can be expanded with the right label.
             {% block project_header_repository %}
               <div class="ui sub header">{% trans "Repository" %}</div>
 
-              {% if project.remote_repository %}
-                {% with repo=project.remote_repository %}
-                  <a href="{{ repo.html_url }}" class="ui basic image nowrap label">
-                    <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
-                         src="{{ repo.avatar_url }}" />
-                    <code>{{ repo.full_name }}</code>
+              <div class="project-repository">
+                {% if project.is_github_app_project %}
+                  <i class="fa-brands fa-github icon"
+                     role="img"
+                     aria-label="{% trans "Connected through the Read the Docs GitHub App" %}"
+                     data-content="{% trans "Connected through the Read the Docs GitHub App" %}"></i>
+                {% elif project.remote_repository.vcs_provider == "github" %}
+                  <i class="fa-brands fa-github icon"
+                     role="img"
+                     aria-label="{% trans "Connected through GitHub OAuth" %}"
+                     data-content="{% trans "Connected through GitHub OAuth" %}"></i>
+                {% elif project.remote_repository.vcs_provider == "gitlab" %}
+                  <i class="fa-brands fa-gitlab icon"
+                     role="img"
+                     aria-label="{% trans "Connected through GitLab" %}"
+                     data-content="{% trans "Connected through GitLab" %}"></i>
+                {% elif project.remote_repository.vcs_provider == "bitbucket" %}
+                  <i class="fa-brands fa-bitbucket icon"
+                     role="img"
+                     aria-label="{% trans "Connected through Bitbucket" %}"
+                     data-content="{% trans "Connected through Bitbucket" %}"></i>
+                {% elif not project.is_direct_upload %}
+                  <i class="fa-solid fa-code-fork icon"
+                     role="img"
+                     aria-label="{% trans "Not connected to a Git provider" %}"
+                     data-content="{% trans "Not connected to a Git provider" %}"></i>
+                {% endif %}
+
+                {% if project.remote_repository %}
+                  {% with repo=project.remote_repository %}
+                    <a href="{{ repo.html_url }}" class="ui basic image nowrap label">
+                      <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
+                           src="{{ repo.avatar_url }}" />
+                      <code>{{ repo.full_name }}</code>
+                    </a>
+                  {% endwith %}
+                {% elif project.repo|starts_with:"https://" %}
+                  <a href="{{ project.repo }}" class="ui basic nowrap label">
+                    <code>{{ project.repo }}</code>
                   </a>
-                {% endwith %}
-              {% elif project.repo|starts_with:"https://" %}
-                <a href="{{ project.repo }}" class="ui basic nowrap label">
-                  <i class="fas fa-code-fork icon"></i>
-                  <code>{{ project.repo }}</code>
-                </a>
-              {% else %}
-                <div class="ui basic nowrap label">
-                  <i class="fas fa-code-fork icon"></i>
-                  <code>{{ project.repo }}</code>
-                </div>
-              {% endif %}
+                {% else %}
+                  <div class="ui basic nowrap label">
+                    <code>{{ project.repo }}</code>
+                  </div>
+                {% endif %}
+              </div>
             {% endblock project_header_repository %}
           </div>
         {% endblock project_header_metadata_right %}
