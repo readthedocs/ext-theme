@@ -107,24 +107,32 @@
     {% endblock build_detail_metadata %}
 
     <div class="ui attached stackable menu">
-      <a class="active item"
-         data-bind="click: show_output, css: {active: !show_raw()}">
+      {% trans "Open the plain text log in a new tab" as text_raw_log_txt %}
+      <div class="ui current dropdown item"
+           data-bind="semanticui: {dropdown: {action: 'hide'}}">
         <i class="fa-duotone fa-terminal icon"></i>
         {% trans "Output" %}
-      </a>
-      {% trans "Open raw log as plain text" as text_raw_log_txt %}
-      <div class="link item"
-           data-bind="click: show_raw_log, css: {active: show_raw()}">
-        <i class="fa-duotone fa-memo-circle-info icon"></i>
-        {% trans "Raw log" %}
-        <a class="raw log txt"
-           href="{% url "build-detail" build.pk "txt" %}"
-           target="_blank"
-           aria-label="{{ text_raw_log_txt }}"
-           title="{{ text_raw_log_txt }}"
-           data-bind="click: open_raw_log_txt, clickBubble: false">
-          <i class="fa-duotone fa-arrow-up-right-from-square small icon"></i>
-        </a>
+        <i class="fa-solid fa-caret-down small icon"></i>
+        <div class="menu">
+          <a class="item"
+             data-bind="click: show_output, css: {active: !show_raw()}">
+            <i class="fa-duotone fa-terminal icon"></i>
+            {% trans "Normal" %}
+          </a>
+          <a class="item"
+             data-bind="click: show_raw_log, css: {active: show_raw()}">
+            <i class="fa-duotone fa-memo-circle-info icon"></i>
+            {% trans "Expanded" %}
+          </a>
+          <a class="item"
+             href="{% url "build-detail" build.pk "txt" %}"
+             target="_blank"
+             title="{{ text_raw_log_txt }}"
+             data-bind="click: function() { return true; }">
+            <i class="fa-duotone fa-file-lines icon"></i>
+            {% trans "Raw log" %}
+          </a>
+        </div>
       </div>
       <a class="ui item"
          data-bind="click: toggle_debug, css: {active: show_debug()}">

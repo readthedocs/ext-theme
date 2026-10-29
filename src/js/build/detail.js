@@ -645,12 +645,6 @@ export class BuildDetailView {
     this.show_raw(true);
   }
 
-  /** Follow the link to the plain text log. Returning ``true`` keeps the
-   * default link behavior, which Knockout otherwise prevents. */
-  open_raw_log_txt() {
-    return true;
-  }
-
   /** Update all attributes and observables that depend on build state */
   update_state(state) {
     // Is build in one of the finished states?

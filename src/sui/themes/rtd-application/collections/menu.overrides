@@ -16,13 +16,11 @@
   }
 });
 
-// Nested link inside the build detail "Raw log" item, opens the plain text log
-.ui.menu .item > a.raw.log.txt {
-  margin-left: 0.5em;
-  color: inherit;
-  opacity: 0.6;
-
-  &:hover {
-    opacity: 1;
-  }
+// Dropdown items can't use ``active`` to look selected, SUI treats that class
+// as the dropdown being open. ``current`` gets the same look as an active item.
+.ui.menu .current.dropdown.item {
+  background: @activeItemBackground;
+  color: @activeItemTextColor;
+  font-weight: @activeItemFontWeight;
+  box-shadow: @activeItemBoxShadow;
 }

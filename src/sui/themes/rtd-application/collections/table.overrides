@@ -164,11 +164,6 @@
       display: block;
     }
   }
-
-  // Space out commands, there is no collapsed output to separate them
-  tbody:not(:first-child) > tr.command > td {
-    padding-top: 1em;
-  }
 }
 
 // Don't collapse labels inside model listing tables
