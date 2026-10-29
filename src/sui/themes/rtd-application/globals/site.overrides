@@ -52,3 +52,15 @@ readthedocs-menu-build-rebuild[uploaded] {
     pointer-events: auto !important;
   }
 }
+
+// Repository label in the project header, with the VCS provider icon aligned
+// to the vertical center of the label.
+.project-repository {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  > i.icon {
+    margin-right: 0.5em;
+  }
+}
