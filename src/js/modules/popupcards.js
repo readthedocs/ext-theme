@@ -6,8 +6,9 @@ import { Registry } from "../application/registry";
 export class PopupcardView {
   static view_name = "PopupcardView";
 
-  constructor(url) {
+  constructor(url, url_notifications) {
     this.url = url;
+    this.url_notifications = url_notifications;
 
     /** @observable {Boolean} Is the popup showing currently? */
     this.is_showing = ko.observable(false);
@@ -47,11 +48,15 @@ export class PopupcardView {
 
     /** @observable {Object} The response object from the API */
     this.data = ko.observable();
+    /** @observableArray {Object} Notifications from the API, if ``url_notifications`` was given */
+    this.notifications = ko.observableArray();
 
     this.promise = null;
+    this.promise_notifications = null;
   }
 
   fetch() {
+    this.fetch_notifications();
     if (!this.url) {
       // This popupcard is for a local only request, there might not be an API
       // to request from.
@@ -84,6 +89,24 @@ export class PopupcardView {
       this.is_loading(false);
       this.is_loaded(false);
     });
+  }
+
+  /** Fetch non-dismissed notifications, only once and only if a URL was given */
+  fetch_notifications() {
+    if (!this.url_notifications || this.promise_notifications) {
+      return;
+    }
+    this.promise_notifications = jquery
+      .getJSON(this.url_notifications, { state__in: "read,unread" })
+      .then((data) => {
+        this.notifications(data.results || []);
+      })
+      .catch((err) => {
+        console.debug(
+          "Error fetching notifications from API:",
+          err.responseJSON,
+        );
+      });
   }
 
   show() {
