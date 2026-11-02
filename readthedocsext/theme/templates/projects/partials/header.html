@@ -36,7 +36,6 @@ collapsed, to save visual space and can be expanded with the right label.
               {% include "includes/components/config_label.html" with icon="fa-solid fa-building" text=organization.name url=organization.get_absolute_url %}
             {% endfor %}
 
-            {# Where the documentation comes from: direct upload, a Git provider, or manual configuration #}
             {% if project.is_direct_upload %}
               {% include "includes/components/config_label.html" with icon="fa-solid fa-upload" text=_("Direct upload") popup=_("Built externally and uploaded") %}
             {% endif %}
@@ -149,13 +148,13 @@ collapsed, to save visual space and can be expanded with the right label.
                 {% if project.is_github_app_project %}
                   <i class="fa-brands fa-github icon"
                      role="img"
-                     aria-label="{% trans "Connected through the Read the Docs GitHub App" %}"
-                     data-content="{% trans "Connected through the Read the Docs GitHub App" %}"></i>
+                     aria-label="{% trans "Connected through GitHub App" %}"
+                     data-content="{% trans "Connected through GitHub App" %}"></i>
                 {% elif project.remote_repository.vcs_provider == "github" %}
                   <i class="fa-brands fa-github icon"
                      role="img"
-                     aria-label="{% trans "Connected through GitHub OAuth" %}"
-                     data-content="{% trans "Connected through GitHub OAuth" %}"></i>
+                     aria-label="{% trans "Connected through GitHub" %}"
+                     data-content="{% trans "Connected through GitHub" %}"></i>
                 {% elif project.remote_repository.vcs_provider == "gitlab" %}
                   <i class="fa-brands fa-gitlab icon"
                      role="img"
@@ -169,8 +168,8 @@ collapsed, to save visual space and can be expanded with the right label.
                 {% elif not project.is_direct_upload %}
                   <i class="fa-solid fa-code-fork icon"
                      role="img"
-                     aria-label="{% trans "Not connected to a Git provider" %}"
-                     data-content="{% trans "Not connected to a Git provider" %}"></i>
+                     aria-label="{% trans "Repository URL is manually configured" %}"
+                     data-content="{% trans "Repository URL is manually configured" %}"></i>
                 {% endif %}
                 </div>
 
