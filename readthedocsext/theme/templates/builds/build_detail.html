@@ -108,7 +108,7 @@
 
     <div class="ui attached stackable menu">
       {% trans "Open the plain text log in a new tab" as text_raw_log_txt %}
-      <div class="ui current dropdown item"
+      <div class="ui dropdown item"
            data-bind="semanticui: {dropdown: {action: 'hide'}}">
         <i class="fa-duotone fa-terminal icon"></i>
         {% trans "Output" %}
@@ -130,7 +130,7 @@
              title="{{ text_raw_log_txt }}"
              data-bind="click: function() { return true; }">
             <i class="fa-duotone fa-file-lines icon"></i>
-            {% trans "Raw log" %}
+            {% trans "Raw TXT" %}
           </a>
         </div>
       </div>
@@ -253,7 +253,7 @@
              data-bind="visible: is_loading()"></div>
 
         {% comment %}
-          The same table renders both the "Output" and the "Raw log" views.
+          The same table renders both the "Output" and the "Raw TXT" views.
           In raw mode every command is expanded, the expander and labels are
           hidden, and the metadata line from the TXT log is shown instead.
         {% endcomment %}

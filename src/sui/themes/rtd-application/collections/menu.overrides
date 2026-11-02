@@ -15,12 +15,3 @@
     }
   }
 });
-
-// Dropdown items can't use ``active`` to look selected, SUI treats that class
-// as the dropdown being open. ``current`` gets the same look as an active item.
-.ui.menu .current.dropdown.item {
-  background: @activeItemBackground;
-  color: @activeItemTextColor;
-  font-weight: @activeItemFontWeight;
-  box-shadow: @activeItemBoxShadow;
-}
