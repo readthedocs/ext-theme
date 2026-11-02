@@ -15,14 +15,14 @@
 {% block content_below %}
   <div class="center aligned nine wide computer twelve wide tablet sixteen wide mobile column">
     <div class="ui left aligned raised segment">
-      <span class="ui {{ USE_ORGANIZATIONS|yesno:'violet,teal' }} ribbon label">
+      <span class="ui primary ribbon label">
         <i class="fa-solid fa-bullhorn icon"></i>
         {% trans "New feature" %}
       </span>
 
       <div class="ui basic center aligned segment">
         <h3 class="ui small icon header">
-          <i class="{{ USE_ORGANIZATIONS|yesno:'violet,teal' }} fa-solid fa-cloud-arrow-up icon"></i>
+          <i class="primary fa-solid fa-cloud-arrow-up icon"></i>
           <div class="content">
             {% trans "Direct upload" %}
             <span class="ui tiny horizontal basic label">{% trans "Beta" %}</span>
@@ -31,7 +31,7 @@
             </div>
           </div>
         </h3>
-        <a class="ui small {{ USE_ORGANIZATIONS|yesno:'violet,teal' }} button"
+        <a class="ui small primary button"
            href="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html"
            target="_blank"
            data-analytics-events="login-direct-upload-guide">
