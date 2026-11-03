@@ -58,12 +58,9 @@
 
 {% block list_item_header %}
   <a href="{% url "projects_tokens_edit" project_slug=project.slug token_pk=object.pk %}">{{ object.name }}</a>
-  <div class="sub header">
-    <code>{{ object.prefix }}_****</code>
-  </div>
 {% endblock list_item_header %}
 
-{# Permissions are shown in the edit page, to leave more space for the name and prefix #}
+{# Permissions are shown in the edit page, to leave more space for the name #}
 {% block list_item_meta_column %}
 {% endblock list_item_meta_column %}
 
