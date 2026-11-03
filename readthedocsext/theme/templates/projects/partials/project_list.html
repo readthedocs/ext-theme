@@ -24,13 +24,13 @@
 {% block list_placeholder_header_empty %}
   {% if USE_ORGANIZATIONS and not request.user|owner_organizations and not request.user|teams %}
     {% trans "Start your 30 day trial" %}
+    <div class="sub header">{% trans "Create an organization for your company to start adding projects." %}</div>
   {% else %}
     {% trans "You don't have any projects configured yet" %}
   {% endif %}
 {% endblock list_placeholder_header_empty %}
 {% block list_placeholder_text_empty %}
   {% if USE_ORGANIZATIONS and not request.user|owner_organizations and not request.user|teams %}
-    <p>{% trans "Create an organization for your company to start adding projects." %}</p>
     <a href="{% url "organization_create" %}" class="ui primary button">{% trans "Create organization" %}</a>
   {% else %}
     <a href="https://docs.readthedocs.io/page/tutorial/"
