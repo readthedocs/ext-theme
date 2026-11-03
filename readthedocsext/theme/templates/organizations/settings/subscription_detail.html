@@ -126,9 +126,10 @@
 
     {% if stripe_subscription.status == 'trialing' %}
       <div class="ui info message">
-        {# TODO better message here #}
-        Your organization will need to upgrade to one of our paid plans soon.
-        See our plan pricing for more information.
+        {% blocktrans trimmed with pricing_url="https://about.readthedocs.com/pricing/" %}
+          Choose a <a href="{{ pricing_url }}" target="_blank">paid plan</a> before your trial ends to keep your documentation online.
+          Click <strong>Start subscription</strong> to pick a plan and add your billing details.
+        {% endblocktrans %}
       </div>
     {% endif %}
 
