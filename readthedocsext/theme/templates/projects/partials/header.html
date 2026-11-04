@@ -145,32 +145,32 @@ collapsed, to save visual space and can be expanded with the right label.
 
               <div class="project-repository">
                 <div class="ui icon nowrap label">
-                {% if project.is_github_app_project %}
-                  <i class="fa-brands fa-github icon"
-                     role="img"
-                     aria-label="{% trans "Connected through GitHub App" %}"
-                     data-content="{% trans "Connected through GitHub App" %}"></i>
-                {% elif project.remote_repository.vcs_provider == "github" %}
-                  <i class="fa-brands fa-github icon"
-                     role="img"
-                     aria-label="{% trans "Connected through GitHub" %}"
-                     data-content="{% trans "Connected through GitHub" %}"></i>
-                {% elif project.remote_repository.vcs_provider == "gitlab" %}
-                  <i class="fa-brands fa-gitlab icon"
-                     role="img"
-                     aria-label="{% trans "Connected through GitLab" %}"
-                     data-content="{% trans "Connected through GitLab" %}"></i>
-                {% elif project.remote_repository.vcs_provider == "bitbucket" %}
-                  <i class="fa-brands fa-bitbucket icon"
-                     role="img"
-                     aria-label="{% trans "Connected through Bitbucket" %}"
-                     data-content="{% trans "Connected through Bitbucket" %}"></i>
-                {% elif not project.is_direct_upload %}
-                  <i class="fa-solid fa-code-fork icon"
-                     role="img"
-                     aria-label="{% trans "Repository URL is manually configured" %}"
-                     data-content="{% trans "Repository URL is manually configured" %}"></i>
-                {% endif %}
+                  {% if project.is_github_app_project %}
+                    <i class="fa-brands fa-github icon"
+                       role="img"
+                       aria-label="{% trans "Connected through GitHub App" %}"
+                       data-content="{% trans "Connected through GitHub App" %}"></i>
+                  {% elif project.remote_repository.vcs_provider == "github" %}
+                    <i class="fa-brands fa-github icon"
+                       role="img"
+                       aria-label="{% trans "Connected through GitHub" %}"
+                       data-content="{% trans "Connected through GitHub" %}"></i>
+                  {% elif project.remote_repository.vcs_provider == "gitlab" %}
+                    <i class="fa-brands fa-gitlab icon"
+                       role="img"
+                       aria-label="{% trans "Connected through GitLab" %}"
+                       data-content="{% trans "Connected through GitLab" %}"></i>
+                  {% elif project.remote_repository.vcs_provider == "bitbucket" %}
+                    <i class="fa-brands fa-bitbucket icon"
+                       role="img"
+                       aria-label="{% trans "Connected through Bitbucket" %}"
+                       data-content="{% trans "Connected through Bitbucket" %}"></i>
+                  {% elif not project.is_direct_upload %}
+                    <i class="fa-solid fa-code-fork icon"
+                       role="img"
+                       aria-label="{% trans "Repository URL is manually configured" %}"
+                       data-content="{% trans "Repository URL is manually configured" %}"></i>
+                  {% endif %}
                 </div>
 
                 {% if project.remote_repository %}
