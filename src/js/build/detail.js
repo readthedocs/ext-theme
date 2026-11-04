@@ -88,7 +88,7 @@ class BuildCommand {
     this.finished = ko.computed(() => {
       return this.end_time() !== null;
     });
-    /** @computed {string} Command metadata line, same format as the TXT log */
+    /** @computed {string} Command metadata line, same format as the text log */
     this.info_display = ko.computed(() => {
       return (
         `start-time: ${this.start_time()}, ` +

@@ -130,7 +130,7 @@
              title="{{ text_raw_log_txt }}"
              data-bind="click: function() { return true; }">
             <i class="fa-duotone fa-file-lines icon"></i>
-            {% trans "Raw TXT" %}
+            {% trans "Raw text" %}
           </a>
         </div>
       </div>
@@ -253,9 +253,9 @@
              data-bind="visible: is_loading()"></div>
 
         {% comment %}
-          The same table renders both the "Output" and the "Raw TXT" views.
+          The same table renders both the "Output" and the "Raw text" views.
           In raw mode every command is expanded, the expander and labels are
-          hidden, and the metadata line from the TXT log is shown instead.
+          hidden, and the metadata line from the text log is shown instead.
         {% endcomment %}
         <table class="ko hidden ui small very basic compact inverted selectable command unstackable table"
                data-bind="css: { hidden: !commands(), 'single line': !is_wrapped(), raw: show_raw() }, foreach: commands">
