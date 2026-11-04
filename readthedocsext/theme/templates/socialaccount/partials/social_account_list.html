@@ -75,10 +75,17 @@
     {% blocktrans trimmed asvar content_text with username=object|get_account_username provider=object.get_provider.name %}
       Disconnect {{ provider }} account {{ username }}?
     {% endblocktrans %}
-    {% blocktrans trimmed asvar warning_text %}
-      You won't be able to log in with this account anymore, and projects
-      connected to repositories from this account might stop building automatically.
-    {% endblocktrans %}
+    {% if object.get_provider.id == "githubapp" %}
+      {% blocktrans trimmed asvar warning_text %}
+        You won't be able to log in with this account anymore.
+      {% endblocktrans %}
+    {% else %}
+      {% blocktrans trimmed asvar warning_text %}
+        You won't be able to log in with this account anymore.
+        If no other maintainer has access to a project's repository,
+        the project might stop building automatically.
+      {% endblocktrans %}
+    {% endif %}
     {% if object|can_be_disconnected %}
       {% include "includes/crud/remove_button.html" with id=object.pk form_url=form_url action_text=action_text content_text=content_text warning_text=warning_text field_name="account" field_value=object.pk %}
     {% else %}
