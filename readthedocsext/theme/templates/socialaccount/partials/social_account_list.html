@@ -73,7 +73,7 @@
     {% url "socialaccount_connections" as form_url %}
     {% trans "Disconnect account" as action_text %}
     {% blocktrans trimmed asvar content_text with username=object|get_account_username provider=object.get_provider.name %}
-      Disconnect {{ provider }} account {{ username }}?
+      Disconnect {{ provider }} account?
     {% endblocktrans %}
     {% if object.get_provider.id == "githubapp" %}
       {% blocktrans trimmed asvar warning_text %}
