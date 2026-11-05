@@ -1,9 +1,22 @@
 {% extends "base.html" %}
 
-{% load i18n %}
-{% load privacy_tags %}
+{% load blocktrans from i18n %}
+{% load get_public_projects from privacy_tags %}
 
-{% block title %}{% blocktrans with profile.user as user %}{{ user }}'s profile{% endblocktrans %}{% endblock %}
+{% block title %}
+  {% blocktrans with profile.user as user %}{{ user }}'s profile{% endblocktrans %}
+{% endblock title %}
+
+{% block head_meta %}
+  {% blocktrans with user=profile.user asvar og_title %}{{ user }}'s profile{% endblocktrans %}
+  {% blocktrans with user=profile.user asvar og_description %}{{ user }}'s projects on Read the Docs{% endblocktrans %}
+  <meta name="description" content="{{ og_description }}" />
+  <meta property="og:title" content="{{ og_title }}" />
+  <meta property="og:description" content="{{ og_description }}" />
+  <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Read the Docs" />
+{% endblock head_meta %}
 
 {% block content %}
   <div class="ui stackable computer reversed grid">
@@ -18,4 +31,4 @@
       {% include "profiles/partials/profile_project_list.html" with objects=project_list objects=public_projects %}
     </div>
   </div>
-{% endblock %}
+{% endblock content %}
