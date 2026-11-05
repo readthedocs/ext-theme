@@ -3,7 +3,8 @@
 {% load naturaltime from humanize %}
 
 {% block chip_view_params %}
-  '{% url "projects-builds-detail" project.slug build.pk %}'
+  '{% url "projects-builds-detail" project.slug build.pk %}',
+  '{% url "projects-builds-notifications-list" project.slug build.pk %}'
 {% endblock chip_view_params %}
 
 {% block chip_url %}
@@ -44,7 +45,17 @@
 {% endblock popupcard_meta %}
 
 {% block popupcard_content %}
-  {% if build.error %}<p>{{ build.error }}</p>{% endif %}
+  {# Build notifications are fetched on hover, see ``PopupcardView``. Only the header is shown. #}
+  <div data-bind="foreach: $parent.notifications">
+    <div data-bind="if: message">
+      <div class="ui small notification message" data-bind="class: message.type">
+        <div class="header">
+          <i class="icon" data-bind="class: 'fad ' + message.icon_classes"></i>
+          <span data-bind="html: message.header"></span>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock popupcard_content %}
 
 {% block popupcard_extra %}
