@@ -36,29 +36,27 @@
      target="_blank">{% trans "Learn more" %}</a>
 {% endblock list_placeholder_text %}
 
-{% block list_item_right_menu %}
-  <div class="ui right floated text menu">
-    <div class="item">
-      {% blocktrans trimmed count num=object.1 %}
-        {{ num }} query
-      {% plural %}
-        {{ num }} queries
-      {% endblocktrans %}
-    </div>
-  </div>
-{% endblock list_item_right_menu %}
+{% block list_item_icon %}
+  <i class="fa-duotone fa-magnifying-glass icon"></i>
+{% endblock list_item_icon %}
 
 {% block list_item_header %}
   {{ object.0 }}
-  <div class="sub header">
+{% endblock list_item_header %}
+
+{% block list_item_meta_items %}
+  <div class="item">
     {% blocktrans trimmed count num=object.2 %}
       {{ num }} result
     {% plural %}
       {{ num }} results
     {% endblocktrans %}
   </div>
-
-{% endblock list_item_header %}
-
-{% block list_item_meta %}
-{% endblock list_item_meta %}
+  <div class="item">
+    {% blocktrans trimmed count num=object.1 %}
+      {{ num }} query
+    {% plural %}
+      {{ num }} queries
+    {% endblocktrans %}
+  </div>
+{% endblock list_item_meta_items %}
