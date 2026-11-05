@@ -23,11 +23,11 @@
   {% if not enabled %}
     {% include "organizations/includes/feature_disabled.html" with project=project plan="Advanced" %}
   {% endif %}
-  <div class="{% if not enabled %}ui basic fitted disabled segment{% endif %}"
-       data-bind="using: ProjectSearchAnalyticsView()">
+  <div class="{% if not enabled %}ui basic fitted disabled segment{% endif %}">
 
     {% include "projects/partials/edit/search_query_list.html" with objects=queries %}
 
+    <div data-bind="using: ProjectSearchAnalyticsView()">
     <h3 class="ui small header">
       {% trans "Overview" %}
       <div class="sub header">{% trans "For the last month" %}</div>
@@ -65,6 +65,7 @@
         </script>
       </div>
     {% endif %}
+    </div>
   </div>
 {% endblock project_edit_content %}
 
