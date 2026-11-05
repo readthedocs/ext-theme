@@ -32,7 +32,8 @@
         {# Translators: Addons is a proper noun and should be capitalized #}
         {% blocktrans trimmed %}
           Addons provide features on your project's hosted documentation,
-          such as our flyout navigation menu, search, analytics, and more.
+          such as our flyout navigation menu, notifications, link previews, and more.
+          Search, pull request previews, and traffic analytics are configured from their own settings pages.
         {% endblocktrans %}
       </p>
 
@@ -40,99 +41,53 @@
       {{ form.project|as_crispy_field }}
     </div>
 
-    {% if form.enabled.value == True %}
-      <div class="ui top attached stackable centered fluid wrapping menu"
-           data-bind="semanticui: {tabs: {history: true, autoTabActivation: false}}">
-        <a class="active item" data-tab="flyout">{% trans "Flyout menu" %}</a>
-        <a class="item" data-tab="search">{% trans "Search" %}</a>
-        <a class="item" data-tab="notifications">{% trans "Notifications" %}</a>
-        <a class="item" data-tab="analytics">{% trans "Analytics" %}</a>
-        <a class="item" data-tab="docdiff">{% trans "Visual diff" %}</a>
-        <a class="item" data-tab="filetreediff">{% trans "File tree diff" %}</a>
-        <a class="item" data-tab="link-previews">{% trans "Link previews" %}</a>
-        <a class="item" data-tab="hotkeys">{% trans "Hotkeys" %}</a>
-        <a class="item" data-tab="custom-script">{% trans "Custom script" %}</a>
-        <a class="item" data-tab="advanced">{% trans "Advanced" %}</a>
-      </div>
-    {% endif %}
-
     {% comment %}
-      Conditionally render this as a bottom attached segment if Addons are enabled.
-      Otherwise, this will render all of the fields in hidden tab divs, so submit
-      and form handling work.
+      When addons are disabled the fields are still rendered, but hidden, so
+      submitting the form keeps their values.
     {% endcomment %}
-    <div {% if form.enabled.value %}class="ui bottom attached segment"{% endif %}>
+    <div {% if not form.enabled.value %}hidden{% endif %}>
 
       {% block addons_flyout %}
-        <div class="ui tab" data-tab="flyout">
-          {{ form.flyout_enabled | as_crispy_field }}
-          {{ form.flyout_sorting | as_crispy_field }}
-          {{ form.flyout_sorting_latest_stable_at_beginning | as_crispy_field }}
-          {{ form.flyout_sorting_custom_pattern | as_crispy_field }}
-          {{ form.flyout_position | as_crispy_field }}
-        </div>
+        <h3 class="ui small dividing header" id="flyout">{% trans "Flyout menu" %}</h3>
+        {{ form.flyout_enabled | as_crispy_field }}
+        {{ form.flyout_sorting | as_crispy_field }}
+        {{ form.flyout_sorting_latest_stable_at_beginning | as_crispy_field }}
+        {{ form.flyout_sorting_custom_pattern | as_crispy_field }}
+        {{ form.flyout_position | as_crispy_field }}
       {% endblock addons_flyout %}
 
-      {% block addons_search %}
-        <div class="ui tab" data-tab="search">
-          {{ form.search_enabled | as_crispy_field }}
-          {{ form.search_show_subprojects_filter | as_crispy_field }}
-        </div>
-      {% endblock addons_search %}
-
       {% block addons_notifications %}
-        <div class="ui tab" data-tab="notifications">
-          {{ form.notifications_enabled | as_crispy_field }}
-          {{ form.notifications_show_on_external | as_crispy_field }}
-          {{ form.notifications_show_on_latest | as_crispy_field }}
-          {{ form.notifications_show_on_non_stable | as_crispy_field }}
-        </div>
+        <h3 class="ui small dividing header" id="notifications">
+          {% trans "Notifications" %}
+          <div class="sub header">
+            {% trans "Warnings shown at the top of your documentation pages" %}
+          </div>
+        </h3>
+        {{ form.notifications_enabled | as_crispy_field }}
+        {{ form.notifications_show_on_latest | as_crispy_field }}
+        {{ form.notifications_show_on_non_stable | as_crispy_field }}
       {% endblock addons_notifications %}
 
-      {% block addons_analytics %}
-        <div class="ui tab" data-tab="analytics">
-          {{ form.analytics_enabled | as_crispy_field }}
-        </div>
-      {% endblock addons_analytics %}
-
-      {% block addons_docdiff %}
-        <div class="ui tab" data-tab="docdiff">
-          {{ form.doc_diff_enabled | as_crispy_field }}
-        </div>
-      {% endblock addons_docdiff %}
-
-      {% block addons_filetreediff %}
-        <div class="ui tab" data-tab="filetreediff">
-          {{ form.filetreediff_enabled | as_crispy_field }}
-          {{ form.filetreediff_ignored_files | as_crispy_field }}
-          {{ form.options_base_version | as_crispy_field }}
-        </div>
-      {% endblock addons_filetreediff %}
-
       {% block addons_link_previews %}
-        <div class="ui tab" data-tab="link-previews">
-          {{ form.linkpreviews_enabled | as_crispy_field }}
-          {{ form.linkpreviews_selector | as_crispy_field }}
-        </div>
+        <h3 class="ui small dividing header" id="link-previews">{% trans "Link previews" %}</h3>
+        {{ form.linkpreviews_enabled | as_crispy_field }}
+        {{ form.linkpreviews_selector | as_crispy_field }}
       {% endblock addons_link_previews %}
 
       {% block addons_hotkeys %}
-        <div class="ui tab" data-tab="hotkeys">
-          {{ form.hotkeys_enabled | as_crispy_field }}
-        </div>
+        <h3 class="ui small dividing header" id="hotkeys">{% trans "Hotkeys" %}</h3>
+        {{ form.hotkeys_enabled | as_crispy_field }}
       {% endblock addons_hotkeys %}
 
       {% block addons_custom_script %}
-        <div class="ui tab" data-tab="custom-script">
-          {{ form.customscript_enabled | as_crispy_field }}
-          {{ form.customscript_src | as_crispy_field }}
-        </div>
+        <h3 class="ui small dividing header" id="custom-script">{% trans "Custom script" %}</h3>
+        {{ form.customscript_enabled | as_crispy_field }}
+        {{ form.customscript_src | as_crispy_field }}
       {% endblock addons_custom_script %}
 
       {% block addons_advanced %}
-        <div class="ui tab" data-tab="advanced">
-          {{ form.options_root_selector|as_crispy_field }}
-        </div>
+        <h3 class="ui small dividing header" id="advanced">{% trans "Advanced" %}</h3>
+        {{ form.options_root_selector|as_crispy_field }}
       {% endblock addons_advanced %}
     </div>
 
