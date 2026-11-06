@@ -100,6 +100,7 @@ before they cause `IntegrityError` failures at deploy time.
 ## Front-end
 
 - Most templates/css/js are in a separate repository (https://github.com/readthedocs/ext-theme/).
+- Build CSS on existing FUI components and patterns; avoid one-off or hand-rolled CSS unless it is strictly necessary.
 
 ## Security
 
