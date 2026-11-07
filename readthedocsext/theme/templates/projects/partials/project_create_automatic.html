@@ -284,7 +284,7 @@
                 <div class="header">
                   <span data-bind="visible: admin">{% trans "Repository can be automatically configured" %}</span>
 
-                  <span class="ui red text" data-bind="visible: !admin">{% trans "Repository must be manually configured" %}</span>
+                  <span class="ui red text" data-bind="visible: !admin">{% trans "Repository admin permissions required" %}</span>
                 </div>
                 <div class="description">
                   <span data-bind="visible: admin">
@@ -295,15 +295,24 @@
                   </span>
 
                   <p class="ui red text" data-bind="visible: !admin">
-                    {% blocktrans trimmed %}
-                      You do not have the necessary permissions to
-                      automatically configure this repository. Additional steps
-                      will be required to configure this repository.
-                    {% endblocktrans %}
+                    {% if USE_ORGANIZATIONS %}
+                      {% blocktrans trimmed %}
+                        You need admin permissions on this repository to
+                        configure it automatically. Ask an admin of this
+                        repository to import it, or configure it manually if
+                        your organization allows it.
+                      {% endblocktrans %}
+                    {% else %}
+                      {% blocktrans trimmed %}
+                        You need admin permissions on this repository to
+                        configure it automatically. Ask an admin of this
+                        repository to import it, or configure it manually.
+                      {% endblocktrans %}
+                    {% endif %}
                   </p>
                   <p class="ui red text" data-bind="visible: !admin">
                     <a class="ui red mini basic button"
-                       href="https://docs.readthedocs.io/page/intro/import-guide.html#manually-import-your-docs"
+                       href="https://docs.readthedocs.io/page/intro/add-project.html#manually-add-your-project"
                        target="_blank">{% trans "Learn how to manually configure this repository" %}</a>
                   </p>
                 </div>
