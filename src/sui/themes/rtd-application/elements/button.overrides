@@ -10,6 +10,7 @@
 
   border-left: 0rem;
 }
+
 // Non-direct children of .ui.buttons don't get the correct rounded corners
 .ui.buttons > * > .ui.button {
   border-top-left-radius: 0rem;
@@ -27,3 +28,13 @@
   border-top-right-radius: 0.25rem;
   border-bottom-right-radius: 0.25rem;
 }
+
+// Fix button group inverted colors on dark theme
+.dark-theme-override({
+  .ui.buttons .ui.button i.icon {
+    color: inherit;
+  }
+  .ui.buttons .ui.loading.button i.icon {
+    color: transparent;
+  }
+});

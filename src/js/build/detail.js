@@ -80,11 +80,22 @@ class BuildCommand {
     });
     /** @observable {number} Command run time in seconds */
     this.run_time = ko.observable(build_command.run_time);
+    /** @observable {string} Command start time */
+    this.start_time = ko.observable(build_command.start_time);
     /** @observable {number} Command end time in seconds */
     this.end_time = ko.observable(build_command.end_time);
     /** @computed {Boolean} Command is finished running? */
     this.finished = ko.computed(() => {
       return this.end_time() !== null;
+    });
+    /** @computed {string} Command metadata line, same format as the text log */
+    this.info_display = ko.computed(() => {
+      return (
+        `start-time: ${this.start_time()}, ` +
+        `end-time: ${this.end_time()}, ` +
+        `duration: ${this.run_time()}, ` +
+        `exit-code: ${this.exit_code()}`
+      );
     });
     /** @computed {Boolean} This command is a debug class command */
     this.is_debug = ko.observable(is_debug);
@@ -111,8 +122,9 @@ class BuildCommand {
       }
     });
 
-    /** @observable {Boolean} Is this command expanded? */
-    this.is_expanded = ko.observable(false);
+    /** @observable {Boolean} Is this command expanded? Failed commands are
+     * expanded by default. */
+    this.is_expanded = ko.observable((build_command.exit_code || 0) > 0);
     this.exit_code.subscribe((exit_code) => {
       if (exit_code !== undefined && exit_code > 0) {
         this.is_expanded(true);
@@ -402,6 +414,23 @@ export class BuildDetailView {
     /** @observable {Boolean} Show debug/info commands */
     this.show_debug = ko.observable(false);
 
+    /* Raw log */
+    /** The view mode is kept in the ``view`` query parameter, so the raw log
+     * can be linked to directly.
+     * @observable {Boolean} Show the raw log instead of the command table */
+    this.show_raw = ko.observable(
+      new URLSearchParams(location.search).get("view") === "raw",
+    );
+    this.show_raw.subscribe((show_raw) => {
+      const url = new URL(location);
+      if (show_raw) {
+        url.searchParams.set("view", "raw");
+      } else {
+        url.searchParams.delete("view");
+      }
+      history.replaceState(null, "", url);
+    });
+
     /** @observable {Boolean} Are we still polling the API? */
     this.is_polling = ko.observable(true);
     this.is_polling.subscribe((is_polling) => {
@@ -541,6 +570,7 @@ export class BuildDetailView {
       command_found.output(command.output);
       command_found.exit_code(command.exit_code || 0);
       command_found.run_time(command.run_time);
+      command_found.start_time(command.start_time);
       command_found.end_time(command.end_time);
     } else {
       this.commands.push(new BuildCommand(command));
@@ -631,6 +661,16 @@ export class BuildDetailView {
   toggle_debug() {
     const show_debug = this.show_debug();
     this.show_debug(!show_debug);
+  }
+
+  /** Show the command table */
+  show_output() {
+    this.show_raw(false);
+  }
+
+  /** Show the raw log */
+  show_raw_log() {
+    this.show_raw(true);
   }
 
   /** Update all attributes and observables that depend on build state */

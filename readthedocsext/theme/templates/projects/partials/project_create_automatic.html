@@ -344,12 +344,14 @@
       <span class="right floated">
         <form action="{% url 'projects_import' %}" method="post">
           {% csrf_token %}
+          {% if direct_upload_available %}
+            <input type="hidden" name="direct_upload" value="1" />
+          {% endif %}
           <input type="hidden" name="name" data-bind="value: name" />
           <input type="hidden" name="repo" data-bind="value: clone_url" />
           <input type="hidden" name="repo_type" data-bind="value: vcs" />
           <input type="hidden" name="project_url" data-bind="value: html_url" />
           <input type="hidden" name="remote_repository" data-bind="value: pk" />
-          <input type="hidden" name="default_branch" data-bind="value: default_branch" />
 
           <button class="ui primary button"
                   data-bind="css: {disabled: (!admin || !$parent.is_repository_supported($data))}">

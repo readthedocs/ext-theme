@@ -20,3 +20,18 @@
   overflow: hidden;
   vertical-align: top;
 }
+
+// Chip element fixes for long content truncation and alignment
+.ui.chip.label {
+  > span.text {
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 10rem;
+  }
+  > .detail {
+    vertical-align: middle;
+  }
+}

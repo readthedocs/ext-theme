@@ -1,0 +1,20 @@
+// Dark theme helper for overrides to styles. Usage:
+//
+// .dark-theme-override({
+//   .ui.container,
+//   .ui.text.container {
+//     color: @white;
+//   }
+// });
+.dark-theme-override(@rules) {
+  html[data-theme="dark"]:not(#_),
+  :host([data-theme="dark"]:not(#_)) {
+    @rules();
+  }
+  @media (prefers-color-scheme: dark) {
+    html[data-theme="system"]:not(#_),
+    :host([data-theme="system"]:not(#_)) {
+      @rules();
+    }
+  }
+}

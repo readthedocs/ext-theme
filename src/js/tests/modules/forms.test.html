@@ -1,0 +1,236 @@
+<!-- djlint:off H005,H016,H030,H031 -->
+<html>
+  <body>
+
+    <readthedocs-input-field id="test-default-property">
+      <input type="text" name="test" />
+    </readthedocs-input-field>
+
+    <readthedocs-input-field id="test-finds-input">
+      <input type="text" name="test" value="hello" />
+    </readthedocs-input-field>
+
+    <readthedocs-input-field id="test-detects-error">
+      <input type="text" name="test" />
+      <div class="ui negative label">Error</div>
+    </readthedocs-input-field>
+
+    <readthedocs-input-field id="test-updates-value">
+      <input type="text" name="test" />
+    </readthedocs-input-field>
+
+    <readthedocs-input-field id="test-tabindex-disabled">
+      <input type="text" name="test" />
+    </readthedocs-input-field>
+
+    <readthedocs-input-field id="test-tabindex-enabled">
+      <input type="text" name="test" />
+    </readthedocs-input-field>
+
+    <readthedocs-input-field id="test-dispatch-error-true">
+      <input type="text" name="test" />
+      <div class="ui negative label">Error</div>
+    </readthedocs-input-field>
+
+    <readthedocs-input-field id="test-dispatch-error-false">
+      <input type="text" name="test" />
+    </readthedocs-input-field>
+
+    <readthedocs-input-field id="test-clears-errors">
+      <input type="text" name="test" />
+      <div class="ui negative label">Error</div>
+    </readthedocs-input-field>
+
+    <readthedocs-input-field id="test-syncs-value">
+      <input type="text" name="test" value="initial" />
+    </readthedocs-input-field>
+
+    <readthedocs-input-field id="test-dispatch-change">
+      <input type="text" name="test" />
+    </readthedocs-input-field>
+
+    <readthedocs-richselect-field id="test-default-selector">
+    </readthedocs-richselect-field>
+
+    <readthedocs-richselect-field id="test-finds-dropdown">
+      <div class="ui dropdown">
+        <input type="hidden" name="test" class="search" />
+      </div>
+    </readthedocs-richselect-field>
+
+    <readthedocs-richselect-field id="test-tabindex-search">
+      <div class="ui dropdown">
+        <input type="hidden" name="test" class="search" />
+      </div>
+    </readthedocs-richselect-field>
+
+    <script type="module">
+      import { expect, elementUpdated } from "@open-wc/testing";
+      import { runTests } from "@web/test-runner-mocha";
+      import jquery from "jquery";
+
+      // Mock SUI dropdown module since it isn't initialized in tests
+      jquery.fn.dropdown = function () {
+        return this;
+      };
+
+      const { FieldElement, RichSelectFieldElement } = await import(
+        "../../modules/forms"
+      );
+
+      runTests(async () => {
+        describe("FieldElement", () => {
+          it("has default property values", async () => {
+            const el = document.querySelector("#test-default-property");
+            await elementUpdated(el);
+
+            expect(el.selector).to.equal("input[name]");
+            expect(el.hasError).to.be.false;
+            expect(el.value).to.equal("");
+            expect(el.disabled).to.be.undefined;
+          });
+
+          it("finds input element on connection", async () => {
+            const el = document.querySelector("#test-finds-input");
+            await elementUpdated(el);
+
+            expect(el.refInput.value).to.not.be.null;
+            expect(el.refInput.value.value).to.equal("hello");
+          });
+
+          it("detects error element on connection", async () => {
+            const el = document.querySelector("#test-detects-error");
+            await elementUpdated(el);
+
+            expect(el.refErrors.value).to.not.be.null;
+            expect(el.refErrors.value.textContent.trim()).to.equal("Error");
+            expect(el.hasError).to.be.true;
+          });
+
+          it("updates input value when value property changes", async () => {
+            const el = document.querySelector("#test-updates-value");
+            el.value = "new value";
+            await elementUpdated(el);
+
+            expect(el.refInput.value.value).to.equal("new value");
+          });
+
+          it("sets tabIndex to -1 when disabled", async () => {
+            const el = document.querySelector("#test-tabindex-disabled");
+            el.disabled = true;
+            await elementUpdated(el);
+
+            expect(el.refInput.value.getAttribute("tabindex")).to.equal("-1");
+          });
+
+          it("sets tabIndex to 0 when enabled", async () => {
+            const el = document.querySelector("#test-tabindex-enabled");
+            el.disabled = false;
+            await elementUpdated(el);
+
+            expect(el.refInput.value.getAttribute("tabindex")).to.equal("0");
+          });
+
+          it("dispatches change event when hasError becomes true", async () => {
+            const el = document.querySelector("#test-dispatch-error-true");
+            await elementUpdated(el);
+
+            let eventFired = false;
+            el.addEventListener("change", () => {
+              eventFired = true;
+            });
+
+            // Reset hasError to false first, then set to true
+            el.hasError = false;
+            await elementUpdated(el);
+            el.hasError = true;
+            await elementUpdated(el);
+
+            expect(eventFired).to.be.true;
+          });
+
+          it("does not dispatch change event when hasError becomes false", async () => {
+            const el = document.querySelector("#test-dispatch-error-false");
+            await elementUpdated(el);
+
+            let eventFired = false;
+            el.addEventListener("change", () => {
+              eventFired = true;
+            });
+
+            el.hasError = true;
+            await elementUpdated(el);
+            expect(eventFired).to.be.true;
+
+            eventFired = false;
+            el.hasError = false;
+            await elementUpdated(el);
+            expect(eventFired).to.be.false;
+          });
+
+          it("clearErrors removes error element and resets hasError", async () => {
+            const el = document.querySelector("#test-clears-errors");
+            await elementUpdated(el);
+
+            expect(el.hasError).to.be.true;
+            expect(el.querySelector(".ui.negative.label")).to.not.be.null;
+
+            el.clearErrors();
+
+            expect(el.hasError).to.be.false;
+            expect(el.querySelector(".ui.negative.label")).to.be.null;
+          });
+        });
+
+        describe("InputFieldElement", () => {
+          it("syncs value from input element on connection", async () => {
+            const el = document.querySelector("#test-syncs-value");
+            await elementUpdated(el);
+
+            expect(el.value).to.equal("initial");
+          });
+
+          it("dispatches change event when input fires change", async () => {
+            const el = document.querySelector("#test-dispatch-change");
+            await elementUpdated(el);
+
+            let eventFired = false;
+            el.addEventListener("change", () => {
+              eventFired = true;
+            });
+
+            const input = el.querySelector("input");
+            input.dispatchEvent(new Event("change", { bubbles: true }));
+
+            expect(eventFired).to.be.true;
+          });
+        });
+
+        describe("RichSelectFieldElement", () => {
+          it("has .ui.dropdown as default selector", async () => {
+            const el = document.querySelector("#test-default-selector");
+            expect(el.selector).to.equal(".ui.dropdown");
+          });
+
+          it("finds dropdown element on connection", async () => {
+            const el = document.querySelector("#test-finds-dropdown");
+            await elementUpdated(el);
+
+            expect(el.refInput.value).to.not.be.null;
+            expect(el.refInput.value.classList.contains("ui")).to.be.true;
+            expect(el.refInput.value.classList.contains("dropdown")).to.be.true;
+          });
+
+          it("sets tabIndex on search input", async () => {
+            const el = document.querySelector("#test-tabindex-search");
+            el.disabled = true;
+            await elementUpdated(el);
+
+            const searchInput = el.querySelector("input.search");
+            expect(searchInput.getAttribute("tabindex")).to.equal("-1");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

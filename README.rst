@@ -3,25 +3,14 @@ Read the Docs - ext-theme
 
 This package is the next generation theme for the Read the Docs application UI.
 
-It aims to be a drop in replacement for the current templates for the Read the
-Docs application and will replace the entire UI for the application. It includes
-updated templates, new JavaScript sources, and UI based on FomanticUI
-(SemanticUI). It does still retain most of the patterns and tools already used
-in the existing application templates. It is an addition to the
-``readthedocsext`` package, and provides the ``theme`` Django application.
-
-.. warning::
-    This package is still alpha level quality and is not ready for general use.
+This is the current UI and templates for the Read the Docs application.
+It includes updated templates, new JavaScript sources, and UI based on FomanticUI (SemanticUI).
+It is an addition to the ``readthedocsext`` package, and provides the ``theme`` Django application.
 
 Installation
 ------------
 
-If you built your local development image with a GitHub token defined, this
-package is already installed in your built image. This should be the default for
-core team.
-
-If not, follow the application `installation directions <https://dev.readthedocs.io/en/latest/install.html>`__
-again, and make sure to set the neccessary GitHub token environment variables.
+This package is automatically installed by default when building the application images.
 
 You will want to check this repository out in the same path as your other
 repositories if you plan on doing development on the files in this repository:
@@ -33,20 +22,10 @@ repositories if you plan on doing development on the files in this repository:
 Usage
 -----
 
-The recommended way of starting your local instance is:
+Just start your local application environment like normal to begin using this package.
 
-.. code:: console
-
-   % inv docker.up --webpack --ext-theme  # `-we` for short
-
-This will start the Webpack dev server container for hot/live reload of compiled
-assets and will alter the template load pattern to make use of templates in this
-package first. You do not need to rebuild the asset files until you open a pull
-request.
-
-You can run your local instance without Webpack, but you will lose live and hot
-reload for the front end assets and you will need to manually run
-``collectstatic`` after every change to the front end assets.
+This will start the Webpack dev server container for hot/live reload of compiled assets.
+You do not need to rebuild the asset files until you open a pull request.
 
 Testing
 -------
@@ -60,17 +39,12 @@ Our standard JS stack uses Jest for testing. Execute tests as normal:
 Linting
 -------
 
-Our standard JS stack uses Prettier for linting. Test linting with:
+We run Prettier for most static files and djlint for Django templates.
+Linting and formatting is done using `pre-commit`:
 
 .. code:: console
 
-   % npm run lint
-
-Reformat code with:
-
-.. code:: console
-
-   % npm run format
+   % pre-commit
 
 Linting checks are performed at CI and will produce errors.
 

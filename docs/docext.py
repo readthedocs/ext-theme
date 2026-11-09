@@ -2,18 +2,18 @@
 readthedocsext-theme doc extensions
 """
 
-import re
 import os
+import re
 import subprocess
 from pathlib import Path
 
+from autoanysrc import BaseCommentAnalyzer
 from sphinx.util import logging
-from sphinxcontrib.autoanysrc import analyzers
 
 logger = logging.getLogger(__name__)
 
 
-class CommonAnalyzer(analyzers.BaseCommentAnalyzer):
+class CommonAnalyzer(BaseCommentAnalyzer):
     def process(self, content):
         first_indent = None
 

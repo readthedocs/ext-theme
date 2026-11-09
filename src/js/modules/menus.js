@@ -119,11 +119,38 @@ export class APIEventWrapper extends LightDOMElement {
   }
 }
 
-/** Menu item for rebuilding a version **/
+/**
+ * Menu item for rebuilding a version
+ *
+ * Uploaded versions are never rebuilt by Read the Docs. With the ``uploaded``
+ * attribute the element renders disabled, ignores clicks, and shows a tooltip
+ * explaining why.
+ **/
 class MenuBuildRebuildElement extends APIEventWrapper {
+  static properties = {
+    uploaded: { type: Boolean },
+  };
+
   // TODO translate this here or use a different pattern
   static errorMessage =
     "There was an error starting a new build for this version";
+  static uploadedMessage =
+    "This version is updated by direct upload. Rebuild it from your own pipeline.";
+
+  firstUpdated() {
+    if (this.uploaded) {
+      this.classList.add("disabled");
+      this.setAttribute("aria-disabled", "true");
+      jquery(this).popup({ content: this.constructor.uploadedMessage });
+    }
+  }
+
+  onEvent() {
+    if (this.uploaded) {
+      return;
+    }
+    super.onEvent();
+  }
 
   getSuccessURL() {
     return this?.data?.build?.urls?.build;

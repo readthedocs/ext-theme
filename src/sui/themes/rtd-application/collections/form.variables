@@ -1,0 +1,6 @@
+// Dark theme fixes, inputs style like light theme fields by default
+@invertedInputBackground: rgba(255, 255, 255, 0.1);
+@invertedInputBorderColor: rgba(255, 255, 255, 0.15);
+@invertedInputColor: @invertedTextColor;
+@invertedLabelColor: @invertedTextColor;
+@invertedInputBoxShadow: none;

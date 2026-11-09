@@ -6,3 +6,12 @@
     display: none;
   }
 }
+
+.dark-theme-override({
+  .ui.attached.menu,
+  .ui.vertical.menu {
+    &:not(.borderless):not(.text) {
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+  }
+});

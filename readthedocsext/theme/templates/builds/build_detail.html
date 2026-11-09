@@ -21,7 +21,7 @@
           {# Build progress on the left #}
           {% block build_detail_metadata_left %}
             <div class="ui eleven wide column">
-              <div class="ui header">
+              <div class="ui truncating header">
                 {% comment %}
                   The state icon expects the build API response directly instead, so
                   we recreate the used fields here.
@@ -34,7 +34,9 @@
                 <span data-bind="with: {state: {code: state()}, success: success()}">
                   {% include "builds/includes/status_icon.html" with build=build size="small" circular=True data_bind=True %}
                 </span>
-                {% include "builds/includes/build_name.html" with build=build is_page_title=True %}
+                <div class="content">
+                  {% include "builds/includes/build_name.html" with build=build is_page_title=True %}
+                </div>
               </div>
 
               <div class="ui basic segment loading padded"
@@ -105,14 +107,33 @@
     {% endblock build_detail_metadata %}
 
     <div class="ui attached stackable menu">
-      <a class="active item">
+      {% trans "Open the plain text log in a new tab" as text_raw_log_txt %}
+      <div class="ui dropdown item"
+           data-bind="semanticui: {dropdown: {action: 'hide'}}">
         <i class="fa-duotone fa-terminal icon"></i>
         {% trans "Output" %}
-      </a>
-      <a class="item" href="{% url "build-detail" build.pk "txt" %}">
-        <i class="fa-duotone fa-memo-circle-info icon"></i>
-        {% trans "Raw log" %}
-      </a>
+        <i class="fa-solid fa-caret-down small icon"></i>
+        <div class="menu">
+          <a class="item"
+             data-bind="click: show_output, css: {active: !show_raw()}">
+            <i class="fa-duotone fa-terminal icon"></i>
+            {% trans "Normal" %}
+          </a>
+          <a class="item"
+             data-bind="click: show_raw_log, css: {active: show_raw()}">
+            <i class="fa-duotone fa-memo-circle-info icon"></i>
+            {% trans "Expanded" %}
+          </a>
+          <a class="item"
+             href="{% url "build-detail" build.pk "txt" %}"
+             target="_blank"
+             title="{{ text_raw_log_txt }}"
+             data-bind="click: function() { return true; }">
+            <i class="fa-duotone fa-file-lines icon"></i>
+            {% trans "Raw text" %}
+          </a>
+        </div>
+      </div>
       <a class="ui item"
          data-bind="click: toggle_debug, css: {active: show_debug()}">
         <i class="fa-duotone fa-microscope icon"></i>
@@ -138,11 +159,13 @@
             {% trans "Cancel" %}
           </a>
 
-          {% if object.project and object.version %}
+          {# Direct upload projects are never built by Read the Docs, nothing to rebuild #}
+          {% if object.project and object.version and not project.is_direct_upload %}
             <readthedocs-menu-build-rebuild class="link item ko hidden"
                                             data-bind="css: { hidden: !can_retry() }"
                                             url="{% url "projects-versions-builds-list" object.project.slug object.version.slug %}"
-                                            csrf-token="{{ csrf_token }}">
+                                            csrf-token="{{ csrf_token }}"
+                                            {% if object.version.is_uploaded %}uploaded{% endif %}>
               <i class="fa-duotone fa-refresh icon"></i>
               {# Translators: this refers to rebuilding a version build #}
               {% trans "Rebuild" %}
@@ -229,32 +252,42 @@
         <div class="ui basic segment very padded"
              data-bind="visible: is_loading()"></div>
 
+        {% comment %}
+          The same table renders both the "Output" and the "Raw text" views.
+          In raw mode every command is expanded, the expander and labels are
+          hidden, and the metadata line from the text log is shown instead.
+        {% endcomment %}
         <table class="ko hidden ui small very basic compact inverted selectable command unstackable table"
-               data-bind="css: { hidden: !commands(), 'single line': !is_wrapped() }, foreach: commands">
+               data-bind="css: { hidden: !commands(), 'single line': !is_wrapped(), raw: show_raw() }, foreach: commands">
           <tbody>
             <tr class="top aligned command"
                 data-bind="visible: is_visible() || $parent.show_debug()">
               <td class="collapsing">
-                <a class="ui icon left floated" data-bind="click: toggle_expanded">
+                <a class="ui icon left floated"
+                   data-bind="click: toggle_expanded, visible: !$parent.show_raw()">
                   <i class="grey fa-solid fa-angle-right icon"
                      data-bind="class: is_expanded() ? 'fa-angle-down' : 'fa-angle-right'"></i>
                 </a>
               </td>
               <td class="command">
+                <code class="ui grey text info"
+                      data-bind="text: info_display, visible: $parent.show_raw()"></code>
                 <code class="ui text"
                       data-bind="text: command, class: !finished() && $parent.is_finished() ? 'red' : command_class, click: toggle_expanded"></code>
-                <a class="ui mini inverted label"
-                   data-bind="text: '{% trans "Running" %}', visible: !finished() && !$parent.is_finished()"></a>
-                <a class="ui mini inverted label"
-                   data-bind="text: '{% trans "Killed" %}', visible: !finished() && $parent.is_finished()"></a>
-                <a class="ui mini inverted label"
-                   data-bind="text: run_time() + 's', visible: finished()"></a>
-                <a class="ui mini inverted label"
-                   data-bind="text: '{% trans "Exit" %}: ' + exit_code(), visible: finished() && exit_code() > 0"></a>
+                <span data-bind="visible: !$parent.show_raw()">
+                  <a class="ui mini inverted label"
+                     data-bind="text: '{% trans "Running" %}', visible: !finished() && !$parent.is_finished()"></a>
+                  <a class="ui mini inverted label"
+                     data-bind="text: '{% trans "Killed" %}', visible: !finished() && $parent.is_finished()"></a>
+                  <a class="ui mini inverted label"
+                     data-bind="text: run_time() + 's', visible: finished()"></a>
+                  <a class="ui mini inverted label"
+                     data-bind="text: '{% trans "Exit" %}: ' + exit_code(), visible: finished() && exit_code() > 0"></a>
+                </span>
               </td>
             </tr>
           </tbody>
-          <tbody data-bind="visible: (is_visible() || $parent.show_debug()) && is_expanded(), foreach: output_lines">
+          <tbody data-bind="visible: (is_visible() || $parent.show_debug()) && (is_expanded() || $parent.show_raw()), foreach: output_lines">
             <tr data-bind="css: {'left olive marked': is_selected()}"
                 class="top aligned">
               <td class="collapsing line number">
