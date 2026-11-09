@@ -507,9 +507,7 @@ export class BuildDetailView {
 
   /** Poll APIv3 build notification API directly
    *
-   * We poll notifications separately from the build detail endpoint.
-   *
-   * TODO include notifications in the same build detail API request.
+   * TODO include notifications in the build detail API response instead.
    *
    * @param {str} url - APIv3 build notification endpoint
    */
