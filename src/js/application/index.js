@@ -153,10 +153,13 @@ export class Application {
       content: "Copied!",
     });
 
-    // Plausible
-    jquery("[data-analytics], [data-analytics-events]").plausible(
-      this.config.production_domain,
-      this.config.debug,
-    );
+    // Plausible. Only logged in users are tracked, the flag is set by the
+    // ``settings_dashboard`` template tag.
+    if (this.config.analytics_enabled) {
+      jquery("[data-analytics], [data-analytics-events]").plausible(
+        this.config.production_domain,
+        this.config.debug,
+      );
+    }
   }
 }
