@@ -12,7 +12,8 @@
 {% endblock content-header %}
 
 {% block content %}
-  <div data-bind="using: BuildDetailView({}, '{% url "projects-builds-detail" parent_lookup_project__slug=build.project.slug build_pk=build.id %}', '{% url "projects-builds-notifications-list" build.project.slug build.id %}')">
+  {# Anonymous API requests are rate limited more aggressively, so poll less often. #}
+  <div data-bind="using: BuildDetailView({}, '{% url "projects-builds-detail" parent_lookup_project__slug=build.project.slug build_pk=build.id %}', '{% url "projects-builds-notifications-list" build.project.slug build.id %}', {% if request.user.is_authenticated %}2000{% else %}10000{% endif %})">
 
     {% block build_detail_metadata %}
       <div class="ui top attached segment">

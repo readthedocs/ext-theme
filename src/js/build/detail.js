@@ -206,13 +206,23 @@ class BuildCommand {
  *     <div data-bind="using: BuildDetailView({id: {{ build.pk }}}, '{% url ... %}', '{% url ... %}')"></div>
  *
  * @param {Object} build - API data for a build.
+ * @param {string} url_api_build - APIv3 build detail URL
+ * @param {string} url_api_notifications - APIv3 build notification URL
+ * @param {number} poll_interval - Milliseconds between API polls
  */
 export class BuildDetailView {
   static view_name = "BuildDetailView";
 
-  constructor(build = {}, url_api_build, url_api_notifications) {
+  constructor(
+    build = {},
+    url_api_build,
+    url_api_notifications,
+    poll_interval = 2000,
+  ) {
     /** @type {number} The build pk/id to fetch */
     this.id = build.id;
+    /** @type {number} Milliseconds between API polls */
+    this.poll_interval = poll_interval;
     /** @type {string} APIv3 build detail API URL */
     this.url_api_build = url_api_build;
     /** @type {string} APIv3 build notification API URL */
@@ -489,18 +499,19 @@ export class BuildDetailView {
         // from the API, but we'll be polling until the build is finished.
         this.is_loading(false);
       })
-      .then(() => {
-        // Continually poll API while build is not finished. If it is in a finished
-        // state, this method will return without setting another timer. We do not
-        // updated :attr:`is_polling` by computed/subscription as we want to ensure
-        // this update happens at the very end of API updates instead.
+      .always(() => {
+        // Continually poll API while build is not finished, even if a request
+        // failed. If it is in a finished state, this method will return without
+        // setting another timer. We do not update :attr:`is_polling` by
+        // computed/subscription as we want to ensure this update happens at
+        // the very end of API updates instead.
         if (this.is_finished()) {
           this.is_polling(false);
         } else {
           setTimeout(() => {
             this.poll_api_build();
             this.poll_api_notifications();
-          }, 2000);
+          }, this.poll_interval);
         }
       });
   }
