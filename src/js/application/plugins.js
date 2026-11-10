@@ -189,7 +189,7 @@ export const chart = {
         value.backgroundColor = "rgb(65, 131, 196, 0.8)";
         value.borderColor = "rgb(65, 131, 196, 1)";
         value.pointBorderColor = "rgb(65, 131, 196, 1)";
-        value.borderWidth = "1px";
+        value.borderWidth = 2;
         return value;
       });
 
