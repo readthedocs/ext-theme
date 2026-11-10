@@ -421,6 +421,23 @@ export class ProjectTemporaryAccessView {
 Registry.add_view(ProjectTemporaryAccessView);
 
 /**
+ * Project token form view
+ *
+ * The expiration date is only used with a custom expiration.
+ */
+export class ProjectTokenView {
+  static view_name = "ProjectTokenView";
+
+  constructor() {
+    this.expires_in = ko.observable();
+    this.is_custom_expiration = ko.computed(() => {
+      return this.expires_in() === "custom";
+    });
+  }
+}
+Registry.add_view(ProjectTokenView);
+
+/**
  * Project search analytics view
  *
  * Search analytics chart data and config is loaded from an inline
