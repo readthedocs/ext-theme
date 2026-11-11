@@ -1,0 +1,48 @@
+<mjml>
+  <mj-head>
+    <mj-title>Read the Docs</mj-title>
+    <mj-attributes>
+      <mj-all font-family="Arial, Helvetica, sans-serif" />
+      <mj-text color="#27313a" font-size="16px" line-height="1.6" />
+    </mj-attributes>
+    <mj-style>
+      a { color: #155e9b; }
+      p { margin: 0 0 16px; }
+    </mj-style>
+    <mj-raw>
+      <style type="text/css">{% block extra-styles %}{% endblock %}</style>
+    </mj-raw>
+  </mj-head>
+  <mj-body background-color="#f3f5f7" width="600px">
+    <mj-section padding="28px 24px 12px">
+      <mj-column>
+        <mj-text padding="0" font-size="13px" color="#596773" align="right">
+          {% block top-right %}{% endblock %}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="32px 32px 16px">
+      <mj-column>
+        <mj-text padding="0 0 24px" font-size="18px" font-weight="bold" color="#155e9b">
+          {% block header %}Read the Docs Community{% endblock %}
+        </mj-text>
+        <mj-text padding="0 0 16px" font-size="20px" line-height="1.35" font-weight="bold">
+          {% block salutation %}{% trans "Hello!" %}{% endblock %}
+        </mj-text>
+        <mj-text padding="0">
+          {% block content %}{% endblock %}
+        </mj-text>
+        <mj-text padding="16px 0 0">
+          {% block signature %}{% trans "Keep documenting," %}<br />{% trans "Read the Docs" %}{% endblock %}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="20px 32px 40px">
+      <mj-column>
+        <mj-text padding="0" font-size="13px" color="#596773">
+          {% block footer %}Read the Docs Community<br /><a href="https://readthedocs.org">readthedocs.org</a>{% endblock %}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

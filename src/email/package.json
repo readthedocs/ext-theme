@@ -1,0 +1,13 @@
+{
+  "name": "readthedocs-email-templates",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "check": "node build.mjs --check",
+    "test": "node --test test.mjs"
+  },
+  "devDependencies": {
+    "mjml": "5.4.1"
+  }
+}
