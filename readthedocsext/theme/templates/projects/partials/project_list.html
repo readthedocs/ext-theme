@@ -2,6 +2,7 @@
 
 {% load blocktrans trans from i18n %}
 {% load naturaltime from humanize %}
+{% load owner_organizations teams from organizations %}
 
 {% block top_left_menu_items %}
   <div data-bind="using: FilterView()">
@@ -21,12 +22,21 @@
   {% trans "No matching projects found" %}
 {% endblock list_placeholder_header_filtered %}
 {% block list_placeholder_header_empty %}
-  {% trans "You don't have any projects configured yet" %}
+  {% if USE_ORGANIZATIONS and not request.user|owner_organizations and not request.user|teams %}
+    {% trans "Start your 30 day trial" %}
+    <div class="sub header">{% trans "Create an organization for your company to start adding projects." %}</div>
+  {% else %}
+    {% trans "You don't have any projects configured yet" %}
+  {% endif %}
 {% endblock list_placeholder_header_empty %}
 {% block list_placeholder_text_empty %}
-  <a href="https://docs.readthedocs.io/page/tutorial/"
-     target="_blank"
-     class="ui primary button">{% trans "Learn how to get started" %}</a>
+  {% if USE_ORGANIZATIONS and not request.user|owner_organizations and not request.user|teams %}
+    <a href="{% url "organization_create" %}" class="ui primary button">{% trans "Create organization" %}</a>
+  {% else %}
+    <a href="https://docs.readthedocs.io/page/tutorial/"
+       target="_blank"
+       class="ui primary button">{% trans "Learn how to get started" %}</a>
+  {% endif %}
 {% endblock list_placeholder_text_empty %}
 
 {% block list_item_right_menu %}
