@@ -1,0 +1,23 @@
+{% load static from static %}
+{% load trans from i18n %}
+
+{% comment %}
+  Site logo and label. Without the ``USE_BRANDING`` setting, self-hosted and
+  local instances show a generic word mark instead of the Read the Docs logo.
+{% endcomment %}
+
+{% if USE_BRANDING %}
+  <img class="ui invertable image"
+       src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}"
+       width="{{ width|default:220 }}"
+       alt="{% trans "Read the Docs logo" %}" />
+  {% include "includes/utils/site_label.html" %}
+{% else %}
+  <span class="ui header">
+    <i class="fad fa-book icon"></i>
+    <span class="content">
+      {% trans "Read the Docs" %}
+      <span class="sub header">{% trans "Open source" %}</span>
+    </span>
+  </span>
+{% endif %}

@@ -17,7 +17,9 @@
     {% endblock head_meta %}
 
     {% block head_links %}
-      <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" />
+      {% if USE_BRANDING %}
+        <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" />
+      {% endif %}
       {% comment %}
         Always include the light theme styles. If the theme is not explicitly a
         light theme, then theme is either `dark` or `system` and we include the
