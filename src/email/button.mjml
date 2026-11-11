@@ -1,0 +1,27 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, Helvetica, sans-serif" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body width="536px">
+    <mj-raw><!-- BUTTON_START --></mj-raw>
+    <mj-section padding="0">
+      <mj-column>
+        <mj-button
+          href="{{ action_url }}"
+          background-color="#00778e"
+          color="#ffffff"
+          font-size="16px"
+          font-weight="bold"
+          border-radius="4px"
+          inner-padding="12px 20px"
+          align="center"
+          padding="0 0 16px"
+          >{{ action_label }}</mj-button
+        >
+      </mj-column>
+    </mj-section>
+    <mj-raw><!-- BUTTON_END --></mj-raw>
+  </mj-body>
+</mjml>

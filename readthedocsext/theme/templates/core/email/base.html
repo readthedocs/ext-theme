@@ -45,9 +45,17 @@
 
 
 
+    <style type="text/css">
+
+    @media only screen and (max-width:479px) {
+      table.mj-full-width-mobile { width: 100% !important; }
+      td.mj-full-width-mobile { width: auto !important; }
+    }
+
+    </style>
 
     <style type="text/css">
-a { color: #155e9b; }
+a { color: #00778e; }
       p { margin: 0 0 16px; }
     </style>
     <style type="text/css">{% block extra-styles %}{% endblock %}</style>
@@ -136,12 +144,36 @@ a { color: #155e9b; }
 
               <tr>
                 <td
+                   align="left" style="font-size:0px;padding:0;word-break:break-word;"
+                >
+
+      <table
+         border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"
+      >
+        <tbody>
+          <tr>
+            <td  style="width:250px;">
+
+      <img
+         alt="Read the Docs" src="https://assets.readthedocs.org/static/images/header-logo.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="250" height="auto"
+      />
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+                </td>
+              </tr>
+
+              <tr>
+                <td
                    align="left" style="font-size:0px;padding:0 0 24px;word-break:break-word;"
                 >
 
       <div
-         style="font-family:Arial, Helvetica, sans-serif;font-size:18px;font-weight:bold;line-height:1.6;text-align:left;color:#155e9b;"
-      >{% block header %}Read the Docs Community{% endblock %}</div>
+         style="font-family:Arial, Helvetica, sans-serif;font-size:18px;font-weight:bold;line-height:1.6;text-align:left;color:#00778e;"
+      >{% block header %}{% endblock %}</div>
 
                 </td>
               </tr>
@@ -177,7 +209,7 @@ a { color: #155e9b; }
 
       <div
          style="font-family:Arial, Helvetica, sans-serif;font-size:16px;line-height:1.6;text-align:left;color:#27313a;"
-      >{% block signature %}{% trans "Keep documenting," %}<br />{% trans "Read the Docs" %}{% endblock %}</div>
+      >{% block signature %}{% trans "Keep documenting," %}<br />{% trans "The Read the Docs team" %}{% endblock %}</div>
 
                 </td>
               </tr>
@@ -227,7 +259,7 @@ a { color: #155e9b; }
 
       <div
          style="font-family:Arial, Helvetica, sans-serif;font-size:13px;line-height:1.6;text-align:left;color:#596773;"
-      >{% block footer %}Read the Docs Community<br /><a href="https://readthedocs.org">readthedocs.org</a>{% endblock %}</div>
+      >{% block footer %}Read the Docs Community<br /><a href="https://about.readthedocs.com">https://about.readthedocs.com</a>{% endblock %}</div>
 
                 </td>
               </tr>

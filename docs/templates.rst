@@ -8,7 +8,8 @@ when you enable the theme on your local instance.
 Email templates
 ---------------
 
-The shared email layout is authored in ``src/email/base.mjml``.
+The shared email layout and button are authored in ``src/email/base.mjml``
+and ``src/email/button.mjml``.
 Install its pinned build dependencies and compile it from the repository root:
 
 .. code-block:: console
@@ -18,8 +19,8 @@ Install its pinned build dependencies and compile it from the repository root:
    npm run email:check
    npm run email:test
 
-Commit both the MJML source and the generated
-``readthedocsext/theme/templates/core/email/base.html``.
+Commit the MJML source and its generated HTML in
+``readthedocsext/theme/templates/core/email/``.
 Do not edit or reformat the generated HTML.
 CI checks that it matches the source.
 Production uses the generated Django template and does not run MJML.
@@ -30,12 +31,15 @@ Individual messages remain Django templates in the application repositories,
 with separate plain-text alternatives.
 Keep Django tags within MJML text or raw components, and check the generated
 output and rendered messages when changing the layout.
+To add a primary action to an email, include ``core/email/button.html`` with
+``action_url`` and ``action_label``. Keep the equivalent URL in its plain-text
+alternative.
 Email clients handle CSS differently, so test representative messages on
 desktop and mobile clients, including Outlook and Gmail, before rollout.
 
 The shared layout is used by account, invitation, team, build failure, domain,
-and subscription emails. Business overrides the shared header, signature, and
-footer in its application templates. Plain-text-only messages, such as the
+and subscription emails. Business overrides the shared footer in its
+application templates. Plain-text-only messages, such as the
 weekly subscription statistics, do not use this layout.
 
 
