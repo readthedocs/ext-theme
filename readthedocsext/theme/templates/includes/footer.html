@@ -6,96 +6,102 @@
   <div class="ui container">
 
     {% block footer_links %}
-      {# Keep these menus in sync with the footer on the website: https://github.com/readthedocs/website #}
-      <div class="ui four column stackable grid very padded">
+      {% if USE_BRANDING %}
+        {# Keep these menus in sync with the footer on the website: https://github.com/readthedocs/website #}
+        <div class="ui four column stackable grid very padded">
 
-        <div class="column">
-          <div class="ui vertical inverted text menu">
-            {% block menu_news %}
-              <h4 class="ui inverted sub header">Stay updated</h4>
-              <a class="item" href="https://about.readthedocs.com/blog/">Blog</a>
-              {% include "includes/elements/link.html" with url="https://landing.mailerlite.com/webforms/landing/t0a9l4" text="Newsletter" is_external=True class="item" %}
-              <a class="item" href="https://status.readthedocs.com/">Status</a>
-              <div class="item">
-                <a href="https://github.com/readthedocs/"
-                   aria-label="Read the Docs on GitHub"
-                   rel="noopener noreferrer"><i class="icon large fab fa-github"></i></a>
-                <a href="https://fosstodon.org/@readthedocs"
-                   aria-label="Read the Docs on Mastodon / Fediverse"
-                   rel="me"><i class="icon large fab fa-mastodon"></i></a>
-              </div>
-            {% endblock menu_news %}
+          <div class="column">
+            <div class="ui vertical inverted text menu">
+              {% block menu_news %}
+                <h4 class="ui inverted sub header">Stay updated</h4>
+                <a class="item" href="https://about.readthedocs.com/blog/">Blog</a>
+                {% include "includes/elements/link.html" with url="https://landing.mailerlite.com/webforms/landing/t0a9l4" text="Newsletter" is_external=True class="item" %}
+                <a class="item" href="https://status.readthedocs.com/">Status</a>
+                <div class="item">
+                  <a href="https://github.com/readthedocs/"
+                     aria-label="Read the Docs on GitHub"
+                     rel="noopener noreferrer"><i class="icon large fab fa-github"></i></a>
+                  <a href="https://fosstodon.org/@readthedocs"
+                     aria-label="Read the Docs on Mastodon / Fediverse"
+                     rel="me"><i class="icon large fab fa-mastodon"></i></a>
+                </div>
+              {% endblock menu_news %}
+            </div>
           </div>
-        </div>
 
-        <div class="column">
-          <div class="ui vertical inverted text menu">
-            {% block menu_learn %}
-              <h4 class="ui inverted sub header">Learn more</h4>
-              <a class="item"
-                 href="https://docs.readthedocs.com/platform/stable/"
-                 target="_blank">Documentation</a>
-              <a class="item"
-                 href="https://docs.readthedocs.com/platform/stable/tutorial/index.html"
-                 target="_blank">Tutorial</a>
-              <a class="item"
-                 href="https://docs.readthedocs.com/platform/stable/config-file/index.html"
-                 target="_blank">Configure your project</a>
-              <a class="item"
-                 href="https://docs.readthedocs.com/platform/stable/intro/doctools.html"
-                 target="_blank">Popular documentation tools</a>
-              <a class="item"
-                 href="https://about.readthedocs.com/comparisons/"
-                 target="_blank">Compare to other platforms</a>
-            {% endblock menu_learn %}
+          <div class="column">
+            <div class="ui vertical inverted text menu">
+              {% block menu_learn %}
+                <h4 class="ui inverted sub header">Learn more</h4>
+                <a class="item"
+                   href="https://docs.readthedocs.com/platform/stable/"
+                   target="_blank">Documentation</a>
+                <a class="item"
+                   href="https://docs.readthedocs.com/platform/stable/tutorial/index.html"
+                   target="_blank">Tutorial</a>
+                <a class="item"
+                   href="https://docs.readthedocs.com/platform/stable/config-file/index.html"
+                   target="_blank">Configure your project</a>
+                <a class="item"
+                   href="https://docs.readthedocs.com/platform/stable/intro/doctools.html"
+                   target="_blank">Popular documentation tools</a>
+                <a class="item"
+                   href="https://about.readthedocs.com/comparisons/"
+                   target="_blank">Compare to other platforms</a>
+              {% endblock menu_learn %}
+            </div>
           </div>
-        </div>
 
-        <div class="column">
-          <div class="ui vertical inverted text menu">
-            {% block menu_services %}
-              <h4 class="ui inverted sub header">Product</h4>
-              <a class="item"
-                 href="https://about.readthedocs.com/features/"
-                 target="_blank">Features</a>
-              <a class="item"
-                 href="https://about.readthedocs.com/pricing/"
-                 target="_blank">Pricing</a>
-              <a class="item"
-                 href="https://about.readthedocs.com/privacy-policy/"
-                 target="_blank">Privacy Policy</a>
-              <a class="item"
-                 href="https://about.readthedocs.com/terms-of-service/"
-                 target="_blank">Terms of Service</a>
-            {% endblock menu_services %}
+          <div class="column">
+            <div class="ui vertical inverted text menu">
+              {% block menu_services %}
+                <h4 class="ui inverted sub header">Product</h4>
+                <a class="item"
+                   href="https://about.readthedocs.com/features/"
+                   target="_blank">Features</a>
+                <a class="item"
+                   href="https://about.readthedocs.com/pricing/"
+                   target="_blank">Pricing</a>
+                <a class="item"
+                   href="https://about.readthedocs.com/privacy-policy/"
+                   target="_blank">Privacy Policy</a>
+                <a class="item"
+                   href="https://about.readthedocs.com/terms-of-service/"
+                   target="_blank">Terms of Service</a>
+              {% endblock menu_services %}
+            </div>
           </div>
-        </div>
 
-        <div class="column">
-          <div class="ui vertical inverted text menu">
-            {% block menu_about %}
-              <h4 class="ui inverted sub header">Company</h4>
-              <a class="item"
-                 href="https://about.readthedocs.com/company/"
-                 target="_blank">About us</a>
-              <a class="item"
-                 href="https://docs.readthedocs.com/platform/stable/support.html"
-                 target="_blank">Support</a>
-              {% include "includes/elements/link.html" with url="https://www.ethicalads.io/advertisers/?ref=rtd" text="Advertise with Us" is_external=True class="item" %}
-              <a class="item"
-                 href="https://docs.readthedocs.com/dev/latest/contribute.html"
-                 target="_blank">Contribute</a>
-            {% endblock menu_about %}
+          <div class="column">
+            <div class="ui vertical inverted text menu">
+              {% block menu_about %}
+                <h4 class="ui inverted sub header">Company</h4>
+                <a class="item"
+                   href="https://about.readthedocs.com/company/"
+                   target="_blank">About us</a>
+                <a class="item"
+                   href="https://docs.readthedocs.com/platform/stable/support.html"
+                   target="_blank">Support</a>
+                {% include "includes/elements/link.html" with url="https://www.ethicalads.io/advertisers/?ref=rtd" text="Advertise with Us" is_external=True class="item" %}
+                <a class="item"
+                   href="https://docs.readthedocs.com/dev/latest/contribute.html"
+                   target="_blank">Contribute</a>
+              {% endblock menu_about %}
+            </div>
           </div>
-        </div>
 
-      </div>
+        </div>
+      {% endif %}
     {% endblock footer_links %}
 
     {% block footer_copyright %}
       <div class="ui basic center aligned inverted segment">
-        <i class="fad fa-copyright icon"></i>
-        Copyright {% now "Y" %}, Read the Docs, Inc &amp; contributors
+        {% if USE_BRANDING %}
+          <i class="fad fa-copyright icon"></i>
+          Copyright {% now "Y" %}, Read the Docs, Inc &amp; contributors
+        {% else %}
+          <a href="https://github.com/readthedocs/readthedocs.org" target="_blank">{% trans "Read the Docs open source" %}</a>
+        {% endif %}
         ·
         <a href="https://docs.readthedocs.com/platform/stable/changelog.html"
            target="_blank">{% trans "Version" %} {% readthedocs_version %}</a>
