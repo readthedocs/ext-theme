@@ -25,10 +25,9 @@
     {% blocktrans trimmed %}
       Traffic data will be accumulated as readers view your documentation.
     {% endblocktrans %}
-    {% if show_addons_link %}
-      {% url 'projects_addons' project.slug as addons_url %}
-      {% blocktrans with url=addons_url trimmed %}
-        Traffic analytics must be enabled in your project's <a href="{{ url }}">Addons settings</a>.
+    {% if show_enable_hint and not project.addons.analytics_enabled %}
+      {% blocktrans trimmed %}
+        Enable traffic analytics above to start collecting data.
       {% endblocktrans %}
     {% endif %}
   </div>
