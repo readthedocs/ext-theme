@@ -48,6 +48,17 @@
 {% block list_item_right_menu %}
   <div class="ui right floated text menu">
     <div class="item">{{ object.2 }}</div>
+    {% if show_filter and filter %}
+      <div class="item">
+        {% trans "Show traffic for this page" as filter_text %}
+        <a class="ui small icon button"
+           href="?url={{ object.0|urlencode }}"
+           data-content="{{ filter_text }}"
+           aria-label="{{ filter_text }}">
+          <i class="fa-solid fa-filter icon"></i>
+        </a>
+      </div>
+    {% endif %}
   </div>
 {% endblock list_item_right_menu %}
 
