@@ -44,7 +44,7 @@
   {% if http_status == 404 %}
     <a class="ui icon button"
        href="{% url 'projects_redirects_create' project.slug %}?redirect_type=exact&from_url={{ object.0|urlencode:'' }}"
-       data-content="{% trans "Create redirect" %}">
+       data-content="{% trans "Create redirect from this missing page" %}">
       <i class="fa-duotone fa-diamond-turn-right icon"></i>
     </a>
   {% endif %}
