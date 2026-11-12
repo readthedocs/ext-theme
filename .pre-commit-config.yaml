@@ -32,7 +32,9 @@ repos:
     rev: v1.40.3
     hooks:
       - id: djlint-reformat-django
+        exclude: ^readthedocsext/theme/templates/core/email/(base|button)\.html$
       - id: djlint-django
+        exclude: ^readthedocsext/theme/templates/core/email/(base|button)\.html$
   - repo: local
     hooks:
       - id: check-build-assets
