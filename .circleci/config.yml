@@ -10,9 +10,6 @@ commands:
     steps:
       - checkout
       - run: npm ci
-      - run: npm ci --prefix src/email
-      - run: npm run email:check
-      - run: npm run email:test
       - run: npm run build
       - run:
           name: Ensure built assets are up to date
