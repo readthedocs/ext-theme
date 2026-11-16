@@ -17,9 +17,6 @@
         margin: 0 0 16px;
       }
     </mj-style>
-    <mj-raw>
-      <style type="text/css">{% block extra-styles %}{% endblock %}</style>
-    </mj-raw>
   </mj-head>
   <mj-body background-color="#f3f5f7" width="600px">
     <mj-section padding="28px 24px 12px">
