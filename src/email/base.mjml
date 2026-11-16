@@ -55,6 +55,21 @@
           {% block salutation %}{% trans "Hello!" %}{% endblock %}
         </mj-text>
         <mj-text padding="0">{% block content %}{% endblock %}</mj-text>
+        <mj-raw>{% block action %}{% if action_url %}</mj-raw>
+        <mj-button
+          href="{{ action_url }}"
+          background-color="#00778e"
+          color="#ffffff"
+          font-size="16px"
+          font-weight="bold"
+          border-radius="4px"
+          inner-padding="12px 20px"
+          align="left"
+          padding="8px 0 16px"
+        >
+          {{ action_label }}
+        </mj-button>
+        <mj-raw>{% endif %}{% endblock %}</mj-raw>
         <mj-text padding="16px 0 0">
           {% block signature %}
             {% trans "Keep documenting," %}<br />

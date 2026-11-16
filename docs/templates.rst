@@ -11,6 +11,9 @@ Email templates
 The email layout, ``core/email/base.html``, is generated from ``src/email/base.mjml``.
 Edit the MJML source, run ``npm run build:email``, and commit both files.
 
+To show a button after the content, pass ``action_url`` and ``action_label`` in the template context.
+Override the ``action`` block with nothing to remove it.
+
 
 Standards
 ---------
