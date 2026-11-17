@@ -1,6 +1,7 @@
 {% extends "projects/edit_base.html" %}
 
 {% load trans from i18n %}
+{% load crispy from crispy_forms_tags %}
 
 {% block title %}
   {% trans "Traffic Analytics" %}
@@ -22,11 +23,18 @@
   {% endcomment %}
   {% if not enabled %}
     {% include "organizations/includes/feature_disabled.html" with project=project plan="Advanced" %}
+  {% else %}
+    <form class="ui form" method="post" action=".">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <input class="ui primary button" type="submit" value="{% trans "Update" %}">
+    </form>
+    <div class="ui hidden divider"></div>
   {% endif %}
   <div class="{% if not enabled %}ui basic fitted disabled segment{% endif %}"
        data-bind="using: ProjectTrafficAnalyticsView()">
 
-    {% include "projects/partials/edit/traffic_list.html" with objects=top_pages_200 show_addons_link=True http_status=200 %}
+    {% include "projects/partials/edit/traffic_list.html" with objects=top_pages_200 show_enable_hint=True http_status=200 %}
 
     {% if top_pages_200 %}
       <h3 class="ui small header">
