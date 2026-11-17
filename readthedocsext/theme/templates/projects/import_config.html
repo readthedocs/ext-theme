@@ -2,35 +2,28 @@
 {% load blocktrans trans from i18n %}
 
 {% block project_add_subheader %}
-  {% if direct_upload_available %}
-    {% trans "Choose how your documentation is built" %}
-  {% else %}
-    {% trans "Add a configuration file to your project" %}
-  {% endif %}
+  {% trans "Choose how your documentation is built" %}
 {% endblock project_add_subheader %}
 
 {% block wizard_form %}
   {{ wizard.form.non_field_errors }}
 
-  {% if direct_upload_available %}
-    {# Both panes are direct children of the container below, so tabs are scoped and don't clash with the YAML sample tabs #}
-    <div class="ui top attached tabular menu"
-         data-bind="semanticui: { tabmenu: { context: '#project-create-build-method', childrenOnly: true } }">
-      <a class="active item" data-tab="readthedocs">
-        <i class="fa-duotone fa-gears icon"></i>
-        {% trans "Build on Read the Docs" %}
-        <div class="ui basic primary label">{% trans "Recommended" %}</div>
-      </a>
-      <a class="item" data-tab="direct_upload">
-        <i class="fa-duotone fa-cloud-arrow-up icon"></i>
-        {% trans "Build externally and upload" %}
-      </a>
-    </div>
-  {% endif %}
+  {# Both panes are direct children of the container below, so tabs are scoped and don't clash with the YAML sample tabs #}
+  <div class="ui top attached tabular menu"
+       data-bind="semanticui: { tabmenu: { context: '#project-create-build-method', childrenOnly: true } }">
+    <a class="active item" data-tab="readthedocs">
+      <i class="fa-duotone fa-gears icon"></i>
+      {% trans "Build on Read the Docs" %}
+      <div class="ui basic primary label">{% trans "Recommended" %}</div>
+    </a>
+    <a class="item" data-tab="direct_upload">
+      <i class="fa-duotone fa-cloud-arrow-up icon"></i>
+      {% trans "Build externally and upload" %}
+    </a>
+  </div>
 
   <div id="project-create-build-method">
-    <div class="ui {% if direct_upload_available %}bottom attached segment{% endif %} active tab"
-         data-tab="readthedocs">
+    <div class="ui bottom attached segment active tab" data-tab="readthedocs">
 
       <div class="ui small info message">
         {% blocktrans trimmed %}
@@ -324,58 +317,56 @@ build:
 
     </div>
 
-    {% if direct_upload_available %}
-      <div class="ui bottom attached segment tab" data-tab="direct_upload">
-        <div class="ui small info message">
-          {% blocktrans trimmed %}
-            <strong>Read the Docs will not build this project.</strong>
-            Build the documentation in your own pipeline, for example in GitHub Actions,
-            and upload the result with the upload action or the <code>readthedocs-upload</code> command line client.
-            Versions, pull request previews, search, addons, and custom domains work as usual.
-          {% endblocktrans %}
+    <div class="ui bottom attached segment tab" data-tab="direct_upload">
+      <div class="ui small info message">
+        {% blocktrans trimmed %}
+          <strong>Read the Docs will not build this project.</strong>
+          Build the documentation in your own pipeline, for example in GitHub Actions,
+          and upload the result with the upload action or the <code>readthedocs-upload</code> command line client.
+          Versions, pull request previews, search, addons, and custom domains work as usual.
+        {% endblocktrans %}
+      </div>
+
+      <p>
+        {% blocktrans trimmed %}
+          Your project is created without any versions.
+          The first one appears when your pipeline uploads the documentation:
+          each branch or tag you push becomes a version on Read the Docs,
+          and each pull request gets its own preview.
+        {% endblocktrans %}
+      </p>
+
+      <p>
+        {% blocktrans trimmed with url="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html" %}
+          Click <strong>I need help</strong> for the exact steps required,
+          or read the <a href="{{ url }}" target="_blank">direct upload documentation</a>.
+        {% endblocktrans %}
+      </p>
+
+      <div class="ui modal" data-modal-id="i-need-help-direct-upload">
+        <div class="header">{% trans "Upload your documentation to Read the Docs" %}</div>
+        <div class="scrolling content">
+          {% include "projects/partials/direct_upload_steps.html" with project_slug=project_slug %}
         </div>
-
-        <p>
-          {% blocktrans trimmed %}
-            Your project is created without any versions.
-            The first one appears when your pipeline uploads the documentation:
-            each branch or tag you push becomes a version on Read the Docs,
-            and each pull request gets its own preview.
-          {% endblocktrans %}
-        </p>
-
-        <p>
-          {% blocktrans trimmed with url="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html" %}
-            Click <strong>I need help</strong> for the exact steps required,
-            or read the <a href="{{ url }}" target="_blank">direct upload documentation</a>.
-          {% endblocktrans %}
-        </p>
-
-        <div class="ui modal" data-modal-id="i-need-help-direct-upload">
-          <div class="header">{% trans "Upload your documentation to Read the Docs" %}</div>
-          <div class="scrolling content">
-            {% include "projects/partials/direct_upload_steps.html" with project_slug=project_slug %}
-          </div>
-          <div class="actions">
-            <div class="ui cancel button">{% trans "Close" %}</div>
-          </div>
-        </div>
-
-        <div class="ui basic fitted right aligned segment">
-          <button data-bind="click: $root.show_modal('i-need-help-direct-upload')"
-                  type="button"
-                  class="ui button">{% trans "I need help" %}</button>
-
-          <button class="ui primary button"
-                  type="submit"
-                  name="config-is_direct_upload"
-                  value="true">
-            <i class="fa-duotone fa-cloud-arrow-up icon"></i>
-            {% trans "I will upload my documentation" %}
-          </button>
+        <div class="actions">
+          <div class="ui cancel button">{% trans "Close" %}</div>
         </div>
       </div>
-    {% endif %}
+
+      <div class="ui basic fitted right aligned segment">
+        <button data-bind="click: $root.show_modal('i-need-help-direct-upload')"
+                type="button"
+                class="ui button">{% trans "I need help" %}</button>
+
+        <button class="ui primary button"
+                type="submit"
+                name="config-is_direct_upload"
+                value="true">
+          <i class="fa-duotone fa-cloud-arrow-up icon"></i>
+          {% trans "I will upload my documentation" %}
+        </button>
+      </div>
+    </div>
   </div>
 {% endblock wizard_form %}
 

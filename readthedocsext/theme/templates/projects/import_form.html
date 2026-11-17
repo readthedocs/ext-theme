@@ -29,15 +29,6 @@
 
       {{ form_automatic | as_crispy_errors }}
 
-      {% if direct_upload_available %}
-        <div class="ui small info message">
-          {% blocktrans trimmed %}
-            Direct upload is available for this project.
-            Pick the repository and choose <strong>Build externally and upload</strong> in the next step.
-          {% endblocktrans %}
-        </div>
-      {% endif %}
-
       <div class="ui {% if form_automatic.is_disabled %}disabled{% endif %} basic segment">
         {% include "projects/partials/project_create_automatic.html" %}
       </div>
