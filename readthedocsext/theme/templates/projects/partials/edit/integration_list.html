@@ -36,9 +36,14 @@
 {% endblock list_placeholder_text %}
 
 {% block list_item_right_buttons %}
-  <a class="ui icon button" href="{{ object.get_absolute_url }}">
-    <i class="fa-duotone fa-wrench icon"></i>
-  </a>
+  {# This URL is to the detail page for the integration or for the GitHub App page #}
+  {% with url=object.get_absolute_url %}
+    <a class="ui {% if not url %}disabled{% endif %} icon button"
+       href="{% firstof url '#' %}"
+       {% if object.is_remote_only %}target="_blank"{% endif %}>
+      <i class="fa-duotone fa-wrench icon"></i>
+    </a>
+  {% endwith %}
 
   {% url 'projects_integrations_delete' project_slug=project.slug integration_pk=object.pk as form_url %}
   {% trans "Remove integration" as action_text %}
@@ -53,7 +58,9 @@
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
-  <a href="{{ object.get_absolute_url }}">{{ object.get_integration_type_display }}</a>
+  <a href="{% url 'projects_integrations_detail' project_slug=project.slug integration_pk=object.pk %}">
+    {{ object.get_integration_type_display }}
+  </a>
 
   {% if object.is_remote_only %}
     {% blocktrans trimmed asvar popup %}

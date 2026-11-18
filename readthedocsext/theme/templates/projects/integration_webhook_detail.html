@@ -18,9 +18,9 @@
       {% endblocktrans %}
     </p>
 
-    {% if integration.installation_url %}
+    {% if integration.get_absolute_url %}
       <a class="ui button"
-         href="{{ integration.installation_url }}"
+         href="{{ integration.get_absolute_url }}"
          target="_blank">
         <i class="fa-brands fa-github icon"></i>
         {% trans "Manage on GitHub" %}
