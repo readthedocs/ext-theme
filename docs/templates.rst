@@ -14,6 +14,11 @@ Edit the MJML source, run ``npm run build:email``, and commit both files.
 To show a button after the content, pass ``action_url`` and ``action_label`` in the template context.
 Override the ``action`` block with nothing to remove it.
 
+To highlight a message, like a build error, pass ``callout_header`` and ``callout_body``.
+It shows in a gray box between the content and the button.
+
+Put content that goes below the button in the ``content-after`` block.
+
 
 Standards
 ---------
