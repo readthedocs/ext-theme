@@ -6,9 +6,7 @@
 {% block title %}{{ project.name }} - {% trans "Notifications" %}{% endblock %}
 
 {% block project_notifications_active %}active{% endblock %}
-{% block project_edit_content_header %}
-  {% trans "Notifications" %}
-{% endblock %}
+{% block project_edit_content_header %}{% trans "Notifications" %}{% endblock %}
 
 {% block project_edit_content %}
   {% include "projects/partials/edit/notification_email_list.html" with objects=emails %}

@@ -60,9 +60,13 @@
     </div>
   {% endif %}
 
-  <form class="ui form"
-        method="post"
-        data-bind="using: ProjectTemporaryAccessView({'allow_all': {% if object.allow_all or not object.pk %} true {% else %} false {% endif %} })">
+  <form class="ui form" method="post" data-bind="using: ProjectTemporaryAccessView({'allow_all':
+    {% if object.allow_all or not object.pk %}
+      true
+    {% else %}
+      false
+    {% endif %}
+    })">
     {% csrf_token %}
 
     {# Manually reprodce the logic behind semantic-ui/uni_form.html as we need some wrapping elements. Don't do this if you don't have to. #}
