@@ -8,6 +8,86 @@
   {% trans "Sign up" %}
 {% endblock head_title %}
 
+{% comment %}
+  Comparison of the two sites under the sign up form, so visitors can tell
+  whether they are signing up on the right one.
+{% endcomment %}
+{% block content_below %}
+  <div class="center aligned twelve wide computer fourteen wide tablet sixteen wide mobile column">
+    <div class="ui left aligned raised segment">
+      <span class="ui primary ribbon label">
+        {% trans "Community or Business?" %}
+      </span>
+
+      <div class="ui basic segment">
+        <div class="ui two column stackable divided grid">
+          <div class="column">
+            <h3 class="ui header">
+              {% trans "Read the Docs Community" %}
+              {% if not USE_ORGANIZATIONS %}
+                <span class="ui tiny horizontal basic primary label">{% trans "You are here" %}</span>
+              {% endif %}
+              <div class="sub header">{% trans "For free and open-source projects" %}</div>
+            </h3>
+            <div class="ui relaxed list">
+              <div class="item">
+                <i class="primary fa-solid fa-check icon"></i>
+                <div class="content">{% trans "Clone public repositories" %}</div>
+              </div>
+              <div class="item">
+                <i class="primary fa-solid fa-check icon"></i>
+                <div class="content">{% trans "Public documentation" %}</div>
+              </div>
+              <div class="item">
+                <i class="primary fa-solid fa-check icon"></i>
+                <div class="content">{% trans "Ad-supported hosting, free for open source" %}</div>
+              </div>
+            </div>
+            {% if USE_ORGANIZATIONS %}
+              <a class="ui small basic primary button"
+                 href="https://app.readthedocs.org/accounts/signup/"
+                 data-analytics-events="signup-switch-to-community">
+                {% trans "Sign up for Community instead" %}
+              </a>
+            {% endif %}
+          </div>
+
+          <div class="column">
+            <h3 class="ui header">
+              {% trans "Read the Docs Business" %}
+              {% if USE_ORGANIZATIONS %}
+                <span class="ui tiny horizontal basic primary label">{% trans "You are here" %}</span>
+              {% endif %}
+              <div class="sub header">{% trans "For commercial and non-free projects" %}</div>
+            </h3>
+            <div class="ui relaxed list">
+              <div class="item">
+                <i class="primary fa-solid fa-check icon"></i>
+                <div class="content">{% trans "Clone private and public repositories" %}</div>
+              </div>
+              <div class="item">
+                <i class="primary fa-solid fa-check icon"></i>
+                <div class="content">{% trans "Public and private documentation" %}</div>
+              </div>
+              <div class="item">
+                <i class="primary fa-solid fa-check icon"></i>
+                <div class="content">{% trans "Team management for your organization" %}</div>
+              </div>
+            </div>
+            {% if not USE_ORGANIZATIONS %}
+              <a class="ui small basic primary button"
+                 href="https://app.readthedocs.com/accounts/signup/"
+                 data-analytics-events="signup-switch-to-business">
+                {% trans "Sign up for Business instead" %}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content_below %}
+
 {% block content_title_text %}
   {% if USE_ORGANIZATIONS %}
     {% trans "Sign up for Read the Docs Business" %}
