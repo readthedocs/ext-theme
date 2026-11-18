@@ -26,55 +26,76 @@
         </mj-text>
       </mj-column>
     </mj-section>
-    <mj-section background-color="#ffffff" padding="32px 32px 16px">
-      <mj-column>
-        <mj-image
-          src="https://assets.readthedocs.org/static/images/header-logo.png"
-          alt="Read the Docs"
-          width="250px"
-          align="left"
-          padding="0"
-        />
-        <mj-text
-          padding="0 0 24px"
-          font-size="18px"
-          font-weight="bold"
-          color="#00778e"
+    <mj-wrapper background-color="#ffffff" padding="32px 32px 16px">
+      <mj-section padding="0">
+        <mj-column>
+          <mj-image
+            src="https://assets.readthedocs.org/static/images/header-logo.png"
+            alt="Read the Docs"
+            width="250px"
+            align="left"
+            padding="0"
+          />
+          <mj-text
+            padding="0 0 24px"
+            font-size="18px"
+            font-weight="bold"
+            color="#00778e"
+          >
+            {% block header %}{% endblock %}
+          </mj-text>
+          <mj-text
+            padding="0 0 16px"
+            font-size="20px"
+            line-height="1.35"
+            font-weight="bold"
+          >
+            {% block salutation %}{% trans "Hello!" %}{% endblock %}
+          </mj-text>
+          <mj-text padding="0">{% block content %}{% endblock %}</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-raw>{% block callout %}{% if callout_body %}</mj-raw>
+      <mj-section padding="0 0 16px">
+        <mj-column
+          background-color="#f6f8fa"
+          border-left="4px solid #d0d7de"
+          padding="12px 16px"
         >
-          {% block header %}{% endblock %}
-        </mj-text>
-        <mj-text
-          padding="0 0 16px"
-          font-size="20px"
-          line-height="1.35"
-          font-weight="bold"
-        >
-          {% block salutation %}{% trans "Hello!" %}{% endblock %}
-        </mj-text>
-        <mj-text padding="0">{% block content %}{% endblock %}</mj-text>
-        <mj-raw>{% block action %}{% if action_url %}</mj-raw>
-        <mj-button
-          href="{{ action_url }}"
-          background-color="#00778e"
-          color="#ffffff"
-          font-size="16px"
-          font-weight="bold"
-          border-radius="4px"
-          inner-padding="12px 20px"
-          align="left"
-          padding="8px 0 16px"
-        >
-          {{ action_label }}
-        </mj-button>
-        <mj-raw>{% endif %}{% endblock %}</mj-raw>
-        <mj-text padding="16px 0 0">
-          {% block signature %}
-            {% trans "Keep documenting," %}<br />
-            {% trans "The Read the Docs team" %}
-          {% endblock %}
-        </mj-text>
-      </mj-column>
-    </mj-section>
+          <mj-text padding="0">
+            <strong>{{ callout_header }}</strong><br />
+            {{ callout_body }}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-raw>{% endif %}{% endblock %}</mj-raw>
+      <mj-section padding="0">
+        <mj-column>
+          <mj-raw>{% block action %}{% if action_url %}</mj-raw>
+          <mj-button
+            href="{{ action_url }}"
+            background-color="#00778e"
+            color="#ffffff"
+            font-size="16px"
+            font-weight="bold"
+            border-radius="4px"
+            inner-padding="12px 20px"
+            align="center"
+            padding="8px 0 24px"
+          >
+            {{ action_label }}
+          </mj-button>
+          <mj-raw>{% endif %}{% endblock %}</mj-raw>
+          <mj-text padding="0">{% block content-after %}{% endblock %}</mj-text>
+          <mj-text padding="16px 0 0">
+            {% block signature %}
+              {% trans "Keep documenting," %}<br />
+              {% trans "The Read the Docs team" %}
+            {% endblock %}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
     <mj-section padding="20px 32px 40px">
       <mj-column>
         <mj-text padding="0" font-size="13px" color="#596773">
