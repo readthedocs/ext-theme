@@ -30,9 +30,9 @@
       <mj-section padding="0">
         <mj-column>
           <mj-image
-            src="https://assets.readthedocs.org/static/images/header-logo.png"
+            src="https://assets.readthedocs.org/static/readthedocsext/theme/images/email-logo.png"
             alt="Read the Docs"
-            width="250px"
+            width="239px"
             align="left"
             padding="0"
           />
