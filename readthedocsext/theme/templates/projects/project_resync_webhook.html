@@ -9,7 +9,8 @@
 {% block content %}
   <p>{% trans "You sure?" %} O_o</p>
 
-  <form class="ui form" method="post" action=".">{% csrf_token %}
+  <form class="ui form" method="post" action=".">
+    {% csrf_token %}
     <input class="ui button" type="submit" value="{% trans "Resync" %}">
   </form>
 {% endblock %}

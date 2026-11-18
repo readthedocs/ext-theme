@@ -12,6 +12,9 @@
 
       <div class="ui vertical pointing fluid menu">
 
+        <a class="item {% block project_overview_active %}{% endblock project_overview_active %}"
+           href="{% url "projects_settings" project.slug %}">{% trans "Overview" %}</a>
+
         <div class="item">
           <div class="header">{% trans "Setup" %}</div>
           <div class="menu">

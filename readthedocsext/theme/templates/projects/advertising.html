@@ -4,10 +4,14 @@
 {% load static %}
 {% load crispy_forms_filters %}
 
-{% block title %}{% trans "Documentation advertising" %}{% endblock %}
+{% block title %}
+  {% trans "Documentation advertising" %}
+{% endblock %}
 
 {% block project-ads-active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Documentation advertising" %}{% endblock %}
+{% block project_edit_content_header %}
+  {% trans "Documentation advertising" %}
+{% endblock %}
 
 {% block project_edit_content %}
   <p>
@@ -117,7 +121,9 @@
     </p>
 
     <p>
-      <input class="ui button primary" type="submit" value="{% trans "Update advertising preference" %}">
+      <input class="ui button primary"
+             type="submit"
+             value="{% trans "Update advertising preference" %}">
     </p>
   </form>
 {% endblock %}

@@ -25,6 +25,8 @@
     {% csrf_token %}
     {{ form|crispy }}
 
-    <input class="ui primary button" type="submit" value="{% trans "Add variable" %}">
+    <input class="ui primary button"
+           type="submit"
+           value="{% trans "Add variable" %}">
   </form>
 {% endblock %}

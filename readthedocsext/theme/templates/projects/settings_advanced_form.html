@@ -4,7 +4,9 @@
 {% load crispy_forms_tags %}
 
 {% block title %}{{ project.name }} - {% trans "Advanced Settings" %}{% endblock %}
-{% block project_edit_content_header %}{% trans "Advanced Settings" %}{% endblock %}
+{% block project_edit_content_header %}
+  {% trans "Advanced Settings" %}
+{% endblock %}
 {% block project_advanced_active %}active{% endblock %}
 
 {% block project_edit_content %}
