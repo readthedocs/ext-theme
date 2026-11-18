@@ -231,6 +231,35 @@
         </td>
       </tr>
 
+      {% if not USE_ORGANIZATIONS %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny header">
+              <i class="fa-duotone fa-users icon"></i>
+              <div class="content">
+                <a href="{% url "projects_users" project.slug %}">{% trans "Maintainers" %}</a>
+                <div class="sub header">{% trans "Who can change this project" %}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            {% with maintainers=project.users.count %}
+              <div class="ui basic label">
+                {% blocktrans trimmed count counter=maintainers %}
+                  {{ counter }} maintainer
+                {% plural %}
+                  {{ counter }} maintainers
+                {% endblocktrans %}
+              </div>
+              {% if maintainers == 1 %}
+                <a class="ui basic primary label"
+                   href="{% url "projects_users" project.slug %}">{% trans "Invite a maintainer" %}</a>
+              {% endif %}
+            {% endwith %}
+          </td>
+        </tr>
+      {% endif %}
+
       <tr class="middle aligned">
         <td>
           <div class="ui tiny header">
