@@ -93,6 +93,37 @@
         {% endif %}
       </tr>
 
+      {% if not project.is_direct_upload %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny header">
+              <i class="fa-duotone fa-gears icon"></i>
+              <div class="content">
+                {% trans "Builds" %}
+                <div class="sub header">
+                  {% blocktrans trimmed with path=project.readthedocs_yaml_path|default:".readthedocs.yaml" %}
+                    Configured by <code>{{ path }}</code>
+                  {% endblocktrans %}
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            {% if project.skip or project.n_consecutive_failed_builds %}
+              <div class="ui basic red label">{% trans "Disabled" %}</div>
+            {% else %}
+              <div class="ui basic label">{% trans "Enabled" %}</div>
+            {% endif %}
+          </td>
+          <td class="right aligned collapsing">
+            <a class="ui small icon button"
+               href="{% url "projects_edit" project.slug %}">
+              <i class="fa-duotone fa-wrench icon"></i>
+            </a>
+          </td>
+        </tr>
+      {% endif %}
+
       <tr class="middle aligned">
         <td>
           <div class="ui tiny header">
@@ -176,17 +207,53 @@
           <div class="ui tiny header">
             <i class="fa-duotone fa-globe icon"></i>
             <div class="content">
-              {% trans "Domain" %}
-              <div class="sub header">{% trans "Where your documentation is served" %}</div>
+              {% trans "Documentation URL" %}
+              <div class="sub header">{% trans "Your domain and URL versioning scheme" %}</div>
             </div>
           </div>
         </td>
         <td>
-          <div class="ui basic {% if project.canonical_custom_domain %}primary{% endif %} label">{{ project.subdomain }}</div>
+          {% with url=project.get_docs_url %}
+            <a class="ui basic {% if project.canonical_custom_domain %}primary{% endif %} label"
+               href="{{ url }}">{{ url|cut:"https://"|cut:"http://" }}</a>
+          {% endwith %}
         </td>
         <td class="right aligned collapsing">
           <a class="ui small icon button"
              href="{% url "projects_domains" project.slug %}">
+            <i class="fa-duotone fa-wrench icon"></i>
+          </a>
+        </td>
+      </tr>
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny header">
+            <i class="fa-duotone fa-signs-post icon"></i>
+            <div class="content">
+              {% trans "Redirects" %}
+              <div class="sub header">{% trans "Keep old links working after pages move" %}</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          {% with redirects=project.redirects.count %}
+            {% if redirects %}
+              <div class="ui basic label">
+                {% blocktrans trimmed count counter=redirects %}
+                  {{ counter }} redirect
+                {% plural %}
+                  {{ counter }} redirects
+                {% endblocktrans %}
+              </div>
+            {% else %}
+              <div class="ui basic label">{% trans "None" %}</div>
+            {% endif %}
+          {% endwith %}
+        </td>
+        <td class="right aligned collapsing">
+          <a class="ui small icon button"
+             href="{% url "projects_redirects" project.slug %}">
             <i class="fa-duotone fa-wrench icon"></i>
           </a>
         </td>
@@ -286,4 +353,5 @@
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/config-file/v2.html" text="Configuration file" is_external=True class="item" %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/pull-requests.html" text="How to configure pull request builds" is_external=True class="item" %}
   {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/custom-domains.html" text="Custom domains" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/user-defined-redirects.html" text="Redirects" is_external=True class="item" %}
 {% endblock project_edit_sidebar_help_topics %}
