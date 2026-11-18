@@ -214,13 +214,8 @@
                         <!--[if mso | IE]><table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td class="" style="vertical-align:top;width:536px;" ><![endif]-->
                         <div class="mj-column-per-100 mj-outlook-group-fix" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
                           <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
-                            <tbody>
-                              <tr>
-                                <td align="left" style="font-size:0px;padding:0;word-break:break-word;">
-                                  <div style="font-family:Arial, Helvetica, sans-serif;font-size:16px;line-height:1.6;text-align:left;color:#27313a;">{% block content-after %}{% endblock %}</div>
-                                </td>
-                              </tr> {% block action %}{% if action_url %} <tr>
-                                <td align="left" style="font-size:0px;padding:8px 0 16px;word-break:break-word;">
+                            <tbody> {% block action %}{% if action_url %} <tr>
+                                <td align="center" style="font-size:0px;padding:8px 0 24px;word-break:break-word;">
                                   <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
                                     <tbody>
                                       <tr>
@@ -234,6 +229,11 @@
                                   </table>
                                 </td>
                               </tr> {% endif %}{% endblock %} <tr>
+                                <td align="left" style="font-size:0px;padding:0;word-break:break-word;">
+                                  <div style="font-family:Arial, Helvetica, sans-serif;font-size:16px;line-height:1.6;text-align:left;color:#27313a;">{% block content-after %}{% endblock %}</div>
+                                </td>
+                              </tr>
+                              <tr>
                                 <td align="left" style="font-size:0px;padding:16px 0 0;word-break:break-word;">
                                   <div style="font-family:Arial, Helvetica, sans-serif;font-size:16px;line-height:1.6;text-align:left;color:#27313a;">{% block signature %} {% trans "Keep documenting," %}<br /> {% trans "The Read the Docs team" %} {% endblock %}</div>
                                 </td>

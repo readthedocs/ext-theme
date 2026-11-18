@@ -71,7 +71,6 @@
       <mj-raw>{% endif %}{% endblock %}</mj-raw>
       <mj-section padding="0">
         <mj-column>
-          <mj-text padding="0">{% block content-after %}{% endblock %}</mj-text>
           <mj-raw>{% block action %}{% if action_url %}</mj-raw>
           <mj-button
             href="{{ action_url }}"
@@ -81,12 +80,13 @@
             font-weight="bold"
             border-radius="4px"
             inner-padding="12px 20px"
-            align="left"
-            padding="8px 0 16px"
+            align="center"
+            padding="8px 0 24px"
           >
             {{ action_label }}
           </mj-button>
           <mj-raw>{% endif %}{% endblock %}</mj-raw>
+          <mj-text padding="0">{% block content-after %}{% endblock %}</mj-text>
           <mj-text padding="16px 0 0">
             {% block signature %}
               {% trans "Keep documenting," %}<br />
