@@ -4,10 +4,14 @@
 {% load static %}
 {% load crispy_forms_filters %}
 
-{% block title %}{% trans "Pull request builds" %}{% endblock %}
+{% block title %}
+  {% trans "Pull request builds" %}
+{% endblock %}
 
 {% block project_pull_requests_active %}active{% endblock %}
-{% block project_edit_content_header %}{% trans "Pull request builds" %}{% endblock %}
+{% block project_edit_content_header %}
+  {% trans "Pull request builds" %}
+{% endblock %}
 
 {% block project_edit_content %}
   <p>
@@ -16,11 +20,14 @@
     {% endblocktrans %}
   </p>
 
+  {% include "projects/partials/github_app_migration_message.html" %}
+
   <form class="ui form" method="post" action=".">
     {% csrf_token %}
     {{ form | crispy }}
 
-    <input class="ui {% if form.errors and form.is_disabled %}disabled{% endif %} primary button" type="submit"
+    <input class="ui {% if form.errors and form.is_disabled %}disabled{% endif %} primary button"
+           type="submit"
            value="{% trans " Update" %}">
   </form>
 {% endblock %}

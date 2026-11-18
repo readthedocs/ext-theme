@@ -1,0 +1,17 @@
+{% load trans blocktrans from i18n %}
+
+{% comment %}
+  Shown where a feature needs the GitHub App and the project still uses our
+  old GitHub integration.
+{% endcomment %}
+
+{% if project.is_legacy_github_project %}
+  <div class="ui info message">
+    <i class="fa-brands fa-github icon"></i>
+    {% url "migrate_to_github_app" as migrate_url %}
+    {% blocktrans trimmed with url=migrate_url %}
+      Some options on this page need the GitHub App, and this project uses our old GitHub integration.
+      <a href="{{ url }}">Migrate to the GitHub App</a> to use them.
+    {% endblocktrans %}
+  </div>
+{% endif %}

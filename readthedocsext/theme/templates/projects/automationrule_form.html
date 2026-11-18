@@ -18,6 +18,8 @@
   {% else %}
     {% trans "Add rule" as button_text %}
   {% endif %}
+  {% include "projects/partials/github_app_migration_message.html" %}
+
   <form class="ui form"
         method="post"
         action="."

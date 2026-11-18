@@ -190,6 +190,12 @@ collapsed, to save visual space and can be expanded with the right label.
                     <code>{{ project.repo }}</code>
                   </div>
                 {% endif %}
+                {% if project.is_legacy_github_project and request.user|is_admin:project %}
+                  {% url "migrate_to_github_app" as migrate_url %}
+                  {% trans "Legacy GitHub" as text %}
+                  {% trans "Connected through our old GitHub integration. Migrate to the GitHub App to get all features." as popup %}
+                  {% include "includes/components/config_label.html" with url=migrate_url text=text popup=popup icon="fa-solid fa-circle-exclamation" classes="basic orange nowrap" %}
+                {% endif %}
               </div>
             {% endblock project_header_repository %}
           </div>
