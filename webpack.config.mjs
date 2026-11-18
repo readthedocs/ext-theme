@@ -228,7 +228,7 @@ function getCommonConfig(env, argv) {
           test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
           type: "asset/resource",
           generator: {
-            filename: "[name][ext]?[contenthash]",
+            filename: "[name][ext]",
             outputPath: "css/fonts/",
             publicPath: "css/fonts/",
           },
