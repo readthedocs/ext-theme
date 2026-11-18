@@ -6,9 +6,7 @@
 {% load is_admin from privacy_tags %}
 
 {% block top_left_menu_items %}
-  <div data-bind="using: FilterView()">
-    {% include "includes/filters/form.html" with fields=filter.form %}
-  </div>
+  {% include "includes/filters/form.html" with fields=filter.form %}
 {% endblock top_left_menu_items %}
 
 {% block create_button %}
