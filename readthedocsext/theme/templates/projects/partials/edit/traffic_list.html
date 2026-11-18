@@ -4,7 +4,7 @@
 
 {% block top_left_menu_items %}
   {% if show_filter and filter %}
-    <div data-bind="using: FilterView()">
+    <div data-bind="using: $root.FilterView()">
       {% include "includes/filters/form.html" with fields=filter.form %}
     </div>
   {% endif %}
@@ -47,9 +47,11 @@
 
 {% block list_item_right_buttons %}
   {% if show_filter and filter %}
+    {% trans "Show traffic for this page" as filter_text %}
     <a class="ui icon button"
        href="?url={{ object.0|urlencode:'' }}"
-       data-content="{% trans "Show traffic for this page" %}">
+       data-content="{{ filter_text }}"
+       aria-label="{{ filter_text }}">
       <i class="fa-duotone fa-filter icon"></i>
     </a>
   {% endif %}
