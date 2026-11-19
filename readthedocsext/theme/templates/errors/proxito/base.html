@@ -42,18 +42,20 @@
   {% block content_extra_link %}
   {% endblock content_extra_link %}
   {% block content_extra_logo %}
-    <div class="right floated">
-      {# Translators: The image that follows this text is the Read the Docs logo and wordmark. Altogether it should read "Hosted by Read the Docs" #}
-      {% trans "Hosted by" %}
-      {# djlint: off D018 #}
-      <a href="//{{ PRODUCTION_DOMAIN }}/"
-         aria-label="{% trans "Read the Docs" %}">
-        <img class="ui middle aligned image"
-             src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}"
-             width="140"
-             alt="{% trans "Read the Docs logo" %}" />
-      </a>
-      {# djlint: on #}
-    </div>
+    {% if USE_BRANDING %}
+      <div class="right floated">
+        {# Translators: The image that follows this text is the Read the Docs logo and wordmark. Altogether it should read "Hosted by Read the Docs" #}
+        {% trans "Hosted by" %}
+        {# djlint: off D018 #}
+        <a href="//{{ PRODUCTION_DOMAIN }}/"
+           aria-label="{% trans "Read the Docs" %}">
+          <img class="ui middle aligned image"
+               src="{% static 'readthedocsext/theme/images/logo-wordmark-dark.svg' %}"
+               width="140"
+               alt="{% trans "Read the Docs logo" %}" />
+        </a>
+        {# djlint: on #}
+      </div>
+    {% endif %}
   {% endblock content_extra_logo %}
 {% endblock content_extra_text %}
