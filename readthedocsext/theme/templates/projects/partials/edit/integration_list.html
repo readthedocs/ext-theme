@@ -58,18 +58,9 @@
 {% endblock list_item_icon %}
 
 {% block list_item_header %}
-  {# This URL is to the detail page for the integration or for the GitHub App page #}
-  {% with url=object.get_absolute_url %}
-    {% if url %}
-      <a href="{{ url }}"
-         {% if object.is_remote_only %}target="_blank"{% endif %}>
-        {{ object.get_integration_type_display }}
-      </a>
-    {% else %}
-      {# Mostly for GHA integrations that are disconnected. We have nothing to link to #}
-      {{ object.get_integration_type_display }}
-    {% endif %}
-  {% endwith %}
+  <a href="{% url 'projects_integrations_detail' project_slug=project.slug integration_pk=object.pk %}">
+    {{ object.get_integration_type_display }}
+  </a>
 
   {% if object.is_remote_only %}
     {% blocktrans trimmed asvar popup %}

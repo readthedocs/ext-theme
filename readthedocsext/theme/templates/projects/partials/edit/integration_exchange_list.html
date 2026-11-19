@@ -1,0 +1,56 @@
+{% extends "includes/crud/table_list.html" %}
+
+{% load trans blocktrans from i18n %}
+{% load naturaltime from humanize %}
+
+{% block top_menu %}
+{% endblock top_menu %}
+
+{% block list_placeholder_icon_class %}
+  fa-duotone fa-clock-rotate-left
+{% endblock list_placeholder_icon_class %}
+{% block list_placeholder_header %}
+  {% trans "There is no recent activity" %}
+{% endblock list_placeholder_header %}
+{% block list_placeholder_text %}
+{% endblock list_placeholder_text %}
+
+{% block list_item_icon %}
+  {% if object.failed %}
+    <i class="fa-solid fa-circle-xmark red icon"></i>
+  {% else %}
+    <i class="fa-solid fa-circle-check green icon"></i>
+  {% endif %}
+{% endblock list_item_icon %}
+
+{% block list_item_header_classes %}
+  ui tiny header
+{% endblock list_item_header_classes %}
+
+{% block list_item_header %}
+  <a href="{% url 'projects_integrations_exchanges_detail' project_slug=project.slug integration_pk=integration.pk exchange_pk=object.pk %}">
+    {% if object.response_detail %}
+      {{ object.response_detail }}
+    {% else %}
+      {% trans "Webhook request" %}
+    {% endif %}
+  </a>
+  <div class="sub header" title="{{ object.date }}">
+    {# Translators: this will read like "Received 5 minutes ago" #}
+    {% blocktrans with date=object.date|naturaltime trimmed %}
+      Received {{ date }}
+    {% endblocktrans %}
+  </div>
+{% endblock list_item_header %}
+
+{% block list_item_meta_column %}
+{% endblock list_item_meta_column %}
+
+{% block list_item_extra_items %}
+  <div class="item">
+    <span class="ui {% if object.failed %}red{% else %}green{% endif %} basic label">{{ object.status_code }}</span>
+  </div>
+{% endblock list_item_extra_items %}
+
+{% block list_item_right_column %}
+{% endblock list_item_right_column %}
