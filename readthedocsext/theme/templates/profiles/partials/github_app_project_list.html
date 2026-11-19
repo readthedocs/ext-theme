@@ -22,8 +22,7 @@
 {% block list_placeholder_text %}
   <a class="ui button"
      href="?step=revoke"
-     aria-label="{% trans "Skip this step" %}"
-     target="_blank">{% trans "Skip this step" %}</a>
+     aria-label="{% trans "Skip this step" %}">{% trans "Skip this step" %}</a>
 {% endblock list_placeholder_text %}
 
 {% block top_right_menu_items %}
@@ -81,7 +80,9 @@
 {% block list_item_meta_items %}
   <div class="item">
     {% with repo=object.project.remote_repository %}
-      <a href="{{ repo.html_url }}" class="ui small basic image nowrap label">
+      <a href="{{ repo.html_url }}"
+         class="ui small basic image nowrap label"
+         target="_blank">
         <img alt="{% blocktrans with name=project.name %}Project {{ name }} avatar{% endblocktrans %}"
              src="{{ repo.avatar_url }}" />
         <code>{{ repo.full_name }}</code>
