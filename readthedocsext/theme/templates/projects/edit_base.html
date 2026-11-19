@@ -35,7 +35,10 @@
             {# API tokens are only used to upload documentation for now #}
             {% if project.allows_direct_upload %}
               <a class="item {% block project_tokens_active %}{% endblock project_tokens_active %}"
-                 href="{% url "projects_tokens" project.slug %}">{% trans "API tokens" %}</a>
+                 href="{% url "projects_tokens" project.slug %}">
+                {% trans "API tokens" %}
+                <div class="ui basic primary label">{% trans "New" %}</div>
+              </a>
             {% endif %}
           </div>
         </div>

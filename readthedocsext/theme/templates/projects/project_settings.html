@@ -70,7 +70,10 @@
             <div class="ui tiny truncating header">
               <i class="fa-duotone fa-key icon"></i>
               <div class="content">
-                <a href="{% url "projects_tokens" project.slug %}">{% trans "API tokens" %}</a>
+                <a href="{% url "projects_tokens" project.slug %}">
+                  {% trans "API tokens" %}
+                  <span class="ui tiny horizontal basic primary label">{% trans "New" %}</span>
+                </a>
                 <div class="sub header">{% trans "Upload documentation you build yourself" %}</div>
               </div>
             </div>
