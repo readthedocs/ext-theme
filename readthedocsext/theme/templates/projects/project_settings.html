@@ -64,6 +64,30 @@
         </td>
       </tr>
 
+      {% if project.allows_direct_upload %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-key icon"></i>
+              <div class="content">
+                <a href="{% url "projects_tokens" project.slug %}">{% trans "API tokens" %}</a>
+                <div class="sub header">{% trans "Upload documentation you build yourself" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            {% with tokens=project.tokens.count %}
+              {% if tokens %}
+                <div class="ui basic label">{{ tokens }}</div>
+              {% else %}
+                <a class="ui basic primary label"
+                   href="{% url "projects_tokens" project.slug %}">{% trans "Create a token" %}</a>
+              {% endif %}
+            {% endwith %}
+          </td>
+        </tr>
+      {% endif %}
+
       {% if allow_private_repos %}
         <tr class="middle aligned">
           <td>
@@ -177,7 +201,7 @@
           <tr class="middle aligned">
             <td>
               <div class="ui tiny truncating header">
-                <i class="fa-duotone fa-key icon"></i>
+                <i class="fa-duotone fa-terminal icon"></i>
                 <div class="content">
                   <a href="{% url "projects_environmentvariables" project.slug %}">{% trans "Environment variables" %}</a>
                   <div class="sub header">{% trans "Secrets and settings for your builds" %}</div>
