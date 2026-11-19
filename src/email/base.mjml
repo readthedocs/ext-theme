@@ -1,0 +1,110 @@
+<mjml>
+  <mj-head>
+    <mj-raw>
+      {% load i18n %}
+      <!-- Generated from src/email/base.mjml by `npm run build:email` -->
+    </mj-raw>
+    <mj-title>Read the Docs</mj-title>
+    <mj-attributes>
+      <mj-all font-family="Arial, Helvetica, sans-serif" />
+      <mj-text color="#27313a" font-size="16px" line-height="1.6" />
+    </mj-attributes>
+    <mj-style>
+      a {
+        color: #00778e;
+      }
+      p {
+        margin: 0 0 16px;
+      }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#f3f5f7" width="600px">
+    <mj-section padding="28px 24px 12px">
+      <mj-column>
+        <mj-text padding="0" font-size="13px" color="#596773" align="right">
+          {% block top-right %}{% endblock %}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-wrapper background-color="#ffffff" padding="32px 32px 16px">
+      <mj-section padding="0">
+        <mj-column>
+          <mj-image
+            src="https://assets.readthedocs.org/static/readthedocsext/theme/images/email-logo.png"
+            alt="Read the Docs"
+            width="239px"
+            align="left"
+            padding="0"
+          />
+          <mj-text
+            padding="0 0 24px"
+            font-size="18px"
+            font-weight="bold"
+            color="#00778e"
+          >
+            {% block header %}{% endblock %}
+          </mj-text>
+          <mj-text
+            padding="0 0 16px"
+            font-size="20px"
+            line-height="1.35"
+            font-weight="bold"
+          >
+            {% block salutation %}{% trans "Hello!" %}{% endblock %}
+          </mj-text>
+          <mj-text padding="0">{% block content %}{% endblock %}</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-raw>{% block callout %}{% if callout_body %}</mj-raw>
+      <mj-section padding="0 0 16px">
+        <mj-column
+          background-color="#f6f8fa"
+          border-left="4px solid #d0d7de"
+          padding="12px 16px"
+        >
+          <mj-text padding="0">
+            <strong>{{ callout_header }}</strong><br />
+            {{ callout_body }}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-raw>{% endif %}{% endblock %}</mj-raw>
+      <mj-section padding="0">
+        <mj-column>
+          <mj-raw>{% block action %}{% if action_url %}</mj-raw>
+          <mj-button
+            href="{{ action_url }}"
+            background-color="#00778e"
+            color="#ffffff"
+            font-size="16px"
+            font-weight="bold"
+            border-radius="4px"
+            inner-padding="12px 20px"
+            align="center"
+            padding="8px 0 24px"
+          >
+            {{ action_label }}
+          </mj-button>
+          <mj-raw>{% endif %}{% endblock %}</mj-raw>
+          <mj-text padding="0">{% block content-after %}{% endblock %}</mj-text>
+          <mj-text padding="16px 0 0">
+            {% block signature %}
+              {% trans "Keep documenting," %}<br />
+              {% trans "The Read the Docs team" %}
+            {% endblock %}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+    <mj-section padding="20px 32px 40px">
+      <mj-column>
+        <mj-text padding="0" font-size="13px" color="#596773">
+          {% block footer %}
+            Read the Docs Community<br />
+            <a href="https://about.readthedocs.com">https://about.readthedocs.com</a>
+          {% endblock %}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
