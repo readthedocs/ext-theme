@@ -19,7 +19,17 @@
     {% endblocktrans %}
   </p>
 
-  {% include "projects/partials/github_app_migration_message.html" %}
+  {# When pull request builds are blocked, the form error already links to the migration #}
+  {% if project.is_legacy_github_project and not form.errors %}
+    <div class="ui info message">
+      <i class="fa-brands fa-github icon"></i>
+      {% url "migrate_to_github_app" as migrate_url %}
+      {% blocktrans trimmed with url=migrate_url %}
+        Build overview comments only work with the GitHub App.
+        <a href="{{ url }}">Migrate this project to the GitHub App</a> to use them.
+      {% endblocktrans %}
+    </div>
+  {% endif %}
 
   <form class="ui form" method="post" action=".">
     {% csrf_token %}

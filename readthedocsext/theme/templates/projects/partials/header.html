@@ -144,17 +144,18 @@ collapsed, to save visual space and can be expanded with the right label.
               <div class="ui sub header">{% trans "Repository" %}</div>
 
               <div class="project-repository">
-                <div class="ui icon nowrap label">
+                <div class="ui {% if project.is_legacy_github_project %}red{% endif %} icon nowrap label">
                   {% if project.is_github_app_project %}
                     <i class="fa-brands fa-github icon"
                        role="img"
                        aria-label="{% trans "Connected through GitHub App" %}"
                        data-content="{% trans "Connected through GitHub App" %}"></i>
                   {% elif project.remote_repository.vcs_provider == "github" %}
+                    {% trans "Connected through our old GitHub integration. Migrate to the GitHub App to get build overview comments and webhook filters." as popup %}
                     <i class="fa-brands fa-github icon"
                        role="img"
-                       aria-label="{% trans "Connected through GitHub" %}"
-                       data-content="{% trans "Connected through GitHub" %}"></i>
+                       aria-label="{{ popup }}"
+                       data-content="{{ popup }}"></i>
                   {% elif project.remote_repository.vcs_provider == "gitlab" %}
                     <i class="fa-brands fa-gitlab icon"
                        role="img"
@@ -189,12 +190,6 @@ collapsed, to save visual space and can be expanded with the right label.
                   <div class="ui basic nowrap label">
                     <code>{{ project.repo }}</code>
                   </div>
-                {% endif %}
-                {% if project.is_legacy_github_project and request.user|is_admin:project %}
-                  {% url "migrate_to_github_app" as migrate_url %}
-                  {% trans "Legacy GitHub" as text %}
-                  {% trans "Connected through our old GitHub integration. Migrate to the GitHub App to get all features." as popup %}
-                  {% include "includes/components/config_label.html" with url=migrate_url text=text popup=popup icon="fa-solid fa-circle-exclamation" classes="basic orange nowrap" %}
                 {% endif %}
               </div>
             {% endblock project_header_repository %}
