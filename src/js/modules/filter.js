@@ -1,39 +1,23 @@
-import ko from "knockout";
 import jquery from "jquery";
 
-import { Registry } from "../application/registry";
+import { LightDOMElement } from "../application/elements";
 
 /**
- * Base view for configuring a view filter.
+ * Filter form for list views
  *
- * Filters fields are all individually configured with the ``filter_config``
- * property as the configuration for the FUI dropdown element. This
- * configuration converts an ``onchange`` event into a form submission
- * automatically.
- *
- * This configuration is used directly in the ``includes/filter/form.html``
- * include, once per filter field.
- *
- * @class
- * @constructor
- * @public
+ * Wraps the form from ``includes/filters/form.html``. Each filter field is a
+ * FUI dropdown, and picking a value submits the form.
  */
-export class FilterView {
-  static view_name = "FilterView";
-
-  constructor() {
-    this.filter_config = {
+export class FilterFormElement extends LightDOMElement {
+  connectedCallback() {
+    super.connectedCallback();
+    jquery(this.querySelectorAll(".ui.filter.dropdown")).dropdown({
       action: "activate",
-      onChange: (value, label, $elem) => {
-        // Note: limit use of jQuery selector aid. It's confusing to mix Django
-        // templates, knockout, and random jQuery selections in the page. Most
-        // of the time, you should be able to use a knockout binding, but this
-        // was rather trivial and resulted in no additional observables on the
-        // view.
-        const form = $elem.closest("form");
-        form.submit();
+      onChange: () => {
+        this.querySelector("form").submit();
       },
-    };
+    });
   }
 }
-Registry.add_view(FilterView);
+
+customElements.define("readthedocs-filter-form", FilterFormElement);
