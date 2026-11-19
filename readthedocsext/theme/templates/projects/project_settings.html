@@ -24,6 +24,7 @@
   {% endif %}
 
   <table class="ui very basic compact stacking table">
+    {# Rows go from setup to access, building, hosting and team. Each shows its current value, or a prompt when unused. #}
     <tbody>
 
       <tr class="middle aligned">
@@ -79,6 +80,7 @@
         </td>
       </tr>
 
+      {# Same check as the API tokens menu item: tokens are only used to upload documentation for now #}
       {% if project.allows_direct_upload %}
         <tr class="middle aligned">
           <td>
@@ -106,6 +108,7 @@
         </tr>
       {% endif %}
 
+      {# Only Business has private documentation #}
       {% if allow_private_repos %}
         <tr class="middle aligned">
           <td>
@@ -123,6 +126,7 @@
         </tr>
       {% endif %}
 
+      {# Sharing is a Business feature #}
       {% if USE_ORGANIZATIONS %}
         <tr class="middle aligned">
           <td>
@@ -147,6 +151,7 @@
         </tr>
       {% endif %}
 
+      {# Build settings don't apply to direct upload projects #}
       {% if not project.is_direct_upload %}
         <tr class="middle aligned">
           <td>
@@ -175,6 +180,7 @@
         </tr>
       {% endif %}
 
+      {# Business only: 25% of Business projects use environment variables, 4% on Community #}
       {% if USE_ORGANIZATIONS and not project.is_direct_upload %}
         <tr class="middle aligned">
           <td>
@@ -217,6 +223,7 @@
         </td>
       </tr>
 
+      {# Business only: 38% of Business projects are in a subproject relationship, 1% on Community #}
       {% if USE_ORGANIZATIONS %}
         <tr class="middle aligned">
           <td>
@@ -257,6 +264,7 @@
         </td>
       </tr>
 
+      {# Community only: Business manages access with teams on the organization #}
       {% if not USE_ORGANIZATIONS %}
         <tr class="middle aligned">
           <td>
