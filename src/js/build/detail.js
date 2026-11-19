@@ -206,8 +206,6 @@ class BuildCommand {
  *     <div data-bind="using: BuildDetailView({id: {{ build.pk }}}, '{% url ... %}', '{% url ... %}')"></div>
  *
  * @param {Object} build - API data for a build.
- * @param {string} url_api_build - APIv3 build detail URL
- * @param {string} url_api_notifications - APIv3 build notification URL
  * @param {number} poll_interval - Milliseconds between API polls
  */
 export class BuildDetailView {
@@ -362,6 +360,8 @@ export class BuildDetailView {
     /* Output */
     /** @observable {Object} Build configuration used for the build */
     this.config = ko.observable();
+    /** @observable {string} The build instance to process the build */
+    this.builder = ko.observable(build.builder);
     /** @observable {Array.<Object>} Build command objects as an array */
     this.commands = ko.observableArray(build.commands);
 
@@ -456,7 +456,7 @@ export class BuildDetailView {
   }
 
   /**
-   * Continually poll our build API and update Build, BuildCommand,
+   * Continually poll our APIv3 for build object and update Build, BuildCommand,
    * and BuildCommandOutput states. When the API return indicates the build is
    * finished, we stop recursive polling.
    */
@@ -471,6 +471,7 @@ export class BuildDetailView {
         this.commit(data.commit);
         this.docs_url(data.urls.documentation);
         this.commit_url(data.urls.commit);
+        this.builder(data.builder);
         this.config(data.config);
         this.state(data.state.code);
         this.state_display(data.state_display);
@@ -481,16 +482,14 @@ export class BuildDetailView {
 
         // This is a mock command used to preview the command output.
         // TODO probably do this in the application instead
-        if (data.config) {
-          this.add_command({
-            id: 0,
-            command: "readthedocs-build --show-config",
-            output: JSON.stringify(data.config, null, "  "),
-            exit_code: 0,
-            run_time: 0,
-            is_debug: true,
-          });
-        }
+        this.add_command({
+          id: 0,
+          command: "readthedocs-build --show-config",
+          output: JSON.stringify(data.config, null, "  "),
+          exit_code: 0,
+          run_time: 0,
+          is_debug: true,
+        });
         for (const command of data.commands) {
           this.add_command(command);
         }
@@ -500,11 +499,10 @@ export class BuildDetailView {
         this.is_loading(false);
       })
       .always(() => {
-        // Continually poll API while build is not finished, even if a request
-        // failed. If it is in a finished state, this method will return without
-        // setting another timer. We do not update :attr:`is_polling` by
-        // computed/subscription as we want to ensure this update happens at
-        // the very end of API updates instead.
+        // Continually poll API while build is not finished. If it is in a finished
+        // state, this method will return without setting another timer. We do not
+        // updated :attr:`is_polling` by computed/subscription as we want to ensure
+        // this update happens at the very end of API updates instead.
         if (this.is_finished()) {
           this.is_polling(false);
         } else {
@@ -518,7 +516,9 @@ export class BuildDetailView {
 
   /** Poll APIv3 build notification API directly
    *
-   * TODO include notifications in the build detail API response instead.
+   * We poll notifications separately from the build detail endpoint.
+   *
+   * TODO include notifications in the same build detail API request.
    *
    * @param {str} url - APIv3 build notification endpoint
    */
