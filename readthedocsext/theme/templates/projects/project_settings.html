@@ -64,6 +64,47 @@
         </td>
       </tr>
 
+      {% if allow_private_repos %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-lock icon"></i>
+              <div class="content">
+                <a href="{% url "projects_edit" project.slug %}">{% trans "Privacy level" %}</a>
+                <div class="sub header">{% trans "Who can view the documentation" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            <div class="ui basic label">{{ project.get_privacy_level_display }}</div>
+          </td>
+        </tr>
+      {% endif %}
+
+      {% if USE_ORGANIZATIONS %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-share-nodes icon"></i>
+              <div class="content">
+                <a href="{% url "projects_temporary_access_list" project.slug %}">{% trans "Sharing" %}</a>
+                <div class="sub header">{% trans "Give readers access with a link or password" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            {% with shares=project.temporary_access.active.count %}
+              {% if shares %}
+                <div class="ui basic label">{{ shares }}</div>
+              {% else %}
+                <a class="ui basic primary label"
+                   href="{% url "projects_temporary_access_list" project.slug %}">{% trans "Share" %}</a>
+              {% endif %}
+            {% endwith %}
+          </td>
+        </tr>
+      {% endif %}
+
       {% if not project.is_direct_upload %}
         <tr class="middle aligned">
           <td>
@@ -80,7 +121,11 @@
               <a class="ui basic primary label"
                  href="{% url "projects_pull_requests" project.slug %}">{% trans "Turn on" %}</a>
             {% elif allow_private_repos %}
-              <div class="ui basic label">{{ project.get_external_builds_privacy_level_display }}</div>
+              <div class="ui basic label">
+                {% blocktrans trimmed with level=project.get_external_builds_privacy_level_display %}
+                  On, {{ level }}
+                {% endblocktrans %}
+              </div>
             {% else %}
               <div class="ui basic label">{% trans "On" %}</div>
             {% endif %}
@@ -112,6 +157,40 @@
         </tr>
       {% endif %}
 
+      {% if USE_ORGANIZATIONS %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-folder-tree icon"></i>
+              <div class="content">
+                <a href="{% url "projects_subprojects" project.slug %}">{% trans "Subprojects" %}</a>
+                <div class="sub header">{% trans "Serve several projects from one domain" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            <div class="ui basic label">{{ project.subprojects.count }}</div>
+          </td>
+        </tr>
+
+        {% if not project.is_direct_upload %}
+          <tr class="middle aligned">
+            <td>
+              <div class="ui tiny truncating header">
+                <i class="fa-duotone fa-key icon"></i>
+                <div class="content">
+                  <a href="{% url "projects_environmentvariables" project.slug %}">{% trans "Environment variables" %}</a>
+                  <div class="sub header">{% trans "Secrets and settings for your builds" %}</div>
+                </div>
+              </div>
+            </td>
+            <td class="right aligned">
+              <div class="ui basic label">{{ project.environmentvariable_set.count }}</div>
+            </td>
+          </tr>
+        {% endif %}
+      {% endif %}
+
       <tr class="middle aligned">
         <td>
           <div class="ui tiny truncating header">
@@ -126,23 +205,6 @@
           <div class="ui basic label">{{ project.default_version }}</div>
         </td>
       </tr>
-
-      {% if allow_private_repos %}
-        <tr class="middle aligned">
-          <td>
-            <div class="ui tiny truncating header">
-              <i class="fa-duotone fa-lock icon"></i>
-              <div class="content">
-                <a href="{% url "projects_edit" project.slug %}">{% trans "Privacy level" %}</a>
-                <div class="sub header">{% trans "Who can view the documentation" %}</div>
-              </div>
-            </div>
-          </td>
-          <td class="right aligned">
-            <div class="ui basic label">{{ project.get_privacy_level_display }}</div>
-          </td>
-        </tr>
-      {% endif %}
 
       <tr class="middle aligned">
         <td>
