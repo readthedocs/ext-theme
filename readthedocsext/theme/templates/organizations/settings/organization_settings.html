@@ -1,6 +1,7 @@
 {% extends "organizations/settings/base.html" %}
 
 {% load trans blocktrans from i18n %}
+{% load has_sso_enabled from organizations %}
 
 {% block title %}
   {{ organization.name }} - {% trans "Settings" %}
@@ -72,50 +73,46 @@
         </td>
       </tr>
 
-      {# Teams and members have their own tabs, they are listed here as they decide who can access projects #}
-      <tr class="middle aligned">
-        <td>
-          <div class="ui tiny truncating header">
-            <i class="fa-duotone fa-people-group icon"></i>
-            <div class="content">
-              <a href="{% url "organization_team_list" organization.slug %}">{% trans "Teams" %}</a>
-              <div class="sub header">{% trans "Which projects each group can access" %}</div>
+      {# Teams and members have their own tabs, they are listed here as they decide who can access projects. #}
+      {# With GitHub, GitLab, or Bitbucket single sign-on, access comes from the repository and both are disabled. #}
+      {% if not organization|has_sso_enabled:"allauth" %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-people-group icon"></i>
+              <div class="content">
+                <a href="{% url "organization_team_list" organization.slug %}">{% trans "Teams" %}</a>
+                <div class="sub header">{% trans "Which projects each group can access" %}</div>
+              </div>
             </div>
-          </div>
-        </td>
-        <td class="right aligned">
-          {% with teams=organization.teams.count %}
-            {% if teams %}
-              <div class="ui basic label">{{ teams }}</div>
-            {% else %}
-              <a class="ui basic primary label"
-                 href="{% url "organization_team_add" organization.slug %}">{% trans "Create a team" %}</a>
-            {% endif %}
-          {% endwith %}
-        </td>
-      </tr>
+          </td>
+          <td class="right aligned">
+            <div class="ui basic label">{{ organization.teams.count }}</div>
+          </td>
+        </tr>
 
-      <tr class="middle aligned">
-        <td>
-          <div class="ui tiny truncating header">
-            <i class="fa-duotone fa-users icon"></i>
-            <div class="content">
-              <a href="{% url "organization_members" organization.slug %}">{% trans "Members" %}</a>
-              <div class="sub header">{% trans "Everyone in your organization" %}</div>
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-users icon"></i>
+              <div class="content">
+                <a href="{% url "organization_members" organization.slug %}">{% trans "Members" %}</a>
+                <div class="sub header">{% trans "Everyone in your organization" %}</div>
+              </div>
             </div>
-          </div>
-        </td>
-        <td class="right aligned">
-          {% with members=organization.members.count %}
-            {% if members > 1 %}
-              <div class="ui basic label">{{ members }}</div>
-            {% else %}
-              <a class="ui basic primary label"
-                 href="{% url "organization_team_list" organization.slug %}">{% trans "Invite a member" %}</a>
-            {% endif %}
-          {% endwith %}
-        </td>
-      </tr>
+          </td>
+          <td class="right aligned">
+            {% with members=organization.members.count %}
+              {% if members > 1 %}
+                <div class="ui basic label">{{ members }}</div>
+              {% else %}
+                <a class="ui basic primary label"
+                   href="{% url "organization_team_list" organization.slug %}">{% trans "Invite a member" %}</a>
+              {% endif %}
+            {% endwith %}
+          </td>
+        </tr>
+      {% endif %}
 
       <tr class="middle aligned">
         <td>
