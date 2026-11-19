@@ -151,7 +151,25 @@
                 {% endblocktrans %}
               </p>
 
-              {% include "profiles/partials/github_oauth_list.html" with objects=old_github_accounts %}
+              {% if old_github_accounts %}
+                {% include "profiles/partials/github_oauth_list.html" with objects=old_github_accounts %}
+              {% elif step_connect_completed %}
+                <p class="ui green text">
+                  <i class="fas fa-circle-check icon"></i>
+                  {% trans "Your account is connected to our GitHub App." %}
+                </p>
+              {% else %}
+                {# Users with projects on the old integration, but no GitHub account connected #}
+                <form class="ui form"
+                      method="post"
+                      action="{% provider_login_url "githubapp" process="connect" next=request.get_full_path %}">
+                  {% csrf_token %}
+                  <button class="ui button" type="submit">
+                    <i class="fa-brands fa-github icon"></i>
+                    {% trans "Connect your GitHub account" %}
+                  </button>
+                </form>
+              {% endif %}
 
               <div class="ui divider"></div>
               <a class="ui button {% if not step_connect_completed %}disabled{% endif %}"
@@ -169,8 +187,10 @@
               {% if installation_target_groups %}
                 <div class="ui message info">
                   <i class="fad fa-info-circle icon"></i>
-                  {% blocktrans trimmed with manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" %}
-                    If you skip installation during migration, you will need to <a href="{{ manual_migration_docs }}" target="_blank">manually migrate</a> your project to keep it working.
+                  {% blocktrans trimmed %}
+                    You can skip this for now.
+                    Projects whose repositories don't have the GitHub App keep using the old integration,
+                    and you can come back to this page at any time to migrate them.
                   {% endblocktrans %}
                 </div>
               {% endif %}
