@@ -1,10 +1,10 @@
 {% extends "organizations/base.html" %}
 
-{% load i18n %}
+{% load trans from i18n %}
 
 {% block content-header %}
   {% include "organizations/partials/header.html" with edit_active="active" %}
-{% endblock %}
+{% endblock content-header %}
 
 {% block content %}
   <div class="ui stackable grid">
@@ -13,24 +13,24 @@
       <div class="ui vertical pointing fluid menu">
         <a class="item {% block organization_overview_active %}{% endblock organization_overview_active %}"
            href="{% url 'organization_settings' organization.slug %}">{% trans "Overview" %}</a>
-        <a class="item {% block organization_details_active %}{% endblock %}"
+        <a class="item {% block organization_details_active %}{% endblock organization_details_active %}"
            href="{% url 'organization_edit' organization.slug %}">
           {% trans "Details" %}
         </a>
-        <a class="item {% block organization_owners_active %}{% endblock %}"
+        <a class="item {% block organization_owners_active %}{% endblock organization_owners_active %}"
            href="{% url 'organization_owners' organization.slug %}">
           {% trans "Owners" %}
         </a>
-        <a class="item {% block organization_security_log_active %}{% endblock %}"
+        <a class="item {% block organization_security_log_active %}{% endblock organization_security_log_active %}"
            href="{% url 'organization_security_log' organization.slug %}">
           {% trans "Security log" %}
         </a>
         {% if USE_ORGANIZATIONS %}
-          <a class="item {% block organization_subscription_active %}{% endblock %}"
+          <a class="item {% block organization_subscription_active %}{% endblock organization_subscription_active %}"
              href="{% url 'subscription_detail' organization.slug %}">
             {% trans "Subscription" %}
           </a>
-          <a class="item {% block organization_sso_active %}{% endblock %}"
+          <a class="item {% block organization_sso_active %}{% endblock organization_sso_active %}"
              href="{% url 'organization_sso' organization.slug %}">
             {% trans "Authorization" %}
           </a>
