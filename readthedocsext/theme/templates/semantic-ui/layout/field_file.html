@@ -84,7 +84,11 @@
 
     <label for="{{ widget.data.attrs.id }}" class="ui button">
       <i class="fas {% if widget.data.attrs.accept == "image/*" %}fa-image{% else %}fa-upload{% endif %} icon"></i>
-      {{ widget.data.input_text }}
+      {% if widget.data.is_initial %}
+        {{ widget.data.input_text }}
+      {% else %}
+        {% trans "Upload file" %}
+      {% endif %}
     </label>
   </div>
 
