@@ -86,34 +86,6 @@
         </td>
       </tr>
 
-      {# Domains are set on each project, the plan decides if they are available #}
-      <tr class="middle aligned">
-        <td>
-          <div class="ui tiny truncating header">
-            <i class="fa-duotone fa-globe icon"></i>
-            <div class="content">
-              {% if custom_domains_enabled %}
-                <a href="{{ organization.get_absolute_url }}">{% trans "Custom domains" %}</a>
-              {% else %}
-                <a href="{% url "subscription_detail" organization.slug %}">{% trans "Custom domains" %}</a>
-              {% endif %}
-              <div class="sub header">{% trans "Serve documentation from your own domain" %}</div>
-            </div>
-          </div>
-        </td>
-        <td class="right aligned">
-          {% if not custom_domains_enabled %}
-            <a class="ui basic primary label"
-               href="{% url "subscription_detail" organization.slug %}">{% trans "Upgrade" %}</a>
-          {% elif custom_domains %}
-            <div class="ui basic label">{{ custom_domains }}</div>
-          {% else %}
-            <a class="ui basic primary label"
-               href="{{ organization.get_absolute_url }}">{% trans "Add a domain" %}</a>
-          {% endif %}
-        </td>
-      </tr>
-
       <tr class="middle aligned">
         <td>
           <div class="ui tiny truncating header">
