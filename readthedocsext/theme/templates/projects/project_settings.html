@@ -56,9 +56,9 @@
               <div class="ui basic label">{% trans "Bitbucket" %}</div>
             {% elif not project.integrations.exists %}
               <a class="ui basic red label"
-                 href="{% url "projects_integrations" project.slug %}">{% trans "Add a webhook" %}</a>
+                 href="{% url "projects_integrations" project.slug %}">{% trans "Add an integration" %}</a>
             {% else %}
-              <div class="ui basic label">{% trans "Webhook" %}</div>
+              <div class="ui basic label">{{ project.integrations.first.get_integration_type_display }}</div>
             {% endif %}
           {% endwith %}
         </td>
