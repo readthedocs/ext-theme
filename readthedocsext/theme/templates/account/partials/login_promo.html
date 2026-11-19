@@ -1,0 +1,76 @@
+{% load trans from i18n %}
+
+{% comment %}
+  Feature card shown under the login form. ``promo`` picks the card,
+  each one with its own analytics event to compare clicks.
+{% endcomment %}
+
+<div class="ui left aligned raised segment">
+  {% if promo == "direct-upload" %}
+    <span class="ui primary ribbon label">
+      <i class="fa-solid fa-bullhorn icon"></i>
+      {% trans "New feature" %}
+    </span>
+  {% else %}
+    <span class="ui primary ribbon label">
+      <i class="fa-solid fa-lightbulb icon"></i>
+      {% trans "Did you know?" %}
+    </span>
+  {% endif %}
+
+  <div class="ui basic center aligned segment">
+    {% if promo == "direct-upload" %}
+      <h3 class="ui small icon header">
+        <i class="primary fa-solid fa-cloud-arrow-up icon"></i>
+        <div class="content">
+          {% trans "Direct upload" %}
+          <span class="ui tiny horizontal basic label">{% trans "Beta" %}</span>
+          <div class="sub header">
+            {% trans "Build your documentation in your own CI and upload it to Read the Docs." %}
+          </div>
+        </div>
+      </h3>
+      <a class="ui small primary button"
+         href="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html"
+         target="_blank"
+         data-analytics-events="login-promo-direct-upload">
+        <i class="fa-solid fa-book icon"></i>
+        {% trans "Read the guide" %}
+      </a>
+    {% elif promo == "build-overview" %}
+      <h3 class="ui small icon header">
+        <i class="primary fa-solid fa-comment-dots icon"></i>
+        <div class="content">
+          {% trans "Build overview comments" %}
+          <div class="sub header">
+            {% trans "Get a comment on every pull request with a link to the preview and the files that changed." %}
+          </div>
+        </div>
+      </h3>
+      <a class="ui small primary button"
+         href="https://docs.readthedocs.com/platform/stable/pull-requests.html"
+         target="_blank"
+         data-analytics-events="login-promo-build-overview">
+        <i class="fa-solid fa-book icon"></i>
+        {% trans "Learn more" %}
+      </a>
+    {% elif promo == "visual-diff" %}
+      <h3 class="ui small icon header">
+        <i class="primary fa-solid fa-code-compare icon"></i>
+        <div class="content">
+          {% trans "Visual diff" %}
+          <div class="sub header">
+            {% trans "See the changes from a pull request highlighted on your rendered documentation." %}
+          </div>
+        </div>
+      </h3>
+      <a class="ui small primary button"
+         href="https://docs.readthedocs.com/platform/stable/visual-diff.html"
+         target="_blank"
+         data-analytics-events="login-promo-visual-diff">
+        <i class="fa-solid fa-book icon"></i>
+        {% trans "Learn more" %}
+      </a>
+    {% endif %}
+  </div>
+</div>
