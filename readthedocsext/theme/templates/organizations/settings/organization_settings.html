@@ -20,7 +20,7 @@
 {% endblock organization_edit_sidebar_help_topics %}
 
 {% block organization_edit_content %}
-  {# Rows go from billing to people, then security. Each shows its current value, or a prompt when unused. #}
+  {# Rows go from the plan to projects, people, then security. Each shows its current value, or a prompt when unused. #}
   <table class="ui very basic compact stacking table">
     <tbody>
 
@@ -46,6 +46,70 @@
                href="{% url "subscription_detail" organization.slug %}">{{ stripe_subscription.get_status_display }}</a>
           {% else %}
             <div class="ui basic label">{% firstof plan_name stripe_subscription.get_status_display %}</div>
+          {% endif %}
+        </td>
+      </tr>
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-hammer icon"></i>
+            <div class="content">
+              <a href="{% url "subscription_detail" organization.slug %}">{% trans "Concurrent builds" %}</a>
+              <div class="sub header">{% trans "Builds that can run at the same time" %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          <div class="ui basic label">{{ concurrent_builds }}</div>
+        </td>
+      </tr>
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-book icon"></i>
+            <div class="content">
+              <a href="{{ organization.get_absolute_url }}">{% trans "Projects" %}</a>
+              <div class="sub header">{% trans "Documentation in your organization" %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          {% with projects=organization.projects.count %}
+            {% if projects %}
+              <div class="ui basic label">{{ projects }}</div>
+            {% else %}
+              <a class="ui basic primary label" href="{% url "projects_import" %}">{% trans "Add a project" %}</a>
+            {% endif %}
+          {% endwith %}
+        </td>
+      </tr>
+
+      {# Domains are set on each project, the plan decides if they are available #}
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-globe icon"></i>
+            <div class="content">
+              {% if custom_domains_enabled %}
+                <a href="{{ organization.get_absolute_url }}">{% trans "Custom domains" %}</a>
+              {% else %}
+                <a href="{% url "subscription_detail" organization.slug %}">{% trans "Custom domains" %}</a>
+              {% endif %}
+              <div class="sub header">{% trans "Serve documentation from your own domain" %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          {% if not custom_domains_enabled %}
+            <a class="ui basic primary label"
+               href="{% url "subscription_detail" organization.slug %}">{% trans "Upgrade" %}</a>
+          {% elif custom_domains %}
+            <div class="ui basic label">{{ custom_domains }}</div>
+          {% else %}
+            <a class="ui basic primary label"
+               href="{{ organization.get_absolute_url }}">{% trans "Add a domain" %}</a>
           {% endif %}
         </td>
       </tr>
