@@ -178,6 +178,29 @@
             {% endif %}
           </td>
         </tr>
+
+        {# Same check as the option on the pull request builds form: the comment is only posted through the GitHub App #}
+        {% if project.is_github_app_project %}
+          <tr class="middle aligned">
+            <td>
+              <div class="ui tiny truncating header">
+                <i class="fa-duotone fa-comment icon"></i>
+                <div class="content">
+                  <a href="{% url "projects_pull_requests" project.slug %}">{% trans "Pull request comments" %}</a>
+                  <div class="sub header">{% trans "A build overview with files changed on each pull request" %}</div>
+                </div>
+              </div>
+            </td>
+            <td class="right aligned">
+              {% if project.external_builds_enabled and project.show_build_overview_in_comment %}
+                <div class="ui basic label">{% trans "On" %}</div>
+              {% else %}
+                <a class="ui basic primary label"
+                   href="{% url "projects_pull_requests" project.slug %}">{% trans "Turn on" %}</a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endif %}
       {% endif %}
 
       {# Business only: 25% of Business projects use environment variables, 4% on Community #}
