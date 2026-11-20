@@ -15,6 +15,8 @@
         <div class="item">
           <div class="header">{% trans "Setup" %}</div>
           <div class="menu">
+            <a class="item {% block project_overview_active %}{% endblock project_overview_active %}"
+               href="{% url "projects_settings" project.slug %}">{% trans "Overview" %}</a>
             <a class="item {% block project_edit_active %}{% endblock project_edit_active %}"
                href="{% url "projects_edit" project.slug %}">{% trans "Settings" %}</a>
             <a class="item {% block project_addons_active %}{% endblock project_addons_active %}"
@@ -33,7 +35,10 @@
             {# API tokens are only used to upload documentation for now #}
             {% if project.allows_direct_upload %}
               <a class="item {% block project_tokens_active %}{% endblock project_tokens_active %}"
-                 href="{% url "projects_tokens" project.slug %}">{% trans "API tokens" %}</a>
+                 href="{% url "projects_tokens" project.slug %}">
+                {% trans "API tokens" %}
+                <div class="ui basic primary label">{% trans "New" %}</div>
+              </a>
             {% endif %}
           </div>
         </div>
