@@ -55,7 +55,7 @@
       Configure organization {{ organization }}
     {% endblocktrans %}
     <a class="ui button"
-       href="{% url "organization_edit" object.slug %}"
+       href="{% url "organization_settings" object.slug %}"
        data-content="{{ label_configure }}"
        aria-label="{{ label_configure }}"
        tabindex="0">

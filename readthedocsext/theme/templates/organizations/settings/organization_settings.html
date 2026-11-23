@@ -1,0 +1,214 @@
+{% extends "organizations/settings/base.html" %}
+
+{% load trans blocktrans from i18n %}
+{% load has_sso_enabled from organizations %}
+
+{% block title %}
+  {{ organization.name }} - {% trans "Settings" %}
+{% endblock title %}
+
+{% block organization_overview_active %}
+  active
+{% endblock organization_overview_active %}
+{% block organization_edit_content_header %}
+  {% trans "Overview" %}
+{% endblock organization_edit_content_header %}
+
+{% block organization_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/commercial/organizations.html" text=_("Organizations") is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/commercial/single-sign-on.html" text=_("Organization single sign-on") is_external=True class="item" %}
+{% endblock organization_edit_sidebar_help_topics %}
+
+{% block organization_edit_content %}
+  {# Rows go from the plan to projects, people, then security. Each shows its current value, or a prompt when unused. #}
+  <table class="ui very basic compact stacking table">
+    <tbody>
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-credit-card icon"></i>
+            <div class="content">
+              <a href="{% url "subscription_detail" organization.slug %}">{% trans "Subscription" %}</a>
+              <div class="sub header">{% trans "Your plan and billing" %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          {% if not stripe_subscription or stripe_subscription.status == "canceled" %}
+            <a class="ui basic primary label"
+               href="{% url "subscription_detail" organization.slug %}">{% trans "Choose a plan" %}</a>
+          {% elif stripe_subscription.status == "trialing" %}
+            <a class="ui basic primary label"
+               href="{% url "subscription_detail" organization.slug %}">{% trans "Trial, add a payment method" %}</a>
+          {% elif stripe_subscription.status != "active" %}
+            <a class="ui basic red label"
+               href="{% url "subscription_detail" organization.slug %}">{{ stripe_subscription.get_status_display }}</a>
+          {% else %}
+            <div class="ui basic label">{% firstof plan_name stripe_subscription.get_status_display %}</div>
+          {% endif %}
+        </td>
+      </tr>
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-hammer icon"></i>
+            <div class="content">
+              <a href="{% url "subscription_detail" organization.slug %}">{% trans "Concurrent builds" %}</a>
+              <div class="sub header">{% trans "Builds that can run at the same time" %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          <div class="ui basic label">{{ concurrent_builds }}</div>
+        </td>
+      </tr>
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-book icon"></i>
+            <div class="content">
+              <a href="{{ organization.get_absolute_url }}">{% trans "Projects" %}</a>
+              <div class="sub header">{% trans "Documentation in your organization" %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          {% with projects=organization.projects.count %}
+            {% if projects %}
+              <div class="ui basic label">{{ projects }}</div>
+            {% else %}
+              <a class="ui basic primary label" href="{% url "projects_import" %}">{% trans "Add a project" %}</a>
+            {% endif %}
+          {% endwith %}
+        </td>
+      </tr>
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-user-shield icon"></i>
+            <div class="content">
+              <a href="{% url "organization_owners" organization.slug %}">{% trans "Owners" %}</a>
+              <div class="sub header">{% trans "Who can change settings and billing" %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          {# A single owner is the only person who can recover the organization #}
+          {% with owners=organization.owners.count %}
+            {% if owners == 1 %}
+              <a class="ui basic primary label"
+                 href="{% url "organization_owners" organization.slug %}">{% trans "Add an owner" %}</a>
+            {% else %}
+              <div class="ui basic label">{{ owners }}</div>
+            {% endif %}
+          {% endwith %}
+        </td>
+      </tr>
+
+      {# Teams and members have their own tabs, they are listed here as they decide who can access projects. #}
+      {# With GitHub, GitLab, or Bitbucket single sign-on, access comes from the repository and both are disabled. #}
+      {% if not organization|has_sso_enabled:"allauth" %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-people-group icon"></i>
+              <div class="content">
+                <a href="{% url "organization_team_list" organization.slug %}">{% trans "Teams" %}</a>
+                <div class="sub header">{% trans "Which projects each group can access" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            <div class="ui basic label">{{ organization.teams.count }}</div>
+          </td>
+        </tr>
+
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-users icon"></i>
+              <div class="content">
+                <a href="{% url "organization_members" organization.slug %}">{% trans "Members" %}</a>
+                <div class="sub header">{% trans "Everyone in your organization" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            {% with members=organization.members.count %}
+              {% if members > 1 %}
+                <div class="ui basic label">{{ members }}</div>
+              {% else %}
+                <a class="ui basic primary label"
+                   href="{% url "organization_team_list" organization.slug %}">{% trans "Invite a member" %}</a>
+              {% endif %}
+            {% endwith %}
+          </td>
+        </tr>
+      {% endif %}
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-right-to-bracket icon"></i>
+            <div class="content">
+              <a href="{% url "organization_sso" organization.slug %}">{% trans "Authorization" %}</a>
+              <div class="sub header">{% trans "How members sign in and get access" %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          {# Provider names match the options on the authorization page #}
+          {% with provider=organization.ssointegration.provider %}
+            {% if provider == "allauth" %}
+              <div class="ui basic label">{% trans "GitHub, GitLab, or Bitbucket" %}</div>
+            {% elif provider == "email" %}
+              <div class="ui basic label">{% trans "Google" %}</div>
+            {% elif provider == "saml" %}
+              <div class="ui basic label">{% trans "SAML" %}</div>
+            {% elif sso_enabled %}
+              <a class="ui basic primary label"
+                 href="{% url "organization_sso" organization.slug %}">{% trans "Set up single sign-on" %}</a>
+            {% else %}
+              <a class="ui basic primary label"
+                 href="{% url "subscription_detail" organization.slug %}">{% trans "Upgrade" %}</a>
+            {% endif %}
+          {% endwith %}
+        </td>
+      </tr>
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-clock-rotate-left icon"></i>
+            <div class="content">
+              <a href="{% url "organization_security_log" organization.slug %}">{% trans "Security log" %}</a>
+              <div class="sub header">{% trans "Sign-ins and changes in your organization" %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          {# The plan sets how many days of history are kept, older plans have none #}
+          {% if audit_logs.unlimited %}
+            <div class="ui basic label">{% trans "Unlimited" %}</div>
+          {% elif audit_logs %}
+            <div class="ui basic label">
+              {% blocktrans trimmed count days=audit_logs.value %}
+                {{ days }} day
+              {% plural %}
+                {{ days }} days
+              {% endblocktrans %}
+            </div>
+          {% else %}
+            <a class="ui basic primary label"
+               href="{% url "subscription_detail" organization.slug %}">{% trans "Upgrade" %}</a>
+          {% endif %}
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+{% endblock organization_edit_content %}
