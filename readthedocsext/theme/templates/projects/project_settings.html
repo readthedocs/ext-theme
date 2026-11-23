@@ -428,17 +428,17 @@
           <div class="ui tiny truncating header">
             <i class="fa-duotone fa-globe icon"></i>
             <div class="content">
-              <a href="{% url "projects_domains" project.slug %}">{% trans "Custom domain" %}</a>
+              <a href="{% url "projects_domains" project.slug %}">{% trans "Documentation domain" %}</a>
               <div class="sub header">{{ project.subdomain }}</div>
             </div>
           </div>
         </td>
         <td class="right aligned">
           {% if project.canonical_custom_domain %}
-            <div class="ui basic label">{% trans "On" %}</div>
+            <div class="ui basic label">{% trans "Custom domain" %}</div>
           {% elif custom_domains_enabled %}
             <a class="ui basic primary label"
-               href="{% url "projects_domains" project.slug %}">{% trans "Add a domain" %}</a>
+               href="{% url "projects_domains" project.slug %}">{% trans "Use your own domain" %}</a>
           {% else %}
             {% url "subscription_detail" project.organizations.first.slug as subscription_url %}
             {% url "projects_domains" project.slug as domains_url %}
