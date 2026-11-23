@@ -3,6 +3,7 @@
 {% load get_providers from socialaccount %}
 {% load crispy from crispy_forms_tags %}
 {% load trans blocktrans from i18n %}
+{% load random_choice from ext_theme_tags %}
 
 {% block head_title %}
   {% trans "Log in" %}
@@ -130,36 +131,12 @@
 {% endblock content_body %}
 
 {% comment %}
-  Promo for direct upload under the login form. The sign up page overrides
-  this block with its own feature highlights.
+  Feature promo under the login form, picked at random on each page load.
+  The sign up page overrides this block with its own feature highlights.
 {% endcomment %}
 {% block content_below %}
+  {% random_choice "direct-upload" "build-overview" "visual-diff" as promo %}
   <div class="center aligned nine wide computer twelve wide tablet sixteen wide mobile column">
-    <div class="ui left aligned raised segment">
-      <span class="ui primary ribbon label">
-        <i class="fa-solid fa-bullhorn icon"></i>
-        {% trans "New feature" %}
-      </span>
-
-      <div class="ui basic center aligned segment">
-        <h3 class="ui small icon header">
-          <i class="primary fa-solid fa-cloud-arrow-up icon"></i>
-          <div class="content">
-            {% trans "Direct upload" %}
-            <span class="ui tiny horizontal basic label">{% trans "Beta" %}</span>
-            <div class="sub header">
-              {% trans "Build your documentation in your own CI and upload it to Read the Docs." %}
-            </div>
-          </div>
-        </h3>
-        <a class="ui small primary button"
-           href="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html"
-           target="_blank"
-           data-analytics-events="login-direct-upload-guide">
-          <i class="fa-solid fa-book icon"></i>
-          {% trans "Read the guide" %}
-        </a>
-      </div>
-    </div>
+    {% include "account/partials/login_promo.html" with promo=promo %}
   </div>
 {% endblock content_below %}

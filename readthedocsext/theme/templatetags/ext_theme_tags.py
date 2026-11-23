@@ -1,3 +1,4 @@
+import random
 import re
 from urllib.parse import urljoin
 
@@ -245,3 +246,9 @@ def whitespaceless(content):
 def starts_with(value, arg):
     """Usage: {% if value|starts_with:"prefix" %}"""
     return str(value).startswith(str(arg))
+
+
+@register.simple_tag
+def random_choice(*choices):
+    """Usage: {% random_choice "a" "b" "c" as choice %}"""
+    return random.choice(choices)
