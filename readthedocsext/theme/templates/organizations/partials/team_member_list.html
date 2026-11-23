@@ -12,9 +12,7 @@
 
 {% block top_left_menu_items %}
   {% if filter %}
-    <div data-bind="using: FilterView()">
-      {% include "includes/filters/form.html" with fields=filter.form %}
-    </div>
+    {% include "includes/filters/form.html" with fields=filter.form %}
   {% endif %}
 {% endblock top_left_menu_items %}
 
