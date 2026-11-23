@@ -245,10 +245,8 @@
     </tbody>
   </table>
 
-  {# The rest shows the current value, for features that only some projects use. Grouped and ordered like the settings menu. #}
+  {# The rest shows the current value, for features that only some projects use. In the same order as the settings menu. #}
   <h3 class="ui small header">{% trans "More settings" %}</h3>
-
-  <div class="ui horizontal divider">{% trans "Setup" %}</div>
   <table class="ui very basic compact stacking table">
     <tbody>
 
@@ -382,13 +380,6 @@
         </tr>
       {% endif %}
 
-    </tbody>
-  </table>
-
-  <div class="ui horizontal divider">{% trans "Building" %}</div>
-  <table class="ui very basic compact stacking table">
-    <tbody>
-
       <tr class="middle aligned">
         <td>
           <div class="ui tiny truncating header">
@@ -428,13 +419,6 @@
           </td>
         </tr>
       {% endif %}
-
-    </tbody>
-  </table>
-
-  <div class="ui horizontal divider">{% trans "Hosting" %}</div>
-  <table class="ui very basic compact stacking table">
-    <tbody>
 
       {# Business only: 38% of Business projects are in a subproject relationship, 1% on Community #}
       {% if USE_ORGANIZATIONS %}
@@ -498,13 +482,6 @@
           {% endif %}
         </td>
       </tr>
-
-    </tbody>
-  </table>
-
-  <div class="ui horizontal divider">{% trans "Maintaining" %}</div>
-  <table class="ui very basic compact stacking table">
-    <tbody>
 
       {# Sharing is a Business feature #}
       {% if USE_ORGANIZATIONS %}
