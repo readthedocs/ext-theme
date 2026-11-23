@@ -7,7 +7,7 @@
   {% trans "Edit Project" %}
 {% endblock title %}
 {% block project_edit_content_header %}
-  {% trans "Settings" %}
+  {% trans "General settings" %}
 {% endblock project_edit_content_header %}
 {% block project_edit_active %}
   active
@@ -77,10 +77,7 @@
   </div>
   <div class="ui mini header">{% trans "Resources" %}</div>
   <div class="ui bulleted list">
-    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/config-file/v2.html" text="Configuration file" is_external=True class="item" %}
-    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/pull-requests.html" text="How to configure pull request builds" is_external=True class="item" %}
     {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/automation-rules.html" text="How to manage versions automatically" is_external=True class="item" %}
-    {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/setup/monorepo.html" text="How to use a .readthedocs.yaml file in a sub-folder" is_external=True class="item" %}
     {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/versioning-schemes.html" text="URL versioning schemes" is_external=True class="item" %}
   </div>
 {% endblock project_edit_sidebar_help_topics_content %}

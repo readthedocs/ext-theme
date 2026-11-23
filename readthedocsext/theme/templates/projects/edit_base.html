@@ -16,7 +16,7 @@
           <div class="header">{% trans "Setup" %}</div>
           <div class="menu">
             <a class="item {% block project_edit_active %}{% endblock project_edit_active %}"
-               href="{% url "projects_edit" project.slug %}">{% trans "Settings" %}</a>
+               href="{% url "projects_edit" project.slug %}">{% trans "General settings" %}</a>
             <a class="item {% block project_addons_active %}{% endblock project_addons_active %}"
                href="{% url "projects_addons" project.slug %}">{% trans "Addons" %}</a>
             {% if not USE_ORGANIZATIONS %}
@@ -41,6 +41,8 @@
         <div class="item">
           <div class="header">{% trans "Building" %}</div>
           <div class="menu">
+            <a class="item {% block project_build_settings_active %}{% endblock project_build_settings_active %}"
+               href="{% url "projects_build_settings" project.slug %}">{% trans "Build settings" %}</a>
             {% if project.is_direct_upload %}
               <a class="disabled item">{% trans "Integrations" %}</a>
             {% else %}
