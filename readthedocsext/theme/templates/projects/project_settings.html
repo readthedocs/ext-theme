@@ -304,29 +304,6 @@
         </td>
       </tr>
 
-      <tr class="middle aligned">
-        <td>
-          <div class="ui tiny truncating header">
-            <i class="fa-duotone fa-layer-group icon"></i>
-            <div class="content">
-              <a href="{% url "projects_edit" project.slug %}">{% trans "URL versioning scheme" %}</a>
-              <div class="sub header">{% trans "How versions and translations appear in URLs" %}</div>
-            </div>
-          </div>
-        </td>
-        <td class="right aligned">
-          <div class="ui basic label">
-            {% if project.versioning_scheme == "multiple_versions_with_translations" %}
-              {% trans "Multiple versions with translations" %}
-            {% elif project.versioning_scheme == "multiple_versions_without_translations" %}
-              {% trans "Multiple versions" %}
-            {% else %}
-              {% trans "Single version" %}
-            {% endif %}
-          </div>
-        </td>
-      </tr>
-
       {# Only Business has private documentation #}
       {% if allow_private_repos %}
         <tr class="middle aligned">
