@@ -206,14 +206,22 @@ class BuildCommand {
  *     <div data-bind="using: BuildDetailView({id: {{ build.pk }}}, '{% url ... %}', '{% url ... %}')"></div>
  *
  * @param {Object} build - API data for a build.
+ * @param {number} poll_interval - Milliseconds between API polls
  */
 export class BuildDetailView {
   static view_name = "BuildDetailView";
 
-  constructor(build = {}, url_api_build, url_api_notifications) {
+  constructor(
+    build = {},
+    url_api_build,
+    url_api_notifications,
+    poll_interval = 2000,
+  ) {
     /** @type {number} The build pk/id to fetch */
     this.id = build.id;
-    /** @type {string} APIv2 build detail API URL */
+    /** @type {number} Milliseconds between API polls */
+    this.poll_interval = poll_interval;
+    /** @type {string} APIv3 build detail API URL */
     this.url_api_build = url_api_build;
     /** @type {string} APIv3 build notification API URL */
     this.url_api_notifications = url_api_notifications;
@@ -448,7 +456,7 @@ export class BuildDetailView {
   }
 
   /**
-   * Continually poll our APIv2 for build object and update Build, BuildCommand,
+   * Continually poll our APIv3 for build object and update Build, BuildCommand,
    * and BuildCommandOutput states. When the API return indicates the build is
    * finished, we stop recursive polling.
    */
@@ -456,16 +464,16 @@ export class BuildDetailView {
     jquery
       .getJSON(this.url_api_build)
       .then((data) => {
-        this.date(data.date);
+        this.date(data.created);
         this.success(data.success);
         this.error(data.error);
-        this.length(data.length);
+        this.length(data.duration);
         this.commit(data.commit);
-        this.docs_url(data.docs_url);
-        this.commit_url(data.commit_url);
+        this.docs_url(data.urls.documentation);
+        this.commit_url(data.urls.commit);
         this.builder(data.builder);
         this.config(data.config);
-        this.state(data.state);
+        this.state(data.state.code);
         this.state_display(data.state_display);
 
         // Always update date and length, as these should update as the build progresses
@@ -490,7 +498,7 @@ export class BuildDetailView {
         // from the API, but we'll be polling until the build is finished.
         this.is_loading(false);
       })
-      .then(() => {
+      .always(() => {
         // Continually poll API while build is not finished. If it is in a finished
         // state, this method will return without setting another timer. We do not
         // updated :attr:`is_polling` by computed/subscription as we want to ensure
@@ -501,18 +509,16 @@ export class BuildDetailView {
           setTimeout(() => {
             this.poll_api_build();
             this.poll_api_notifications();
-          }, 2000);
+          }, this.poll_interval);
         }
       });
   }
 
   /** Poll APIv3 build notification API directly
    *
-   * We have to do this because we rely on the build APIv2 for everything else
-   * and the APIv3 build endpoints don't have the data required yet.
+   * We poll notifications separately from the build detail endpoint.
    *
-   * TODO this should all happen under a single build API v3 poll instead, and
-   * this method should go away.
+   * TODO include notifications in the same build detail API request.
    *
    * @param {str} url - APIv3 build notification endpoint
    */
