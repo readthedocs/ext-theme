@@ -14,7 +14,7 @@
 {% endblock project_edit_content_header %}
 
 {% block project_edit_content %}
-  {# The five things we want every project to have, as a checklist: checked once set up, with a prompt until then #}
+  {# Five steps in the order a project gets set up, as a checklist: checked once done, with a prompt until then #}
   <h3 class="ui small header">{% trans "Get set up" %}</h3>
   <table class="ui very basic compact stacking table">
     <tbody>
@@ -38,7 +38,7 @@
                 <a href="{% url "projects_tokens" project.slug %}">{% trans "Repository" %}</a>
                 <div class="sub header">{% trans "Documentation is uploaded through the API" %}</div>
               {% else %}
-                <a href="{% url "projects_integrations" project.slug %}">{% trans "Repository" %}</a>
+                <a href="{% url "projects_integrations" project.slug %}">{% trans "Connect your repository" %}</a>
                 <div class="sub header">{{ project.repo }}</div>
               {% endif %}
             </div>
@@ -64,6 +64,45 @@
               <div class="ui basic label">{{ project.integrations.first.get_integration_type_display }}</div>
             {% endif %}
           {% endwith %}
+        </td>
+      </tr>
+
+      {# A passing build is the first sign that the project works. Direct upload projects are done once a version is uploaded. #}
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            {% if project.is_direct_upload %}
+              <i class="fa-duotone {% if active_versions_count %}fa-circle-check green{% else %}fa-circle grey{% endif %} icon"></i>
+              <div class="content">
+                <a href="{% url "projects_tokens" project.slug %}">{% trans "Upload your documentation" %}</a>
+                <div class="sub header">{% trans "Publish a version you built yourself" %}</div>
+              </div>
+            {% else %}
+              <i class="fa-duotone {% if project.has_good_build %}fa-circle-check green{% else %}fa-circle grey{% endif %} icon"></i>
+              <div class="content">
+                <a href="{% url "builds_project_list" project.slug %}">{% trans "Get a passing build" %}</a>
+                <div class="sub header">{% trans "Your documentation builds and is online" %}</div>
+              </div>
+            {% endif %}
+          </div>
+        </td>
+        <td class="right aligned">
+          {% if project.is_direct_upload %}
+            {% if active_versions_count %}
+              <div class="ui basic label">{% trans "Uploaded" %}</div>
+            {% else %}
+              <a class="ui basic primary label"
+                 href="{% url "projects_tokens" project.slug %}">{% trans "Upload" %}</a>
+            {% endif %}
+          {% elif project.has_good_build %}
+            <div class="ui basic label">{% trans "Passing" %}</div>
+          {% elif project.builds.exists %}
+            <a class="ui basic primary label"
+               href="{% url "builds_project_list" project.slug %}">{% trans "Fix the build" %}</a>
+          {% else %}
+            <a class="ui basic primary label"
+               href="{% url "builds_project_list" project.slug %}">{% trans "Start a build" %}</a>
+          {% endif %}
         </td>
       </tr>
 
@@ -99,7 +138,7 @@
             <div class="ui tiny truncating header">
               <i class="fa-duotone {% if project.external_builds_enabled %}fa-circle-check green{% else %}fa-circle grey{% endif %} icon"></i>
               <div class="content">
-                <a href="{% url "projects_pull_requests" project.slug %}">{% trans "Pull request builds" %}</a>
+                <a href="{% url "projects_pull_requests" project.slug %}">{% trans "Build pull requests" %}</a>
                 <div class="sub header">{% trans "Preview changes before you merge" %}</div>
               </div>
             </div>
@@ -129,7 +168,7 @@
               <div class="ui tiny truncating header">
                 <i class="fa-duotone {% if project.is_github_app_project and project.external_builds_enabled and project.show_build_overview_in_comment %}fa-circle-check green{% else %}fa-circle grey{% endif %} icon"></i>
                 <div class="content">
-                  <a href="{% url "projects_pull_requests" project.slug %}">{% trans "Pull request comments" %}</a>
+                  <a href="{% url "projects_pull_requests" project.slug %}">{% trans "Comment on pull requests" %}</a>
                   <div class="sub header">{% trans "A build overview with files changed on each pull request" %}</div>
                 </div>
               </div>
@@ -149,50 +188,56 @@
         {% endif %}
       {% endif %}
 
-      {# Single version projects have nothing to add, so they count as done #}
+      {# Projects with more than one person on them stick around. Community invites maintainers, Business adds the project to teams. #}
       <tr class="middle aligned">
         <td>
           <div class="ui tiny truncating header">
-            <i class="fa-duotone {% if project.is_single_version or active_versions_count > 1 %}fa-circle-check green{% else %}fa-circle grey{% endif %} icon"></i>
-            <div class="content">
-              <a href="{% url "project_version_list" project.slug %}">{% trans "Versions" %}</a>
-              <div class="sub header">{% trans "Keep docs for each release, and a stable version for readers" %}</div>
-            </div>
+            {% if USE_ORGANIZATIONS %}
+              {% with organization=project.organizations.first %}
+                <i class="fa-duotone {% if project.teams.exists %}fa-circle-check green{% else %}fa-circle grey{% endif %} icon"></i>
+                <div class="content">
+                  <a href="{% url "organization_team_list" organization.slug %}">{% trans "Invite your team" %}</a>
+                  <div class="sub header">{% trans "Teams that can view or change this project" %}</div>
+                </div>
+              {% endwith %}
+            {% else %}
+              <i class="fa-duotone {% if project.users.count > 1 %}fa-circle-check green{% else %}fa-circle grey{% endif %} icon"></i>
+              <div class="content">
+                <a href="{% url "projects_users" project.slug %}">{% trans "Invite your team" %}</a>
+                <div class="sub header">{% trans "Who can change this project" %}</div>
+              </div>
+            {% endif %}
           </div>
         </td>
         <td class="right aligned">
-          {% if project.is_single_version %}
-            <div class="ui basic label">{% trans "Single version" %}</div>
-          {% elif active_versions_count > 1 %}
-            <div class="ui basic label">{{ active_versions_count }}</div>
+          {% if USE_ORGANIZATIONS %}
+            {% with teams=project.teams.count organization=project.organizations.first %}
+              {% if teams %}
+                <div class="ui basic label">
+                  {% blocktrans trimmed count teams=teams %}
+                    {{ teams }} team
+                  {% plural %}
+                    {{ teams }} teams
+                  {% endblocktrans %}
+                </div>
+              {% else %}
+                <a class="ui basic primary label"
+                   href="{% url "organization_team_list" organization.slug %}">{% trans "Add to a team" %}</a>
+              {% endif %}
+            {% endwith %}
           {% else %}
-            <a class="ui basic primary label"
-               href="{% url "project_version_list" project.slug %}">{% trans "Add a version" %}</a>
-          {% endif %}
-        </td>
-      </tr>
-
-      <tr class="middle aligned">
-        <td>
-          <div class="ui tiny truncating header">
-            <i class="fa-duotone {% if project.canonical_custom_domain %}fa-circle-check green{% else %}fa-circle grey{% endif %} icon"></i>
-            <div class="content">
-              <a href="{% url "projects_domains" project.slug %}">{% trans "Custom domain" %}</a>
-              <div class="sub header">{{ project.subdomain }}</div>
-            </div>
-          </div>
-        </td>
-        <td class="right aligned">
-          {% if project.canonical_custom_domain %}
-            <div class="ui basic label">{% trans "On" %}</div>
-          {% elif custom_domains_enabled %}
-            <a class="ui basic primary label"
-               href="{% url "projects_domains" project.slug %}">{% trans "Add a domain" %}</a>
-          {% else %}
-            {% url "subscription_detail" project.organizations.first.slug as subscription_url %}
-            {% url "projects_domains" project.slug as domains_url %}
-            <a class="ui basic primary label"
-               href="{% firstof subscription_url domains_url %}">{% trans "Upgrade" %}</a>
+            {% with maintainers=project.users.count %}
+              {% if maintainers > 1 %}
+                <div class="ui basic label">
+                  {% blocktrans trimmed %}
+                    {{ maintainers }} maintainers
+                  {% endblocktrans %}
+                </div>
+              {% else %}
+                <a class="ui basic primary label"
+                   href="{% url "projects_users" project.slug %}">{% trans "Invite a maintainer" %}</a>
+              {% endif %}
+            {% endwith %}
           {% endif %}
         </td>
       </tr>
@@ -381,6 +426,31 @@
       <tr class="middle aligned">
         <td>
           <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-globe icon"></i>
+            <div class="content">
+              <a href="{% url "projects_domains" project.slug %}">{% trans "Custom domain" %}</a>
+              <div class="sub header">{{ project.subdomain }}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          {% if project.canonical_custom_domain %}
+            <div class="ui basic label">{% trans "On" %}</div>
+          {% elif custom_domains_enabled %}
+            <a class="ui basic primary label"
+               href="{% url "projects_domains" project.slug %}">{% trans "Add a domain" %}</a>
+          {% else %}
+            {% url "subscription_detail" project.organizations.first.slug as subscription_url %}
+            {% url "projects_domains" project.slug as domains_url %}
+            <a class="ui basic primary label"
+               href="{% firstof subscription_url domains_url %}">{% trans "Upgrade" %}</a>
+          {% endif %}
+        </td>
+      </tr>
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
             <i class="fa-duotone fa-magnifying-glass icon"></i>
             <div class="content">
               <a href="{% url "projects_search_settings" project.slug %}">{% trans "Search" %}</a>
@@ -438,31 +508,6 @@
           </div>
         </td>
       </tr>
-
-      {# Community only: Business manages access with teams on the organization #}
-      {% if not USE_ORGANIZATIONS %}
-        <tr class="middle aligned">
-          <td>
-            <div class="ui tiny truncating header">
-              <i class="fa-duotone fa-users icon"></i>
-              <div class="content">
-                <a href="{% url "projects_users" project.slug %}">{% trans "Maintainers" %}</a>
-                <div class="sub header">{% trans "Who can change this project" %}</div>
-              </div>
-            </div>
-          </td>
-          <td class="right aligned">
-            {% with maintainers=project.users.count %}
-              {% if maintainers == 1 %}
-                <a class="ui basic primary label"
-                   href="{% url "projects_users" project.slug %}">{% trans "Invite a maintainer" %}</a>
-              {% else %}
-                <div class="ui basic label">{{ maintainers }}</div>
-              {% endif %}
-            {% endwith %}
-          </td>
-        </tr>
-      {% endif %}
 
       <tr class="middle aligned">
         <td>
