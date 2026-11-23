@@ -245,8 +245,10 @@
     </tbody>
   </table>
 
-  {# The rest shows the current value, for features that only some projects use #}
+  {# The rest shows the current value, for features that only some projects use. Grouped and ordered like the settings menu. #}
   <h3 class="ui small header">{% trans "More settings" %}</h3>
+
+  <div class="ui horizontal divider">{% trans "Setup" %}</div>
   <table class="ui very basic compact stacking table">
     <tbody>
 
@@ -316,6 +318,42 @@
         </td>
       </tr>
 
+      {# Only Business has private documentation #}
+      {% if allow_private_repos %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-lock icon"></i>
+              <div class="content">
+                <a href="{% url "projects_edit" project.slug %}">{% trans "Privacy level" %}</a>
+                <div class="sub header">{% trans "Who can view the documentation" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            <div class="ui basic label">{{ project.get_privacy_level_display }}</div>
+          </td>
+        </tr>
+      {% endif %}
+
+      {# Automation rules act on versions as they are built, so not on direct upload projects #}
+      {% if not project.is_direct_upload %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-robot icon"></i>
+              <div class="content">
+                <a href="{% url "projects_automation_rule_list" project.slug %}">{% trans "Automation rules" %}</a>
+                <div class="sub header">{% trans "Activate and hide versions automatically" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            <div class="ui basic label">{{ project.automation_rules.count }}</div>
+          </td>
+        </tr>
+      {% endif %}
+
       {# Same check as the API tokens menu item: tokens are only used to upload documentation for now #}
       {% if project.allows_direct_upload and not project.is_direct_upload %}
         <tr class="middle aligned">
@@ -344,48 +382,34 @@
         </tr>
       {% endif %}
 
-      {# Only Business has private documentation #}
-      {% if allow_private_repos %}
-        <tr class="middle aligned">
-          <td>
-            <div class="ui tiny truncating header">
-              <i class="fa-duotone fa-lock icon"></i>
-              <div class="content">
-                <a href="{% url "projects_edit" project.slug %}">{% trans "Privacy level" %}</a>
-                <div class="sub header">{% trans "Who can view the documentation" %}</div>
-              </div>
-            </div>
-          </td>
-          <td class="right aligned">
-            <div class="ui basic label">{{ project.get_privacy_level_display }}</div>
-          </td>
-        </tr>
-      {% endif %}
+    </tbody>
+  </table>
 
-      {# Sharing is a Business feature #}
-      {% if USE_ORGANIZATIONS %}
-        <tr class="middle aligned">
-          <td>
-            <div class="ui tiny truncating header">
-              <i class="fa-duotone fa-share-nodes icon"></i>
-              <div class="content">
-                <a href="{% url "projects_temporary_access_list" project.slug %}">{% trans "Sharing" %}</a>
-                <div class="sub header">{% trans "Give readers access with a link or password" %}</div>
-              </div>
+  <div class="ui horizontal divider">{% trans "Building" %}</div>
+  <table class="ui very basic compact stacking table">
+    <tbody>
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-bell icon"></i>
+            <div class="content">
+              <a href="{% url "projects_notifications" project.slug %}">{% trans "Notifications" %}</a>
+              <div class="sub header">{% trans "Who hears about failed builds" %}</div>
             </div>
-          </td>
-          <td class="right aligned">
-            {% with shares=project.temporary_access.active.count %}
-              {% if shares %}
-                <div class="ui basic label">{{ shares }}</div>
-              {% else %}
-                <a class="ui basic primary label"
-                   href="{% url "projects_temporary_access_list" project.slug %}">{% trans "Share" %}</a>
-              {% endif %}
-            {% endwith %}
-          </td>
-        </tr>
-      {% endif %}
+          </div>
+        </td>
+        <td class="right aligned">
+          {% with emails=project.emailhook_notifications.count webhooks=project.webhook_notifications.count %}
+            {% if emails or webhooks %}
+              <div class="ui basic label">{{ emails|add:webhooks }}</div>
+            {% else %}
+              <a class="ui basic primary label"
+                 href="{% url "projects_notifications" project.slug %}">{% trans "Add an email" %}</a>
+            {% endif %}
+          {% endwith %}
+        </td>
+      </tr>
 
       {# Business only: 25% of Business projects use environment variables, 4% on Community #}
       {% if USE_ORGANIZATIONS and not project.is_direct_upload %}
@@ -404,6 +428,13 @@
           </td>
         </tr>
       {% endif %}
+
+    </tbody>
+  </table>
+
+  <div class="ui horizontal divider">{% trans "Hosting" %}</div>
+  <table class="ui very basic compact stacking table">
+    <tbody>
 
       {# Business only: 38% of Business projects are in a subproject relationship, 1% on Community #}
       {% if USE_ORGANIZATIONS %}
@@ -468,20 +499,34 @@
         </td>
       </tr>
 
-      {# Automation rules act on versions as they are built, so not on direct upload projects #}
-      {% if not project.is_direct_upload %}
+    </tbody>
+  </table>
+
+  <div class="ui horizontal divider">{% trans "Maintaining" %}</div>
+  <table class="ui very basic compact stacking table">
+    <tbody>
+
+      {# Sharing is a Business feature #}
+      {% if USE_ORGANIZATIONS %}
         <tr class="middle aligned">
           <td>
             <div class="ui tiny truncating header">
-              <i class="fa-duotone fa-robot icon"></i>
+              <i class="fa-duotone fa-share-nodes icon"></i>
               <div class="content">
-                <a href="{% url "projects_automation_rule_list" project.slug %}">{% trans "Automation rules" %}</a>
-                <div class="sub header">{% trans "Activate and hide versions automatically" %}</div>
+                <a href="{% url "projects_temporary_access_list" project.slug %}">{% trans "Sharing" %}</a>
+                <div class="sub header">{% trans "Give readers access with a link or password" %}</div>
               </div>
             </div>
           </td>
           <td class="right aligned">
-            <div class="ui basic label">{{ project.automation_rules.count }}</div>
+            {% with shares=project.temporary_access.active.count %}
+              {% if shares %}
+                <div class="ui basic label">{{ shares }}</div>
+              {% else %}
+                <a class="ui basic primary label"
+                   href="{% url "projects_temporary_access_list" project.slug %}">{% trans "Share" %}</a>
+              {% endif %}
+            {% endwith %}
           </td>
         </tr>
       {% endif %}
@@ -506,28 +551,6 @@
               {% endblocktrans %}
             {% endif %}
           </div>
-        </td>
-      </tr>
-
-      <tr class="middle aligned">
-        <td>
-          <div class="ui tiny truncating header">
-            <i class="fa-duotone fa-bell icon"></i>
-            <div class="content">
-              <a href="{% url "projects_notifications" project.slug %}">{% trans "Notifications" %}</a>
-              <div class="sub header">{% trans "Who hears about failed builds" %}</div>
-            </div>
-          </div>
-        </td>
-        <td class="right aligned">
-          {% with emails=project.emailhook_notifications.count webhooks=project.webhook_notifications.count %}
-            {% if emails or webhooks %}
-              <div class="ui basic label">{{ emails|add:webhooks }}</div>
-            {% else %}
-              <a class="ui basic primary label"
-                 href="{% url "projects_notifications" project.slug %}">{% trans "Add an email" %}</a>
-            {% endif %}
-          {% endwith %}
         </td>
       </tr>
 
