@@ -1,6 +1,6 @@
 {% extends "projects/automation_rule_list.html" %}
 
-{% load trans from i18n %}
+{% load trans blocktrans from i18n %}
 {% load crispy from crispy_forms_tags %}
 {% load alter_field from ext_theme_tags %}
 
@@ -18,6 +18,17 @@
   {% else %}
     {% trans "Add rule" as button_text %}
   {% endif %}
+  {% if project.is_legacy_github_project %}
+    <div class="ui info message">
+      <i class="fa-brands fa-github icon"></i>
+      {% url "migrate_to_github_app" as migrate_url %}
+      {% blocktrans trimmed with url=migrate_url %}
+        Webhook filters only work with the GitHub App.
+        <a href="{{ url }}">Migrate this project to the GitHub App</a> to use them.
+      {% endblocktrans %}
+    </div>
+  {% endif %}
+
   <form class="ui form"
         method="post"
         action="."

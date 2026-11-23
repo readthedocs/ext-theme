@@ -71,6 +71,13 @@
     {% endif %}
   {% endwith %}
 
+  {% if object.integration_type == "github_webhook" and project.is_legacy_github_project %}
+    {% url "migrate_to_github_app" as migrate_url %}
+    {% trans "Legacy" as text %}
+    {% trans "Our GitHub App replaces this webhook. Migrate to get all features." as popup %}
+    {% include "includes/components/config_label.html" with url=migrate_url text=text popup=popup classes="basic orange" %}
+  {% endif %}
+
   {% if object.is_remote_only %}
     {% blocktrans trimmed asvar popup %}
       This integration is managed by the provider and cannot be removed
