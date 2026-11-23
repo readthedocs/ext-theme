@@ -18,7 +18,7 @@
             <a class="item {% block project_overview_active %}{% endblock project_overview_active %}"
                href="{% url "projects_settings" project.slug %}">{% trans "Overview" %}</a>
             <a class="item {% block project_edit_active %}{% endblock project_edit_active %}"
-               href="{% url "projects_edit" project.slug %}">{% trans "Settings" %}</a>
+               href="{% url "projects_edit" project.slug %}">{% trans "General" %}</a>
             <a class="item {% block project_addons_active %}{% endblock project_addons_active %}"
                href="{% url "projects_addons" project.slug %}">{% trans "Addons" %}</a>
             {% if not USE_ORGANIZATIONS %}
