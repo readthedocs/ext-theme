@@ -1,0 +1,550 @@
+{% extends "projects/project_edit_base.html" %}
+
+{% load trans blocktrans from i18n %}
+
+{% block title %}
+  {{ project.name }} - {% trans "Settings" %}
+{% endblock title %}
+
+{% block project_overview_active %}
+  active
+{% endblock project_overview_active %}
+{% block project_edit_content_header %}
+  {% trans "Overview" %}
+{% endblock project_edit_content_header %}
+
+{% block project_edit_content %}
+  {# Five steps in the order a project gets set up, as a checklist: checked once done, with a prompt until then #}
+  <h3 class="ui small header">{% trans "Get set up" %}</h3>
+  <table class="ui very basic compact stacking table">
+    <tbody>
+
+      {# Direct upload projects are never built here, so they start with a token to upload with instead of a repository #}
+      {% if project.is_direct_upload %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone {% if project.tokens.exists %}fa-circle-check green{% else %}fa-circle grey{% endif %} icon"></i>
+              <div class="content">
+                <a href="{% url "projects_tokens" project.slug %}">
+                  {% trans "Create an API token" %}
+                  <span class="ui tiny horizontal basic primary label">{% trans "New" %}</span>
+                </a>
+                <div class="sub header">{% trans "Your build uses it to upload documentation" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            {% with tokens=project.tokens.count %}
+              {% if tokens %}
+                <div class="ui basic label">{{ tokens }}</div>
+              {% else %}
+                <a class="ui basic primary label"
+                   href="{% url "projects_tokens" project.slug %}">{% trans "Create a token" %}</a>
+              {% endif %}
+            {% endwith %}
+          </td>
+        </tr>
+      {% else %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              {% with provider=project.remote_repository.vcs_provider %}
+                {% if project.is_github_app_project %}
+                  <i class="fa-duotone fa-circle-check green icon"></i>
+                {% elif provider == "github" %}
+                  <i class="fa-duotone fa-circle grey icon"></i>
+                {% elif provider or project.integrations.exists %}
+                  <i class="fa-duotone fa-circle-check green icon"></i>
+                {% else %}
+                  <i class="fa-duotone fa-circle grey icon"></i>
+                {% endif %}
+              {% endwith %}
+              <div class="content">
+                <a href="{% url "projects_integrations" project.slug %}">{% trans "Connect your repository" %}</a>
+                <div class="sub header">{{ project.repo }}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            {% with provider=project.remote_repository.vcs_provider %}
+              {% if project.is_github_app_project %}
+                <div class="ui basic label">{% trans "GitHub App" %}</div>
+              {% elif provider == "github" %}
+                <a class="ui basic orange label"
+                   href="{% url "migrate_to_github_app" %}">{% trans "Migrate to GitHub App" %}</a>
+              {% elif provider == "gitlab" %}
+                <div class="ui basic label">{% trans "GitLab" %}</div>
+              {% elif provider == "bitbucket" %}
+                <div class="ui basic label">{% trans "Bitbucket" %}</div>
+              {% elif not project.integrations.exists %}
+                <a class="ui basic red label"
+                   href="{% url "projects_integrations" project.slug %}">{% trans "Add an integration" %}</a>
+              {% else %}
+                <div class="ui basic label">{{ project.integrations.first.get_integration_type_display }}</div>
+              {% endif %}
+            {% endwith %}
+          </td>
+        </tr>
+      {% endif %}
+
+      {# A passing build is the first sign that the project works. Direct upload projects are done once a version is uploaded. #}
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            {% if project.is_direct_upload %}
+              <i class="fa-duotone {% if active_versions_count %}fa-circle-check green{% else %}fa-circle grey{% endif %} icon"></i>
+              <div class="content">
+                <a href="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html">{% trans "Upload your documentation" %}</a>
+                <div class="sub header">{% trans "Publish a version you built yourself" %}</div>
+              </div>
+            {% else %}
+              <i class="fa-duotone {% if project.has_good_build %}fa-circle-check green{% else %}fa-circle grey{% endif %} icon"></i>
+              <div class="content">
+                <a href="{% url "builds_project_list" project.slug %}">{% trans "Get a passing build" %}</a>
+                <div class="sub header">{% trans "Your documentation builds and is online" %}</div>
+              </div>
+            {% endif %}
+          </div>
+        </td>
+        <td class="right aligned">
+          {% if project.is_direct_upload %}
+            {% if active_versions_count %}
+              <div class="ui basic label">{% trans "Uploaded" %}</div>
+            {% else %}
+              <a class="ui basic primary label"
+                 href="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html">{% trans "See how to upload" %}</a>
+            {% endif %}
+          {% elif project.has_good_build %}
+            <div class="ui basic label">{% trans "Passing" %}</div>
+          {% elif project.builds.exists %}
+            <a class="ui basic primary label"
+               href="{% url "builds_project_list" project.slug %}">{% trans "Fix the build" %}</a>
+          {% else %}
+            {# The build list has no build button while it is empty, the version list does #}
+            <a class="ui basic primary label"
+               href="{% url "projects_detail" project.slug %}">{% trans "Start a build" %}</a>
+          {% endif %}
+        </td>
+      </tr>
+
+      {# Pull request builds need a GitHub or GitLab repository. Direct upload projects upload their own previews. #}
+      {% if not project.is_direct_upload %}
+        {% if project.is_github_project or project.is_gitlab_project %}
+          <tr class="middle aligned">
+            <td>
+              <div class="ui tiny truncating header">
+                <i class="fa-duotone {% if project.external_builds_enabled %}fa-circle-check green{% else %}fa-circle grey{% endif %} icon"></i>
+                <div class="content">
+                  <a href="{% url "projects_pull_requests" project.slug %}">{% trans "Build pull requests" %}</a>
+                  <div class="sub header">{% trans "Preview changes before you merge" %}</div>
+                </div>
+              </div>
+            </td>
+            <td class="right aligned">
+              {% if not project.external_builds_enabled %}
+                <a class="ui basic primary label"
+                   href="{% url "projects_pull_requests" project.slug %}">{% trans "Turn on" %}</a>
+              {% elif allow_private_repos %}
+                <div class="ui basic label">
+                  {% blocktrans trimmed with level=project.get_external_builds_privacy_level_display %}
+                    On, {{ level }}
+                  {% endblocktrans %}
+                </div>
+              {% else %}
+                <div class="ui basic label">{% trans "On" %}</div>
+              {% endif %}
+            </td>
+          </tr>
+        {% endif %}
+      {% endif %}
+
+      {# The comment is only posted through the GitHub App, so other GitHub projects are pointed to the migration. #}
+      {# It needs pull request builds, except on direct upload projects, which upload their own previews. #}
+      {% if project.is_github_project %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              {% if not project.is_github_app_project or not project.show_build_overview_in_comment %}
+                <i class="fa-duotone fa-circle grey icon"></i>
+              {% elif project.is_direct_upload or project.external_builds_enabled %}
+                <i class="fa-duotone fa-circle-check green icon"></i>
+              {% else %}
+                <i class="fa-duotone fa-circle grey icon"></i>
+              {% endif %}
+              <div class="content">
+                <a href="{% url "projects_pull_requests" project.slug %}">{% trans "Comment on pull requests" %}</a>
+                <div class="sub header">{% trans "A build overview with files changed on each pull request" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            {% if not project.is_github_app_project %}
+              <a class="ui basic primary label"
+                 href="{% url "migrate_to_github_app" %}">{% trans "Needs the GitHub App" %}</a>
+            {% elif not project.show_build_overview_in_comment %}
+              <a class="ui basic primary label"
+                 href="{% url "projects_pull_requests" project.slug %}">{% trans "Turn on" %}</a>
+            {% elif project.is_direct_upload or project.external_builds_enabled %}
+              <div class="ui basic label">{% trans "On" %}</div>
+            {% else %}
+              <a class="ui basic primary label"
+                 href="{% url "projects_pull_requests" project.slug %}">{% trans "Turn on" %}</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endif %}
+
+      {# Projects with more than one person on them stick around. Community invites maintainers, Business adds the project to teams. #}
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            {% if USE_ORGANIZATIONS %}
+              {% with organization=project.organizations.first %}
+                <i class="fa-duotone {% if project.teams.exists %}fa-circle-check green{% else %}fa-circle grey{% endif %} icon"></i>
+                <div class="content">
+                  <a href="{% url "organization_team_list" organization.slug %}">{% trans "Invite your team" %}</a>
+                  <div class="sub header">{% trans "Teams that can view or change this project" %}</div>
+                </div>
+              {% endwith %}
+            {% else %}
+              <i class="fa-duotone {% if project.users.count > 1 %}fa-circle-check green{% else %}fa-circle grey{% endif %} icon"></i>
+              <div class="content">
+                <a href="{% url "projects_users" project.slug %}">{% trans "Invite your team" %}</a>
+                <div class="sub header">{% trans "Who can change this project" %}</div>
+              </div>
+            {% endif %}
+          </div>
+        </td>
+        <td class="right aligned">
+          {% if USE_ORGANIZATIONS %}
+            {% with teams=project.teams.count organization=project.organizations.first %}
+              {% if teams %}
+                <div class="ui basic label">
+                  {% blocktrans trimmed count teams=teams %}
+                    {{ teams }} team
+                  {% plural %}
+                    {{ teams }} teams
+                  {% endblocktrans %}
+                </div>
+              {% else %}
+                <a class="ui basic primary label"
+                   href="{% url "organization_team_list" organization.slug %}">{% trans "Add to a team" %}</a>
+              {% endif %}
+            {% endwith %}
+          {% else %}
+            {% with maintainers=project.users.count %}
+              {% if maintainers > 1 %}
+                <div class="ui basic label">
+                  {% blocktrans trimmed %}
+                    {{ maintainers }} maintainers
+                  {% endblocktrans %}
+                </div>
+              {% else %}
+                <a class="ui basic primary label"
+                   href="{% url "projects_users" project.slug %}">{% trans "Invite a maintainer" %}</a>
+              {% endif %}
+            {% endwith %}
+          {% endif %}
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  {# The rest shows the current value, for features that only some projects use. In the same order as the settings menu. #}
+  <h3 class="ui small header">{% trans "More settings" %}</h3>
+  <table class="ui very basic compact stacking table">
+    <tbody>
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-hammer icon"></i>
+            <div class="content">
+              <a href="{% url "projects_edit" project.slug %}">{% trans "Builds" %}</a>
+              <div class="sub header">
+                {% if project.is_direct_upload %}
+                  {% trans "Documentation is uploaded through the API" %}
+                {% else %}
+                  {% trans "Documentation is built from your repository" %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          {% if project.is_direct_upload %}
+            <div class="ui basic label">{% trans "Direct upload" %}</div>
+          {% elif project.n_consecutive_failed_builds %}
+            {# Turned off after too many failed builds in a row, the settings form has the option to turn them back on #}
+            <a class="ui basic red label"
+               href="{% url "projects_edit" project.slug %}">{% trans "Disabled, turn back on" %}</a>
+          {% elif project.skip %}
+            {# Only Read the Docs staff can lift this one #}
+            <a class="ui basic red label" href="{% url "support" %}">{% trans "Disabled, contact support" %}</a>
+          {% else %}
+            <div class="ui basic label">{% trans "On" %}</div>
+          {% endif %}
+        </td>
+      </tr>
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-code-branch icon"></i>
+            <div class="content">
+              <a href="{% url "projects_edit" project.slug %}">{% trans "Default version" %}</a>
+              <div class="sub header">{% trans "Where readers land first" %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          <div class="ui basic label">{{ project.default_version }}</div>
+        </td>
+      </tr>
+
+      {# Only Business has private documentation #}
+      {% if allow_private_repos %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-lock icon"></i>
+              <div class="content">
+                <a href="{% url "projects_edit" project.slug %}">{% trans "Privacy level" %}</a>
+                <div class="sub header">{% trans "Who can view the documentation" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            <div class="ui basic label">{{ project.get_privacy_level_display }}</div>
+          </td>
+        </tr>
+      {% endif %}
+
+      {# Automation rules act on versions as they are built, so not on direct upload projects #}
+      {% if not project.is_direct_upload %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-robot icon"></i>
+              <div class="content">
+                <a href="{% url "projects_automation_rule_list" project.slug %}">{% trans "Automation rules" %}</a>
+                <div class="sub header">{% trans "Activate and hide versions automatically" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            <div class="ui basic label">{{ project.automation_rules.count }}</div>
+          </td>
+        </tr>
+      {% endif %}
+
+      {# Same check as the API tokens menu item: tokens are only used to upload documentation for now #}
+      {% if project.allows_direct_upload and not project.is_direct_upload %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-key icon"></i>
+              <div class="content">
+                <a href="{% url "projects_tokens" project.slug %}">
+                  {% trans "API tokens" %}
+                  <span class="ui tiny horizontal basic primary label">{% trans "New" %}</span>
+                </a>
+                <div class="sub header">{% trans "Upload documentation you build yourself" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            {% with tokens=project.tokens.count %}
+              {% if tokens %}
+                <div class="ui basic label">{{ tokens }}</div>
+              {% else %}
+                <a class="ui basic primary label"
+                   href="{% url "projects_tokens" project.slug %}">{% trans "Create a token" %}</a>
+              {% endif %}
+            {% endwith %}
+          </td>
+        </tr>
+      {% endif %}
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-bell icon"></i>
+            <div class="content">
+              <a href="{% url "projects_notifications" project.slug %}">{% trans "Notifications" %}</a>
+              <div class="sub header">{% trans "Who hears about failed builds" %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          {% with emails=project.emailhook_notifications.count webhooks=project.webhook_notifications.count %}
+            {% if emails or webhooks %}
+              <div class="ui basic label">{{ emails|add:webhooks }}</div>
+            {% else %}
+              <a class="ui basic primary label"
+                 href="{% url "projects_notifications" project.slug %}">{% trans "Add an email" %}</a>
+            {% endif %}
+          {% endwith %}
+        </td>
+      </tr>
+
+      {# Business only: 25% of Business projects use environment variables, 4% on Community #}
+      {% if USE_ORGANIZATIONS and not project.is_direct_upload %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-terminal icon"></i>
+              <div class="content">
+                <a href="{% url "projects_environmentvariables" project.slug %}">{% trans "Environment variables" %}</a>
+                <div class="sub header">{% trans "Secrets and settings for your builds" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            <div class="ui basic label">{{ project.environmentvariable_set.count }}</div>
+          </td>
+        </tr>
+      {% endif %}
+
+      {# Business only: 38% of Business projects are in a subproject relationship, 1% on Community #}
+      {% if USE_ORGANIZATIONS %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-folder-tree icon"></i>
+              <div class="content">
+                <a href="{% url "projects_subprojects" project.slug %}">{% trans "Subprojects" %}</a>
+                <div class="sub header">{% trans "Serve several projects from one domain" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            <div class="ui basic label">{{ project.subprojects.count }}</div>
+          </td>
+        </tr>
+      {% endif %}
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-globe icon"></i>
+            <div class="content">
+              <a href="{% url "projects_domains" project.slug %}">{% trans "Documentation domain" %}</a>
+              <div class="sub header">{{ project.subdomain }}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          {% if project.canonical_custom_domain %}
+            <div class="ui basic label">{% trans "Custom domain" %}</div>
+          {% elif custom_domains_enabled %}
+            <a class="ui basic primary label"
+               href="{% url "projects_domains" project.slug %}">{% trans "Use your own domain" %}</a>
+          {% else %}
+            {% url "subscription_detail" project.organizations.first.slug as subscription_url %}
+            {% url "projects_domains" project.slug as domains_url %}
+            <a class="ui basic primary label"
+               href="{% firstof subscription_url domains_url %}">{% trans "Upgrade" %}</a>
+          {% endif %}
+        </td>
+      </tr>
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-magnifying-glass icon"></i>
+            <div class="content">
+              <a href="{% url "projects_search_settings" project.slug %}">{% trans "Search" %}</a>
+              <div class="sub header">{% trans "Readers can search your documentation" %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          {% if project.search_indexing_enabled %}
+            <div class="ui basic label">{% trans "On" %}</div>
+          {% else %}
+            <a class="ui basic primary label"
+               href="{% url "projects_edit" project.slug %}">{% trans "Turn on" %}</a>
+          {% endif %}
+        </td>
+      </tr>
+
+      {# Sharing is a Business feature #}
+      {% if USE_ORGANIZATIONS %}
+        <tr class="middle aligned">
+          <td>
+            <div class="ui tiny truncating header">
+              <i class="fa-duotone fa-share-nodes icon"></i>
+              <div class="content">
+                <a href="{% url "projects_temporary_access_list" project.slug %}">{% trans "Sharing" %}</a>
+                <div class="sub header">{% trans "Give readers access with a link or password" %}</div>
+              </div>
+            </div>
+          </td>
+          <td class="right aligned">
+            {% with shares=project.temporary_access.active.count %}
+              {% if shares %}
+                <div class="ui basic label">{{ shares }}</div>
+              {% else %}
+                <a class="ui basic primary label"
+                   href="{% url "projects_temporary_access_list" project.slug %}">{% trans "Share" %}</a>
+              {% endif %}
+            {% endwith %}
+          </td>
+        </tr>
+      {% endif %}
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-signs-post icon"></i>
+            <div class="content">
+              <a href="{% url "projects_redirects" project.slug %}">{% trans "Redirects" %}</a>
+              <div class="sub header">{% trans "Keep old links working" %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          <div class="ui basic label">
+            {% if redirects_limit.unlimited %}
+              {{ project.redirects.count }}
+            {% else %}
+              {% blocktrans trimmed with count=project.redirects.count limit=redirects_limit.value %}
+                {{ count }} of {{ limit }}
+              {% endblocktrans %}
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+
+      <tr class="middle aligned">
+        <td>
+          <div class="ui tiny truncating header">
+            <i class="fa-duotone fa-chart-line icon"></i>
+            <div class="content">
+              <a href="{% url "projects_addons" project.slug %}">{% trans "Analytics" %}</a>
+              <div class="sub header">{% trans "See which pages readers visit" %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="right aligned">
+          {% if project.addons.enabled and project.addons.analytics_enabled %}
+            <div class="ui basic label">{% trans "On" %}</div>
+          {% else %}
+            <a class="ui basic primary label"
+               href="{% url "projects_addons" project.slug %}">{% trans "Turn on" %}</a>
+          {% endif %}
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+{% endblock project_edit_content %}
+
+{% block project_edit_sidebar_help_topics %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/guides/pull-requests.html" text="How to configure pull request builds" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/custom-domains.html" text="Custom domains" is_external=True class="item" %}
+  {% include "includes/elements/link.html" with url="https://docs.readthedocs.io/page/user-defined-redirects.html" text="Redirects" is_external=True class="item" %}
+{% endblock project_edit_sidebar_help_topics %}
