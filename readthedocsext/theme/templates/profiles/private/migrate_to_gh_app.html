@@ -196,10 +196,10 @@
               {% if installation_target_groups %}
                 <div class="ui message info">
                   <i class="fad fa-info-circle icon"></i>
-                  {% blocktrans trimmed %}
-                    You can skip this for now.
-                    Projects whose repositories don't have the GitHub App keep using the old integration,
-                    and you can come back to this page at any time to migrate them.
+                  {% blocktrans trimmed with manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" %}
+                    Install our GitHub App on all your repositories to migrate all your projects.
+                    If you can't install it on some of them now,
+                    you can come back to this page later or <a href="{{ manual_migration_docs }}" target="_blank">migrate them manually</a>.
                   {% endblocktrans %}
                 </div>
               {% endif %}
