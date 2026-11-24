@@ -160,9 +160,10 @@
                 </p>
               {% else %}
                 {# Users with projects on the old integration, but no GitHub account connected #}
+                {# Return without a step, so the page continues with the next step #}
                 <form class="ui form"
                       method="post"
-                      action="{% provider_login_url "githubapp" process="connect" next=request.get_full_path %}">
+                      action="{% provider_login_url "githubapp" process="connect" next=request.path %}">
                   {% csrf_token %}
                   <button class="ui button" type="submit">
                     <i class="fa-brands fa-github icon"></i>
@@ -179,6 +180,14 @@
                 {% blocktrans trimmed %}
                   Next, you will install our GitHub App on each organization and account that has attached repositories.
                   While approving access you will be able to select and deselect individual repositories.
+                {% endblocktrans %}
+              </p>
+              <p>
+                {% blocktrans trimmed with pull_requests_docs="https://docs.readthedocs.com/platform/stable/pull-requests.html" %}
+                  Some features only work with our GitHub App,
+                  like the <a href="{{ pull_requests_docs }}" target="_blank">build overview comment on pull requests</a>.
+                  Only owners of a GitHub organization can install the app on it.
+                  If you aren't an owner, ask one to install it for you.
                 {% endblocktrans %}
               </p>
 
