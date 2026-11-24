@@ -152,7 +152,5 @@
     {% endif %}
   {% endif %}
 
-  <h3 class="ui small header">{% trans "Recent Activity" %}</h3>
-
-  {% include "projects/partials/edit/integration_exchange_list.html" with objects=integration.exchanges.all skip_pagination=True %}
+  {% include "projects/partials/edit/integration_exchange_list.html" with objects=integration.exchanges.all %}
 {% endblock project_edit_content %}
