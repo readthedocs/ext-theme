@@ -19,8 +19,7 @@ version = release
 
 extensions = [
     "docext",
-    "sphinx.ext.autodoc",
-    "sphinxcontrib.autoanysrc",
+    "autoanysrc",
     "sphinx_js",
 ]
 

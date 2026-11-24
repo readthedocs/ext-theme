@@ -8,9 +8,11 @@
 <p>{% trans "These are the steps you need to follow after adding the project:" %}</p>
 <ol>
   <li>
-    {% url "profiles_tokens" as tokens_url %}
-    {% blocktrans trimmed %}
-      <a href="{{ tokens_url }}" target="_blank">Create an API token</a> and store it as a secret named <code>READTHEDOCS_TOKEN</code> in your pipeline.
+    {% blocktrans trimmed with url="https://docs.readthedocs.com/platform/stable/guides/build/direct-upload.html#prerequisites" %}
+      Create a <a href="{{ url }}" target="_blank">project API token</a>
+      from <strong>Settings</strong> &gt; <strong>API tokens</strong> of your project,
+      with the <strong>Upload documentation</strong> permission,
+      and store it as a secret named <code>READTHEDOCS_TOKEN</code> in your pipeline.
     {% endblocktrans %}
   </li>
   <li>

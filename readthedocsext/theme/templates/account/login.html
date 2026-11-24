@@ -3,6 +3,7 @@
 {% load get_providers from socialaccount %}
 {% load crispy from crispy_forms_tags %}
 {% load trans blocktrans from i18n %}
+{% load random_choice from ext_theme_tags %}
 
 {% block head_title %}
   {% trans "Log in" %}
@@ -128,3 +129,14 @@
   {% endblock authentication_extra %}
 
 {% endblock content_body %}
+
+{% comment %}
+  Feature promo under the login form, picked at random on each page load.
+  The sign up page overrides this block with its own feature highlights.
+{% endcomment %}
+{% block content_below %}
+  {% random_choice "direct-upload" "build-overview" "visual-diff" as promo %}
+  <div class="center aligned nine wide computer twelve wide tablet sixteen wide mobile column">
+    {% include "account/partials/login_promo.html" with promo=promo %}
+  </div>
+{% endblock content_below %}
