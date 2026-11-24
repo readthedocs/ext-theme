@@ -315,11 +315,9 @@ export class ProjectRedirectView {
       if (redirect_type === "page") {
         return `${lang_part}${version_part}/`;
       } else if (redirect_type === "clean_url_to_html") {
-        return `${lang_part}${version_part}/<span class="ui violet text">$file</span>/`;
-      } else if (redirect_type === "clean_url_without_trailing_slash_to_html") {
-        return `${lang_part}${version_part}/<span class="ui violet text">$file</span>`;
+        return `/**/<span class="ui violet text">$file</span>/`;
       } else if (redirect_type === "html_to_clean_url") {
-        return `${lang_part}${version_part}/<span class="ui violet text">$file</span>.html`;
+        return `/**/<span class="ui violet text">$file</span>.html`;
       }
       return "";
     });
@@ -347,11 +345,9 @@ export class ProjectRedirectView {
       } else if (redirect_type === "page") {
         return `${lang_part}${version_part}/`;
       } else if (redirect_type === "clean_url_to_html") {
-        return `${lang_part}${version_part}/<span class="ui violet text">$file</span>.html`;
-      } else if (redirect_type === "clean_url_without_trailing_slash_to_html") {
-        return `${lang_part}${version_part}/<span class="ui violet text">$file</span>.html`;
+        return `/**/<span class="ui violet text">$file</span>.html`;
       } else if (redirect_type === "html_to_clean_url") {
-        return `${lang_part}${version_part}/<span class="ui violet text">$file</span>/`;
+        return `/**/<span class="ui violet text">$file</span>/`;
       }
       return "";
     });
@@ -379,11 +375,7 @@ export class ProjectRedirectView {
         this.is_from_url_visible(true);
         this.is_to_url_visible(is_to_url_visible);
       } else if (
-        [
-          "clean_url_to_html",
-          "clean_url_without_trailing_slash_to_html",
-          "html_to_clean_url",
-        ].includes(redirect_type)
+        ["clean_url_to_html", "html_to_clean_url"].includes(redirect_type)
       ) {
         this.is_example_disabled(false);
         this.is_from_url_visible(false);
@@ -419,6 +411,23 @@ export class ProjectTemporaryAccessView {
   }
 }
 Registry.add_view(ProjectTemporaryAccessView);
+
+/**
+ * Project token form view
+ *
+ * The expiration date is only used with a custom expiration.
+ */
+export class ProjectTokenView {
+  static view_name = "ProjectTokenView";
+
+  constructor() {
+    this.expires_in = ko.observable();
+    this.is_custom_expiration = ko.computed(() => {
+      return this.expires_in() === "custom";
+    });
+  }
+}
+Registry.add_view(ProjectTokenView);
 
 /**
  * Project search analytics view

@@ -45,7 +45,9 @@
 {% block list_item_meta_items %}
   <div class="item">
     {% with repo=object.remote_repository %}
-      <a href="{{ repo.html_url }}" class="ui small basic image nowrap label">
+      <a href="{{ repo.html_url }}"
+         class="ui small basic image nowrap label"
+         target="_blank">
         <img alt="{% blocktrans with name=object.name %}Project {{ name }} avatar{% endblocktrans %}"
              src="{{ repo.avatar_url }}" />
         <code>{{ repo.full_name }}</code>

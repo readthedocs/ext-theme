@@ -1,3 +1,4 @@
+import random
 import re
 from urllib.parse import urljoin
 
@@ -59,8 +60,8 @@ def do_webpack_static(parser, token):
     return WebpackStaticNode.handle_token(parser, token)
 
 
-@register.simple_tag(name="settings_dashboard")
-def settings_dashboard():
+@register.simple_tag(name="settings_dashboard", takes_context=True)
+def settings_dashboard(context):
     """
     Configure dashboard from application settings.
 
@@ -78,6 +79,8 @@ def settings_dashboard():
         "webpack_public_path": f"{public_path_prefix}/readthedocsext/theme/",
         "production_domain": settings.PRODUCTION_DOMAIN,
         "sentry": getattr(settings, "SENTRY_BROWSER", {}),
+        # Only track logged in users, anonymous dashboard traffic is mostly crawlers
+        "analytics_enabled": context["request"].user.is_authenticated,
     }
 
 
@@ -155,6 +158,9 @@ def get_providers(context, process="login"):
     ``priority``
         Priority order value for list of providers, higher values are lower in priority on the list.
 
+    ``default`` (bool)
+        Always list this provider first, regardless of ``priority``
+
     Additionally, filter out providers from the database -- applications that
     have a ``pk`` -- these are per-user applications like SAML.
     """
@@ -166,7 +172,11 @@ def get_providers(context, process="login"):
         and not provider.app.pk
     ]
     return sorted(
-        providers, key=lambda provider: provider.app.settings.get("priority", 100)
+        providers,
+        key=lambda provider: (
+            not provider.app.settings.get("default", False),
+            provider.app.settings.get("priority", 100),
+        ),
     )
 
 
@@ -236,3 +246,9 @@ def whitespaceless(content):
 def starts_with(value, arg):
     """Usage: {% if value|starts_with:"prefix" %}"""
     return str(value).startswith(str(arg))
+
+
+@register.simple_tag
+def random_choice(*choices):
+    """Usage: {% random_choice "a" "b" "c" as choice %}"""
+    return random.choice(choices)

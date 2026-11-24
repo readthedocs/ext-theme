@@ -80,7 +80,7 @@
                 {% blocktrans trimmed with docs_url="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#github-app" %}
                   We’re introducing a new GitHub App to replace our old GitHub OAuth app.
                   This new app offers more granular permissions and better GitHub integration.
-                  Learn more in our <a href="{{ docs_url }}">documentation</a>.
+                  Learn more in our <a href="{{ docs_url }}" target="_blank">documentation</a>.
                 {% endblocktrans %}
               </p>
 
@@ -130,7 +130,7 @@
                   </li>
                   <li>
                     {% blocktrans trimmed with connect_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#connect-a-repository-to-an-existing-project" %}
-                      Projects not linked to a GitHub repository can be <a href="{{ connect_docs }}">linked</a> after connecting your account. These don't need migration.
+                      Projects not linked to a GitHub repository can be <a href="{{ connect_docs }}" target="_blank">linked</a> after connecting your account. These don't need migration.
                     {% endblocktrans %}
                   </li>
                   <li>
@@ -170,7 +170,7 @@
                 <div class="ui message info">
                   <i class="fad fa-info-circle icon"></i>
                   {% blocktrans trimmed with manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" %}
-                    If you skip installation during migration, you will need to <a href="{{ manual_migration_docs }}">manually migrate</a> your project to keep it working.
+                    If you skip installation during migration, you will need to <a href="{{ manual_migration_docs }}" target="_blank">manually migrate</a> your project to keep it working.
                   {% endblocktrans %}
                 </div>
               {% endif %}
@@ -185,7 +185,7 @@
                   After installing our GitHub App on each of your repositories,
                   you will need to migrate your Read the Docs projects to use
                   the new connection.
-                  If your project isn't listed, you may need to <a href="{{ manual_migration_docs }}">manually migrate it</a> or <a href="{{ connect_docs }}">connect it to a GitHub repository</a>.
+                  If your project isn't listed, you may need to <a href="{{ manual_migration_docs }}" target="_blank">manually migrate it</a> or <a href="{{ connect_docs }}" target="_blank">connect it to a GitHub repository</a>.
                 {% endblocktrans %}
               </p>
 
@@ -214,7 +214,7 @@
                 <p>
                   {% blocktrans trimmed with manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" %}
                     The following projects aren't connected to a repository,
-                    you need to <a href="{{ manual_migration_docs }}">manually migrate them</a> to use the new GitHub App.
+                    you need to <a href="{{ manual_migration_docs }}" target="_blank">manually migrate them</a> to use the new GitHub App.
                   {% endblocktrans %}
                 </p>
                 {% include "profiles/partials/github_app_project_manual_migration_list.html" with objects=manual_migration_required skip_pagination=True %}
@@ -241,7 +241,7 @@
                     <i class="fad fa-warning icon"></i>
                     {% blocktrans trimmed with migrate_step="?step=migrate" manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" %}
                       You have projects that need to be <a href="{{ migrate_step }}">migrated</a>.
-                      If you revoke access now, you'll need to <a href="{{ manual_migration_docs }}">manually migrate</a> them.
+                      If you revoke access now, you'll need to <a href="{{ manual_migration_docs }}" target="_blank">manually migrate</a> them.
                     {% endblocktrans %}
                   </div>
                 {% endif %}
@@ -264,7 +264,7 @@
                   <i class="fad fa-info-circle icon"></i>
                   {% blocktrans trimmed with manual_migration_docs="https://docs.readthedocs.com/platform/stable/reference/git-integration.html#manually-migrating-a-project" %}
                     After disconnecting the old GitHub OAuth app, you won't be able to see this page again.
-                    If you have projects that need to be migrated, you'll need to <a href="{{ manual_migration_docs }}">manually migrate</a> them.
+                    If you have projects that need to be migrated, you'll need to <a href="{{ manual_migration_docs }}" target="_blank">manually migrate</a> them.
                   {% endblocktrans %}
                 </div>
 
