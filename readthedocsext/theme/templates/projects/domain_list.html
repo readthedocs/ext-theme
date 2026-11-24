@@ -1,6 +1,6 @@
 {% extends "projects/project_edit_base.html" %}
 
-{% load trans from i18n %}
+{% load trans blocktrans from i18n %}
 
 {% block title %}
   {{ project.name }} - {% trans "Domains" %}
@@ -23,8 +23,24 @@
   {% endcomment %}
   {% if not enabled %}
     {% include "organizations/includes/feature_disabled.html" with project=project plan="Advanced" %}
+  {% elif project.superproject %}
+    <div class="ui icon message">
+      <i class="fa-duotone fa-circle-exclamation icon"></i>
+      <div class="content">
+        <div class="header">{% trans "Custom domains managed by superproject" %}</div>
+        <p>
+          {% url "projects_detail" project.superproject.slug as superproject_url %}
+          {% url "projects_domains" project.superproject.slug as superproject_domains_url %}
+          {% blocktrans trimmed with superproject_url=superproject_url superproject_domains_url=superproject_domains_url superproject_name=project.superproject.name %}
+            This project is a subproject of
+            <a href="{{ superproject_url }}">{{ superproject_name }}</a>.
+            Custom domains must be <a href="{{ superproject_domains_url }}">added on the superproject</a>.
+          {% endblocktrans %}
+        </p>
+      </div>
+    </div>
   {% endif %}
-  <div class="{% if not enabled %}ui basic fitted disabled segment{% endif %}">
+  <div class="{% if not enabled or project.superproject %}ui basic fitted disabled segment{% endif %}">
     {% include "projects/partials/edit/domain_list.html" with objects=object_list %}
   </div>
 {% endblock project_edit_content %}
