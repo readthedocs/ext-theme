@@ -1,0 +1,35 @@
+{% load trans from i18n %}
+{% load naturaltime from humanize %}
+
+<div class="ui basic segment">
+  <h2 class="ui small header">{% trans "Recent activity" %}</h2>
+  <div class="ui relaxed list">
+    {% for exchange in objects %}
+      <div class="item">
+        {% if exchange.failed %}
+          <i class="fa-duotone fa-circle-exclamation middle aligned red icon"></i>
+        {% else %}
+          <i class="fa-duotone fa-circle-check middle aligned green icon"></i>
+        {% endif %}
+        <div class="content">
+          <div class="header">
+            <a href="{% url 'projects_integrations_exchanges_detail' project_slug=project.slug integration_pk=integration.pk exchange_pk=exchange.pk %}">
+              {% if exchange.response_detail %}
+                {{ exchange.response_detail }}
+              {% else %}
+                {% trans "Webhook request" %}
+              {% endif %}
+            </a>
+          </div>
+          <div class="description">
+            {# Translators: this is an HTTP status code, it will read like "Status 200" #}
+            {% trans "Status" %} {{ exchange.status_code }}
+            <span class="ui small light grey text" data-content="{{ exchange.date }}">{{ exchange.date|naturaltime }}</span>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="item">{% trans "There is no recent activity" %}</div>
+    {% endfor %}
+  </div>
+</div>
