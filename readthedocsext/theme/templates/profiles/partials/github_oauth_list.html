@@ -19,7 +19,7 @@
 {% endblock list_item_meta_items %}
 
 {% block list_item_right_menu %}
-  {% if object|has_github_app_account %}
+  {% if connected or object|has_github_app_account %}
     <span class="ui green text">
       <i class="fas fa-circle-check icon"></i>
       {% trans "Connected" %}

@@ -154,10 +154,7 @@
               {% if old_github_accounts %}
                 {% include "profiles/partials/github_oauth_list.html" with objects=old_github_accounts %}
               {% elif step_connect_completed %}
-                <p class="ui green text">
-                  <i class="fas fa-circle-check icon"></i>
-                  {% trans "Your account is connected to our GitHub App." %}
-                </p>
+                {% include "profiles/partials/github_oauth_list.html" with objects=github_app_accounts connected=True %}
               {% else %}
                 {# Users with projects on the old integration, but no GitHub account connected #}
                 {# Return without a step, so the page continues with the next step #}
